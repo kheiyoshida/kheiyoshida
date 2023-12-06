@@ -1,0 +1,36 @@
+{
+  "name": "mgnr",
+  "description": "music generator for WebAudio/Tone.js/node",
+  "version": "0.0.3",
+  "main": "index.js",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --outDir dist --declaration",
+    "test": "jest --watch"
+  },
+  "keywords": [
+    "music",
+    "music-generator"
+  ],
+  "author": "Katsumi Yoshida",
+  "license": "ISC",
+  "dependencies": {
+    "js-logger": "^1.6.1",
+    "tone": "^14.7.77"
+  },
+  "peerDependencies": {
+    "js-logger": "^1.6.1",
+    "tone": "^14.7.77"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.4.0",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
+    "ts-jest": "^29.0.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
+  }
+}

@@ -1,0 +1,50 @@
+import { clearTimer, setIntervalEvent, setTimer } from "."
+
+describe(`global timer`, () => {
+  beforeAll(() => {
+    jest.useFakeTimers()
+  })
+  afterAll(() => {
+    jest.useRealTimers()
+  })
+  it(`can set timer id`, () => {
+    const cb = jest.fn()
+    setTimer('render', cb, 2000)
+    jest.advanceTimersByTime(1000)
+    expect(cb).not.toHaveBeenCalled()
+    jest.advanceTimersByTime(1000)
+    expect(cb).toHaveBeenCalled()
+  })
+  it(`can cancel timer`, () => {
+    const cb = jest.fn()
+    setTimer('render', cb, 2000)
+    jest.advanceTimersByTime(1000)
+    expect(cb).not.toHaveBeenCalled()
+    clearTimer('render')
+    jest.advanceTimersByTime(1000)
+    expect(cb).not.toHaveBeenCalled()
+  })
+  it(`can override timer`, () => {
+    const cb = jest.fn()
+    setTimer('render', cb, 2000)
+    jest.advanceTimersByTime(1000)
+    expect(cb).not.toHaveBeenCalled()
+    setTimer('render', cb, 2000)
+    jest.advanceTimersByTime(1000)
+    expect(cb).not.toHaveBeenCalled()
+    jest.advanceTimersByTime(1000)
+    expect(cb).toHaveBeenCalled()
+  })
+  it(`can set interval event`, () => {
+    const cb = jest.fn()
+    setIntervalEvent('render', cb, 2000)
+    jest.advanceTimersByTime(1000)
+    expect(cb).not.toHaveBeenCalled()
+    jest.advanceTimersByTime(1000)
+    expect(cb).toHaveBeenCalledTimes(1)
+    jest.advanceTimersByTime(1000)
+    expect(cb).toHaveBeenCalledTimes(1)
+    jest.advanceTimersByTime(1000)
+    expect(cb).toHaveBeenCalledTimes(2)
+  })
+})

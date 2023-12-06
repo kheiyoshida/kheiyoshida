@@ -1,0 +1,22 @@
+@use '../module/vars';
+@use '../module/style';
+
+.work {
+  &__title {
+    color: rgba(vars.$text-color, 0.7);
+    font-size: vars.$txt-small;
+    margin-bottom: 2 * vars.$space;
+    letter-spacing: .18rem;
+    border-bottom: .1px solid rgba(vars.$text-color, 0.3) ;
+  }
+  &__body {
+    // > div {
+    //   margin-bottom: vars.$space;
+    // }
+  }
+  &__paginate {
+    > a {
+      @include style.btn;
+    }
+  }
+}

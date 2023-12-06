@@ -1,0 +1,51 @@
+@use '../module/vars';
+@use '../module/animation';
+
+@mixin item {
+  cursor: pointer;
+  &:hover {
+    @include animation.hover;
+  }
+}
+
+.menu {
+  width: 100%;
+
+  &__item {
+    &__lv1 {
+      @include item;
+      font-size: vars.$txt-big;
+    }
+    &__lv2 {
+      @include item;
+      font-size: 1rem;
+      margin-left: vars.$pd2;
+    }
+    &__lv3 {
+      @include item;
+      font-size: vars.$txt-small;
+      display:block;
+      margin-left: 2 * vars.$pd2;
+    }
+  }
+
+  @media screen and (max-width: vars.$sp-width) {
+    line-height: 330%;
+    position: absolute;
+    top: vars.$space;
+    left: vars.$space;
+    $sp-reso: 1.5;
+
+    &__item {
+      &__lv1 {
+        font-size: $sp-reso * vars.$txt-big;
+      }
+      &__lv2 {
+        font-size: $sp-reso * 1rem;
+      }
+      &__lv3 {
+        font-size: $sp-reso * vars.$txt-small;
+      }
+    }
+  }
+}

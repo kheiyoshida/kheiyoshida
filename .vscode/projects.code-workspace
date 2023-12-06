@@ -1,0 +1,14 @@
+{
+    "folders": [
+      {
+        "path": "../packages"
+      },
+      {
+        "path": "../projects"
+      },
+    ],
+    "settings": {
+        "typescript.tsdk": "../.yarn/sdks/typescript/lib",
+        "typescript.enablePromptUseWorkspaceTsdk": true
+    }
+  }

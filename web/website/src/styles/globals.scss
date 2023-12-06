@@ -1,0 +1,100 @@
+@use 'module/vars';
+@use 'module/animation';
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+html,
+body {
+  min-height: 100vh;
+  overflow-y: scroll;
+  max-width: 100vw;
+  overflow-x: hidden;
+  color: vars.$text-color;
+  background-color: vars.$bg-color;
+  @media screen and (max-width: vars.$sp-width) {
+    font-size: clamp(14px, 1.6vw, 16px);
+  }
+
+  letter-spacing: .035rem;
+  line-height: 220%;
+  text-align: left;
+
+  overscroll-behavior: none;
+}
+
+.container {
+  width: min(vars.$max-width, 100vw);
+  margin: vars.$space auto;
+  padding: vars.$pd2;
+
+  $menu-width: 33%;
+
+  &__menu {
+    position: fixed;
+    min-width: $menu-width;
+  }
+
+  &__body {
+    margin-left: $menu-width;
+    width: 100% - $menu-width;
+    position: relative;
+  }
+
+  @media screen and (max-width: vars.$sp-width) {
+
+    margin-top: 2 * vars.$space + vars.$txt-small;
+    padding: vars.$space;
+    
+    &__menu {
+      display: none;
+    }
+    &__body {
+      margin: 0;
+      margin-bottom: 5 * vars.$space;
+      width: 100%;
+      position: relative;
+    }
+  }
+}
+
+.spmenu-btn {
+  @media screen and (min-width: vars.$sp-width) {
+    display: none;
+  }
+  position: fixed;
+  top: vars.$space;
+  margin-left: vars.$space;
+  z-index: 100;
+  cursor: pointer;
+}
+
+a {
+  color: vars.$text-color;
+  text-decoration: none;
+  &:hover {
+    @include animation.hover;
+  }
+}
+
+.iframeLink {
+  position: relative;
+  &__block {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    &.red {
+      width: auto;
+      height: auto;
+      background-color: red;
+    }
+  }
+  iframe {
+    z-index: 2;
+  }
+}

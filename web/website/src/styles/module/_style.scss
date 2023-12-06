@@ -1,0 +1,13 @@
+@use '../module/vars';
+@use '../module/animation';
+
+@mixin btn {
+  display: inline-block;
+  margin: vars.$pd2;
+  padding: vars.$pd2;
+  font-size: 2.2rem;
+  cursor: pointer;
+  &:hover {
+    @include animation.hover;
+  } 
+}
