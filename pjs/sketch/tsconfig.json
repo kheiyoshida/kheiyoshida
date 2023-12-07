@@ -1,15 +1,6 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "skipLibCheck": true,
-    "typeRoots": [
-      "node_modules/@types",
-    ],
-    "types": ["p5", "jest"],
     "baseUrl": ".",
     "paths": {
       "src/*": [
