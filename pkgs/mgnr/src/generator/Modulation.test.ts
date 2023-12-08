@@ -53,10 +53,9 @@ describe(`ScaleModulation`, () => {
       )
       expect(mod).toBe(undefined)
       expect(spyLogger).toHaveBeenCalled()
-      expect(spyLogger.mock.calls[0][0]).toMatchInlineSnapshot(`
-        "no changes detected: 
-                C(omit27) and F(omit46)"
-      `)
+      expect(spyLogger.mock.calls[0][0]).toMatchInlineSnapshot(
+        `"no changes detected: C(omit27) and F(omit46)"`
+      )
     })
     it(`should consume another queue if degreeList gets empty`, () => {
       const spyLogger = jest.spyOn(Logger, 'info')
@@ -82,7 +81,7 @@ describe(`ScaleModulation`, () => {
       expect(mod!.queue).not.toHaveLength(3)
       expect(spyLogger).toHaveBeenCalledTimes(1)
       expect(mod!.queue).toHaveLength(2)
-      
+
       mod!.next()
       expect(mod!.queue).toHaveLength(1)
       mod!.next()

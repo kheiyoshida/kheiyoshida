@@ -1,11 +1,10 @@
-import { random } from '../utils/calc'
-import { Scale } from './Scale'
-import { negateIf, pick, randomRemove } from '../utils/utils'
-import { SeqNotes, Sequence, SequenceNotesConf } from './Sequence'
-import { NotePicker, NotePickerConf } from './NotePicker'
-import { Note } from './Note'
 import { MutateSpec } from '../core/SequenceEvent'
-import Logger from 'js-logger'
+import { random } from '../utils/calc'
+import { negateIf, pick, randomRemove } from '../utils/utils'
+import { Note } from './Note'
+import { NotePicker, NotePickerConf } from './NotePicker'
+import { Scale } from './Scale'
+import { SeqNotes, Sequence, SequenceNotesConf } from './Sequence'
 
 export type SeqConfig = {
   scale?: Scale

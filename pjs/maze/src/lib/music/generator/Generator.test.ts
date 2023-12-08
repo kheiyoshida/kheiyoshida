@@ -10,7 +10,7 @@ const scale = new Scale({
   range: { min: 60, max: 80 },
   pref: 'major',
 })
-const notes:SeqNotes = {
+const notes: SeqNotes = {
   0: [
     {
       dur: 1,
@@ -39,7 +39,7 @@ const notes:SeqNotes = {
   ],
 }
 
-const monoNotes:SeqNotes = {
+const monoNotes: SeqNotes = {
   ...notes,
   3: [
     {
@@ -54,7 +54,7 @@ const monoNotes:SeqNotes = {
       pitch: 80,
       vel: 100,
     },
-  ]
+  ],
 }
 
 const deepCopy = <T>(v: T) => JSON.parse(JSON.stringify(v)) as T
@@ -453,7 +453,7 @@ describe('Sequence', () => {
       jest
         .spyOn(utils, 'randomRemove')
         .mockImplementation((notes) => [notes.slice(1), [notes[0]]])
-      
+
       const conf: GeneratorArgs['conf'] = {
         ...baseConf,
         density: 0.25,
@@ -463,18 +463,13 @@ describe('Sequence', () => {
         noteDur: 1,
       }
 
-      
       const initialNotes = deepCopy(monoNotes)
       const beforeNotes = deepCopy(initialNotes)
-      
 
-      const gen = new Generator({conf, notes: initialNotes})
+      const gen = new Generator({ conf, notes: initialNotes })
       gen.mutate({ rate: 1, strategy: 'inPlace' })
       expect(gen.sequence.notes).not.toMatchObject(beforeNotes)
-      console.log(beforeNotes)
-      console.log(gen.sequence.notes)
-      gen.sequence.iteratePos(pos => {
-        console.log(pos)
+      gen.sequence.iteratePos((pos) => {
         const afterNote = gen.sequence.notes[pos]
         expect(afterNote[0]).not.toMatchObject(beforeNotes[pos][0])
         expect(afterNote[0].pitch).not.toBe(beforeNotes[pos][0].pitch)
@@ -584,18 +579,18 @@ describe('Sequence', () => {
               pitch: 30,
               vel: 100,
               dur: 1,
-            }
+            },
           ],
           2: [
             {
               pitch: 30,
               vel: 100,
               dur: 1,
-            }
+            },
           ],
         },
-      })    
-      const firstFill = JSON.parse(JSON.stringify({...gen.sequence.notes}))
+      })
+      const firstFill = JSON.parse(JSON.stringify({ ...gen.sequence.notes }))
       gen.resetNotes()
       expect(gen.sequence.notes).not.toMatchObject(firstFill)
     })
@@ -613,18 +608,18 @@ describe('Sequence', () => {
               pitch: 60,
               vel: 100,
               dur: 1,
-            }
+            },
           ],
           3: [
             {
               pitch: 60,
               vel: 100,
               dur: 1,
-            }
+            },
           ],
         },
-      })    
-      gen.scale.modulate({key: 'D', pref: 'omit25'})
+      })
+      gen.scale.modulate({ key: 'D', pref: 'omit25' })
       gen.changeSequenceLength('shrink', 1)
       gen.resetNotes()
       expect(gen.sequence.notes[0][0]).toMatchObject({
@@ -632,7 +627,7 @@ describe('Sequence', () => {
         vel: 100,
         dur: 1,
       })
-      gen.sequence.iteratePos(p => {
+      gen.sequence.iteratePos((p) => {
         expect(p).toBeLessThan(4)
       })
     })

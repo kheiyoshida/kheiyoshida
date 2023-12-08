@@ -20,7 +20,6 @@ export type BuildParams = Parameters<typeof buildMatrix>
 export const build = (floor: number): FinalMaze => {
   const params = paramBuild(floor)
   return buildMaze(params)
-  return buildMaze([3, 0.6, 0.2])
 }
 
 /**

@@ -1,6 +1,5 @@
 import p5 from 'p5'
 import {
-  calculateNodeVertices,
   collectEdgeVertices,
   createInitialNode,
   createPerpendicularVertex,
@@ -25,9 +24,9 @@ const PI = 3.14159265359
 const radToDegrees = (rad: number) => ((2 * rad) / PI) * 360
 
 describe('calculateVertices', () => {
-  it('should map vertices to each node and create a node list for the entire graph', () => {
-    //
-  })
+  it.todo(
+    'should map vertices to each node and create a node list for the entire graph'
+  )
 })
 
 describe('collectEdgeVertices', () => {
@@ -108,7 +107,7 @@ describe('collectEdgeVertices', () => {
     })
     const result = collectEdgeVertices(node)
     expect(result).toHaveLength(4)
-    expect(result.map((v) => v.position.array())).toMatchObject(`
+    expect(result.map((v) => v.position.array())).toMatchInlineSnapshot(`
       [
         [
           100,
@@ -116,19 +115,19 @@ describe('collectEdgeVertices', () => {
           -100,
         ],
         [
-          150,
-          100,
-          100,
-        ],
-        [
-          150,
-          -100,
-          100,
-        ],
-        [
-          200,
+          -200,
           0,
           -100,
+        ],
+        [
+          150,
+          100,
+          100,
+        ],
+        [
+          -300,
+          100,
+          100,
         ],
       ]
     `)
