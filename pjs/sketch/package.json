@@ -4,12 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint \"src/**/*.ts\"",
     "dev": "webpack-dev-server --mode development",
     "pj:new": "sh -c 'mkdir src/projects/${0} && cp src/templates/pj.ts src/projects/${0}/index.ts'",
     "pj:list": "node ./scripts/projects",
     "build": "webpack && cp public/index.html dist/index.html",
-    "test": "jest --watch"
+    "test": "cd ../.. && jest --selectProjects sketch"
   },
   "keywords": [],
   "author": "",

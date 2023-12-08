@@ -4,11 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint './src/**/*.{js,jsx,ts,tsx}'",
     "dev": "webpack-dev-server --mode development",
-    "debug": "DEBUG=true webpack-dev-server --mode development",
     "build": "webpack && cp public/index.html dist/index.html",
-    "test": "jest --watch"
+    "test": "cd ../.. && jest --selectProjects maze"
   },
   "author": "",
   "license": "ISC",
