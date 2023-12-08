@@ -12,6 +12,7 @@ const RootConfig:Config = {
   testMatch: [
     '<rootDir>/src/**/*.test.ts'
   ], 
+  prettierPath: require.resolve('prettier-2'),
 }
 
 const JestConfig:Config = {

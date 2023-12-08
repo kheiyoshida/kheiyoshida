@@ -13,6 +13,7 @@ importers:
       jest: ^29.5.0
       jest-environment-jsdom: ^29.5.0
       prettier: ^3.1.0
+      prettier-2: npm:prettier@2
       syncpack: ^11.2.1
       ts-jest: ^29.0.5
       typescript: ^5.3.2
@@ -26,6 +27,7 @@ importers:
       jest: 29.7.0_@types+node@20.10.4
       jest-environment-jsdom: 29.7.0
       prettier: 3.1.0
+      prettier-2: /prettier/2.8.8
       syncpack: 11.2.1
       ts-jest: 29.1.1_jest@29.7.0+typescript@5.3.3
       typescript: 5.3.3
@@ -6424,6 +6426,12 @@ packages:
   /prelude-ls/1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
+
+  /prettier/2.8.8:
+    resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    dev: true
 
   /prettier/3.1.0:
     resolution: {integrity: sha512-TQLvXjq5IAibjh8EpBIkNKxO749UEWABoiIZehEPiY4GNpVdhaFKqSTu+QrlU6D2dPAfubRmtJTi4K4YkQ5eXw==}

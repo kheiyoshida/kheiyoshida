@@ -1,5 +1,8 @@
 import { MediaSize, PixelPosition } from './types'
 
+/**
+ * determine the region where the center position of magnified region can move
+ */
 export const restrainedRegion = (
   videoSize: MediaSize,
   magnifiedSize: MediaSize
