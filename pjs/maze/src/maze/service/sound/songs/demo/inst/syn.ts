@@ -1,12 +1,12 @@
-import * as E from 'src/lib/music/core/events'
-import * as TC from 'src/lib/music/externals/tone/commands'
-import * as TE from 'src/lib/music/externals/tone/events'
-import { ChConf, InstCh } from 'src/lib/music/externals/tone/mixer/Channel'
-import { Scale } from 'src/lib/music/generator/Scale'
+import * as E from 'mgnr/src/core/events'
+import * as TC from 'mgnr/src/externals/tone/commands'
+import * as TE from 'mgnr/src/externals/tone/events'
+import { ChConf, InstCh } from 'mgnr/src/externals/tone/mixer/Channel'
+import { Scale } from 'mgnr/src/generator/Scale'
 import * as Tone from 'tone'
 import { createFilteredDelaySend } from '../mix/send'
 import { fade } from '../mix/fade'
-import { random } from 'src/lib/music/utils/calc'
+import { random } from 'mgnr/src/utils/calc'
 
 export const createSynCh = () => {
   const synCh: ChConf<InstCh> = {

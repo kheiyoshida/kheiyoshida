@@ -1,5 +1,5 @@
-import * as TC from 'src/lib/music/externals/tone/commands'
-import * as TE from 'src/lib/music/externals/tone/events'
+import * as TC from 'mgnr/src/externals/tone/commands'
+import * as TE from 'mgnr/src/externals/tone/events'
 import { random } from "src/lib/random"
 
 type FadeConfig = {

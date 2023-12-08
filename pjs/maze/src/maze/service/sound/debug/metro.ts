@@ -1,5 +1,5 @@
 import Logger from "js-logger"
-import { RegisterTimeEvents } from "src/lib/music/externals/tone/commands"
+import { RegisterTimeEvents } from "mgnr/src//externals/tone/commands"
 import { Transport } from "tone"
 
 export const metro = (interval = '1m') => {

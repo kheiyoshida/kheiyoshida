@@ -15,7 +15,8 @@
   "dependencies": {
     "js-logger": "^1.6.1",
     "p5": "^1.9.0",
-    "tone": "^14.7.77"
+    "tone": "^14.7.77",
+    "mgnr": "workspace:^"
   },
   "devDependencies": {
     "@types/p5": "^1.7.4",

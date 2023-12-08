@@ -1,12 +1,12 @@
 import Logger from 'js-logger'
-import { Musician } from 'src/lib/music/Musician'
-import * as Events from 'src/lib/music/core/events'
-import * as ToneCommands from 'src/lib/music/externals/tone/commands'
+import { Musician } from 'mgnr/src/Musician'
+import * as Events from 'mgnr/src/core/events'
+import * as ToneCommands from 'mgnr/src/externals/tone/commands'
 import {
   MuteRequired
-} from 'src/lib/music/externals/tone/events'
-import { Scale } from 'src/lib/music/generator/Scale'
-import { random } from 'src/lib/music/utils/calc'
+} from 'mgnr/src/externals/tone/events'
+import { Scale } from 'mgnr/src/generator/Scale'
+import { random } from 'mgnr/src/utils/calc'
 import {
   createKickCh,
   createPadCh,

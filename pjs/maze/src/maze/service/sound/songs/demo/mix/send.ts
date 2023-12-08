@@ -1,6 +1,6 @@
 import * as Tone from 'tone'
-import * as Commands from 'src/lib/music/externals/tone/commands'
-import { ChConf, SendCh } from 'src/lib/music/externals/tone/mixer/Channel'
+import * as Commands from 'mgnr/src/externals/tone/commands'
+import { ChConf, SendCh } from 'mgnr/src/externals/tone/mixer/Channel'
 
 export const createFilteredDelaySend = () => {
   const delayCh: ChConf<SendCh> = {

@@ -1,9 +1,9 @@
 import * as Tone from 'tone'
-import * as Commands from 'src/lib/music/externals/tone/commands'
+import * as Commands from 'mgnr/src/externals/tone/commands'
 import {
   ChConf,
   InstCh,
-} from 'src/lib/music/externals/tone/mixer/Channel'
+} from 'mgnr/src/externals/tone/mixer/Channel'
 
 export const createSynCh = () => {
   const synCh: ChConf<InstCh> = {

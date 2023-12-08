@@ -1,12 +1,12 @@
-import { Musician } from 'src/lib/music/Musician'
-import * as TC from 'src/lib/music/externals/tone/commands'
-import * as E from 'src/lib/music/core/events'
-import { Scale } from 'src/lib/music/generator/Scale'
+import { Musician } from 'mgnr/src/Musician'
+import * as TC from 'mgnr/src/externals/tone/commands'
+import * as E from 'mgnr/src/core/events'
+import { Scale } from 'mgnr/src/generator/Scale'
 import {
   nthDegreeTone,
   pickRandomPitchName,
-} from 'src/lib/music/generator/utils'
-import { random, randomIntBetween } from 'src/lib/music/utils/calc'
+} from 'mgnr/src/generator/utils'
+import { random, randomIntBetween } from 'mgnr/src/utils/calc'
 import { metro } from '../../debug/metro'
 import { setupKick } from './inst/kick'
 import { setupPadCh } from './inst/pad'
