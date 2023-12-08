@@ -1,0 +1,12 @@
+{
+  "name": "utils",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cd ../.. && jest --selectProjects utils"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

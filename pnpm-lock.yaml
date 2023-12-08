@@ -99,6 +99,9 @@ importers:
       tone:
         specifier: ^14.7.77
         version: 14.7.77
+      utils:
+        specifier: workspace:^
+        version: link:../../pkgs/utils
       webmidi:
         specifier: ^3.0.22
         version: 3.1.7
@@ -164,6 +167,8 @@ importers:
       typescript:
         specifier: ^4.8.4
         version: 4.9.5
+
+  pkgs/utils: {}
 
   web/website:
     dependencies:

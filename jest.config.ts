@@ -35,6 +35,13 @@ const JestConfig:Config = {
       rootDir: './pkgs/mgnr',
       coverageDirectory: '<rootDir>/src',
       collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
+    },
+    {
+      ...RootConfig,
+      displayName: 'utils',
+      rootDir: './pkgs/utils',
+      coverageDirectory: '<rootDir>/src',
+      collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
     }
   ]
 }

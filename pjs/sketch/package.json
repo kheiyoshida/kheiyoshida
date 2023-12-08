@@ -17,7 +17,8 @@
     "js-logger": "^1.6.1",
     "mgnr": "workspace:^",
     "tone": "^14.7.77",
-    "webmidi": "^3.0.22"
+    "webmidi": "^3.0.22",
+    "utils": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "^7.19.6",
