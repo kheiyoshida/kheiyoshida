@@ -168,6 +168,21 @@ importers:
         specifier: ^4.8.4
         version: 4.9.5
 
+  pkgs/mgnr-presets:
+    dependencies:
+      mgnr:
+        specifier: workspace:^
+        version: link:../mgnr
+      tone:
+        specifier: ^14.7.77
+        version: 14.7.77
+
+  pkgs/p5utils:
+    dependencies:
+      p5:
+        specifier: ^1.9.0
+        version: 1.9.0
+
   pkgs/utils: {}
 
   web/website:
