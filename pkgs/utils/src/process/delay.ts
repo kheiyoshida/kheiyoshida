@@ -1,5 +1,5 @@
-export const delay = (t: number) =>
-  new Promise<NodeJS.Timeout>((r) => setTimeout(r, t))
+export const delay = (mils: number) =>
+  new Promise<NodeJS.Timeout>((r) => setTimeout(r, mils))
 
 /**
  * generates function that executes after delaying time
