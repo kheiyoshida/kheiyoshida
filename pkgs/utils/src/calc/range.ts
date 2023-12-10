@@ -1,5 +1,12 @@
-import { Range } from "./types"
-import Logger from "js-logger"
+import Logger from 'js-logger'
+
+/**
+ * number range
+ */
+export type Range = {
+  min: number
+  max: number
+}
 
 export class NumRange implements Range {
   private _min!: number
@@ -16,7 +23,7 @@ export class NumRange implements Range {
   public set max(value: number) {
     this._max = value
   }
-  constructor(r : Range) {
+  constructor(r: Range) {
     if (r instanceof NumRange) {
       return r
     }
@@ -41,12 +48,12 @@ export class NumRange implements Range {
       Logger.warn(err, `invalid: ${val.max}`)
       min = limit.max
     }
-    return new NumRange({min, max})
+    return new NumRange({ min, max })
   }
   public includes(n: number) {
     return this.min <= n && this.max >= n
   }
-  public within(range: Range):boolean {
+  public within(range: Range): boolean {
     return !(this._min < range.min || this._max > range.max)
   }
   public eq(range: Range): boolean {

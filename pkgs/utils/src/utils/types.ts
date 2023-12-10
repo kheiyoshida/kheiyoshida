@@ -1,12 +1,3 @@
-
-/**
- * number range
- */
-export type Range = {
-  min: number
-  max: number
-}
-
 /**
  * Recursively make fields optional. 
  */

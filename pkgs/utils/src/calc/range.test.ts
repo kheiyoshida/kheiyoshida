@@ -1,4 +1,4 @@
-import { NumRange } from "./primitives";
+import { NumRange } from "./range";
 describe('NumRange', () => {
   it('includes', () => {
     const range = new NumRange({min: 40, max: 60})
