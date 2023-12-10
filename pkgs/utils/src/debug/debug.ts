@@ -17,3 +17,12 @@ export const wrapDebug =
     console.log(`[${fn.name} result]`, result)
     return result
   }
+
+
+export const wrapLogger =
+<T>(fn: (...args: any) => T) =>
+(...args: any) => {
+  const returned = fn(args)
+  console.log(returned)
+  return returned
+}

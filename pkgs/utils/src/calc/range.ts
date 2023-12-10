@@ -26,6 +26,14 @@ export const pickRange = (numOrRange: number | Range) => {
   }
 }
 
+export const normalizeRange = (rangeValue: number | Range) => {
+  if (typeof rangeValue === 'number') {
+    return rangeValue
+  } else {
+    return rangeValue.max
+  }
+}
+
 export class NumRange {
   readonly min!: number
   readonly max!: number

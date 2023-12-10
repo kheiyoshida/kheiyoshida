@@ -1,11 +1,4 @@
-/**
- * creates a unique id generator.
- *
- * make sure the project has only one caller for this
- *
- * @returns unique id
- */
-export const incrementalId = () => {
+export const makeCounter = () => {
   let current = 0
   return () => {
     current += 1
@@ -13,7 +6,11 @@ export const incrementalId = () => {
   }
 }
 
-export const changingNumber = (
+/**
+ * create a store for a number variable that changes everytime client evokes `renew`,
+ * where the number tries to "ping-pong" between min and max
+ */
+export const makePingpongNumberStore = (
   determineAmount: (current: number) => number,
   min: number,
   max: number,
@@ -33,6 +30,8 @@ export const changingNumber = (
   }
   return {
     renew,
-    current,
+    get current() {
+      return current
+    },
   }
 }
