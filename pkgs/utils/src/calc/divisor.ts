@@ -1,9 +1,4 @@
-export const validateInt = (int: number): number => {
-  if (!Number.isInteger(int)) {
-    throw Error(`float recieved where it should be int: ${int}`)
-  }
-  return int
-}
+import { validateInt } from "./validate"
 
 export const createOneStartArray = (n: number): number[] => {
   return [...Array(validateInt(n) + 1).keys()].slice(1)
@@ -36,15 +31,3 @@ export const getCommonFloatDivisors = (a: number, b: number, precision = 1, resu
     getFloatDivisors(b, precision, resultLimit).includes(a)
   )
 }
-
-export const clamp = (val: number, min: number, max: number) => {
-  return Math.min(Math.max(val, min), max)
-}
-
-export const clampAnd =
-  (val: number, min: number, max: number) => (and: (clamped: number) => void) => {
-    const clamped = clamp(val, min, max)
-    if (clamped !== val) {
-      and(clamped)
-    }
-  }

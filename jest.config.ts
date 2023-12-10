@@ -1,21 +1,20 @@
 import type { Config } from 'jest'
 
-const RootConfig:Config = {
+const RootConfig: Config = {
   preset: 'ts-jest',
   transform: {
     '^.+\\.(ts|tsx)?$': 'ts-jest',
   },
   moduleNameMapper: {
-    'src/(.*)': '<rootDir>/src/$1'
+    'src/(.*)': '<rootDir>/src/$1',
   },
-  testEnvironment: 'jsdom',  
-  testMatch: [
-    '<rootDir>/src/**/*.test.ts'
-  ], 
+  testEnvironment: 'jsdom',
+  testMatch: ['<rootDir>/src/**/*.test.ts'],
   prettierPath: require.resolve('prettier-2'),
+  setupFiles: ['../../jest/globalSetup.ts']
 }
 
-const JestConfig:Config = {
+const JestConfig: Config = {
   projects: [
     // pjs
     {
@@ -41,8 +40,8 @@ const JestConfig:Config = {
       displayName: 'utils',
       rootDir: './pkgs/utils',
       coverageDirectory: '<rootDir>/src',
-      collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
-    }
-  ]
+      collectCoverageFrom: ['<rootDir>/src/**/*.ts'],      
+    },
+  ],
 }
 export default JestConfig

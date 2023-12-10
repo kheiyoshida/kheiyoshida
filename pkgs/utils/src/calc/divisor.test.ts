@@ -1,18 +1,10 @@
 import {
-  clamp,
-  clampAnd,
   createOneStartArray,
   getCommonDivisors,
   getCommonFloatDivisors,
   getDivisors,
   getFloatDivisors,
-  validateInt,
-} from './div'
-
-describe(`${validateInt.name}`, () => {
-  expect(() => validateInt(0.5)).toThrow()
-  expect(() => validateInt(2)).not.toThrow()
-})
+} from './divisor'
 
 describe(`${createOneStartArray.name}`, () => {
   it(`should get int array that starts with 1`, () => {
@@ -45,22 +37,5 @@ describe(`${getCommonDivisors.name}`, () => {
 describe(`${getCommonFloatDivisors.name}`, () => {
   it(`should get common float divisors`, () => {
     expect(getCommonFloatDivisors(10, 5, 2, 10)).toMatchObject([1, 1.25, 2.5, 5])
-  })
-})
-
-describe(`${clamp.name}`, () => {
-  it(`should clamp value to the range`, () => {
-    expect(clamp(10, 1, 5)).toBe(5)
-  })
-})
-
-describe(`${clampAnd.name}`, () => {
-  it(`should clamp and exec callback when clamped`, () => {
-    const fn = jest.fn()
-    clampAnd(10, 1,5)(fn)
-    expect(fn).toHaveBeenCalled()
-    const fn2 = jest.fn()
-    clampAnd(3, 1,5)(fn2)
-    expect(fn2).not.toHaveBeenCalled()
   })
 })

@@ -1,28 +1,35 @@
 import Logger from 'js-logger'
+import { randomIntBetween } from '../random/value'
 
-/**
- * number range
- */
 export type Range = {
   min: number
   max: number
 }
 
-export class NumRange implements Range {
-  private _min!: number
-  public get min(): number {
-    return this._min
+export const clamp = (val: number, min: number, max: number) => {
+  return Math.min(Math.max(val, min), max)
+}
+
+export const clampAnd =
+  (val: number, min: number, max: number) => (and: (clamped: number) => void) => {
+    const clamped = clamp(val, min, max)
+    if (clamped !== val) {
+      and(clamped)
+    }
   }
-  public set min(value: number) {
-    this._min = value
+
+export const pickRange = (numOrRange: number | Range) => {
+  if (typeof numOrRange === 'number') {
+    return numOrRange
+  } else {
+    return randomIntBetween(numOrRange.min, numOrRange.max)
   }
-  private _max!: number
-  public get max(): number {
-    return this._max
-  }
-  public set max(value: number) {
-    this._max = value
-  }
+}
+
+export class NumRange {
+  readonly min!: number
+  readonly max!: number
+
   constructor(r: Range) {
     if (r instanceof NumRange) {
       return r
@@ -30,9 +37,10 @@ export class NumRange implements Range {
     if (r.max <= r.min) {
       throw new Error(`NumRange.max must be greater than min`)
     }
-    this._min = r.min
-    this._max = r.max
+    this.min = r.min
+    this.max = r.max
   }
+
   static clamp(
     val: Range,
     limit: Range,
@@ -46,17 +54,24 @@ export class NumRange implements Range {
     }
     if (val.max > limit.max) {
       Logger.warn(err, `invalid: ${val.max}`)
-      min = limit.max
+      max = limit.max
     }
     return new NumRange({ min, max })
   }
+
   public includes(n: number) {
     return this.min <= n && this.max >= n
   }
+
   public within(range: Range): boolean {
-    return !(this._min < range.min || this._max > range.max)
+    return !(this.min < range.min || this.max > range.max)
   }
+
   public eq(range: Range): boolean {
-    return this._min == range.min && this.max == range.max
+    return this.min == range.min && this.max == range.max
   }
+}
+
+export const restrainWithinRange = (val: Range, limit: Range) => {
+  return { min: Math.max(val.min, limit.min), max: Math.min(val.max, limit.max) }
 }
