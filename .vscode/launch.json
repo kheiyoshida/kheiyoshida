@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "chrome",
+            "name": "Debug sketch on port 3000",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/pjs/sketch",
+            "sourceMaps": true,
+            "timeout": 10000
+        },
+        {
+            "type": "chrome",
+            "name": "Debug maze on port 3000",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/pjs/maze",
+            "sourceMaps": true,
+            "timeout": 10000
+        }
+    ]
+}

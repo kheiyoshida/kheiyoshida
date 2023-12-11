@@ -7,7 +7,7 @@
     "dev": "webpack-dev-server --mode development",
     "pj:new": "sh -c 'mkdir src/projects/${0} && cp src/templates/pj.ts src/projects/${0}/index.ts'",
     "pj:list": "node ./scripts/projects",
-    "build": "webpack && cp public/index.html dist/index.html",
+    "build": "webpack --mode production && cp public/index.html dist/index.html",
     "test": "cd ../.. && jest --selectProjects sketch"
   },
   "keywords": [],
@@ -17,8 +17,8 @@
     "js-logger": "^1.6.1",
     "mgnr": "workspace:^",
     "tone": "^14.7.77",
-    "webmidi": "^3.0.22",
-    "utils": "workspace:^"
+    "utils": "workspace:^",
+    "webmidi": "^3.0.22"
   },
   "devDependencies": {
     "@babel/core": "^7.19.6",
@@ -29,7 +29,7 @@
     "babel-loader": "^9.0.0",
     "esbuild-loader": "^3.0.1",
     "imports-loader": "^4.0.1",
-    "p5": "^1.8.0",
+    "p5": "^1.9.0",
     "raw-loader": "^4.0.2",
     "source-map-loader": "^4.0.1",
     "ts-node": "^10.9.1",

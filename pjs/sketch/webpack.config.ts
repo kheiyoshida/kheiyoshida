@@ -51,11 +51,13 @@ const config: Configuration = {
     },
     extensions: [".ts", ".js"],
   },
+  devtool: 'source-map',
   output: {
     publicPath: '/',
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
     clean: true,
+    // devtoolModuleFilenameTemplate: 'file:///[absolute-resource-path]'
   },
   devServer: {
     static: path.join(__dirname, "public"),
