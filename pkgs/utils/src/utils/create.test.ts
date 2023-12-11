@@ -26,10 +26,17 @@ test(`${overrideDefault.name}`, () => {
   })
 })
 
-test(`${concatWithJunction.name}`, () => {
-  const a = ['c', 'o', 'n', 'c']
-  const b = ['c', 'a', 't']
-  expect(concatWithJunction(a, b)).toMatchObject(['c', 'o', 'n', 'c', 'a', 't'])
+describe(`${concatWithJunction.name}`, () => {
+  it(`should concat two arrays using the last item of first`, () => {
+    const a = ['c', 'o', 'n', 'c']
+    const b = ['c', 'a', 't']
+    expect(concatWithJunction(a, b)).toMatchObject(['c', 'o', 'n', 'c', 'a', 't'])
+  })
+  it(`should just retun if one is empty`, () => {
+    const array = ['a', 'b', 'c']
+    expect(concatWithJunction(array, [])).toMatchObject(array)
+    expect(concatWithJunction([], array)).toMatchObject(array)
+  })
 })
 
 test(`${createCombination.name}`, () => {

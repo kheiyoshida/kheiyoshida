@@ -1,26 +1,26 @@
 import {
-  randomFire,
+  fireByRate,
   randomFloatBetween,
   randomIntBetween,
   randomIntInclusiveBetween,
 } from './value'
 
-describe(`${randomFire.name}`, () => {
+describe(`${fireByRate.name}`, () => {
   it(`should get boolean value based on provided rate`, () => {
     jest
       .spyOn(Math, 'random')
       .mockReturnValueOnce(0.2)
       .mockReturnValueOnce(0.9)
       .mockReturnValueOnce(0.5)
-    expect(randomFire(0.5)).toBe(true)
-    expect(randomFire(0.5)).toBe(false)
-    expect(randomFire(0.5)).toBe(true)
+    expect(fireByRate(0.5)).toBe(true)
+    expect(fireByRate(0.5)).toBe(false)
+    expect(fireByRate(0.5)).toBe(true)
   })
   it(`should reject rate greater than 1`, () => {
-    expect(() => randomFire(1.01)).toThrow()
+    expect(() => fireByRate(1.01)).toThrow()
   })
   it(`should reject negative rate`, () => {
-    expect(() => randomFire(-0.1)).toThrow()
+    expect(() => fireByRate(-0.1)).toThrow()
   })
 })
 

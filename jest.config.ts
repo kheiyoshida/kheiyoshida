@@ -15,6 +15,11 @@ const RootConfig: Config = {
 }
 
 const JestConfig: Config = {
+  globals: {
+    'ts-jest': {
+      isolatedModules: false,
+    },
+  },
   // even thoug it's on top level, this is for each project level
   // do not run --coverage from root dir
   collectCoverageFrom: [

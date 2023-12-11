@@ -1,4 +1,4 @@
-export const randomFire = (rate: number) => {
+export const fireByRate = (rate: number) => {
   if (rate > 1 || rate < 0) {
     throw Error('rate should be between 0.0 and 1.0')
   }

@@ -5,12 +5,6 @@ export const compareTuples = <T>(valueTuple: [T, T], compareTuple: [T, T]): bool
   return false
 }
 
-/**
- * negate a bool value if condition is true
- * @param condition condition to determine if it should negate the bool value
- * @param value boolean value
- * @returns
- */
 export function negateIf(condition: boolean, value: boolean) {
   if (condition) {
     return !value

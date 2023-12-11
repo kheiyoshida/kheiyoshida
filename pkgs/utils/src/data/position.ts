@@ -1,3 +1,4 @@
+import { Range } from '../calc/range'
 
 /**
  * 2 numbers tuple.
@@ -15,14 +16,8 @@ export const reducePosition = (p1: Position, p2: Position): Position => [
  */
 export const validatePosition = (
   [v1, v2]: Position,
-  {
-    min,
-    max,
-  }: {
-    min?: number
-    max?: number
-  }
-): Position|null => {
+  { min, max }: Partial<Range>
+): Position | null => {
   if (min !== undefined && (v1 < min || v2 < min)) return null
   if (max !== undefined && (v1 > max || v2 > max)) return null
   return [v1, v2]

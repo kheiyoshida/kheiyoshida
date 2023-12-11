@@ -7,3 +7,4 @@ export const valueOrFn = <T, A>(a: A, vof: T | ((a: A) => T)) => {
   if (vof instanceof Function) return vof(a)
   else return vof
 }
+

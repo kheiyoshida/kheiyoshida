@@ -1,5 +1,5 @@
 import Logger from 'js-logger'
-import { randomIntBetween } from '../random/value'
+import { randomIntInclusiveBetween } from '../random/value'
 
 export type Range = {
   min: number
@@ -19,19 +19,13 @@ export const clampAnd =
   }
 
 export const pickRange = (numOrRange: number | Range) => {
-  if (typeof numOrRange === 'number') {
-    return numOrRange
-  } else {
-    return randomIntBetween(numOrRange.min, numOrRange.max)
-  }
+  if (typeof numOrRange === 'number') return numOrRange
+  else return randomIntInclusiveBetween(numOrRange.min, numOrRange.max)
 }
 
 export const normalizeRange = (rangeValue: number | Range) => {
-  if (typeof rangeValue === 'number') {
-    return rangeValue
-  } else {
-    return rangeValue.max
-  }
+  if (typeof rangeValue === 'number') return rangeValue
+  else return rangeValue.max
 }
 
 export class NumRange {

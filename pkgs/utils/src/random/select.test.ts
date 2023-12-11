@@ -1,11 +1,11 @@
 import {
-  createRandomSelect,
+  makeWeightedRandomPicker,
   makeDifferentIntPicker,
   makeRandomItemPicker,
   randomItemFromArray,
   randomItem,
   ratioToPercentage,
-  mapPercentage,
+  mapPercentageThresholds,
 } from './select'
 
 describe(`${randomItemFromArray.name}`, () => {
@@ -53,7 +53,26 @@ describe(`${randomItem.name}`, () => {
   })
 })
 
-describe(`randomSelect`, () => {
+describe(`${makeWeightedRandomPicker.name}`, () => {
+  it(`can make a random picker with candidates and their ratio`, () => {
+    const randomPicker = makeWeightedRandomPicker<string>([
+      [3, 'A'],
+      [2, 'B'],
+      [5, 'C'],
+    ])
+    const mathRandom = jest.spyOn(Math, 'random')
+    mathRandom.mockReturnValue(0.2)
+    expect(randomPicker()).toBe('A')
+
+    const randomPicker2 = makeWeightedRandomPicker([
+      [30, 'A'],
+      [18, 'B'],
+      [60, 'C'],
+    ])
+    mathRandom.mockReturnValue(1)
+    expect(randomPicker2()).toBe('C')
+  })
+
   it(`can turn ratio to pecentage`, () => {
     expect(
       ratioToPercentage([
@@ -69,7 +88,7 @@ describe(`randomSelect`, () => {
   })
   it(`can turn percentages to mapped pecentages`, () => {
     expect(
-      mapPercentage([
+      mapPercentageThresholds([
         [0.3, 'A'],
         [0.2, 'B'],
         [0.5, 'C'],
@@ -79,28 +98,5 @@ describe(`randomSelect`, () => {
       [0.5, 'B'],
       [1.0, 'C'],
     ])
-  })
-
-  it(`can select randomly`, () => {
-    const mathRandom = jest.spyOn(Math, 'random')
-    mathRandom.mockReturnValue(0.2)
-    expect(
-      createRandomSelect([
-        [3, 'A'],
-        [2, 'B'],
-        [5, 'C'],
-      ])()
-    ).toBe('A')
-
-    mathRandom.mockReturnValue(1)
-    expect(
-      createRandomSelect([
-        [30, 'A'],
-        [18, 'B'],
-        [60, 'C'],
-      ])()
-    ).toBe('C')
-
-    mathRandom.mockClear()
   })
 })

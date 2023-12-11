@@ -1,5 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const makeStore = <T extends Object>() => {
+
+export const makeStore = <T extends Record<string, unknown>>() => {
   let data: Readonly<T>
 
   const init = (initialValue: T) => {
@@ -7,13 +7,6 @@ export const makeStore = <T extends Object>() => {
       throw new Error(`already initialized`)
     }
     data = initialValue
-  }
-
-  /**
-   * update field of state using new value. It will renew the whole state object
-   */
-  const _update = <K extends keyof T>(key: K, newVal: T[K]) => {
-    data = { ...data, [key]: newVal }
   }
 
   /**
@@ -27,6 +20,10 @@ export const makeStore = <T extends Object>() => {
     }
   }
 
+  const _update = <K extends keyof T>(key: K, newVal: T[K]) => {
+    data = { ...data, [key]: newVal }
+  }
+
   /**
    * update state in bulk
    * @param newState partial fields of entire state
@@ -35,14 +32,11 @@ export const makeStore = <T extends Object>() => {
     data = { ...data, ...newState }
   }
 
-  /**
-   * read a field of state.
-   * If key is not provided, returns the entire state
-   */
-  const read: {
-    <K extends keyof T>(key: K): Readonly<T>[K]
-    (): Readonly<T>
-  } = <K extends keyof T>(key?: K) => (key ? data[key] : data)
+  function read(): Readonly<T>
+  function read<K extends keyof T>(key: K): Readonly<T>[K]
+  function read<K extends keyof T>(key?: K) {
+    return key ? data[key] : data
+  }
 
   return { init, update, read, bulkUpdate }
 }

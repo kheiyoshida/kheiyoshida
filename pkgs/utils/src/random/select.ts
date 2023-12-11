@@ -31,31 +31,28 @@ export const makeRandomItemPicker = <T>(array: T[]): (() => T) => {
 }
 
 /**
- * creates a function that randomly select one from candidates by defined ratio
+ * creates a function that randomly select item with weighted rate
  */
-export const createRandomSelect = <C>(candidates: [number, C][]) => {
-  const candiWithPercentage = mapPercentage(ratioToPercentage(candidates))
+export const makeWeightedRandomPicker = <C>(candidates: [number, C][]) => {
+  const candiWithPercentage = mapPercentageThresholds(ratioToPercentage(candidates))
   return () => {
     const r = Math.random()
     const selected = candiWithPercentage.find(([p]) => r <= p)
-    if (!selected) {
-      throw Error(`could not randomly select`)
-    }
-    return selected[1]
+    return selected![1]
   }
 }
 
 export const ratioToPercentage = <C>(candidates: [number, C][]) => {
-  const sum = candidates.reduce((p, [r]) => p + r, 0)
-  return candidates.map(([ratio, c]) => [ratio / sum, c] as [number, C])
+  const sum = candidates.reduce((prev, [ratio]) => prev + ratio, 0)
+  return candidates.map(([ratio, cand]) => [ratio / sum, cand] as [number, C])
 }
 
-export const mapPercentage = <C>(candidates: [number, C][]) => {
+export const mapPercentageThresholds = <C>(candidates: [number, C][]) => {
   const newCandidates = candidates.slice()
-  candidates.reduce((prev, [p, _], i) => {
-    const inc = prev + p
-    newCandidates[i][0] = inc
-    return inc
+  candidates.reduce((prev, [percentage, _], i) => {
+    const accumulated = prev + percentage
+    newCandidates[i][0] = accumulated
+    return accumulated
   }, 0)
   return newCandidates
 }
