@@ -24,9 +24,6 @@ const analyser = createAnalyzer(soundSource.source, fftSize)
 
 let started = false
 
-let vunit: number
-let hunit: number
-
 let center: p5.Vector
 
 const setup = () => {
@@ -34,10 +31,9 @@ const setup = () => {
   ch = p.windowHeight
   p.createCanvas(cw, ch, p.WEBGL)
   p.angleMode(p.DEGREES)
-  fillColor = p.color(10, 60)
+  fillColor = p.color(10, 245)
   strokeColor = p.color(200, 100)
   p.background(fillColor)
-  p.fill(fillColor)
   p.stroke(strokeColor)
   p.strokeWeight(1)
 
@@ -57,9 +53,6 @@ const setup = () => {
   p.mousePressed = start
   p.touchStarted = start
 
-  vunit = ch / analyser.bufferLength
-  hunit = cw / analyser.bufferLength
-
   center = p.createVector(0, 0, 0)
 }
 
@@ -75,8 +68,9 @@ let coefficient = 2
 const draw = () => {
   if (!started) return
   const dataArray = analyser.waveform()
-  p.fill(fillColor)
+
   p.background(fillColor)
+
   p.fill(strokeColor)
 
   const m = p.millis() * 0.01

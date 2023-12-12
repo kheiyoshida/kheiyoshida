@@ -35,7 +35,7 @@ const setup = () => {
   ch = p.windowHeight
   p.createCanvas(cw, ch, p.WEBGL)
   p.angleMode(p.DEGREES)
-  fillColor = p.color(10, 60)
+  fillColor = p.color(10, 245)
   strokeColor = p.color(200, 100)
   p.background(fillColor)
   p.fill(fillColor)
