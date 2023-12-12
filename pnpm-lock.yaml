@@ -102,9 +102,6 @@ importers:
       utils:
         specifier: workspace:^
         version: link:../../pkgs/utils
-      webmidi:
-        specifier: ^3.0.22
-        version: 3.1.7
     devDependencies:
       '@babel/core':
         specifier: ^7.19.6
@@ -2467,12 +2464,6 @@ packages:
     resolution: {integrity: sha512-/Ad8+nIOV7Rl++6f1BdKxFSMgmoqEoYbHRpPcx3JEfv8VRsQe9Z4mCXeJBzxs7mbHY/XOZZuXlRNfhpVPbs6ZA==}
     dev: true
 
-  /@types/webmidi@2.0.10:
-    resolution: {integrity: sha512-4RmTFMB6mN2h8XbJa1x3cOs9IOkXvFyHGcPUpUvWfmATuKg/J+dsFiMVgCE2EkpS+/8a8AP2tE3rQT1mLG7vEg==}
-    requiresBuild: true
-    dev: false
-    optional: true
-
   /@types/ws@8.5.10:
     resolution: {integrity: sha512-vmQSUcfalpIq0R9q7uTo2lXs6eGIpt9wtnLdMv9LVpIjCA/+ufZRozlVoVelIYixx1ugCBKDhn89vnsEGOCx9A==}
     dependencies:
@@ -3798,12 +3789,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       path-type: 4.0.0
-
-  /djipevents@2.0.7:
-    resolution: {integrity: sha512-KNFYaU85imxOCKOUsIR70Iz9E19r96/X7LSH+u0tSoZdpWcBdzoqtTsU+wuLhc6GMpSFob+KInkZAbfKi01Bjg==}
-    dependencies:
-      '@babel/runtime': 7.23.5
-    dev: false
 
   /dns-equal@1.0.0:
     resolution: {integrity: sha512-z+paD6YUQsk+AbGCEM4PrOXSss5gd66QfcVBFTKR/HpFL9jCqikS94HYwKww6fQyO7IxrIIyUu+g0Ka9tUS2Cg==}
@@ -5387,13 +5372,6 @@ packages:
       set-function-name: 2.0.1
     dev: false
 
-  /jazz-midi@1.7.9:
-    resolution: {integrity: sha512-c8c4BBgwxdsIr1iVm53nadCrtH7BUlnX3V95ciK/gbvXN/ndE5+POskBalXgqlc/r9p2XUbdLTrgrC6fou5p9w==}
-    engines: {node: '>=10.0.0'}
-    requiresBuild: true
-    dev: false
-    optional: true
-
   /jest-changed-files@29.7.0:
     resolution: {integrity: sha512-fEArFiwf1BpQ+4bXSprcDc3/x4HSzL4al2tozwVpDFpsxALjLYdyiIK4e5Vz66GQJIbXJ82+35PtysofptNX2w==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -5950,15 +5928,6 @@ packages:
       object.assign: 4.1.5
       object.values: 1.1.7
     dev: false
-
-  /jzz@1.7.6:
-    resolution: {integrity: sha512-a2Z+ZMV4yIW82sbE/d+z8fnhc/83C5lpgVAz+NHhUAUlgdT0IUBxQOb6JyCrZ4WIMZnugeKMDFL314FoFrd51Q==}
-    requiresBuild: true
-    dependencies:
-      '@types/webmidi': 2.0.10
-      jazz-midi: 1.7.9
-    dev: false
-    optional: true
 
   /keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -7823,15 +7792,6 @@ packages:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
     engines: {node: '>=12'}
     dev: true
-
-  /webmidi@3.1.7:
-    resolution: {integrity: sha512-Q3OGc/GMRF0ZkGFUnTiwe+DWXAIVGJa2jkcPIqwsUF555hlhAfxXFcD+7CvN+0FzNFH1aDkH2K2gQkEPKMrphw==}
-    engines: {node: '>=8.5'}
-    dependencies:
-      djipevents: 2.0.7
-    optionalDependencies:
-      jzz: 1.7.6
-    dev: false
 
   /webpack-cli@4.10.0(webpack-dev-server@4.15.1)(webpack@5.89.0):
     resolution: {integrity: sha512-NLhDfH/h4O6UOy+0LSso42xvYypClINuMNBVVzX4vX98TmTaTUxwRbXdhucbFMd2qLaCTcLq/PdYrvi8onw90w==}
