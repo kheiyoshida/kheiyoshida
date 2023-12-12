@@ -1,5 +1,5 @@
-import * as TC from 'mgnr/dist/externals/tone/commands'
-import * as TE from 'mgnr/dist/externals/tone/events'
+import * as TC from 'mgnr/src/externals/tone/commands'
+import * as TE from 'mgnr/src/externals/tone/events'
 import { random } from 'src/lib/utils/random'
 import { providePreset } from '../utils'
 

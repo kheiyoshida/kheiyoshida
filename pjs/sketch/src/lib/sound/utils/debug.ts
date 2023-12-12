@@ -1,4 +1,4 @@
-import { RegisterTimeEvents } from "mgnr/dist/externals/tone/commands"
+import { RegisterTimeEvents } from "mgnr/src/externals/tone/commands"
 import { Transport } from "tone"
 
 export const metro = (interval = '1m') => {

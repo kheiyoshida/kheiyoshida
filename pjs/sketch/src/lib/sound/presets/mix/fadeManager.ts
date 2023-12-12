@@ -1,5 +1,5 @@
 import { Fader } from './fade'
-import * as TC from 'mgnr/dist/externals/tone/commands'
+import * as TC from 'mgnr/src/externals/tone/commands'
 
 const detectSilence = (fadeList: Fader[]): boolean =>
   fadeList.every((fade) => fade.fadeState.value === 'muted')

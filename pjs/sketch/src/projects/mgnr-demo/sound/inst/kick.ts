@@ -1,6 +1,6 @@
-import * as E from 'mgnr/dist/core/events'
-import * as TC from 'mgnr/dist/externals/tone/commands'
-import { Scale } from 'mgnr/dist/generator/Scale'
+import * as E from 'mgnr/src/core/events'
+import * as TC from 'mgnr/src/externals/tone/commands'
+import { Scale } from 'mgnr/src/generator/Scale'
 import { defaultKick, defaultTom } from 'src/lib/sound/presets/inst/kick'
 import { kickFactory } from '../../../../lib/sound/presets/notes/kick'
 
