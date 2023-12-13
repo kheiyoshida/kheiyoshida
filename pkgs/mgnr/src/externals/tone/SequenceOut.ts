@@ -1,6 +1,6 @@
 import * as Tone from 'tone'
 import * as Events from '../../core/events'
-import { midi2Note } from '../../generator/convert'
+import { convertMidiToNoteName } from '../../generator/convert'
 import { SequenceOut } from '../../core/SequenceOut'
 import {
   Instrument,
@@ -62,7 +62,7 @@ export class ToneSequenceOut extends SequenceOut<ToneInst> {
       Logger.debug('canceled assigning note due to empty scale')
     } else {
       this.inst.triggerAttackRelease(
-        midi2Note(pitch),
+        convertMidiToNoteName(pitch),
         pickRange(note.dur) * this.secsPerDiv,
         time,
         pickRange(note.vel) / 127
@@ -72,7 +72,7 @@ export class ToneSequenceOut extends SequenceOut<ToneInst> {
 
   private finalPitch(note: Note) {
     return note.pitch === 'random'
-      ? this.generator.picker.scale.pickRandom()
+      ? this.generator.picker.scale.pickRandomPitch()
       : note.pitch
   }
 

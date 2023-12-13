@@ -1,7 +1,7 @@
 import { Command } from '../../core/Message'
-import { GeneratorArgs } from '../../generator/Generator'
-import { SeqNotes } from '../../generator/Sequence'
 import { SeqEvent } from '../../core/SequenceEvent'
+import { GeneratorArgs } from '../../generator/Generator'
+import { SequenceNoteMap } from '../../generator/Sequence'
 import { TimeEventMap } from './TimeObserver'
 import { ChConf, InstCh, SendCh } from './mixer/Channel'
 
@@ -34,7 +34,7 @@ export class AssignGenerator extends Command implements GeneratorArgs {
   channelId!: string
   loop!: number
   conf!: GeneratorArgs['conf']
-  notes?: SeqNotes
+  notes?: SequenceNoteMap
   events?: SeqEvent
 }
 

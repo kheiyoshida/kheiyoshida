@@ -1,27 +1,27 @@
+import Logger from 'js-logger'
 import { random, randomIntBetween } from '../utils/calc'
-import {
-  Degree,
-  OCTAVE,
-  ROOT_TONE,
-  PitchName,
-  ScalePref,
-  SCALES,
-  MidiNum,
-  DegreeNumList,
-  LOWEST_MIDI_NUM,
-  HIGHEST_MIDI_NUM,
-  Semitone,
-  WHOLE_OCTAVES,
-} from './constants'
-import { deg2semi } from './convert'
 import { NumRange } from '../utils/primitives'
 import { Range } from '../utils/types'
-import Logger from 'js-logger'
 import { Modulation } from './Modulation'
+import {
+  Degree,
+  HIGHEST_MIDI_NUM,
+  LOWEST_MIDI_NUM,
+  MidiNum,
+  OCTAVE,
+  PitchName,
+  ROOT_TONE_MAP,
+  SCALES,
+  ScaleType,
+  Semitone,
+  SemitonesInScale,
+  WHOLE_OCTAVES,
+} from './constants'
+import { convertDegreeToSemitone } from './convert'
 
 export interface ScaleConf {
   key: PitchName
-  pref: ScalePref
+  pref: ScaleType
   range: Range
 }
 
@@ -45,21 +45,9 @@ export class Scale {
   /**
    * prefered degree in the key
    */
-  get pref(): ScalePref {
+  get scaleType(): ScaleType {
     return this._conf.pref
   }
-
-  /**
-   * range of the note pool
-   */
-  get range(): Range {
-    return this._conf.range
-  }
-
-  /**
-   * possible pitches in the current key. 
-   */
-  private _wholePitches!: MidiNum[]
 
   /**
    * possible pitches in the current key.
@@ -68,25 +56,29 @@ export class Scale {
   get wholePitches() {
     return this._wholePitches
   }
+  private _wholePitches!: MidiNum[]
 
   /**
    * ranged pitches in the whole pitches.
-   * clients usually pick pitch from this pool
+   * client picks pitches from this pool
    */
+  get primaryPitches(): MidiNum[] {
+    return this._primaryPitches
+  }
   private _primaryPitches!: MidiNum[]
 
   /**
-   * pitch list
+   * range of the pitches applied to primaryPitches
    */
-  get pitches(): MidiNum[] {
-    return this._primaryPitches
+  get pitchRange(): Range {
+    return this._conf.range
   }
 
   /**
-   * root tone midi number (in the lowest)
+   * root tone midi number
    */
-  get root() {
-    return ROOT_TONE[this.key]
+  get lowestPitch() {
+    return ROOT_TONE_MAP[this.key]
   }
 
   static DefaultValue: ScaleConf = {
@@ -125,10 +117,9 @@ export class Scale {
   }
 
   /**
-   * build the pitch lists based on degreeList and configured range.
    * call this method every time the config/key changes
    */
-  private construct(degreeList: DegreeNumList) {
+  private construct(degreeList: SemitonesInScale) {
     if (!degreeList.length) {
       throw Error(`constructNotes called without degreeList`)
     }
@@ -136,115 +127,88 @@ export class Scale {
     this._primaryPitches = this.constructPrimaryPitches()
   }
 
-  private constructWholePitches(degreeList: DegreeNumList):MidiNum[] {
+  private constructWholePitches(degreeList: SemitonesInScale): MidiNum[] {
     const pitches: MidiNum[] = []
     for (let o = 0; o < WHOLE_OCTAVES; o++) {
       for (const d of degreeList) {
-        pitches.push(this.root + o * OCTAVE + d)
+        pitches.push(this.lowestPitch + o * OCTAVE + d)
       }
     }
     return pitches
   }
 
-  private constructPrimaryPitches():MidiNum[] {
+  private constructPrimaryPitches(): MidiNum[] {
     if (!this._wholePitches.length) {
       throw Error(`constructPrimaryPitches called with empty wholePitches`)
     }
-    const range = new NumRange(this.range)
+    const range = new NumRange(this.pitchRange)
     return this._wholePitches.filter((p) => range.includes(p)).slice()
   }
 
   private subRange(range: NumRange): MidiNum[] {
-    if (!range.within(this.range)) {
+    if (!range.within(this.pitchRange)) {
       Logger.warn(`subRange must be specified within current scale's range`)
-      return this.pitches
+      return this.primaryPitches
     }
-    return this.pitches.filter((n) => range.includes(n)).slice()
+    return this.primaryPitches.filter((n) => range.includes(n)).slice()
   }
 
-  /**
-   * pick random note in the current notes pool
-   */
-  public pickRandom() {
-    if (!this.pitches.length) return
-    const i = randomIntBetween(0, this.pitches.length)
-    return this.pitches[i]
+  public pickRandomPitch() {
+    if (!this.primaryPitches.length) return
+    const i = randomIntBetween(0, this.primaryPitches.length)
+    return this.primaryPitches[i]
   }
 
   /**
    * look for the first Nth degree note in the scale
-   * doesn't return if not any
    *
    * @param degree Nth degree from the current key root
    * @param range search scope
    * @returns note's midi number
    */
-  public pickNthDegree(
-    degree: Semitone | Degree,
-    range?: Range
-  ): MidiNum | undefined {
-    const notes = !range ? this.pitches : this.subRange(new NumRange(range))
+  public pickNthDegree(degree: Semitone | Degree, range?: Range): MidiNum | undefined {
+    const notes = !range ? this.primaryPitches : this.subRange(new NumRange(range))
     return notes.find((n) => this.isNthDegree(n, degree))
   }
 
-  /**
-   * examine note's degree
-   * @param semitone
-   * @param degree
-   * @returns result
-   */
   private isNthDegree(semitone: number, degree: number | Degree): boolean {
-    const d = typeof degree !== 'number' ? deg2semi(degree) : degree % OCTAVE
+    const d = typeof degree !== 'number' ? convertDegreeToSemitone(degree) : degree % OCTAVE
     return this.getDegreeInScale(semitone) === d
   }
 
-  /**
-   * @param pitch note to examine
-   * @returns note's degree in this scale
-   */
   private getDegreeInScale(pitch: number): Semitone {
-    return (pitch - this.root) % OCTAVE
+    return (pitch - this.lowestPitch) % OCTAVE
   }
 
   /**
-   * look for nearest note in the notes to the provided note
+   * look for nearest note in the pitches.
    * search direction is bidirectional by default
-   *
-   * @param num note's midi number
-   * @param d
-   * @returns
    */
-  public pickNearestPitch(
-    num: MidiNum,
-    d: 'up' | 'down' | 'bi' = 'bi'
-  ): MidiNum {
+  public pickNearestPitch(pitch: MidiNum, d: 'up' | 'down' | 'bi' = 'bi'): MidiNum {
     const lookup: ('up' | 'down')[] =
       d !== 'bi' ? [d] : random(0.5) ? ['up', 'down'] : ['down', 'up']
     let n = 1
     while (n < OCTAVE * 2) {
       for (const l of lookup) {
         if (l === 'up') {
-          const found = this.pitches.find((note) => note === num + n)
+          const found = this.primaryPitches.find((note) => note === pitch + n)
           if (found) return found
         }
         if (l === 'down') {
-          const found = this.pitches.find((note) => note === num - n)
+          const found = this.primaryPitches.find((note) => note === pitch - n)
           if (found) return found
         }
       }
       n += 1
     }
     Logger.warn(`couldn't find note. returning as is`)
-    return num
+    return pitch
   }
 
   //-------------------
   // Modulation
   //-------------------
 
-  /**
-   * spec for next modulation operation
-   */
   private _modulation?: Modulation | undefined
   get inModulation(): boolean {
     return this._modulation !== undefined
@@ -255,7 +219,7 @@ export class Scale {
    * it compares current scale and desired scale and gradually shift towards it
    *
    * @param values config for the next destination scale
-   * @param stages number of swap event required to complete the transition
+   * @param stages number of swap iterations to complete the transition
    */
   public modulate(values: Partial<ScaleConf> = {}, stages = 0) {
     if (!this._modulation) {
@@ -264,7 +228,7 @@ export class Scale {
       const nextDegreeList = this._modulation.next()
       this.construct(nextDegreeList)
       if (this._modulation.queue.length === 0) {
-        this.endModulation(this._modulation.conf)
+        this.endModulation(this._modulation.nextScaleConf)
       }
     }
   }

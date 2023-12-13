@@ -4,7 +4,7 @@ import { negateIf, pick, randomRemove } from '../utils/utils'
 import { Note } from './Note'
 import { NotePicker, NotePickerConf } from './NotePicker'
 import { Scale } from './Scale'
-import { SeqNotes, Sequence, SequenceNotesConf } from './Sequence'
+import { SequenceNoteMap, Sequence, SequenceNotesConf } from './Sequence'
 
 export type SeqConfig = {
   scale?: Scale
@@ -12,29 +12,23 @@ export type SeqConfig = {
 
 export interface GeneratorArgs {
   conf: SeqConfig & Partial<SequenceNotesConf> & Partial<NotePickerConf>
-  notes?: SeqNotes
+  notes?: SequenceNoteMap
 }
 
 export class Generator {
-
   readonly picker: NotePicker
-
   readonly sequence: Sequence
+  private initialNotes!: SequenceNoteMap
 
   get scale(): Scale {
     return this.picker.scale
   }
 
+  // Does it have to know about picker and sequnece?
   constructor({ conf, notes }: GeneratorArgs) {
     // should be validation here
     this.picker = new NotePicker(
-      pick(conf, [
-        'noteDur',
-        'noteVel',
-        'veloPref',
-        'fillStrategy',
-        'harmonizer',
-      ]),
+      pick(conf, ['noteDur', 'noteVel', 'veloPref', 'fillStrategy', 'harmonizer']),
       conf.scale
     )
     this.sequence = new Sequence(
@@ -45,29 +39,27 @@ export class Generator {
     this.assignNotes()
   }
 
-  private initialNotes!: SeqNotes
-
   private assignInitialNotes() {
-    const ini = {...this.initialNotes}
+    const ini = { ...this.initialNotes }
     this.sequence.replaceEntireNotes(ini)
-    this.harmonize()
+    this.harmonizeNotes()
   }
 
   private assignNotes() {
     switch (this.picker.conf.fillStrategy) {
       case 'random':
       case 'fill':
-        this.fill()
+        this.fillAvailableSpaceInSequence()
         break
       case 'fixed':
         break
     }
   }
 
-  private fill() {
+  private fillAvailableSpaceInSequence() {
     let fail = 0
     while (this.sequence.availableSpace > 0 && fail < 5) {
-      const notes = this.picker.pickHarmonized()
+      const notes = this.picker.pickHarmonizedNotes()
       if (!notes) {
         fail += 1
       } else {
@@ -77,13 +69,14 @@ export class Generator {
     }
   }
 
-  private harmonize() {
+  // should this be here?
+  private harmonizeNotes() {
     if (this.picker.harmonizeEnabled) {
       const harmonized: Array<{ pos: number; notes: Note[] }> = []
       this.sequence.iterate((note, pos) => {
         harmonized.push({
           pos,
-          notes: this.picker.harmonize(note),
+          notes: this.picker.harmonizeNote(note),
         })
       })
       Object.values(harmonized).forEach((har) => {
@@ -94,44 +87,25 @@ export class Generator {
     }
   }
 
-  private recycle(notes: Note[]) {
+  private recycleNotes(notes: Note[]) {
     notes.forEach((n) => {
       const pos = this.sequence.getAvailablePosition()
       this.sequence.assignNote(pos, n)
     })
   }
 
-  /**
-   * invoke initial notes.
-   * i.e. reboot the initial assign process, but it cares the current config
-   */
-  private invokeInitialNotes() {
-    if (!this.sequence.isEmpty) return
+  public eraseSequenceNotes() {
+    this.sequence.deleteEntireNotes()
+  }
+
+  public resetNotes() {
+    this.eraseSequenceNotes()
     this.assignInitialNotes()
     this.removeNotesOutOfLength()
     this.adjustPitch()
-  }
-
-  /**
-   * empty sequence
-   */
-  public erase() {
-    this.sequence.clearNotes()
-  }
-
-  /**
-   * empty sequence and assign notes again
-   */
-  public resetNotes() {
-    this.erase()
-    this.invokeInitialNotes()
     this.assignNotes()
   }
 
-  /**
-   * Check if current notes are in tune with the current scale.
-   * if not, adust notes so that it can represent the current scale
-   */
   public adjustPitch() {
     this.sequence.iterate((n) => {
       if (this.picker.checkStaleNote(n)) {
@@ -140,36 +114,17 @@ export class Generator {
     })
   }
 
-  /**
-   * flag for controlling the length change direction
-   */
-  private reverse = false
+  private reverseLengthChangeDirection = false
 
-  /**
-   * toggle direction of extend/shrink
-   */
   public toggleReverse() {
-    this.reverse = !this.reverse
+    this.reverseLengthChangeDirection = !this.reverseLengthChangeDirection
   }
 
-  /**
-   * change sequence's length.
-   * if it couldn't change (when it reaches the limit), notify by returning false.
-   * 
-   * @param method change direction
-   * @param len amount of sequence length it will change
-   * @param refill reassign notes in the extended space
-   * @returns result of operation
-   */
-  public changeSequenceLength(
-    method: 'shrink' | 'extend',
-    len: number,
-    refill = true
-  ):boolean {
-    if (negateIf(this.reverse, method === 'extend')) {
-      return this.extend(len, refill)
+  public changeSequenceLength(method: 'shrink' | 'extend', length: number, refill = true): boolean {
+    if (negateIf(this.reverseLengthChangeDirection, method === 'extend')) {
+      return this.extend(length, refill)
     } else {
-      return this.shrink(len, refill)
+      return this.shrink(length, refill)
     }
   }
 
@@ -189,72 +144,58 @@ export class Generator {
   }
 
   /**
-   * delete excessive notes after shrinking
+   * delete excessive notes, typically after shrinking
    */
   private removeNotesOutOfLength() {
-    this.sequence.iteratePos((p) => {
+    this.sequence.iteratePosition((p) => {
       if (p >= this.sequence.length) {
-        this.sequence.deletePosition(p)
+        this.sequence.deleteNotesInPosition(p)
       }
     })
   }
 
   /**
-   * remove notes randomly
-   * @returns removed notes. can be recycled for relocation
+   * @returns removed notes that can be relocated
    */
   public randomRemove(rate = 0.5) {
     let removed: Note[] = []
-    this.sequence.iteratePos((i) => {
+    this.sequence.iteratePosition((i) => {
       const [survived, rm] = randomRemove(this.sequence.notes[i], rate)
       if (survived.length) {
-        this.sequence.replaceNotes(i, survived)
+        this.sequence.replaceNotesInPosition(i, survived)
       } else {
-        this.sequence.deletePosition(i)
+        this.sequence.deleteNotesInPosition(i)
       }
       removed = removed.concat(rm)
     })
     return removed
   }
 
-  /**
-   * mutate notes' position, pitch, velocity, durtion, etc.
-   * @param rate fire rate for each mutate operation on a note
-   */
   public mutate({ rate, strategy }: MutateSpec) {
     switch (strategy) {
       case 'randomize':
-        this.mutateRandomize(rate)
+        this.randomizeNotes(rate)
         break
       case 'move':
-        this.mutateMove(rate)
+        this.moveNotes(rate)
         break
       case 'inPlace':
-        this.mutateInPlace(rate)
+        this.mutateNotesPitches(rate)
         break
     }
   }
 
-  /**
-   * randomly remove note and assign new notes in random position
-   */
-  private mutateRandomize(rate: number) {
+  private randomizeNotes(rate: number) {
     this.randomRemove(rate)
     this.assignNotes()
   }
 
-  /**
-   * move note to another position
-   */
-  private mutateMove(rate: number) {
+  private moveNotes(rate: number) {
     const removed = this.randomRemove(rate)
-    this.recycle(removed)
+    this.recycleNotes(removed)
   }
 
-  /**
-   * only change note's pitch in its current position
-   */
-  private mutateInPlace(rate: number) {
+  private mutateNotesPitches(rate: number) {
     this.sequence.iterate((n) => {
       if (random(rate)) {
         this.picker.changeNotePitch(n)

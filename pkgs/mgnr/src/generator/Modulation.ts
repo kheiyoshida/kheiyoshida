@@ -1,8 +1,8 @@
-import { DegreeNumList, SCALES, Semitone } from './constants'
+import { SemitonesInScale, SCALES, Semitone } from './constants'
 import Logger from 'js-logger'
 import { findDelete } from '../utils/utils'
 import { ScaleConf } from './Scale'
-import { keyDiff } from './utils'
+import { getSemitoneDiffBetweenPitches } from './utils'
 
 interface ModulationQueueItem {
   add?: Semitone[]
@@ -14,13 +14,13 @@ export class Modulation {
   public get queue(): ModulationQueueItem[] {
     return this._queue
   }
-  private _conf: ScaleConf
-  public get conf(): ScaleConf {
-    return this._conf
+  private _nextScaleConf: ScaleConf
+  public get nextScaleConf(): ScaleConf {
+    return this._nextScaleConf
   }
-  private _degreeList: Semitone[]
-  public get degreeList(): Semitone[] {
-    return this._degreeList
+  private _degreesInNextScaleType: Semitone[]
+  public get degreesInNextScaleType(): Semitone[] {
+    return this._degreesInNextScaleType
   }
 
   constructor(
@@ -29,8 +29,8 @@ export class Modulation {
     degreeList: Semitone[]
   ) {
     this._queue = queue
-    this._conf = conf
-    this._degreeList = degreeList
+    this._nextScaleConf = conf
+    this._degreesInNextScaleType = degreeList
   }
 
   static create(
@@ -59,18 +59,18 @@ export class Modulation {
   }
 
   private consumeQueue(): number[] {
-    const mod = this.queue.shift()!
-    if (mod.remove) {
-      mod.remove.forEach((rm) => findDelete(this._degreeList, rm))
+    const modQueueItem = this.queue.shift()!
+    if (modQueueItem.remove) {
+      modQueueItem.remove.forEach((rm) => findDelete(this._degreesInNextScaleType, rm))
     }
-    if (mod.add) {
-      this._degreeList.push(...mod.add)
+    if (modQueueItem.add) {
+      this._degreesInNextScaleType.push(...modQueueItem.add)
     }
-    if (this._degreeList.length === 0) {
+    if (this._degreesInNextScaleType.length === 0) {
       Logger.info(`empty degreeList. consume another queue...`)
       return this.consumeQueue()
     }
-    return this._degreeList.sort((a, b) => a - b)
+    return this._degreesInNextScaleType.sort((a, b) => a - b)
   }
 }
 
@@ -78,8 +78,8 @@ export class Modulation {
  * Derive next degree list
  * (each note's degree is relative to the current key)
  */
-function nextDegreeList(current: ScaleConf, next: ScaleConf): DegreeNumList {
-  const diff = keyDiff(current.key, next.key)
+function nextDegreeList(current: ScaleConf, next: ScaleConf): SemitonesInScale {
+  const diff = getSemitoneDiffBetweenPitches(current.key, next.key)
   const dl = SCALES[next.pref]
   return slideDegreeList(dl, diff)
 }
@@ -88,7 +88,7 @@ function nextDegreeList(current: ScaleConf, next: ScaleConf): DegreeNumList {
  * add diff to each degree number in the list.
  * if it exceeds 12, it starts from 0 again
  */
-function slideDegreeList(dl: DegreeNumList, diff: number): DegreeNumList {
+function slideDegreeList(dl: SemitonesInScale, diff: number): SemitonesInScale {
   return dl.map((d) => (d + diff) % 12)
 }
 
@@ -99,8 +99,8 @@ function slideDegreeList(dl: DegreeNumList, diff: number): DegreeNumList {
  * @returns
  */
 function constructModulationQueue(
-  current: DegreeNumList,
-  next: DegreeNumList,
+  current: SemitonesInScale,
+  next: SemitonesInScale,
   stages: number
 ) {
   const add = [...next.filter((d) => !current.includes(d))]

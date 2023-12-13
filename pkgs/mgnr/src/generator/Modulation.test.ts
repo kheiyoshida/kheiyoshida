@@ -26,14 +26,14 @@ describe(`ScaleModulation`, () => {
           add: [10],
         },
       ])
-      expect(mod!.degreeList).toMatchObject([0, 2, 4, 5, 7, 9, 11])
+      expect(mod!.degreesInNextScaleType).toMatchObject([0, 2, 4, 5, 7, 9, 11])
 
       mod!.next()
-      expect(mod!.degreeList).toMatchObject([0, 2, 4, 5, 7, 9])
+      expect(mod!.degreesInNextScaleType).toMatchObject([0, 2, 4, 5, 7, 9])
       expect(mod!.queue).toMatchObject([{ add: [10] }])
 
       mod!.next()
-      expect(mod!.degreeList).toMatchObject([0, 2, 4, 5, 7, 9, 10])
+      expect(mod!.degreesInNextScaleType).toMatchObject([0, 2, 4, 5, 7, 9, 10])
       expect(mod!.queue).toMatchObject([])
     })
     it(`should cancel modulation if there's no diff`, () => {

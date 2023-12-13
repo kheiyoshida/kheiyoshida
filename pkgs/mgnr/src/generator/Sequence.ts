@@ -14,48 +14,61 @@ export type SequenceNotesConf = {
   fillPref: 'mono' | 'allowPoly'
 }
 
-/**
- * data map for notes on each position.
- * notes can be set in the same position as array
- */
-export type SeqNotes = {
-  [pos: number]: Note[]
+export type SequenceNoteMap = {
+  [position: number]: Note[]
 }
 
 export class Sequence {
-  private _notes!: SeqNotes
-  public get notes(): SeqNotes {
+  private _notes!: SequenceNoteMap
+  public get notes(): SequenceNoteMap {
     return this._notes
   }
 
   readonly conf: SequenceNotesConf
 
   /**
-   * length of the sequence
+   * the number of divisions
+   * e.g. length 8 means 8 sixteenth notes in a sequence
    */
   get length(): number {
     return this.conf.length
   }
 
   /**
-   * min/max for length. affects extend/shrink
+   * min/max limit to which sequence can shrink/extend
    */
   get lenRange() {
     return this.conf.lenRange
   }
 
   /**
-   * note division per 1 measure
+   * unit of each note with length 1
    */
   get division() {
     return this.conf.division
   }
 
   /**
-   * density of the notes
+   * the ratio of notes/available space
    */
-  get density() {
+  get density(): number {
     return this.conf.density
+  }
+
+  get availableSpace() {
+    return this.maxNumOfNotes - this.usedSpace
+  }
+
+  get maxNumOfNotes() {
+    return Math.floor(this.length * this.density)
+  }
+
+  get usedSpace() {
+    let used = 0
+    for (const notes of Object.values(this.notes)) {
+      used += notes.reduce((p, note) => Math.max(p, normalizeRange(note.dur)), 0)
+    }
+    return used
   }
 
   /**
@@ -66,36 +79,14 @@ export class Sequence {
     return this.length / this.division
   }
 
-  get maxNumOfNotes() {
-    return Math.floor(this.length * this.density)
+  get isEmpty() {
+    return this.numOfNotes === 0
   }
 
-  get availableSpace() {
-    return this.maxNumOfNotes - this.used
-  }
-
-  /**
-   * currently used space in the sequence
-   */
-  get used() {
-    let used = 0
-    for (const notes of Object.values(this.notes)) {
-      used += notes.reduce((p, c) => Math.max(p, normalizeRange(c.dur)), 0)
-    }
-    return used
-  }
-
-  /**
-   * actual number of note objects
-   */
   get numOfNotes() {
     let num = 0
     this.iterate((_) => (num += 1))
     return num
-  }
-
-  get isEmpty() {
-    return this.numOfNotes === 0
   }
 
   static DefaultConf: SequenceNotesConf = {
@@ -124,28 +115,29 @@ export class Sequence {
   }
 
   public assignNotes(pos: number | undefined, notes: Note[]) {
-    for(const n of notes) {
+    for (const n of notes) {
       this.assignNote(pos, n)
     }
   }
 
-  /**
-   * delete old data an dreplace entire notes object. 
-   */
-  public replaceEntireNotes(notes: SeqNotes) {
+  public replaceEntireNotes(notes: SequenceNoteMap) {
     this._notes = notes
   }
 
-  public replaceNotes(pos: number, notes: Note[]) {
+  public replaceNotesInPosition(position: number, notes: Note[]) {
     if (!notes || !notes.length) {
       throw Error(`replaceNotes called with empty notes`)
     }
-    this.notes[pos] = notes
+    this.notes[position] = notes
   }
 
-  public deletePosition(p: number) {
-    if (this.notes[p]) {
-      delete this.notes[p]
+  public deleteEntireNotes() {
+    this._notes = {}
+  }
+
+  public deleteNotesInPosition(position: number) {
+    if (this.notes[position]) {
+      delete this.notes[position]
     }
   }
 
@@ -188,25 +180,13 @@ export class Sequence {
     this.conf.length -= len
   }
 
-  public clearNotes() {
-    this._notes = {}
+  public iterate(cb: (notes: Note, pos: number) => void) {
+    this.iteratePosition((p) => this.notes[p].forEach((note) => cb(note, p)))
   }
 
-  /**
-   * iterate over note positions
-   * @param cb
-   */
-  public iteratePos(cb: (pos: number) => void) {
+  public iteratePosition(cb: (pos: number) => void) {
     Object.keys(this.notes)
       .map((p) => parseInt(p))
       .forEach(cb)
-  }
-
-  /**
-   * Iterate on each note
-   * @param cb
-   */
-  public iterate(cb: (notes: Note, pos: number) => void) {
-    this.iteratePos((p) => this.notes[p].forEach((note) => cb(note, p)))
   }
 }

@@ -4,17 +4,11 @@ import { MessageBus } from './MessageBus'
 export class Message {
   static pub<T extends Message>(this: { new (): T }, values: T) {
     MessageBus.get().handle(
-      Object.assign(
-        Object.assign(Object.create(this.prototype), new this()),
-        values
-      )
+      Object.assign(Object.assign(Object.create(this.prototype), new this()), values)
     )
   }
   static create<T extends Message>(this: { new (): T }, values: T): T {
-    return Object.assign(
-      Object.assign(Object.create(this.prototype), new this()),
-      values
-    )
+    return Object.assign(Object.assign(Object.create(this.prototype), new this()), values)
   }
 }
 
@@ -32,9 +26,6 @@ export type EventHandlerMap<D extends Destination, Keys extends string = string>
   [k in Keys]: Handler<D>[]
 }
 
-export type CommandHandlerMap<
-  D extends Destination,
-  Keys extends string = string
-> = {
+export type CommandHandlerMap<D extends Destination, Keys extends string = string> = {
   [k in Keys]: Handler<D>
 }

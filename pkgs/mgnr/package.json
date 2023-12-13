@@ -8,8 +8,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --outDir dist --declaration",
-    "test": "jest --watch"
+    "build": "tsc --outDir dist",
+    "test": "cd ../.. && jest --selectProjects mgnr",
+    "test:coverage": "cd ../.. && jest --selectProjects mgnr --coverage"
   },
   "keywords": [
     "music",

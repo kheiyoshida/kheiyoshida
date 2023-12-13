@@ -1,9 +1,4 @@
-import {
-  CommandHandlerMap,
-  EventHandlerMap,
-  Handler,
-  Message
-} from '../../core/Message'
+import { CommandHandlerMap, EventHandlerMap, Handler, Message } from '../../core/Message'
 import { Generator } from '../../generator/Generator'
 import { DisposeSequenceOutRequired, SequenceOutSetupRequired } from '../../core/events'
 import { ToneDestination } from './Destination'
@@ -13,10 +8,7 @@ import { InstChannel, SendChannel } from './mixer/Channel'
 
 export type ToneHandler<M extends Message = any> = Handler<ToneDestination, M>
 
-const setupInstChannel: ToneHandler<Commands.SetupInstChannel> = (
-  mes,
-  { mixer }
-) => {
+const setupInstChannel: ToneHandler<Commands.SetupInstChannel> = (mes, { mixer }) => {
   mixer.addInstChannel(mes.conf.id, new InstChannel(mes.conf))
   if (mes.conf.fadeIn) {
     return [
@@ -29,18 +21,12 @@ const setupInstChannel: ToneHandler<Commands.SetupInstChannel> = (
   return null
 }
 
-const setupSendChannel: ToneHandler<Commands.SetupSendChannel> = (
-  mes,
-  { mixer }
-) => {
+const setupSendChannel: ToneHandler<Commands.SetupSendChannel> = (mes, { mixer }) => {
   mixer.addSendChannel(mes.conf.id, new SendChannel(mes.conf))
   return null
 }
 
-const assignSendChannel: ToneHandler<Commands.AssignSendChannel> = (
-  mes,
-  { mixer }
-) => {
+const assignSendChannel: ToneHandler<Commands.AssignSendChannel> = (mes, { mixer }) => {
   mixer.connectSendChannel(mes.from, mes.to, mes.gainAmount)
   return null
 }
@@ -48,10 +34,7 @@ const assignSendChannel: ToneHandler<Commands.AssignSendChannel> = (
 /**
  * assign generator to instrument
  */
-const assignGenerator: ToneHandler<Commands.AssignGenerator> = (
-  mes,
-  { mixer }
-) => {
+const assignGenerator: ToneHandler<Commands.AssignGenerator> = (mes, { mixer }) => {
   const instCh = mixer.findInstChannelById(mes.channelId)
   const gen = new Generator({
     conf: mes.conf,
@@ -80,62 +63,47 @@ const handleMute: ToneHandler<Events.MuteRequired> = (mes, { mixer }) => {
   return null
 }
 
-const handleSendFade: ToneHandler<Events.SendFadeRequired> = (mes, {mixer}) => {
+const handleSendFade: ToneHandler<Events.SendFadeRequired> = (mes, { mixer }) => {
   mixer.fadeChannelSend(mes.channel, mes.send, mes.values)
   return null
 }
 
-const handleSendMute: ToneHandler<Events.SendMuteRequired> = (mes, {mixer}) => {
+const handleSendMute: ToneHandler<Events.SendMuteRequired> = (mes, { mixer }) => {
   mixer.muteChannelSend(mes.channel, mes.send, mes.value)
   return null
 }
 
-const registerTimeEvents: ToneHandler<Commands.RegisterTimeEvents> = (
-  mes,
-  dest
-) => {
+const registerTimeEvents: ToneHandler<Commands.RegisterTimeEvents> = (mes, dest) => {
   dest.timeObserver.registerEvents(mes.events)
   return null
 }
 
-const disposeChannel: ToneHandler<Events.DisposeChannelRequired> = (mes, {mixer}) => {
+const disposeChannel: ToneHandler<Events.DisposeChannelRequired> = (mes, { mixer }) => {
   const ch = mixer.findChannelById(mes.channelId)
   if (ch instanceof InstChannel) {
     return [
       DisposeSequenceOutRequired.create({
-        outId: mes.channelId
+        outId: mes.channelId,
       }),
       Events.DeleteChannelRequired.create({
-        channelId: mes.channelId
-      })
+        channelId: mes.channelId,
+      }),
     ]
   } else {
     return [
       Events.DeleteChannelRequired.create({
-        channelId: mes.channelId
-      })
+        channelId: mes.channelId,
+      }),
     ]
-  } 
+  }
 }
 
-const deleteChannel: ToneHandler<Events.DeleteChannelRequired> = (mes, {mixer}) => {
+const deleteChannel: ToneHandler<Events.DeleteChannelRequired> = (mes, { mixer }) => {
   mixer.deleteChannel(mes.channelId)
   return null
 }
 
-// for tests
-export const handlers = {
-  setupInstChannel,
-  setupSendChannel,
-  assignSendChannel,
-  assignGenerator,
-  handleFade,
-}
-
-export const TONE_EVENT_HANDLERS: EventHandlerMap<
-  ToneDestination,
-  keyof typeof Events
-> = {
+export const TONE_EVENT_HANDLERS: EventHandlerMap<ToneDestination, keyof typeof Events> = {
   ChannelAssigned: [],
   FadeRequired: [handleFade],
   MuteRequired: [handleMute],
@@ -145,13 +113,10 @@ export const TONE_EVENT_HANDLERS: EventHandlerMap<
   DisposeChannelRequired: [disposeChannel],
 }
 
-export const TONE_COMMAND_HANDLERS: CommandHandlerMap<
-  ToneDestination,
-  keyof typeof Commands
-> = {
+export const TONE_COMMAND_HANDLERS: CommandHandlerMap<ToneDestination, keyof typeof Commands> = {
   SetupInstChannel: setupInstChannel,
   SetupSendChannel: setupSendChannel,
   AssignSendChannel: assignSendChannel,
   AssignGenerator: assignGenerator,
-  RegisterTimeEvents: registerTimeEvents,  
+  RegisterTimeEvents: registerTimeEvents,
 }

@@ -1,9 +1,9 @@
-import { TimeObserver } from '../../externals/tone/TimeObserver'
+import { Destination } from '../../core/Destination'
 import { ToneOutput } from '../../externals/tone/Output'
+import { TimeObserver } from '../../externals/tone/TimeObserver'
 import { MasterChannelConf } from '../../externals/tone/mixer/Master'
 import { Mixer } from '../../externals/tone/mixer/Mixer'
 import { PitchName } from '../../generator/constants'
-import { Destination } from '../../core/Destination'
 import { buildConf } from '../../utils/utils'
 import { ToneInst } from './SequenceOut'
 

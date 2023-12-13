@@ -2,7 +2,7 @@ import Logger from 'js-logger'
 import { buildConf } from '../utils/utils'
 import { Note } from './Note'
 import { Degree, MidiNum, OCTAVE, Semitone } from './constants'
-import { deg2semi } from './convert'
+import { convertDegreeToSemitone } from './convert'
 
 export type HarmonizerConf = {
   degree: (Degree | Semitone)[]
@@ -28,25 +28,20 @@ export class Harmonizer {
   /**
    * harmonize note's pitch.
    * @param note original note
-   * @param degree degree to add
-   * @returns hamonized notes
+   * @param wholePitches available pitches in the scale
    */
-  public harmonize(note: Note, pitches: Semitone[]): Note[] {
+  public harmonize(note: Note, wholePitches: Semitone[]): Note[] {
     return this.conf.degree
-      .map((d) => this._harmonize(note, d, pitches))
+      .map((d) => this._harmonize(note, d, wholePitches))
       .filter((n): n is Note => n !== undefined)
   }
 
-  private _harmonize(
-    note: Note,
-    degree: Degree | Semitone,
-    pitches: Semitone[]
-  ): Note | undefined {
+  private _harmonize(note: Note, degree: Degree | Semitone, pitches: Semitone[]): Note | undefined {
     if (note.pitch === 'random') {
       Logger.info(`random harmonize`)
       return note
     }
-    const semiDeg = deg2semi(degree)
+    const semiDeg = convertDegreeToSemitone(degree)
     if (this.conf.force) {
       const pitch = this.getPitch(note.pitch, semiDeg)
       return { ...note, pitch }

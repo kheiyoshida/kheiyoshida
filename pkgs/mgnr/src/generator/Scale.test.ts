@@ -9,7 +9,7 @@ describe(`Scale`, () => {
         key: 'C',
         range: { min: 60, max: 60 + OCTAVE * 3 },
       })
-      expect(scale.pitches).toMatchObject([
+      expect(scale.primaryPitches).toMatchObject([
         60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81, 83, 84, 86, 88, 89,
         91, 93, 95, 96,
       ])
@@ -21,7 +21,7 @@ describe(`Scale`, () => {
         key: 'C',
         range: { min: 0, max: 30 },
       })
-      expect(scale.pitches).toMatchInlineSnapshot(`
+      expect(scale.primaryPitches).toMatchInlineSnapshot(`
         [
           24,
           26,
@@ -41,7 +41,7 @@ describe(`Scale`, () => {
         pref: 'omit27',
         range: { min: 60, max: 90 },
       })
-      expect(scale.pitches).toMatchObject([
+      expect(scale.primaryPitches).toMatchObject([
         60, 63, 67, 68, 70, 72, 75, 79, 80, 82, 84, 87,
       ])
     })
@@ -54,7 +54,7 @@ describe(`Scale`, () => {
     })
     it(`should pick random note from the range`, () => {
       for (let i = 0; i < 100; i++) {
-        const n = scale.pickRandom()
+        const n = scale.pickRandomPitch()
         expect(n! >= 60 && n! <= 80).toBe(true)
       }
     })
@@ -86,11 +86,11 @@ describe(`Scale`, () => {
         pref: 'major',
         range: { min: 60, max: 72 },
       })
-      expect(scale.pitches).toMatchObject([60, 62, 64, 65, 67, 69, 71, 72])
+      expect(scale.primaryPitches).toMatchObject([60, 62, 64, 65, 67, 69, 71, 72])
       scale.modulate({ key: 'F' }, 2)
-      expect(scale.pitches).toMatchObject([60, 62, 64, 65, 67, 69, 72])
+      expect(scale.primaryPitches).toMatchObject([60, 62, 64, 65, 67, 69, 72])
       scale.modulate()
-      expect(scale.pitches).toMatchObject([60, 62, 64, 65, 67, 69, 70, 72])
+      expect(scale.primaryPitches).toMatchObject([60, 62, 64, 65, 67, 69, 70, 72])
       expect(scale.key).toBe('F')
       expect(scale.inModulation).toBe(false)
     })
@@ -100,9 +100,9 @@ describe(`Scale`, () => {
         pref: 'major',
         range: { min: 60, max: 72 },
       })
-      expect(scale.pitches).toMatchObject([60, 62, 64, 65, 67, 69, 71, 72])
+      expect(scale.primaryPitches).toMatchObject([60, 62, 64, 65, 67, 69, 71, 72])
       scale.modulate({ key: 'F' }, 1)
-      expect(scale.pitches).toMatchObject([60, 62, 64, 65, 67, 69, 70, 72])
+      expect(scale.primaryPitches).toMatchObject([60, 62, 64, 65, 67, 69, 70, 72])
       expect(scale.key).toBe('F')
       expect(scale.inModulation).toBe(false)
     })
@@ -111,10 +111,10 @@ describe(`Scale`, () => {
         key: 'C',
         range: { min: 60, max: 60 + OCTAVE * 3 },
       })
-      const beforeNotes = scale.pitches.slice()
+      const beforeNotes = scale.primaryPitches.slice()
       scale.modulate({ range: { min: 60, max: 60 + OCTAVE * 1 } })
-      expect(scale.pitches).not.toMatchObject(beforeNotes)
-      expect(scale.pitches).toMatchObject([60, 62, 64, 65, 67, 69, 71, 72])
+      expect(scale.primaryPitches).not.toMatchObject(beforeNotes)
+      expect(scale.primaryPitches).toMatchObject([60, 62, 64, 65, 67, 69, 71, 72])
     })
     it(`can change prefered tone`, () => {
       const scale = new Scale({
@@ -122,10 +122,10 @@ describe(`Scale`, () => {
         pref: 'omit27',
         range: { min: 60, max: 90 },
       })
-      const beforeNotes = scale.pitches.slice()
+      const beforeNotes = scale.primaryPitches.slice()
       scale.modulate({ pref: 'omit47' })
-      expect(scale.pitches).not.toMatchObject(beforeNotes)
-      expect(scale.pitches).toMatchObject([
+      expect(scale.primaryPitches).not.toMatchObject(beforeNotes)
+      expect(scale.primaryPitches).toMatchObject([
         60, 63, 65, 67, 70, 72, 75, 77, 79, 82, 84, 87, 89,
       ])
     })
@@ -135,10 +135,10 @@ describe(`Scale`, () => {
         pref: 'omit27',
         range: { min: 60, max: 72 },
       })
-      expect(scale.pitches).toMatchObject([60, 64, 65, 67, 69, 72])
+      expect(scale.primaryPitches).toMatchObject([60, 64, 65, 67, 69, 72])
       scale.modulate({ key: 'F', pref: 'omit46' }, 3)
       expect(scale.key).toBe('F')
-      expect(scale.pitches).toMatchObject([60, 64, 65, 67, 69, 72])
+      expect(scale.primaryPitches).toMatchObject([60, 64, 65, 67, 69, 72])
       expect(scale.inModulation).toBe(false)
     })
     it.todo(`should NOT cancel modulation if there's change in range`)

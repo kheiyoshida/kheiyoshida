@@ -49,8 +49,8 @@ describe(`SequenceNotes`, () => {
   it(`can delete notes`, () => {
     const seqNotes = new Sequence()
     seqNotes.replaceEntireNotes(makeNotes())
-    seqNotes.deletePosition(0)
-    seqNotes.deletePosition(4)
+    seqNotes.deleteNotesInPosition(0)
+    seqNotes.deleteNotesInPosition(4)
     expect(seqNotes.notes).toMatchObject({ 2: notes[2] })
   })
   it('getAvailablePosition', () => {
@@ -68,17 +68,17 @@ describe(`SequenceNotes`, () => {
     // 1
     const seqNotes = new Sequence()
     seqNotes.replaceEntireNotes(makeNotes())
-    seqNotes.iteratePos((pos) => seqNotes.deletePosition(pos))
+    seqNotes.iteratePosition((pos) => seqNotes.deleteNotesInPosition(pos))
     expect(seqNotes.notes).toMatchInlineSnapshot(`{}`)
     // 2
     const seqNotes2 = new Sequence()
     seqNotes2.replaceEntireNotes(makeNotes())
     expect(seqNotes2.notes[0]).toHaveLength(1)
-    seqNotes2.iteratePos((pos) =>
+    seqNotes2.iteratePosition((pos) =>
       seqNotes2.notes[pos].forEach((n) => (n.pitch = 72))
     )
     expect(
-      seqNotes2.iteratePos((p) =>
+      seqNotes2.iteratePosition((p) =>
         seqNotes2.notes[p].forEach((n) => n.pitch === 72)
       )
     )
@@ -88,7 +88,7 @@ describe(`SequenceNotes`, () => {
     seqNotes.replaceEntireNotes(makeNotes())
     seqNotes.iterate((n) => (n.pitch = 72))
     expect(
-      seqNotes.iteratePos((p) =>
+      seqNotes.iteratePosition((p) =>
         seqNotes.notes[p].forEach((n) => n.pitch === 72)
       )
     )
@@ -96,7 +96,7 @@ describe(`SequenceNotes`, () => {
   it(`can clear notes`, () => {
     const seqNotes = new Sequence()
     seqNotes.replaceEntireNotes(makeNotes())
-    seqNotes.clearNotes()
+    seqNotes.deleteEntireNotes()
     expect(seqNotes.numOfNotes).toBe(0)
   })
 })

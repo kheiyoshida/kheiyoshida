@@ -18,11 +18,11 @@ export abstract class Output<I> {
    */
   public findGeneratorByScale(scale: Scale): Generator[] {
     return Object.values(this.outs)
-      .filter(out => out.generator.scale === scale)
-      .map(out => out.generator)
+      .filter((out) => out.generator.scale === scale)
+      .map((out) => out.generator)
   }
 
-  public abstract set(outId: string, gen: Generator, inst: I, events?: SeqEvent):void
+  public abstract set(outId: string, gen: Generator, inst: I, events?: SeqEvent): void
 
   public delete(outId: string) {
     if (outId in this.outs) {

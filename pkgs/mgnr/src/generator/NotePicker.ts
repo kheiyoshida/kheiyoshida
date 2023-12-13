@@ -44,16 +44,14 @@ export class NotePicker {
    * Check if a note is in the current scale's note pool
    */
   public checkStaleNote(n: Note): boolean {
-    return n.pitch !== 'random' && !this.scale.pitches.includes(n.pitch)
+    return n.pitch !== 'random' && !this.scale.primaryPitches.includes(n.pitch)
   }
 
   private getVel(): Note['vel'] {
-    return this.conf.veloPref === 'randomPerEach'
-      ? this.conf.noteVel
-      : pickRange(this.conf.noteVel)
+    return this.conf.veloPref === 'randomPerEach' ? this.conf.noteVel : pickRange(this.conf.noteVel)
   }
 
-  public pick(): Note | undefined {
+  public pickNote(): Note | undefined {
     if (this.conf.fillStrategy === 'random') {
       return {
         pitch: 'random',
@@ -61,7 +59,7 @@ export class NotePicker {
         vel: this.getVel(),
       }
     } else {
-      const pitch = this.scale.pickRandom()
+      const pitch = this.scale.pickRandomPitch()
       if (!pitch) return
       return {
         pitch,
@@ -71,20 +69,16 @@ export class NotePicker {
     }
   }
 
-  public pickHarmonized(): Note[] | undefined {
-    const n = this.pick()
+  public pickHarmonizedNotes(): Note[] | undefined {
+    const n = this.pickNote()
     if (!n) return
     if (!this.harmonizeEnabled) {
       return [n]
     }
-    return [n, ...this.harmonize(n)]
+    return [n, ...this.harmonizeNote(n)]
   }
 
-  /**
-   * harmonize note's pitch.
-   * @param note original note
-   */
-  public harmonize(note: Note): Note[] {
+  public harmonizeNote(note: Note): Note[] {
     if (!this.harmonizer) {
       Logger.warn(`harmonizer is not set for this picker`)
       return []
@@ -92,10 +86,6 @@ export class NotePicker {
     return this.harmonizer.harmonize(note, this.scale.wholePitches)
   }
 
-  /**
-   * adjust note's pitch to the nearest pitch in the scale
-   * typically called when scale modulated
-   */
   public adjustNotePitch(n: Note, d?: 'up' | 'down' | 'bi') {
     if (this.conf.fillStrategy !== 'fixed') {
       n.pitch = this.scale.pickNearestPitch(n.pitch as number, d)
@@ -104,27 +94,19 @@ export class NotePicker {
     }
   }
 
-  /**
-   * change note's pitch randomly
-   * same pitch should not be assigned
-   */
   public changeNotePitch(n: Note) {
     n.pitch = this.getRandomPitch(n.pitch) || n.pitch
   }
 
-  /**
-   * Get random pitch from the scale.
-   * @param p (optional) if provided, it assures differnt pitch
-   */
-  private getRandomPitch(p?: Note['pitch'], r = 0): number | null {
+  private getRandomPitch(originalPitch?: Note['pitch'], r = 0): number | null {
     if (r > 20) {
       Logger.warn(`recursion exceeded at getRandomPitch`)
       return null
     }
-    const pitch = this.scale.pickRandom()
-    if (!pitch || p === pitch) {
-      return this.getRandomPitch(p, r + 1)
+    const newPitch = this.scale.pickRandomPitch()
+    if (!newPitch || originalPitch === newPitch) {
+      return this.getRandomPitch(originalPitch, r + 1)
     }
-    return pitch
+    return newPitch
   }
 }

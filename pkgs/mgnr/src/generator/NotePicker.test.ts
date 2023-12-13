@@ -27,7 +27,7 @@ describe(`NotePicker`, () => {
         dur: 1,
         vel: 100
       }
-      const res = picker.harmonize(note)
+      const res = picker.harmonizeNote(note)
       expect(res).toMatchObject([{
         ...note,
         pitch: 67,
@@ -45,7 +45,7 @@ describe(`NotePicker`, () => {
         dur: 1,
         vel: 100
       }
-      const res = picker.harmonize(note)
+      const res = picker.harmonizeNote(note)
       expect(res).toMatchObject([{
         ...note,
         pitch: 67,
@@ -64,7 +64,7 @@ describe(`NotePicker`, () => {
         dur: 1,
         vel: 100
       }
-      const res = picker.harmonize(note)
+      const res = picker.harmonizeNote(note)
       expect(res).toMatchObject([{...note, pitch: 66}])
     })
     it(`can look down the scale for the Nth degree note`, () => {
@@ -80,7 +80,7 @@ describe(`NotePicker`, () => {
         dur: 1,
         vel: 100
       }
-      const res = picker.harmonize(note)
+      const res = picker.harmonizeNote(note)
       expect(res).toMatchObject([{...note, pitch: 53}])
     })
   })
