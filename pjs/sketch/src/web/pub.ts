@@ -7,5 +7,6 @@ export const published: string[] = [
   'wasted',
   'flower',
   'tp4',
-  'mgnr-demo'
+  'mgnr-demo',
+  'mgnr-poc'
 ]

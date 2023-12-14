@@ -16,7 +16,7 @@ export class ToneSequenceOut extends SequenceOut<ToneInst> {
   /**
    * Check time based events while assign loop
    */
-  private checkEvent(loop: number, repeatNth: number, loopStartedAt: number) {
+  protected checkEvent(loop: number, repeatNth: number, loopStartedAt: number) {
     if (this.events.elapsed) {
       Events.SequenceElapsed.pub({
         out: this,

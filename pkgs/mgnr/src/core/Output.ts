@@ -22,6 +22,9 @@ export abstract class Output<I> {
       .map((out) => out.generator)
   }
 
+  /**
+   * assign generator to instrument
+   */
   public abstract set(outId: string, gen: Generator, inst: I, events?: SeqEvent): void
 
   public delete(outId: string) {
