@@ -1,4 +1,4 @@
-import * as Tone from 'tone'
+import * as Transport from '../tone/tone-wrapper/Transport'
 
 export type TimeEventHandler = (time: number) => OnceTimeEvent | void
 
@@ -34,7 +34,7 @@ export class TimeObserver {
   }
 
   private registerOnce(event: OnceTimeEvent) {
-    Tone.Transport.scheduleOnce((time) => {
+    Transport.scheduleOnce((time) => {
       const chain = event.handler(time)
       if (chain) {
         this.next(chain)
@@ -43,7 +43,7 @@ export class TimeObserver {
   }
 
   private registerRepeat(event: RepeatTimeEvent) {
-    Tone.Transport.scheduleRepeat(
+    Transport.scheduleRepeat(
       (time) => {
         const chain = event.handler(time)
         if (chain) {
@@ -70,6 +70,6 @@ export class TimeObserver {
   }
 
   private setBPM(bpm: number) {
-    Tone.Transport.bpm.value = bpm
+    Transport.setBPM(bpm)
   }
 }

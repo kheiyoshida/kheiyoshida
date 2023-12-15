@@ -8,5 +8,6 @@ export const published: string[] = [
   'flower',
   'tp4',
   'mgnr-demo',
-  'mgnr-poc'
+  'mgnr-poc',
+  'mgnr-test'
 ]

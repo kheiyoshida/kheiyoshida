@@ -1,4 +1,3 @@
-import { ToneOutput } from 'mgnr/src/externals/tone/Output'
 import { ToneSequenceOut } from 'mgnr/src/externals/tone/SequenceOut'
 import {
   createGenerator,

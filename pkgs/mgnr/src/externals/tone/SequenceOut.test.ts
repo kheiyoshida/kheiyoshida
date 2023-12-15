@@ -1,7 +1,9 @@
+import { mockScheduleLoop } from '../../__tests__/mock'
 import * as Tone from 'tone'
 import { Generator } from '../../generator/Generator'
 import { ToneSequenceOut } from './SequenceOut'
 import * as wrapperUtil from './tone-wrapper/utils'
+
 jest.mock('tone')
 
 const FIXED_SECONDS_PER_MEASURE = 1
@@ -34,15 +36,7 @@ describe(`${ToneSequenceOut.name}`, () => {
   }
   let spyScheduleLoop: jest.SpyInstance
   beforeEach(() => {
-    spyScheduleLoop = jest
-      .spyOn(wrapperUtil, 'scheduleLoop')
-      .mockImplementation((cb, duration, startTime, numOfLoops) => {
-        // eslint-disable-next-line no-extra-semi
-        ;[...Array(numOfLoops)].map((_, loopNth) => {
-          cb(loopNth, loopNth)
-        })
-        return 0 // compatibility
-      })
+    spyScheduleLoop = jest.spyOn(wrapperUtil, 'scheduleLoop').mockImplementation(mockScheduleLoop)
   })
   it(`can assign sequence to inst`, () => {
     const { seqOut, inst } = prepare()

@@ -11,7 +11,7 @@ import { Destination } from './Destination'
 export class MessageBus<D extends Destination> {
   private static instance: MessageBus<any>
 
-  private destination: Destination
+  public destination: Destination
   readonly EventHandlers
   readonly CommandHandlers
 
