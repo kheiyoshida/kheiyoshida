@@ -101,8 +101,6 @@ export const CORE_EVENT_HANDLERS: EventHandlerMap<Destination, keyof typeof Even
   ScaleModulationRequired: [modulateScale],
   AdjustNotesRequired: [adjustSequenceNotes],
   SequenceOutSetupRequired: [setupSequenceOut],
-  SequenceAssigned: [],
-  SequenceStarted: [],
   SequenceElapsed: [handleSequenceEvent<Events.SequenceElapsed>('elapsed')],
   SequenceEnded: [handleSequenceEvent<Events.SequenceEnded>('ended')],
   SequenceReAssignRequired: [reassignSequence],

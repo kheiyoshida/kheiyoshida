@@ -104,7 +104,6 @@ const deleteChannel: ToneHandler<Events.DeleteChannelRequired> = (mes, { mixer }
 }
 
 export const TONE_EVENT_HANDLERS: EventHandlerMap<ToneDestination, keyof typeof Events> = {
-  ChannelAssigned: [],
   FadeRequired: [handleFade],
   MuteRequired: [handleMute],
   SendFadeRequired: [handleSendFade],
