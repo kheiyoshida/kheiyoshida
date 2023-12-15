@@ -1,11 +1,8 @@
-import * as Tone from 'tone'
+import * as Transport from './tone-wrapper/Transport'
 import * as Events from '../../core/events'
 import { convertMidiToNoteName } from '../../generator/convert'
 import { SequenceOut } from '../../core/SequenceOut'
-import {
-  Instrument,
-  InstrumentOptions,
-} from 'tone/build/esm/instrument/Instrument'
+import { Instrument, InstrumentOptions } from 'tone/build/esm/instrument/Instrument'
 import { Note } from '../../generator/Note'
 import { pickRange } from '../../utils/calc'
 import Logger from 'js-logger'
@@ -13,13 +10,12 @@ import Logger from 'js-logger'
 export type ToneInst = Instrument<InstrumentOptions>
 
 export class ToneSequenceOut extends SequenceOut<ToneInst> {
-
   /**
    * ids of assign events
    */
   private assignIds: number[] = []
-  
-  protected checkEvent(loop: number, repeatNth: number, loopStartedAt: number) {
+
+  protected checkEvent(repeat: number, repeatNth: number, loopStartedAt: number) {
     if (this.events.elapsed) {
       Events.SequenceElapsed.pub({
         out: this,
@@ -27,11 +23,11 @@ export class ToneSequenceOut extends SequenceOut<ToneInst> {
         endTime: loopStartedAt + repeatNth * this.sequenceDuration,
       })
     }
-    if (repeatNth === loop) {
+    if (repeatNth === repeat) {
       Events.SequenceEnded.pub({
         out: this,
-        loop,
-        endTime: loopStartedAt + loop * this.sequenceDuration,
+        loop: repeat,
+        endTime: loopStartedAt + repeat * this.sequenceDuration,
       })
     }
   }
@@ -39,21 +35,19 @@ export class ToneSequenceOut extends SequenceOut<ToneInst> {
   /**
    * @param startTime time elapsed in Tone.Transport
    */
-  public assignSequence(loop = 1, startTime = 0) {
+  public assignSequence(repeat = 1, startTime = 0) {
     if (this.isDisposed) return
     if (this.generator.sequence.isEmpty) return
-    let repeat = 0
-    const e = Tone.Transport.scheduleRepeat(
-      (t) => {
-        repeat += 1
-        this.checkEvent(loop, repeat, startTime)
+    const e = Transport.scheduleLoop(
+      (time, loopNth) => {
+        this.checkEvent(repeat, loopNth, startTime)
         this.generator.sequence.iterate((note, pos) => {
-          this.assignNote(note, t + pos * this.secsPerDivision)
+          this.assignNote(note, time + pos * this.secsPerDivision)
         })
       },
-      this.sequenceDuration, // interval
-      startTime, // start
-      loop * this.sequenceDuration // loop duration
+      this.sequenceDuration,
+      startTime,
+      repeat
     )
     this.assignIds.push(e)
   }
@@ -79,7 +73,7 @@ export class ToneSequenceOut extends SequenceOut<ToneInst> {
   }
 
   private get secsPerMeasure() {
-    return Tone.Transport.toSeconds('1m')
+    return Transport.toSeconds('1m')
   }
 
   private get sequenceDuration() {
@@ -88,10 +82,10 @@ export class ToneSequenceOut extends SequenceOut<ToneInst> {
 
   private get secsPerDivision() {
     return this.secsPerMeasure / this.generator.sequence.division
-  }  
+  }
 
   public cancelAssign() {
-    this.assignIds.forEach((id) => Tone.Transport.clear(id))
+    this.assignIds.forEach((id) => Transport.clear(id))
   }
 
   public dispose() {
