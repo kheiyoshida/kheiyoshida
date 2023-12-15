@@ -1,6 +1,6 @@
 import { CommandHandlerMap, EventHandlerMap, Handler, Message } from '../../core/Message'
-import { Generator } from '../../generator/Generator'
 import { DisposeSequenceOutRequired, SequenceOutSetupRequired } from '../../core/events'
+import { Generator } from '../../generator/Generator'
 import { ToneDestination } from './Destination'
 import * as Commands from './commands'
 import * as Events from './events'

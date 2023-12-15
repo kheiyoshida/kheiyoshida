@@ -1,11 +1,12 @@
-import * as Transport from './tone-wrapper/Transport'
-import * as Events from '../../core/events'
-import { convertMidiToNoteName } from '../../generator/convert'
-import { SequenceOut } from '../../core/SequenceOut'
-import { Instrument, InstrumentOptions } from 'tone/build/esm/instrument/Instrument'
-import { Note } from '../../generator/Note'
-import { pickRange } from '../../utils/calc'
 import Logger from 'js-logger'
+import { Instrument, InstrumentOptions } from 'tone/build/esm/instrument/Instrument'
+import { SequenceOut } from '../../core/SequenceOut'
+import * as Events from '../../core/events'
+import { Note } from '../../generator/Note'
+import { convertMidiToNoteName } from '../../generator/convert'
+import { pickRange } from '../../utils/calc'
+import * as Transport from './tone-wrapper/Transport'
+import { scheduleLoop } from './tone-wrapper/utils'
 
 export type ToneInst = Instrument<InstrumentOptions>
 
@@ -15,19 +16,19 @@ export class ToneSequenceOut extends SequenceOut<ToneInst> {
    */
   private assignIds: number[] = []
 
-  protected checkEvent(repeat: number, repeatNth: number, loopStartedAt: number) {
+  protected checkEvent(totalNumOfLoops: number, loopNth: number, loopStartedAt: number) {
     if (this.events.elapsed) {
       Events.SequenceElapsed.pub({
         out: this,
-        loop: repeatNth,
-        endTime: loopStartedAt + repeatNth * this.sequenceDuration,
+        loop: loopNth,
+        endTime: loopStartedAt + loopNth * this.sequenceDuration,
       })
     }
-    if (repeatNth === repeat) {
+    if (loopNth === totalNumOfLoops) {
       Events.SequenceEnded.pub({
         out: this,
-        loop: repeat,
-        endTime: loopStartedAt + repeat * this.sequenceDuration,
+        loop: totalNumOfLoops,
+        endTime: loopStartedAt + totalNumOfLoops * this.sequenceDuration,
       })
     }
   }
@@ -35,19 +36,19 @@ export class ToneSequenceOut extends SequenceOut<ToneInst> {
   /**
    * @param startTime time elapsed in Tone.Transport
    */
-  public assignSequence(repeat = 1, startTime = 0) {
+  public assignSequence(numOfLoops = 1, startTime = 0) {
     if (this.isDisposed) return
     if (this.generator.sequence.isEmpty) return
-    const e = Transport.scheduleLoop(
+    const e = scheduleLoop(
       (time, loopNth) => {
-        this.checkEvent(repeat, loopNth, startTime)
-        this.generator.sequence.iterate((note, pos) => {
-          this.assignNote(note, time + pos * this.secsPerDivision)
+        this.checkEvent(numOfLoops, loopNth, startTime)
+        this.generator.sequence.iterate((note, position) => {
+          this.assignNote(note, time + position * this.secsPerDivision)
         })
       },
       this.sequenceDuration,
       startTime,
-      repeat
+      numOfLoops
     )
     this.assignIds.push(e)
   }
