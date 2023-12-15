@@ -13,9 +13,12 @@ import Logger from 'js-logger'
 export type ToneInst = Instrument<InstrumentOptions>
 
 export class ToneSequenceOut extends SequenceOut<ToneInst> {
+
   /**
-   * Check time based events while assign loop
+   * ids of assign events
    */
+  private assignIds: number[] = []
+  
   protected checkEvent(loop: number, repeatNth: number, loopStartedAt: number) {
     if (this.events.elapsed) {
       Events.SequenceElapsed.pub({
@@ -34,7 +37,6 @@ export class ToneSequenceOut extends SequenceOut<ToneInst> {
   }
 
   /**
-   * @param loop number of loop
    * @param startTime time elapsed in Tone.Transport
    */
   public assignSequence(loop = 1, startTime = 0) {
@@ -46,7 +48,7 @@ export class ToneSequenceOut extends SequenceOut<ToneInst> {
         repeat += 1
         this.checkEvent(loop, repeat, startTime)
         this.generator.sequence.iterate((note, pos) => {
-          this.assignNote(note, t + pos * this.secsPerDiv)
+          this.assignNote(note, t + pos * this.secsPerDivision)
         })
       },
       this.sequenceDuration, // interval
@@ -57,22 +59,22 @@ export class ToneSequenceOut extends SequenceOut<ToneInst> {
   }
 
   private assignNote(note: Note, time: number) {
-    const pitch = this.finalPitch(note)
+    const pitch = this.getConcretePitch(note)
     if (!pitch) {
       Logger.debug('canceled assigning note due to empty scale')
     } else {
       this.inst.triggerAttackRelease(
         convertMidiToNoteName(pitch),
-        pickRange(note.dur) * this.secsPerDiv,
+        pickRange(note.dur) * this.secsPerDivision,
         time,
         pickRange(note.vel) / 127
       )
     }
   }
 
-  private finalPitch(note: Note) {
+  private getConcretePitch(note: Note) {
     return note.pitch === 'random'
-      ? this.generator.picker.scale.pickRandomPitch()
+      ? this.generator.picker.scale.pickRandomPitch() // violation of law of demeter
       : note.pitch
   }
 
@@ -84,11 +86,9 @@ export class ToneSequenceOut extends SequenceOut<ToneInst> {
     return this.generator.sequence.lengthInMeasure * this.secsPerMeasure
   }
 
-  private get secsPerDiv() {
+  private get secsPerDivision() {
     return this.secsPerMeasure / this.generator.sequence.division
-  }
-
-  private assignIds: number[] = []
+  }  
 
   public cancelAssign() {
     this.assignIds.forEach((id) => Tone.Transport.clear(id))
