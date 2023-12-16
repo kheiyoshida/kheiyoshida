@@ -15,25 +15,39 @@ export interface GeneratorArgs {
   notes?: SequenceNoteMap
 }
 
+export function construct({ conf, notes }: GeneratorArgs): Generator {
+  const picker = new NotePicker(
+    pick(conf, ['noteDur', 'noteVel', 'veloPref', 'fillStrategy', 'harmonizer']),
+    conf.scale
+  )
+  const sequence = new Sequence(
+    pick(conf, ['length', 'lenRange', 'division', 'density', 'fillPref'])
+  )
+  const generator = new Generator(picker, sequence)
+  generator.constructNotes(notes)
+  return generator
+}
+
 export class Generator {
-  readonly picker: NotePicker
-  readonly sequence: Sequence
+  readonly picker!: NotePicker
+  readonly sequence!: Sequence
 
   get scale(): Scale {
     return this.picker.scale
   }
 
-  // Does it have to know about picker and sequnece?
-  constructor({ conf, notes }: GeneratorArgs) {
-    // should be validation here
-    this.picker = new NotePicker(
-      pick(conf, ['noteDur', 'noteVel', 'veloPref', 'fillStrategy', 'harmonizer']),
-      conf.scale
-    )
-    this.sequence = new Sequence(
-      pick(conf, ['length', 'lenRange', 'division', 'density', 'fillPref'])
-    )
-    this.assignInitialNotes(notes)
+  constructor(picker: NotePicker, sequence: Sequence)
+  constructor({ conf, notes }: GeneratorArgs)
+  constructor(genArgsOrPicker: GeneratorArgs | NotePicker, sequence?: Sequence) {
+    if (genArgsOrPicker instanceof NotePicker && sequence) {
+      this.picker = genArgsOrPicker
+      this.sequence = sequence
+      // remember to call constructNotes
+    } else return construct(genArgsOrPicker)
+  }
+
+  public constructNotes(initialNotes?: SequenceNoteMap) {
+    this.assignInitialNotes(initialNotes)
     this.assignNotes()
   }
 
