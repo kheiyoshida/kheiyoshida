@@ -188,7 +188,7 @@ describe('Sequence', () => {
       } // -> should make 8
       const generator = new Generator({ conf })
 
-      // failing. why? 
+      // failing. why?
       expect(generator.sequence.numOfNotes).toBeLessThanOrEqual(conf.density! * conf.length!)
       expect(Object.values(generator.sequence.notes).some((posNotes) => posNotes.length > 1)).toBe(
         true
@@ -400,7 +400,9 @@ describe('Sequence', () => {
       }
       const { generator, notePos } = arrangeSeq({ conf })
       expect(
-        notePos.every((p) => scale.primaryPitches.includes(generator.sequence.notes[p][0].pitch as number))
+        notePos.every((p) =>
+          scale.primaryPitches.includes(generator.sequence.notes[p][0].pitch as number)
+        )
       ).toBe(true)
       scale.modulate({ key: 'D', pref: '_1M' }, 1)
       generator.adjustPitch()
@@ -423,56 +425,54 @@ describe('Sequence', () => {
         },
         notes: makeNotes(),
       })
-      expect(gen.sequence.notes).toMatchInlineSnapshot(`
-        {
-          "0": [
-            {
-              "dur": 1,
-              "pitch": 60,
-              "vel": 100,
-            },
-            {
-              "dur": 1,
-              "pitch": 67,
-              "vel": 100,
-            },
-          ],
-          "2": [
-            {
-              "dur": 1,
-              "pitch": 62,
-              "vel": 100,
-            },
-            {
-              "dur": 1,
-              "pitch": 69,
-              "vel": 100,
-            },
-          ],
-          "4": [
-            {
-              "dur": 1,
-              "pitch": 80,
-              "vel": 100,
-            },
-            {
-              "dur": 1,
-              "pitch": 72,
-              "vel": 100,
-            },
-            {
-              "dur": 1,
-              "pitch": 88,
-              "vel": 100,
-            },
-            {
-              "dur": 1,
-              "pitch": 79,
-              "vel": 100,
-            },
-          ],
-        }
-      `)
+      expect(gen.sequence.notes).toMatchObject({
+        '0': [
+          {
+            dur: 1,
+            pitch: 60,
+            vel: 100,
+          },
+          {
+            dur: 1,
+            pitch: 67,
+            vel: 100,
+          },
+        ],
+        '2': [
+          {
+            dur: 1,
+            pitch: 62,
+            vel: 100,
+          },
+          {
+            dur: 1,
+            pitch: 69,
+            vel: 100,
+          },
+        ],
+        '4': [
+          {
+            dur: 1,
+            pitch: 80,
+            vel: 100,
+          },
+          {
+            dur: 1,
+            pitch: 88,
+            vel: 100,
+          },
+          {
+            dur: 1,
+            pitch: 72,
+            vel: 100,
+          },
+          {
+            dur: 1,
+            pitch: 79,
+            vel: 100,
+          },
+        ],
+      })
     })
   })
 

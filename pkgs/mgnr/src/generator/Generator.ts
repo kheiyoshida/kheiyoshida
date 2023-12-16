@@ -37,10 +37,16 @@ export class Generator {
     this.assignNotes()
   }
 
-  private assignInitialNotes(notes?: SequenceNoteMap) {
-    if (!notes) return
-    this.sequence.replaceEntireNotes({...notes})
-    this.harmonizeNotes()
+  private assignInitialNotes(initialNotes?: SequenceNoteMap) {
+    if (!initialNotes) return
+    Sequence.iterateNoteMapPosition(initialNotes, (position) => {
+      this.sequence.assignNotes(
+        position,
+        this.picker.harmonizeEnabled
+          ? initialNotes[position].flatMap((note) => [note, ...this.picker.harmonizeNote(note)])
+          : initialNotes[position]
+      )
+    })
   }
 
   private assignNotes() {
@@ -64,24 +70,6 @@ export class Generator {
         const pos = this.sequence.getAvailablePosition()
         this.sequence.assignNotes(pos, notes)
       }
-    }
-  }
-
-  // should this be here?
-  private harmonizeNotes() {
-    if (this.picker.harmonizeEnabled) {
-      const harmonized: Array<{ pos: number; notes: Note[] }> = []
-      this.sequence.iterate((note, pos) => {
-        harmonized.push({
-          pos,
-          notes: this.picker.harmonizeNote(note),
-        })
-      })
-      Object.values(harmonized).forEach((har) => {
-        har.notes.forEach((note) => {
-          this.sequence.assignNote(har.pos, note)
-        })
-      })
     }
   }
 

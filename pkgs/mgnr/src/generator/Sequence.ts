@@ -194,13 +194,21 @@ export class Sequence {
     this.conf.length -= len
   }
 
-  public iterate(cb: (notes: Note, pos: number) => void) {
-    this.iteratePosition((p) => this.notes[p].forEach((note) => cb(note, p)))
-  }
-
-  public iteratePosition(cb: (pos: number) => void) {
-    Object.keys(this.notes)
+  static iterateNoteMapPosition(notes: SequenceNoteMap, cb: (position: number) => void) {
+    Object.keys(notes)
       .map((p) => parseInt(p))
       .forEach(cb)
+  }
+
+  static iterateNoteMap(notes: SequenceNoteMap, cb: (note: Note, position: number) => void) {
+    Sequence.iterateNoteMapPosition(notes, (p) => notes[p].forEach((note) => cb(note, p)))
+  }
+
+  public iterate(cb: (note: Note, position: number) => void) {
+    Sequence.iterateNoteMap(this.notes, cb)
+  }
+
+  public iteratePosition(cb: (position: number) => void) {
+    Sequence.iterateNoteMapPosition(this.notes, cb)
   }
 }
