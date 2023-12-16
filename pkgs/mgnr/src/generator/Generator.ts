@@ -1,10 +1,10 @@
 import { MutateSpec } from '../core/SequenceEvent'
 import { random } from '../utils/calc'
-import { negateIf, pick, randomRemove } from '../utils/utils'
+import { negateIf, pick } from '../utils/utils'
 import { Note } from './Note'
 import { NotePicker, NotePickerConf } from './NotePicker'
 import { Scale } from './Scale'
-import { SequenceNoteMap, Sequence, SequenceNotesConf } from './Sequence'
+import { Sequence, SequenceNoteMap, SequenceNotesConf } from './Sequence'
 
 export type SeqConfig = {
   scale?: Scale
@@ -40,8 +40,7 @@ export class Generator {
   }
 
   private assignInitialNotes() {
-    const ini = { ...this.initialNotes }
-    this.sequence.replaceEntireNotes(ini)
+    this.sequence.replaceEntireNotes({ ...this.initialNotes })
     this.harmonizeNotes()
   }
 
@@ -162,30 +161,13 @@ export class Generator {
   }
 
   private randomizeNotes(rate: number) {
-    this.randomRemove(rate)
+    this.sequence.deleteRandomNotes(rate)
     this.assignNotes()
   }
 
   private moveNotes(rate: number) {
-    const removed = this.randomRemove(rate)
+    const removed = this.sequence.deleteRandomNotes(rate)
     this.recycleNotes(removed)
-  }
-
-  /**
-   * @returns removed notes that can be relocated
-   */
-  public randomRemove(rate = 0.5) {
-    let removed: Note[] = []
-    this.sequence.iteratePosition((i) => {
-      const [survived, rm] = randomRemove(this.sequence.notes[i], rate)
-      if (survived.length) {
-        this.sequence.replaceNotesInPosition(i, survived)
-      } else {
-        this.sequence.deleteNotesInPosition(i)
-      }
-      removed = removed.concat(rm)
-    })
-    return removed
   }
 
   private recycleNotes(notes: Note[]) {

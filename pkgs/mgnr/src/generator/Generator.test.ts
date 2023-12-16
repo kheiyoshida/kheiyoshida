@@ -311,59 +311,6 @@ describe('Sequence', () => {
       fillPref: 'mono',
       noteVel: 100,
     }
-    it(`can remove notes`, () => {
-      jest.spyOn(utils, 'randomRemove').mockImplementation((notes) => {
-        if (notes.length > 1) {
-          return [
-            [notes[0]], // survive
-            notes.slice(1),
-          ]
-        } else {
-          return [[], notes]
-        }
-      })
-      const conf: GeneratorArgs['conf'] = {
-        ...baseConf,
-        density: 0.25,
-        fillStrategy: 'fixed',
-      }
-      const { generator, notePos } = arrangeSeq({ conf, notes: makeNotes() })
-      expect(notePos).toHaveLength(3)
-      const before = { ...generator.sequence.notes }
-      const removed = generator.randomRemove()
-      const after = generator.sequence.notes
-      expect(after).not.toMatchObject(before)
-      expect(after).toMatchInlineSnapshot(`
-        {
-          "4": [
-            {
-              "dur": 1,
-              "pitch": 80,
-              "vel": 100,
-            },
-          ],
-        }
-      `)
-      expect(removed).toMatchInlineSnapshot(`
-        [
-          {
-            "dur": 1,
-            "pitch": 60,
-            "vel": 100,
-          },
-          {
-            "dur": 1,
-            "pitch": 62,
-            "vel": 100,
-          },
-          {
-            "dur": 1,
-            "pitch": 72,
-            "vel": 100,
-          },
-        ]
-      `)
-    })
     it(`can randomize existing notes`, () => {
       jest.spyOn(utils, 'randomRemove').mockImplementation((notes) => [notes.slice(1, 2), []])
       const conf: GeneratorArgs['conf'] = {

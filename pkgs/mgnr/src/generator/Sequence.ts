@@ -1,7 +1,7 @@
 import Logger from 'js-logger'
 import { randomIntBetween } from '../utils/calc'
 import { Range } from '../utils/types'
-import { buildConf, normalizeRange } from '../utils/utils'
+import { buildConf, normalizeRange, randomRemove } from '../utils/utils'
 import { Note } from './Note'
 
 type SeqDivision = 16 | 8 | 4 | 2 | 1
@@ -139,6 +139,20 @@ export class Sequence {
     if (this.notes[position]) {
       delete this.notes[position]
     }
+  }
+
+  public deleteRandomNotes(rate: number): Note[] {
+    let removed: Note[] = []
+    this.iteratePosition((i) => {
+      const [survived, rm] = randomRemove(this.notes[i], rate)
+      if (survived.length) {
+        this.replaceNotesInPosition(i, survived)
+      } else {
+        this.deleteNotesInPosition(i)
+      }
+      removed = removed.concat(rm)
+    })
+    return removed
   }
 
   private searchEmptyPosition(n = 0): number | undefined {
