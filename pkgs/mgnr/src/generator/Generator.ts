@@ -87,23 +87,16 @@ export class Generator {
     }
   }
 
-  private recycleNotes(notes: Note[]) {
-    notes.forEach((n) => {
-      const pos = this.sequence.getAvailablePosition()
-      this.sequence.assignNote(pos, n)
-    })
-  }
-
-  public eraseSequenceNotes() {
-    this.sequence.deleteEntireNotes()
-  }
-
   public resetNotes() {
     this.eraseSequenceNotes()
     this.assignInitialNotes()
     this.removeNotesOutOfLength()
     this.adjustPitch()
     this.assignNotes()
+  }
+
+  public eraseSequenceNotes() {
+    this.sequence.deleteEntireNotes()
   }
 
   public adjustPitch() {
@@ -154,23 +147,6 @@ export class Generator {
     })
   }
 
-  /**
-   * @returns removed notes that can be relocated
-   */
-  public randomRemove(rate = 0.5) {
-    let removed: Note[] = []
-    this.sequence.iteratePosition((i) => {
-      const [survived, rm] = randomRemove(this.sequence.notes[i], rate)
-      if (survived.length) {
-        this.sequence.replaceNotesInPosition(i, survived)
-      } else {
-        this.sequence.deleteNotesInPosition(i)
-      }
-      removed = removed.concat(rm)
-    })
-    return removed
-  }
-
   public mutate({ rate, strategy }: MutateSpec) {
     switch (strategy) {
       case 'randomize':
@@ -193,6 +169,30 @@ export class Generator {
   private moveNotes(rate: number) {
     const removed = this.randomRemove(rate)
     this.recycleNotes(removed)
+  }
+
+  /**
+   * @returns removed notes that can be relocated
+   */
+  public randomRemove(rate = 0.5) {
+    let removed: Note[] = []
+    this.sequence.iteratePosition((i) => {
+      const [survived, rm] = randomRemove(this.sequence.notes[i], rate)
+      if (survived.length) {
+        this.sequence.replaceNotesInPosition(i, survived)
+      } else {
+        this.sequence.deleteNotesInPosition(i)
+      }
+      removed = removed.concat(rm)
+    })
+    return removed
+  }
+
+  private recycleNotes(notes: Note[]) {
+    notes.forEach((n) => {
+      const pos = this.sequence.getAvailablePosition()
+      this.sequence.assignNote(pos, n)
+    })
   }
 
   private mutateNotesPitches(rate: number) {
