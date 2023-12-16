@@ -60,9 +60,6 @@ const monoNotes: SequenceNoteMap = {
 
 const deepCopy = <T>(v: T) => JSON.parse(JSON.stringify(v)) as T
 
-// should I really deep copy it?
-const makeNotes = () => deepCopy(notes)
-
 const getNotesPos = (generator: Generator) => {
   return Object.keys(generator.sequence.notes).map((p) => parseInt(p))
 }
@@ -252,7 +249,7 @@ describe('Sequence', () => {
             max: 12,
           },
         },
-        notes: makeNotes(),
+        notes: notes,
       })
       expect(generator.sequence.length).toBe(8)
       // 1
@@ -288,7 +285,7 @@ describe('Sequence', () => {
             max: 12,
           },
         },
-        notes: makeNotes(),
+        notes: notes,
       })
       gen.toggleReverse()
       gen.changeSequenceLength('extend', 2)
@@ -320,7 +317,7 @@ describe('Sequence', () => {
         fillStrategy: 'fill',
         noteDur: 1,
       }
-      const { generator } = arrangeSeq({ conf, notes: makeNotes() })
+      const { generator } = arrangeSeq({ conf, notes: notes })
       const before = { ...generator.sequence.notes }
       generator.mutate({ rate: 1, strategy: 'randomize' })
       const after = generator.sequence.notes
@@ -352,7 +349,7 @@ describe('Sequence', () => {
         fillPref: 'mono',
         noteDur: 1,
       }
-      const { generator, notePos } = arrangeSeq({ conf, notes: makeNotes() })
+      const { generator, notePos } = arrangeSeq({ conf, notes: notes })
       const before = { ...generator.sequence.notes }
       const beforeNoteItems = notePos.map((pos) => generator.sequence.notes[pos][0])
       generator.mutate({ rate: 1, strategy: 'move' })
@@ -423,7 +420,7 @@ describe('Sequence', () => {
             degree: ['5'],
           },
         },
-        notes: makeNotes(),
+        notes: notes,
       })
       expect(gen.sequence.notes).toMatchObject({
         '0': [
