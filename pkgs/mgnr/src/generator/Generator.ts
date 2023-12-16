@@ -18,7 +18,6 @@ export interface GeneratorArgs {
 export class Generator {
   readonly picker: NotePicker
   readonly sequence: Sequence
-  private initialNotes!: SequenceNoteMap
 
   get scale(): Scale {
     return this.picker.scale
@@ -34,13 +33,13 @@ export class Generator {
     this.sequence = new Sequence(
       pick(conf, ['length', 'lenRange', 'division', 'density', 'fillPref'])
     )
-    this.initialNotes = notes || {}
-    this.assignInitialNotes()
+    this.assignInitialNotes(notes)
     this.assignNotes()
   }
 
-  private assignInitialNotes() {
-    this.sequence.replaceEntireNotes({ ...this.initialNotes })
+  private assignInitialNotes(notes?: SequenceNoteMap) {
+    if (!notes) return
+    this.sequence.replaceEntireNotes({...notes})
     this.harmonizeNotes()
   }
 
@@ -86,9 +85,9 @@ export class Generator {
     }
   }
 
-  public resetNotes() {
+  public resetNotes(notes?: SequenceNoteMap) {
     this.eraseSequenceNotes()
-    this.assignInitialNotes()
+    this.assignInitialNotes(notes)
     this.removeNotesOutOfLength()
     this.adjustPitch()
     this.assignNotes()

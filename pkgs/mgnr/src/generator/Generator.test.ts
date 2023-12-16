@@ -506,43 +506,6 @@ describe('Sequence', () => {
       gen.resetNotes()
       expect(gen.sequence.notes).not.toMatchObject(firstFill)
     })
-    // flaky
-    it.skip(`should adjust notes after assigning initial notes`, () => {
-      const gen = new Generator({
-        conf: {
-          fillStrategy: 'fill',
-          fillPref: 'mono',
-          length: 4,
-          density: 0.75,
-        },
-        notes: {
-          0: [
-            {
-              pitch: 60,
-              vel: 100,
-              dur: 1,
-            },
-          ],
-          3: [
-            {
-              pitch: 60,
-              vel: 100,
-              dur: 1,
-            },
-          ],
-        },
-      })
-      gen.scale.modulate({ key: 'D', pref: 'omit25' })
-      gen.changeSequenceLength('shrink', 1)
-      gen.resetNotes()
-      expect(gen.sequence.notes[0][0]).toMatchObject({
-        pitch: 61,
-        vel: 100,
-        dur: 1,
-      })
-      gen.sequence.iteratePosition((p) => {
-        expect(p).toBeLessThan(4)
-      })
-    })
+    it.todo(`can reset notes with new initial notes`)
   })
 })

@@ -1,4 +1,4 @@
-import { Sequence, SequenceNoteMap } from './Sequence'
+import { Sequence } from './Sequence'
 import { Note } from './Note'
 import * as utils from '../utils/utils'
 

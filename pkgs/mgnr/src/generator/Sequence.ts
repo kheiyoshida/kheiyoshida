@@ -19,7 +19,7 @@ export type SequenceNoteMap = {
 }
 
 export class Sequence {
-  private _notes!: SequenceNoteMap
+  private _notes: SequenceNoteMap = {}
   public get notes(): SequenceNoteMap {
     return this._notes
   }
