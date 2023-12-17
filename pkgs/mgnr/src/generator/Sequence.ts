@@ -85,7 +85,7 @@ export class Sequence {
 
   get numOfNotes() {
     let num = 0
-    this.iterate((_) => (num += 1))
+    this.iterateEachNote((_) => (num += 1))
     return num
   }
 
@@ -194,21 +194,36 @@ export class Sequence {
     this.conf.length -= len
   }
 
-  static iterateNoteMapPosition(notes: SequenceNoteMap, cb: (position: number) => void) {
-    Object.keys(notes)
+  static iteratePosition(noteMap: SequenceNoteMap, cb: (position: number) => void) {
+    Object.keys(noteMap)
       .map((p) => parseInt(p))
       .forEach(cb)
   }
 
-  static iterateNoteMap(notes: SequenceNoteMap, cb: (note: Note, position: number) => void) {
-    Sequence.iterateNoteMapPosition(notes, (p) => notes[p].forEach((note) => cb(note, p)))
+  static iterateNotesAtPosition(
+    noteMap: SequenceNoteMap,
+    cb: (notes: Note[], position: number) => void
+  ) {
+    Object.keys(noteMap)
+      .map((p) => parseInt(p))
+      .forEach((p) => cb(noteMap[p], p))
   }
 
-  public iterate(cb: (note: Note, position: number) => void) {
-    Sequence.iterateNoteMap(this.notes, cb)
+  static iterateEachNote(noteMap: SequenceNoteMap, cb: (note: Note, position: number) => void) {
+    Sequence.iterateNotesAtPosition(noteMap, (notesAtPos, position) =>
+      notesAtPos.forEach((note) => cb(note, position))
+    )
   }
 
   public iteratePosition(cb: (position: number) => void) {
-    Sequence.iterateNoteMapPosition(this.notes, cb)
+    Sequence.iteratePosition(this.notes, cb)
+  }
+
+  public iterateNotesAtPosition(cb: (notes: Note[], position: number) => void) {
+    Sequence.iterateNotesAtPosition(this.notes, cb)
+  }
+
+  public iterateEachNote(cb: (note: Note, position: number) => void) {
+    Sequence.iterateEachNote(this.notes, cb)
   }
 }

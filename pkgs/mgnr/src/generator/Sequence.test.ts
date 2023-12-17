@@ -81,7 +81,7 @@ describe(`${Sequence.name}`, () => {
   it(`can iterate on each note`, () => {
     const seqNotes = new Sequence()
     seqNotes.replaceEntireNotes(makeNotes())
-    seqNotes.iterate((n) => (n.pitch = 72))
+    seqNotes.iterateEachNote((n) => (n.pitch = 72))
     expect(seqNotes.iteratePosition((p) => seqNotes.notes[p].forEach((n) => n.pitch === 72)))
   })
   it(`can clear notes`, () => {

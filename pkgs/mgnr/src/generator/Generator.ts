@@ -36,6 +36,10 @@ export class Generator {
     return this.picker.scale
   }
 
+  get notes(): SequenceNoteMap {
+    return this.sequence.notes
+  }
+
   constructor(picker: NotePicker, sequence: Sequence)
   constructor({ conf, notes }: GeneratorArgs)
   constructor(genArgsOrPicker: GeneratorArgs | NotePicker, sequence?: Sequence) {
@@ -53,7 +57,7 @@ export class Generator {
 
   private assignInitialNotes(initialNotes?: SequenceNoteMap) {
     if (!initialNotes) return
-    Sequence.iterateNoteMapPosition(initialNotes, (position) => {
+    Sequence.iteratePosition(initialNotes, (position) => {
       this.sequence.assignNotes(
         position,
         this.picker.harmonizeEnabled
@@ -100,7 +104,7 @@ export class Generator {
   }
 
   public adjustPitch() {
-    this.sequence.iterate((n) => {
+    this.sequence.iterateEachNote((n) => {
       if (this.picker.checkStaleNote(n)) {
         this.picker.adjustNotePitch(n)
       }
@@ -179,7 +183,7 @@ export class Generator {
   }
 
   private mutateNotesPitches(rate: number) {
-    this.sequence.iterate((n) => {
+    this.sequence.iterateEachNote((n) => {
       if (random(rate)) {
         this.picker.changeNotePitch(n)
       }

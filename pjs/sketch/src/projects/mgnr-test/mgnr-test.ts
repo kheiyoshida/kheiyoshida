@@ -6,7 +6,7 @@ import * as TONE_COMMANDS from 'mgnr/src/externals/tone/commands'
 import * as TONE_EVENTS from 'mgnr/src/externals/tone/events'
 import { Scale } from 'mgnr/src/generator/Scale'
 import { nthDegreeTone } from 'mgnr/src/generator/utils'
-import { PolySynth } from 'tone'
+import { MonoSynth, Oscillator, PolySynth } from 'tone'
 import { filterDelay } from '../../lib/sound/presets/send/delay'
 import { assert, beepAlert } from './assert'
 
@@ -15,7 +15,6 @@ export function testWrap(testFunction: () => void) {
     testFunction()
   } catch (e) {
     beepAlert()
-    throw Error()
   }
 }
 
@@ -30,7 +29,7 @@ export function test1() {
   const outs = destination.output.outs
 
   // setup generator, inst, and channel
-  const inst = new PolySynth()
+  const inst = new PolySynth(MonoSynth, {volume: -30})
   const channelId = 'instCh'
   TONE_COMMANDS.SetupInstChannel.pub({
     conf: {

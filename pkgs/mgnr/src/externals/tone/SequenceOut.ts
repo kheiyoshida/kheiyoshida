@@ -42,7 +42,7 @@ export class ToneSequenceOut extends SequenceOut<ToneInst> {
     const e = scheduleLoop(
       (time, loopNth) => {
         this.checkEvent(numOfLoops, loopNth, startTime)
-        this.generator.sequence.iterate((note, position) => {
+        this.generator.sequence.iterateEachNote((note, position) => {
           this.assignNote(note, time + position * this.secsPerDivision)
         })
       },
