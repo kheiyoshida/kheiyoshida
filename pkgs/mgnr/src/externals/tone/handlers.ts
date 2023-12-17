@@ -1,6 +1,7 @@
 import { CommandHandlerMap, EventHandlerMap, Handler, Message } from '../../core/Message'
 import { DisposeSequenceOutRequired, SequenceOutSetupRequired } from '../../core/events'
-import { Generator } from '../../generator/Generator'
+import { Generator, construct } from '../../generator/Generator'
+import { NotePicker } from '../../generator/NotePicker'
 import { ToneDestination } from './Destination'
 import * as Commands from './commands'
 import * as Events from './events'
@@ -36,14 +37,12 @@ const assignSendChannel: ToneHandler<Commands.AssignSendChannel> = (mes, { mixer
  */
 const assignGenerator: ToneHandler<Commands.AssignGenerator> = (mes, { mixer }) => {
   const instCh = mixer.findInstChannelById(mes.channelId)
-  const gen = new Generator({
-    conf: mes.conf,
-    notes: mes.notes,
-  })
+  const generator = construct(mes.conf)
+  generator.constructNotes(mes.notes)
 
   return [
     SequenceOutSetupRequired.create({
-      gen: gen,
+      gen: generator,
       inst: instCh.inst,
       outId: mes.channelId,
       loop: mes.loop,

@@ -3,6 +3,8 @@ import * as Tone from 'tone'
 import { Generator } from '../../generator/Generator'
 import { ToneSequenceOut } from './SequenceOut'
 import * as wrapperUtil from './tone-wrapper/utils'
+import { NotePicker } from '../../generator/NotePicker'
+import { Sequence } from '../../generator/Sequence'
 
 jest.mock('tone')
 
@@ -25,10 +27,12 @@ describe(`${ToneSequenceOut.name}`, () => {
     ],
   }
   const prepare = (notes = defaultNotes) => {
-    const generator = new Generator({
-      conf: { fillStrategy: 'fixed' },
-      notes,
-    })
+    const generator = new Generator(
+      new NotePicker({fillStrategy: 'fixed'}),
+      new Sequence()
+    )
+    generator.constructNotes(notes)
+    
     const inst = new Tone.PolySynth()
     const outId = 'outId'
     const seqOut = new ToneSequenceOut(generator, inst, outId)

@@ -1,6 +1,6 @@
 import { Command } from '../../core/Message'
 import { SeqEvent } from '../../core/SequenceEvent'
-import { GeneratorArgs } from '../../generator/Generator'
+import { GeneratorConf } from '../../generator/Generator'
 import { SequenceNoteMap } from '../../generator/Sequence'
 import { TimeEventMap } from './TimeObserver'
 import { ChConf, InstCh, SendCh } from './mixer/Channel'
@@ -30,10 +30,10 @@ export class AssignSendChannel extends Command {
  * @param loop
  * how many times generated sequence have to loop.
  */
-export class AssignGenerator extends Command implements GeneratorArgs {
+export class AssignGenerator extends Command implements GeneratorConf {
   channelId!: string
   loop!: number
-  conf!: GeneratorArgs['conf']
+  conf!: GeneratorConf['conf']
   notes?: SequenceNoteMap
   events?: SeqEvent
 }
