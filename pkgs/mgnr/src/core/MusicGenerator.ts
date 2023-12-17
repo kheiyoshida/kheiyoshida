@@ -6,7 +6,7 @@ import { SequenceOut } from './SequenceOut'
 import { SequenceNoteMap } from '../generator/Sequence'
 
 export class MusicGenerator<Dest extends Destination<Inst>, Inst> {
-  private destination: Dest
+  protected destination: Dest
 
   constructor(destination: Dest) {
     this.destination = destination
@@ -74,5 +74,9 @@ export class MusicGenerator<Dest extends Destination<Inst>, Inst> {
 
   resetNotes(out: SequenceOut, noteMap?: SequenceNoteMap) {
     out.generator.resetNotes(noteMap)
+  }
+
+  disposeSequenceOut(outId: string) {
+    this.destination.output.delete(outId)
   }
 }

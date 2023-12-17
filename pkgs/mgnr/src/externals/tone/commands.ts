@@ -30,10 +30,10 @@ export class AssignSendChannel extends Command {
  * @param loop
  * how many times generated sequence have to loop.
  */
-export class AssignGenerator extends Command implements GeneratorConf {
+export class AssignGenerator extends Command {
   channelId!: string
   loop!: number
-  conf!: GeneratorConf['conf']
+  conf!: GeneratorConf
   notes?: SequenceNoteMap
   events?: SeqEvent
 }
