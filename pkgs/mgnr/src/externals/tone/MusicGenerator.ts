@@ -16,6 +16,10 @@ import {
 } from './mixer/Channel'
 
 export class ToneMusicGenerator extends MusicGenerator<ToneDestination, ToneInst> {
+  constructor() {
+    super(new ToneDestination())
+  }
+
   setupInstChannel(conf: ChConf<InstCh>) {
     this.destination.mixer.addInstChannel(conf.id, new InstChannel(conf))
     if (conf.fadeIn) {

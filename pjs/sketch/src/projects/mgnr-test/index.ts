@@ -1,14 +1,14 @@
 import * as Tone from 'tone'
 
-import { test1, testWrap } from './mgnr-test'
+import { testWrap } from './mgnr-test'
+import { test2 } from './mgnr-test2'
 
 const setup = () => {
   // startSound()
   testWrap(() => {
-    test1()
+    test2()
     Tone.start()
     Tone.Transport.start()
-    
   })
 }
 

@@ -6,7 +6,7 @@ import * as TONE_COMMANDS from 'mgnr/src/externals/tone/commands'
 import * as TONE_EVENTS from 'mgnr/src/externals/tone/events'
 import { Scale } from 'mgnr/src/generator/Scale'
 import { nthDegreeTone } from 'mgnr/src/generator/utils'
-import { MonoSynth, Oscillator, PolySynth } from 'tone'
+import { MonoSynth, PolySynth } from 'tone'
 import { filterDelay } from '../../lib/sound/presets/send/delay'
 import { assert, beepAlert } from './assert'
 
@@ -192,5 +192,3 @@ export function test1() {
     },
   })
 }
-
-export function test2() {}
