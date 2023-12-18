@@ -14,21 +14,19 @@ import {
   SendCh,
   SendChannel,
 } from './mixer/Channel'
+import { Mixer } from './mixer/Mixer'
 
 export class ToneMusicGenerator extends MusicGenerator<ToneDestination, ToneInst> {
   constructor(dest?: ToneDestination) {
     super(dest || new ToneDestination())
   }
 
-  setupInstChannel(conf: ChConf<InstCh>) {
-    this.destination.mixer.addInstChannel(conf.id, new InstChannel(conf))
-    if (conf.fadeIn) {
-      this.fadeChannel(conf.id, conf.fadeIn)
-    }
+  createMixer() {
+    return new Mixer({})
   }
 
-  setupSendChannel(conf: ChConf<SendCh>) {
-    this.destination.mixer.addSendChannel(conf.id, new SendChannel(conf))
+  setupInstChannel(conf: ChConf<InstCh>) {
+    this.destination.mixer.createInstChannel(conf)
   }
 
   assignSendChannel(from: string, to: string, gainAmount = 0) {

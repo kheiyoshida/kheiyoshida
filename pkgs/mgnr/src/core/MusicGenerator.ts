@@ -1,9 +1,9 @@
-import { Destination } from './Destination'
-import { SeqEvent, SeqEventKey } from './SequenceEvent'
 import { Generator } from '../generator/Generator'
 import { Scale, ScaleConf } from '../generator/Scale'
-import { SequenceOut } from './SequenceOut'
 import { SequenceNoteMap } from '../generator/Sequence'
+import { Destination } from './Destination'
+import { SeqEvent } from './SequenceEvent'
+import { SequenceOut } from './SequenceOut'
 
 export class MusicGenerator<Dest extends Destination<Inst>, Inst> {
   protected destination: Dest

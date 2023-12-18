@@ -1,8 +1,6 @@
-import { CoreHandler, Event } from '../core/Message'
 import { SequenceOut } from './SequenceOut'
 
 export type SeqEventKey = 'elapsed' | 'ended'
-export type SeqEventDef<E extends Event> = CoreHandler<E> | MutateSpec | Event[]
 
 export type SequenceLoopEventContext = {
   out: SequenceOut

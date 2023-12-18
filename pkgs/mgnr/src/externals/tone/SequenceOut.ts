@@ -1,7 +1,6 @@
 import Logger from 'js-logger'
 import { Instrument, InstrumentOptions } from 'tone/build/esm/instrument/Instrument'
 import { SequenceOut } from '../../core/SequenceOut'
-import * as Events from '../../core/events'
 import { Note } from '../../generator/Note'
 import { convertMidiToNoteName } from '../../generator/convert'
 import { pickRange } from '../../utils/calc'

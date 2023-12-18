@@ -2,7 +2,7 @@ import {
   Instrument,
   InstrumentOptions,
 } from 'tone/build/esm/instrument/Instrument'
-import { FadeValues, InstChannel, MuteValue, SendChannel } from './Channel'
+import { ChConf, FadeValues, InstCh, InstChannel, MuteValue, SendCh, SendChannel } from './Channel'
 import { MasterChannel, MasterChannelConf } from './Master'
 import { Send } from './Send'
 
@@ -16,12 +16,32 @@ export type Channels = {
 
 export class Mixer {
   readonly channels: Channels
-  constructor(masterConf: MasterChannelConf) {
+  constructor(masterConf: MasterChannelConf = {}) {
     this.channels = {
       inst: {},
       sends: {},
       master: new MasterChannel(masterConf),
     }
+  }
+
+  createInstChannel(conf: ChConf<InstCh>) {
+    const newCh = new InstChannel(conf)
+    this.addInstChannel(conf.id, newCh)
+    if (conf.fadeIn) {
+      newCh.volumeFade(conf.fadeIn)
+    }
+  }
+
+  createSendChannel(conf: ChConf<SendCh>) {
+    this.addSendChannel(conf.id, new SendChannel(conf))
+  }
+
+  connectSendChannel(from: string, to: string, gainAmount = 0) {
+    const fromCh = this.findChannelById(from)
+    const toCh = this.findSendChannelById(to)
+    const send = new Send(gainAmount, from, to)
+    fromCh.connectSend(send)
+    send.out.connect(toCh.first)
   }
 
   public findInstChannelById(id: string): InstChannel {
@@ -66,13 +86,7 @@ export class Mixer {
     this.channels.sends[channelId] = ch
   }
 
-  public connectSendChannel(from: string, to: string, gainAmount = 0) {
-    const fromCh = this.findChannelById(from)
-    const toCh = this.findSendChannelById(to)
-    const send = new Send(gainAmount, from, to)
-    fromCh.connectSend(send)
-    send.out.connect(toCh.first)
-  }
+
 
   public muteChannel(channelId: string, v: MuteValue) {
     const ch = this.findChannelById(channelId)

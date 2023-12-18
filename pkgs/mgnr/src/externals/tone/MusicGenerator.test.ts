@@ -2,6 +2,7 @@ import { Delay, PolySynth } from 'tone'
 import { ToneDestination } from './Destination'
 import { ToneMusicGenerator } from './MusicGenerator'
 import { Scale } from '../../generator/Scale'
+import { Mixer } from './mixer/Mixer'
 jest.mock('tone')
 
 jest.mock('./tone-wrapper/Transport')
@@ -13,32 +14,11 @@ const prepareMgnr = () => {
 }
 
 describe(`${ToneMusicGenerator.name}`, () => {
-  test(`${ToneMusicGenerator.prototype.setupInstChannel.name}`, () => {
-    const {
-      mgnr,
-      dest: { mixer },
-    } = prepareMgnr()
-    const spyAddInstCh = jest.spyOn(mixer, 'addInstChannel')
-    mgnr.setupInstChannel({
-      id: 'synth',
-      inst: new PolySynth(),
-      initialVolume: -10,
-    })
-    expect(spyAddInstCh).toHaveBeenCalled()
+  test(`${ToneMusicGenerator.prototype.createMixer.name}`, () => {
+    const { mgnr } = prepareMgnr()
+    expect(mgnr.createMixer() instanceof Mixer).toBe(true)
   })
-  test(`${ToneMusicGenerator.prototype.setupSendChannel.name}`, () => {
-    const {
-      mgnr,
-      dest: { mixer },
-    } = prepareMgnr()
-    const spyAddSendCh = jest.spyOn(mixer, 'addSendChannel')
-    mgnr.setupSendChannel({
-      id: 'delay',
-      effects: [new Delay()],
-      initialVolume: -10,
-    })
-    expect(spyAddSendCh).toHaveBeenCalled()
-  })
+
   test(`${ToneMusicGenerator.prototype.assignSendChannel.name}`, () => {
     const {
       mgnr,
