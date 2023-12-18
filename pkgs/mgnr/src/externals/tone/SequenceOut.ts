@@ -18,14 +18,14 @@ export class ToneSequenceOut extends SequenceOut<ToneInst> {
 
   protected checkEvent(totalNumOfLoops: number, loopNth: number, loopStartedAt: number) {
     if (this.events.elapsed) {
-      Events.SequenceElapsed.pub({
+      this.events.elapsed({
         out: this,
         loop: loopNth,
         endTime: loopStartedAt + loopNth * this.sequenceDuration,
       })
     }
     if (loopNth === totalNumOfLoops) {
-      Events.SequenceEnded.pub({
+      this.events.ended && this.events.ended({
         out: this,
         loop: totalNumOfLoops,
         endTime: loopStartedAt + totalNumOfLoops * this.sequenceDuration,

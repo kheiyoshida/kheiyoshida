@@ -1,10 +1,11 @@
-import { mockScheduleLoop } from '../../__tests__/mock'
 import * as Tone from 'tone'
+import { mockScheduleLoop } from '../../__tests__/mock'
+import { SeqEvent } from '../../core/SequenceEvent'
 import { Generator } from '../../generator/Generator'
+import { NotePicker } from '../../generator/NotePicker'
+import { Sequence, SequenceNoteMap } from '../../generator/Sequence'
 import { ToneSequenceOut } from './SequenceOut'
 import * as wrapperUtil from './tone-wrapper/utils'
-import { NotePicker } from '../../generator/NotePicker'
-import { Sequence } from '../../generator/Sequence'
 
 jest.mock('tone')
 
@@ -26,16 +27,18 @@ describe(`${ToneSequenceOut.name}`, () => {
       },
     ],
   }
-  const prepare = (notes = defaultNotes) => {
-    const generator = new Generator(
-      new NotePicker({fillStrategy: 'fixed'}),
-      new Sequence()
-    )
+  const prepare = (
+    { notes, events }: { notes: SequenceNoteMap; events?: SeqEvent } = {
+      notes: defaultNotes,
+      events: undefined,
+    }
+  ) => {
+    const generator = new Generator(new NotePicker({ fillStrategy: 'fixed' }), new Sequence())
     generator.constructNotes(notes)
-    
+
     const inst = new Tone.PolySynth()
     const outId = 'outId'
-    const seqOut = new ToneSequenceOut(generator, inst, outId)
+    const seqOut = new ToneSequenceOut(generator, inst, outId, events)
     return { seqOut, generator, inst, outId }
   }
   let spyScheduleLoop: jest.SpyInstance
@@ -58,5 +61,16 @@ describe(`${ToneSequenceOut.name}`, () => {
         expect(velocity).toBeLessThan(1)
       }
     )
+  })
+  it(`should trigger elapsed events on each loop`, () => {
+    const eventHandler = jest.fn()
+    const { seqOut, inst } = prepare({
+      notes: defaultNotes,
+      events: {
+        elapsed: eventHandler,
+      },
+    })
+    seqOut.assignSequence(4, 0)
+    expect(eventHandler).toHaveBeenCalledTimes(4)
   })
 })

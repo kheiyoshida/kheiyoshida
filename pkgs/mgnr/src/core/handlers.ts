@@ -46,40 +46,6 @@ const adjustSequenceNotes: CoreHandler<Events.AdjustNotesRequired> = (mes, { out
   return null
 }
 
-/**
- * generic handler to deal with time-based events of sequences
- */
-const handleSequenceEvent = <T extends Events.SequenceElapsed>(key: SeqEventKey) => {
-  const handler: CoreHandler<T> = (mes, dest) => {
-    Logger.debug(key)
-    const eventSpec = mes.out.events[key]
-    if (!eventSpec) {
-      return [
-        Events.SequenceReAssignRequired.create({
-          out: mes.out,
-          loop: mes.loop,
-          startTime: mes.endTime,
-        }),
-      ]
-    } else {
-      // Event[]
-      if (Array.isArray(eventSpec)) {
-        return eventSpec
-      }
-      // Handler
-      else if (typeof eventSpec === 'function') {
-        return eventSpec(mes, dest)
-      }
-      // MutateSpec
-      else {
-        mes.out.generator.mutate(eventSpec)
-        return null
-      }
-    }
-  }
-  return handler
-}
-
 const reassignSequence: CoreHandler<Events.SequenceReAssignRequired> = (mes) => {
   if (mes.reset) {
     mes.out.generator.resetNotes()
@@ -101,8 +67,7 @@ export const CORE_EVENT_HANDLERS: EventHandlerMap<Destination, keyof typeof Even
   ScaleModulationRequired: [modulateScale],
   AdjustNotesRequired: [adjustSequenceNotes],
   SequenceOutSetupRequired: [setupSequenceOut],
-  SequenceElapsed: [handleSequenceEvent<Events.SequenceElapsed>('elapsed')],
-  SequenceEnded: [handleSequenceEvent<Events.SequenceEnded>('ended')],
+  
   SequenceReAssignRequired: [reassignSequence],
   DisposeSequenceOutRequired: [disposeSequenceOut],
   EraseNotesRequired: [eraseSequenceNotes],

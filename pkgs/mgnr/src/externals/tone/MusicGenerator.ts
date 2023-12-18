@@ -16,8 +16,8 @@ import {
 } from './mixer/Channel'
 
 export class ToneMusicGenerator extends MusicGenerator<ToneDestination, ToneInst> {
-  constructor() {
-    super(new ToneDestination())
+  constructor(dest?: ToneDestination) {
+    super(dest || new ToneDestination())
   }
 
   setupInstChannel(conf: ChConf<InstCh>) {

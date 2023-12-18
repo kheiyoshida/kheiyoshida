@@ -98,9 +98,6 @@ describe(`${MusicGenerator.name}`, () => {
       expect(generator2.adjustPitch).toHaveBeenCalled()
     })
   })
-  describe(`${MusicGenerator.prototype.handleTimeEvent.name}`, () => {
-    it.todo(`should hanlde elapsed/ended evetns`)
-  })
   describe(`${MusicGenerator.prototype.reassignSequence.name}`, () => {
     it(`should reassign sequence`, () => {
       const { mgnr, dest } = prepareMgnr()

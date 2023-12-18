@@ -34,12 +34,7 @@ export class AdjustNotesRequired extends Event {
   scale!: Scale
 }
 
-export class SequenceElapsed extends Event {
-  out!: SequenceOut
-  loop!: number
-  endTime!: number
-}
-export class SequenceEnded extends SequenceElapsed {}
+
 
 export class SequenceReAssignRequired extends Event {
   out!: SequenceOut

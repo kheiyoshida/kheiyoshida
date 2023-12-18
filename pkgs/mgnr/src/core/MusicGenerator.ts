@@ -46,26 +46,6 @@ export class MusicGenerator<Dest extends Destination<Inst>, Inst> {
     gens.forEach((gen) => gen.adjustPitch())
   }
 
-  handleTimeEvent(key: SeqEventKey, mes: { out: SequenceOut; loop: number; endTime: number }) {
-    const eventSpec = mes.out.events[key]
-    if (!eventSpec) {
-      this.reassignSequence(mes.out, mes.loop, mes.endTime)
-    } else {
-      // Event[]
-      if (Array.isArray(eventSpec)) {
-        return eventSpec
-      }
-      // Handler
-      else if (typeof eventSpec === 'function') {
-        return eventSpec(mes, this.destination)
-      }
-      // MutateSpec
-      else {
-        mes.out.generator.mutate(eventSpec)
-      }
-    }
-  }
-
   reassignSequence(out: SequenceOut, startTime: number, loop?: number) {
     if (!out.isDisposed) {
       out.assignSequence(loop, startTime)
