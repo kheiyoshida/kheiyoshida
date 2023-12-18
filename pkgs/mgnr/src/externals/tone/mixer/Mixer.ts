@@ -1,7 +1,4 @@
-import {
-  Instrument,
-  InstrumentOptions,
-} from 'tone/build/esm/instrument/Instrument'
+import { Instrument, InstrumentOptions } from 'tone/build/esm/instrument/Instrument'
 import { ChConf, FadeValues, InstCh, InstChannel, MuteValue, SendCh, SendChannel } from './Channel'
 import { MasterChannel, MasterChannelConf } from './Master'
 import { Send } from './Send'
@@ -88,8 +85,6 @@ export class Mixer {
     ch.last.connect(this.channels.master.chNode)
     this.channels.sends[channelId] = ch
   }
-
-
 
   public muteChannel(channelId: string, v: MuteValue) {
     const ch = this.findChannelById(channelId)
