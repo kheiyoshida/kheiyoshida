@@ -11,16 +11,6 @@ export type GeneratorConf = {
 } & Partial<SequenceNotesConf> &
   Partial<NotePickerConf>
 
-export function construct(conf: GeneratorConf): Generator {
-  const picker = new NotePicker(
-    pick(conf, ['noteDur', 'noteVel', 'veloPref', 'fillStrategy', 'harmonizer']),
-    conf.scale
-  )
-  const sequence = new Sequence(
-    pick(conf, ['length', 'lenRange', 'division', 'density', 'fillPref'])
-  )
-  return new Generator(picker, sequence)
-}
 
 export class Generator {
   readonly picker: NotePicker

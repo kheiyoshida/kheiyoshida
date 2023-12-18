@@ -10,7 +10,7 @@ import { SequenceOut } from './SequenceOut'
 
 class MockOutput extends Output<unknown> {
   public set(outId: string, generator: Generator, inst: unknown, events?: SeqEvent): void {
-    this.outs[outId] = new MockSequenceOut(generator, inst, outId, events)
+    this.outs[outId] = new MockSequenceOut(generator, inst)
   }
 }
 
@@ -33,6 +33,14 @@ const prepareMgnr = () => {
 }
 
 describe(`${MusicGenerator.name}`, () => {
+  describe(`${MusicGenerator.prototype.createGenerator.name}`, () => {
+    const { mgnr } = prepareMgnr()
+    const generator = mgnr.createGenerator({
+      fillPref: 'mono',
+      scale: new Scale({ key: 'D' }),
+    })
+    expect(generator).toBeInstanceOf(Generator)
+  })
   describe(`${MusicGenerator.prototype.setSequenceOut.name}`, () => {
     it(`should set sequence out`, () => {
       const { mgnr, dest } = prepareMgnr()

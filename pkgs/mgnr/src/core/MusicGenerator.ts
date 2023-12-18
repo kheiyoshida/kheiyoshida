@@ -1,6 +1,8 @@
-import { Generator } from '../generator/Generator'
+import { Generator, GeneratorConf } from '../generator/Generator'
+import { NotePicker } from '../generator/NotePicker'
 import { Scale, ScaleConf } from '../generator/Scale'
-import { SequenceNoteMap } from '../generator/Sequence'
+import { Sequence, SequenceNoteMap } from '../generator/Sequence'
+import { pick } from '../utils/utils'
 import { Destination } from './Destination'
 import { SeqEvent } from './SequenceEvent'
 import { SequenceOut } from './SequenceOut'
@@ -12,10 +14,20 @@ export class MusicGenerator<Dest extends Destination<Inst>, Inst> {
     this.destination = destination
   }
 
+  createGenerator(conf: GeneratorConf): Generator {
+    const picker = new NotePicker(
+      pick(conf, ['noteDur', 'noteVel', 'veloPref', 'fillStrategy', 'harmonizer']),
+      conf.scale
+    )
+    const sequence = new Sequence(
+      pick(conf, ['length', 'lenRange', 'division', 'density', 'fillPref'])
+    )
+    return new Generator(picker, sequence)
+  }
+
   setSequenceOut(gen: Generator, inst: Inst, outId: string, loop?: number, events?: SeqEvent) {
     this.destination.output.set(outId, gen, inst, events)
     this.destination.output.outs[outId].assignSequence(loop)
-    return null
   }
 
   changeSequenceLength(

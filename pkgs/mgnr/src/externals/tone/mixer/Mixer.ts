@@ -30,10 +30,13 @@ export class Mixer {
     if (conf.fadeIn) {
       newCh.volumeFade(conf.fadeIn)
     }
+    return newCh
   }
 
   createSendChannel(conf: ChConf<SendCh>) {
-    this.addSendChannel(conf.id, new SendChannel(conf))
+    const newCh = new SendChannel(conf)
+    this.addSendChannel(conf.id, newCh)
+    return newCh
   }
 
   connectSendChannel(from: string, to: string, gainAmount = 0) {

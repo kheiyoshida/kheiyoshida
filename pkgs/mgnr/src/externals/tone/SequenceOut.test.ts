@@ -28,9 +28,8 @@ describe(`${ToneSequenceOut.name}`, () => {
     ],
   }
   const prepare = (
-    { notes, events }: { notes: SequenceNoteMap; events?: SeqEvent } = {
+    { notes }: { notes: SequenceNoteMap } = {
       notes: defaultNotes,
-      events: undefined,
     }
   ) => {
     const generator = new Generator(new NotePicker({ fillStrategy: 'fixed' }), new Sequence())
@@ -38,7 +37,7 @@ describe(`${ToneSequenceOut.name}`, () => {
 
     const inst = new Tone.PolySynth()
     const outId = 'outId'
-    const seqOut = new ToneSequenceOut(generator, inst, outId, events)
+    const seqOut = new ToneSequenceOut(generator, inst)
     return { seqOut, generator, inst, outId }
   }
   let spyScheduleLoop: jest.SpyInstance
@@ -64,12 +63,10 @@ describe(`${ToneSequenceOut.name}`, () => {
   })
   it(`should trigger elapsed events on each loop`, () => {
     const eventHandler = jest.fn()
-    const { seqOut, inst } = prepare({
+    const { seqOut } = prepare({
       notes: defaultNotes,
-      events: {
-        elapsed: eventHandler,
-      },
     })
+    seqOut.onElapsed(eventHandler)
     seqOut.assignSequence(4, 0)
     expect(eventHandler).toHaveBeenCalledTimes(4)
   })

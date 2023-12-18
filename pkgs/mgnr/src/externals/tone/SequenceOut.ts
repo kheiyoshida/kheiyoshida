@@ -6,6 +6,7 @@ import { convertMidiToNoteName } from '../../generator/convert'
 import { pickRange } from '../../utils/calc'
 import * as Transport from './tone-wrapper/Transport'
 import { scheduleLoop } from './tone-wrapper/utils'
+import { SequenceLoopEventHandler } from '../../core/SequenceEvent'
 
 export type ToneInst = Instrument<InstrumentOptions>
 
@@ -30,6 +31,14 @@ export class ToneSequenceOut extends SequenceOut<ToneInst> {
         endTime: loopStartedAt + totalNumOfLoops * this.sequenceDuration,
       })
     }
+  }
+
+  public onElapsed(eventHandler: SequenceLoopEventHandler) {
+    this.events.elapsed = eventHandler
+  }
+
+  public onEnded(eventHandler: SequenceLoopEventHandler) {
+    this.events.ended  = eventHandler
   }
 
   /**

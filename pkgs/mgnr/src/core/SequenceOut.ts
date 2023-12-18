@@ -9,11 +9,11 @@ export abstract class SequenceOut<I = any> {
   readonly inst: I
   readonly outId: string
   readonly events: SeqEvent
-  constructor(generator: Generator, inst: I, outId: string, events?: SeqEvent) {
-    this.outId = outId
+  constructor(generator: Generator, inst: I) {
+    this.outId = ''
     this.generator = generator
     this.inst = inst
-    this.events = events || {}
+    this.events = {}
   }
   public abstract assignSequence(loop?: number, startTime?: number): void
 

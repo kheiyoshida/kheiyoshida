@@ -1,3 +1,4 @@
+import { Generator } from '../generator/Generator'
 import { SequenceOut } from './SequenceOut'
 
 export type SeqEventKey = 'elapsed' | 'ended'
