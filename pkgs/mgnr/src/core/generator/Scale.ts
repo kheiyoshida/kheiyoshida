@@ -1,7 +1,7 @@
 import Logger from 'js-logger'
-import { random, randomIntBetween } from '../utils/calc'
-import { NumRange } from '../utils/primitives'
-import { Range } from '../utils/types'
+import { random, randomIntBetween } from '../../utils/calc'
+import { NumRange } from '../../utils/primitives'
+import { Range } from '../../utils/types'
 import { Modulation } from './Modulation'
 import {
   Degree,

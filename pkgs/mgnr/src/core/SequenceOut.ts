@@ -1,4 +1,4 @@
-import { Generator } from '../generator/Generator'
+import { Generator } from './generator/Generator'
 import { SeqEvent } from './SequenceEvent'
 
 /**

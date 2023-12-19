@@ -1,7 +1,7 @@
-import { Generator } from '../generator/Generator'
-import { NotePicker } from '../generator/NotePicker'
-import { Scale } from '../generator/Scale'
-import { Sequence } from '../generator/Sequence'
+import { Generator } from './generator/Generator'
+import { NotePicker } from './generator/NotePicker'
+import { Scale } from './generator/Scale'
+import { Sequence } from './generator/Sequence'
 import { MusicGenerator } from './MusicGenerator'
 
 const prepareMgnr = () => {

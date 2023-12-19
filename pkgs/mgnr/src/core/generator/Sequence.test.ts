@@ -1,6 +1,6 @@
 import { Sequence } from './Sequence'
 import { Note } from './Note'
-import * as utils from '../utils/utils'
+import * as utils from '../../utils/utils'
 
 const notes = {
   0: [

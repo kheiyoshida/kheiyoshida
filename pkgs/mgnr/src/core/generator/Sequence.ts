@@ -1,7 +1,7 @@
 import Logger from 'js-logger'
-import { randomIntBetween } from '../utils/calc'
-import { Range } from '../utils/types'
-import { buildConf, normalizeRange, randomRemove } from '../utils/utils'
+import { randomIntBetween } from '../../utils/calc'
+import { Range } from '../../utils/types'
+import { buildConf, normalizeRange, randomRemove } from '../../utils/utils'
 import { Note } from './Note'
 
 type SeqDivision = 16 | 8 | 4 | 2 | 1

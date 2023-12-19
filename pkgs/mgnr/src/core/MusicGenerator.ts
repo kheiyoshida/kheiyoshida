@@ -1,7 +1,7 @@
-import { Generator, GeneratorConf } from '../generator/Generator'
-import { NotePicker } from '../generator/NotePicker'
-import { Scale, ScaleConf } from '../generator/Scale'
-import { Sequence } from '../generator/Sequence'
+import { Generator, GeneratorConf } from './generator/Generator'
+import { NotePicker } from './generator/NotePicker'
+import { Scale, ScaleConf } from './generator/Scale'
+import { Sequence } from './generator/Sequence'
 import { pick } from '../utils/utils'
 
 export class MusicGenerator {

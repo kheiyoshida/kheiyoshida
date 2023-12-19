@@ -1,4 +1,4 @@
-import { Range } from '../utils/types'
+import { Range } from '../../utils/types'
 
 type RANDOM = 'random'
 

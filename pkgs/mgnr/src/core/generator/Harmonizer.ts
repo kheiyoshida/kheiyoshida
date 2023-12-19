@@ -1,5 +1,5 @@
 import Logger from 'js-logger'
-import { buildConf } from '../utils/utils'
+import { buildConf } from '../../utils/utils'
 import { Note } from './Note'
 import { Degree, MidiNum, OCTAVE, Semitone } from './constants'
 import { convertDegreeToSemitone } from './convert'

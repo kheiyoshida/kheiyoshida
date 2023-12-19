@@ -1,4 +1,4 @@
-import * as utils from '../utils/utils'
+import * as utils from '../../utils/utils'
 import { Generator } from './Generator'
 import { NotePicker } from './NotePicker'
 import { Scale } from './Scale'
