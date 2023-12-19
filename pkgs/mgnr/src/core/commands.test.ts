@@ -2,7 +2,7 @@ import { Generator } from './generator/Generator'
 import { NotePicker } from './generator/NotePicker'
 import { Scale } from './generator/Scale'
 import { Sequence } from './generator/Sequence'
-import * as mgnr from '.'
+import * as mgnr from './commands'
 
 describe(`${mgnr.createGenerator.name}`, () => {
   const generator = mgnr.createGenerator({

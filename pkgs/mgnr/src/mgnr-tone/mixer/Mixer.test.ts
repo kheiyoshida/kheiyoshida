@@ -1,4 +1,4 @@
-import { Delay, PolySynth } from "mgnr-tone/mgnr";
+import { Delay, PolySynth } from "mgnr-tone/commands";
 import { Mixer } from "./Mixer";
 jest.mock('tone')
 

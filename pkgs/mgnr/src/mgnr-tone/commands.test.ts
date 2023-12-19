@@ -1,4 +1,4 @@
-import * as mgnr from './mgnr'
+import * as mgnr from './commands'
 import { Mixer } from './mixer/Mixer'
 jest.mock('tone')
 

@@ -1,4 +1,4 @@
-import * as Tone from 'mgnr-tone/mgnr'
+import * as Tone from 'mgnr-tone/commands'
 import { InstChannel, SendChannel } from './Channel'
 jest.mock('tone')
 
