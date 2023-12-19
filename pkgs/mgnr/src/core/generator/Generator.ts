@@ -1,6 +1,7 @@
-import { MutateSpec } from '../types'
 import { random } from '../../utils/calc'
-import { negateIf, pick } from '../../utils/utils'
+import { negateIf } from '../../utils/utils'
+import { Outlet } from '../Outlet'
+import { MutateSpec } from '../types'
 import { Note } from './Note'
 import { NotePicker, NotePickerConf } from './NotePicker'
 import { Scale } from './Scale'
@@ -11,10 +12,10 @@ export type GeneratorConf = {
 } & Partial<SequenceNotesConf> &
   Partial<NotePickerConf>
 
-
-export class Generator {
+export class Generator<I = unknown> {
   readonly picker: NotePicker
   readonly sequence: Sequence
+  private outlet!: Outlet<I>
 
   get scale(): Scale {
     return this.picker.scale
@@ -27,6 +28,15 @@ export class Generator {
   constructor(picker: NotePicker, sequence: Sequence) {
     this.picker = picker
     this.sequence = sequence
+  }
+
+  public feed(outlet: Outlet<I>): Outlet<I> {
+    if (this.outlet) {
+      throw Error(`outlet is already set. create another generator to feed this outlet`)
+    }
+    outlet.generator = this
+    this.outlet = outlet
+    return outlet
   }
 
   public constructNotes(initialNotes?: SequenceNoteMap) {

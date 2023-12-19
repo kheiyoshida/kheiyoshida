@@ -6,7 +6,6 @@ import { convertMidiToNoteName } from '../core/generator/convert'
 import { pickRange } from '../utils/calc'
 import * as Transport from './tone-wrapper/Transport'
 import { scheduleLoop } from './tone-wrapper/utils'
-import { SequenceLoopEventHandler } from '../core/types'
 
 export type ToneInst = Instrument<InstrumentOptions>
 
@@ -25,28 +24,20 @@ export class ToneOutlet extends Outlet<ToneInst> {
       })
     }
     if (loopNth === totalNumOfLoops) {
-      this.events.ended && this.events.ended({
-        out: this,
-        loop: totalNumOfLoops,
-        endTime: loopStartedAt + totalNumOfLoops * this.sequenceDuration,
-      })
+      this.events.ended &&
+        this.events.ended({
+          out: this,
+          loop: totalNumOfLoops,
+          endTime: loopStartedAt + totalNumOfLoops * this.sequenceDuration,
+        })
     }
-  }
-
-  public onElapsed(eventHandler: SequenceLoopEventHandler) {
-    this.events.elapsed = eventHandler
-  }
-
-  public onEnded(eventHandler: SequenceLoopEventHandler) {
-    this.events.ended  = eventHandler
   }
 
   /**
    * @param startTime time elapsed in Tone.Transport
    */
-  public assignSequence(numOfLoops = 1, startTime = 0) {
-    if (this.isDisposed) return
-    if (this.generator.sequence.isEmpty) return
+  public loopSequence(numOfLoops = 1, startTime = 0): ToneOutlet {
+    if (this.generator.sequence.isEmpty) return this
     const e = scheduleLoop(
       (time, loopNth) => {
         this.checkEvent(numOfLoops, loopNth, startTime)
@@ -59,6 +50,7 @@ export class ToneOutlet extends Outlet<ToneInst> {
       numOfLoops
     )
     this.assignIds.push(e)
+    return this
   }
 
   private assignNote(note: Note, time: number) {
@@ -95,10 +87,5 @@ export class ToneOutlet extends Outlet<ToneInst> {
 
   public cancelAssign() {
     this.assignIds.forEach((id) => Transport.clear(id))
-  }
-
-  public dispose() {
-    super.dispose()
-    this.cancelAssign()
   }
 }

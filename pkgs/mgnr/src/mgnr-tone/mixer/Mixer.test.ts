@@ -1,5 +1,5 @@
-import { Delay, PolySynth } from "mgnr-tone/commands";
-import { Mixer } from "./Mixer";
+import { Delay, PolySynth } from 'tone'
+import { Mixer } from './Mixer'
 jest.mock('tone')
 
 describe(`${Mixer}`, () => {
@@ -7,7 +7,7 @@ describe(`${Mixer}`, () => {
     const mixer = new Mixer()
     mixer.createInstChannel({
       id: 'synth',
-      inst: new PolySynth()
+      inst: new PolySynth(),
     })
     expect(mixer.channels.inst.synth).toBeDefined()
   })
@@ -15,7 +15,7 @@ describe(`${Mixer}`, () => {
     const mixer = new Mixer()
     mixer.createSendChannel({
       id: 'delay',
-      effects: [new Delay()]
+      effects: [new Delay()],
     })
     expect(mixer.channels.sends.delay).toBeDefined()
   })
@@ -23,11 +23,11 @@ describe(`${Mixer}`, () => {
     const mixer = new Mixer()
     mixer.createInstChannel({
       id: 'synth',
-      inst: new PolySynth()
+      inst: new PolySynth(),
     })
     mixer.createSendChannel({
       id: 'delay',
-      effects: [new Delay()]
+      effects: [new Delay()],
     })
     mixer.connectSendChannel('synth', 'delay', 1)
     expect(mixer.channels.inst.synth.sends.nodes.length).toBe(1)

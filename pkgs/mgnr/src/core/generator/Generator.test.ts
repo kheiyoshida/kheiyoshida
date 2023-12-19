@@ -1,4 +1,5 @@
 import * as utils from '../../utils/utils'
+import { MockOutlet } from '../Outlet.test'
 import { Generator } from './Generator'
 import { NotePicker } from './NotePicker'
 import { Scale } from './Scale'
@@ -60,6 +61,23 @@ const monoNotes: SequenceNoteMap = {
 const deepCopy = <T>(v: T) => JSON.parse(JSON.stringify(v)) as T
 
 describe(`${Generator.name}`, () => {
+  describe(`${Generator.prototype.feed.name}`, () => {
+    it(`can set an outlet to feed sequence to`, () => {
+      const generator = new Generator(new NotePicker({}), new Sequence())
+      const outlet = new MockOutlet('fakeInst')
+      generator.feed(outlet)
+      expect(outlet.generator).toBe(generator)
+    })
+    it(`should not override the outlet`, () => {
+      const generator = new Generator(new NotePicker({}), new Sequence())
+      const outlet = new MockOutlet('fakeInst')
+      generator.feed(outlet)
+      expect(outlet.generator).toBe(generator)
+      const outlet2 = new MockOutlet('anotherInst')
+      expect(() => generator.feed(outlet2)).toThrow()
+      expect(() => outlet2.generator).toThrow()
+    })
+  })
   describe(`${Generator.prototype.constructNotes.name}`, () => {
     it(`should assign initial notes if provided`, () => {
       const generator = new Generator(new NotePicker({ fillStrategy: 'fixed' }), new Sequence())

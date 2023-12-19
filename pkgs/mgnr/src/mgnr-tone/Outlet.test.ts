@@ -36,7 +36,7 @@ describe(`${ToneOutlet.name}`, () => {
 
     const inst = new Tone.PolySynth()
     const outId = 'outId'
-    const seqOut = new ToneOutlet(generator, inst)
+    const seqOut = new ToneOutlet(inst, generator)
     return { seqOut, generator, inst, outId }
   }
   let spyScheduleLoop: jest.SpyInstance
@@ -45,7 +45,7 @@ describe(`${ToneOutlet.name}`, () => {
   })
   it(`can assign sequence to inst`, () => {
     const { seqOut, inst } = prepare()
-    seqOut.assignSequence(4, 0)
+    seqOut.loopSequence(4, 0)
     expect(spyScheduleLoop.mock.calls[0].slice(1)).toMatchObject([
       1, // duration
       0, // startTime
@@ -66,7 +66,7 @@ describe(`${ToneOutlet.name}`, () => {
       notes: defaultNotes,
     })
     seqOut.onElapsed(eventHandler)
-    seqOut.assignSequence(4, 0)
+    seqOut.loopSequence(4, 0)
     expect(eventHandler).toHaveBeenCalledTimes(4)
   })
 })
