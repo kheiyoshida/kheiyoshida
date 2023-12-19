@@ -4,13 +4,11 @@ import { SeqEvent } from './types'
 /**
  * Adapter for Generator's Sequence and external sources
  */
-export abstract class Outlet<I = any> {
+export abstract class Outlet<Inst = any> {
   readonly generator: Generator
-  readonly inst: I
-  readonly outId: string
+  readonly inst: Inst
   readonly events: SeqEvent
-  constructor(generator: Generator, inst: I) {
-    this.outId = ''
+  constructor(generator: Generator, inst: Inst) {
     this.generator = generator
     this.inst = inst
     this.events = {}

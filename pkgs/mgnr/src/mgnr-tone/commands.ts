@@ -7,8 +7,8 @@ export function createMixer() {
   return new Mixer({})
 }
 
-export function supplyGenerator(gen: Generator, inst: ToneInst): ToneOutlet {
-  return new ToneOutlet(gen, inst)
+export function createOutlet(generator: Generator, inst: ToneInst): ToneOutlet {
+  return new ToneOutlet(generator, inst)
 }
 
 export function registerTimeEvents(events: TimeEventMap) {
