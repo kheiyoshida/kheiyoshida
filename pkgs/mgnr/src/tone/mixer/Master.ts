@@ -1,6 +1,6 @@
 import Logger from 'js-logger'
 import * as Tone from 'tone'
-import { buildConf } from '../../../utils/utils'
+import { buildConf } from '../../utils/utils'
 
 export interface MasterChannelConf {
   limitThreashold?: number

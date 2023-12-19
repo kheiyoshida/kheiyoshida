@@ -1,9 +1,8 @@
 import * as Tone from 'tone'
-import { mockScheduleLoop } from '../../__tests__/mock'
-import { SeqEvent } from '../../core/SequenceEvent'
-import { Generator } from '../../core/generator/Generator'
-import { NotePicker } from '../../core/generator/NotePicker'
-import { Sequence, SequenceNoteMap } from '../../core/generator/Sequence'
+import { mockScheduleLoop } from '../__tests__/mock'
+import { Generator } from '../core/generator/Generator'
+import { NotePicker } from '../core/generator/NotePicker'
+import { Sequence, SequenceNoteMap } from '../core/generator/Sequence'
 import { ToneSequenceOut } from './SequenceOut'
 import * as wrapperUtil from './tone-wrapper/utils'
 

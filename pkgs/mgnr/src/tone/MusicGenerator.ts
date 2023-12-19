@@ -1,5 +1,5 @@
-import { MusicGenerator } from '../../core/MusicGenerator'
-import { Generator } from '../../core/generator/Generator'
+import { MusicGenerator } from '../core/MusicGenerator'
+import { Generator } from '../core/generator/Generator'
 import { ToneInst, ToneSequenceOut } from './SequenceOut'
 import { TimeEventMap, TimeObserver } from './TimeObserver'
 import { Mixer } from './mixer/Mixer'

@@ -1,12 +1,12 @@
 import Logger from 'js-logger'
 import { Instrument, InstrumentOptions } from 'tone/build/esm/instrument/Instrument'
-import { SequenceOut } from '../../core/SequenceOut'
-import { Note } from '../../core/generator/Note'
-import { convertMidiToNoteName } from '../../core/generator/convert'
-import { pickRange } from '../../utils/calc'
+import { SequenceOut } from '../core/SequenceOut'
+import { Note } from '../core/generator/Note'
+import { convertMidiToNoteName } from '../core/generator/convert'
+import { pickRange } from '../utils/calc'
 import * as Transport from './tone-wrapper/Transport'
 import { scheduleLoop } from './tone-wrapper/utils'
-import { SequenceLoopEventHandler } from '../../core/SequenceEvent'
+import { SequenceLoopEventHandler } from '../core/SequenceEvent'
 
 export type ToneInst = Instrument<InstrumentOptions>
 
