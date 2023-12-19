@@ -1,10 +1,10 @@
 import { Generator } from './generator/Generator'
-import { SeqEvent } from './SequenceEvent'
+import { SeqEvent } from './types'
 
 /**
  * Adapter for Generator's Sequence and external sources
  */
-export abstract class SequenceOut<I = any> {
+export abstract class Outlet<I = any> {
   readonly generator: Generator
   readonly inst: I
   readonly outId: string

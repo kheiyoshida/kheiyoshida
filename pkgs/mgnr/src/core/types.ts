@@ -1,9 +1,9 @@
-import { SequenceOut } from './SequenceOut'
+import { Outlet } from './Outlet'
 
 export type SeqEventKey = 'elapsed' | 'ended'
 
 export type SequenceLoopEventContext = {
-  out: SequenceOut
+  out: Outlet
   loop: number
   endTime: number
 }

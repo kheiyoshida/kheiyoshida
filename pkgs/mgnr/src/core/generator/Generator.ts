@@ -1,4 +1,4 @@
-import { MutateSpec } from '../SequenceEvent'
+import { MutateSpec } from '../types'
 import { random } from '../../utils/calc'
 import { negateIf, pick } from '../../utils/utils'
 import { Note } from './Note'

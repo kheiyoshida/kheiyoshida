@@ -1,4 +1,4 @@
-import { ToneMusicGenerator } from './MusicGenerator'
+import { ToneMusicGenerator } from '.'
 import { Mixer } from './mixer/Mixer'
 jest.mock('tone')
 

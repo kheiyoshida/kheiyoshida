@@ -1,6 +1,6 @@
 /* eslint-disable no-extra-semi */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { scheduleLoop } from '../externals/tone/tone-wrapper/utils'
+import { scheduleLoop } from '../mgnr-tone/tone-wrapper/utils'
 
 /**
  * simply run callback by provided loop times

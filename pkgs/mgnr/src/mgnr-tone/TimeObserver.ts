@@ -1,4 +1,4 @@
-import * as Transport from '../tone/tone-wrapper/Transport'
+import * as Transport from './tone-wrapper/Transport'
 
 export type TimeEventHandler = (time: number) => OnceTimeEvent | void
 

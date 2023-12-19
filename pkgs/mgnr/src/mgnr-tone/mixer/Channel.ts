@@ -1,5 +1,5 @@
 import * as Tone from 'tone'
-import { ToneInst } from '../SequenceOut'
+import { ToneInst } from '../Outlet'
 import { Send, Sends } from './Send'
 
 export type ChConf<C extends Ch> = C & {

@@ -1,9 +1,9 @@
-import * as Tone from 'tone'
+import * as Tone from 'mgnr-tone'
 import { mockScheduleLoop } from '../__tests__/mock'
 import { Generator } from '../core/generator/Generator'
 import { NotePicker } from '../core/generator/NotePicker'
 import { Sequence, SequenceNoteMap } from '../core/generator/Sequence'
-import { ToneSequenceOut } from './SequenceOut'
+import { ToneOutlet } from './Outlet'
 import * as wrapperUtil from './tone-wrapper/utils'
 
 jest.mock('tone')
@@ -16,7 +16,7 @@ jest.mock('./tone-wrapper/Transport', () => ({
   toSeconds: () => FIXED_SECONDS_PER_MEASURE,
 }))
 
-describe(`${ToneSequenceOut.name}`, () => {
+describe(`${ToneOutlet.name}`, () => {
   const defaultNotes = {
     0: [
       {
@@ -36,7 +36,7 @@ describe(`${ToneSequenceOut.name}`, () => {
 
     const inst = new Tone.PolySynth()
     const outId = 'outId'
-    const seqOut = new ToneSequenceOut(generator, inst)
+    const seqOut = new ToneOutlet(generator, inst)
     return { seqOut, generator, inst, outId }
   }
   let spyScheduleLoop: jest.SpyInstance
