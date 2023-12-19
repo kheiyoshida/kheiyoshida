@@ -1,4 +1,4 @@
-import * as Tone from 'mgnr-tone'
+import * as Tone from 'tone'
 import { mockScheduleLoop } from '../__tests__/mock'
 import { Generator } from '../core/generator/Generator'
 import { NotePicker } from '../core/generator/NotePicker'
