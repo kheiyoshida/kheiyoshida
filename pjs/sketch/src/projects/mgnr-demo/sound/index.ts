@@ -6,13 +6,13 @@ import { Transport } from 'tone'
 import { setupKick, setupTom } from './inst/kick'
 import { setupPadCh } from './inst/pad'
 import { setupExtraSynCh, setupSynCh } from './inst/syn'
+import { randomIntInclusiveBetween } from 'utils'
 
 /**
  * demo song for beta release
  */
 export const music = () => {
-  // Transport.bpm.value = randomIntInclusiveBetween(96, 106)
-  Transport.bpm.value = 120
+  Transport.bpm.value = randomIntInclusiveBetween(96, 106)
 
   const key = pickRandomPitchName()
   const scale = mgnr.createScale(key, 'omit25', { min: 24, max: 48 })
