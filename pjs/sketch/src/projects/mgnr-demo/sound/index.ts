@@ -1,13 +1,8 @@
-import { Musician } from 'mgnr/src/Musician'
-import * as E from 'mgnr/src/core/events'
-import * as TC from 'mgnr/src/externals/tone/commands'
-import { Scale } from 'mgnr/src/generator/Scale'
-import { nthDegreeTone, pickRandomPitchName } from 'mgnr/src/generator/utils'
-import { randomIntBetween } from 'mgnr/src/utils/calc'
-import { makeFader } from 'src/lib/sound/presets/mix/fade'
-import { manageFade } from 'src/lib/sound/presets/mix/fadeManager'
+import { Scale } from 'mgnr/src/core/generator/Scale'
+import { nthDegreeTone, pickRandomPitchName } from 'mgnr/src/core/generator/utils'
+import * as mgnr from 'mgnr/src/mgnr-tone'
 import { filterDelay, reverb } from 'src/lib/sound/presets/send/delay'
-import { metro } from 'src/lib/sound/utils/debug'
+import { Transport } from 'tone'
 import { setupKick, setupTom } from './inst/kick'
 import { setupPadCh } from './inst/pad'
 import { setupExtraSynCh, setupSynCh } from './inst/syn'
@@ -16,30 +11,12 @@ import { setupExtraSynCh, setupSynCh } from './inst/syn'
  * demo song for beta release
  */
 export const music = () => {
-  // initialize
-  const bpm = randomIntBetween(96, 106)
-  Musician.init('tone', { bpm })
-  metro()
+  // Transport.bpm.value = randomIntInclusiveBetween(96, 106)
+  Transport.bpm.value = 120
 
-  // scale
   const key = pickRandomPitchName()
-  const scale = new Scale({
-    key: key,
-    pref: 'omit25',
-    range: {
-      min: 24,
-      max: 48,
-    },
-  })
-
-  const scale2 = new Scale({
-    key: key,
-    pref: 'omit25',
-    range: {
-      min: 48,
-      max: 72,
-    },
-  })
+  const scale = mgnr.createScale(key, 'omit25', { min: 24, max: 48 })
+  const scale2 = mgnr.createScale(key, 'omit25', { min: 48, max: 72 })
 
   // inst channels and generators
   const kickCh = setupKick()
@@ -49,45 +26,20 @@ export const music = () => {
   const exSynCh = setupExtraSynCh(scale2)
 
   // sends
-  const delaySend = filterDelay()
-  TC.SetupSendChannel.pub({ conf: delaySend })
-  TC.AssignSendChannel.pub({
-    from: synCh.id,
-    to: delaySend.id,
-    gainAmount: 1.4,
-  })
-  TC.AssignSendChannel.pub({
-    from: padCh.id,
-    to: delaySend.id,
-    gainAmount: 2,
-  })
-  TC.AssignSendChannel.pub({
-    from: exSynCh.id,
-    to: delaySend.id,
-    gainAmount: 1.4,
-  })
+  const mixer = mgnr.getMixer()
+  const delayCh = mixer.createSendChannel(filterDelay())
+  mixer.connect(synCh, delayCh, 1.4)
+  mixer.connect(padCh, delayCh, 2)
+  mixer.connect(exSynCh, delayCh, 1.4)
 
-  const reverbSend = reverb()
-  TC.SetupSendChannel.pub({ conf: reverbSend })
-  TC.AssignSendChannel.pub({
-    from: kickCh.id,
-    to: reverbSend.id,
-    gainAmount: 1,
-  })
-  TC.AssignSendChannel.pub({
-    from: synCh.id,
-    to: reverbSend.id,
-    gainAmount: 0.5,
-  })
-  TC.AssignSendChannel.pub({
-    from: tomCh.id,
-    to: reverbSend.id,
-    gainAmount: 0.5,
-  })
+  const reverbCh = mixer.createSendChannel(reverb())
+  mixer.connect(kickCh, reverbCh, 1)
+  mixer.connect(synCh, reverbCh, 0.5)
+  mixer.connect(tomCh, reverbCh, 0.5)
 
   // fade
-  const padFade = makeFader(
-    padCh.id,
+  const padFade = mgnr.makeFader(
+    padCh,
     {
       volumeRange: {
         min: -52,
@@ -106,8 +58,8 @@ export const music = () => {
     },
     'on'
   )
-  const exSynFade = makeFader(
-    exSynCh.id,
+  const exSynFade = mgnr.makeFader(
+    exSynCh,
     {
       volumeRange: {
         min: -52,
@@ -126,8 +78,8 @@ export const music = () => {
     },
     'muted'
   )
-  const kickFade = makeFader(
-    kickCh.id,
+  const kickFade = mgnr.makeFader(
+    kickCh,
     {
       volumeRange: {
         min: -40,
@@ -146,8 +98,8 @@ export const music = () => {
     },
     'on'
   )
-  const tomFade = makeFader(
-    tomCh.id,
+  const tomFade = mgnr.makeFader(
+    tomCh,
     {
       volumeRange: {
         min: -30,
@@ -167,32 +119,36 @@ export const music = () => {
     'muted'
   )
 
-  manageFade([tomFade, kickFade, padFade, exSynFade])
+  mgnr.manageFade([tomFade, kickFade, padFade, exSynFade])
+
+  const mod = (scale: Scale, scale2: Scale) => {
+    const key = nthDegreeTone(scale.key, '6')
+    scale.modulate({ key }, 3)
+    scale2.modulate({ key }, 3)
+  }
 
   const startMod = () => {
-    TC.RegisterTimeEvents.pub({
-      events: {
-        once: [
-          {
-            time: '+0m',
-            handler: () => {
-              mod(scale, scale2)
-            },
+    mgnr.registerTimeEvents({
+      once: [
+        {
+          time: '+0m',
+          handler: () => {
+            mod(scale, scale2)
           },
-          {
-            time: '+8m',
-            handler: () => {
-              mod(scale, scale2)
-            },
+        },
+        {
+          time: '+8m',
+          handler: () => {
+            mod(scale, scale2)
           },
-          {
-            time: '+16m',
-            handler: () => {
-              mod(scale, scale2)
-            },
+        },
+        {
+          time: '+16m',
+          handler: () => {
+            mod(scale, scale2)
           },
-        ],
-      },
+        },
+      ],
     })
   }
 
@@ -207,22 +163,4 @@ export const music = () => {
     kickFadeIn: () => kickFade.manualFadeIn('2m'),
     kickFadeOut: () => kickFade.manualFadeIn('8m'),
   }
-}
-
-const mod = (scale: Scale, scale2: Scale) => {
-  const key = nthDegreeTone(scale.key, '6')
-  E.ScaleModulationRequired.pub({
-    scale,
-    next: {
-      key,
-    },
-    stages: 3,
-  })
-  E.ScaleModulationRequired.pub({
-    scale: scale2,
-    next: {
-      key,
-    },
-    stages: 3,
-  })
 }

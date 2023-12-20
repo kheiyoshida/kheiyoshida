@@ -1,6 +1,14 @@
 import { Instrument, InstrumentOptions } from 'tone/build/esm/instrument/Instrument'
 import { removeItemFromArray } from 'utils/src/utils/mutate'
-import { Channel, FadeValues, InstChConf, InstChannel, MuteValue, SendChConf, SendChannel } from './Channel'
+import {
+  Channel,
+  FadeValues,
+  InstChConf,
+  InstChannel,
+  MuteValue,
+  SendChConf,
+  SendChannel,
+} from './Channel'
 import { MasterChannel, MasterChannelConf } from './Master'
 import { Send } from './Send'
 
@@ -8,10 +16,14 @@ export type Inst = Instrument<InstrumentOptions>
 
 export class Mixer {
   readonly channels: Channel[] = []
-  readonly master: MasterChannel
+  readonly master!: MasterChannel
+
+  static singleton: Mixer
 
   constructor(masterConf: MasterChannelConf = {}) {
+    if (Mixer.singleton) return Mixer.singleton
     this.master = new MasterChannel(masterConf)
+    Mixer.singleton = this
   }
 
   createInstChannel(conf: InstChConf) {
@@ -26,7 +38,13 @@ export class Mixer {
     return newCh
   }
 
-  connectSendChannel(fromCh: Channel, toCh: SendChannel, gainAmount = 0) {
+  /**
+   * connect channels using send
+   * @param fromCh 
+   * @param toCh 
+   * @param gainAmount 
+   */
+  connect(fromCh: Channel, toCh: SendChannel, gainAmount = 0) {
     const send = new Send(gainAmount, fromCh, toCh)
     fromCh.connectSend(send)
     send.out.connect(toCh.first)

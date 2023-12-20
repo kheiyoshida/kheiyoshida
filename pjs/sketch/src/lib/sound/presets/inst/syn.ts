@@ -12,7 +12,6 @@ const defaultSynOptions = {
 export const defaultSyn = providePreset(
   defaultSynOptions,
   (options): InstChConf => ({
-    id: options.id,
     inst: new Tone.PolySynth(Tone.AMSynth).set({
       envelope: { attack: 0, sustain: 0.5, decay: 0.4, release: 0.3 },
     }),
@@ -27,14 +26,12 @@ export const defaultSyn = providePreset(
 
 export const fmSynth = providePreset(
   {
-    id: 'syn',
     highPassFreq: 500,
     lowPassFreq: 8000,
     initialVolume: -30,
     asdr: { attack: 0.4, sustain: 0.5, decay: 0, release: 0 },
   },
-  ({ id, initialVolume, highPassFreq, lowPassFreq, asdr }): InstChConf => ({
-    id,
+  ({ initialVolume, highPassFreq, lowPassFreq, asdr }): InstChConf => ({
     inst: new Tone.PolySynth(Tone.FMSynth).set({ envelope: asdr }),
     effects: [
       new Tone.Filter(highPassFreq, 'highpass'),
@@ -46,9 +43,9 @@ export const fmSynth = providePreset(
 
 export const noiseSynth = providePreset(
   { id: 'noise', initialVolume: -30 },
-  ({ id, initialVolume }): InstChConf => ({
-    id,
+  ({ initialVolume }): InstChConf => ({
     inst: new Tone.NoiseSynth(),
     initialVolume,
+    effects: []
   })
 )

@@ -1,105 +1,53 @@
-import * as E from 'mgnr/src/core/events'
-import * as TC from 'mgnr/src/externals/tone/commands'
-import { Scale } from 'mgnr/src/generator/Scale'
+import { Scale } from 'mgnr/src/core/generator/Scale'
+import * as mgnr from 'mgnr/src/mgnr-tone'
 import { defaultPad } from 'src/lib/sound/presets/inst/pad'
 
 export const setupPadCh = (scale: Scale) => {
-  const padCh = defaultPad({
-    id: 'pad',
-    asdr: { attack: 0.5, sustain: 1, decay: 0.8, release: 0 },
-    highPassFreq: 300,
-    lowPassFreq: 1400,
-    initialVolume: -10,
-  })
-  TC.SetupInstChannel.pub({ conf: padCh })
+  const mixer = mgnr.getMixer()
+  const padCh = mixer.createInstChannel(
+    defaultPad({
+      asdr: { attack: 0.5, sustain: 1, decay: 0.8, release: 0 },
+      highPassFreq: 300,
+      lowPassFreq: 1400,
+      initialVolume: -10,
+    })
+  )
 
-  TC.AssignGenerator.pub({
-    channelId: padCh.id,
-    loop: 2,
-    conf: {
-      scale: scale,
-      length: 12,
-      division: 16,
-      density: 0.2,
-      noteDur: {
-        min: 3,
-        max: 8,
-      },
-      lenRange: {
-        min: 4,
-        max: 40,
-      },
-      noteVel: {
-        min: 80,
-        max: 120,
-      },
-      fillStrategy: 'fill',
-      fillPref: 'mono',
-      harmonizer: {
-        degree: ['6'],
-        lookDown: false,
-      },
+  const out = mgnr.createOutlet(padCh)
+
+  const generator = mgnr.createGenerator({
+    scale: scale,
+    length: 12,
+    division: 16,
+    density: 0.2,
+    noteDur: {
+      min: 3,
+      max: 8,
     },
-    events: {
-      ended: (mes) => {
-        mes.out.generator.mutate({ rate: 0.3, strategy: 'randomize' })
-        mes.out.generator.mutate({ rate: 0.4, strategy: 'inPlace' })
-        return [
-          E.SequenceLengthChangeRequired.create({
-            gen: mes.out.generator,
-            method: 'extend',
-            len: 4,
-            exceeded: 'reverse',
-          }),
-          E.SequenceReAssignRequired.create({
-            out: mes.out,
-            startTime: mes.endTime,
-          }),
-        ]
-      },
+    lenRange: {
+      min: 4,
+      max: 40,
+    },
+    noteVel: {
+      min: 80,
+      max: 120,
+    },
+    fillStrategy: 'fill',
+    fillPref: 'mono',
+    harmonizer: {
+      degree: ['6'],
+      lookDown: false,
     },
   })
 
-  TC.AssignGenerator.pub({
-    channelId: padCh.id,
-    loop: 3,
-    conf: {
-      scale: scale,
-      length: 12,
-      division: 16,
-      density: 0.2,
-      noteDur: {
-        min: 3,
-        max: 8,
-      },
-      lenRange: {
-        min: 4,
-        max: 20,
-      },
-      noteVel: {
-        min: 20,
-        max: 80,
-      },
-      fillStrategy: 'fill',
-      fillPref: 'mono',
-    },
-    events: {
-      ended: (mes) => {
-        mes.out.generator.mutate({ rate: 0.4, strategy: 'inPlace' })
-        return [
-          E.SequenceLengthChangeRequired.create({
-            gen: mes.out.generator,
-            method: 'extend',
-            len: 3,
-            exceeded: 'reverse',
-          }),
-          E.SequenceReAssignRequired.create({
-            out: mes.out,
-            startTime: mes.endTime,
-          }),
-        ]
-      },
-    },
+  const lengthChange = mgnr.pingpongSequenceLength('extend')
+  generator.constructNotes()
+  generator.feedOutlet(out)
+  out.loopSequence(2).onEnded((mes) => {
+    mes.out.generator.mutate({ rate: 0.3, strategy: 'randomize' })
+    mes.out.generator.mutate({ rate: 0.4, strategy: 'inPlace' })
+    lengthChange(mes.out.generator, 4)
+    out.loopSequence(2, mes.endTime)
   })
 
   return padCh

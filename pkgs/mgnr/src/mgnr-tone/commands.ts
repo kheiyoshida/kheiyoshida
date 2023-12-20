@@ -1,17 +1,16 @@
 import { ToneInst, ToneOutlet } from './Outlet'
-import { TimeEventMap, registerEvents } from './timeEvent'
-import { Mixer } from './mixer/Mixer'
 import { InstChannel } from './mixer/Channel'
+import { MasterChannelConf } from './mixer/Master'
+import { Mixer } from './mixer/Mixer'
+export { manageFade, makeFader } from './mixer/fader'
+export { registerEvents as registerTimeEvents } from './timeEvent'
 
-export function createMixer() {
-  return new Mixer({})
+
+export function getMixer(masterConf: MasterChannelConf = {}) {
+  return new Mixer(masterConf)
 }
 
 export function createOutlet(inst: ToneInst | InstChannel): ToneOutlet {
   if (inst instanceof InstChannel) return new ToneOutlet(inst.inst)
   else return new ToneOutlet(inst)
-}
-
-export function registerTimeEvents(events: TimeEventMap) {
-  registerEvents(events)
 }

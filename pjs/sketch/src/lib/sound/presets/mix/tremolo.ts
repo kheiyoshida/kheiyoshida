@@ -1,30 +1,25 @@
-import * as TC from 'mgnr/src/externals/tone/commands'
-import * as TE from 'mgnr/src/externals/tone/events'
 import { random } from 'src/lib/utils/random'
 import { providePreset } from '../utils'
+import { Channel } from 'mgnr/src/mgnr-tone/mixer/Channel'
+import { registerEvents } from 'mgnr/src/mgnr-tone/timeEvent'
 
-export const registerTremolo = (chId: string) =>
+export const registerTremolo = (ch: Channel) =>
   providePreset(
     {
       interval: '72hz',
       randomRate: 0.3,
     },
     (options) => {
-      TC.RegisterTimeEvents.pub({
-        events: {
-          repeat: [
-            {
-              interval: options.interval,
-              handler: () => {
-                if (random(options.randomRate)) return
-                TE.MuteRequired.pub({
-                  channel: chId,
-                  value: 'toggle',
-                })
-              },
+      registerEvents({
+        repeat: [
+          {
+            interval: options.interval,
+            handler: () => {
+              if (random(options.randomRate)) return
+              ch.mute('toggle')
             },
-          ],
-        },
+          },
+        ],
       })
     }
   )

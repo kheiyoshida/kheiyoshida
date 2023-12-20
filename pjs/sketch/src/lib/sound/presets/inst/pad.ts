@@ -13,7 +13,6 @@ const defaultPadOptions = {
 export const defaultPad = providePreset(
   defaultPadOptions,
   (options): InstChConf => ({
-    id: options.id,
     inst: new Tone.PolySynth(Tone.AMSynth).set({
       envelope: options.asdr,
     }),

@@ -9,5 +9,4 @@ export const published: string[] = [
   'tp4',
   'mgnr-demo',
   'mgnr-poc',
-  'mgnr-test'
 ]

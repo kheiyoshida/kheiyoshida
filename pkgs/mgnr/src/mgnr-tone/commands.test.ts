@@ -4,6 +4,6 @@ jest.mock('tone')
 
 jest.mock('./tone-wrapper/Transport')
 
-test(`${mgnr.createMixer.name}`, () => {
-  expect(mgnr.createMixer() instanceof Mixer).toBe(true)
+test(`${mgnr.getMixer.name}`, () => {
+  expect(mgnr.getMixer() instanceof Mixer).toBe(true)
 })
