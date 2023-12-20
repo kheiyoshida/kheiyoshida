@@ -6,15 +6,14 @@ describe(`${Mixer}`, () => {
   test(`${Mixer.prototype.createInstChannel.name}`, () => {
     const mixer = new Mixer()
     const ch = mixer.createInstChannel({
-      id: 'synth',
       inst: new PolySynth(),
+      effects: [],
     })
     expect(mixer.channels.includes(ch)).toBe(true)
   })
   test(`${Mixer.prototype.createSendChannel.name}`, () => {
     const mixer = new Mixer()
     const ch = mixer.createSendChannel({
-      id: 'delay',
       effects: [new Delay()],
     })
     expect(mixer.channels.includes(ch)).toBe(true)
@@ -22,11 +21,10 @@ describe(`${Mixer}`, () => {
   test(`${Mixer.prototype.connectSendChannel.name}`, () => {
     const mixer = new Mixer()
     const synCh = mixer.createInstChannel({
-      id: 'synth',
       inst: new PolySynth(),
+      effects: [],
     })
     const delayCh = mixer.createSendChannel({
-      id: 'delay',
       effects: [new Delay()],
     })
     mixer.connectSendChannel(synCh, delayCh, 1)

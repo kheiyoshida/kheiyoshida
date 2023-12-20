@@ -30,7 +30,7 @@ export class Generator<I = unknown> {
     this.sequence = sequence
   }
 
-  public feed(outlet: Outlet<I>): Outlet<I> {
+  public feedOutlet(outlet: Outlet<I>): Outlet<I> {
     if (this.outlet) {
       throw Error(`outlet is already set. create another generator to feed this outlet`)
     }
@@ -100,33 +100,28 @@ export class Generator<I = unknown> {
     })
   }
 
-  private reverseLengthChangeDirection = false
-
-  public toggleReverse() {
-    this.reverseLengthChangeDirection = !this.reverseLengthChangeDirection
-  }
-
-  public changeSequenceLength(method: 'shrink' | 'extend', length: number, refill = true): boolean {
-    if (negateIf(this.reverseLengthChangeDirection, method === 'extend')) {
-      return this.extend(length, refill)
+  public changeSequenceLength(
+    method: 'shrink' | 'extend',
+    length: number,
+    onSequenceLengthLimit: ((currentMethod: 'shrink' | 'extend') => void) = () => undefined
+  ) {
+    if (method === 'extend') {
+      if (!this.sequence.canExtend(length)) return onSequenceLengthLimit(method)
+      this.extend(length)
     } else {
-      return this.shrink(length, refill)
+      if (!this.sequence.canShrink(length)) return onSequenceLengthLimit(method)
+      this.shrink(length)
     }
   }
 
-  private extend(len: number, refill = true) {
-    if (!this.sequence.canExtend(len)) return false
-    this.sequence.extend(len)
-    refill && this.assignNotes()
-    return true
+  private extend(length: number) {
+    this.sequence.extend(length)
+    this.assignNotes()
   }
 
-  private shrink(len: number, refill = true) {
-    if (!this.sequence.canShrink(len)) return false
-    this.sequence.shrink(len)
+  private shrink(length: number) {
+    this.sequence.shrink(length)
     this.removeNotesOutOfLength()
-    refill && this.assignNotes()
-    return true
   }
 
   /**

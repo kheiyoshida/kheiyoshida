@@ -61,20 +61,20 @@ const monoNotes: SequenceNoteMap = {
 const deepCopy = <T>(v: T) => JSON.parse(JSON.stringify(v)) as T
 
 describe(`${Generator.name}`, () => {
-  describe(`${Generator.prototype.feed.name}`, () => {
+  describe(`${Generator.prototype.feedOutlet.name}`, () => {
     it(`can set an outlet to feed sequence to`, () => {
       const generator = new Generator(new NotePicker({}), new Sequence())
       const outlet = new MockOutlet('fakeInst')
-      generator.feed(outlet)
+      generator.feedOutlet(outlet)
       expect(outlet.generator).toBe(generator)
     })
     it(`should not override the outlet`, () => {
       const generator = new Generator(new NotePicker({}), new Sequence())
       const outlet = new MockOutlet('fakeInst')
-      generator.feed(outlet)
+      generator.feedOutlet(outlet)
       expect(outlet.generator).toBe(generator)
       const outlet2 = new MockOutlet('anotherInst')
-      expect(() => generator.feed(outlet2)).toThrow()
+      expect(() => generator.feedOutlet(outlet2)).toThrow()
       expect(() => outlet2.generator).toThrow()
     })
   })
@@ -105,7 +105,7 @@ describe(`${Generator.name}`, () => {
   })
 
   describe(`${Generator.prototype.changeSequenceLength.name}`, () => {
-    it(`can extend its length and shuld fill up the extra space after extension`, () => {
+    it(`can extend its sequence length, filling the extended part with notes`, () => {
       const picker = new NotePicker({ fillStrategy: 'fill', noteDur: 1 })
       const sequence = new Sequence({ fillPref: 'mono', length: 8, density: 0.5 })
       const generator = new Generator(picker, sequence)
@@ -129,34 +129,18 @@ describe(`${Generator.name}`, () => {
       const sequence = new Sequence({ length: 8, lenRange })
       const generator = new Generator(picker, sequence)
       expect(generator.sequence.length).toBe(8)
-      // 1
-      const res = generator.changeSequenceLength('extend', 6)
-      expect(res).toBe(false)
+      // 8 -> 14 x
+      generator.changeSequenceLength('extend', 6)
       expect(sequence.length).toBe(8)
-      // 2
-      const res2 = generator.changeSequenceLength('shrink', 4)
+      // 8 -> 4 x
+      generator.changeSequenceLength('shrink', 4)
       expect(sequence.length).toBe(8)
-      expect(res2).toBe(false)
-      // 3
-      const res3 = generator.changeSequenceLength('shrink', 2)
+      // 8 -> 6 o
+      generator.changeSequenceLength('shrink', 2)
       expect(sequence.length).toBe(6)
-      expect(res3).toBe(true)
-      // 4
-      const res4 = generator.changeSequenceLength('extend', 4)
+      // 6 -> 10 o
+      generator.changeSequenceLength('extend', 4)
       expect(sequence.length).toBe(10)
-      expect(res4).toBe(true)
-    })
-    it(`can reverse the length change direction`, () => {
-      const lenRange = { min: 4, max: 12 }
-      const picker = new NotePicker({})
-      const sequence = new Sequence({ length: 8, lenRange })
-      const generator = new Generator(picker, sequence)
-      generator.toggleReverse()
-      generator.changeSequenceLength('extend', 2)
-      expect(sequence.length).toBe(6)
-      sequence.iteratePosition((p) => {
-        expect(p).toBeLessThan(6)
-      })
     })
   })
 

@@ -1,7 +1,23 @@
 import { pick } from '../utils/utils'
 import { Generator, GeneratorConf } from './generator/Generator'
 import { NotePicker } from './generator/NotePicker'
+import { Scale, ScaleConf } from './generator/Scale'
 import { Sequence } from './generator/Sequence'
+
+export function createScale(
+  key: ScaleConf['key'],
+  pref?: ScaleConf['pref'],
+  range?: ScaleConf['range']
+): Scale
+export function createScale(conf: Partial<ScaleConf>): Scale
+export function createScale(
+  confOrKey?: Partial<ScaleConf> | ScaleConf['key'],
+  pref?: ScaleConf['pref'],
+  range?: ScaleConf['range']
+): Scale {
+  if (typeof confOrKey === 'string') return new Scale({ key: confOrKey, pref, range })
+  else return new Scale(confOrKey)
+}
 
 export function createGenerator(conf: GeneratorConf): Generator {
   const picker = new NotePicker(
@@ -14,20 +30,12 @@ export function createGenerator(conf: GeneratorConf): Generator {
   return new Generator(picker, sequence)
 }
 
-export function changeSequenceLength(
-  gen: Generator,
-  method: 'shrink' | 'extend',
-  len: number,
-  exceeded?: 'reverse' | 'erase',
-  refill = true
-) {
-  const result = gen.changeSequenceLength(method, len, refill)
-  if (result === false) {
-    if (exceeded === 'reverse') {
-      gen.toggleReverse()
-      gen.changeSequenceLength(method, len, refill)
-    } else if (exceeded === 'erase') {
-      gen.eraseSequenceNotes()
-    }
+export function pingpongSequenceLength(initialMethod: 'shrink' | 'extend') {
+  let direction = initialMethod
+  return (gen: Generator, len: number) => {
+    gen.changeSequenceLength(direction, len, (method) => {
+      direction = method === 'extend' ? 'shrink' : 'extend'
+      gen.changeSequenceLength(direction, len)
+    })
   }
 }
