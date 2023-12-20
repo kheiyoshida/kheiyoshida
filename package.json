@@ -6,6 +6,7 @@
     "preinstall": "npx only-allow pnpm",
     "eslint": "eslint",
     "sync": "npx syncpack list",
+    "lint": "eslint **/src/**/*.ts",
     "test": "jest",
     "test:pkgs": "jest --selectProjects mgnr --coverage",
     "prepare": "husky install"
