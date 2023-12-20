@@ -1,5 +1,4 @@
 import { random } from '../../utils/calc'
-import { negateIf } from '../../utils/utils'
 import { Outlet } from '../Outlet'
 import { MutateSpec } from '../types'
 import { Note } from './Note'
@@ -12,7 +11,7 @@ export type GeneratorConf = {
 } & Partial<SequenceNotesConf> &
   Partial<NotePickerConf>
 
-export class Generator<I = unknown> {
+export class SequenceGenerator<I = unknown> {
   readonly picker: NotePicker
   readonly sequence: Sequence
   private outlet!: Outlet<I>

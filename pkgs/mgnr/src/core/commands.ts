@@ -1,5 +1,5 @@
 import { pick } from '../utils/utils'
-import { Generator, GeneratorConf } from './generator/Generator'
+import { SequenceGenerator, GeneratorConf } from './generator/Generator'
 import { NotePicker } from './generator/NotePicker'
 import { Scale, ScaleConf } from './generator/Scale'
 import { Sequence } from './generator/Sequence'
@@ -19,7 +19,7 @@ export function createScale(
   else return new Scale(confOrKey)
 }
 
-export function createGenerator(conf: GeneratorConf): Generator {
+export function createGenerator(conf: GeneratorConf): SequenceGenerator {
   const picker = new NotePicker(
     pick(conf, ['noteDur', 'noteVel', 'veloPref', 'fillStrategy', 'harmonizer']),
     conf.scale
@@ -27,12 +27,12 @@ export function createGenerator(conf: GeneratorConf): Generator {
   const sequence = new Sequence(
     pick(conf, ['length', 'lenRange', 'division', 'density', 'fillPref'])
   )
-  return new Generator(picker, sequence)
+  return new SequenceGenerator(picker, sequence)
 }
 
 export function pingpongSequenceLength(initialMethod: 'shrink' | 'extend') {
   let direction = initialMethod
-  return (gen: Generator, len: number) => {
+  return (gen: SequenceGenerator, len: number) => {
     gen.changeSequenceLength(direction, len, (method) => {
       direction = method === 'extend' ? 'shrink' : 'extend'
       gen.changeSequenceLength(direction, len)

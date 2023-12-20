@@ -1,5 +1,5 @@
 import * as mgnr from './commands'
-import { Generator } from './generator/Generator'
+import { SequenceGenerator } from './generator/Generator'
 import { Scale } from './generator/Scale'
 
 test(`${mgnr.createScale.name}`, () => {
@@ -15,5 +15,5 @@ test(`${mgnr.createGenerator.name}`, () => {
     fillPref: 'mono',
     scale: new Scale({ key: 'D' }),
   })
-  expect(generator).toBeInstanceOf(Generator)
+  expect(generator).toBeInstanceOf(SequenceGenerator)
 })

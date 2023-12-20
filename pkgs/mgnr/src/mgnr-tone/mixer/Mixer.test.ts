@@ -18,7 +18,7 @@ describe(`${Mixer}`, () => {
     })
     expect(mixer.channels.includes(ch)).toBe(true)
   })
-  test(`${Mixer.prototype.connectSendChannel.name}`, () => {
+  test(`${Mixer.prototype.connect.name}`, () => {
     const mixer = new Mixer()
     const synCh = mixer.createInstChannel({
       inst: new PolySynth(),
@@ -27,7 +27,7 @@ describe(`${Mixer}`, () => {
     const delayCh = mixer.createSendChannel({
       effects: [new Delay()],
     })
-    mixer.connectSendChannel(synCh, delayCh, 1)
+    mixer.connect(synCh, delayCh, 1)
     expect(synCh.sends.nodes.length).toBe(1)
   })
 })

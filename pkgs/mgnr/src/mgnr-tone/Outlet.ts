@@ -24,11 +24,13 @@ export class ToneOutlet extends Outlet<ToneInst> {
       })
     }
     if (loopNth === totalNumOfLoops) {
+      const actualEndTime = loopStartedAt + totalNumOfLoops * this.sequenceDuration
       this.events.ended &&
         this.events.ended({
           out: this,
           loop: totalNumOfLoops,
-          endTime: loopStartedAt + totalNumOfLoops * this.sequenceDuration,
+          endTime: actualEndTime,
+          repeatLoop: () => this.loopSequence(totalNumOfLoops, actualEndTime)
         })
     }
   }

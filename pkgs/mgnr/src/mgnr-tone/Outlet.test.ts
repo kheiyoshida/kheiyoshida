@@ -1,6 +1,6 @@
 import * as Tone from 'tone'
 import { mockScheduleLoop } from '../__tests__/mock'
-import { Generator } from '../core/generator/Generator'
+import { SequenceGenerator } from '../core/generator/Generator'
 import { NotePicker } from '../core/generator/NotePicker'
 import { Sequence, SequenceNoteMap } from '../core/generator/Sequence'
 import { ToneOutlet } from './Outlet'
@@ -31,7 +31,7 @@ describe(`${ToneOutlet.name}`, () => {
       notes: defaultNotes,
     }
   ) => {
-    const generator = new Generator(new NotePicker({ fillStrategy: 'fixed' }), new Sequence())
+    const generator = new SequenceGenerator(new NotePicker({ fillStrategy: 'fixed' }), new Sequence())
     generator.constructNotes(notes)
 
     const inst = new Tone.PolySynth()

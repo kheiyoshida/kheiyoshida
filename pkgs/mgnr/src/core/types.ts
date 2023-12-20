@@ -7,11 +7,15 @@ export type SequenceLoopEventContext = {
   loop: number
   endTime: number
 }
-export type SequenceLoopEventHandler = (context: SequenceLoopEventContext) => void
+
+export type SequenceLoopElapsedHandler = (context: SequenceLoopEventContext) => void
+export type SequenceLoopEndedHandler = (
+  context: SequenceLoopEventContext & { repeatLoop: () => void }
+) => void
 
 export type SeqEvent = {
-  elapsed?: SequenceLoopEventHandler
-  ended?: SequenceLoopEventHandler
+  elapsed?: SequenceLoopElapsedHandler
+  ended?: SequenceLoopEndedHandler
 }
 
 export type MutateStrategy = 'randomize' | 'move' | 'inPlace' | 'recursion'

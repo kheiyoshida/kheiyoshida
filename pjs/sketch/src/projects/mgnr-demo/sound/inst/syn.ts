@@ -56,12 +56,12 @@ export const setupSynCh = (scale: Scale) => {
     .onElapsed((mes) => {
       mes.out.generator.mutate({ rate: 0.3, strategy: 'randomize' })
     })
-    .onEnded(({ out, endTime }) => {
+    .onEnded(({ out, repeatLoop }) => {
       out.generator.mutate({ rate: 0.5, strategy: 'randomize' })
       out.generator.mutate({ rate: 0.2, strategy: 'inPlace' })
       lengthChange(out.generator, 4)
       out.generator.resetNotes()
-      out.loopSequence(4, endTime)
+      repeatLoop()
     })
 
   registerTremolo(synCh)({ randomRate: 0.01, interval: '3hz' })
