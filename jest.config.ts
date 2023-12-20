@@ -6,7 +6,7 @@ const RootConfig: Config = {
     '^.+\\.(ts|tsx)?$': 'ts-jest',
   },
   moduleNameMapper: {
-    'src/(.*)': '<rootDir>/src/$1',
+    '^src/(.*)': '<rootDir>/src/$1',
   },
   testEnvironment: 'jsdom',
   testMatch: ['<rootDir>/src/**/*.test.ts'],

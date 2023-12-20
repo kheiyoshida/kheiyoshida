@@ -1,6 +1,5 @@
 import * as Tone from 'tone'
-import { FadeValues, MuteValue } from './Channel'
-import Logger from 'js-logger'
+import { Channel, FadeValues, MuteValue, SendChannel } from './Channel'
 
 export class Sends {
   readonly nodes: Send[] = []
@@ -9,24 +8,10 @@ export class Sends {
     this.nodes.push(send)
   }
 
-  public fade(id: string, values: FadeValues) {
-    const s = this.find(id)
-    if (s) {
-      s.fade(values)
-    }
-  }
-
-  public mute(id: string, value: MuteValue) {
-    const s = this.find(id)
-    if (s) {
-      s.mute(value)
-    }
-  }
-
-  private find(to: string): Send | undefined {
-    const s = this.nodes.find((n) => n.to === to)
+  public find(to: SendChannel): Send {
+    const s = this.nodes.find((n) => n.toCh === to)
     if (!s) {
-      Logger.warn(`could not find send ${to}`)
+      throw Error(`could not find send ${to}`)
     }
     return s
   }
@@ -40,7 +25,7 @@ export class Send {
   readonly gain: Tone.Gain
   readonly out = new Tone.Channel()
 
-  constructor(amount: number, readonly from: string, readonly to: string) {
+  constructor(amount: number, readonly fromCh: Channel, readonly toCh: SendChannel) {
     this.gain = new Tone.Gain(amount)
     this.gain.connect(this.out)
   }
