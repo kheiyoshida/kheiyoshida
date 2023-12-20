@@ -8,7 +8,7 @@
     "sync": "npx syncpack list",
     "lint": "eslint **/src/**/*.ts",
     "test": "jest",
-    "test:pkgs": "jest --selectProjects mgnr --coverage",
+    "test:pkgs": "jest --selectProjects mgnr utils --coverage",
     "prepare": "husky install"
   },
   "devDependencies": {
