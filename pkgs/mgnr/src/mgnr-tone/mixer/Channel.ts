@@ -2,26 +2,25 @@ import * as Tone from 'tone'
 import { ToneInst } from '../Outlet'
 import { Send, Sends } from './Send'
 
-export type ChConf<C extends Ch> = C & {
-  id: string
+export type ChConf = {
   initialVolume?: number
-  fadeIn?: FadeValues
+  effects: Tone.ToneAudioNode[]
 }
+export type InstChConf = ChConf & {
+  inst: ToneInst
+}
+export type SendChConf = ChConf
 
 export type FadeValues = Parameters<Tone.Param['rampTo']>
 
 export type MuteValue = 'on' | 'off' | 'toggle'
 
-export interface Ch {
-  effects?: Tone.ToneAudioNode[]
-}
-
-export abstract class Channel implements Ch {
+export abstract class Channel {
   readonly effects: Tone.ToneAudioNode[]
   readonly vol: Tone.Volume
   readonly sends = new Sends()
 
-  constructor({ effects, initialVolume }: Omit<ChConf<Ch>, 'id'>) {
+  constructor({ effects, initialVolume }: ChConf) {
     this.effects = effects || []
     this.vol = new Tone.Volume(initialVolume)
   }
@@ -67,14 +66,10 @@ export abstract class Channel implements Ch {
   }
 }
 
-export interface InstCh extends Ch {
-  inst: ToneInst
-}
-
-export class InstChannel extends Channel implements InstCh {
+export class InstChannel extends Channel {
   readonly inst: ToneInst
 
-  constructor(conf: Omit<ChConf<InstCh>, 'id'>) {
+  constructor(conf: InstChConf) {
     super(conf)
     this.inst = conf.inst
     this.connectNodes()
@@ -85,14 +80,10 @@ export class InstChannel extends Channel implements InstCh {
   }
 }
 
-export interface SendCh extends Ch {
-  effects: Tone.ToneAudioNode[]
-}
-
-export class SendChannel extends Channel implements SendCh {
+export class SendChannel extends Channel {
   readonly ch = new Tone.Channel()
 
-  constructor(conf: Omit<ChConf<SendCh>, 'id'>) {
+  constructor(conf: SendChConf) {
     super(conf)
     this.connectNodes()
   }

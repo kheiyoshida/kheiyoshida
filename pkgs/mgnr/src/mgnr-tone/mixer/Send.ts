@@ -8,7 +8,7 @@ export class Sends {
     this.nodes.push(send)
   }
 
-  public find(to: SendChannel): Send {
+  public findSend(to: SendChannel): Send {
     const s = this.nodes.find((n) => n.toCh === to)
     if (!s) {
       throw Error(`could not find send ${to}`)

@@ -1,8 +1,8 @@
 import { Instrument, InstrumentOptions } from 'tone/build/esm/instrument/Instrument'
-import { ChConf, Channel, FadeValues, InstCh, InstChannel, MuteValue, SendCh, SendChannel } from './Channel'
+import { removeItemFromArray } from 'utils/src/utils/mutate'
+import { Channel, FadeValues, InstChConf, InstChannel, MuteValue, SendChConf, SendChannel } from './Channel'
 import { MasterChannel, MasterChannelConf } from './Master'
 import { Send } from './Send'
-import { removeItemFromArray } from 'utils/src/utils/mutate'
 
 export type Inst = Instrument<InstrumentOptions>
 
@@ -14,16 +14,13 @@ export class Mixer {
     this.master = new MasterChannel(masterConf)
   }
 
-  createInstChannel(conf: ChConf<InstCh>) {
+  createInstChannel(conf: InstChConf) {
     const newCh = new InstChannel(conf)
     this.registerChannel(newCh)
-    if (conf.fadeIn) {
-      newCh.volumeFade(conf.fadeIn)
-    }
     return newCh
   }
 
-  createSendChannel(conf: ChConf<SendCh>) {
+  createSendChannel(conf: SendChConf) {
     const newCh = new SendChannel(conf)
     this.registerChannel(newCh)
     return newCh
@@ -44,11 +41,11 @@ export class Mixer {
   }
 
   public fadeChannelSend(fromCh: Channel, toCh: SendChannel, v: FadeValues) {
-    fromCh.sends.find(toCh).fade(v)
+    fromCh.sends.findSend(toCh).fade(v)
   }
 
   public muteChannelSend(fromCh: Channel, toCh: SendChannel, v: MuteValue) {
-    fromCh.sends.find(toCh).mute(v)
+    fromCh.sends.findSend(toCh).mute(v)
   }
 
   public deleteChannel(channel: Channel) {
