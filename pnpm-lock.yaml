@@ -160,6 +160,9 @@ importers:
       mgnr:
         specifier: workspace:^
         version: link:../../pkgs/mgnr
+      mgnr-tone-presets:
+        specifier: workspace:^
+        version: link:../../pkgs/mgnr-tone-presets
       tone:
         specifier: ^14.7.77
         version: 14.7.77
@@ -232,7 +235,7 @@ importers:
         specifier: ^4.8.4
         version: 4.9.5
 
-  pkgs/mgnr-presets:
+  pkgs/mgnr-tone-presets:
     dependencies:
       mgnr:
         specifier: workspace:^
@@ -240,6 +243,9 @@ importers:
       tone:
         specifier: ^14.7.77
         version: 14.7.77
+      utils:
+        specifier: workspace:^
+        version: link:../utils
 
   pkgs/p5utils:
     dependencies:

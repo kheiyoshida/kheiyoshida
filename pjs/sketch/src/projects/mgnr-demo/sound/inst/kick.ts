@@ -1,6 +1,5 @@
 import * as mgnr from 'mgnr/src/mgnr-tone'
-import { defaultKick, defaultTom } from 'src/lib/sound/presets/inst/kick'
-import { kickFactory } from '../../../../lib/sound/presets/notes/kick'
+import { defaultKick, defaultTom, kickFactory } from 'mgnr-tone-presets'
 
 export const setupKick = () => {
   const mixer = mgnr.getMixer()

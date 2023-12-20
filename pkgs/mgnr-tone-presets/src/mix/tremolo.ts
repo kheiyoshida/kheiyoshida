@@ -1,5 +1,5 @@
-import { random } from 'src/lib/utils/random'
-import { providePreset } from '../utils'
+import { fireByRate } from 'utils'
+import { providePreset } from '../utils/utils'
 import { Channel } from 'mgnr/src/mgnr-tone/mixer/Channel'
 import { registerEvents } from 'mgnr/src/mgnr-tone/timeEvent'
 
@@ -15,7 +15,7 @@ export const registerTremolo = (ch: Channel) =>
           {
             interval: options.interval,
             handler: () => {
-              if (random(options.randomRate)) return
+              if (fireByRate(options.randomRate)) return
               ch.mute('toggle')
             },
           },

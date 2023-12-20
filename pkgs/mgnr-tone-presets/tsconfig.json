@@ -6,14 +6,9 @@
       "ESNext",
     ],
     "module": "CommonJS",
-    "rootDir": "./src",
+    "rootDir": "./",
     "moduleResolution": "node",
-    "baseUrl": "./src",
-    "paths": {
-        "src/*": [
-            "./src/*"
-        ],
-    },
+    "baseUrl": "./",
     "resolveJsonModule": true,
     "allowJs": true,
     "declaration": true,

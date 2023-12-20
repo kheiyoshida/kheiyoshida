@@ -1,6 +1,6 @@
 import { Scale } from 'mgnr/src/core/generator/Scale'
 import * as mgnr from 'mgnr/src/mgnr-tone'
-import { defaultPad } from 'src/lib/sound/presets/inst/pad'
+import { defaultPad } from 'mgnr-tone-presets'
 
 export const setupPadCh = (scale: Scale) => {
   const mixer = mgnr.getMixer()

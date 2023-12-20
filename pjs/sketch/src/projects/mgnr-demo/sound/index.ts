@@ -1,7 +1,7 @@
 import { Scale } from 'mgnr/src/core/generator/Scale'
 import { nthDegreeTone, pickRandomPitchName } from 'mgnr/src/core/generator/utils'
 import * as mgnr from 'mgnr/src/mgnr-tone'
-import { filterDelay, reverb } from 'src/lib/sound/presets/send/delay'
+import { filterDelay, reverb } from 'mgnr-tone-presets'
 import { Transport } from 'tone'
 import { setupKick, setupTom } from './inst/kick'
 import { setupPadCh } from './inst/pad'

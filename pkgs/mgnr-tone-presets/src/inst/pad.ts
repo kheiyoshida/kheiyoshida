@@ -1,13 +1,13 @@
 import * as Tone from 'tone'
-import { InstChConf } from '../types'
-import { providePreset } from '../utils'
+import { providePreset } from '../utils/utils'
+import { InstChConf } from 'mgnr/src/mgnr-tone/mixer/Channel'
 
 const defaultPadOptions = {
   id: 'pad',
   highPassFreq: 200,
   lowPassFreq: 500,
   asdr: { attack: 0.4, sustain: 0.4, decay: 0.6, release: 0.9 },
-  initialVolume: -15
+  initialVolume: -15,
 }
 
 export const defaultPad = providePreset(

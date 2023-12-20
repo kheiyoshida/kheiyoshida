@@ -1,6 +1,6 @@
 import * as Tone from 'tone'
-import { InstChConf } from '../types'
-import { providePreset } from '../utils'
+import { providePreset } from '../utils/utils'
+import { InstChConf } from 'mgnr/src/mgnr-tone/mixer/Channel'
 
 const defaultSynOptions = {
   id: 'syn',

@@ -1,13 +1,10 @@
 import * as Tone from 'tone'
-import { SendChConf } from '../types'
-import { providePreset } from '../utils'
+import { providePreset } from '../utils/utils'
+import { SendChConf } from 'mgnr/src/mgnr-tone/mixer/Channel'
 
 export const filterDelay = providePreset(
-  {
-    id: 'filterDelay',
-  },
+  {},
   (options): SendChConf => ({
-    id: options.id,
     effects: [
       new Tone.Filter(1200, 'highpass'),
       new Tone.Filter(5000, 'lowpass'),
@@ -23,11 +20,9 @@ export const filterDelay = providePreset(
 
 export const reverb = providePreset(
   {
-    id: 'reverb',
-    decay: 2.4
+    decay: 2.4,
   },
   (options): SendChConf => ({
-    id: options.id,
     effects: [new Tone.Reverb({ decay: options.decay })],
   })
 )

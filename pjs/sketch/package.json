@@ -16,6 +16,7 @@
   "dependencies": {
     "js-logger": "^1.6.1",
     "mgnr": "workspace:^",
+    "mgnr-tone-presets": "workspace:^",
     "tone": "^14.7.77",
     "utils": "workspace:^"
   },
