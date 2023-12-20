@@ -6,9 +6,9 @@
       "ESNext",
     ],
     "module": "CommonJS",
-    "rootDir": "./src",
+    "rootDir": "./",
     "moduleResolution": "node",
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "paths": {
         "src/*": [
             "./src/*"

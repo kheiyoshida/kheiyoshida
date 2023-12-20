@@ -1,6 +1,5 @@
-
 import { ToneInst, ToneOutlet } from './Outlet'
-import { TimeEventMap, TimeObserver } from './TimeObserver'
+import { TimeEventMap, registerEvents } from './timeEvent'
 import { Mixer } from './mixer/Mixer'
 
 export function createMixer() {
@@ -12,5 +11,5 @@ export function createOutlet(inst: ToneInst): ToneOutlet {
 }
 
 export function registerTimeEvents(events: TimeEventMap) {
-  new TimeObserver(120).registerEvents(events)
+  registerEvents(events)
 }
