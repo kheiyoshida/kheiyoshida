@@ -93,16 +93,14 @@ export class SequenceGenerator<I = unknown> {
 
   public adjustPitch() {
     this.sequence.iterateEachNote((n) => {
-      if (this.picker.checkStaleNote(n)) {
-        this.picker.adjustNotePitch(n)
-      }
+      this.picker.adjustNotePitch(n)
     })
   }
 
   public changeSequenceLength(
     method: 'shrink' | 'extend',
     length: number,
-    onSequenceLengthLimit: ((currentMethod: 'shrink' | 'extend') => void) = () => undefined
+    onSequenceLengthLimit: (currentMethod: 'shrink' | 'extend') => void = () => undefined
   ) {
     if (method === 'extend') {
       if (!this.sequence.canExtend(length)) return onSequenceLengthLimit(method)
