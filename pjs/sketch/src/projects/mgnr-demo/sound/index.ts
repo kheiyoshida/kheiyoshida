@@ -3,9 +3,11 @@ import { nthDegreeTone, pickRandomPitchName } from 'mgnr/src/core/generator/util
 import * as mgnr from 'mgnr/src/mgnr-tone'
 import { filterDelay, reverb } from 'mgnr-tone-presets'
 import { Transport } from 'tone'
-import { setupKick, setupTom } from './inst/kick'
+import { setupKick } from './inst/kick'
+import { setupTom } from './inst/tom'
 import { setupPadCh } from './inst/pad'
-import { setupExtraSynCh, setupSynCh } from './inst/syn'
+import { setupSynCh } from './inst/syn'
+import { setupExtraSynCh } from './inst/exSyn'
 import { randomIntInclusiveBetween } from 'utils'
 
 /**
