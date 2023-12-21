@@ -47,7 +47,7 @@ const _fadeIn = (fadeState: FadeState, channel: Channel, volumeTo: number, durat
       time: '+0m',
       handler: () => {
         fadeState.set('ramping')
-        channel.volumeFade([volumeTo, duration])
+        channel.staticVolumeFade([volumeTo, duration])
         return {
           time: `+${duration}`,
           handler: () => {
@@ -62,7 +62,7 @@ const _fadeIn = (fadeState: FadeState, channel: Channel, volumeTo: number, durat
 const _fadeOut = (fadeState: FadeState, channel: Channel, volumeTo: number, duration: string) => {
   if (fadeState.value === 'on') {
     fadeState.set('ramping')
-    channel.volumeFade([volumeTo, duration])
+    channel.staticVolumeFade([volumeTo, duration])
     return {
       time: `+${duration}`,
       handler: () => {

@@ -1,10 +1,12 @@
 import * as Tone from 'tone'
 import { ToneInst } from '../Outlet'
 import { Send, Sends } from './Send'
+import { Range, valueOrFn } from 'utils'
 
 export type ChConf = {
   initialVolume?: number
-  effects: Tone.ToneAudioNode[]
+  effects?: Tone.ToneAudioNode[]
+  volumeRange?: Range
 }
 export type InstChConf<I extends ToneInst = ToneInst> = ChConf & {
   inst: I
@@ -19,9 +21,11 @@ export abstract class Channel {
   readonly effects: Tone.ToneAudioNode[]
   readonly vol: Tone.Volume
   readonly sends = new Sends()
+  readonly volumeRange: Range
 
-  constructor({ effects, initialVolume }: ChConf) {
+  constructor({ effects, initialVolume, volumeRange }: ChConf) {
     this.effects = effects || []
+    this.volumeRange = volumeRange || { min: -50, max: -10 }
     this.vol = new Tone.Volume(initialVolume)
   }
 
@@ -41,8 +45,24 @@ export abstract class Channel {
     this.sends.push(send)
   }
 
-  public volumeFade(values: FadeValues) {
+  public staticVolumeFade(values: FadeValues) {
     this.vol.volume.rampTo(...values)
+  }
+
+  public dynamicVolumeFade(relativeVolume: number | ((v: number) => number), time: FadeValues[1]) {
+    this.mute('off')
+    const finalValue =
+      typeof relativeVolume === 'number'
+        ? this.vol.volume.value + relativeVolume
+        : relativeVolume(this.vol.volume.value)
+    if (finalValue <= this.volumeRange.min) {
+      this.vol.volume.rampTo(this.volumeRange.min, time)
+      this.mute('on')
+    } else if (finalValue >= this.volumeRange.max) {
+      this.vol.volume.rampTo(this.volumeRange.max, time)
+    } else {
+      this.vol.volume.rampTo(finalValue, time)
+    }
   }
 
   public mute(v: MuteValue) {
