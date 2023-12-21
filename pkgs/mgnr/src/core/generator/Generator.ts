@@ -4,11 +4,11 @@ import { MutateSpec } from '../types'
 import { Note } from './Note'
 import { NotePicker, NotePickerConf } from './NotePicker'
 import { Scale } from './Scale'
-import { Sequence, SequenceNoteMap, SequenceNotesConf } from './Sequence'
+import { Sequence, SequenceNoteMap, SequenceConf } from './Sequence'
 
 export type GeneratorConf = {
   scale?: Scale
-} & Partial<SequenceNotesConf> &
+} & Partial<SequenceConf> &
   Partial<NotePickerConf>
 
 export class SequenceGenerator<I = unknown> {
@@ -36,6 +36,13 @@ export class SequenceGenerator<I = unknown> {
     outlet.generator = this
     this.outlet = outlet
     return outlet
+  }
+
+  public updateConfig(config: Partial<GeneratorConf>): void {
+    this.sequence.updateConfig(config)
+    this.picker.updateConfig(config)
+    this.eraseSequenceNotes()
+    this.constructNotes()
   }
 
   public constructNotes(initialNotes?: SequenceNoteMap) {

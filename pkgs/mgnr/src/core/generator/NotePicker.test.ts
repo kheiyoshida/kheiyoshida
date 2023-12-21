@@ -9,6 +9,12 @@ describe(`${NotePicker.name}`, () => {
     })
   })
 
+  test(`${NotePicker.prototype.updateConfig.name}`, () => {
+    const picker = new NotePicker({ noteDur: {min: 2, max: 4}})    
+    picker.updateConfig({noteDur: 2})
+    expect(picker.conf.noteDur).toBe(2)
+  })
+
   describe(`${NotePicker.prototype.pickNote.name}`, () => {
     it(`should pick runtime random note if strategy is "random"`, () => {
       const noteDur = { min: 2, max: 4 }

@@ -6,7 +6,7 @@ import { Note } from './Note'
 
 type SeqDivision = 16 | 8 | 4 | 2 | 1
 
-export type SequenceNotesConf = {
+export type SequenceConf = {
   length: number
   lenRange: Range
   density: number
@@ -24,7 +24,7 @@ export class Sequence {
     return this._notes
   }
 
-  readonly conf: SequenceNotesConf
+  protected conf: SequenceConf
 
   /**
    * the number of divisions
@@ -93,7 +93,7 @@ export class Sequence {
     return num
   }
 
-  static DefaultConf: SequenceNotesConf = {
+  static DefaultConf: SequenceConf = {
     length: 16,
     lenRange: {
       min: 2,
@@ -104,8 +104,12 @@ export class Sequence {
     fillPref: 'allowPoly',
   }
 
-  constructor(conf: Partial<SequenceNotesConf> = {}) {
+  constructor(conf: Partial<SequenceConf> = {}) {
     this.conf = buildConf(Sequence.DefaultConf, conf)
+  }
+
+  public updateConfig(conf: Partial<SequenceConf>) {
+    this.conf = buildConf(this.conf, conf)
   }
 
   public addNote(pos: number | undefined, note: Note) {

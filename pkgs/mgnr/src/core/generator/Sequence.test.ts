@@ -94,6 +94,11 @@ describe(`${Sequence.name}`, () => {
       expect(seq.numOfNotes).toBe(2)
     })
   })
+  test(`${Sequence.prototype.updateConfig.name}`, () => {
+    const seq = new Sequence({density: 0.5})
+    seq.updateConfig({density: 0.9})
+    expect(seq.density).toBe(0.9)
+  })
   describe(`${Sequence.prototype.addNote.name}`, () => {
     it(`should put note in specified position`, () => {
       const seq = new Sequence()

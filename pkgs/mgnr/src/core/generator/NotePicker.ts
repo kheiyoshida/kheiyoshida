@@ -15,7 +15,10 @@ export type NotePickerConf = {
 }
 
 export class NotePicker {
-  readonly conf: NotePickerConf
+  private _conf: NotePickerConf
+  get conf(): NotePickerConf {
+    return this._conf
+  }
 
   readonly scale: Scale
 
@@ -28,7 +31,7 @@ export class NotePicker {
     if (conf.harmonizer) {
       this.harmonizer = new Harmonizer(conf.harmonizer)
     }
-    this.conf = buildConf(NotePicker.getDefaultConf(), conf)
+    this._conf = buildConf(NotePicker.getDefaultConf(), conf)
     this.scale = scale || new Scale({ key: 'C', range: { min: 24, max: 120 } })
   }
   static getDefaultConf(): NotePickerConf {
@@ -38,6 +41,10 @@ export class NotePicker {
       veloPref: 'randomPerEach',
       fillStrategy: 'fill',
     }
+  }
+
+  public updateConfig(conf: Partial<NotePickerConf>) {
+    this._conf = buildConf(this._conf, conf)
   }
 
   public pickHarmonizedNotes(): Note[] | undefined {
@@ -50,7 +57,7 @@ export class NotePicker {
   }
 
   public pickNote(): Note | undefined {
-    if (this.conf.fillStrategy === 'random') {
+    if (this._conf.fillStrategy === 'random') {
       return this.pickRandomNote()
     } else {
       const pitch = this.scale.pickRandomPitch()
@@ -61,7 +68,7 @@ export class NotePicker {
   private pickRandomNote(): Note {
     return {
       pitch: 'random',
-      dur: this.conf.noteDur,
+      dur: this._conf.noteDur,
       vel: this.getNoteVelocity(),
     }
   }
@@ -69,13 +76,13 @@ export class NotePicker {
   private pickConcreteNote(pitch: number): Note {
     return {
       pitch,
-      dur: pickRange(this.conf.noteDur),
+      dur: pickRange(this._conf.noteDur),
       vel: this.getNoteVelocity(),
     }
   }
 
   private getNoteVelocity(): Note['vel'] {
-    return this.conf.veloPref === 'randomPerEach' ? this.conf.noteVel : pickRange(this.conf.noteVel)
+    return this._conf.veloPref === 'randomPerEach' ? this._conf.noteVel : pickRange(this._conf.noteVel)
   }
 
   public harmonizeNote(note: Note): Note[] {
@@ -88,7 +95,7 @@ export class NotePicker {
 
   public adjustNotePitch(n: Note, d?: 'up' | 'down' | 'bi'): void {
     if (this.checkStaleNote(n)) return
-    if (this.conf.fillStrategy !== 'fixed') {
+    if (this._conf.fillStrategy !== 'fixed') {
       n.pitch = this.scale.pickNearestPitch(n.pitch as number, d)
     } else {
       this.changeNotePitch(n)
