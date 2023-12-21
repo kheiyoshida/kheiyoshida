@@ -6,8 +6,8 @@ export type ChConf = {
   initialVolume?: number
   effects: Tone.ToneAudioNode[]
 }
-export type InstChConf = ChConf & {
-  inst: ToneInst
+export type InstChConf<I extends ToneInst = ToneInst> = ChConf & {
+  inst: I
 }
 export type SendChConf = ChConf
 
@@ -66,10 +66,10 @@ export abstract class Channel {
   }
 }
 
-export class InstChannel extends Channel {
-  readonly inst: ToneInst
+export class InstChannel<I extends ToneInst = ToneInst> extends Channel {
+  readonly inst: I
 
-  constructor(conf: InstChConf) {
+  constructor(conf: InstChConf<I>) {
     super(conf)
     this.inst = conf.inst
     this.connectNodes()

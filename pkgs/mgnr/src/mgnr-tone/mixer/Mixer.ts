@@ -11,6 +11,7 @@ import {
 } from './Channel'
 import { MasterChannel, MasterChannelConf } from './Master'
 import { Send } from './Send'
+import { ToneInst } from '../Outlet'
 
 export type Inst = Instrument<InstrumentOptions>
 
@@ -26,7 +27,7 @@ export class Mixer {
     Mixer.singleton = this
   }
 
-  createInstChannel(conf: InstChConf) {
+  createInstChannel<I extends ToneInst>(conf: InstChConf<I>): InstChannel<I> {
     const newCh = new InstChannel(conf)
     this.registerChannel(newCh)
     return newCh
@@ -40,9 +41,9 @@ export class Mixer {
 
   /**
    * connect channels using send
-   * @param fromCh 
-   * @param toCh 
-   * @param gainAmount 
+   * @param fromCh
+   * @param toCh
+   * @param gainAmount
    */
   connect(fromCh: Channel, toCh: SendChannel, gainAmount = 0) {
     const send = new Send(gainAmount, fromCh, toCh)
