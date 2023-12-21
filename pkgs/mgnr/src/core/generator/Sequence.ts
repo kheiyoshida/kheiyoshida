@@ -65,9 +65,9 @@ export class Sequence {
 
   get usedSpace() {
     let used = 0
-    for (const notes of Object.values(this.notes)) {
-      used += notes.reduce((p, note) => Math.max(p, normalizeRange(note.dur)), 0)
-    }
+    this.iterateEachNote(note => {
+      used += normalizeRange(note.dur)
+    })
     return used
   }
 
@@ -75,7 +75,7 @@ export class Sequence {
    * number of measures for a loop of sequence.
    * e.g. length20 / division16 = 1.25 measures
    */
-  get lengthInMeasure(): number {
+  get numOfMeasures(): number {
     return this.length / this.division
   }
 
@@ -83,6 +83,10 @@ export class Sequence {
     return this.numOfNotes === 0
   }
 
+  /**
+   * note this is different from `usedSpace`. 
+   * it doesn't care note length
+   */
   get numOfNotes() {
     let num = 0
     this.iterateEachNote((_) => (num += 1))
@@ -104,19 +108,18 @@ export class Sequence {
     this.conf = buildConf(Sequence.DefaultConf, conf)
   }
 
-  public assignNote(pos: number | undefined, note: Note) {
-    if (pos !== undefined) {
-      if (this.notes[pos]) {
-        this.notes[pos].push(note)
-      } else {
-        this.notes[pos] = [note]
-      }
+  public addNote(pos: number | undefined, note: Note) {
+    if (pos === undefined || pos >= this.length) return
+    if (this.notes[pos]) {
+      this.notes[pos].push(note)
+    } else {
+      this.notes[pos] = [note]
     }
   }
 
-  public assignNotes(pos: number | undefined, notes: Note[]) {
+  public addNotes(pos: number | undefined, notes: Note[]) {
     for (const n of notes) {
-      this.assignNote(pos, n)
+      this.addNote(pos, n)
     }
   }
 

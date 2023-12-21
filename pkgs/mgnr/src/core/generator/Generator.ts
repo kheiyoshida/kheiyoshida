@@ -46,7 +46,7 @@ export class SequenceGenerator<I = unknown> {
   private assignInitialNotes(initialNotes?: SequenceNoteMap) {
     if (!initialNotes) return
     Sequence.iteratePosition(initialNotes, (position) => {
-      this.sequence.assignNotes(
+      this.sequence.addNotes(
         position,
         this.picker.harmonizeEnabled
           ? initialNotes[position].flatMap((note) => [note, ...this.picker.harmonizeNote(note)])
@@ -74,7 +74,7 @@ export class SequenceGenerator<I = unknown> {
         fail += 1
       } else {
         const pos = this.sequence.getAvailablePosition()
-        this.sequence.assignNotes(pos, notes)
+        this.sequence.addNotes(pos, notes)
       }
     }
   }
@@ -161,7 +161,7 @@ export class SequenceGenerator<I = unknown> {
   private recycleNotes(notes: Note[]) {
     notes.forEach((n) => {
       const pos = this.sequence.getAvailablePosition()
-      this.sequence.assignNote(pos, n)
+      this.sequence.addNote(pos, n)
     })
   }
 
