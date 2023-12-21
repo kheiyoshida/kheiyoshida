@@ -1,6 +1,5 @@
 import * as Tone from 'tone'
 import { providePreset } from '../utils/utils'
-import { InstChConf } from 'mgnr/src/mgnr-tone/mixer/Channel'
 
 const defaultSynOptions = {
   id: 'syn',
@@ -11,7 +10,7 @@ const defaultSynOptions = {
 
 export const defaultSyn = providePreset(
   defaultSynOptions,
-  (options): InstChConf => ({
+  (options) => ({
     inst: new Tone.PolySynth(Tone.AMSynth).set({
       envelope: { attack: 0, sustain: 0.5, decay: 0.4, release: 0.3 },
     }),
@@ -31,21 +30,12 @@ export const fmSynth = providePreset(
     initialVolume: -30,
     asdr: { attack: 0.4, sustain: 0.5, decay: 0, release: 0 },
   },
-  ({ initialVolume, highPassFreq, lowPassFreq, asdr }): InstChConf => ({
+  ({ initialVolume, highPassFreq, lowPassFreq, asdr }) => ({
     inst: new Tone.PolySynth(Tone.FMSynth).set({ envelope: asdr }),
     effects: [
       new Tone.Filter(highPassFreq, 'highpass'),
       new Tone.Filter(lowPassFreq, 'lowpass'),
     ],
     initialVolume,
-  })
-)
-
-export const noiseSynth = providePreset(
-  { id: 'noise', initialVolume: -30 },
-  ({ initialVolume }): InstChConf => ({
-    inst: new Tone.NoiseSynth(),
-    initialVolume,
-    effects: []
   })
 )

@@ -10,6 +10,7 @@ export const setupTom = () => {
       highPassFreq: 500,
     })
   )
+  tomCh.inst.set({envelope: {}})
   const tomOut = mgnr.createOutlet(tomCh)
   const generator = mgnr.createGenerator({
     scale: mgnr.createScale({ range: { min: 20, max: 40 } }),

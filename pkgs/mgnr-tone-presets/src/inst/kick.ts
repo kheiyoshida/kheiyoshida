@@ -1,5 +1,4 @@
 import * as Tone from 'tone'
-import { InstChConf } from 'mgnr/src/mgnr-tone/mixer/Channel'
 import { providePreset } from '../utils/utils'
 
 const defaultKickOptions = {
@@ -11,7 +10,7 @@ const defaultKickOptions = {
 
 export const defaultKick = providePreset(
   defaultKickOptions,
-  (options): InstChConf => ({
+  (options) => ({
     inst: new Tone.PolySynth(Tone.MembraneSynth),
     effects: [
       new Tone.Filter({ frequency: options.highPassFreq, type: 'highpass' }),
@@ -24,7 +23,7 @@ export const defaultKick = providePreset(
 
 export const reverbKick = providePreset(
   defaultKickOptions,
-  (options): InstChConf => ({
+  (options) => ({
     inst: new Tone.MembraneSynth(),
     effects: [
       new Tone.Filter({ frequency: options.highPassFreq, type: 'highpass' }),
@@ -42,7 +41,7 @@ export const defaultTom = providePreset(
     lowPassFreq: 200,
     initialVolume: -20,
   },
-  (options): InstChConf => ({
+  (options) => ({
     inst: new Tone.PolySynth(Tone.MembraneSynth).set({
       envelope: { attack: 0, sustain: 0.2, decay: 0.1, release: 0 },
     }),
@@ -52,14 +51,5 @@ export const defaultTom = providePreset(
       new Tone.Compressor(-4, 1.5).set({ attack: 0.5, release: 0.1 }),
     ],
     initialVolume: options.initialVolume,
-  })
-)
-
-export const noiseHH = providePreset(
-  {},
-  (): InstChConf => ({
-    inst: new Tone.NoiseSynth(),
-    effects: [],
-    initialVolume: -10,
   })
 )

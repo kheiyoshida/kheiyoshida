@@ -1,6 +1,5 @@
 import * as Tone from 'tone'
 import { providePreset } from '../utils/utils'
-import { InstChConf } from 'mgnr/src/mgnr-tone/mixer/Channel'
 
 const defaultPadOptions = {
   id: 'pad',
@@ -12,15 +11,14 @@ const defaultPadOptions = {
 
 export const defaultPad = providePreset(
   defaultPadOptions,
-  (options): InstChConf => ({
+  (options) => ({
     inst: new Tone.PolySynth(Tone.AMSynth).set({
       envelope: options.asdr,
     }),
     effects: [
       new Tone.Filter(options.highPassFreq, 'highpass'),
       new Tone.Filter(options.lowPassFreq, 'lowpass'),
-      // new Tone.EQ3(-4, 0, 4),
-      // new Tone.Compressor({ attack: 0.4, release: 0.7, threshold: -10 }),
+      
     ],
     initialVolume: options.initialVolume,
   })
