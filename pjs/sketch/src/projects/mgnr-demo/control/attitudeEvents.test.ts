@@ -8,46 +8,47 @@ import {
 import { resolveEvents } from './attitudeEvents'
 import { CommandGrid } from './commandGrid'
 
-const mockCommandGrid = () => ({
-  1: {
-    silent: jest.fn(),
-    neutral: jest.fn(),
-    loud: jest.fn(),
-    common: jest.fn(),
+const commandGrid: CommandGrid = {
+  silent: {
+    1: jest.fn(),
+    2: jest.fn(),
+    3: jest.fn(),
   },
-  2: {
-    silent: jest.fn(),
-    neutral: jest.fn(),
-    loud: jest.fn(),
-    common: jest.fn(),
+  loud: {
+    1: jest.fn(),
+    2: jest.fn(),
+    3: jest.fn(),
   },
-  3: {
-    silent: jest.fn(),
-    neutral: jest.fn(),
-    loud: jest.fn(),
-    common: jest.fn(),
+  common: {
+    1: jest.fn(),
+    2: jest.fn(),
+    3: jest.fn(),
   },
-})
+  neutral: {
+    1: jest.fn(),
+    2: jest.fn(),
+    3: jest.fn(),
+  },
+}
 
 describe(`${resolveEvents.name}`, () => {
-  const commandGrid: CommandGrid = mockCommandGrid()
-
   beforeEach(() => {
     jest.resetAllMocks()
   })
   it.each`
-    frames                            | roomVar                | handler
-    ${EventThresholdFrameNumber1}     | ${SilentThreshold}     | ${commandGrid[1].silent}
-    ${EventThresholdFrameNumber1}     | ${SilentThreshold + 1} | ${commandGrid[1].neutral}
-    ${EventThresholdFrameNumber1}     | ${LoudThreshold}       | ${commandGrid[1].loud}
-    ${EventThresholdFrameNumber1 * 2} | ${SilentThreshold}     | ${commandGrid[1].silent}
-    ${EventThresholdFrameNumber1}     | ${LoudThreshold}       | ${commandGrid[1].common}
-    ${EventThresholdFrameNumber2}     | ${SilentThreshold}     | ${commandGrid[2].silent}
-    ${EventThresholdFrameNumber2}     | ${SilentThreshold + 1} | ${commandGrid[2].neutral}
-    ${EventThresholdFrameNumber2}     | ${LoudThreshold}       | ${commandGrid[2].loud}
-    ${EventThresholdFrameNumber3}     | ${SilentThreshold}     | ${commandGrid[3].silent}
-    ${EventThresholdFrameNumber3}     | ${SilentThreshold + 1} | ${commandGrid[3].neutral}
-    ${EventThresholdFrameNumber3}     | ${LoudThreshold}       | ${commandGrid[3].loud}
+    roomVar                | frames                        | handler
+    ${SilentThreshold}     | ${EventThresholdFrameNumber1} | ${commandGrid.silent[1]}
+    ${SilentThreshold}     | ${EventThresholdFrameNumber2} | ${commandGrid.silent[2]}
+    ${SilentThreshold}     | ${EventThresholdFrameNumber3} | ${commandGrid.silent[3]}
+    ${SilentThreshold}     | ${EventThresholdFrameNumber1} | ${commandGrid.common[1]}
+    ${SilentThreshold}     | ${EventThresholdFrameNumber2} | ${commandGrid.common[2]}
+    ${SilentThreshold}     | ${EventThresholdFrameNumber3} | ${commandGrid.common[3]}
+    ${SilentThreshold + 1} | ${EventThresholdFrameNumber1} | ${commandGrid.neutral[1]}
+    ${SilentThreshold + 1} | ${EventThresholdFrameNumber2} | ${commandGrid.neutral[2]}
+    ${SilentThreshold + 1} | ${EventThresholdFrameNumber3} | ${commandGrid.neutral[3]}
+    ${LoudThreshold}       | ${EventThresholdFrameNumber1} | ${commandGrid.loud[1]}
+    ${LoudThreshold}       | ${EventThresholdFrameNumber2} | ${commandGrid.loud[2]}
+    ${LoudThreshold}       | ${EventThresholdFrameNumber3} | ${commandGrid.loud[3]}
   `(
     `should run the matching event handler from provided command grid`,
     ({ roomVar, frames, handler }) => {

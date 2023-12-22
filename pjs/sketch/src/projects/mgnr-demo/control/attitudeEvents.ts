@@ -3,84 +3,106 @@ import {
   EventThresholdFrameNumber1,
   EventThresholdFrameNumber2,
   EventThresholdFrameNumber3,
-  eventThresholdSeconds,
-  eventThresholdSeconds2,
-  eventThresholdSeconds3,
-  FrameRate,
   LoudThreshold,
   SilentThreshold,
 } from '../constants'
-import { sketchConfigStore } from '../state'
 import { music } from '../sound'
-import { CommandGrid, Thresholds } from './commandGrid'
+import { sketchConfigStore } from '../state'
+import { buildCommandGrid, CommandGrid, Scenes } from './commandGrid'
 
 export const resolveEvents = (roomVar: number, commandGrid: CommandGrid) => (frames: number) => {
-  if (frames === 0) return
-  if (frames % EventThresholdFrameNumber1 === 0) {
-    handleThreshold(1)
+  handleThreshold('common')
+  if (roomVar <= SilentThreshold) {
+    handleThreshold('silent')
+  } else if (roomVar >= LoudThreshold) {
+    handleThreshold('loud')
+  } else {
+    handleThreshold('neutral')
   }
-  if (frames % EventThresholdFrameNumber2 === 0) {
-    handleThreshold(2)
-  }
-  if (frames % EventThresholdFrameNumber3 === 0) {
-    handleThreshold(3)
-  }
-  function handleThreshold(th: Thresholds) {
-    const thGrid = commandGrid[th]
-    thGrid.common(roomVar)
-    if (roomVar <= SilentThreshold) {
-      thGrid.silent(roomVar)
-    } else if (roomVar >= LoudThreshold) {
-      thGrid.loud(roomVar)
-    } else {
-      thGrid.neutral(roomVar)
+  function handleThreshold(scene: Scenes) {
+    const sceneGrid = commandGrid[scene]
+    if (frames === 0) return
+    if (frames % EventThresholdFrameNumber1 === 0) {
+      sceneGrid[1](roomVar)
+    }
+    if (frames % EventThresholdFrameNumber2 === 0) {
+      sceneGrid[2](roomVar)
+    }
+    if (frames % EventThresholdFrameNumber3 === 0) {
+      sceneGrid[3](roomVar)
     }
   }
 }
 
-export const onActive =
-  (roomVar: number, musicCommands: ReturnType<typeof music>) => (activeFrames: number) => {
-    if (activeFrames === 0) return
-    if (activeFrames % (eventThresholdSeconds * FrameRate) === 0) {
-      sketchConfigStore.update('fillColor', (c) => moveColor(c, 1, 1, 1, -1))
-      if (roomVar > SilentThreshold) {
-        musicCommands.kickFadeOut()
-      }
-      if (roomVar < LoudThreshold) {
-        musicCommands.padFadeOut()
-      }
-    }
-    if (activeFrames % (eventThresholdSeconds2 * FrameRate) === 0) {
-      if (roomVar > SilentThreshold) {
-        musicCommands.exSynFadeIn()
-      }
-      if (roomVar < LoudThreshold) {
-        musicCommands.tomFadeIn()
-      }
-    }
-  }
+export const buildActiveCommandGrid = (m: ReturnType<typeof music>): CommandGrid =>
+  buildCommandGrid({
+    common: {
+      1: () => {
+        sketchConfigStore.update('fillColor', (c) => moveColor(c, 1, 1, 1, -1))
+      },
+    },
+    neutral: {
+      1: () => {
+        m.kickFadeOut()
+        m.padFadeOut()
+      },
+      2: () => {
+        m.exSynFadeIn()
+        m.tomFadeIn()
+      },
+    },
+    silent: {
+      1: () => {
+        m.padFadeOut()
+      },
+      2: () => {
+        m.tomFadeIn()
+      },
+    },
+    loud: {
+      1: () => {
+        m.kickFadeOut()
+      },
+      2: () => {
+        m.exSynFadeIn()
+      },
+    },
+  })
 
-export const onStill =
-  (roomVar: number, musicCommands: ReturnType<typeof music>) => (stillFrames: number) => {
-    if (stillFrames === 0) return
-    if (stillFrames % (eventThresholdSeconds * FrameRate) === 0) {
-      sketchConfigStore.update('fillColor', (c) => moveColor(c, -2, -2, -2, 2))
-      if (roomVar > SilentThreshold) {
-        musicCommands.exSynFadeOut()
-      }
-      if (roomVar < LoudThreshold) {
-        musicCommands.tomFadeOut()
-      }
-    }
-    if (stillFrames % (eventThresholdSeconds2 * FrameRate) === 0) {
-      if (roomVar > SilentThreshold) {
-        musicCommands.padFadeIn()
-      }
-      if (roomVar < LoudThreshold) {
-        musicCommands.kickFadeIn()
-      }
-    }
-    if (stillFrames % (eventThresholdSeconds3 * FrameRate) === 0) {
-      musicCommands.startMod()
-    }
-  }
+export const buildStillCommandGrid = (m: ReturnType<typeof music>): CommandGrid =>
+  buildCommandGrid({
+    common: {
+      1: () => {
+        sketchConfigStore.update('fillColor', (c) => moveColor(c, -2, -2, -2, 2))
+      },
+      3: () => {
+        m.startMod()
+      },
+    },
+    neutral: {
+      1: () => {
+        m.exSynFadeOut()
+        m.tomFadeOut()
+      },
+      2: () => {
+        m.padFadeIn()
+        m.kickFadeIn()
+      },
+    },
+    silent: {
+      1: () => {
+        m.tomFadeOut()
+      },
+      2: () => {
+        m.kickFadeIn()
+      },
+    },
+    loud: {
+      1: () => {
+        m.exSynFadeOut()
+      },
+      2: () => {
+        m.padFadeIn()
+      },
+    },
+  })

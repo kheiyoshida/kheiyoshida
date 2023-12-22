@@ -2,8 +2,12 @@ import p5 from 'p5'
 import { applyConfig } from 'src/lib/utils/project'
 import { randomIntBetween } from 'src/lib/utils/random'
 import * as Tone from 'tone'
-import { SECONDS_TO_CHANGE_ATTITUDE, fieldRange, FrameRate, treeRange } from './constants'
-import { onActive, onStill } from './control/attitudeEvents'
+import { FrameRate, SECONDS_TO_CHANGE_ATTITUDE, fieldRange, treeRange } from './constants'
+import {
+  buildActiveCommandGrid,
+  buildStillCommandGrid,
+  resolveEvents,
+} from './control/attitudeEvents'
 import { setupControl } from './control/control'
 import { generateTrees } from './objects'
 import { music } from './sound'
@@ -21,6 +25,10 @@ const startSound = () => {
   Tone.Transport.start()
 }
 let control: ReturnType<typeof setupControl>
+
+// commands
+const activeCommands = buildActiveCommandGrid(musicCommands)
+const stillCommands = buildStillCommandGrid(musicCommands)
 
 const setup = () => {
   showInstruction(startSound)
@@ -42,8 +50,8 @@ const setup = () => {
 const draw = () => {
   control.move()
   control.detectAttitude({
-    onActive: onActive(roomVar, musicCommands),
-    onStill: onStill(roomVar, musicCommands),
+    onActive: resolveEvents(roomVar, activeCommands),
+    onStill: resolveEvents(roomVar, stillCommands),
   })
   control.restrictPosition(() => {
     // room var holds random value between 5 and 40
