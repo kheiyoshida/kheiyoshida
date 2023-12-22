@@ -10,6 +10,10 @@ export const setupPadCh = (scale: Scale) => {
       highPassFreq: 300,
       lowPassFreq: 1400,
       initialVolume: -10,
+      volumeRange: {
+        min: -52,
+        max: -16,
+      },
     })
   )
 

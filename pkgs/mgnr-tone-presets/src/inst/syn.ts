@@ -29,13 +29,18 @@ export const fmSynth = providePreset(
     lowPassFreq: 8000,
     initialVolume: -30,
     asdr: { attack: 0.4, sustain: 0.5, decay: 0, release: 0 },
+    volumeRange: {
+      min: -52,
+      max: -20,
+    },
   },
-  ({ initialVolume, highPassFreq, lowPassFreq, asdr }) => ({
+  ({ initialVolume, highPassFreq, lowPassFreq, asdr, volumeRange }) => ({
     inst: new Tone.PolySynth(Tone.FMSynth).set({ envelope: asdr }),
     effects: [
       new Tone.Filter(highPassFreq, 'highpass'),
       new Tone.Filter(lowPassFreq, 'lowpass'),
     ],
     initialVolume,
+    volumeRange
   })
 )

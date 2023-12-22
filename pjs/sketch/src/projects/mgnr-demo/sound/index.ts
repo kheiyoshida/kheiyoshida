@@ -60,6 +60,7 @@ export const music = () => {
     },
     'on'
   )
+
   const exSynFade = mgnr.makeFader(
     exSynCh,
     {

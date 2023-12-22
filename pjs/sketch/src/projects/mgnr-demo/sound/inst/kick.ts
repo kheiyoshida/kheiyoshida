@@ -7,6 +7,10 @@ export const setupKick = () => {
     defaultKick({
       initialVolume: -20,
       lowPassFreq: 120,
+      volumeRange: {
+        min: -40,
+        max: -16,
+      },
     })
   )
   const kickOut = mgnr.createOutlet(kickCh)
@@ -50,4 +54,3 @@ export const setupKick = () => {
   })
   return kickCh
 }
-

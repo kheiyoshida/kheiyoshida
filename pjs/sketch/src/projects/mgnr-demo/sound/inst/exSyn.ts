@@ -8,10 +8,15 @@ export const setupExtraSynCh = (scale: Scale) => {
     fmSynth({
       highPassFreq: 700,
       lowPassFreq: 6000,
-      initialVolume: -52,
       asdr: { attack: 0, sustain: 0.5, decay: 0, release: 0 },
+      initialVolume: -52,
+      volumeRange: {
+        min: -52,
+        max: -20
+      }
     })
   )
+
   const out = mgnr.createOutlet(exSynCh)
 
   const generator = mgnr.createGenerator({

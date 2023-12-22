@@ -8,6 +8,10 @@ export const setupTom = () => {
       initialVolume: -30,
       lowPassFreq: 700,
       highPassFreq: 500,
+      volumeRange: {
+        min: -30,
+        max: -16,
+      },
     })
   )
   tomCh.inst.set({envelope: {}})
