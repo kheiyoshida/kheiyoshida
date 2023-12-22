@@ -8,14 +8,15 @@ export const setupExtraSynCh = (scale: Scale) => {
     fmSynth({
       highPassFreq: 700,
       lowPassFreq: 6000,
-      asdr: { attack: 0, sustain: 0.5, decay: 0, release: 0 },
+      asdr: { attack: 1, sustain: 0.5, decay: 0, release: 0 },
       initialVolume: -52,
       volumeRange: {
-        min: -52,
+        min: -40,
         max: -20
       }
     })
   )
+  // exSynCh.mute('on')
 
   const out = mgnr.createOutlet(exSynCh)
 
@@ -31,7 +32,7 @@ export const setupExtraSynCh = (scale: Scale) => {
       max: 3,
     },
     lenRange: {
-      min: 8,
+      min: 12,
       max: 30,
     },
   })
@@ -40,14 +41,14 @@ export const setupExtraSynCh = (scale: Scale) => {
   generator.feedOutlet(out)
   const lengthChange = mgnr.pingpongSequenceLength('extend')
   out
-    .loopSequence(4)
+    .loopSequence(2)
     .onElapsed(() => {
       generator.mutate({ rate: 0.3, strategy: 'randomize' })
     })
     .onEnded((mes) => {
       mes.out.generator.mutate({ rate: 0.2, strategy: 'inPlace' })
       lengthChange(mes.out.generator, 4)
-      out.loopSequence(4, mes.endTime)
+      mes.repeatLoop()
     })
 
   const generator2 = mgnr.createGenerator({
@@ -62,7 +63,7 @@ export const setupExtraSynCh = (scale: Scale) => {
       max: 3,
     },
     lenRange: {
-      min: 2,
+      min: 10,
       max: 40,
     },
   })
@@ -84,10 +85,10 @@ export const setupExtraSynCh = (scale: Scale) => {
     ],
   })
   const lengthChange2 = mgnr.pingpongSequenceLength('extend')
-  out.loopSequence(4).onEnded((mes) => {
+  out.loopSequence(2).onEnded((mes) => {
     mes.out.generator.mutate({ rate: 0.2, strategy: 'inPlace' })
     lengthChange2(mes.out.generator, 6)
-    mes.out.loopSequence(4, mes.endTime)
+    mes.repeatLoop()
   })
   return exSynCh
 }

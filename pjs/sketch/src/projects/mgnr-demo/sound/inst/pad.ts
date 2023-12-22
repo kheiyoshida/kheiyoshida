@@ -6,12 +6,12 @@ export const setupPadCh = (scale: Scale) => {
   const mixer = mgnr.getMixer()
   const padCh = mixer.createInstChannel(
     defaultPad({
-      asdr: { attack: 0.5, sustain: 1, decay: 0.8, release: 0 },
+      asdr: { attack: 0.5, sustain: 1, decay: 0.8, release: 0.2 },
       highPassFreq: 300,
-      lowPassFreq: 1400,
+      lowPassFreq: 1200,
       initialVolume: -10,
       volumeRange: {
-        min: -52,
+        min: -40,
         max: -16,
       },
     })
@@ -21,7 +21,7 @@ export const setupPadCh = (scale: Scale) => {
 
   const generator = mgnr.createGenerator({
     scale: scale,
-    length: 12,
+    length: 50,
     division: 16,
     density: 0.2,
     noteDur: {
@@ -29,8 +29,8 @@ export const setupPadCh = (scale: Scale) => {
       max: 8,
     },
     lenRange: {
-      min: 4,
-      max: 40,
+      min: 40,
+      max: 60,
     },
     noteVel: {
       min: 80,

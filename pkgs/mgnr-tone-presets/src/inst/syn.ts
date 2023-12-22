@@ -28,7 +28,7 @@ export const fmSynth = providePreset(
     highPassFreq: 500,
     lowPassFreq: 8000,
     initialVolume: -30,
-    asdr: { attack: 0.4, sustain: 0.5, decay: 0, release: 0 },
+    asdr: { attack: 0, sustain: 0.5, decay: 0, release: 0 },
     volumeRange: {
       min: -52,
       max: -20,

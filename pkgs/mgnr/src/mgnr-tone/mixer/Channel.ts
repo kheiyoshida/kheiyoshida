@@ -1,7 +1,7 @@
 import * as Tone from 'tone'
+import { Range } from 'utils'
 import { ToneInst } from '../Outlet'
 import { Send, Sends } from './Send'
-import { Range, valueOrFn } from 'utils'
 
 export type ChConf = {
   initialVolume?: number
@@ -57,7 +57,7 @@ export abstract class Channel {
         : relativeVolume(this.vol.volume.value)
     if (finalValue <= this.volumeRange.min) {
       this.vol.volume.rampTo(this.volumeRange.min, time)
-      this.mute('on')
+      // this.mute('on')
     } else if (finalValue >= this.volumeRange.max) {
       this.vol.volume.rampTo(this.volumeRange.max, time)
     } else {

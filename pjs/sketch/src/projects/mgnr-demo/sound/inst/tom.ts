@@ -14,13 +14,17 @@ export const setupTom = () => {
       },
     })
   )
-  tomCh.inst.set({envelope: {}})
+  tomCh.mute('on')
   const tomOut = mgnr.createOutlet(tomCh)
   const generator = mgnr.createGenerator({
     scale: mgnr.createScale({ range: { min: 20, max: 40 } }),
-    length: 40,
+    length: 20,
     division: 16,
     density: 0.1,
+    lenRange: {
+      min: 10,
+      max: 40
+    },
     fillStrategy: 'fill',
     fillPref: 'mono',
   })

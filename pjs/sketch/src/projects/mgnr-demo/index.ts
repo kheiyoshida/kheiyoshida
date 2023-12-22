@@ -13,6 +13,8 @@ import { generateTrees } from './objects'
 import { music } from './sound'
 import { sketchConfigStore } from './state'
 import { showInstruction } from './ui'
+import { CommandGrid, Scenes, Thresholds } from './control/commandGrid'
+import { randomIntInclusiveBetween } from 'utils'
 
 // state
 let geometries: p5.Geometry[]
@@ -45,17 +47,50 @@ const setup = () => {
   p.noStroke()
   geometries = generateTrees(treeRange, 40)
   control = setupControl(fieldRange, FrameRate * SECONDS_TO_CHANGE_ATTITUDE)
+
+  const scenes: Scenes[] = ['loud', 'neutral', 'silent']
+  const thresholds: Thresholds[] = [1,2,3]
+
+  const register = (commands: CommandGrid) => {
+    scenes.forEach((scene) => {
+      const row = document.body.appendChild(document.createElement('div'))
+      thresholds.forEach((threshold) => {
+        const btn = document.createElement('button')
+        btn.innerText = `${scene} ${threshold}`
+        btn.onclick = () => {
+          console.log(scene, threshold)
+          commands[scene][threshold](20)
+          commands['common'][threshold](20)
+        }
+        row.appendChild(btn)
+      })
+    })
+  }
+  register(activeCommands)
+  register(stillCommands)
+
+  const debugDiv = document.createElement('div')
+  debugDiv.style.position = 'fixed'
+  debugDiv.style.top = '0'
+  document.body.appendChild(debugDiv)
+
+  const debugBtn = document.createElement('button')
+  debugBtn.innerText = 'debug'
+  debugBtn.onclick = () => {
+    musicCommands.debug()
+  }
+  debugDiv.appendChild(debugBtn)
 }
 
 const draw = () => {
   control.move()
   control.detectAttitude({
-    onActive: resolveEvents(roomVar, activeCommands),
-    onStill: resolveEvents(roomVar, stillCommands),
+    onActive: resolveEvents(roomVar, activeCommands, 'active'),
+    onStill: resolveEvents(roomVar, stillCommands, 'still'),
   })
   control.restrictPosition(() => {
-    // room var holds random value between 5 and 40
-    roomVar = Math.max(5, Math.min(roomVar + randomIntBetween(-15, 10), 40))
+    // room var holds random value between 10 and 40
+    roomVar = Math.max(10, Math.min(roomVar + randomIntInclusiveBetween(-10, 10), 40))
     geometries = generateTrees(treeRange, roomVar, roomVar)
     sketchConfigStore.update('strokeColor', () =>
       p.color(
