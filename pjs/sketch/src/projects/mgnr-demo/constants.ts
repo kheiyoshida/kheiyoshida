@@ -3,9 +3,9 @@ export const treeRange = fieldRange * 0.9
 export const FrameRate = 30
 
 // thresholds
-export const eventThresholdSeconds = 3
-export const eventThresholdSeconds2 = eventThresholdSeconds * 2
-export const eventThresholdSeconds3 = eventThresholdSeconds * 3
+export const eventThresholdSeconds = 2.5
+export const eventThresholdSeconds2 = 5
+export const eventThresholdSeconds3 = 10
 
 export const EventThresholdFrameNumber1 = eventThresholdSeconds * FrameRate
 export const EventThresholdFrameNumber2 = eventThresholdSeconds2 * FrameRate

@@ -23,6 +23,10 @@ export abstract class Channel {
   readonly sends = new Sends()
   readonly volumeRange: Range
 
+  get volumeRangeDiff(): number {
+    return this.volumeRange.max - this.volumeRange.min
+  }
+
   constructor({ effects, initialVolume, volumeRange }: ChConf) {
     this.effects = effects || []
     this.volumeRange = volumeRange || { min: -50, max: -10 }
@@ -56,13 +60,17 @@ export abstract class Channel {
         ? this.vol.volume.value + relativeVolume
         : relativeVolume(this.vol.volume.value)
     if (finalValue <= this.volumeRange.min) {
+      if (this.isAlreadyMinimumVolume) return this.mute('on')
       this.vol.volume.rampTo(this.volumeRange.min, time)
-      // this.mute('on')
     } else if (finalValue >= this.volumeRange.max) {
       this.vol.volume.rampTo(this.volumeRange.max, time)
     } else {
       this.vol.volume.rampTo(finalValue, time)
     }
+  }
+
+  get isAlreadyMinimumVolume(): boolean {
+    return this.vol.volume.value <= this.volumeRange.min
   }
 
   public mute(v: MuteValue) {

@@ -72,16 +72,22 @@ export const music = () => {
 
   return {
     startMod,
-    padFadeIn: () => padCh.dynamicVolumeFade(8, '2m'),
-    padFadeOut: () => padCh.dynamicVolumeFade(-8, '2m'),
-    exSynFadeIn: () => {
-      exSynCh.dynamicVolumeFade(8, '2m')
+
+    padFadeIn: () => padCh.dynamicVolumeFade(padCh.volumeRangeDiff / 4, '2m'),
+    padFadeOut: () => padCh.dynamicVolumeFade(-padCh.volumeRangeDiff / 3, '4m'),
+
+    exSynFadeIn: () => exSynCh.dynamicVolumeFade(exSynCh.volumeRangeDiff / 4, '2m'),
+    exSynFadeOut: () => exSynCh.dynamicVolumeFade(-exSynCh.volumeRangeDiff / 3, '4m'),
+
+    tomFadeIn: () => tomCh.dynamicVolumeFade(tomCh.volumeRangeDiff / 4, '2m'),
+    tomFadeOut: () => tomCh.dynamicVolumeFade(-tomCh.volumeRangeDiff / 3, '4m'),
+
+    kickFadeIn: () => kickCh.dynamicVolumeFade(kickCh.volumeRangeDiff / 4, '2m'),
+    kickFadeOut: () => kickCh.dynamicVolumeFade(-kickCh.volumeRangeDiff / 3, '4m'),
+
+    debug: () => {
+      console.log('exSyn muted?', exSynCh.vol.mute)
+      console.log('tom muted?', tomCh.vol.mute)
     },
-    exSynFadeOut: () => exSynCh.dynamicVolumeFade(-8, '2m'),
-    tomFadeIn: () => tomCh.dynamicVolumeFade(6, '2m'),
-    tomFadeOut: () => tomCh.dynamicVolumeFade(-6, '2m'),
-    kickFadeIn: () => kickCh.dynamicVolumeFade(2, '2m'),
-    kickFadeOut: () => kickCh.dynamicVolumeFade(-2, '2m'),
-    debug: () => {},
   }
 }
