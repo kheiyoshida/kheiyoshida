@@ -13,21 +13,29 @@ const commandGrid: CommandGrid = {
     1: jest.fn(),
     2: jest.fn(),
     3: jest.fn(),
+    4: jest.fn(),
+    5: jest.fn()
   },
   loud: {
     1: jest.fn(),
     2: jest.fn(),
     3: jest.fn(),
+    4: jest.fn(),
+    5: jest.fn()
   },
   common: {
     1: jest.fn(),
     2: jest.fn(),
     3: jest.fn(),
+    4: jest.fn(),
+    5: jest.fn()
   },
   neutral: {
     1: jest.fn(),
     2: jest.fn(),
     3: jest.fn(),
+    4: jest.fn(),
+    5: jest.fn()
   },
 }
 

@@ -1,5 +1,6 @@
 import * as mgnr from 'mgnr/src/mgnr-tone'
 import { defaultTom, kickFactory } from 'mgnr-tone-presets'
+import { randomFloatBetween } from 'utils'
 
 export const setupTom = () => {
   const mixer = mgnr.getMixer()
@@ -37,5 +38,12 @@ export const setupTom = () => {
     changeLength(out.generator, 4)
     tomOut.loopSequence(2, endTime)
   })
-  return tomCh
+
+  const randomizeConfig = () => {
+    generator.updateConfig({
+      density: randomFloatBetween(0.1, 0.3),      
+    })
+  }
+
+  return {tomCh, randomizeConfig}
 }

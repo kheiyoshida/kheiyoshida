@@ -1,6 +1,7 @@
 import { fmSynth } from 'mgnr-tone-presets'
 import { Scale } from 'mgnr/src/core/generator/Scale'
 import * as mgnr from 'mgnr/src/mgnr-tone'
+import { randomFloatBetween, randomIntInclusiveBetween } from 'utils'
 
 export const setupExtraSynCh = (scale: Scale) => {
   const mixer = mgnr.getMixer()
@@ -12,8 +13,8 @@ export const setupExtraSynCh = (scale: Scale) => {
       initialVolume: -30,
       volumeRange: {
         min: -40,
-        max: -16
-      }
+        max: -16,
+      },
     })
   )
   exSynCh.mute('on')
@@ -90,5 +91,23 @@ export const setupExtraSynCh = (scale: Scale) => {
     lengthChange2(mes.out.generator, 6)
     mes.repeatLoop()
   })
-  return exSynCh
+
+  const randomizeConfig = () => {
+    generator.updateConfig({
+      density: randomFloatBetween(0.3, 0.7),
+      noteDur: {
+        min: randomIntInclusiveBetween(1,2),
+        max: randomIntInclusiveBetween(2, 5)
+      }
+    }),
+    generator2.updateConfig({
+      density: randomFloatBetween(0.3, 0.7),
+      noteDur: {
+        min: randomIntInclusiveBetween(2, 3),
+        max: randomIntInclusiveBetween(3, 5)
+      }
+    })
+  }
+
+  return { exSynCh, randomizeConfig }
 }

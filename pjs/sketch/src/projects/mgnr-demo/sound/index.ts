@@ -21,11 +21,11 @@ export const music = () => {
   const scale2 = mgnr.createScale(key, 'omit25', { min: 48, max: 72 })
 
   // inst channels and generators
-  const kickCh = setupKick()
-  const tomCh = setupTom()
-  const padCh = setupPadCh(scale)
+  const {kickCh, randomizeConfig: kickRandomize }= setupKick()
+  const {tomCh, randomizeConfig: tomRandomize} = setupTom()
+  const {padCh, randomizeConfig: padRandomize} = setupPadCh(scale)
   const synCh = setupSynCh(scale2)
-  const exSynCh = setupExtraSynCh(scale2)
+  const {exSynCh, randomizeConfig: exSynRandomize} = setupExtraSynCh(scale2)
 
   // sends
   const mixer = mgnr.getMixer()
@@ -76,15 +76,19 @@ export const music = () => {
 
     padFadeIn: () => padCh.dynamicVolumeFade(padCh.volumeRangeDiff / 4, '2m'),
     padFadeOut: () => padCh.dynamicVolumeFade(-padCh.volumeRangeDiff / 3, '4m'),
+    padRandomize,
 
     exSynFadeIn: () => exSynCh.dynamicVolumeFade(exSynCh.volumeRangeDiff / 4, '2m'),
     exSynFadeOut: () => exSynCh.dynamicVolumeFade(-exSynCh.volumeRangeDiff / 3, '4m'),
+    exSynRandomize,
 
     tomFadeIn: () => tomCh.dynamicVolumeFade(tomCh.volumeRangeDiff / 4, '2m'),
     tomFadeOut: () => tomCh.dynamicVolumeFade(-tomCh.volumeRangeDiff / 3, '4m'),
+    tomRandomize,
 
     kickFadeIn: () => kickCh.dynamicVolumeFade(kickCh.volumeRangeDiff / 4, '2m'),
     kickFadeOut: () => kickCh.dynamicVolumeFade(-kickCh.volumeRangeDiff / 3, '4m'),
+    kickRandomize,
 
     debug: () => {
       console.log('exSyn muted?', exSynCh.vol.mute)

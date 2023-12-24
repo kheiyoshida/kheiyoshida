@@ -1,5 +1,5 @@
 export type Scenes = 'silent' | 'neutral' | 'loud' | 'common'
-export type Thresholds = 1 | 2 | 3
+export type Thresholds = 1 | 2 | 3 | 4 | 5
 type Handler = (roomVar: number) => void
 
 export type CommandGrid = {
@@ -18,6 +18,8 @@ const filler: CommandGrid[Scenes] = {
   1: () => undefined,
   2: () => undefined,
   3: () => undefined,
+  4: () => undefined,
+  5: () => undefined
 }
 
 export const buildCommandGrid = (partialGrid: PartialCommandGrid): CommandGrid => ({

@@ -3,6 +3,8 @@ import {
   EventThresholdFrameNumber1,
   EventThresholdFrameNumber2,
   EventThresholdFrameNumber3,
+  EventThresholdFrameNumber4,
+  EventThresholdFrameNumber5,
   LoudThreshold,
   SilentThreshold,
 } from '../constants'
@@ -35,6 +37,14 @@ export const resolveEvents =
         console.log(id, scene, 3)
         sceneGrid[3](roomVar)
       }
+      if (frames % EventThresholdFrameNumber4 === 0) {
+        console.log(id, scene, 4)
+        sceneGrid[4](roomVar)
+      }
+      if (frames % EventThresholdFrameNumber5 === 0) {
+        console.log(id, scene, 5)
+        sceneGrid[5](roomVar)
+      }
     }
   }
 
@@ -44,6 +54,9 @@ export const buildActiveCommandGrid = (m: ReturnType<typeof music>): CommandGrid
       1: () => {
         sketchConfigStore.update('fillColor', (c) => moveColor(c, 1, 1, 1, -1))
       },
+      5: () => {
+        m.startMod()
+      }
     },
     neutral: {
       1: () => {
@@ -66,6 +79,9 @@ export const buildActiveCommandGrid = (m: ReturnType<typeof music>): CommandGrid
       3: () => {
         m.exSynFadeIn()
       },
+      4: () => {
+        m.tomRandomize()
+      }
     },
     loud: {
       1: () => {
@@ -78,6 +94,9 @@ export const buildActiveCommandGrid = (m: ReturnType<typeof music>): CommandGrid
       3: () => {
         m.tomFadeIn()
       },
+      4: () => {
+        m.exSynRandomize()
+      }
     },
   })
 
@@ -87,9 +106,9 @@ export const buildStillCommandGrid = (m: ReturnType<typeof music>): CommandGrid 
       1: () => {
         sketchConfigStore.update('fillColor', (c) => moveColor(c, -2, -2, -2, 2))
       },
-      2: () => {
-        m.tomFadeOut()
-      },
+      5: () => {
+        m.startMod()
+      }
     },
     neutral: {
       1: () => {
@@ -112,6 +131,9 @@ export const buildStillCommandGrid = (m: ReturnType<typeof music>): CommandGrid 
       3: () => {
         m.padFadeIn()
       },
+      4: () => {
+        m.kickRandomize()
+      }
     },
     loud: {
       1: () => {
@@ -124,5 +146,8 @@ export const buildStillCommandGrid = (m: ReturnType<typeof music>): CommandGrid 
       3: () => {
         m.kickFadeIn()
       },
+      4: () => {
+        m.padRandomize()
+      }
     },
   })

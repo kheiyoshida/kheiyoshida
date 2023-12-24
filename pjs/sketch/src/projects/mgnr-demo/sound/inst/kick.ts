@@ -1,5 +1,6 @@
 import * as mgnr from 'mgnr/src/mgnr-tone'
 import { defaultKick } from 'mgnr-tone-presets'
+import { randomIntBetween } from 'mgnr/src/utils/calc'
 
 export const setupKick = () => {
   const mixer = mgnr.getMixer()
@@ -52,5 +53,12 @@ export const setupKick = () => {
     changeLength(out.generator, 3)
     kickOut.loopSequence(2, endTime)
   })
-  return kickCh
+
+  const randomizeConfig = () => {
+    generator.updateConfig({
+      density: randomIntBetween(0.3, 0.5)
+    })
+  }
+  
+  return {kickCh, randomizeConfig}
 }

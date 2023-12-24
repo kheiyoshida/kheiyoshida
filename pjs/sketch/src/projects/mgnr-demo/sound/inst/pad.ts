@@ -1,6 +1,7 @@
 import { Scale } from 'mgnr/src/core/generator/Scale'
 import * as mgnr from 'mgnr/src/mgnr-tone'
 import { defaultPad } from 'mgnr-tone-presets'
+import { randomFloatBetween, randomIntInclusiveBetween } from 'utils'
 
 export const setupPadCh = (scale: Scale) => {
   const mixer = mgnr.getMixer()
@@ -55,5 +56,15 @@ export const setupPadCh = (scale: Scale) => {
     out.loopSequence(2, mes.endTime)
   })
 
-  return padCh
+  const randomizeConfig = () => {
+    generator.updateConfig({
+      noteDur: {
+        min: randomIntInclusiveBetween(3, 5),
+        max: randomIntInclusiveBetween(6, 10),
+      },
+      density: randomFloatBetween(0.2, 0.4),
+    })
+  }
+
+  return { padCh, randomizeConfig }
 }
