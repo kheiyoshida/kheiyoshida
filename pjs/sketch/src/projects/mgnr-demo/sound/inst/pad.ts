@@ -16,6 +16,7 @@ export const setupPadCh = (scale: Scale) => {
       },
     })
   )
+  padCh.mute('on')
 
   const out = mgnr.createOutlet(padCh)
 

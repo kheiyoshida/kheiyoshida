@@ -9,14 +9,14 @@ export const setupExtraSynCh = (scale: Scale) => {
       highPassFreq: 700,
       lowPassFreq: 6000,
       asdr: { attack: 1, sustain: 0.5, decay: 0, release: 0 },
-      initialVolume: -52,
+      initialVolume: -30,
       volumeRange: {
         min: -40,
         max: -20
       }
     })
   )
-  // exSynCh.mute('on')
+  exSynCh.mute('on')
 
   const out = mgnr.createOutlet(exSynCh)
 
@@ -24,7 +24,7 @@ export const setupExtraSynCh = (scale: Scale) => {
     scale,
     length: 10,
     division: 16,
-    density: 0.3,
+    density: 0.6,
     fillStrategy: 'fill',
     fillPref: 'mono',
     noteDur: {

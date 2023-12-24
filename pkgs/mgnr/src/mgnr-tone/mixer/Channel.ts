@@ -4,6 +4,7 @@ import { ToneInst } from '../Outlet'
 import { Send, Sends } from './Send'
 
 export type ChConf = {
+  id?: string
   initialVolume?: number
   effects?: Tone.ToneAudioNode[]
   volumeRange?: Range
@@ -22,15 +23,17 @@ export abstract class Channel {
   readonly vol: Tone.Volume
   readonly sends = new Sends()
   readonly volumeRange: Range
+  readonly id
 
   get volumeRangeDiff(): number {
     return this.volumeRange.max - this.volumeRange.min
   }
 
-  constructor({ effects, initialVolume, volumeRange }: ChConf) {
+  constructor({ effects, initialVolume, volumeRange, id }: ChConf) {
     this.effects = effects || []
     this.volumeRange = volumeRange || { min: -50, max: -10 }
     this.vol = new Tone.Volume(initialVolume)
+    this.id = id || ''
   }
 
   protected connectNodes() {
@@ -60,7 +63,10 @@ export abstract class Channel {
         ? this.vol.volume.value + relativeVolume
         : relativeVolume(this.vol.volume.value)
     if (finalValue <= this.volumeRange.min) {
-      if (this.isAlreadyMinimumVolume) return this.mute('on')
+      if (this.isAlreadyMinimumVolume) {
+        console.log(this.id, 'mute on')
+        return this.mute('on')
+      }
       this.vol.volume.rampTo(this.volumeRange.min, time)
     } else if (finalValue >= this.volumeRange.max) {
       this.vol.volume.rampTo(this.volumeRange.max, time)

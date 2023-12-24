@@ -41,6 +41,7 @@ export const fmSynth = providePreset(
       new Tone.Filter(lowPassFreq, 'lowpass'),
     ],
     initialVolume,
-    volumeRange
+    volumeRange,
+    id: 'exSyn'
   })
 )
