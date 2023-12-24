@@ -12,7 +12,7 @@ export const setupExtraSynCh = (scale: Scale) => {
       initialVolume: -30,
       volumeRange: {
         min: -40,
-        max: -20
+        max: -16
       }
     })
   )
@@ -24,7 +24,7 @@ export const setupExtraSynCh = (scale: Scale) => {
     scale,
     length: 10,
     division: 16,
-    density: 0.6,
+    density: 0.3,
     fillStrategy: 'fill',
     fillPref: 'mono',
     noteDur: {

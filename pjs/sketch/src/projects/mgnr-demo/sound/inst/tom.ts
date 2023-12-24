@@ -10,7 +10,7 @@ export const setupTom = () => {
       highPassFreq: 500,
       volumeRange: {
         min: -30,
-        max: -16,
+        max: -6,
       },
     })
   )

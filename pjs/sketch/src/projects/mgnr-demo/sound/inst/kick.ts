@@ -9,7 +9,7 @@ export const setupKick = () => {
       lowPassFreq: 120,
       volumeRange: {
         min: -40,
-        max: -16,
+        max: -6,
       },
     })
   )

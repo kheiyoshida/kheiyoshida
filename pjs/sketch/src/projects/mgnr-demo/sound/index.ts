@@ -35,6 +35,7 @@ export const music = () => {
   mixer.connect(exSynCh, delayCh, 1.4)
 
   const reverbCh = mixer.createSendChannel(reverb())
+  mixer.connect(padCh, reverbCh, .5)
   mixer.connect(kickCh, reverbCh, 1)
   mixer.connect(synCh, reverbCh, 0.5)
   mixer.connect(tomCh, reverbCh, 0.5)

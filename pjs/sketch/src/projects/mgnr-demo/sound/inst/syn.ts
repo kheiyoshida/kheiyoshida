@@ -8,7 +8,7 @@ export const setupSynCh = (scale: Scale) => {
     fmSynth({
       highPassFreq: 600,
       lowPassFreq: 1000,
-      initialVolume: -40,
+      initialVolume: -30,
     })
   )
   const out = mgnr.createOutlet(synCh)

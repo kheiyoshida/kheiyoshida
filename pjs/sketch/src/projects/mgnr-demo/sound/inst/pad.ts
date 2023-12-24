@@ -6,13 +6,13 @@ export const setupPadCh = (scale: Scale) => {
   const mixer = mgnr.getMixer()
   const padCh = mixer.createInstChannel(
     defaultPad({
-      asdr: { attack: 0.5, sustain: 1, decay: 0.8, release: 0.2 },
+      asdr: { attack: 0.7, sustain: 1, decay: 0.8, release: 0.2 },
       highPassFreq: 300,
       lowPassFreq: 1200,
       initialVolume: -10,
       volumeRange: {
         min: -40,
-        max: -16,
+        max: -6,
       },
     })
   )

@@ -12,7 +12,7 @@ export interface MasterChannelConf {
 export class MasterChannel {
   static getDefault() {
     return {
-      limitThreashold: -10,
+      limitThreashold: -6,
       autoLimit: true,
       targetRMS: -6,
     }

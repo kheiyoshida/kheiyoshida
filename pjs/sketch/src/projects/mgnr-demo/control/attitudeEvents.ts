@@ -44,11 +44,12 @@ export const buildActiveCommandGrid = (m: ReturnType<typeof music>): CommandGrid
       1: () => {
         sketchConfigStore.update('fillColor', (c) => moveColor(c, 1, 1, 1, -1))
       },
-      2: () => {
-        m.kickFadeOut()
-      },
     },
     neutral: {
+      1: () => {
+        m.padFadeOut()
+        m.kickFadeOut()
+      },
       2: () => {
         m.exSynFadeIn()
         m.tomFadeIn()
@@ -60,6 +61,7 @@ export const buildActiveCommandGrid = (m: ReturnType<typeof music>): CommandGrid
       },
       2: () => {
         m.tomFadeIn()
+        m.padFadeOut()
       },
       3: () => {
         m.exSynFadeIn()
@@ -71,6 +73,7 @@ export const buildActiveCommandGrid = (m: ReturnType<typeof music>): CommandGrid
       },
       2: () => {
         m.exSynFadeIn()
+        m.kickFadeOut()
       },
       3: () => {
         m.tomFadeIn()
@@ -89,6 +92,10 @@ export const buildStillCommandGrid = (m: ReturnType<typeof music>): CommandGrid 
       },
     },
     neutral: {
+      1: () => {
+        m.exSynFadeOut()
+        m.tomFadeOut()
+      },
       2: () => {
         m.padFadeIn()
         m.kickFadeIn()
@@ -100,6 +107,7 @@ export const buildStillCommandGrid = (m: ReturnType<typeof music>): CommandGrid 
       },
       2: () => {
         m.kickFadeIn()
+        m.exSynFadeOut()
       },
       3: () => {
         m.padFadeIn()
@@ -111,6 +119,7 @@ export const buildStillCommandGrid = (m: ReturnType<typeof music>): CommandGrid 
       },
       2: () => {
         m.padFadeIn()
+        m.tomFadeOut()
       },
       3: () => {
         m.kickFadeIn()
