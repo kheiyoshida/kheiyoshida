@@ -37,7 +37,7 @@ const setup = () => {
     cw: p.windowWidth,
     ch: p.windowHeight,
     fillColor: p.color(50),
-    strokeColor: p.color(100),
+    strokeColor: p.color(100, 200),
     frameRate: FrameRate,
     strokeWeight: 1,
     webgl: true,
