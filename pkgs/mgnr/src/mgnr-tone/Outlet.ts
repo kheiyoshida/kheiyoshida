@@ -80,7 +80,7 @@ export class ToneOutlet extends Outlet<ToneInst> {
   }
 
   private get sequenceDuration() {
-    return this.generator.sequence.lengthInMeasure * this.secsPerMeasure
+    return this.generator.sequence.numOfMeasures * this.secsPerMeasure
   }
 
   private get secsPerDivision() {

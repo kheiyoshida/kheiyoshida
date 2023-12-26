@@ -2,7 +2,6 @@ import { ToneInst, ToneOutlet } from './Outlet'
 import { InstChannel } from './mixer/Channel'
 import { MasterChannelConf } from './mixer/Master'
 import { Mixer } from './mixer/Mixer'
-export { manageFade, makeFader } from './mixer/fader'
 export { registerEvents as registerTimeEvents } from './timeEvent'
 
 

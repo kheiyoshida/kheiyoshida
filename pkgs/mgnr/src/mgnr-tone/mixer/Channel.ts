@@ -1,13 +1,16 @@
 import * as Tone from 'tone'
+import { Range } from 'utils'
 import { ToneInst } from '../Outlet'
 import { Send, Sends } from './Send'
 
 export type ChConf = {
+  id?: string
   initialVolume?: number
-  effects: Tone.ToneAudioNode[]
+  effects?: Tone.ToneAudioNode[]
+  volumeRange?: Range
 }
-export type InstChConf = ChConf & {
-  inst: ToneInst
+export type InstChConf<I extends ToneInst = ToneInst> = ChConf & {
+  inst: I
 }
 export type SendChConf = ChConf
 
@@ -19,10 +22,18 @@ export abstract class Channel {
   readonly effects: Tone.ToneAudioNode[]
   readonly vol: Tone.Volume
   readonly sends = new Sends()
+  readonly volumeRange: Range
+  readonly id
 
-  constructor({ effects, initialVolume }: ChConf) {
+  get volumeRangeDiff(): number {
+    return this.volumeRange.max - this.volumeRange.min
+  }
+
+  constructor({ effects, initialVolume, volumeRange, id }: ChConf) {
     this.effects = effects || []
+    this.volumeRange = volumeRange || { min: -50, max: -10 }
     this.vol = new Tone.Volume(initialVolume)
+    this.id = id || ''
   }
 
   protected connectNodes() {
@@ -41,8 +52,31 @@ export abstract class Channel {
     this.sends.push(send)
   }
 
-  public volumeFade(values: FadeValues) {
+  public staticVolumeFade(values: FadeValues) {
     this.vol.volume.rampTo(...values)
+  }
+
+  public dynamicVolumeFade(relativeVolume: number | ((v: number) => number), time: FadeValues[1]) {
+    this.mute('off')
+    const finalValue =
+      typeof relativeVolume === 'number'
+        ? this.vol.volume.value + relativeVolume
+        : relativeVolume(this.vol.volume.value)
+    if (finalValue <= this.volumeRange.min) {
+      if (this.isAlreadyMinimumVolume) {
+        console.log(this.id, 'mute on')
+        return this.mute('on')
+      }
+      this.vol.volume.rampTo(this.volumeRange.min, time)
+    } else if (finalValue >= this.volumeRange.max) {
+      this.vol.volume.rampTo(this.volumeRange.max, time)
+    } else {
+      this.vol.volume.rampTo(finalValue, time)
+    }
+  }
+
+  get isAlreadyMinimumVolume(): boolean {
+    return this.vol.volume.value <= this.volumeRange.min
   }
 
   public mute(v: MuteValue) {
@@ -66,10 +100,10 @@ export abstract class Channel {
   }
 }
 
-export class InstChannel extends Channel {
-  readonly inst: ToneInst
+export class InstChannel<I extends ToneInst = ToneInst> extends Channel {
+  readonly inst: I
 
-  constructor(conf: InstChConf) {
+  constructor(conf: InstChConf<I>) {
     super(conf)
     this.inst = conf.inst
     this.connectNodes()

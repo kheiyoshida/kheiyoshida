@@ -1,5 +1,6 @@
 import * as mgnr from 'mgnr/src/mgnr-tone'
-import { defaultKick, defaultTom, kickFactory } from 'mgnr-tone-presets'
+import { defaultKick } from 'mgnr-tone-presets'
+import { randomIntBetween } from 'mgnr/src/utils/calc'
 
 export const setupKick = () => {
   const mixer = mgnr.getMixer()
@@ -7,6 +8,10 @@ export const setupKick = () => {
     defaultKick({
       initialVolume: -20,
       lowPassFreq: 120,
+      volumeRange: {
+        min: -40,
+        max: -6,
+      },
     })
   )
   const kickOut = mgnr.createOutlet(kickCh)
@@ -48,35 +53,12 @@ export const setupKick = () => {
     changeLength(out.generator, 3)
     kickOut.loopSequence(2, endTime)
   })
-  return kickCh
-}
 
-export const setupTom = () => {
-  const mixer = mgnr.getMixer()
-  const tomCh = mixer.createInstChannel(
-    defaultTom({
-      initialVolume: -30,
-      lowPassFreq: 700,
-      highPassFreq: 500,
+  const randomizeConfig = () => {
+    generator.updateConfig({
+      density: randomIntBetween(0.3, 0.5)
     })
-  )
-  const tomOut = mgnr.createOutlet(tomCh)
-  const generator = mgnr.createGenerator({
-    scale: mgnr.createScale({ range: { min: 20, max: 40 } }),
-    length: 40,
-    division: 16,
-    density: 0.1,
-    fillStrategy: 'fill',
-    fillPref: 'mono',
-  })
-  generator.constructNotes(kickFactory(10, 8))
-  generator.feedOutlet(tomOut)
-  const changeLength = mgnr.pingpongSequenceLength('extend')
-  tomOut.loopSequence(2).onEnded(({ out, endTime }) => {
-    out.generator.mutate({ rate: 0.5, strategy: 'randomize' })
-    out.generator.mutate({ rate: 0.2, strategy: 'inPlace' })
-    changeLength(out.generator, 4)
-    tomOut.loopSequence(2, endTime)
-  })
-  return tomCh
+  }
+  
+  return {kickCh, randomizeConfig}
 }

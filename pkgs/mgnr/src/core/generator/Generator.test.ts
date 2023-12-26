@@ -1,6 +1,6 @@
 import * as utils from '../../utils/utils'
 import { MockOutlet } from '../Outlet.test'
-import { SequenceGenerator } from './Generator'
+import { GeneratorConf, SequenceGenerator } from './Generator'
 import { NotePicker } from './NotePicker'
 import { Scale } from './Scale'
 import { Sequence, SequenceNoteMap } from './Sequence'
@@ -78,6 +78,36 @@ describe(`${SequenceGenerator.name}`, () => {
       expect(() => outlet2.generator).toThrow()
     })
   })
+  describe(`${SequenceGenerator.prototype.updateConfig.name}`, () => {
+    const make = () => {
+      const picker = new NotePicker({noteDur: {min: 1, max: 4}})
+      const scale = new Scale()
+      const sequence = new Sequence({density: 0.5, length: 8})
+      const generator = new SequenceGenerator(picker, sequence)
+      return {picker, scale, sequence, generator}
+    }
+    it(`should update config with given fields & values`, () => {
+      const {generator, sequence, picker} = make()
+      generator.updateConfig({
+        density: 0.9
+      })
+      expect(sequence.density).toBe(0.9)
+      generator.updateConfig({
+        noteDur: 2
+      })
+      expect(picker.conf.noteDur).toBe(2)
+    })
+    it(`should construct notes again after updating configuration`, () => {
+      const picker = new NotePicker({noteDur: 1})
+      const sequence = new Sequence({density: 0.5, length: 8})
+      const generator = new SequenceGenerator(picker, sequence)
+      generator.constructNotes(defaultNotes)
+      generator.updateConfig({
+        density: 0.25,
+      })
+      expect(sequence.numOfNotes).toBe(2)
+    })
+  })
   describe(`${SequenceGenerator.prototype.constructNotes.name}`, () => {
     it(`should assign initial notes if provided`, () => {
       const generator = new SequenceGenerator(new NotePicker({ fillStrategy: 'fixed' }), new Sequence())
@@ -99,7 +129,7 @@ describe(`${SequenceGenerator.name}`, () => {
       const generator = new SequenceGenerator(picker, sequence)
       const initialNotes = { 0: defaultNotes[0].slice() }
       generator.constructNotes(initialNotes)
-      expect(generator.sequence.numOfNotes).toBe(sequence.conf.density * sequence.conf.length) // 4 notes
+      expect(generator.sequence.numOfNotes).toBe(sequence.density * sequence.length) // 4 notes
       expect(generator.sequence.notes).toMatchObject(expect.objectContaining(initialNotes))
     })
   })

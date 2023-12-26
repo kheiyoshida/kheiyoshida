@@ -13,10 +13,10 @@ export const showInstruction = (onConfirm: () => void) => {
   div.style('line-height', '1.8em')
   div.style('padding-top', '30vh')
 
-  const text = p.createDiv(`mgnr-demo`)
-  const text2 = p.createDiv(`please click/tap to play`)
+  const text = p.createDiv(`[mgnr-demo]`)
+  const text2 = p.createDiv(`Click or tap to play`)
   const text3 = p.createDiv(`(*plays sound*)`)
-  const text4 = p.createDiv(`cntrol: arrow key/swipe`)
+  const text4 = p.createDiv(`Control: arrow keys/swipe`)
   div.elt.appendChild(text.elt)
   div.elt.appendChild(text2.elt)
   div.elt.appendChild(text3.elt)

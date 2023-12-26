@@ -1,5 +1,5 @@
 import Logger from 'js-logger'
-import { pickRange } from '../../utils/calc'
+import { pickRange } from 'utils'
 import { Range } from '../../utils/types'
 import { buildConf } from '../../utils/utils'
 import { Harmonizer, HarmonizerConf } from './Harmonizer'
@@ -15,7 +15,10 @@ export type NotePickerConf = {
 }
 
 export class NotePicker {
-  readonly conf: NotePickerConf
+  private _conf: NotePickerConf
+  get conf(): NotePickerConf {
+    return this._conf
+  }
 
   readonly scale: Scale
 
@@ -24,11 +27,11 @@ export class NotePicker {
     return this.harmonizer !== undefined
   }
 
-  constructor(conf: Partial<NotePickerConf>, scale?: Scale) {
+  constructor(conf: Partial<NotePickerConf> = {}, scale?: Scale) {
     if (conf.harmonizer) {
       this.harmonizer = new Harmonizer(conf.harmonizer)
     }
-    this.conf = buildConf(NotePicker.getDefaultConf(), conf)
+    this._conf = buildConf(NotePicker.getDefaultConf(), conf)
     this.scale = scale || new Scale({ key: 'C', range: { min: 24, max: 120 } })
   }
   static getDefaultConf(): NotePickerConf {
@@ -40,33 +43,8 @@ export class NotePicker {
     }
   }
 
-  /**
-   * Check if a note is in the current scale's note pool
-   */
-  public checkStaleNote(n: Note): boolean {
-    return n.pitch !== 'random' && !this.scale.primaryPitches.includes(n.pitch)
-  }
-
-  private getVel(): Note['vel'] {
-    return this.conf.veloPref === 'randomPerEach' ? this.conf.noteVel : pickRange(this.conf.noteVel)
-  }
-
-  public pickNote(): Note | undefined {
-    if (this.conf.fillStrategy === 'random') {
-      return {
-        pitch: 'random',
-        dur: this.conf.noteDur,
-        vel: this.getVel(),
-      }
-    } else {
-      const pitch = this.scale.pickRandomPitch()
-      if (!pitch) return
-      return {
-        pitch,
-        dur: pickRange(this.conf.noteDur),
-        vel: this.getVel(),
-      }
-    }
+  public updateConfig(conf: Partial<NotePickerConf>) {
+    this._conf = buildConf(this._conf, conf)
   }
 
   public pickHarmonizedNotes(): Note[] | undefined {
@@ -78,6 +56,35 @@ export class NotePicker {
     return [n, ...this.harmonizeNote(n)]
   }
 
+  public pickNote(): Note | undefined {
+    if (this._conf.fillStrategy === 'random') {
+      return this.pickRandomNote()
+    } else {
+      const pitch = this.scale.pickRandomPitch()
+      if (pitch) return this.pickConcreteNote(pitch)
+    }
+  }
+
+  private pickRandomNote(): Note {
+    return {
+      pitch: 'random',
+      dur: this._conf.noteDur,
+      vel: this.getNoteVelocity(),
+    }
+  }
+
+  private pickConcreteNote(pitch: number): Note {
+    return {
+      pitch,
+      dur: pickRange(this._conf.noteDur),
+      vel: this.getNoteVelocity(),
+    }
+  }
+
+  private getNoteVelocity(): Note['vel'] {
+    return this._conf.veloPref === 'randomPerEach' ? this._conf.noteVel : pickRange(this._conf.noteVel)
+  }
+
   public harmonizeNote(note: Note): Note[] {
     if (!this.harmonizer) {
       Logger.warn(`harmonizer is not set for this picker`)
@@ -86,12 +93,18 @@ export class NotePicker {
     return this.harmonizer.harmonize(note, this.scale.wholePitches)
   }
 
-  public adjustNotePitch(n: Note, d?: 'up' | 'down' | 'bi') {
-    if (this.conf.fillStrategy !== 'fixed') {
+  public adjustNotePitch(n: Note, d?: 'up' | 'down' | 'bi'): void {
+    if (this.checkStaleNote(n)) return
+    if (this._conf.fillStrategy !== 'fixed') {
       n.pitch = this.scale.pickNearestPitch(n.pitch as number, d)
     } else {
-      n.pitch = this.getRandomPitch() || n.pitch
+      this.changeNotePitch(n)
     }
+  }
+
+  private checkStaleNote(n: Note): boolean {
+    if (n.pitch === 'random') return true
+    return this.scale.primaryPitches.includes(n.pitch)
   }
 
   public changeNotePitch(n: Note) {

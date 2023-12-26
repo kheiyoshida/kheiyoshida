@@ -153,7 +153,7 @@ export class Scale {
     return this.primaryPitches.filter((n) => range.includes(n)).slice()
   }
 
-  public pickRandomPitch() {
+  public pickRandomPitch(): number | undefined {
     if (!this.primaryPitches.length) return
     const i = randomIntBetween(0, this.primaryPitches.length)
     return this.primaryPitches[i]
