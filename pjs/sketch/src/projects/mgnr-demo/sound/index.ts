@@ -40,7 +40,7 @@ export const music = () => {
   mixer.connect(synCh, reverbCh, 0.5)
   mixer.connect(tomCh, reverbCh, 0.5)
 
-  const mod = (scale: Scale, scale2: Scale) => {
+  const mod = () => {
     const key = nthDegreeTone(scale.key, '6')
     scale.modulate({ key }, 3)
     scale2.modulate({ key }, 3)
@@ -51,21 +51,15 @@ export const music = () => {
       once: [
         {
           time: '+0m',
-          handler: () => {
-            mod(scale, scale2)
-          },
+          handler: mod
         },
         {
           time: '+8m',
-          handler: () => {
-            mod(scale, scale2)
-          },
+          handler: mod,
         },
         {
           time: '+16m',
-          handler: () => {
-            mod(scale, scale2)
-          },
+          handler: mod
         },
       ],
     })
@@ -89,10 +83,5 @@ export const music = () => {
     kickFadeIn: () => kickCh.dynamicVolumeFade(kickCh.volumeRangeDiff / 4, '2m'),
     kickFadeOut: () => kickCh.dynamicVolumeFade(-kickCh.volumeRangeDiff / 3, '4m'),
     kickRandomize,
-
-    debug: () => {
-      console.log('exSyn muted?', exSynCh.vol.mute)
-      console.log('tom muted?', tomCh.vol.mute)
-    },
   }
 }

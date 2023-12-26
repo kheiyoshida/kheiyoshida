@@ -10,7 +10,7 @@ import {
 } from '../constants'
 import { music } from '../sound'
 import { sketchConfigStore } from '../state'
-import { buildCommandGrid, CommandGrid, Scenes } from './commandGrid'
+import { CommandGrid, Scenes, buildCommandGrid } from './commandGrid'
 
 export const resolveEvents =
   (roomVar: number, commandGrid: CommandGrid, id?: string) => (frames: number) => {
@@ -26,23 +26,18 @@ export const resolveEvents =
       const sceneGrid = commandGrid[scene]
       if (frames === 0) return
       if (frames % EventThresholdFrameNumber1 === 0) {
-        console.log(id, scene, 1)
         sceneGrid[1](roomVar)
       }
       if (frames % EventThresholdFrameNumber2 === 0) {
-        console.log(id, scene, 2)
         sceneGrid[2](roomVar)
       }
       if (frames % EventThresholdFrameNumber3 === 0) {
-        console.log(id, scene, 3)
         sceneGrid[3](roomVar)
       }
       if (frames % EventThresholdFrameNumber4 === 0) {
-        console.log(id, scene, 4)
         sceneGrid[4](roomVar)
       }
       if (frames % EventThresholdFrameNumber5 === 0) {
-        console.log(id, scene, 5)
         sceneGrid[5](roomVar)
       }
     }
@@ -56,7 +51,7 @@ export const buildActiveCommandGrid = (m: ReturnType<typeof music>): CommandGrid
       },
       5: () => {
         m.startMod()
-      }
+      },
     },
     neutral: {
       1: () => {
@@ -81,7 +76,7 @@ export const buildActiveCommandGrid = (m: ReturnType<typeof music>): CommandGrid
       },
       4: () => {
         m.tomRandomize()
-      }
+      },
     },
     loud: {
       1: () => {
@@ -96,7 +91,7 @@ export const buildActiveCommandGrid = (m: ReturnType<typeof music>): CommandGrid
       },
       4: () => {
         m.exSynRandomize()
-      }
+      },
     },
   })
 
@@ -108,7 +103,7 @@ export const buildStillCommandGrid = (m: ReturnType<typeof music>): CommandGrid 
       },
       5: () => {
         m.startMod()
-      }
+      },
     },
     neutral: {
       1: () => {
@@ -133,7 +128,7 @@ export const buildStillCommandGrid = (m: ReturnType<typeof music>): CommandGrid 
       },
       4: () => {
         m.kickRandomize()
-      }
+      },
     },
     loud: {
       1: () => {
@@ -148,6 +143,6 @@ export const buildStillCommandGrid = (m: ReturnType<typeof music>): CommandGrid 
       },
       4: () => {
         m.padRandomize()
-      }
+      },
     },
   })
