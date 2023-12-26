@@ -16,9 +16,7 @@ const config: Configuration = {
   ],
   optimization: {
     minimizer: [
-      new EsbuildPlugin({
-        keepNames: true
-      })
+      new EsbuildPlugin()
     ]
   },
   module: {
