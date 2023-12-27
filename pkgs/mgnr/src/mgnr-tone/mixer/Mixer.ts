@@ -39,12 +39,6 @@ export class Mixer {
     return newCh
   }
 
-  /**
-   * connect channels using send
-   * @param fromCh
-   * @param toCh
-   * @param gainAmount
-   */
   connect(fromCh: Channel, toCh: SendChannel, gainAmount = 0) {
     const send = new Send(gainAmount, fromCh, toCh)
     fromCh.connectSend(send)
