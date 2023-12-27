@@ -107,7 +107,7 @@ export class NotePicker {
     return this.scale.primaryPitches.includes(n.pitch)
   }
 
-  public changeNotePitch(n: Note) {
+  public changeNotePitch(n: Note):void {
     n.pitch = this.getRandomPitch(n.pitch) || n.pitch
   }
 
