@@ -1,14 +1,14 @@
 import { filterDelay, reverb } from 'mgnr-tone-presets'
-import { Scale } from 'mgnr/src/core/generator/Scale'
 import { nthDegreeTone, pickRandomPitchName } from 'mgnr/src/core/generator/utils'
 import * as mgnr from 'mgnr/src/mgnr-tone'
 import { Transport } from 'tone'
-import { randomIntInclusiveBetween } from 'utils'
+import { randomIntInclusiveBetween, randomItemFromArray } from 'utils'
 import { setupExtraSynCh } from './inst/exSyn'
 import { setupKick } from './inst/kick'
 import { setupPadCh } from './inst/pad'
 import { setupSynCh } from './inst/syn'
 import { setupTom } from './inst/tom'
+import { DEGREES, Degree, SCALES, ScaleType } from 'mgnr/src/core/generator/constants'
 
 /**
  * demo song for beta release
@@ -41,9 +41,11 @@ export const music = () => {
   mixer.connect(tomCh, reverbCh, 0.5)
 
   const mod = () => {
-    const key = nthDegreeTone(scale.key, '6')
-    scale.modulate({ key }, 3)
-    scale2.modulate({ key }, 3)
+    const key = nthDegreeTone(scale.key, randomItemFromArray([...DEGREES]))
+    const pref = randomItemFromArray(Object.keys(SCALES).map(k => k)) as ScaleType
+    const range = { min: randomIntInclusiveBetween(45, 50), max: randomIntInclusiveBetween(51, 55)}
+    scale.modulate({ key, pref, range }, 3)
+    scale2.modulate({ key, pref, range }, 3)
   }
 
   const startMod = () => {

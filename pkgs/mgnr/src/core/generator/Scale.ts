@@ -1,5 +1,6 @@
 import Logger from 'js-logger'
-import { random, randomIntBetween } from '../../utils/calc'
+import { randomItemFromArray } from 'utils'
+import { random } from '../../utils/calc'
 import { NumRange } from '../../utils/primitives'
 import { Range } from '../../utils/types'
 import { Modulation } from './Modulation'
@@ -68,6 +69,14 @@ export class Scale {
   private _primaryPitches!: MidiNum[]
 
   /**
+   * suggests that scale has no pitches
+   * (typically temporarily during modulation)
+   */
+  get isEmpty(): boolean {
+    return this._primaryPitches.length === 0
+  }
+
+  /**
    * range of the pitches applied to primaryPitches
    */
   get pitchRange(): Range {
@@ -108,41 +117,16 @@ export class Scale {
   }
 
   constructor(values: Partial<ScaleConf> = {}) {
-    this.init(this.buildConf(values))
+    const conf = this.buildConf(values)
+    const result = constructFromConf(conf)
+    validateResult(result, conf)
+    this.setNewValues(result.wholePitches, result.primaryPitches, conf)
   }
 
-  private init(conf: ScaleConf) {
+  private setNewValues(wholePitches: MidiNum[], primaryPitches: MidiNum[], conf: ScaleConf) {
     this._conf = conf
-    this.construct(SCALES[conf.pref])
-  }
-
-  /**
-   * call this method every time the config/key changes
-   */
-  private construct(degreeList: SemitonesInScale) {
-    if (!degreeList.length) {
-      throw Error(`constructNotes called without degreeList`)
-    }
-    this._wholePitches = this.constructWholePitches(degreeList)
-    this._primaryPitches = this.constructPrimaryPitches()
-  }
-
-  private constructWholePitches(degreeList: SemitonesInScale): MidiNum[] {
-    const pitches: MidiNum[] = []
-    for (let o = 0; o < WHOLE_OCTAVES; o++) {
-      for (const d of degreeList) {
-        pitches.push(this.lowestPitch + o * OCTAVE + d)
-      }
-    }
-    return pitches
-  }
-
-  private constructPrimaryPitches(): MidiNum[] {
-    if (!this._wholePitches.length) {
-      throw Error(`constructPrimaryPitches called with empty wholePitches`)
-    }
-    const range = new NumRange(this.pitchRange)
-    return this._wholePitches.filter((p) => range.includes(p)).slice()
+    this._wholePitches = wholePitches
+    this._primaryPitches = primaryPitches
   }
 
   private subRange(range: NumRange): MidiNum[] {
@@ -153,10 +137,11 @@ export class Scale {
     return this.primaryPitches.filter((n) => range.includes(n)).slice()
   }
 
-  public pickRandomPitch(): number | undefined {
-    if (!this.primaryPitches.length) return
-    const i = randomIntBetween(0, this.primaryPitches.length)
-    return this.primaryPitches[i]
+  public pickRandomPitch(): MidiNum | undefined {
+    if (this.primaryPitches.length === 0) {
+      throw Error(`scale is empty ${JSON.stringify(this._conf, null, 2)}`)
+    }
+    return randomItemFromArray(this.primaryPitches)
   }
 
   /**
@@ -173,10 +158,10 @@ export class Scale {
 
   private isNthDegree(semitone: number, degree: number | Degree): boolean {
     const d = typeof degree !== 'number' ? convertDegreeToSemitone(degree) : degree % OCTAVE
-    return this.getDegreeInScale(semitone) === d
+    return this.getSemitoneDegreeInScale(semitone) === d
   }
 
-  private getDegreeInScale(pitch: number): Semitone {
+  private getSemitoneDegreeInScale(pitch: number): Semitone {
     return (pitch - this.lowestPitch) % OCTAVE
   }
 
@@ -221,12 +206,26 @@ export class Scale {
    * @param values config for the next destination scale
    * @param stages number of swap iterations to complete the transition
    */
-  public modulate(values: Partial<ScaleConf> = {}, stages = 0) {
+  public modulate(values?: Partial<ScaleConf>, stages = 0): void {
     if (!this._modulation) {
+      if (!values) return
       this.initiateModulation(values, stages)
     } else {
       const nextDegreeList = this._modulation.next()
-      this.construct(nextDegreeList)
+      const { wholePitches, primaryPitches } = _construct(
+        nextDegreeList,
+        this.lowestPitch,
+        this.pitchRange
+      )
+      if (!this.validateModResult({ wholePitches, primaryPitches }, this._modulation)) {
+        if (this._modulation.queue.length) return this.modulate()
+        else {
+          Logger.error(`unexpected empty modulation. generously aborting the process...`)
+          this._modulation = undefined
+          return this.modulateImmediately(this._conf)
+        }
+      }
+      this.setNewValues(wholePitches, primaryPitches, this._conf)
       if (this._modulation.queue.length === 0) {
         this.endModulation(this._modulation.nextScaleConf)
       }
@@ -234,14 +233,38 @@ export class Scale {
   }
 
   private initiateModulation(values: Partial<ScaleConf>, stages = 0) {
-    Logger.debug('initiate modulation: ', values)
-    if (stages < 2) return this.modulateImmediately(values)
     const conf = this.buildConf(values)
+    if (stages < 2) return this.modulateImmediately(conf)
+    if (!this.validateNextConf(conf)) {
+      Logger.warn(`aborted modulation due to the invalid config`)
+      return
+    }
     const hasSet = this.setModulation(conf, stages)
     if (!hasSet) {
       this.endModulation(conf)
     } else {
       this.modulate()
+    }
+  }
+
+  private validateNextConf(conf: ScaleConf) {
+    try {
+      const result = constructFromConf(conf)
+      validateResult(result, conf)
+      return true
+    } catch (e) {
+      if (e instanceof EmptyScaleError) return false
+      throw e
+    }
+  }
+
+  private validateModResult(result: ReturnType<typeof _construct>, mod: Modulation) {
+    try {
+      validateResult(result, mod.nextScaleConf)
+      return true
+    } catch (e) {
+      if (e instanceof EmptyScaleError) return false
+      throw e
     }
   }
 
@@ -253,12 +276,64 @@ export class Scale {
     }
   }
 
-  private modulateImmediately(values: Partial<ScaleConf>) {
-    this.init(this.buildConf(values))
+  private modulateImmediately(conf: ScaleConf) {
+    try {
+      const { wholePitches, primaryPitches } = constructFromConf(conf)
+      validateResult({ wholePitches, primaryPitches }, conf)
+      this.setNewValues(wholePitches, primaryPitches, conf)
+    } catch (e) {
+      if (e instanceof EmptyScaleError) {
+        return
+      }
+      throw e
+    }
   }
 
   private endModulation(conf: ScaleConf) {
     this._conf = conf
     this._modulation = undefined
   }
+}
+
+class EmptyScaleError extends Error {
+  constructor(config: ScaleConf) {
+    super(`unexpected empty scale. Is the new config valid?: ${JSON.stringify(config, null, 2)}`)
+  }
+}
+
+function constructFromConf(conf: ScaleConf) {
+  return _construct(SCALES[conf.pref], ROOT_TONE_MAP[conf.key], conf.range)
+}
+
+export function validateResult(result: ReturnType<typeof _construct>, conf: ScaleConf): void {
+  if (result.wholePitches.length === 0 || result.primaryPitches.length === 0) {
+    throw new EmptyScaleError(conf)
+  }
+}
+
+function _construct(degreeList: SemitonesInScale, lowestPitch: number, pitchRange: Range) {
+  if (!degreeList.length) {
+    throw Error(`constructNotes called without degreeList`)
+  }
+  const wholePitches = _constructWholePitches(degreeList, lowestPitch)
+  const primaryPitches = _constructPrimaryPitches(wholePitches, pitchRange)
+  return { wholePitches, primaryPitches }
+}
+
+function _constructWholePitches(degreeList: SemitonesInScale, lowestPitch: number) {
+  const pitches: MidiNum[] = []
+  for (let octave = 0; octave < WHOLE_OCTAVES; octave++) {
+    for (const degree of degreeList) {
+      pitches.push(lowestPitch + octave * OCTAVE + degree)
+    }
+  }
+  return pitches
+}
+
+function _constructPrimaryPitches(wholePitches: number[], pitchRange: Range) {
+  if (!wholePitches.length) {
+    throw Error(`constructPrimaryPitches called with empty wholePitches`)
+  }
+  const range = new NumRange(pitchRange)
+  return wholePitches.filter((p) => range.includes(p)).slice()
 }

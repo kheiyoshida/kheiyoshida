@@ -23,11 +23,7 @@ export class Modulation {
     return this._degreesInNextScaleType
   }
 
-  constructor(
-    queue: ModulationQueueItem[],
-    conf: ScaleConf,
-    degreeList: Semitone[]
-  ) {
+  constructor(queue: ModulationQueueItem[], conf: ScaleConf, degreeList: Semitone[]) {
     this._queue = queue
     this._nextScaleConf = conf
     this._degreesInNextScaleType = degreeList
@@ -39,13 +35,13 @@ export class Modulation {
     stages: number
   ): Modulation | undefined {
     const currentDegreeList = SCALES[currentConf.pref]
-    const queue = Helpers.constructModulationQueue(
-      currentDegreeList,
-      nextDegreeList(currentConf, nextConf),
-      stages
-    )
+    const nextDegreeList = getNextDegreeList(currentConf, nextConf)
+    
+    const queue = Helpers.constructModulationQueue(currentDegreeList, nextDegreeList, stages)
     if (!queue.length) {
-      Logger.warn(`no changes detected: ${currentConf.key}(${currentConf.pref}) and ${nextConf.key}(${nextConf.pref})`)
+      Logger.warn(
+        `no changes detected: ${currentConf.key}(${currentConf.pref}) and ${nextConf.key}(${nextConf.pref})`
+      )
       return
     }
     return new Modulation(queue, nextConf, currentDegreeList.slice())
@@ -78,7 +74,7 @@ export class Modulation {
  * Derive next degree list
  * (each note's degree is relative to the current key)
  */
-function nextDegreeList(current: ScaleConf, next: ScaleConf): SemitonesInScale {
+function getNextDegreeList(current: ScaleConf, next: ScaleConf): SemitonesInScale {
   const diff = getSemitoneDiffBetweenPitches(current.key, next.key)
   const dl = SCALES[next.pref]
   return slideDegreeList(dl, diff)

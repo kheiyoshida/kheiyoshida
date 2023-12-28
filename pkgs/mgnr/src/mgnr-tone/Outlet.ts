@@ -30,7 +30,7 @@ export class ToneOutlet extends Outlet<ToneInst> {
           out: this,
           loop: totalNumOfLoops,
           endTime: actualEndTime,
-          repeatLoop: () => this.loopSequence(totalNumOfLoops, actualEndTime)
+          repeatLoop: () => this.loopSequence(totalNumOfLoops, actualEndTime),
         })
     }
   }
@@ -55,7 +55,7 @@ export class ToneOutlet extends Outlet<ToneInst> {
     return this
   }
 
-  private assignNote(note: Note, time: number) {
+  private assignNote(note: Note, time: number): void {
     const pitch = this.getConcretePitch(note)
     if (!pitch) {
       Logger.debug('canceled assigning note due to empty scale')
@@ -69,7 +69,7 @@ export class ToneOutlet extends Outlet<ToneInst> {
     }
   }
 
-  private getConcretePitch(note: Note) {
+  private getConcretePitch(note: Note): number | undefined {
     return note.pitch === 'random'
       ? this.generator.picker.scale.pickRandomPitch() // violation of law of demeter
       : note.pitch
