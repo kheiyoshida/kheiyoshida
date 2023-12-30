@@ -2,7 +2,7 @@ import * as utils from '../../utils/utils'
 import { MockOutlet } from '../Outlet.test'
 import { GeneratorConf, SequenceGenerator } from './Generator'
 import { NotePicker } from './NotePicker'
-import { Scale } from './Scale'
+import { Scale } from './scale/Scale'
 import { Sequence, SequenceNoteMap } from './Sequence'
 
 const scale = new Scale({

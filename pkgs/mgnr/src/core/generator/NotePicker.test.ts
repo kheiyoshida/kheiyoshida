@@ -1,5 +1,5 @@
 import { NotePicker } from './NotePicker'
-import { Scale } from './Scale'
+import { Scale } from './scale/Scale'
 
 describe(`${NotePicker.name}`, () => {
   describe(`fields`, () => {

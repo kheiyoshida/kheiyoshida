@@ -1,7 +1,7 @@
 import { pick } from '../utils/utils'
 import { SequenceGenerator, GeneratorConf } from './generator/Generator'
 import { NotePicker } from './generator/NotePicker'
-import { Scale, ScaleConf } from './generator/Scale'
+import { Scale, ScaleConf } from './generator/scale/Scale'
 import { Sequence } from './generator/Sequence'
 
 export function createScale(

@@ -4,7 +4,7 @@ import { Range } from '../../utils/types'
 import { buildConf } from '../../utils/utils'
 import { Harmonizer, HarmonizerConf } from './Harmonizer'
 import { Note } from './Note'
-import { Scale } from './Scale'
+import { Scale } from './scale/Scale'
 
 export type NotePickerConf = {
   noteDur: number | Range

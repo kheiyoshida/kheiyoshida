@@ -1,5 +1,5 @@
 import { Scale } from './Scale'
-import { OCTAVE } from './constants'
+import { OCTAVE } from '../constants'
 
 describe(`${Scale.name}`, () => {
   describe(`note construction`, () => {

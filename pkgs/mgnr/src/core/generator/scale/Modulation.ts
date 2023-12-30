@@ -1,8 +1,8 @@
-import { SemitonesInScale, SCALES, Semitone } from './constants'
+import { SemitonesInScale, SCALES, Semitone } from '../constants'
 import Logger from 'js-logger'
-import { findDelete } from '../../utils/utils'
+import { findDelete } from '../../../utils/utils'
 import { ScaleConf } from './Scale'
-import { getSemitoneDiffBetweenPitches } from './utils'
+import { getSemitoneDiffBetweenPitches } from '../utils'
 
 interface ModulationQueueItem {
   add?: Semitone[]

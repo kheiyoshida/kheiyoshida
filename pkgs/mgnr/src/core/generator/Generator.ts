@@ -3,7 +3,7 @@ import { Outlet } from '../Outlet'
 import { MutateSpec } from '../types'
 import { Note } from './Note'
 import { NotePicker, NotePickerConf } from './NotePicker'
-import { Scale } from './Scale'
+import { Scale } from './scale/Scale'
 import { Sequence, SequenceNoteMap, SequenceConf } from './Sequence'
 
 export type GeneratorConf = {
