@@ -47,23 +47,6 @@ describe(`${Scale.name}`, () => {
       expect(n! >= 60 && n! <= 80).toBe(true)
     })
   })
-  describe(`${Scale.prototype.pickNthDegree.name}`, () => {
-    it(`can pick Nth degree note of the scale`, () => {
-      const scale = new Scale({ key: 'C', range: { min: 60, max: 80 } })
-      const res = scale.pickNthDegree('5', { min: 60, max: 72 })
-      expect(res).toBe(67)
-      const res2 = scale.pickNthDegree('b7', { min: 60, max: 72 })
-      expect(res2).toBe(undefined)
-      const res3 = scale.pickNthDegree('7', { min: 60, max: 67 })
-      expect(res3).toBe(undefined)
-      const res4 = scale.pickNthDegree('1')
-      expect(res4).toBe(60)
-      const res5 = scale.pickNthDegree(0)
-      expect(res5).toBe(60)
-      const res6 = scale.pickNthDegree(12)
-      expect(res6).toBe(60)
-    })
-  })
   describe(`${Scale.prototype.pickNearestPitch.name}`, () => {
     it(`can pick nearest note in the scale for a note`, () => {
       const scale = new Scale({ key: 'C', pref: 'major' })

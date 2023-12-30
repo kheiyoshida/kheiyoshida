@@ -1,26 +1,22 @@
 import Logger from 'js-logger'
 import { randomItemFromArray } from 'utils'
 import { random } from '../../../utils/calc'
-import { NumRange } from '../../../utils/primitives'
 import { Range } from '../../../utils/types'
 import {
-  Degree,
   MidiNum,
   OCTAVE,
   PitchName,
   ROOT_TONE_MAP,
-  ScaleType,
-  Semitone,
+  ScaleType
 } from '../constants'
-import { convertDegreeToSemitone } from '../convert'
 import { Modulation } from './Modulation'
 import { constructScalePitches, constructScalePitchesFromConf } from './construct'
 import {
   EmptyScaleError,
-  validateScaleRange,
   validateModResult,
   validateModulationConf,
   validateScalePitches,
+  validateScaleRange,
 } from './validate'
 
 export interface ScaleConf {
@@ -118,35 +114,6 @@ export class Scale {
 
   public pickRandomPitch(): MidiNum {
     return randomItemFromArray(this.primaryPitches)
-  }
-
-  /**
-   * look for the first Nth degree note in the scale
-   *
-   * @param degree Nth degree from the current key root
-   * @param range search scope
-   * @returns note's midi number
-   */
-  public pickNthDegree(degree: Semitone | Degree, range?: Range): MidiNum | undefined {
-    const notes = !range ? this.primaryPitches : this.subRange(new NumRange(range))
-    return notes.find((n) => this.isNthDegree(n, degree))
-  }
-
-  private subRange(range: NumRange): MidiNum[] {
-    if (!range.within(this.pitchRange)) {
-      Logger.warn(`subRange must be specified within current scale's range`)
-      return this.primaryPitches
-    }
-    return this.primaryPitches.filter((n) => range.includes(n)).slice()
-  }
-
-  private isNthDegree(semitone: number, degree: number | Degree): boolean {
-    const deg = typeof degree !== 'number' ? convertDegreeToSemitone(degree) : degree % OCTAVE
-    return this.getSemitoneDegreeInScale(semitone) === deg
-  }
-
-  private getSemitoneDegreeInScale(pitch: number): Semitone {
-    return (pitch - this.lowestPitch) % OCTAVE
   }
 
   /**
