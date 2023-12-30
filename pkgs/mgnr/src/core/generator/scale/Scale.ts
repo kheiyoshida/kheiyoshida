@@ -1,14 +1,8 @@
 import Logger from 'js-logger'
-import { randomItemFromArray } from 'utils'
+import { findNearestNumberInArray, randomItemFromArray } from 'utils'
 import { random } from '../../../utils/calc'
 import { Range } from '../../../utils/types'
-import {
-  MidiNum,
-  OCTAVE,
-  PitchName,
-  ROOT_TONE_MAP,
-  ScaleType
-} from '../constants'
+import { MidiNum, OCTAVE, PitchName, ROOT_TONE_MAP, ScaleType } from '../constants'
 import { Modulation } from './Modulation'
 import { constructScalePitches, constructScalePitchesFromConf } from './construct'
 import {
@@ -120,25 +114,9 @@ export class Scale {
    * look for nearest note in the pitches.
    * search direction is bidirectional by default
    */
-  public pickNearestPitch(pitch: MidiNum, d: 'up' | 'down' | 'bi' = 'bi'): MidiNum {
-    const lookup: ('up' | 'down')[] =
-      d !== 'bi' ? [d] : random(0.5) ? ['up', 'down'] : ['down', 'up']
-    let n = 1
-    while (n < OCTAVE * 2) {
-      for (const l of lookup) {
-        if (l === 'up') {
-          const found = this.primaryPitches.find((note) => note === pitch + n)
-          if (found) return found
-        }
-        if (l === 'down') {
-          const found = this.primaryPitches.find((note) => note === pitch - n)
-          if (found) return found
-        }
-      }
-      n += 1
-    }
-    Logger.warn(`couldn't find note. returning as is`)
-    return pitch
+  public pickNearestPitch(pitch: MidiNum, dir: 'up' | 'down' | 'bi' = 'bi'): MidiNum {
+    const findNearest = findNearestNumberInArray(this.primaryPitches)
+    return findNearest(pitch, dir === 'up' ? 'r' : dir === 'down' ? 'l' : 'bi')
   }
 
   //-------------------
