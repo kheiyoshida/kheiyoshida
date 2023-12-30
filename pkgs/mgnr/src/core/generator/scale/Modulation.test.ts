@@ -37,7 +37,6 @@ describe(`${Modulation.name}`, () => {
       expect(mod!.queue).toMatchObject([])
     })
     it(`should cancel modulation if there's no diff`, () => {
-      const spyLogger = jest.spyOn(Logger, 'warn')
       const mod = Modulation.create(
         {
           key: 'C',
@@ -52,10 +51,6 @@ describe(`${Modulation.name}`, () => {
         2
       )
       expect(mod).toBe(undefined)
-      expect(spyLogger).toHaveBeenCalled()
-      expect(spyLogger.mock.calls[0][0]).toMatchInlineSnapshot(
-        `"no changes detected: C(omit27) and F(omit46)"`
-      )
     })
     it(`should consume another queue if degreeList gets empty`, () => {
       const spyLogger = jest.spyOn(Logger, 'info')

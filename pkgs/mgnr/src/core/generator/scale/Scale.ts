@@ -1,8 +1,6 @@
-import Logger from 'js-logger'
 import { findNearestNumberInArray, randomItemFromArray } from 'utils'
-import { random } from '../../../utils/calc'
 import { Range } from '../../../utils/types'
-import { MidiNum, OCTAVE, PitchName, ROOT_TONE_MAP, ScaleType } from '../constants'
+import { MidiNum, PitchName, ROOT_TONE_MAP, ScaleType } from '../constants'
 import { Modulation } from './Modulation'
 import { constructScalePitches, constructScalePitchesFromConf } from './construct'
 import {
@@ -110,10 +108,6 @@ export class Scale {
     return randomItemFromArray(this.primaryPitches)
   }
 
-  /**
-   * look for nearest note in the pitches.
-   * search direction is bidirectional by default
-   */
   public pickNearestPitch(pitch: MidiNum, dir: 'up' | 'down' | 'bi' = 'bi'): MidiNum {
     const findNearest = findNearestNumberInArray(this.primaryPitches)
     return findNearest(pitch, dir === 'up' ? 'r' : dir === 'down' ? 'l' : 'bi')
@@ -140,48 +134,36 @@ export class Scale {
       if (!values) return
       this.initiateModulation(values, stages)
     } else {
-      const nextDegreeList = this._modulation.next()
-      const { wholePitches, primaryPitches } = constructScalePitches(
-        nextDegreeList,
-        this.lowestPitch,
-        this.pitchRange
-      )
-      if (!validateModResult({ wholePitches, primaryPitches }, this._modulation)) {
-        if (this._modulation.queue.length) return this.modulate()
-        else {
-          Logger.error(`unexpected empty modulation. generously aborting the process...`)
-          this._modulation = undefined
-          return this.modulateImmediately(this._conf)
-        }
-      }
-      this.setNewValues(wholePitches, primaryPitches, this._conf)
-      if (this._modulation.queue.length === 0) {
-        this.endModulation(this._modulation.nextScaleConf)
-      }
+      this.actualModulation(this._modulation)
     }
   }
 
   private initiateModulation(values: Partial<ScaleConf>, stages = 0) {
     const conf = this.buildConf(values)
     if (stages < 2) return this.modulateImmediately(conf)
-    if (!validateModulationConf(conf)) {
-      Logger.warn(`aborted modulation due to the invalid config`)
-      return
+    if (!validateModulationConf(conf)) return
+    this._modulation = Modulation.create(this._conf, conf, stages)
+    if (!this._modulation) return this.endModulation(conf)
+    this.modulate()
+  }
+
+  private actualModulation(modulation: Modulation): void {
+    const nextDegreeList = modulation.next()
+    const result = constructScalePitches(nextDegreeList, this.lowestPitch, this.pitchRange)
+    const scaleIsNotEmpty = validateModResult(result, modulation)
+    if (!scaleIsNotEmpty) {
+      if (modulation.queue.length) return this.actualModulation(modulation)
+      else return this.abortModulation()
     }
-    const hasSet = this.setModulation(conf, stages)
-    if (!hasSet) {
-      this.endModulation(conf)
-    } else {
-      this.modulate()
+    this.setNewValues(result.wholePitches, result.primaryPitches, this._conf)
+    if (modulation.queue.length === 0) {
+      this.endModulation(modulation.nextScaleConf)
     }
   }
 
-  private setModulation(conf: ScaleConf, stages: number) {
-    const modulation = Modulation.create(this._conf, conf, stages)
-    if (modulation) {
-      this._modulation = modulation
-      return true
-    }
+  private abortModulation() {
+    this._modulation = undefined
+    this.modulateImmediately(this._conf)
   }
 
   private modulateImmediately(conf: ScaleConf) {
@@ -190,9 +172,7 @@ export class Scale {
       validateScalePitches({ wholePitches, primaryPitches }, conf)
       this.setNewValues(wholePitches, primaryPitches, conf)
     } catch (e) {
-      if (e instanceof EmptyScaleError) {
-        return
-      }
+      if (e instanceof EmptyScaleError) return
       throw e
     }
   }

@@ -36,14 +36,8 @@ export class Modulation {
   ): Modulation | undefined {
     const currentDegreeList = SCALES[currentConf.pref]
     const nextDegreeList = getNextDegreeList(currentConf, nextConf)
-    
     const queue = Helpers.constructModulationQueue(currentDegreeList, nextDegreeList, stages)
-    if (!queue.length) {
-      Logger.warn(
-        `no changes detected: ${currentConf.key}(${currentConf.pref}) and ${nextConf.key}(${nextConf.pref})`
-      )
-      return
-    }
+    if (!queue.length) return
     return new Modulation(queue, nextConf, currentDegreeList.slice())
   }
 
