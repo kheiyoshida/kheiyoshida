@@ -1,8 +1,8 @@
-import { pick } from '../utils/utils'
-import { SequenceGenerator, GeneratorConf } from './generator/Generator'
+import { getSubset } from 'utils'
+import { GeneratorConf, SequenceGenerator } from './generator/Generator'
 import { NotePicker } from './generator/NotePicker'
-import { Scale, ScaleConf } from './generator/Scale'
 import { Sequence } from './generator/Sequence'
+import { Scale, ScaleConf } from './generator/scale/Scale'
 
 export function createScale(
   key: ScaleConf['key'],
@@ -21,11 +21,11 @@ export function createScale(
 
 export function createGenerator(conf: GeneratorConf): SequenceGenerator {
   const picker = new NotePicker(
-    pick(conf, ['noteDur', 'noteVel', 'veloPref', 'fillStrategy', 'harmonizer']),
+    getSubset(conf, ['noteDur', 'noteVel', 'veloPref', 'fillStrategy', 'harmonizer']),
     conf.scale
   )
   const sequence = new Sequence(
-    pick(conf, ['length', 'lenRange', 'division', 'density', 'fillPref'])
+    getSubset(conf, ['length', 'lenRange', 'division', 'density', 'fillPref'])
   )
   return new SequenceGenerator(picker, sequence)
 }

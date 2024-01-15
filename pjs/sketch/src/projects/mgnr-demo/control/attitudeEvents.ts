@@ -100,9 +100,11 @@ export const buildStillCommandGrid = (m: ReturnType<typeof music>): CommandGrid 
     common: {
       1: () => {
         sketchConfigStore.update('fillColor', (c) => moveColor(c, -2, -2, -2, 2))
+        m.startMod()
+        m.exSynFadeIn()
+        
       },
       5: () => {
-        m.startMod()
       },
     },
     neutral: {

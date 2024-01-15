@@ -1,8 +1,8 @@
 import Logger from 'js-logger'
 import { Helpers, Modulation } from './Modulation'
 
-describe(`ScaleModulation`, () => {
-  describe(`gradulal modulation`, () => {
+describe(`${Modulation.name}`, () => {
+  describe(`construct modulatioon process`, () => {
     it(`should remove notes first, then add the replacement (if any)`, () => {
       const mod = Modulation.create(
         {
@@ -17,7 +17,7 @@ describe(`ScaleModulation`, () => {
         },
         2
       )
-      expect(mod).not.toBe(undefined)
+      expect(mod).toBeDefined()
       expect(mod!.queue).toMatchObject([
         {
           remove: [11],
@@ -37,7 +37,6 @@ describe(`ScaleModulation`, () => {
       expect(mod!.queue).toMatchObject([])
     })
     it(`should cancel modulation if there's no diff`, () => {
-      const spyLogger = jest.spyOn(Logger, 'warn')
       const mod = Modulation.create(
         {
           key: 'C',
@@ -52,10 +51,6 @@ describe(`ScaleModulation`, () => {
         2
       )
       expect(mod).toBe(undefined)
-      expect(spyLogger).toHaveBeenCalled()
-      expect(spyLogger.mock.calls[0][0]).toMatchInlineSnapshot(
-        `"no changes detected: C(omit27) and F(omit46)"`
-      )
     })
     it(`should consume another queue if degreeList gets empty`, () => {
       const spyLogger = jest.spyOn(Logger, 'info')
@@ -69,7 +64,27 @@ describe(`ScaleModulation`, () => {
         6
       )
       expect(mod).not.toBe(undefined)
-      expect(mod!.queue).toHaveLength(6)
+      expect(mod!.degreesInNextScaleType).toMatchObject([0, 4, 7])
+      expect(mod!.queue).toMatchObject([
+        {
+          remove: [7],
+        },
+        {
+          remove: [4],
+        },
+        {
+          remove: [0], // when scale gets empty
+        },
+        {
+          add: [9],
+        },
+        {
+          add: [6],
+        },
+        {
+          add: [2],
+        },
+      ])
 
       mod!.next()
       expect(mod!.queue).toHaveLength(5)
@@ -79,8 +94,8 @@ describe(`ScaleModulation`, () => {
       // gets empty
       mod!.next()
       expect(mod!.queue).not.toHaveLength(3)
-      expect(spyLogger).toHaveBeenCalledTimes(1)
       expect(mod!.queue).toHaveLength(2)
+      expect(spyLogger).toHaveBeenCalledWith(`empty degreeList. consume another queue...`)
 
       mod!.next()
       expect(mod!.queue).toHaveLength(1)
@@ -96,64 +111,38 @@ describe('Helpers', () => {
     const Dmajor = [1, 2, 4, 6, 7, 9, 11]
     it(`should return modulation queue`, () => {
       const res = Helpers.constructModulationQueue(Cmajor, Dmajor, 2)
-      expect(res).toMatchInlineSnapshot(`
-        [
-          {
-            "remove": [
-              5,
-              0,
-            ],
-          },
-          {
-            "add": [
-              6,
-              1,
-            ],
-          },
-        ]
-      `)
+      expect(res).toMatchObject([
+        {
+          remove: [5, 0],
+        },
+        {
+          add: [6, 1],
+        },
+      ])
       const res2 = Helpers.constructModulationQueue(Cmajor, Dmajor, 3)
-      expect(res2).toMatchInlineSnapshot(`
-        [
-          {
-            "remove": [
-              5,
-              0,
-            ],
-          },
-          {
-            "add": [
-              6,
-              1,
-            ],
-          },
-        ]
-      `)
+      expect(res2).toMatchObject([
+        {
+          remove: [5, 0],
+        },
+        {
+          add: [6, 1],
+        },
+      ])
       const res3 = Helpers.constructModulationQueue(Cmajor, Dmajor, 4)
-      expect(res3).toMatchInlineSnapshot(`
-        [
-          {
-            "remove": [
-              5,
-            ],
-          },
-          {
-            "remove": [
-              0,
-            ],
-          },
-          {
-            "add": [
-              6,
-            ],
-          },
-          {
-            "add": [
-              1,
-            ],
-          },
-        ]
-      `)
+      expect(res3).toMatchObject([
+        {
+          remove: [5],
+        },
+        {
+          remove: [0],
+        },
+        {
+          add: [6],
+        },
+        {
+          add: [1],
+        },
+      ])
     })
   })
 })

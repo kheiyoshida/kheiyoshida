@@ -1,7 +1,7 @@
 import * as mgnr from './commands'
 import { SequenceGenerator } from './generator/Generator'
 import { NotePicker } from './generator/NotePicker'
-import { Scale } from './generator/Scale'
+import { Scale } from './generator/scale/Scale'
 import { Sequence } from './generator/Sequence'
 
 test(`${mgnr.createScale.name}`, () => {

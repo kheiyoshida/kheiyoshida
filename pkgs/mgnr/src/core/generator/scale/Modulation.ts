@@ -1,8 +1,8 @@
-import { SemitonesInScale, SCALES, Semitone } from './constants'
+import { SemitonesInScale, SCALES, Semitone } from '../constants'
 import Logger from 'js-logger'
-import { findDelete } from '../../utils/utils'
+import { removeItemFromArray} from 'utils'
 import { ScaleConf } from './Scale'
-import { getSemitoneDiffBetweenPitches } from './utils'
+import { getSemitoneDiffBetweenPitches } from '../utils'
 
 interface ModulationQueueItem {
   add?: Semitone[]
@@ -23,11 +23,7 @@ export class Modulation {
     return this._degreesInNextScaleType
   }
 
-  constructor(
-    queue: ModulationQueueItem[],
-    conf: ScaleConf,
-    degreeList: Semitone[]
-  ) {
+  constructor(queue: ModulationQueueItem[], conf: ScaleConf, degreeList: Semitone[]) {
     this._queue = queue
     this._nextScaleConf = conf
     this._degreesInNextScaleType = degreeList
@@ -39,15 +35,9 @@ export class Modulation {
     stages: number
   ): Modulation | undefined {
     const currentDegreeList = SCALES[currentConf.pref]
-    const queue = Helpers.constructModulationQueue(
-      currentDegreeList,
-      nextDegreeList(currentConf, nextConf),
-      stages
-    )
-    if (!queue.length) {
-      Logger.warn(`no changes detected: ${currentConf.key}(${currentConf.pref}) and ${nextConf.key}(${nextConf.pref})`)
-      return
-    }
+    const nextDegreeList = getNextDegreeList(currentConf, nextConf)
+    const queue = Helpers.constructModulationQueue(currentDegreeList, nextDegreeList, stages)
+    if (!queue.length) return
     return new Modulation(queue, nextConf, currentDegreeList.slice())
   }
 
@@ -61,7 +51,7 @@ export class Modulation {
   private consumeQueue(): number[] {
     const modQueueItem = this.queue.shift()!
     if (modQueueItem.remove) {
-      modQueueItem.remove.forEach((rm) => findDelete(this._degreesInNextScaleType, rm))
+      modQueueItem.remove.forEach((rm) => removeItemFromArray(this._degreesInNextScaleType, rm))
     }
     if (modQueueItem.add) {
       this._degreesInNextScaleType.push(...modQueueItem.add)
@@ -78,7 +68,7 @@ export class Modulation {
  * Derive next degree list
  * (each note's degree is relative to the current key)
  */
-function nextDegreeList(current: ScaleConf, next: ScaleConf): SemitonesInScale {
+function getNextDegreeList(current: ScaleConf, next: ScaleConf): SemitonesInScale {
   const diff = getSemitoneDiffBetweenPitches(current.key, next.key)
   const dl = SCALES[next.pref]
   return slideDegreeList(dl, diff)

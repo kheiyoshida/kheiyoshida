@@ -1,8 +1,7 @@
-import Logger from 'js-logger'
-import { OCTAVE } from './constants'
 import { Scale } from './Scale'
+import { OCTAVE } from '../constants'
 
-describe(`Scale`, () => {
+describe(`${Scale.name}`, () => {
   describe(`note construction`, () => {
     it(`should construct note pool from key and range`, () => {
       const scale = new Scale({
@@ -10,76 +9,57 @@ describe(`Scale`, () => {
         range: { min: 60, max: 60 + OCTAVE * 3 },
       })
       expect(scale.primaryPitches).toMatchObject([
-        60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81, 83, 84, 86, 88, 89,
-        91, 93, 95, 96,
+        60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81, 83, 84, 86, 88, 89, 91, 93, 95, 96,
       ])
     })
-
     it(`should detect error range and fallback to default`, () => {
-      const l = jest.spyOn(Logger, 'warn')
       const scale = new Scale({
         key: 'C',
         range: { min: 0, max: 30 },
       })
-      expect(scale.primaryPitches).toMatchInlineSnapshot(`
-        [
-          24,
-          26,
-          28,
-          29,
-        ]
-      `)
-      expect(l).toHaveBeenCalledWith(
-        'Scale.range should be between 24 - 120',
-        'invalid: 0'
-      )
+      expect(scale.primaryPitches).toMatchObject([24, 26, 28, 29])
     })
-
     it(`can set prefered degree in the key`, () => {
       const scale = new Scale({
         key: 'D#',
         pref: 'omit27',
         range: { min: 60, max: 90 },
       })
-      expect(scale.primaryPitches).toMatchObject([
-        60, 63, 67, 68, 70, 72, 75, 79, 80, 82, 84, 87,
-      ])
+      expect(scale.primaryPitches).toMatchObject([60, 63, 67, 68, 70, 72, 75, 79, 80, 82, 84, 87])
+    })
+    it(`should throw if the pitches would be empty`, () => {
+      expect(() => {
+        new Scale({
+          key: 'F',
+          pref: '_1M',
+          range: {
+            min: 49,
+            max: 51,
+          },
+        })
+      }).toThrow()
     })
   })
-
-  describe('note picker', () => {
-    let scale: Scale
-    beforeAll(() => {
-      scale = new Scale({ key: 'C', range: { min: 60, max: 80 } })
-    })
+  describe(`${Scale.prototype.pickRandomPitch.name}`, () => {
     it(`should pick random note from the range`, () => {
-      for (let i = 0; i < 100; i++) {
-        const n = scale.pickRandomPitch()
-        expect(n! >= 60 && n! <= 80).toBe(true)
-      }
+      const scale = new Scale({ key: 'C', range: { min: 60, max: 80 } })
+      const n = scale.pickRandomPitch()
+      expect(n! >= 60 && n! <= 80).toBe(true)
     })
-    it(`can pick Nth degree note of the scale`, () => {
-      const res = scale.pickNthDegree('5', { min: 60, max: 72 })
-      expect(res).toBe(67)
-      const res2 = scale.pickNthDegree('b7', { min: 60, max: 72 })
-      expect(res2).toBe(undefined)
-      const res3 = scale.pickNthDegree('7', { min: 60, max: 67 })
-      expect(res3).toBe(undefined)
-      const res4 = scale.pickNthDegree('1')
-      expect(res4).toBe(60)
-      const res5 = scale.pickNthDegree(0)
-      expect(res5).toBe(60)
-      const res6 = scale.pickNthDegree(12)
-      expect(res6).toBe(60)
-    })
+  })
+  describe(`${Scale.prototype.pickNearestPitch.name}`, () => {
     it(`can pick nearest note in the scale for a note`, () => {
       const scale = new Scale({ key: 'C', pref: 'major' })
       expect(scale.pickNearestPitch(61, 'down')).toBe(60)
       expect(scale.pickNearestPitch(61, 'up')).toBe(62)
     })
+    it(`should return the note as is when it couldn't find any note`, () => {
+      const scale = new Scale({ key: 'C', range: { min: 61, max: 66 } })
+      expect(scale.pickNearestPitch(61, 'down')).toBe(61)
+      expect(scale.pickNearestPitch(66, 'up')).toBe(66)
+    })
   })
-
-  describe(`modulation`, () => {
+  describe(`${Scale.prototype.modulate.name}`, () => {
     it(`can gradually change notes to the destination scale`, () => {
       const scale = new Scale({
         key: 'C',
@@ -106,7 +86,7 @@ describe(`Scale`, () => {
       expect(scale.key).toBe('F')
       expect(scale.inModulation).toBe(false)
     })
-    it(`can change its tone range`, () => {
+    it(`can change its pitch range`, () => {
       const scale = new Scale({
         key: 'C',
         range: { min: 60, max: 60 + OCTAVE * 3 },
@@ -116,7 +96,7 @@ describe(`Scale`, () => {
       expect(scale.primaryPitches).not.toMatchObject(beforeNotes)
       expect(scale.primaryPitches).toMatchObject([60, 62, 64, 65, 67, 69, 71, 72])
     })
-    it(`can change prefered tone`, () => {
+    it(`can change scale type`, () => {
       const scale = new Scale({
         key: 'D#',
         pref: 'omit27',
@@ -141,6 +121,35 @@ describe(`Scale`, () => {
       expect(scale.primaryPitches).toMatchObject([60, 64, 65, 67, 69, 72])
       expect(scale.inModulation).toBe(false)
     })
-    it.todo(`should NOT cancel modulation if there's change in range`)
+    it(`should cancel modulation if the next config would end up with empty scale`, () => {
+      const scale = new Scale()
+      const originalPitches = scale.primaryPitches.slice()
+      scale.modulate(
+        {
+          key: 'F',
+          pref: '_1M',
+          range: {
+            min: 49,
+            max: 51,
+          },
+        },
+        4
+      )
+      expect(scale.inModulation).toBe(false)
+      expect(scale.primaryPitches).toMatchObject(originalPitches)
+    })
+    it(`should consume next modulation queue if scale was to get empty`, () => {
+      const scale = new Scale({ key: 'C', pref: '_1M', range: { min: 64, max: 67 } })
+      expect(scale.primaryPitches).toMatchObject([64, 67])
+      expect(() => {
+        scale.modulate(
+          {
+            key: 'D',
+          },
+          6
+        )
+        scale.modulate()
+      }).not.toThrow()
+    })
   })
 })

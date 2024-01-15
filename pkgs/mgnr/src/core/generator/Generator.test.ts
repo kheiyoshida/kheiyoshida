@@ -1,9 +1,14 @@
-import * as utils from '../../utils/utils'
+import * as utils from 'utils'
 import { MockOutlet } from '../Outlet.test'
-import { GeneratorConf, SequenceGenerator } from './Generator'
+import { SequenceGenerator } from './Generator'
 import { NotePicker } from './NotePicker'
-import { Scale } from './Scale'
 import { Sequence, SequenceNoteMap } from './Sequence'
+import { Scale } from './scale/Scale'
+
+jest.mock('utils', () => ({
+  __esModule: true,
+  ...jest.requireActual('utils')
+}))
 
 const scale = new Scale({
   key: 'C',
@@ -80,26 +85,26 @@ describe(`${SequenceGenerator.name}`, () => {
   })
   describe(`${SequenceGenerator.prototype.updateConfig.name}`, () => {
     const make = () => {
-      const picker = new NotePicker({noteDur: {min: 1, max: 4}})
+      const picker = new NotePicker({ noteDur: { min: 1, max: 4 } })
       const scale = new Scale()
-      const sequence = new Sequence({density: 0.5, length: 8})
+      const sequence = new Sequence({ density: 0.5, length: 8 })
       const generator = new SequenceGenerator(picker, sequence)
-      return {picker, scale, sequence, generator}
+      return { picker, scale, sequence, generator }
     }
     it(`should update config with given fields & values`, () => {
-      const {generator, sequence, picker} = make()
+      const { generator, sequence, picker } = make()
       generator.updateConfig({
-        density: 0.9
+        density: 0.9,
       })
       expect(sequence.density).toBe(0.9)
       generator.updateConfig({
-        noteDur: 2
+        noteDur: 2,
       })
       expect(picker.conf.noteDur).toBe(2)
     })
     it(`should construct notes again after updating configuration`, () => {
-      const picker = new NotePicker({noteDur: 1})
-      const sequence = new Sequence({density: 0.5, length: 8})
+      const picker = new NotePicker({ noteDur: 1 })
+      const sequence = new Sequence({ density: 0.5, length: 8 })
       const generator = new SequenceGenerator(picker, sequence)
       generator.constructNotes(defaultNotes)
       generator.updateConfig({
@@ -110,7 +115,10 @@ describe(`${SequenceGenerator.name}`, () => {
   })
   describe(`${SequenceGenerator.prototype.constructNotes.name}`, () => {
     it(`should assign initial notes if provided`, () => {
-      const generator = new SequenceGenerator(new NotePicker({ fillStrategy: 'fixed' }), new Sequence())
+      const generator = new SequenceGenerator(
+        new NotePicker({ fillStrategy: 'fixed' }),
+        new Sequence()
+      )
       generator.constructNotes(defaultNotes)
       expect(generator.sequence.notes).toMatchObject(defaultNotes)
     })
@@ -177,7 +185,7 @@ describe(`${SequenceGenerator.name}`, () => {
   describe(`${SequenceGenerator.prototype.mutate.name}`, () => {
     beforeEach(() => {
       jest
-        .spyOn(utils, 'randomRemove')
+        .spyOn(utils, 'randomRemoveFromArray')
         .mockImplementation((notes) => [notes.slice(1, 2), [notes[0]]]) // all removed except the second note
     })
     it(`can randomize existing notes`, () => {
@@ -192,7 +200,7 @@ describe(`${SequenceGenerator.name}`, () => {
       expect(after[4].includes(before[4][1])).toBe(true) // survived note
     })
     it(`can move the existing notes to random position preserving pitch/dur/vel`, () => {
-      const picker = new NotePicker({ fillStrategy: 'fixed'})
+      const picker = new NotePicker({ fillStrategy: 'fixed' })
       const sequence = new Sequence()
       const generator = new SequenceGenerator(picker, sequence)
       generator.constructNotes(monoNotes)
@@ -224,7 +232,7 @@ describe(`${SequenceGenerator.name}`, () => {
       const sequence = new Sequence({ fillPref: 'mono', length: 8, density: 0.5 })
       const generator = new SequenceGenerator(picker, sequence)
       generator.constructNotes(defaultNotes)
-      const beforeNotes = deepCopy({...sequence.notes})
+      const beforeNotes = deepCopy({ ...sequence.notes })
       generator.mutate({ rate: 1, strategy: 'inPlace' })
       expect(sequence.notes).not.toMatchObject(beforeNotes)
       sequence.iterateNotesAtPosition((afterNotes, pos) => {
@@ -237,28 +245,24 @@ describe(`${SequenceGenerator.name}`, () => {
   describe(`${SequenceGenerator.prototype.adjustPitch.name}`, () => {
     it(`can adjust notes on scale changes`, () => {
       const scale = new Scale({ key: 'C', pref: '_1M' })
-      const picker = new NotePicker({ fillStrategy: 'fill'}, scale)
+      const picker = new NotePicker({ fillStrategy: 'fill' }, scale)
       const sequence = new Sequence({ fillPref: 'mono', length: 8, density: 0.5 })
       const generator = new SequenceGenerator(picker, sequence)
       generator.constructNotes()
       sequence.iterateEachNote((note) => {
-        expect(
-          scale.primaryPitches.includes(note.pitch as number)
-        ).toBe(true)
+        expect(scale.primaryPitches.includes(note.pitch as number)).toBe(true)
       })
       scale.modulate({ key: 'D', pref: '_1M' }, 1)
       generator.adjustPitch()
       sequence.iterateEachNote((note) => {
-        expect(
-          scale.primaryPitches.includes(note.pitch as number)
-        ).toBe(true)
+        expect(scale.primaryPitches.includes(note.pitch as number)).toBe(true)
       })
     })
   })
 
   describe(`${SequenceGenerator.prototype.eraseSequenceNotes.name}`, () => {
-    const sequence = new Sequence({fillPref: 'mono'})
-    const generator = new SequenceGenerator(new NotePicker({}),sequence)
+    const sequence = new Sequence({ fillPref: 'mono' })
+    const generator = new SequenceGenerator(new NotePicker({}), sequence)
     generator.constructNotes()
     expect(sequence.numOfNotes).toBe(8)
     generator.eraseSequenceNotes()
@@ -269,7 +273,7 @@ describe(`${SequenceGenerator.name}`, () => {
     it(`can reset notes`, () => {
       const picker = new NotePicker({})
       const sequence = new Sequence()
-      const generator = new SequenceGenerator(picker,sequence)
+      const generator = new SequenceGenerator(picker, sequence)
       generator.constructNotes()
       const firstFill = generator.notes
       generator.resetNotes()

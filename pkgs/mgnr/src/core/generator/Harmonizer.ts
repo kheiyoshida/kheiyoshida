@@ -1,5 +1,5 @@
 import Logger from 'js-logger'
-import { buildConf } from '../../utils/utils'
+import { overrideDefault } from 'utils'
 import { Note } from './Note'
 import { Degree, MidiNum, OCTAVE, Semitone } from './constants'
 import { convertDegreeToSemitone } from './convert'
@@ -14,7 +14,7 @@ export class Harmonizer {
   private conf: HarmonizerConf
 
   constructor(conf: Partial<HarmonizerConf>) {
-    this.conf = buildConf(Harmonizer.getDefaultConf(), conf)
+    this.conf = overrideDefault(Harmonizer.getDefaultConf(), conf)
   }
 
   static getDefaultConf(): HarmonizerConf {

@@ -1,5 +1,5 @@
 import { Harmonizer } from './Harmonizer'
-import { Scale } from './Scale'
+import { Scale } from './scale/Scale'
 
 describe(`${Harmonizer.name}`, () => {
   it(`can harmonize note by degree`, () => {

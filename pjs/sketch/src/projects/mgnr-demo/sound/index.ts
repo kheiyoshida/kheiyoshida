@@ -1,18 +1,15 @@
 import { filterDelay, reverb } from 'mgnr-tone-presets'
-import { Scale } from 'mgnr/src/core/generator/Scale'
+import { DEGREES, SCALES, ScaleType } from 'mgnr/src/core/generator/constants'
 import { nthDegreeTone, pickRandomPitchName } from 'mgnr/src/core/generator/utils'
 import * as mgnr from 'mgnr/src/mgnr-tone'
 import { Transport } from 'tone'
-import { randomIntInclusiveBetween } from 'utils'
+import { randomIntInclusiveBetween, randomItemFromArray } from 'utils'
 import { setupExtraSynCh } from './inst/exSyn'
 import { setupKick } from './inst/kick'
 import { setupPadCh } from './inst/pad'
 import { setupSynCh } from './inst/syn'
 import { setupTom } from './inst/tom'
 
-/**
- * demo song for beta release
- */
 export const music = () => {
   Transport.bpm.value = randomIntInclusiveBetween(96, 106)
 
@@ -21,11 +18,11 @@ export const music = () => {
   const scale2 = mgnr.createScale(key, 'omit25', { min: 48, max: 72 })
 
   // inst channels and generators
-  const {kickCh, randomizeConfig: kickRandomize }= setupKick()
-  const {tomCh, randomizeConfig: tomRandomize} = setupTom()
-  const {padCh, randomizeConfig: padRandomize} = setupPadCh(scale)
+  const { kickCh, randomizeConfig: kickRandomize } = setupKick()
+  const { tomCh, randomizeConfig: tomRandomize } = setupTom()
+  const { padCh, randomizeConfig: padRandomize } = setupPadCh(scale)
   const synCh = setupSynCh(scale2)
-  const {exSynCh, randomizeConfig: exSynRandomize} = setupExtraSynCh(scale2)
+  const { exSynCh, randomizeConfig: exSynRandomize } = setupExtraSynCh(scale2)
 
   // sends
   const mixer = mgnr.getMixer()
@@ -35,15 +32,17 @@ export const music = () => {
   mixer.connect(exSynCh, delayCh, 1.4)
 
   const reverbCh = mixer.createSendChannel(reverb())
-  mixer.connect(padCh, reverbCh, .5)
+  mixer.connect(padCh, reverbCh, 0.5)
   mixer.connect(kickCh, reverbCh, 1)
   mixer.connect(synCh, reverbCh, 0.5)
   mixer.connect(tomCh, reverbCh, 0.5)
 
   const mod = () => {
-    const key = nthDegreeTone(scale.key, '6')
-    scale.modulate({ key }, 3)
-    scale2.modulate({ key }, 3)
+    const key = nthDegreeTone(scale.key, randomItemFromArray([...DEGREES]))
+    const pref = randomItemFromArray(Object.keys(SCALES).map((k) => k)) as ScaleType
+    const range = { min: randomIntInclusiveBetween(45, 50), max: randomIntInclusiveBetween(51, 55) }
+    scale.modulate({ key, pref, range }, 3)
+    scale2.modulate({ key, pref, range }, 3)
   }
 
   const startMod = () => {
@@ -51,7 +50,7 @@ export const music = () => {
       once: [
         {
           time: '+0m',
-          handler: mod
+          handler: mod,
         },
         {
           time: '+8m',
@@ -59,7 +58,7 @@ export const music = () => {
         },
         {
           time: '+16m',
-          handler: mod
+          handler: mod,
         },
       ],
     })

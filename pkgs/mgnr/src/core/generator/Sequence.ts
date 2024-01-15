@@ -1,7 +1,11 @@
 import Logger from 'js-logger'
-import { randomIntBetween } from '../../utils/calc'
-import { Range } from '../../utils/types'
-import { buildConf, normalizeRange, randomRemove } from '../../utils/utils'
+import {
+  Range,
+  normalizeRange,
+  overrideDefault,
+  randomIntBetween,
+  randomRemoveFromArray,
+} from 'utils'
 import { Note } from './Note'
 
 type SeqDivision = 16 | 8 | 4 | 2 | 1
@@ -65,7 +69,7 @@ export class Sequence {
 
   get usedSpace() {
     let used = 0
-    this.iterateEachNote(note => {
+    this.iterateEachNote((note) => {
       used += normalizeRange(note.dur)
     })
     return used
@@ -84,7 +88,7 @@ export class Sequence {
   }
 
   /**
-   * note this is different from `usedSpace`. 
+   * note this is different from `usedSpace`.
    * it doesn't care note length
    */
   get numOfNotes() {
@@ -105,11 +109,11 @@ export class Sequence {
   }
 
   constructor(conf: Partial<SequenceConf> = {}) {
-    this.conf = buildConf(Sequence.DefaultConf, conf)
+    this.conf = overrideDefault(Sequence.DefaultConf, conf)
   }
 
   public updateConfig(conf: Partial<SequenceConf>) {
-    this.conf = buildConf(this.conf, conf)
+    this.conf = overrideDefault(this.conf, conf)
   }
 
   public addNote(pos: number | undefined, note: Note) {
@@ -151,7 +155,7 @@ export class Sequence {
   public deleteRandomNotes(rate: number): Note[] {
     let removed: Note[] = []
     this.iteratePosition((i) => {
-      const [survived, rm] = randomRemove(this.notes[i], rate)
+      const [survived, rm] = randomRemoveFromArray(this.notes[i], rate)
       if (survived.length) {
         this.replaceNotesInPosition(i, survived)
       } else {

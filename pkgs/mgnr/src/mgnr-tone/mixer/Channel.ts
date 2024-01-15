@@ -23,17 +23,27 @@ export abstract class Channel {
   readonly vol: Tone.Volume
   readonly sends = new Sends()
   readonly volumeRange: Range
-  readonly id
+  readonly id: string | undefined
 
   get volumeRangeDiff(): number {
     return this.volumeRange.max - this.volumeRange.min
+  }
+
+  get isAlreadyMinimumVolume(): boolean {
+    return this.vol.volume.value <= this.volumeRange.min
+  }
+
+  abstract get first(): Tone.Channel | ToneInst
+
+  get last(): Tone.ToneAudioNode | ToneInst {
+    return this.vol
   }
 
   constructor({ effects, initialVolume, volumeRange, id }: ChConf) {
     this.effects = effects || []
     this.volumeRange = volumeRange || { min: -50, max: -10 }
     this.vol = new Tone.Volume(initialVolume)
-    this.id = id || ''
+    this.id = id
   }
 
   protected connectNodes() {
@@ -52,10 +62,6 @@ export abstract class Channel {
     this.sends.push(send)
   }
 
-  public staticVolumeFade(values: FadeValues) {
-    this.vol.volume.rampTo(...values)
-  }
-
   public dynamicVolumeFade(relativeVolume: number | ((v: number) => number), time: FadeValues[1]) {
     this.mute('off')
     const finalValue =
@@ -64,7 +70,6 @@ export abstract class Channel {
         : relativeVolume(this.vol.volume.value)
     if (finalValue <= this.volumeRange.min) {
       if (this.isAlreadyMinimumVolume) {
-        console.log(this.id, 'mute on')
         return this.mute('on')
       }
       this.vol.volume.rampTo(this.volumeRange.min, time)
@@ -73,10 +78,6 @@ export abstract class Channel {
     } else {
       this.vol.volume.rampTo(finalValue, time)
     }
-  }
-
-  get isAlreadyMinimumVolume(): boolean {
-    return this.vol.volume.value <= this.volumeRange.min
   }
 
   public mute(v: MuteValue) {
@@ -91,12 +92,6 @@ export abstract class Channel {
     // don't dispose instrument (in case notes are remaining)
     this.effects.forEach((e) => e.dispose())
     this.sends.dispose()
-  }
-
-  abstract get first(): Tone.Channel | ToneInst
-
-  get last(): Tone.ToneAudioNode | ToneInst {
-    return this.vol
   }
 }
 
