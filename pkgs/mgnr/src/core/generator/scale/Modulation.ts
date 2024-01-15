@@ -1,6 +1,6 @@
 import { SemitonesInScale, SCALES, Semitone } from '../constants'
 import Logger from 'js-logger'
-import { findDelete } from '../../../utils/utils'
+import { removeItemFromArray} from 'utils'
 import { ScaleConf } from './Scale'
 import { getSemitoneDiffBetweenPitches } from '../utils'
 
@@ -51,7 +51,7 @@ export class Modulation {
   private consumeQueue(): number[] {
     const modQueueItem = this.queue.shift()!
     if (modQueueItem.remove) {
-      modQueueItem.remove.forEach((rm) => findDelete(this._degreesInNextScaleType, rm))
+      modQueueItem.remove.forEach((rm) => removeItemFromArray(this._degreesInNextScaleType, rm))
     }
     if (modQueueItem.add) {
       this._degreesInNextScaleType.push(...modQueueItem.add)

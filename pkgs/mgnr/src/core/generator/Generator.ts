@@ -1,4 +1,4 @@
-import { random } from '../../utils/calc'
+import { fireByRate } from 'utils'
 import { Outlet } from '../Outlet'
 import { MutateSpec } from '../types'
 import { Note } from './Note'
@@ -172,7 +172,7 @@ export class SequenceGenerator<I = unknown> {
 
   private mutateNotesPitches(rate: number) {
     this.sequence.iterateEachNote((n) => {
-      if (random(rate)) {
+      if (fireByRate(rate)) {
         this.picker.changeNotePitch(n)
       }
     })

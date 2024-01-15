@@ -1,4 +1,4 @@
-import { randomIntBetween } from '../../utils/calc'
+import { randomIntBetween } from 'utils'
 import {
   Degree,
   DEGREE_NUM_MAP,

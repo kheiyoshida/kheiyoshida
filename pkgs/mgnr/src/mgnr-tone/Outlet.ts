@@ -3,7 +3,7 @@ import { Instrument, InstrumentOptions } from 'tone/build/esm/instrument/Instrum
 import { Outlet } from '../core/Outlet'
 import { Note } from '../core/generator/Note'
 import { convertMidiToNoteName } from '../core/generator/convert'
-import { pickRange } from '../utils/calc'
+import { pickRange } from 'utils'
 import * as Transport from './tone-wrapper/Transport'
 import { scheduleLoop } from './tone-wrapper/utils'
 

@@ -1,7 +1,7 @@
 import Logger from 'js-logger'
 import { pickRange } from 'utils'
-import { Range } from '../../utils/types'
-import { buildConf } from '../../utils/utils'
+import { Range } from 'utils'
+import { overrideDefault } from 'utils'
 import { Harmonizer, HarmonizerConf } from './Harmonizer'
 import { Note } from './Note'
 import { Scale } from './scale/Scale'
@@ -31,7 +31,7 @@ export class NotePicker {
     if (conf.harmonizer) {
       this.harmonizer = new Harmonizer(conf.harmonizer)
     }
-    this._conf = buildConf(NotePicker.getDefaultConf(), conf)
+    this._conf = overrideDefault(NotePicker.getDefaultConf(), conf)
     this.scale = scale || new Scale({ key: 'C', range: { min: 24, max: 120 } })
   }
   static getDefaultConf(): NotePickerConf {
@@ -44,7 +44,7 @@ export class NotePicker {
   }
 
   public updateConfig(conf: Partial<NotePickerConf>) {
-    this._conf = buildConf(this._conf, conf)
+    this._conf = overrideDefault(this._conf, conf)
   }
 
   public pickHarmonizedNotes(): Note[] | undefined {

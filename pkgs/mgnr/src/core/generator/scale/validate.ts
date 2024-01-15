@@ -1,5 +1,5 @@
-import { NumRange } from '../../../utils/primitives'
-import { Range } from '../../../utils/types'
+import { NumRange } from 'utils'
+import { Range } from 'utils'
 import { HIGHEST_MIDI_NUM, LOWEST_MIDI_NUM } from '../constants'
 import { Modulation } from './Modulation'
 import { ScaleConf } from './Scale'

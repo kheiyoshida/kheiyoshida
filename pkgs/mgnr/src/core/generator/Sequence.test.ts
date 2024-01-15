@@ -1,6 +1,11 @@
 import { Sequence } from './Sequence'
 import { Note } from './Note'
-import * as utils from '../../utils/utils'
+import * as utils from 'utils'
+
+jest.mock('utils', () => ({
+  __esModule: true,
+  ...jest.requireActual('utils')
+}))
 
 const notes = {
   0: [
@@ -163,7 +168,7 @@ describe(`${Sequence.name}`, () => {
     expect(seqNotes.notes).toMatchObject({ 2: notes[2] })
   })
   test(`${Sequence.prototype.deleteRandomNotes.name}`, () => {
-    jest.spyOn(utils, 'randomRemove').mockImplementation((notes) => {
+    jest.spyOn(utils, 'randomRemoveFromArray').mockImplementation((notes) => {
       if (notes.length > 1)
         return [
           [notes[0]], // survive

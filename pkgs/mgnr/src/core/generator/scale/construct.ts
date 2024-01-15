@@ -1,5 +1,5 @@
-import { NumRange } from '../../../utils/primitives'
-import { Range } from '../../../utils/types'
+import { NumRange } from 'utils'
+import { Range } from 'utils'
 import {
   MidiNum,
   OCTAVE,

@@ -1,6 +1,6 @@
 import Logger from 'js-logger'
 import * as Tone from 'tone'
-import { buildConf } from '../../utils/utils'
+import { overrideDefault } from 'utils'
 
 export interface MasterChannelConf {
   limitThreashold?: number
@@ -26,7 +26,7 @@ export class MasterChannel {
   readonly vol: Tone.Volume
 
   constructor(options: MasterChannelConf = {}) {
-    const { limitThreashold, autoLimit, targetRMS } = buildConf(
+    const { limitThreashold, autoLimit, targetRMS } = overrideDefault(
       MasterChannel.getDefault(),
       options
     )
