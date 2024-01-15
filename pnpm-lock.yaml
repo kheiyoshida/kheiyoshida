@@ -56,9 +56,9 @@ importers:
       js-logger:
         specifier: ^1.6.1
         version: 1.6.1
-      mgnr:
+      mgnr-tone:
         specifier: workspace:^
-        version: link:../../pkgs/mgnr
+        version: link:../../pkgs/mgnr-tone
       p5:
         specifier: ^1.9.0
         version: 1.9.0
@@ -91,78 +91,14 @@ importers:
         specifier: ^4.15.1
         version: 4.15.1(webpack-cli@4.10.0)(webpack@5.89.0)
 
-  pjs/mgnr-test:
-    dependencies:
-      js-logger:
-        specifier: ^1.6.1
-        version: 1.6.1
-      mgnr:
-        specifier: workspace:^
-        version: link:../../pkgs/mgnr
-      tone:
-        specifier: ^14.7.77
-        version: 14.7.77
-      utils:
-        specifier: workspace:^
-        version: link:../../pkgs/utils
-    devDependencies:
-      '@babel/core':
-        specifier: ^7.19.6
-        version: 7.23.5
-      '@babel/preset-env':
-        specifier: ^7.19.4
-        version: 7.23.5(@babel/core@7.23.5)
-      '@babel/preset-typescript':
-        specifier: ^7.18.6
-        version: 7.23.3(@babel/core@7.23.5)
-      '@types/node':
-        specifier: ^20.9.2
-        version: 20.10.4
-      '@types/p5':
-        specifier: ^1.7.0
-        version: 1.7.4
-      babel-loader:
-        specifier: ^9.0.0
-        version: 9.1.3(@babel/core@7.23.5)(webpack@5.89.0)
-      esbuild-loader:
-        specifier: ^3.0.1
-        version: 3.2.0(webpack@5.89.0)
-      imports-loader:
-        specifier: ^4.0.1
-        version: 4.0.1(webpack@5.89.0)
-      p5:
-        specifier: ^1.9.0
-        version: 1.9.0
-      raw-loader:
-        specifier: ^4.0.2
-        version: 4.0.2(webpack@5.89.0)
-      source-map-loader:
-        specifier: ^4.0.1
-        version: 4.0.1(webpack@5.89.0)
-      ts-node:
-        specifier: ^10.9.1
-        version: 10.9.1(@types/node@20.10.4)(typescript@4.9.5)
-      typescript:
-        specifier: ^4.8.4
-        version: 4.9.5
-      webpack:
-        specifier: ^5.76.2
-        version: 5.89.0(webpack-cli@4.10.0)
-      webpack-cli:
-        specifier: ^4.10.0
-        version: 4.10.0(webpack-dev-server@4.15.1)(webpack@5.89.0)
-      webpack-dev-server:
-        specifier: ^4.11.1
-        version: 4.15.1(webpack-cli@4.10.0)(webpack@5.89.0)
-
   pjs/sketch:
     dependencies:
       js-logger:
         specifier: ^1.6.1
         version: 1.6.1
-      mgnr:
+      mgnr-tone:
         specifier: workspace:^
-        version: link:../../pkgs/mgnr
+        version: link:../../pkgs/mgnr-tone
       mgnr-tone-presets:
         specifier: workspace:^
         version: link:../../pkgs/mgnr-tone-presets
@@ -222,11 +158,27 @@ importers:
         specifier: ^4.11.1
         version: 4.15.1(webpack-cli@4.10.0)(webpack@5.89.0)
 
-  pkgs/mgnr:
+  pkgs/mgnr-core:
     dependencies:
       js-logger:
         specifier: ^1.6.1
         version: 1.6.1
+      utils:
+        specifier: workspace:^
+        version: link:../utils
+    devDependencies:
+      typescript:
+        specifier: ^4.8.4
+        version: 4.9.5
+
+  pkgs/mgnr-tone:
+    dependencies:
+      js-logger:
+        specifier: ^1.6.1
+        version: 1.6.1
+      mgnr-core:
+        specifier: workspace:^
+        version: link:../mgnr-core
       tone:
         specifier: ^14.7.77
         version: 14.7.77
@@ -240,9 +192,9 @@ importers:
 
   pkgs/mgnr-tone-presets:
     dependencies:
-      mgnr:
+      mgnr-tone:
         specifier: workspace:^
-        version: link:../mgnr
+        version: link:../mgnr-tone
       tone:
         specifier: ^14.7.77
         version: 14.7.77

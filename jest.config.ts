@@ -52,8 +52,13 @@ const JestConfig: Config = {
     // pkgs
     {
       ...RootConfig,
-      displayName: 'mgnr',
-      rootDir: './pkgs/mgnr',
+      displayName: 'mgnr-core',
+      rootDir: './pkgs/mgnr-core',
+    },
+    {
+      ...RootConfig,
+      displayName: 'mgnr-tone',
+      rootDir: './pkgs/mgnr-tone',
     },
     {
       ...RootConfig,

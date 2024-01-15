@@ -1,7 +1,6 @@
 {
-  "name": "mgnr",
-  "description": "music generator for WebAudio/Tone.js/node",
-  "version": "0.0.3",
+  "name": "mgnr-core",
+  "version": "0.0.1",
   "main": "index.js",
   "files": [
     "src",
@@ -9,8 +8,8 @@
   ],
   "scripts": {
     "build": "tsc --outDir dist",
-    "test": "cd ../.. && jest --selectProjects mgnr",
-    "test:coverage": "cd ../.. && jest --selectProjects mgnr --coverage"
+    "test": "cd ../.. && jest --selectProjects mgnr-core",
+    "test:coverage": "cd ../.. && jest --selectProjects mgnr-core --coverage"
   },
   "keywords": [
     "music",
@@ -20,12 +19,10 @@
   "license": "ISC",
   "dependencies": {
     "js-logger": "^1.6.1",
-    "tone": "^14.7.77",
     "utils": "workspace:^"
   },
   "peerDependencies": {
-    "js-logger": "^1.6.1",
-    "tone": "^14.7.77"
+    "js-logger": "^1.6.1"
   },
   "devDependencies": {
     "typescript": "^4.8.4"
