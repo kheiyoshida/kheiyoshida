@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "src/*": [
+        "./src/*"
+      ],
+    },
+    "sourceMap": true,
+    "outDir": "./dist",
+    "types": ["node"]
+  }
+}
