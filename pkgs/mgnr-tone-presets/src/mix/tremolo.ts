@@ -1,7 +1,7 @@
 import { fireByRate } from 'utils'
 import { providePreset } from '../utils/utils'
-import { Channel } from 'mgnr/src/mgnr-tone/mixer/Channel'
-import { registerEvents } from 'mgnr/src/mgnr-tone/timeEvent'
+import { Channel } from 'mgnr-tone/src/mixer/Channel'
+import { registerEvents } from 'mgnr-tone/src/timeEvent'
 
 export const registerTremolo = (ch: Channel) =>
   providePreset(

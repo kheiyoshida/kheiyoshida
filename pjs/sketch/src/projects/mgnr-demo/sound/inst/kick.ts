@@ -1,5 +1,5 @@
 import { defaultKick } from 'mgnr-tone-presets'
-import * as mgnr from 'mgnr/src/mgnr-tone'
+import * as mgnr from 'mgnr-tone/src'
 import { randomFloatBetween } from 'utils'
 
 export const setupKick = () => {

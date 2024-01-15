@@ -1,4 +1,4 @@
-import * as mgnr from 'mgnr/src/mgnr-tone'
+import * as mgnr from 'mgnr-tone/src'
 import { defaultTom, kickFactory } from 'mgnr-tone-presets'
 import { randomFloatBetween } from 'utils'
 

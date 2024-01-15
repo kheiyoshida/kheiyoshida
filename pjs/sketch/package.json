@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "js-logger": "^1.6.1",
+    "mgnr-core": "workspace:^",
     "mgnr-tone": "workspace:^",
     "mgnr-tone-presets": "workspace:^",
     "tone": "^14.7.77",
