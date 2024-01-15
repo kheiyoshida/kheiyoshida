@@ -56,9 +56,9 @@ importers:
       js-logger:
         specifier: ^1.6.1
         version: 1.6.1
-      mgnr:
+      mgnr-tone:
         specifier: workspace:^
-        version: link:../../pkgs/mgnr
+        version: link:../../pkgs/mgnr-tone
       p5:
         specifier: ^1.9.0
         version: 1.9.0
@@ -77,7 +77,7 @@ importers:
         version: 4.0.1(webpack@5.89.0)
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@types/node@20.10.4)(typescript@4.9.5)
+        version: 10.9.1(@types/node@20.11.1)(typescript@4.9.5)
       typescript:
         specifier: ^4.9.5
         version: 4.9.5
@@ -91,78 +91,39 @@ importers:
         specifier: ^4.15.1
         version: 4.15.1(webpack-cli@4.10.0)(webpack@5.89.0)
 
-  pjs/mgnr-test:
+  pjs/mgnr:
     dependencies:
-      js-logger:
-        specifier: ^1.6.1
-        version: 1.6.1
-      mgnr:
+      mgnr-core:
         specifier: workspace:^
-        version: link:../../pkgs/mgnr
-      tone:
-        specifier: ^14.7.77
-        version: 14.7.77
-      utils:
-        specifier: workspace:^
-        version: link:../../pkgs/utils
+        version: link:../../pkgs/mgnr-core
+      midi:
+        specifier: ^2.0.0
+        version: 2.0.0
     devDependencies:
-      '@babel/core':
-        specifier: ^7.19.6
-        version: 7.23.5
-      '@babel/preset-env':
-        specifier: ^7.19.4
-        version: 7.23.5(@babel/core@7.23.5)
-      '@babel/preset-typescript':
-        specifier: ^7.18.6
-        version: 7.23.3(@babel/core@7.23.5)
+      '@types/midi':
+        specifier: ^2.0.3
+        version: 2.0.3
       '@types/node':
-        specifier: ^20.9.2
-        version: 20.10.4
-      '@types/p5':
-        specifier: ^1.7.0
-        version: 1.7.4
-      babel-loader:
-        specifier: ^9.0.0
-        version: 9.1.3(@babel/core@7.23.5)(webpack@5.89.0)
-      esbuild-loader:
-        specifier: ^3.0.1
-        version: 3.2.0(webpack@5.89.0)
-      imports-loader:
-        specifier: ^4.0.1
-        version: 4.0.1(webpack@5.89.0)
-      p5:
-        specifier: ^1.9.0
-        version: 1.9.0
-      raw-loader:
-        specifier: ^4.0.2
-        version: 4.0.2(webpack@5.89.0)
-      source-map-loader:
-        specifier: ^4.0.1
-        version: 4.0.1(webpack@5.89.0)
+        specifier: ^20.11.1
+        version: 20.11.1
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@types/node@20.10.4)(typescript@4.9.5)
+        version: 10.9.1(@types/node@20.11.1)(typescript@4.9.5)
       typescript:
         specifier: ^4.8.4
         version: 4.9.5
-      webpack:
-        specifier: ^5.76.2
-        version: 5.89.0(webpack-cli@4.10.0)
-      webpack-cli:
-        specifier: ^4.10.0
-        version: 4.10.0(webpack-dev-server@4.15.1)(webpack@5.89.0)
-      webpack-dev-server:
-        specifier: ^4.11.1
-        version: 4.15.1(webpack-cli@4.10.0)(webpack@5.89.0)
 
   pjs/sketch:
     dependencies:
       js-logger:
         specifier: ^1.6.1
         version: 1.6.1
-      mgnr:
+      mgnr-core:
         specifier: workspace:^
-        version: link:../../pkgs/mgnr
+        version: link:../../pkgs/mgnr-core
+      mgnr-tone:
+        specifier: workspace:^
+        version: link:../../pkgs/mgnr-tone
       mgnr-tone-presets:
         specifier: workspace:^
         version: link:../../pkgs/mgnr-tone-presets
@@ -222,11 +183,27 @@ importers:
         specifier: ^4.11.1
         version: 4.15.1(webpack-cli@4.10.0)(webpack@5.89.0)
 
-  pkgs/mgnr:
+  pkgs/mgnr-core:
     dependencies:
       js-logger:
         specifier: ^1.6.1
         version: 1.6.1
+      utils:
+        specifier: workspace:^
+        version: link:../utils
+    devDependencies:
+      typescript:
+        specifier: ^4.8.4
+        version: 4.9.5
+
+  pkgs/mgnr-tone:
+    dependencies:
+      js-logger:
+        specifier: ^1.6.1
+        version: 1.6.1
+      mgnr-core:
+        specifier: workspace:^
+        version: link:../mgnr-core
       tone:
         specifier: ^14.7.77
         version: 14.7.77
@@ -240,9 +217,9 @@ importers:
 
   pkgs/mgnr-tone-presets:
     dependencies:
-      mgnr:
+      mgnr-tone:
         specifier: workspace:^
-        version: link:../mgnr
+        version: link:../mgnr-tone
       tone:
         specifier: ^14.7.77
         version: 14.7.77
@@ -2439,6 +2416,12 @@ packages:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
     dev: false
 
+  /@types/midi@2.0.3:
+    resolution: {integrity: sha512-pWHbPU2FDq+ice7cjhZOEH19UUi55qDkdRggRZHy+1HKmYBRVZjaUBZofI0umL93PWif3Xr9EVwpmyUp1ecQnQ==}
+    dependencies:
+      '@types/node': 20.11.1
+    dev: true
+
   /@types/mime@1.3.5:
     resolution: {integrity: sha512-/pyBZWSLD2n0dcHE3hq8s8ZvcETHtEuF+3E7XVt0Ig2nvsVQXdghHVcEkIWjy9A0wKfTn97a/PSDYohKIlnP/w==}
     dev: true
@@ -2459,6 +2442,12 @@ packages:
 
   /@types/node@20.10.4:
     resolution: {integrity: sha512-D08YG6rr8X90YB56tSIuBaddy/UXAA9RKJoFvrsnogAum/0pmjkgi4+2nx96A330FmioegBWmEYQ+syqCFaveg==}
+    dependencies:
+      undici-types: 5.26.5
+    dev: true
+
+  /@types/node@20.11.1:
+    resolution: {integrity: sha512-DsXojJUES2M+FE8CpptJTKpg+r54moV9ZEncPstni1WHFmTcCzeFLnMFfyhCVS8XNOy/OQG+8lVxRLRrVHmV5A==}
     dependencies:
       undici-types: 5.26.5
     dev: true
@@ -3318,6 +3307,12 @@ packages:
   /binary-extensions@2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
+
+  /bindings@1.5.0:
+    resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
+    dependencies:
+      file-uri-to-path: 1.0.0
+    dev: false
 
   /bl@4.1.0:
     resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
@@ -4643,6 +4638,10 @@ packages:
     engines: {node: ^10.12.0 || >=12.0.0}
     dependencies:
       flat-cache: 3.2.0
+
+  /file-uri-to-path@1.0.0:
+    resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
+    dev: false
 
   /fill-range@7.0.1:
     resolution: {integrity: sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==}
@@ -6189,6 +6188,15 @@ packages:
       braces: 3.0.2
       picomatch: 2.3.1
 
+  /midi@2.0.0:
+    resolution: {integrity: sha512-HyCLWa+ET8Aqfu/NxdNkxfCx0EfCJrcZgKuhrY4c9UgkfxRt3ChM7RP1oC5vJf7ALXyuAG47jqr5yUlvSodTPQ==}
+    engines: {node: '>=10'}
+    requiresBuild: true
+    dependencies:
+      bindings: 1.5.0
+      nan: 2.18.0
+    dev: false
+
   /mime-db@1.52.0:
     resolution: {integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==}
     engines: {node: '>= 0.6'}
@@ -6249,6 +6257,10 @@ packages:
       dns-packet: 5.6.1
       thunky: 1.1.0
     dev: true
+
+  /nan@2.18.0:
+    resolution: {integrity: sha512-W7tfG7vMOGtD30sHoZSSc/JVYiyDPEyQVso/Zz+/uQd0B0L46gtC+pHha5FFMRpil6fm/AoEcRWyOVi4+E/f8w==}
+    dev: false
 
   /nanoid@3.3.7:
     resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
@@ -7605,6 +7617,37 @@ packages:
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
       '@types/node': 20.10.4
+      acorn: 8.11.2
+      acorn-walk: 8.3.1
+      arg: 4.1.3
+      create-require: 1.1.1
+      diff: 4.0.2
+      make-error: 1.3.6
+      typescript: 4.9.5
+      v8-compile-cache-lib: 3.0.1
+      yn: 3.1.1
+    dev: true
+
+  /ts-node@10.9.1(@types/node@20.11.1)(typescript@4.9.5):
+    resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
+    hasBin: true
+    peerDependencies:
+      '@swc/core': '>=1.2.50'
+      '@swc/wasm': '>=1.2.50'
+      '@types/node': '*'
+      typescript: '>=2.7'
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
+      '@swc/wasm':
+        optional: true
+    dependencies:
+      '@cspotcode/source-map-support': 0.8.1
+      '@tsconfig/node10': 1.0.9
+      '@tsconfig/node12': 1.0.11
+      '@tsconfig/node14': 1.0.3
+      '@tsconfig/node16': 1.0.4
+      '@types/node': 20.11.1
       acorn: 8.11.2
       acorn-walk: 8.3.1
       arg: 4.1.3

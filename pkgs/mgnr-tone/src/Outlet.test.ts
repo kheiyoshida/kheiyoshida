@@ -1,8 +1,8 @@
 import * as Tone from 'tone'
-import { mockScheduleLoop } from '../__tests__/mock'
-import { SequenceGenerator } from '../core/generator/Generator'
-import { NotePicker } from '../core/generator/NotePicker'
-import { Sequence, SequenceNoteMap } from '../core/generator/Sequence'
+import { mockScheduleLoop } from './__tests__/mock'
+import { SequenceGenerator } from 'mgnr-core/src/generator/Generator'
+import { NotePicker } from 'mgnr-core/src/generator/NotePicker'
+import { Sequence, SequenceNoteMap } from 'mgnr-core/src/generator/Sequence'
 import { ToneOutlet } from './Outlet'
 import * as wrapperUtil from './tone-wrapper/utils'
 

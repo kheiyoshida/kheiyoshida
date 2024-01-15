@@ -1,4 +1,4 @@
-import { SequenceLoopElapsedHandler, SequenceLoopEndedHandler } from '../core/types'
+import { SequenceLoopElapsedHandler, SequenceLoopEndedHandler } from './types'
 import { SequenceGenerator } from './generator/Generator'
 import { SeqEvent } from './types'
 
