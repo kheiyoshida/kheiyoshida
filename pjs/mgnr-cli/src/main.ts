@@ -14,15 +14,21 @@ export function main() {
       min: 1,
       max: 4,
     },
-    density: 0.8,
+    density: 0.4,
+    fillPref: 'mono',
     scale,
   })
   generator.constructNotes()
 
   const ch1 = new MidiChannel(port, 1)
   const outlet1 = new MidiOutlet(ch1, generator)
-  outlet1.loopSequence().onEnded((out) => {
-    out.repeatLoop()
+  outlet1.loopSequence(3)
+  .onElapsed(() => {
+    generator.mutate({ rate: 0.4, strategy: 'move' })
+  })
+  .onEnded((ctx) => {
+    generator.mutate({ rate: 0.4, strategy: 'randomize' })
+    ctx.repeatLoop()
   })
 
   const generator2 = mgnr.createGenerator({

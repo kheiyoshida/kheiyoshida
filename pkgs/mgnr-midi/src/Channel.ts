@@ -1,7 +1,6 @@
-import { MidiPort } from './Port';
-import { convertToMidiNote } from './convert';
-import { ConcreteNote, MidiChannelNumber } from './types';
-
+import { MidiPort } from './Port'
+import { convertToMidiNote } from './convert'
+import { ConcreteNote, MidiChannelNumber } from './types'
 
 export class MidiChannel {
   constructor(
@@ -12,7 +11,6 @@ export class MidiChannel {
   sendNote(note: ConcreteNote, startInMeasure: number, endInMeasure: number) {
     const midiNote = convertToMidiNote(this.chNumber, note)
     this.port.noteOnAtRelativeBeat(startInMeasure, midiNote)
-    this.port.noteOffAtRelativeBeat(endInMeasure, {...midiNote, velocity: 0})
+    this.port.noteOffAtRelativeBeat(endInMeasure, { ...midiNote, velocity: 0 })
   }
 }
-
