@@ -1,0 +1,27 @@
+{
+  "name": "mgnr-midi",
+  "version": "0.0.1",
+  "main": "index.js",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --outDir dist",
+    "test": "cd ../.. && jest --selectProjects mgnr-midi",
+    "test:coverage": "cd ../.. && jest --selectProjects mgnr-midi --coverage"
+  },
+  "keywords": [
+    "music",
+    "music-generator"
+  ],
+  "author": "Katsumi Yoshida",
+  "license": "ISC",
+  "dependencies": {
+    "mgnr-core": "workspace:^",
+    "utils": "workspace:^"
+  },
+  "devDependencies": {
+    "typescript": "^4.8.4"
+  }
+}
