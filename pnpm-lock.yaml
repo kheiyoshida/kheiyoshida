@@ -192,6 +192,9 @@ importers:
 
   pkgs/mgnr-midi:
     dependencies:
+      easymidi:
+        specifier: ^3.1.0
+        version: 3.1.0
       mgnr-core:
         specifier: workspace:^
         version: link:../mgnr-core

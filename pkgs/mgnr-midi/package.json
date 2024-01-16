@@ -18,6 +18,7 @@
   "author": "Katsumi Yoshida",
   "license": "ISC",
   "dependencies": {
+    "easymidi": "^3.1.0",
     "mgnr-core": "workspace:^",
     "utils": "workspace:^"
   },

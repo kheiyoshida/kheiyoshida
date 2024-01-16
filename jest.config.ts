@@ -57,6 +57,11 @@ const JestConfig: Config = {
     },
     {
       ...RootConfig,
+      displayName: 'mgnr-midi',
+      rootDir: './pkgs/mgnr-midi',
+    },
+    {
+      ...RootConfig,
       displayName: 'mgnr-tone',
       rootDir: './pkgs/mgnr-tone',
     },

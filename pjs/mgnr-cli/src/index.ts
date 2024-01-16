@@ -15,11 +15,20 @@ class MidiChannel {
   constructor(private chNumber: number) {}
 
   public sendNote(pitch: number, vel: number) {
-    output.send('noteon', {
-      note: pitch,
-      velocity: vel,
-      channel: this.chNumber,
-    } as MidiNote)
+    
+    if (pitch < 60) {
+      output.send('noteon', {
+        note: pitch,
+        velocity: vel,
+        channel: 1,
+      } as MidiNote)
+    } else {
+      output.send('noteon', {
+        note: pitch,
+        velocity: vel,
+        channel: 0,
+      } as MidiNote)
+    }
   }
 }
 
@@ -52,6 +61,7 @@ function main() {
   const scale = mgnr.createScale('C', 'omit25', { min: 40, max: 80 })
   const generator = mgnr.createGenerator({
     scale,
+    length: 40
   })
   const midiCh = new MidiChannel(0)
   const outlet = new MidiOutlet(midiCh)
