@@ -9,6 +9,7 @@
     },
     "sourceMap": true,
     "outDir": "./dist",
-    "types": ["node"]
+    "types": ["node"],
+    "isolatedModules": false
   }
 }
