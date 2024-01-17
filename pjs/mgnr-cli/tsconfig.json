@@ -1,15 +1,12 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "src/*": [
-        "./src/*"
-      ],
-    },
-    "sourceMap": true,
-    "outDir": "./dist",
-    "types": ["node"],
-    "isolatedModules": false
+    "rootDir": "src",
+    "baseUrl": "src",
+    "outDir": "dist",
+    "isolatedModules": false,
+    "downlevelIteration": true,    
+    "target": "ES6",
+    "types": ["node"]
   }
 }

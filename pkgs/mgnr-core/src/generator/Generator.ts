@@ -41,7 +41,7 @@ export class SequenceGenerator<I = unknown> {
   public updateConfig(config: Partial<GeneratorConf>): void {
     this.sequence.updateConfig(config)
     this.picker.updateConfig(config)
-    this.eraseSequenceNotes()
+    // this.eraseSequenceNotes()
     this.constructNotes()
   }
 
