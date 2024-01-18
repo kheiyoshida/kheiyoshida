@@ -1,9 +1,14 @@
 import * as repl from 'node:repl'
 import { main } from './session/1'
 
-const replServer = repl.start()
+function startCliSession() {
+  try {
+    const replServer = repl.start()
+    const bound = main()
+    Object.assign(replServer.context, bound)
+  } catch (err) {
+    console.error(err)
+  }
+}
 
-const bound = main()
-
-Object.assign(replServer.context, bound)
-// replServer.context.start = main
+startCliSession()

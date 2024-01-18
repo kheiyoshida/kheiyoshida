@@ -2,6 +2,8 @@ import { Scale } from 'mgnr-core/src'
 import { GeneratorConf, SequenceGenerator } from 'mgnr-core/src/generator/Generator'
 import { HarmonizerConf } from 'mgnr-core/src/generator/Harmonizer'
 import { ScaleConf } from 'mgnr-core/src/generator/scale/Scale'
+import { LogItem } from 'stream/src/types'
+import { Range } from 'utils'
 
 export class CliScale extends Scale {
   mutateKey(key: ScaleConf['key'], stages = 1) {
@@ -27,6 +29,16 @@ export class CliScale extends Scale {
   }
   mp(...args: Parameters<typeof CliScale.prototype.mutatePref>) {
     this.mutatePref(...args)
+  }
+
+  logName: string = ''
+  logState(): LogItem {
+    return {
+      _: this.logName,
+      k: this.key,
+      p: this._conf.pref,
+      r: `${this.pitchRange.min}-${this.pitchRange.max}`
+    }
   }
 }
 
@@ -80,4 +92,33 @@ export class CliSequenceGenerator extends SequenceGenerator {
   onLoop(cb: typeof CliSequenceGenerator.prototype.loopHandler) {
     this.loopHandler = cb
   }
+  execLoop(s: CliScale) {
+    try {
+      if (!this.loopHandler) return
+      this.loopHandler(this, s)
+    } catch (err) {
+      console.error(`${this.logName}.loopHandler failed `)
+      this.loopHandler = undefined
+    }
+  }
+
+  logName: string = ''
+  logState(): LogItem {
+    return {
+      _: this.logName,
+      len: this.sequence.length,
+      notes: this.sequence.numOfNotes,
+      density: this.sequence.density,
+      dur: convertRange(this.picker.conf.noteDur),
+      vel: convertRange(this.picker.conf.noteVel),
+      fill: this.picker.conf.fillStrategy,
+      poly: this.sequence.poly,
+      h: this.picker.conf.harmonizer ? this.picker.conf.harmonizer['degree'] : '',
+    }
+  }
+}
+
+function convertRange(r: Range | number) {
+  if (typeof r === 'number') return r
+  else return `${r.min}-${r.max}`
 }

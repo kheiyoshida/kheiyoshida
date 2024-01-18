@@ -12,6 +12,7 @@ app.get('/ping', (req, res) => {
 
 app.post('/', (req, res) => {
   printLog(req.body)
+  res.json()
 })
 
 export function startStream() {

@@ -20,7 +20,7 @@ export interface ScaleConf {
 export type ScaleArgs = Partial<ScaleConf>
 
 export class Scale {
-  private _conf!: ScaleConf
+  protected _conf!: ScaleConf
 
   /**
    * root tone name of the scale.
