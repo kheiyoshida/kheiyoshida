@@ -2,12 +2,14 @@
   "name": "mgnr-cli",
   "scripts": {
     "build": "rm -rf dist && tsc",
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "stream": "ts-node src/stream.ts"
   },
   "dependencies": {
     "mgnr-core": "workspace:^",
     "mgnr-midi": "workspace:^",
-    "utils": "workspace:^"
+    "utils": "workspace:^",
+    "stream": "workspace:^"
   },
   "devDependencies": {
     "ts-node": "^10.9.1",

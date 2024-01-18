@@ -67,6 +67,11 @@ const JestConfig: Config = {
     },
     {
       ...RootConfig,
+      displayName: 'stream',
+      rootDir: './pkgs/stream',
+    },
+    {
+      ...RootConfig,
       displayName: 'utils',
       rootDir: './pkgs/utils',
     },

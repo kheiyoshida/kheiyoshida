@@ -2,6 +2,7 @@ import { MidiPort } from 'mgnr-midi/src/Port'
 import { createGenerator, createScale } from '../../common'
 import { createChannelOutlet } from '../../common/setup'
 import { ScaleConf } from 'mgnr-core/src/generator/scale/Scale'
+import { sendStream } from '../../common/log'
 
 export function main() {
   const port = new MidiPort('Logic Pro Virtual In', 120)
@@ -58,5 +59,6 @@ export function main() {
       s1.mutateKey(key, stages)
       s2.mutateKey(key, stages)
     },
+    sendLog: sendStream
   }
 }
