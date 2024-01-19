@@ -1,7 +1,7 @@
 import { SketchConfigStore, applyConfig } from 'p5utils/src/lib/utils/project'
 import { randomBetween } from 'p5utils/src/lib/utils/random'
 import { makeStore } from 'p5utils/src/lib/utils/store'
-import { expand } from '../../lib/render/helpers/expand'
+import { expand } from 'p5utils/src/lib/render/helpers/expand'
 import { Gene, grow } from './gene'
 
 const store = makeStore<SketchConfigStore>()
