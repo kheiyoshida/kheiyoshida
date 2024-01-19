@@ -30,6 +30,10 @@ export class Sequence {
 
   protected conf: SequenceConf
 
+  get poly() {
+    return this.conf.fillPref === 'allowPoly'
+  }
+
   /**
    * the number of divisions
    * e.g. length 8 means 8 sixteenth notes in a sequence

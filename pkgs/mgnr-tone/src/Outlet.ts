@@ -57,19 +57,15 @@ export class ToneOutlet extends Outlet<ToneInst> {
 
   private assignNote(note: Note, time: number): void {
     const pitch = this.getConcretePitch(note)
-    if (!pitch) {
-      Logger.debug('canceled assigning note due to empty scale')
-    } else {
-      this.inst.triggerAttackRelease(
-        convertMidiToNoteName(pitch),
-        pickRange(note.dur) * this.secsPerDivision,
-        time,
-        pickRange(note.vel) / 127
-      )
-    }
+    this.inst.triggerAttackRelease(
+      convertMidiToNoteName(pitch),
+      pickRange(note.dur) * this.secsPerDivision,
+      time,
+      pickRange(note.vel) / 127
+    )
   }
 
-  private getConcretePitch(note: Note): number | undefined {
+  private getConcretePitch(note: Note): number {
     return note.pitch === 'random'
       ? this.generator.picker.scale.pickRandomPitch() // violation of law of demeter
       : note.pitch

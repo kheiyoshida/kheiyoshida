@@ -45,6 +45,9 @@ export class NotePicker {
 
   public updateConfig(conf: Partial<NotePickerConf>) {
     this._conf = overrideDefault(this._conf, conf)
+    if (conf.harmonizer) {
+      this.harmonizer = new Harmonizer(conf.harmonizer)
+    }
   }
 
   public pickHarmonizedNotes(): Note[] | undefined {
