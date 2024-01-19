@@ -1,10 +1,10 @@
 import p5 from 'p5'
-import { connect, disconnect } from 'src/lib/data/graph/node'
-import { GraphNode } from 'src/lib/data/graph/types'
-import { mutate } from 'src/lib/data/node'
-import * as NODE from 'src/lib/data/node/index'
-import { BaseNode3D, VectorAngles } from 'src/lib/data/node/types'
-import { randomBetween, randomIntBetween } from 'src/lib/utils/random'
+import { connect, disconnect } from 'p5utils/src/lib/data/graph/node'
+import { GraphNode } from 'p5utils/src/lib/data/graph/types'
+import { mutate } from 'p5utils/src/lib/data/node'
+import * as NODE from 'p5utils/src/lib/data/node/index'
+import { BaseNode3D, VectorAngles } from 'p5utils/src/lib/data/node/types'
+import { randomBetween, randomIntBetween } from 'p5utils/src/lib/utils/random'
 
 export type Node = GraphNode<
   BaseNode3D & {

@@ -1,7 +1,7 @@
-import { GraphNode } from 'src/lib/data/graph/types'
-import * as N from 'src/lib/data/node'
-import { NodeTerritory } from 'src/lib/data/node/types'
-import { random, randomIntBetween } from 'src/lib/utils/random'
+import { GraphNode } from 'p5utils/src/lib/data/graph/types'
+import * as N from 'p5utils/src/lib/data/node'
+import { NodeTerritory } from 'p5utils/src/lib/data/node/types'
+import { random, randomIntBetween } from 'p5utils/src/lib/utils/random'
 
 const DEFAULT_NODE_SPEED = 30
 const SPEED_DESCEND = 2

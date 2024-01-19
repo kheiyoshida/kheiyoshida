@@ -1,6 +1,6 @@
-import { clampAnd } from 'src/lib/utils/calc'
+import { clampAnd } from 'p5utils/src/lib/utils/calc'
 import { BaseNode, NodeTerritory } from './types'
-import { valueOrFn } from 'src/lib/utils/utils'
+import { valueOrFn } from 'p5utils/src/lib/utils/utils'
 import p5 from 'p5'
 
 /**

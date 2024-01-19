@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { applyColor } from 'src/lib/p5utils/color'
+import { applyColor } from 'p5utils/src/lib/p5utils/color'
 import { defaultPalette } from './factories'
 
 export type ColorDomains = 'fill' | 'stroke'

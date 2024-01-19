@@ -1,4 +1,4 @@
-import { pushPop } from "src/lib/p5utils"
+import { pushPop } from "p5utils/src/lib/p5utils"
 import { Conf } from "../../../config"
 import { Direction, NESW } from "../../../domain/maze/direction"
 import { Grid } from "../../../domain/maze/mapper"

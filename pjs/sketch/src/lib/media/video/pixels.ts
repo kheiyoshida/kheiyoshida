@@ -1,4 +1,4 @@
-import { getCommonDivisors, getFloatDivisors } from "src/lib/utils/calc"
+import { getCommonDivisors, getFloatDivisors } from "p5utils/src/lib/utils/calc"
 import { leftTopIze } from './magnify'
 import { MediaSize, PixelPosition } from './types'
 

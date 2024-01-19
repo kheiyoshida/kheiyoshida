@@ -1,6 +1,6 @@
 import p5 from 'p5'
-import { destVect, vline } from 'src/lib/utils/p5utils'
-import { randomBetween } from "src/lib/utils/random"
+import { destVect, vline } from 'p5utils/src/lib/utils/p5utils'
+import { randomBetween } from "p5utils/src/lib/utils/random"
 import { Wing } from './wing'
 
 let cw: number

@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { valueOrFn } from 'src/lib/utils/utils'
+import { valueOrFn } from 'p5utils/src/lib/utils/utils'
 import { mutate } from '.'
 import { BaseNode3D } from './types'
 

@@ -1,4 +1,4 @@
-import { randomItemFromArray } from "src/lib/utils/random"
+import { randomItemFromArray } from "p5utils/src/lib/utils/random"
 import {
   MatrixRangeError,
   createEmptyMatrix,

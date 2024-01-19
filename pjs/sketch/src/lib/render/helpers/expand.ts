@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { pushPop } from 'src/lib/utils/p5utils'
+import { pushPop } from 'p5utils/src/lib/utils/p5utils'
 
 /**
  * assumes angleMode to be DEGREE

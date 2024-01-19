@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { makeStore } from 'src/lib/utils/store'
+import { makeStore } from 'p5utils/src/lib/utils/store'
 import { bindKeyEvent, bindTouchEvent } from './bindInput'
 
 export type Direction = 'go' | 'back' | 'right' | 'left' | null

@@ -1,10 +1,10 @@
 import p5 from 'p5'
-import { colorCopy, pushPop, randomColor } from 'src/lib/p5utils'
-import { random } from "src/lib/random"
-import { randomBetween } from "src/lib/random"
+import { colorCopy, pushPop, randomColor } from 'p5utils/src/lib/p5utils'
+import { random } from "p5utils/src/lib/random"
+import { randomBetween } from "p5utils/src/lib/random"
 import { Conf } from '../../../config'
 import { getDeadEndItem, putDeadEndItem } from '../../../domain/maze/deadend'
-import { sequence, DrawFn, moment } from 'src/lib/sequence'
+import { sequence, DrawFn, moment } from 'p5utils/src/lib/sequence'
 import { getPaletteColor } from 'src/maze/domain/vision/color/palette'
 
 export const emptyPicture = (pos: number[], size: number[]) => {

@@ -1,9 +1,9 @@
 import p5 from 'p5'
-import { connect } from 'src/lib/data/graph/node'
-import { calculateVertices, createInitialNode } from 'src/lib/data/shape/create'
-import { ShapeNode } from 'src/lib/data/shape/types'
-import { geometryFromShape } from 'src/lib/render/shape'
-import { randomIntBetween, shuffle } from 'src/lib/utils/random'
+import { connect } from 'p5utils/src/lib/data/graph/node'
+import { calculateVertices, createInitialNode } from 'p5utils/src/lib/data/shape/create'
+import { ShapeNode } from 'p5utils/src/lib/data/shape/types'
+import { geometryFromShape } from 'p5utils/src/lib/render/shape'
+import { randomIntBetween, shuffle } from 'p5utils/src/lib/utils/random'
 
 const createStaticNode = (position: p5.Vector, distanceFromNode: number) => {
   return createInitialNode(

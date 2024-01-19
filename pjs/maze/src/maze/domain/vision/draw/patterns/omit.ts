@@ -1,4 +1,4 @@
-import { pointLine } from 'src/lib/p5utils'
+import { pointLine } from 'p5utils/src/lib/p5utils'
 import { distortedMidPoints, distributedPath } from '../helpers/helpers'
 import { LayerDrawer, LineDrawer, PathDrawer, SpecDrawer } from '../types'
 import { layerDrawerFactory, specDrawerFactory } from './factory'

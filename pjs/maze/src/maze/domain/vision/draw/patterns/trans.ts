@@ -1,5 +1,5 @@
-import { pushPop } from 'src/lib/p5utils'
-import { transColor } from 'src/lib/p5utils/color'
+import { pushPop } from 'p5utils/src/lib/p5utils'
+import { transColor } from 'p5utils/src/lib/p5utils/color'
 import { getPalette } from '../../color/palette'
 import { LayerDrawerFactory } from '../types'
 import { specDrawerFactory } from './factory'

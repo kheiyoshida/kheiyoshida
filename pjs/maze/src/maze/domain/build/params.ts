@@ -1,4 +1,4 @@
-import { random, randomBetween, randomIntBetween } from "src/lib/random"
+import { random, randomBetween, randomIntBetween } from "p5utils/src/lib/random"
 import { BuildParams } from "."
 
 export const INITIAL_FLOOR_SIZE = 6

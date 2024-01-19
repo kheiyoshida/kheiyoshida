@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { randomBetween } from "src/lib/utils/random"
+import { randomBetween } from "p5utils/src/lib/utils/random"
 
 export function bloom(
   x: number,

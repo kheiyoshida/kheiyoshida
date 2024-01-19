@@ -1,6 +1,6 @@
 import * as TC from 'mgnr/src/externals/tone/commands'
 import * as TE from 'mgnr/src/externals/tone/events'
-import { random } from "src/lib/random"
+import { random } from "p5utils/src/lib/random"
 
 type FadeConfig = {
   rate: number

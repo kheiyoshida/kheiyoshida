@@ -1,7 +1,7 @@
 import p5, { Geometry } from 'p5'
-import { Shape, ShapeNode } from 'src/lib/data/shape/types'
-import { calcPerpendicularVector } from 'src/lib/data/shape/utils'
-import { pushPop } from 'src/lib/utils/p5utils'
+import { Shape, ShapeNode } from 'p5utils/src/lib/data/shape/types'
+import { calcPerpendicularVector } from 'p5utils/src/lib/data/shape/utils'
+import { pushPop } from 'p5utils/src/lib/utils/p5utils'
 
 type pExtended = p5 & { beginGeometry: any; endGeometry: any }
 

@@ -1,4 +1,4 @@
-import { randomBetween, randomIntBetween } from 'src/lib/random'
+import { randomBetween, randomIntBetween } from 'p5utils/src/lib/random'
 import { toFloatPercent } from 'src/maze/utils'
 import { DrawPath, DrawPoint } from '../types'
 

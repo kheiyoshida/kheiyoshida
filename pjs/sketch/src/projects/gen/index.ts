@@ -1,6 +1,6 @@
-import { SketchConfigStore, applyConfig } from 'src/lib/utils/project'
-import { randomBetween } from 'src/lib/utils/random'
-import { makeStore } from 'src/lib/utils/store'
+import { SketchConfigStore, applyConfig } from 'p5utils/src/lib/utils/project'
+import { randomBetween } from 'p5utils/src/lib/utils/random'
+import { makeStore } from 'p5utils/src/lib/utils/store'
 import { expand } from '../../lib/render/helpers/expand'
 import { Gene, grow } from './gene'
 
