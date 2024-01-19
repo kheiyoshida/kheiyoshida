@@ -3,10 +3,7 @@ import { MediaSize, PixelPosition } from './types'
 /**
  * determine the region where the center position of magnified region can move
  */
-export const restrainedRegion = (
-  videoSize: MediaSize,
-  magnifiedSize: MediaSize
-) => {
+export const restrainedRegion = (videoSize: MediaSize, magnifiedSize: MediaSize) => {
   return {
     t: magnifiedSize.height / 2,
     b: videoSize.height - magnifiedSize.height / 2,
@@ -43,14 +40,8 @@ export const centerPosition = (size: MediaSize) => ({
  * @param magnifiedSize
  * @returns
  */
-export const leftTopIze = (
-  position: PixelPosition,
-  magnifiedSize: MediaSize
-) => {
-  const [halfWidth, halfHeight] = [
-    magnifiedSize.width / 2,
-    magnifiedSize.height / 2,
-  ]
+export const leftTopIze = (position: PixelPosition, magnifiedSize: MediaSize) => {
+  const [halfWidth, halfHeight] = [magnifiedSize.width / 2, magnifiedSize.height / 2]
   if (Number.isInteger(halfWidth) && Number.isInteger(halfHeight))
     return {
       x: position.x - magnifiedSize.width / 2,

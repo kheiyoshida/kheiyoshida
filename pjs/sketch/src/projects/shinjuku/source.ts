@@ -1,6 +1,6 @@
-import { randomItemFromArray } from "src/lib/utils/random"
-import { GetVideoSource, VideoSourceList } from 'src/lib/media/video/types'
-import { requireVideo } from "src/assets"
+import { randomItemFromArray } from "utils"
+import { GetVideoSource, VideoSourceList } from 'p5utils/src/lib/media/video/types'
+import { requireVideo } from "../../assets"
 
 // export const videoSource: VideoSourceList = [
 //   require('../../assets/video/shinjuku1.mp4'),

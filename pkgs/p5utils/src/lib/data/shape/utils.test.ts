@@ -1,13 +1,9 @@
 import p5 from 'p5'
-import { getNearestVertices } from './utils'
-import { createInitialNode } from './create'
-import { ShapeNode, Vertex } from './types'
 import { connect } from '../graph/node'
+import { ShapeNode, Vertex } from './types'
+import { getNearestVertices } from './utils'
 
-const prepareNode = (
-  position: p5.Vector,
-  vertices: Vertex[] = []
-): ShapeNode => ({
+const prepareNode = (position: p5.Vector, vertices: Vertex[] = []): ShapeNode => ({
   position,
   move: new p5.Vector(),
   angles: {
@@ -53,12 +49,7 @@ describe('getNearestVertices', () => {
     connect(node, edge2)
     const result = getNearestVertices(node)
     expect(result.includes(edge2.vertices[0])).toBe(true)
-    expect(result).toMatchObject([
-      vertices[0],
-      vertices2[0],
-      vertices[1],
-      vertices2[2],
-    ])
+    expect(result).toMatchObject([vertices[0], vertices2[0], vertices[1], vertices2[2]])
   })
   it('should not get shared vertex twice', () => {
     const node = prepareNode(new p5.Vector())
@@ -80,11 +71,6 @@ describe('getNearestVertices', () => {
     connect(node, edge2)
     const result = getNearestVertices(node)
     expect(result.includes(edge2.vertices[0])).toBe(true)
-    expect(result).toMatchObject([
-      vertices[0],
-      vertices[1],
-      vertices[2],
-      vertices2[2],
-    ])
+    expect(result).toMatchObject([vertices[0], vertices[1], vertices[2], vertices2[2]])
   })
 })

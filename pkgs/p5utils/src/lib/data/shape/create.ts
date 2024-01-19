@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { randomBetween } from 'src/lib/utils/random'
+import { randomFloatBetween } from 'utils'
 import { BaseNode3D } from '../node/types'
 import {
   adjustNodePositionFromEdge,
@@ -76,15 +76,15 @@ const TETRAHEDRAL_ANGLE = 1.9111355 // 109.5
 const ONE_THIRD = 2.0944 // 120
 export const createTetraVertices = (
   length: number,
-  phi = randomBetween(0, 3.14),
+  phi = randomFloatBetween(0, 3.14),
   rand = 0
 ): p5.Vector[] => {
-  const v1 = p5.Vector.fromAngles(0, 0, randomBetween(length, length + rand))
+  const v1 = p5.Vector.fromAngles(0, 0, randomFloatBetween(length, length + rand))
   const rest = [...Array(3)].map((_, i) =>
     p5.Vector.fromAngles(
       TETRAHEDRAL_ANGLE,
       phi + ONE_THIRD * (i + 1),
-      randomBetween(length, length + rand)
+      randomFloatBetween(length, length + rand)
     )
   )
   return [v1, ...rest]

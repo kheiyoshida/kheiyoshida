@@ -65,6 +65,11 @@ const JestConfig: Config = {
       displayName: 'utils',
       rootDir: './pkgs/utils',
     },
+    {
+      ...RootConfig,
+      displayName: 'p5utils',
+      rootDir: './pkgs/p5utils',
+    },
   ],
 }
 export default JestConfig

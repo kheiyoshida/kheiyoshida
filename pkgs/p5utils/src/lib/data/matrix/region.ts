@@ -1,4 +1,4 @@
-import { randomItemFromArray } from "src/lib/utils/random"
+import { randomItemFromArray } from "utils"
 import {
   MatrixRangeError,
   createEmptyMatrix,

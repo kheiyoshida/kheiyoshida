@@ -5,7 +5,7 @@ export type p5VideoElement = MediaElement & {
   pixels: Uint8ClampedArray
 }
 
-export type VideoSize = { width: number, height: number }
+export type VideoSize = { width: number; height: number }
 
 export type VideoSource = string
 export type GetVideoSource = () => VideoSource
@@ -33,7 +33,7 @@ export type MediaSize = {
 }
 
 export type PixelPosition = {
-  x: number,
+  x: number
   y: number
 }
 

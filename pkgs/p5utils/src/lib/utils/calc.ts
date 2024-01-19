@@ -29,12 +29,9 @@ export const clamp = (val: number, min: number, max: number) => {
  * @param max
  */
 export const clampAnd =
-  (val: number, min: number, max: number) =>
-  (and: (clamped: number) => void) => {
+  (val: number, min: number, max: number) => (and: (clamped: number) => void) => {
     const clamped = clamp(val, min, max)
     if (clamped !== val) {
       and(clamped)
     }
   }
-
-  

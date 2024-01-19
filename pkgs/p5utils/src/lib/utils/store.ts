@@ -20,7 +20,7 @@ export const makeStore = <T extends Object>() => {
    * update field of state using old value. It will renew the whole state object
    */
   const update = <K extends keyof T>(key: K, val: ((v: T[K]) => T[K]) | T[K]) => {
-    if(val instanceof Function) {
+    if (val instanceof Function) {
       _update(key, val(data[key]))
     } else {
       _update(key, val)

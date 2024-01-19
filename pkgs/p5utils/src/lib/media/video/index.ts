@@ -1,5 +1,5 @@
 import { once } from '../../utils/fp'
-import { makeRandomArrayPicker, randomIntBetween } from "src/lib/utils/random"
+import { makeRandomItemPicker as makeRandomArrayPicker, randomIntBetween } from "utils"
 import { centerPosition, restrain, restrainedRegion } from './magnify'
 import { magnifyCandidates, partialParse } from './pixels'
 import {

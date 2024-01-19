@@ -22,16 +22,11 @@ export function randomColor(alpha = 255) {
 /**
  * change color variables with delta values
  */
-export function moveColor(
-  c: p5.Color,
-  r: number,
-  g: number,
-  b: number,
-  a = 0
-): p5.Color {
+export function moveColor(c: p5.Color, r: number, g: number, b: number, a = 0): p5.Color {
   return p.color(p.red(c) + r, p.green(c) + g, p.blue(c) + b, p.alpha(c) + a)
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function pushPop(cb: Function) {
   p.push()
   cb()
@@ -61,11 +56,7 @@ export function colorCopy(color: p5.Color) {
 /**
  * convert degree into vector
  */
-export const degree2Vector = (
-  theta: number,
-  phi: number,
-  velocity: number
-): p5.Vector => {
+export const degree2Vector = (theta: number, phi: number, velocity: number): p5.Vector => {
   const rad1 = p.radians(theta)
   const rad2 = p.radians(phi)
   return p5.Vector.fromAngles(rad1, rad2, velocity)
@@ -85,10 +76,7 @@ export const clickCapture = () => {
  * @param vec
  */
 export const shakeVector = (vec: p5.Vector, shake: number) =>
-  p.createVector(
-    vec.x + randomIntBetween(-shake, shake),
-    vec.y + randomIntBetween(-shake, shake)
-  )
+  p.createVector(vec.x + randomIntBetween(-shake, shake), vec.y + randomIntBetween(-shake, shake))
 
 export const shakeVector3D = (vec: p5.Vector, shake: number) =>
   p.createVector(

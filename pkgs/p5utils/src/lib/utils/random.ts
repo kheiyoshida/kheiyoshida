@@ -46,8 +46,8 @@ export const wobbleInt = (range: number) => (n: number) => {
 
 /**
  * create shuffled array
- * @param array 
- * @returns 
+ * @param array
+ * @returns
  */
 export const shuffle = <T>(array: T[]) => {
   const len = Number(array.length)

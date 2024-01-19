@@ -127,6 +127,9 @@ importers:
       mgnr-tone-presets:
         specifier: workspace:^
         version: link:../../pkgs/mgnr-tone-presets
+      p5utils:
+        specifier: workspace:^
+        version: link:../../pkgs/p5utils
       tone:
         specifier: ^14.7.77
         version: 14.7.77
@@ -232,6 +235,13 @@ importers:
       p5:
         specifier: ^1.9.0
         version: 1.9.0
+      utils:
+        specifier: workspace:^
+        version: link:../utils
+    devDependencies:
+      '@types/p5':
+        specifier: ^1.7.6
+        version: 1.7.6
 
   pkgs/utils:
     dependencies:
@@ -2454,6 +2464,10 @@ packages:
 
   /@types/p5@1.7.4:
     resolution: {integrity: sha512-cMF3SvlBSzJV9m3enUYBx9UvJmQP9fxmPS17EDtYJVCQwwNMc/BRrDtHUHaxZH+BhuESNuUnfUKNVpJIjRT+Xw==}
+    dev: true
+
+  /@types/p5@1.7.6:
+    resolution: {integrity: sha512-6pLTOo0V3N5jZb5nTwjiv3lPHLK3Z/TjbhQUj8CTWXocUk1Z/f6OHTp3Pcwi1BhWnf5gqKUcyEb1gP0KIJuQgw==}
     dev: true
 
   /@types/prop-types@15.7.11:
