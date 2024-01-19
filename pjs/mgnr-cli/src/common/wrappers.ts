@@ -87,6 +87,7 @@ export class CliSequenceGenerator extends SequenceGenerator {
   }
   flush() {
     this.eraseSequenceNotes()
+    this.loopHandler = undefined
   }
   loopHandler?: (g: CliSequenceGenerator, s: CliScale) => void
   onLoop(cb: typeof CliSequenceGenerator.prototype.loopHandler) {
@@ -102,17 +103,21 @@ export class CliSequenceGenerator extends SequenceGenerator {
     }
   }
 
+  remove(rate: number) {
+    this.sequence.deleteRandomNotes(rate)
+  }
+
   logName: string = ''
   logState(): LogItem {
     return {
       _: this.logName,
-      len: this.sequence.length,
-      notes: this.sequence.numOfNotes,
-      density: this.sequence.density,
+      l: this.sequence.length,
+      n: this.sequence.numOfNotes,
+      den: this.sequence.density,
       dur: convertRange(this.picker.conf.noteDur),
       vel: convertRange(this.picker.conf.noteVel),
-      fill: this.picker.conf.fillStrategy,
-      poly: this.sequence.poly,
+      f: this.picker.conf.fillStrategy,
+      p: this.sequence.poly ? 'poly' : 'mono',
       h: this.picker.conf.harmonizer ? this.picker.conf.harmonizer['degree'] : '',
     }
   }
