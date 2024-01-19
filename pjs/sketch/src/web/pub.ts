@@ -5,8 +5,6 @@ export const published: string[] = [
   'shinjuku',
   'spiders',
   'wasted',
-  'flower',
   'tp4',
   'mgnr-demo',
-  'mgnr-poc',
 ]
