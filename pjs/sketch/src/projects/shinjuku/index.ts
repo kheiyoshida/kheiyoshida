@@ -1,21 +1,22 @@
+/* eslint-disable no-extra-semi */
 import p5 from 'p5'
+import { iterateMatrix } from 'p5utils/src/lib/data/matrix/matrix'
 import {
   callContext,
   createAnalyzer,
   createSoundSource,
-} from 'src/lib/media/audio/analyzer'
-import { FFTSize } from 'src/lib/media/audio/types'
-import { random, randomItemFromArray, wobbleInt } from "src/lib/utils/random"
+} from 'p5utils/src/lib/media/audio/analyzer'
+import { FFTSize } from 'p5utils/src/lib/media/audio/types'
 import {
   calcPixelSize,
   makeParseOptionSelector,
   makeVideoSupply,
   parseVideo,
-} from 'src/lib/media/video'
-import { brightness } from 'src/lib/media/video/analyze'
-import { iterateMatrix } from '../../lib/data/matrix/matrix'
+} from 'p5utils/src/lib/media/video'
+import { brightness } from 'p5utils/src/lib/media/video/analyze'
+import { fireByRate as random, randomItemFromArray, makeIntWobbler } from 'utils'
+import { requireMusic } from '../../assets'
 import { videoSource } from './source'
-import { requireMusic } from 'src/assets'
 
 const VIDEO_PARSE_PX_WIDTH = 160
 
@@ -60,17 +61,22 @@ const setup = () => {
 
   const play = () => {
     start()
-    videoSupply = makeVideoSupply(videoSource, { speed: 0.1 }, (videos) => {
-      parseOptions = makeParseOptionSelector(videos[0], VIDEO_PARSE_PX_WIDTH)
-    }, () => soundSource.play())
+    videoSupply = makeVideoSupply(
+      videoSource,
+      { speed: 0.1 },
+      (videos) => {
+        parseOptions = makeParseOptionSelector(videos[0], VIDEO_PARSE_PX_WIDTH)
+      },
+      () => soundSource.play()
+    )
   }
 
   p.mousePressed = play
   p.touchStarted = play
 }
 
-const wobble10 = wobbleInt(10)
-const wobble2 = wobbleInt(2)
+const wobble10 = makeIntWobbler(10)
+const wobble2 = makeIntWobbler(2)
 
 const draw = () => {
   p.rect(-1, -1, cw + 1, ch + 1)
@@ -78,10 +84,10 @@ const draw = () => {
 
   const video = (random(0.98) ? videoSupply.supply : videoSupply.renew)()
   if (random(0.2)) {
-    const superWobble = wobbleInt(Math.min(ch, cw) / 4)
+    const superWobble = makeIntWobbler(Math.min(ch, cw) / 4)
     parseOptions.changePosition((position) => ({
       x: superWobble(position.x),
-      y: superWobble(position.y)
+      y: superWobble(position.y),
     }))
     parseOptions.randomMagnify()
     videoSupply.updateOptions({

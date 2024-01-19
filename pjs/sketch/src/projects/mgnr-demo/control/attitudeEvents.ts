@@ -1,4 +1,4 @@
-import { moveColor } from 'src/lib/utils/p5utils'
+import { moveColor } from 'p5utils/src/lib/utils/p5utils'
 import {
   EventThresholdFrameNumber1,
   EventThresholdFrameNumber2,

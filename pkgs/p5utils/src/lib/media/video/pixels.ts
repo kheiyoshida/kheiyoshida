@@ -1,6 +1,7 @@
-import { getCommonDivisors, getFloatDivisors } from "src/lib/utils/calc"
+import { getCommonDivisors, getFloatDivisors } from 'utils'
 import { leftTopIze } from './magnify'
 import { MediaSize, PixelPosition } from './types'
+import { RGBA, RGBAMatrix } from '../../data/matrix/types'
 
 /**
  * create a map of the candidates for skip/resolution for a given size
@@ -16,11 +17,7 @@ export const resolutionCandidates = (size: MediaSize) =>
 /**
  * list all the eligible magnify rates
  */
-export const magnifyCandidates = (
-  videoSize: MediaSize,
-  resolution: number,
-  bindHeight = false
-) => {
+export const magnifyCandidates = (videoSize: MediaSize, resolution: number, bindHeight = false) => {
   try {
     const candidates = getFloatDivisors(videoSize.width / resolution)
     if (!bindHeight) return candidates
@@ -28,11 +25,7 @@ export const magnifyCandidates = (
   } catch (e) {
     console.warn(
       `maybe setting wrong candidate for resolution. ${resolution}
-      the candidates would be: ${JSON.stringify(
-        resolutionCandidates(videoSize),
-        null,
-        4
-      )}`
+      the candidates would be: ${JSON.stringify(resolutionCandidates(videoSize), null, 4)}`
     )
     throw e
   }
@@ -80,5 +73,3 @@ export const partialParse = (
   }
   return matrix
 }
-
-const validate = () => {}

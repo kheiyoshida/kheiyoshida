@@ -1,11 +1,12 @@
 import { MediaElement } from 'p5'
+import { RGBAMatrix } from '../../data/matrix/types'
 
 export type p5VideoElement = MediaElement & {
   loadPixels: () => void
   pixels: Uint8ClampedArray
 }
 
-export type VideoSize = { width: number, height: number }
+export type VideoSize = { width: number; height: number }
 
 export type VideoSource = string
 export type GetVideoSource = () => VideoSource
@@ -33,7 +34,7 @@ export type MediaSize = {
 }
 
 export type PixelPosition = {
-  x: number,
+  x: number
   y: number
 }
 

@@ -1,4 +1,5 @@
 import { createEmptyMatrix, lookupMatrix, swapMatrix } from './matrix'
+import { Matrix } from './types'
 
 test(`swapMatrix`, () => {
   const matrix: Matrix<boolean> = [

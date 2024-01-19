@@ -1,15 +1,16 @@
 {
   "name": "p5utils",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cd ../.. && jest --selectProjects p5utils",
+    "test:coverage": "cd ../.. && jest --selectProjects p5utils --coverage"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "p5": "^1.9.0"
+    "p5": "^1.9.0",
+    "utils": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/p5": "^1.7.6"
   }
 }

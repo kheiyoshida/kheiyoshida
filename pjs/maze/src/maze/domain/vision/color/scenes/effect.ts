@@ -1,5 +1,5 @@
-import { randomColorVector } from 'src/lib/p5utils/color'
-import { createRandomSelect } from 'src/lib/random'
+import { randomColorVector } from 'p5utils/src/lib/p5utils/color'
+import { createRandomSelect } from 'p5utils/src/lib/random'
 import { ManipMap, ParameterizeState, bundleScene } from '.'
 import { getPalette } from '../palette'
 import {

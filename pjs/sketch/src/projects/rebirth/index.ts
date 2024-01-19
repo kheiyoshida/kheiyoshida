@@ -1,6 +1,6 @@
 import p5 from 'p5'
-import { destVect, vline } from 'src/lib/utils/p5utils'
-import { randomBetween } from "src/lib/utils/random"
+import { destVect, vline } from 'p5utils/src/lib/utils/p5utils'
+import { randomFloatBetween as randomBetween } from "utils"
 import { Wing } from './wing'
 
 let cw: number
@@ -35,7 +35,7 @@ const randomVect = () =>
 const draw = () => {
   p.rect(-1, -1, cw + 1, ch + 1)
 
-  let died = []
+  const died = []
   for (const w of ws) {
     w.grow()
     const res = w.grow()
@@ -45,7 +45,7 @@ const draw = () => {
   }
 
   if (died.length) {
-    let newws = []
+    const newws = []
     for (const w of ws) {
       if (!died.includes(w)) {
         newws.push(w)
@@ -63,12 +63,6 @@ const draw = () => {
   // randomGradation(fillColor)
   fillColor.setAlpha(Math.max(20, rangedBetween(p.alpha(fillColor), 50, 100)))
   p.fill(fillColor)
-}
-
-const randomGradation = (c: p5.Color) => {
-  c.setBlue(rangedBetween(p.blue(c), 30, 50))
-  c.setGreen(rangedBetween(p.green(c), 1, 10))
-  c.setRed(rangedBetween(p.red(c), 3, 10))
 }
 
 const rangedBetween = (base: number, range: number, limit: number) => {

@@ -1,5 +1,4 @@
-import { once } from '../../utils/fp'
-import { makeRandomArrayPicker, randomIntBetween } from "src/lib/utils/random"
+import { makeRandomItemPicker as makeRandomArrayPicker, once, randomIntBetween } from 'utils'
 import { centerPosition, restrain, restrainedRegion } from './magnify'
 import { magnifyCandidates, partialParse } from './pixels'
 import {
@@ -8,7 +7,7 @@ import {
   SupplyVideo,
   SupplyVideoOption,
   VideoSourceList,
-  p5VideoElement
+  p5VideoElement,
 } from './types'
 
 const vs = (video: p5VideoElement) => ({
@@ -17,9 +16,7 @@ const vs = (video: p5VideoElement) => ({
 })
 
 const loadVideoSourceList = (sourceList: VideoSourceList): p5VideoElement[] => {
-  const videoElements = sourceList.map(
-    (s) => p.createVideo(s) as p5VideoElement
-  )
+  const videoElements = sourceList.map((s) => p.createVideo(s) as p5VideoElement)
   videoElements.forEach((video) => {
     video.attribute('playsinline', 'true')
     video.hideControls()
@@ -98,17 +95,14 @@ export const makeVideoSupply = (
   }
 }
 
-export const makeParseOptionSelector = (
-  video: p5VideoElement,
-  resolution: number
-) => {
+export const makeParseOptionSelector = (video: p5VideoElement, resolution: number) => {
   const videoSize = vs(video)
   const magCandidates = magnifyCandidates(videoSize, resolution)
   const sizeCandidates = magCandidates.map((mag) => ({
     width: videoSize.width / mag,
     height: videoSize.height / mag,
   }))
-  const restrained = sizeCandidates.map(magSize => restrainedRegion(videoSize, magSize))
+  const restrained = sizeCandidates.map((magSize) => restrainedRegion(videoSize, magSize))
 
   let position = { x: video.width / 2, y: video.height / 2 }
   let magnifyLevel = 1
@@ -130,22 +124,16 @@ export const makeParseOptionSelector = (
     if (mag < magCandidates.length) {
       magnifyLevel = mag
     }
-    throw Error(
-      `range error: available magnify is: ${JSON.stringify(magCandidates)}`
-    )
+    throw Error(`range error: available magnify is: ${JSON.stringify(magCandidates)}`)
   }
 
   const getCurrentPosition = () => {
-    position = 
-      magnifyLevel !== 1
-        ? restrain(getRestrained(), getPosition())
-        : centerPosition(videoSize)
+    position =
+      magnifyLevel !== 1 ? restrain(getRestrained(), getPosition()) : centerPosition(videoSize)
     return position
   }
 
-  const changePosition = (
-    change: (position: PixelPosition) => PixelPosition
-  ) => {
+  const changePosition = (change: (position: PixelPosition) => PixelPosition) => {
     const newPosition = change(getPosition())
     position = restrain(getRestrained(), newPosition)
   }
@@ -163,23 +151,16 @@ export const makeParseOptionSelector = (
 
 export const parseVideo = (
   video: ReturnType<SupplyVideo>,
-  {
-    size,
-    skip,
-    position,
-  }: ReturnType<ReturnType<typeof makeParseOptionSelector>['get']>
+  { size, skip, position }: ReturnType<ReturnType<typeof makeParseOptionSelector>['get']>
 ) => {
   const videoSize = vs(video)
   video.loadPixels()
   return partialParse(video.pixels, videoSize, skip, size, position)
 }
 
-export const calcPixelSize = once((
-  { width, height }: MediaSize,
-  skip: number,
-  canvasWidth: number,
-  canvasHeight: number
-) => ({
-  pxw: canvasWidth / Math.ceil(width / skip),
-  pxh: canvasHeight / Math.ceil(height / skip),
-}))
+export const calcPixelSize = once(
+  ({ width, height }: MediaSize, skip: number, canvasWidth: number, canvasHeight: number) => ({
+    pxw: canvasWidth / Math.ceil(width / skip),
+    pxh: canvasHeight / Math.ceil(height / skip),
+  })
+)

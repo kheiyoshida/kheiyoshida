@@ -1,7 +1,7 @@
+/* eslint-disable no-extra-semi */
 import p5, { Geometry } from 'p5'
-import { Shape, ShapeNode } from 'src/lib/data/shape/types'
-import { calcPerpendicularVector } from 'src/lib/data/shape/utils'
-import { pushPop } from 'src/lib/utils/p5utils'
+import { Shape, ShapeNode } from '../../data/shape/types'
+import { calcPerpendicularVector } from '../../data/shape/utils'
 
 type pExtended = p5 & { beginGeometry: any; endGeometry: any }
 
@@ -14,9 +14,7 @@ export const geometryFromShape = (shape: Shape): Geometry => {
     ;[0, 1, 2, 3].forEach((surfaceNumber) =>
       createSurface(
         node,
-        node.vertices
-          .filter((v, i) => i !== surfaceNumber)
-          .map((v) => v.position),
+        node.vertices.filter((v, i) => i !== surfaceNumber).map((v) => v.position),
         node.vertices[surfaceNumber].position
       )
     )
@@ -24,11 +22,7 @@ export const geometryFromShape = (shape: Shape): Geometry => {
   return (p as pExtended).endGeometry()
 }
 
-const createSurface = (
-  node: ShapeNode,
-  vectors: p5.Vector[],
-  surfaceVector: p5.Vector
-) => {
+const createSurface = (node: ShapeNode, vectors: p5.Vector[], surfaceVector: p5.Vector) => {
   p.beginShape(p.TRIANGLES)
   const fromNode = vectors.map((v) => node.position.copy().sub(v))
   const normal = calcPerpendicularVector(fromNode)
@@ -38,11 +32,6 @@ const createSurface = (
   p.normal(normal)
   vectors.forEach(vectorVertex)
   p.endShape()
-
-  // pushPop(() => {
-  //   p.translate(node.position)
-  //   p.box(2)
-  // })
 }
 
 const vectorVertex = (v: p5.Vector) => {

@@ -12,21 +12,9 @@ export const calcPerpendicularVector = ([v1, v2, v3]: Vector[]) =>
 export const calcCenter = (vectors: Vector[]) => {
   return new Vector(
     ...vectors
-      .reduce(
-        (prev, curr) => curr.array().map((value, i) => prev[i] + value),
-        [0, 0, 0]
-      )
+      .reduce((prev, curr) => curr.array().map((value, i) => prev[i] + value), [0, 0, 0])
       .map((value) => value / vectors.length)
   )
-}
-
-/**
- * determine shared vertices to use from the connected edges
- * @param edges
- */
-export const collectSharedVertices = (edges: ShapeNode[]): Vertex[] => {
-  //
-  throw Error()
 }
 
 /**
@@ -34,10 +22,8 @@ export const collectSharedVertices = (edges: ShapeNode[]): Vertex[] => {
  * @param node
  * @param surface
  */
-export const calcDistanceFromSurface = (
-  node: ShapeNode,
-  surface: Vertex[]
-): number => node.position.dist(calcCenter(surface.map((v) => v.position)))
+export const calcDistanceFromSurface = (node: ShapeNode, surface: Vertex[]): number =>
+  node.position.dist(calcCenter(surface.map((v) => v.position)))
 
 /**
  * get the nearest vertices from the vertices of nodes' edges
@@ -53,10 +39,7 @@ export const getNearestVertices = (
   const sortedEdges = edgesWithVertices.map((edge) =>
     edge.vertices
       .slice()
-      .sort(
-        (a, b) =>
-          node.position.dist(a.position) - node.position.dist(b.position)
-      )
+      .sort((a, b) => node.position.dist(a.position) - node.position.dist(b.position))
   )
   const pickVertices = edgesWithVertices.length === 1 ? 3 : 4
   let cursor = 0

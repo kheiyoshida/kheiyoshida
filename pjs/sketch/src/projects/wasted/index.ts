@@ -4,17 +4,17 @@ import {
   callContext,
   createAnalyzer,
   createSoundSource,
-} from 'src/lib/media/audio/analyzer'
-import { FFTSize } from 'src/lib/media/audio/types'
-import { drawLineBetweenVectors } from 'src/lib/render/drawers/draw'
-import { mapToSphere } from 'src/lib/render/helpers/sphere'
-import { instruction } from "src/lib/utils/project"
-import { changingNumber } from "src/lib/utils/variable"
+} from 'p5utils/src/lib/media/audio/analyzer'
+import { FFTSize } from 'p5utils/src/lib/media/audio/types'
+import { drawLineBetweenVectors } from 'p5utils/src/lib/render/drawers/draw'
+import { mapToSphere } from 'p5utils/src/lib/render/helpers/sphere'
+import { instruction } from "p5utils/src/lib/utils/project"
+import { makePingpongNumberStore as changingNumber } from "utils"
 import {
-  randomBetween,
+  randomFloatBetween as randomBetween,
   randomIntBetween
-} from "src/lib/utils/random"
-import { degree2Vector, pushPop } from 'src/lib/utils/p5utils'
+} from "utils"
+import { degree2Vector, pushPop } from 'p5utils/src/lib/utils/p5utils'
 
 let cw: number
 let ch: number

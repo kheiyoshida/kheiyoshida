@@ -1,4 +1,5 @@
-import { randomIntBetween } from "src/lib/utils/random"
+import { randomIntBetween } from "utils"
+import { Matrix, MatrixDirection, MatrixDraw, MatrixLoc } from "./types"
 
 export const iterateMatrix = <T>(matrix: T[][], draw: MatrixDraw<T>) => {
   matrix.forEach((row, y) => {

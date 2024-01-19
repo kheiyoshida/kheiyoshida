@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { randomBetween } from '../random'
+import { randomFloatBetween as randomBetween } from 'utils'
 
 /**
  * generate random color, alpha can be inherited
@@ -46,11 +46,7 @@ export function colorCopy(color: p5.Color) {
  * @param min minimum alpha
  * @returns same color object
  */
-export const transColor = (
-  color: p5.Color,
-  val: number,
-  min?: number
-): p5.Color => {
+export const transColor = (color: p5.Color, val: number, min?: number): p5.Color => {
   const c = colorCopy(color)
   const newAlpha = p.alpha(c) + val
   if (min !== undefined && newAlpha < min) return c

@@ -6,6 +6,7 @@ import {
   growRegion,
   randomSeed,
 } from './region'
+import { RegionMatrix } from './types'
 
 test(`checkAdjacent`, () => {
   const matrix: RegionMatrix = [

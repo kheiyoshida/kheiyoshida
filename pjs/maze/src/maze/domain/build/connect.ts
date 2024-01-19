@@ -1,4 +1,4 @@
-import { random } from "src/lib/random"
+import { random } from "p5utils/src/lib/random"
 import { Matrix, getAllAdjacentNodes } from '../matrix'
 import { iterateEachNode } from '../matrix/iterate'
 import { connectNodes, makeShortestPath } from '../matrix/path'

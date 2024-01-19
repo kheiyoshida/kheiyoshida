@@ -38,7 +38,7 @@ export const applyConfig = ({
   strokeColor,
   strokeWeight,
   frameRate,
-  webgl
+  webgl,
 }: SketchConfigStore) => {
   p.createCanvas(cw, ch, webgl ? p.WEBGL : p.P2D)
   p.background(fillColor)

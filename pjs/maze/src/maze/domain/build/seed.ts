@@ -1,4 +1,4 @@
-import { random } from "src/lib/random"
+import { random } from "p5utils/src/lib/random"
 import { retry } from '../../utils/retry'
 import { Matrix, countNodes, putNode } from '../matrix'
 import { iteratePosition } from '../matrix/iterate'

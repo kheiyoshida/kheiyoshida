@@ -1,4 +1,4 @@
-import { randomItemFromArray } from "src/lib/utils/random"
+import { randomItemFromArray } from 'utils'
 import {
   MatrixRangeError,
   createEmptyMatrix,
@@ -6,9 +6,9 @@ import {
   iterateMatrix,
   lookupMatrix,
   randomMatrixLoc,
-  sumLocation,
-  swapMatrix,
+  swapMatrix
 } from './matrix'
+import { MatrixDirection, MatrixLoc, RegionMatrix } from './types'
 
 export const createRegion = (sizeX: number, sizeY: number): RegionMatrix => {
   return createEmptyMatrix(sizeX, sizeY, false)
@@ -17,20 +17,6 @@ export const createRegion = (sizeX: number, sizeY: number): RegionMatrix => {
 export const randomSeed = (matrix: RegionMatrix) => {
   const init = randomMatrixLoc(matrix)
   swapMatrix(matrix, init, true)
-}
-
-/**
- * swap collection of cells based off vector shape
- */
-const invade = (
-  matrix: RegionMatrix,
-  start: MatrixLoc,
-  direction: RegionVector
-) => {
-  for (const vec of direction) {
-    const dest = sumLocation(start, vec)
-    swapMatrix(matrix, dest, true)
-  }
 }
 
 /**
@@ -56,15 +42,10 @@ export const growRegion = (matrix: RegionMatrix) => {
   return matrix
 }
 
-export const shrinkRegion = () => {}
-
 /**
  * check adjacent cells' availability
  */
-export const checkAdjacent = (
-  matrix: RegionMatrix,
-  loc: MatrixLoc
-): MatrixDirection[] => {
+export const checkAdjacent = (matrix: RegionMatrix, loc: MatrixLoc): MatrixDirection[] => {
   return (['t', 'r', 'b', 'l'] as MatrixDirection[]).filter((d) =>
     lookupRegion(matrix, directionLoc(loc, d))
   )
@@ -85,8 +66,7 @@ export const randomRegionEdge = (
   if (adj.length > 0) {
     return directionLoc(loc, randomItemFromArray(adj))
   } else {
-    if (retry < 100)
-      return randomRegionEdge(matrix, direction, [...tried, loc], retry + 1)
+    if (retry < 100) return randomRegionEdge(matrix, direction, [...tried, loc], retry + 1)
     else
       throw Error(
         `recursion exceeded max retry: ${JSON.stringify(

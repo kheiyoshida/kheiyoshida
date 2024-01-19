@@ -1,4 +1,4 @@
-import { getRandomMod } from 'src/lib/random'
+import { getRandomMod } from 'p5utils/src/lib/random'
 import { Conf } from 'src/maze/config'
 import { Frame } from '.'
 import { DrawPoint } from '../draw/patterns/factory'

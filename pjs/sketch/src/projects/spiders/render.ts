@@ -1,8 +1,7 @@
-import { shakyLineBetweenVectors2D } from 'src/lib/render/drawers/draw'
-import { randomIntBetween } from 'src/lib/utils/random'
+import { shakyLineBetweenVectors2D } from 'p5utils/src/lib/render/drawers/draw'
+import { shakeVector } from 'p5utils/src/lib/utils/p5utils'
 import { Graph } from './graph'
 import { Node } from './node'
-import { shakeVector } from 'src/lib/utils/p5utils'
 
 export const render = (graph: Graph) => {
   renderNodes(graph)
@@ -10,6 +9,7 @@ export const render = (graph: Graph) => {
 }
 
 const renderNode = (node: Node) => {
+  // eslint-disable-next-line no-extra-semi
   ;[...Array(10)].map((_) => {
     const position = shakeVector(node.position, 2)
     p.circle(position.x,position.y, 4)
