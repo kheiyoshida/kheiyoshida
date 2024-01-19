@@ -1,7 +1,7 @@
 import p5 from 'p5'
 import { drawLineBetweenVectors2D } from 'p5utils/src/lib/render/drawers/draw'
 import { destVect } from 'p5utils/src/lib/utils/p5utils'
-import { randomBetween } from 'p5utils/src/lib/utils/random'
+import { randomFloatBetween as randomBetween } from 'utils'
 
 export type Gene = {
   v: p5.Vector

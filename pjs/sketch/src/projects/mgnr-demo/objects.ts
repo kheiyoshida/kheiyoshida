@@ -3,7 +3,7 @@ import { connect } from 'p5utils/src/lib/data/graph/node'
 import { calculateVertices, createInitialNode } from 'p5utils/src/lib/data/shape/create'
 import { ShapeNode } from 'p5utils/src/lib/data/shape/types'
 import { geometryFromShape } from 'p5utils/src/lib/render/shape'
-import { randomIntBetween, shuffle } from 'p5utils/src/lib/utils/random'
+import { randomIntBetween, createShuffledArray as shuffle } from 'utils'
 
 const createStaticNode = (position: p5.Vector, distanceFromNode: number) => {
   return createInitialNode(

@@ -1,6 +1,7 @@
 import { getCommonDivisors, getFloatDivisors } from 'utils'
 import { leftTopIze } from './magnify'
 import { MediaSize, PixelPosition } from './types'
+import { RGBA, RGBAMatrix } from '../../data/matrix/types'
 
 /**
  * create a map of the candidates for skip/resolution for a given size
@@ -72,5 +73,3 @@ export const partialParse = (
   }
   return matrix
 }
-
-const validate = () => {}

@@ -10,7 +10,7 @@ import {
   applyConfig,
   instruction,
 } from 'p5utils/src/lib/utils/project'
-import { makeStore } from 'p5utils/src/lib/utils/store'
+import { makeStore } from 'utils'
 import {
   cleanGraph,
   connectGraph,

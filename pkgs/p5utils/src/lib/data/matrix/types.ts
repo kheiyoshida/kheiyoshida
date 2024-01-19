@@ -1,17 +1,17 @@
-type RGBA = [number, number, number, number]
+export type RGBA = [number, number, number, number]
 
-type Matrix<T> = T[][]
-type RGBAMatrix = Matrix<RGBA>
-type ContrastMatrix = Matrix<number | null>
-type RegionMatrix = Matrix<boolean>
+export type Matrix<T> = T[][]
+export type RGBAMatrix = Matrix<RGBA>
+export type ContrastMatrix = Matrix<number | null>
+export type RegionMatrix = Matrix<boolean>
 
-type MatrixLoc = [number, number]
+export type MatrixLoc = [number, number]
 
 /**
  * collection of relative values that indicates cells to invade
  */
-type RegionVector = MatrixLoc[]
+export type RegionVector = MatrixLoc[]
 
-type MatrixDirection = 't' | 'r' | 'b' | 'l' | 'tr' | 'br' | 'bl' | 'tl'
+export type MatrixDirection = 't' | 'r' | 'b' | 'l' | 'tr' | 'br' | 'bl' | 'tl'
 
-type MatrixDraw<T> = (x: number, y: number, val: T) => void
+export type MatrixDraw<T> = (x: number, y: number, val: T) => void

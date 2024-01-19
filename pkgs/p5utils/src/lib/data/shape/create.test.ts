@@ -20,13 +20,8 @@ const createDefaultNode = () =>
     { distanceFromNode: 50 }
   )
 
-const PI = 3.14159265359
-const radToDegrees = (rad: number) => ((2 * rad) / PI) * 360
-
 describe('calculateVertices', () => {
-  it.todo(
-    'should map vertices to each node and create a node list for the entire graph'
-  )
+  it.todo('should map vertices to each node and create a node list for the entire graph')
 })
 
 describe('collectEdgeVertices', () => {

@@ -1,4 +1,5 @@
 import { MediaElement } from 'p5'
+import { RGBAMatrix } from '../../data/matrix/types'
 
 export type p5VideoElement = MediaElement & {
   loadPixels: () => void

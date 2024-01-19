@@ -1,6 +1,6 @@
 import p5 from 'p5'
-import { destVect, vline } from 'p5utils/src/lib/utils/p5utils'
-import { randomBetween } from "p5utils/src/lib/utils/random"
+import { destVect } from 'p5utils/src/lib/utils/p5utils'
+import { randomFloatBetween as randomBetween } from "utils"
 
 export class Wing {
   private vertices: p5.Vector[] = []

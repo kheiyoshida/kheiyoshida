@@ -18,15 +18,6 @@ export const calcCenter = (vectors: Vector[]) => {
 }
 
 /**
- * determine shared vertices to use from the connected edges
- * @param edges
- */
-export const collectSharedVertices = (edges: ShapeNode[]): Vertex[] => {
-  //
-  throw Error()
-}
-
-/**
  * get the distance between node and surface (vertices of 3)
  * @param node
  * @param surface

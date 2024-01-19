@@ -9,7 +9,7 @@ import { FFTSize } from 'p5utils/src/lib/media/audio/types'
 import { drawLineBetweenVectors } from 'p5utils/src/lib/render/drawers/draw'
 import { mapToSphere } from 'p5utils/src/lib/render/helpers/sphere'
 import { instruction } from "p5utils/src/lib/utils/project"
-import { randomBetween } from "p5utils/src/lib/utils/random"
+import { randomFloatBetween as randomBetween } from "utils"
 import { degree2Vector, pushPop } from 'p5utils/src/lib/utils/p5utils'
 
 let cw: number

@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { randomBetween, randomIntBetween } from './random'
+import { randomFloatBetween as randomBetween, randomIntBetween } from 'utils'
 
 export const gridPoint = (unit = 100) => {
   for (let i = 0; i <= p.width; i += unit) {

@@ -14,8 +14,7 @@ import {
   parseVideo,
 } from 'p5utils/src/lib/media/video'
 import { brightness } from 'p5utils/src/lib/media/video/analyze'
-import { wobbleInt } from 'p5utils/src/lib/utils/random'
-import { fireByRate as random, randomItemFromArray } from 'utils'
+import { fireByRate as random, randomItemFromArray, makeIntWobbler } from 'utils'
 import { requireMusic } from '../../assets'
 import { videoSource } from './source'
 
@@ -76,8 +75,8 @@ const setup = () => {
   p.touchStarted = play
 }
 
-const wobble10 = wobbleInt(10)
-const wobble2 = wobbleInt(2)
+const wobble10 = makeIntWobbler(10)
+const wobble2 = makeIntWobbler(2)
 
 const draw = () => {
   p.rect(-1, -1, cw + 1, ch + 1)
@@ -85,7 +84,7 @@ const draw = () => {
 
   const video = (random(0.98) ? videoSupply.supply : videoSupply.renew)()
   if (random(0.2)) {
-    const superWobble = wobbleInt(Math.min(ch, cw) / 4)
+    const superWobble = makeIntWobbler(Math.min(ch, cw) / 4)
     parseOptions.changePosition((position) => ({
       x: superWobble(position.x),
       y: superWobble(position.y),

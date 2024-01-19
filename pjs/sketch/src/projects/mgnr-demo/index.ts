@@ -1,6 +1,6 @@
 import p5 from 'p5'
 import { applyConfig } from 'p5utils/src/lib/utils/project'
-import { randomIntBetween } from 'p5utils/src/lib/utils/random'
+import { randomIntBetween } from 'utils'
 import * as Tone from 'tone'
 import { randomIntInclusiveBetween } from 'utils'
 import { FrameRate, SECONDS_TO_CHANGE_ATTITUDE, fieldRange, treeRange } from './constants'

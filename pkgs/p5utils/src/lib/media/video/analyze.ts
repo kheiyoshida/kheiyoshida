@@ -1,4 +1,5 @@
 import { createEmptyMatrix } from '../../data/matrix/matrix'
+import { RGBA, RGBAMatrix } from '../../data/matrix/types'
 
 export const brightness = ([r, g, b]: RGBA) => (299 * r + 587 * g + 114 * b) / 1000
 

@@ -1,5 +1,5 @@
 import { SketchConfigStore, applyConfig } from 'p5utils/src/lib/utils/project'
-import { makeStore } from 'p5utils/src/lib/utils/store'
+import { makeStore } from 'utils'
 
 const store = makeStore<SketchConfigStore>()
 

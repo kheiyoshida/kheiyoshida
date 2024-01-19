@@ -1,6 +1,6 @@
 import { SketchConfigStore, applyConfig } from 'p5utils/src/lib/utils/project'
-import { randomBetween } from 'p5utils/src/lib/utils/random'
-import { makeStore } from 'p5utils/src/lib/utils/store'
+import { randomFloatBetween as randomBetween } from 'utils'
+import { makeStore } from 'utils'
 import { expand } from 'p5utils/src/lib/render/helpers/expand'
 import { Gene, grow } from './gene'
 
