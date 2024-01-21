@@ -1,9 +1,7 @@
 import { LogData } from 'stream/src/types'
 import { CliScale, CliSequenceGenerator } from './wrappers'
 
-const STREAM_URL = 'localhost:8080'
-
-export function sendLogStream(generators: CliSequenceGenerator[], scales: CliScale[]) {
+export function setupLogStream(generators: CliSequenceGenerator[], scales: CliScale[]) {
   let time = 0
   const interval = 250
   setInterval(() => {
@@ -18,8 +16,9 @@ export function sendLogStream(generators: CliSequenceGenerator[], scales: CliSca
   }, interval)
 }
 
+const STREAM_URL = 'http://localhost:8080/log'
 export async function sendStream(log: LogData) {
-  await fetch(`http://${STREAM_URL}`, {
+  await fetch(STREAM_URL, {
     method: 'POST',
     body: JSON.stringify(log),
     headers: { 'Content-Type': 'application/json' },

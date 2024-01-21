@@ -1,5 +1,5 @@
 import * as repl from 'node:repl'
-import { main } from './session/1'
+import { main } from './session/2'
 
 function startCliSession() {
   try {

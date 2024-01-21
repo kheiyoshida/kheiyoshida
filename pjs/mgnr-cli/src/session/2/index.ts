@@ -1,7 +1,7 @@
 import { ScaleConf } from 'mgnr-core/src/generator/scale/Scale'
 import { MidiPort } from 'mgnr-midi/src/Port'
 import { createGenerator, createScale } from '../../common'
-import { setupLogStream, sendStream } from '../../common/log'
+import { setupLogStream } from '../../common/log'
 import { createChannelOutlet } from '../../common/setup'
 
 export function main() {
@@ -10,7 +10,7 @@ export function main() {
   const outlet2 = createChannelOutlet(port, 2)
   const outlet3 = createChannelOutlet(port, 3)
 
-  const s1 = createScale('C', 'major', { min: 50, max: 80 })
+  const s1 = createScale('A', 'omit25', { min: 50, max: 80 })
   const g1 = createGenerator({
     division: 16,
     length: 8,
@@ -52,7 +52,7 @@ export function main() {
     ctx.repeatLoop()
   })
 
-  const s2 = createScale('C', 'omit25', { min: 34, max: 60 })
+  const s2 = createScale('A', 'major', { min: 34, max: 80 })
   const g3 = createGenerator({
     division: 16,
     length: 8,
@@ -96,6 +96,5 @@ export function main() {
       s1.mutateKey(key, stages)
       s2.mutateKey(key, stages)
     },
-    sendLog: sendStream,
   }
 }

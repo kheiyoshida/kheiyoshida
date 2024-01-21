@@ -9,8 +9,10 @@
     "test": "cd ../.. && jest --selectProjects sketch"
   },
   "dependencies": {
+    "@types/webmidi": "^2.0.10",
+    "p5utils": "workspace:^",
     "utils": "workspace:^",
-    "p5utils": "workspace:^"
+    "webmidi": "^3.1.8"
   },
   "devDependencies": {
     "@babel/core": "^7.19.6",
