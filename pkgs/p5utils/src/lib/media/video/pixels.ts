@@ -1,32 +1,6 @@
-import { getCommonDivisors, getFloatDivisors } from 'utils'
 import { RGBA, RGBAMatrix } from '../../data/matrix/types'
-import { leftTopIze } from './magnify'
+import { leftTopIze } from './position'
 import { MediaSize, PixelPosition } from './types'
-
-export const magnifyCandidates = (videoSize: MediaSize, resolution: number, bindHeight = false) => {
-  try {
-    const candidates = getFloatDivisors(videoSize.width / resolution)
-    if (!bindHeight) return candidates
-    return candidates.filter((m) => videoSize.height % m === 0)
-  } catch (e) {
-    throw new WrongResolutionError(videoSize, resolution)
-  }
-}
-
-class WrongResolutionError extends Error {
-  constructor(videoSize: MediaSize, resolution: number) {
-    super(`maybe setting wrong candidate for resolution. ${resolution}
-    the candidates would be: ${JSON.stringify(resolutionCandidates(videoSize), null, 4)}`)
-  }
-}
-
-const resolutionCandidates = (size: MediaSize) =>
-  Object.fromEntries(
-    getCommonDivisors(size.width, size.height).map((d) => [
-      d,
-      { width: size.width / d, height: size.height / d },
-    ])
-  ) as { [skip: number]: MediaSize }
 
 /**
  * Parse media pixels and make RGBA matrix
@@ -46,7 +20,6 @@ export const partialParse = (
 ) => {
   const leftTopPosition = leftTopIze(centerPosition, magnifiedSize)
   const matrix: RGBAMatrix = []
-  validatePosition(leftTopPosition, magnifiedSize, videoSize)
   for (let y = leftTopPosition.y; y < leftTopPosition.y + magnifiedSize.height; y += skip) {
     const row: RGBA[] = []
     for (let x = leftTopPosition.x; x < leftTopPosition.x + magnifiedSize.width; x += skip) {
@@ -63,18 +36,12 @@ export const partialParse = (
   return matrix
 }
 
-export const validatePosition = (
-  position: PixelPosition,
-  magnifiedSize: MediaSize,
-  videoSize: MediaSize
-) => {
-  if (
-    position.y < 0 ||
-    position.x < 0 ||
-    position.y + magnifiedSize.height > videoSize.height ||
-    position.x + magnifiedSize.width > videoSize.width
-  ) {
-    console.error({ ...position, ...magnifiedSize })
-    throw Error()
-  }
-}
+export const calcPixelSize = (
+  { width, height }: MediaSize,
+  skip: number,
+  canvasWidth: number,
+  canvasHeight: number
+) => ({
+  pxw: canvasWidth / Math.ceil(width / skip),
+  pxh: canvasHeight / Math.ceil(height / skip),
+})

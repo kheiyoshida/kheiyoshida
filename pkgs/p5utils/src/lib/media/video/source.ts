@@ -1,6 +1,14 @@
 import { delay } from 'utils'
 import { VideoSourceList, p5VideoElement } from './types'
 
+export const prepareVideoElements = async (
+  sourceList: VideoSourceList
+): Promise<p5VideoElement[]> => {
+  const videoElements = loadVideoSourceList(sourceList)
+  await waitForVideosToLoad(videoElements)
+  return videoElements
+}
+
 export const loadVideoSourceList = (sourceList: VideoSourceList): p5VideoElement[] => {
   const videoElements = sourceList.map((s) => p.createVideo(s) as p5VideoElement)
   videoElements.forEach((video) => {

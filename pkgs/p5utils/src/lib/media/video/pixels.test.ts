@@ -1,13 +1,4 @@
-import { magnifyCandidates, partialParse } from './pixels'
-
-test(`${magnifyCandidates.name}`, () => {
-  const size = {
-    width: 960,
-    height: 540,
-  }
-  const result = magnifyCandidates(size, 160)
-  expect(result).toMatchObject([1, 1.5, 2, 3, 6])
-})
+import { partialParse } from './pixels'
 
 test(`${partialParse.name}`, () => {
   const videoSize = { width: 16, height: 12 }

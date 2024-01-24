@@ -7,17 +7,14 @@ import {
   createSoundSource,
 } from 'p5utils/src/lib/media/audio/analyzer'
 import { FFTSize } from 'p5utils/src/lib/media/audio/types'
-import {
-  calcPixelSize,
-  makeParseOptionSelector,
-  makeVideoSupply,
-  parseVideo,
-} from 'p5utils/src/lib/media/video'
+import { makeParseOptionSelector, parseVideo } from 'p5utils/src/lib/media/video'
 import { brightness } from 'p5utils/src/lib/media/video/analyze'
-import { fireByRate as random, randomItemFromArray, makeIntWobbler } from 'utils'
-import { requireMusic } from '../../assets'
-import { videoSource } from './source'
+import { calcPixelSize } from 'p5utils/src/lib/media/video/pixels'
+import { prepareVideoElements } from 'p5utils/src/lib/media/video/source'
+import { makeVideoSupply } from 'p5utils/src/lib/media/video/supply'
+import { makeIntWobbler, fireByRate as random, randomItemFromArray } from 'utils'
 import sound from '../../assets/music/shinjuku.mp3'
+import { videoSource } from './source'
 
 const VIDEO_PARSE_PX_WIDTH = 160
 
@@ -48,6 +45,8 @@ const start = () => {
 let videoSupply: ReturnType<typeof makeVideoSupply>
 let parseOptions: ReturnType<typeof makeParseOptionSelector>
 
+let loaded = false
+
 const setup = () => {
   cw = p.windowWidth
   ch = p.windowHeight
@@ -63,14 +62,12 @@ const setup = () => {
 
   const play = () => {
     start()
-    videoSupply = makeVideoSupply(
-      videoSource,
-      { speed: 0.1 },
-      (videos) => {
-        parseOptions = makeParseOptionSelector(videos[0], VIDEO_PARSE_PX_WIDTH)
-      },
-      () => soundSource.play()
-    )
+    prepareVideoElements(videoSource).then((videoElements) => {
+      videoSupply = makeVideoSupply(videoElements, { speed: 0.1 })
+      videoSupply.onEnded(() => videoSupply.swapVideo())
+      parseOptions = makeParseOptionSelector(videoElements[0], VIDEO_PARSE_PX_WIDTH)
+      loaded = true
+    })
   }
 
   p.mousePressed = play
@@ -81,11 +78,14 @@ const wobble10 = makeIntWobbler(10)
 const wobble2 = makeIntWobbler(2)
 
 const draw = () => {
-  if (!started || !videoSupply.isLoaded()) return
-  if (p.frameCount % 4 !== 0) return
+  if (!started || !loaded) return
+  // if (p.frameCount % 4 !== 0) return
   p.rect(-1, -1, cw + 1, ch + 1)
 
-  const video = (random(0.98) ? videoSupply.supply : videoSupply.renew)()
+  if (random(0.02)) {
+    videoSupply.swapVideo()
+  }
+  const video = videoSupply.currentVideo
 
   if (random(0.2)) {
     const superWobble = makeIntWobbler(Math.min(ch, cw) / 4)
@@ -104,13 +104,13 @@ const draw = () => {
     y: wobble10(position.y),
   }))
 
-  const options = parseOptions.get()
+  const options = parseOptions.currentOptions
   const videoSnapshot = parseVideo(video, options)
   const { pxh, pxw } = calcPixelSize(options.size, options.skip, cw, ch)
 
   const drawCell = (x: number, y: number) => {
-    // p.ellipse(wobble10(x * pxw), wobble10(y * pxh), pxw , pxw )
-    p.rect(x * pxw, y * pxh, pxw *0.4, pxh *0.4)
+    p.rect(wobble2(x * pxw), y * pxh, pxw, pxw)
+    // p.rect(x * pxw, y * pxh, pxw * 0.4, pxh * 0.4)
     // ;[...Array(4)].map(() => {
     //   p.point(wobble10(x * pxw), wobble10(y * pxh))
     // })

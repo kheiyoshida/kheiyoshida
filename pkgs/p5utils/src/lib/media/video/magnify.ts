@@ -1,52 +1,39 @@
-import { MediaSize, PixelPosition } from './types'
+import { getCommonDivisors, getFloatDivisors } from 'utils'
+import { MediaSize } from './types'
 
-/**
- * determine the region where the center position of magnified region can move
- */
-export const restrainedRegion = (videoSize: MediaSize, magnifiedSize: MediaSize) => {
-  return {
-    t: magnifiedSize.height / 2,
-    b: videoSize.height - magnifiedSize.height / 2,
-    l: magnifiedSize.width / 2,
-    r: videoSize.width - magnifiedSize.width / 2,
-  }
-}
-
-export const restrain = (
-  restrainRegion: ReturnType<typeof restrainedRegion>,
-  position: PixelPosition
+export const createMagnifiedSizeList = (
+  originalMediaSize: MediaSize,
+  finalResolutionWidth: number,
+  bindHeight = false
 ) => {
-  if (position.x > restrainRegion.r) {
-    position.x = restrainRegion.r
-  } else if (position.x < restrainRegion.l) {
-    position.x = restrainRegion.l
-  }
-  if (position.y > restrainRegion.b) {
-    position.y = restrainRegion.b
-  } else if (position.y < restrainRegion.t) {
-    position.y = restrainRegion.t
-  }
-  return position
+  const magCandidates = listMagnifyCandidates(originalMediaSize, finalResolutionWidth, bindHeight)
+  return magCandidates.map((mag) => ({
+    width: originalMediaSize.width / mag,
+    height: originalMediaSize.height / mag,
+  }))
 }
 
-export const centerPosition = (size: MediaSize) => ({
-  x: size.width / 2,
-  y: size.height / 2,
-})
-
-/**
- * convert center position to left-top position
- * @param position
- * @param magnifiedSize
- * @returns
- */
-export const leftTopIze = (position: PixelPosition, magnifiedSize: MediaSize) => {
-  const [halfWidth, halfHeight] = [magnifiedSize.width / 2, magnifiedSize.height / 2]
-  if (!Number.isInteger(halfWidth) || !Number.isInteger(halfHeight)) {
-    throw Error(`magnifiedSize is not consisting of even numbers`)
-  }
-  return {
-    x: position.x - halfWidth,
-    y: position.y - halfHeight,
+export const listMagnifyCandidates = (videoSize: MediaSize, resolution: number, bindHeight = false) => {
+  try {
+    const candidates = getFloatDivisors(videoSize.width / resolution)
+    if (!bindHeight) return candidates
+    return candidates.filter((m) => videoSize.height % m === 0)
+  } catch (e) {
+    throw new WrongResolutionError(videoSize, resolution)
   }
 }
+
+export class WrongResolutionError extends Error {
+  constructor(videoSize: MediaSize, resolution: number) {
+    super(`maybe setting wrong candidate for resolution. ${resolution}
+    the candidates would be: ${JSON.stringify(resolutionCandidates(videoSize), null, 4)}`)
+  }
+}
+
+const resolutionCandidates = (size: MediaSize) =>
+  Object.fromEntries(
+    getCommonDivisors(size.width, size.height).map((d) => [
+      d,
+      { width: size.width / d, height: size.height / d },
+    ])
+  ) as { [skip: number]: MediaSize }
