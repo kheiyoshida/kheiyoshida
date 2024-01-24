@@ -3,18 +3,18 @@ import { GetVideoSource, VideoSourceList } from 'p5utils/src/lib/media/video/typ
 import { requireVideo } from "../../assets"
 
 export const videoSource: VideoSourceList = [
-  require('../../assets/video/shinjuku1_resized.mp4'),
-  // require('../../assets/video/shinjuku2.mp4'),
-  // require('../../assets/video/shinjuku3.mp4'),
-  // require('../../assets/video/shinjuku4.mp4'),
-  // require('../../assets/video/shinjuku5.mp4'),
-  // require('../../assets/video/shinjuku6.mp4'),
-  // require('../../assets/video/shinjuku7.mp4'),
-  // require('../../assets/video/shinjuku8.mp4'),
-  // require('../../assets/video/shinjuku9.mp4'),
-  // require('../../assets/video/shinjuku10.mp4'),
-  // require('../../assets/video/shinjuku11.mp4'),
-  // require('../../assets/video/shinjuku12.mp4'),
+  // require('../../assets/video/shinjuku1_resized.mp4'),
+  require('../../assets/video/shinjuku2.mp4'),
+  require('../../assets/video/shinjuku3.mp4'),
+  require('../../assets/video/shinjuku4.mp4'),
+  require('../../assets/video/shinjuku5.mp4'),
+  require('../../assets/video/shinjuku6.mp4'),
+  require('../../assets/video/shinjuku7.mp4'),
+  require('../../assets/video/shinjuku8.mp4'),
+  require('../../assets/video/shinjuku9.mp4'),
+  require('../../assets/video/shinjuku10.mp4'),
+  require('../../assets/video/shinjuku11.mp4'),
+  require('../../assets/video/shinjuku12.mp4'),
 ]
 
 // export const videoSource: VideoSourceList = [

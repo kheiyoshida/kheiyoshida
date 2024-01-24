@@ -1,35 +1,32 @@
 import { getCommonDivisors, getFloatDivisors } from 'utils'
+import { RGBA, RGBAMatrix } from '../../data/matrix/types'
 import { leftTopIze } from './magnify'
 import { MediaSize, PixelPosition } from './types'
-import { RGBA, RGBAMatrix } from '../../data/matrix/types'
 
-/**
- * create a map of the candidates for skip/resolution for a given size
- */
-export const resolutionCandidates = (size: MediaSize) =>
-  Object.fromEntries(
-    getCommonDivisors(size.width, size.height).map((d) => [
-      d,
-      { width: size.width / d, height: size.height / d },
-    ])
-  ) as { [skip: number]: MediaSize }
-
-/**
- * list all the eligible magnify rates
- */
 export const magnifyCandidates = (videoSize: MediaSize, resolution: number, bindHeight = false) => {
   try {
     const candidates = getFloatDivisors(videoSize.width / resolution)
     if (!bindHeight) return candidates
     return candidates.filter((m) => videoSize.height % m === 0)
   } catch (e) {
-    console.warn(
-      `maybe setting wrong candidate for resolution. ${resolution}
-      the candidates would be: ${JSON.stringify(resolutionCandidates(videoSize), null, 4)}`
-    )
-    throw e
+    throw new WrongResolutionError(videoSize, resolution)
   }
 }
+
+class WrongResolutionError extends Error {
+  constructor(videoSize: MediaSize, resolution: number) {
+    super(`maybe setting wrong candidate for resolution. ${resolution}
+    the candidates would be: ${JSON.stringify(resolutionCandidates(videoSize), null, 4)}`)
+  }
+}
+
+const resolutionCandidates = (size: MediaSize) =>
+  Object.fromEntries(
+    getCommonDivisors(size.width, size.height).map((d) => [
+      d,
+      { width: size.width / d, height: size.height / d },
+    ])
+  ) as { [skip: number]: MediaSize }
 
 /**
  * Parse media pixels and make RGBA matrix
@@ -47,20 +44,12 @@ export const partialParse = (
   magnifiedSize: MediaSize,
   centerPosition: PixelPosition = { x: 0, y: 0 }
 ) => {
-  const position = leftTopIze(centerPosition, magnifiedSize)
+  const leftTopPosition = leftTopIze(centerPosition, magnifiedSize)
   const matrix: RGBAMatrix = []
-  if (
-    position.y < 0 ||
-    position.x < 0 ||
-    position.y + magnifiedSize.height > videoSize.height ||
-    position.x + magnifiedSize.width > videoSize.width
-  ) {
-    console.error({ ...position, ...magnifiedSize })
-    throw Error()
-  }
-  for (let y = position.y; y < position.y + magnifiedSize.height; y += skip) {
+  validatePosition(leftTopPosition, magnifiedSize, videoSize)
+  for (let y = leftTopPosition.y; y < leftTopPosition.y + magnifiedSize.height; y += skip) {
     const row: RGBA[] = []
-    for (let x = position.x; x < position.x + magnifiedSize.width; x += skip) {
+    for (let x = leftTopPosition.x; x < leftTopPosition.x + magnifiedSize.width; x += skip) {
       const i = y * videoSize.width + x
       const pos = i * 4 // 4 items in each pixel
       const r = pixels[pos]
@@ -72,4 +61,20 @@ export const partialParse = (
     matrix.push(row)
   }
   return matrix
+}
+
+export const validatePosition = (
+  position: PixelPosition,
+  magnifiedSize: MediaSize,
+  videoSize: MediaSize
+) => {
+  if (
+    position.y < 0 ||
+    position.x < 0 ||
+    position.y + magnifiedSize.height > videoSize.height ||
+    position.x + magnifiedSize.width > videoSize.width
+  ) {
+    console.error({ ...position, ...magnifiedSize })
+    throw Error()
+  }
 }

@@ -1,43 +1,14 @@
 import { makeRandomItemPicker as makeRandomArrayPicker, randomIntBetween } from 'utils'
 import { centerPosition, restrain, restrainedRegion } from './magnify'
 import { magnifyCandidates, partialParse } from './pixels'
+import { loadVideoSourceList, waitForVideosToLoad } from './source'
 import {
   MediaSize,
   PixelPosition,
-  SupplyVideo,
   SupplyVideoOption,
   VideoSourceList,
-  p5VideoElement,
+  p5VideoElement
 } from './types'
-
-const vs = (video: p5VideoElement) => ({
-  width: video.width,
-  height: video.height,
-})
-
-export const loadVideoSourceList = (sourceList: VideoSourceList): p5VideoElement[] => {
-  const videoElements = sourceList.map((s) => p.createVideo(s) as p5VideoElement)
-  videoElements.forEach((video) => {
-    video.attribute('playsinline', 'true')
-    video.hideControls()
-    video.volume(0)
-    video.hide()
-  })
-  return videoElements
-}
-
-const waitForVideosToLoad = async (videoElements: p5VideoElement[]) => {
-  let check = 0
-  while (check < 100) {
-    check++
-    if (videoElements.every((v) => v.width !== 300)) {
-      return true
-    } else {
-      await new Promise((r) => setTimeout(r, 20))
-    }
-  }
-  throw Error(`videos couldn't be loaded within 10 secs`)
-}
 
 export const makeVideoSupply = (
   sourceList: VideoSourceList,
@@ -95,20 +66,22 @@ export const makeVideoSupply = (
   }
 }
 
-export const makeParseOptionSelector = (video: p5VideoElement, resolution: number) => {
-  const videoSize = vs(video)
-  const magCandidates = magnifyCandidates(videoSize, resolution)
+export const makeParseOptionSelector = (
+  originalVideoSize: MediaSize,
+  finalResolutionWidth: number
+) => {
+  const magCandidates = magnifyCandidates(originalVideoSize, finalResolutionWidth)
   const sizeCandidates = magCandidates.map((mag) => ({
-    width: videoSize.width / mag,
-    height: videoSize.height / mag,
+    width: originalVideoSize.width / mag,
+    height: originalVideoSize.height / mag,
   }))
-  const restrained = sizeCandidates.map((magSize) => restrainedRegion(videoSize, magSize))
+  const restrained = sizeCandidates.map((magSize) => restrainedRegion(originalVideoSize, magSize))
 
-  let position = { x: video.width / 2, y: video.height / 2 }
+  let position = { x: originalVideoSize.width / 2, y: originalVideoSize.height / 2 }
   let magnifyLevel = 1
 
   const getSize = () => sizeCandidates[magnifyLevel - 1]
-  const getSkip = () => getSize().width / resolution
+  const getSkip = () => getSize().width / finalResolutionWidth
   const getPosition = () => position
   const getRestrained = () => restrained[magnifyLevel - 1]
 
@@ -120,16 +93,11 @@ export const makeParseOptionSelector = (video: p5VideoElement, resolution: numbe
     }
   }
 
-  const selectMagnify = (mag: number) => {
-    if (mag < magCandidates.length) {
-      magnifyLevel = mag
-    }
-    throw Error(`range error: available magnify is: ${JSON.stringify(magCandidates)}`)
-  }
-
   const getCurrentPosition = () => {
     position =
-      magnifyLevel !== 1 ? restrain(getRestrained(), getPosition()) : centerPosition(videoSize)
+      magnifyLevel !== 1
+        ? restrain(getRestrained(), getPosition())
+        : centerPosition(originalVideoSize)
     return position
   }
 
@@ -140,7 +108,6 @@ export const makeParseOptionSelector = (video: p5VideoElement, resolution: numbe
 
   return {
     get: getOptions,
-    selectMagnify,
     randomMagnify: () => {
       magnifyLevel = randomIntBetween(1, magCandidates.length)
     },
@@ -150,12 +117,11 @@ export const makeParseOptionSelector = (video: p5VideoElement, resolution: numbe
 }
 
 export const parseVideo = (
-  video: ReturnType<SupplyVideo>,
+  video: p5VideoElement,
   { size, skip, position }: ReturnType<ReturnType<typeof makeParseOptionSelector>['get']>
 ) => {
-  const videoSize = vs(video)
   video.loadPixels()
-  return partialParse(video.pixels, videoSize, skip, size, position)
+  return partialParse(video.pixels, video, skip, size, position)
 }
 
 export const calcPixelSize = (
