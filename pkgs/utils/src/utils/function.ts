@@ -24,7 +24,9 @@ export function pipe(value: unknown, ...fns: Function[]): unknown {
  * make sure the function's called once
  * @param fn function to execute
  */
-export const once = <F extends (...args: any[]) => unknown>(fn: F) => {
+export const once = <F extends (...args: any[]) => any>(
+  fn: F
+): ((...args: Parameters<F>) => ReturnType<F>) => {
   let done = false
   return (...args: Parameters<F>) => {
     if (!done) {

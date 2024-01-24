@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { randomBetween } from "../../utils/random"
+import { randomFloatBetween as randomBetween } from "utils"
 
 export function bloom(
   x: number,

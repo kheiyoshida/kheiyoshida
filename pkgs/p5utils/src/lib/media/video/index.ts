@@ -1,4 +1,4 @@
-import { makeRandomItemPicker as makeRandomArrayPicker, once, randomIntBetween } from 'utils'
+import { makeRandomItemPicker as makeRandomArrayPicker, randomIntBetween } from 'utils'
 import { centerPosition, restrain, restrainedRegion } from './magnify'
 import { magnifyCandidates, partialParse } from './pixels'
 import {
@@ -15,7 +15,7 @@ const vs = (video: p5VideoElement) => ({
   height: video.height,
 })
 
-const loadVideoSourceList = (sourceList: VideoSourceList): p5VideoElement[] => {
+export const loadVideoSourceList = (sourceList: VideoSourceList): p5VideoElement[] => {
   const videoElements = sourceList.map((s) => p.createVideo(s) as p5VideoElement)
   videoElements.forEach((video) => {
     video.attribute('playsinline', 'true')
@@ -158,9 +158,12 @@ export const parseVideo = (
   return partialParse(video.pixels, videoSize, skip, size, position)
 }
 
-export const calcPixelSize = once(
-  ({ width, height }: MediaSize, skip: number, canvasWidth: number, canvasHeight: number) => ({
-    pxw: canvasWidth / Math.ceil(width / skip),
-    pxh: canvasHeight / Math.ceil(height / skip),
-  })
-)
+export const calcPixelSize = (
+  { width, height }: MediaSize,
+  skip: number,
+  canvasWidth: number,
+  canvasHeight: number
+) => ({
+  pxw: canvasWidth / Math.ceil(width / skip),
+  pxh: canvasHeight / Math.ceil(height / skip),
+})

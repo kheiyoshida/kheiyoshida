@@ -79,6 +79,9 @@ const JestConfig: Config = {
       ...RootConfig,
       displayName: 'p5utils',
       rootDir: './pkgs/p5utils',
+      setupFilesAfterEnv: [
+        '<rootDir>/jest/setup.ts'
+      ]
     },
   ],
 }
