@@ -1,38 +1,40 @@
-import { iterateMatrix } from 'p5utils/src/lib/data/matrix/matrix'
-import { RGBAMatrix } from 'p5utils/src/lib/data/matrix/types'
 import { Analyzer } from 'p5utils/src/lib/media/audio/types'
-import { brightness } from 'p5utils/src/lib/media/pixel/analyze'
 import { pushPop } from 'p5utils/src/lib/utils/p5utils'
-import { makeIntWobbler, makePingpongNumberStore } from 'utils'
-
-const wobble = makeIntWobbler(10)
+import { clamp, makeIntWobbler } from 'utils'
+import { LocBrightness } from '.'
 
 const finalPixelSize =
   (rate: number) =>
   (pxw: number, pxh: number): [number, number] => [pxw * rate, pxh * rate]
 
-
-
 export const drawMatrix = (
-  videoSnapshot: RGBAMatrix,
+  brighnessSnapshot: LocBrightness[],
   { pxw, pxh }: { pxw: number; pxh: number },
-  analyzer: Analyzer
+  wave: number
 ) => {
-  // const waveformData = analyzer.analyze()
+  const wobble = makeIntWobbler(clamp(wave * 6, 1, 10))
+  const final = finalPixelSize(clamp((1 + wave) / 10, 0.2, 0.3))
 
   const drawCell = (x: number, y: number) => {
-    // const index = x % analyzer.bufferLength
-    // const wave = waveformData[index] * 0.5
-    p.rect(wobble(x) * pxw, wobble(y) * pxh, ...finalPixelSize(0.2)(pxw, pxh))
+    const posX = wobble(x) * pxw
+    const posY = wobble(y) * pxh
+    p.ellipse(posX, posY, ...final(pxw, pxh))
+
+    // debug
+    // p.rect(x, y, 1, 1)
   }
 
-  iterateMatrix(videoSnapshot, (x, y, rgba) => {
-    const bri = brightness(rgba)
-    if (bri > 120) {
+  brighnessSnapshot.forEach(([x, y, bri]) => {
+    if (bri > 110 - wave * 20) {
       pushPop(() => {
-        p.fill(255, bri)
+        p.fill(bri, bri)
         drawCell(x, y)
       })
     }
   })
+}
+
+export const calcWave = (analyzer: Analyzer) => {
+  const base = analyzer.analyze().reduce((a, b) => a + b) / analyzer.bufferLength
+  return clamp((base - 0.3) * 10, 0, 2)
 }

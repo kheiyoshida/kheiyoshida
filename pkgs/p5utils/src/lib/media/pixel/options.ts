@@ -40,6 +40,9 @@ export const makePixelParseOptionSelector = (
       }
     },
     randomMagnify: (limit = sizeCandidates.length - 1) => {
+      if (limit > 0) {
+        limit = Math.min(sizeCandidates.length - 1, limit)
+      }
       magnifyLevel = randomIntInclusiveBetween(0, limit)
       if (magnifyLevel === 0) {
         resetPosition()
@@ -50,5 +53,8 @@ export const makePixelParseOptionSelector = (
       const newPosition = change(position)
       position = restrain(getRegion(), newPosition)
     },
+    get magnifyLevels() {
+      return sizeCandidates
+    }
   }
 }

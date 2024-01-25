@@ -17,7 +17,7 @@ describe(`${makeVideoSupply.name}`, () => {
           speed: jest.fn(),
           play: jest.fn(),
           onended: jest.fn(),
-          stop: jest.fn(),
+          pause: jest.fn(),
         }) as unknown as p5VideoElement
     )
     jest.spyOn(source, 'loadVideoSourceList').mockReturnValue(mockVideoElements)
@@ -35,7 +35,7 @@ describe(`${makeVideoSupply.name}`, () => {
     supply.updateOptions({ speed: 0.2 })
     supply.swapVideo()
     const video2 = supply.currentVideo
-    expect(video.stop).toHaveBeenCalled()
+    expect(video.pause).toHaveBeenCalled()
     expect(video2.speed).toHaveBeenCalledWith(0.2)
     expect(video2.play).toHaveBeenCalled()
   })

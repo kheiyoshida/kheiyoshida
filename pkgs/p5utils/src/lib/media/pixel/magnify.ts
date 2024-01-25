@@ -15,10 +15,12 @@ export const createMagnifiedSizeList = (
 
 export const listMagnifyCandidates = (videoSize: MediaSize, resolution: number, bindHeight = false) => {
   try {
+    console.log(videoSize.width, resolution)
     const candidates = getFloatDivisors(videoSize.width / resolution)
     if (!bindHeight) return candidates
     return candidates.filter((m) => videoSize.height % m === 0)
   } catch (e) {
+    console.error(e)
     throw new WrongResolutionError(videoSize, resolution)
   }
 }

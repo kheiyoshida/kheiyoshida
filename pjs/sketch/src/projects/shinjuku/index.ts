@@ -17,13 +17,16 @@ import sound from '../../assets/music/shinjuku.mp3'
 
 import { calcPixelSize } from 'p5utils/src/lib/media/pixel/pixels'
 import { memorize } from 'utils'
-import { drawMatrix } from './render'
+import { calcWave, drawMatrix } from './render'
 import { videoSource } from './source'
 import { updateVideoOptions } from './update'
-import { RGBAMatrix } from 'p5utils/src/lib/data/matrix/types'
 
-const VIDEO_PARSE_PX_WIDTH = 320
+import { iterateMatrix } from 'p5utils/src/lib/data/matrix/matrix'
+import { brightness } from 'p5utils/src/lib/media/pixel/analyze'
+
+export const VIDEO_PARSE_PX_WIDTH = 200
 const FrameRate = 16
+let pxSize: ReturnType<typeof calcPixelSize>
 
 export let cw: number
 export let ch: number
@@ -53,13 +56,16 @@ const prepareVideo = () => {
     videoSupply = makeVideoSupply(videoElements, { speed: 0.1 })
     videoSupply.onEnded(() => videoSupply.swapVideo())
     parseOptions = makePixelParseOptionSelector(videoElements[0], VIDEO_PARSE_PX_WIDTH)
+    pxSize = calcPxSize(parseOptions.currentOptions.size, parseOptions.currentOptions.skip, cw, ch)
     videoLoaded = true
   })
 }
 
 const start = () => {
   if (!videoLoaded) return
-  videoSupply.swapVideo()
+  if (!videoSupply.currentVideo) {
+    videoSupply.swapVideo()
+  }
   playSound()
   started = true
 }
@@ -67,9 +73,12 @@ const start = () => {
 const setup = () => {
   prepareVideo()
   cw = p.windowWidth
-  ch = p.windowHeight
+  ch = cw * 9/ 16
+  const marginTop = (p.windowHeight - ch) / 2
+  const canvas = document.getElementsByTagName('canvas')[0]
+  canvas.setAttribute('style', `margin-top: ${marginTop}px;`)
   p.createCanvas(cw, ch)
-  fillColor = p.color(0)
+  fillColor = p.color(0, 245)
   strokeColor = p.color(255)
   p.background(0)
   p.fill(fillColor)
@@ -83,21 +92,25 @@ const setup = () => {
   p.touchStarted = start
 }
 
-let videoSnapshot: RGBAMatrix
+export type LocBrightness = [x: number, y: number, brightness: number]
+let brightnessSnapshot: LocBrightness[]
 
 const draw = () => {
   if (!started) return
   p.rect(-1, -1, cw + 1, ch + 1)
+  playSound()
 
-  updateVideoOptions(videoSupply, parseOptions)
-  const options = parseOptions.currentOptions
-  const pxSize = calcPxSize(options.size, options.skip, cw, ch)
-
-  if (p.frameCount % 4 === 0 || !videoSnapshot) {
-    videoSnapshot = parseVideo(videoSupply.currentVideo, options)
+  if (p.frameCount % 4 === 0 || !brightnessSnapshot) {
+    updateVideoOptions(videoSupply, parseOptions)
+    const videoSnapshot = parseVideo(videoSupply.currentVideo, parseOptions.currentOptions)
+    const bright: LocBrightness[] = []
+    iterateMatrix(videoSnapshot, (x, y, rgba) => {
+      bright.push([x, y, brightness(rgba)])
+    })
+    brightnessSnapshot = bright
   }
 
-  drawMatrix(videoSnapshot, pxSize, analyser)
+  drawMatrix(brightnessSnapshot, pxSize, calcWave(analyser))
 }
 
 const calcPxSize = memorize(calcPixelSize)

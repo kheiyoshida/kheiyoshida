@@ -1,4 +1,4 @@
-import { listMagnifyCandidates } from './magnify';
+import { listMagnifyCandidates } from '../pixel/magnify';
 
 test(`${listMagnifyCandidates.name}`, () => {
   const size = {

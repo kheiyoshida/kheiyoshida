@@ -16,7 +16,7 @@ export const makeVideoSupply = (
 
   const swapVideo = () => {
     if (currentVideo) {
-      currentVideo.stop()
+      currentVideo.pause()
     }
     currentVideo = randomVideo()
     currentVideo.speed(options.speed)
