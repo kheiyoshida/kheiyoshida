@@ -16,10 +16,7 @@ test(`${once.name}`, () => {
   expect(fn).not.toHaveBeenCalled()
   onceFunc()
   expect(fn).toHaveBeenCalledTimes(1)
-  onceFunc()
-  expect(fn).toHaveBeenCalledTimes(1)
-  onceFunc()
-  expect(fn).toHaveBeenCalledTimes(1)
+  expect(() => onceFunc()).toThrow()
 })
 
 test(`${memorize.name}`, () => {

@@ -24,15 +24,16 @@ export function pipe(value: unknown, ...fns: Function[]): unknown {
  * make sure the function's called once
  * @param fn function to execute
  */
-export const once = <F extends (...args: any[]) => any>(
+export const once = <A extends unknown[], R, F extends (...args: A) => R>(
   fn: F
-): ((...args: Parameters<F>) => ReturnType<F>) => {
+): ((...args: A) => R) => {
   let done = false
-  return (...args: Parameters<F>) => {
+  return (...args: A) => {
     if (!done) {
       done = true
-      return fn(args)
+      return fn(...args)
     }
+    throw Error(`once function called twice. Did you mean to use 'memorize()?'`)
   }
 }
 
