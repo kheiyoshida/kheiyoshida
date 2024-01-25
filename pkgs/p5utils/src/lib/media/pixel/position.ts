@@ -42,11 +42,11 @@ export const centerPosition = (size: MediaSize) => ({
  */
 export const leftTopIze = (position: PixelPosition, magnifiedSize: MediaSize) => {
   const [halfWidth, halfHeight] = [magnifiedSize.width / 2, magnifiedSize.height / 2]
-  if (!Number.isInteger(halfWidth) || !Number.isInteger(halfHeight)) {
-    throw Error(`magnifiedSize is not consisting of even numbers`)
-  }
+  // if (!Number.isInteger(halfWidth) || !Number.isInteger(halfHeight)) {
+  //   throw Error(`magnifiedSize is not consisting of even numbers: ${JSON.stringify(magnifiedSize)}`)
+  // }
   return {
-    x: position.x - halfWidth,
-    y: position.y - halfHeight,
+    x: position.x - Math.floor(halfWidth),
+    y: position.y - Math.floor(halfHeight),
   }
 }

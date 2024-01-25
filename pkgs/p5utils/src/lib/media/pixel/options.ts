@@ -5,6 +5,12 @@ import { MediaSize, PixelPosition } from './types'
 
 export type PixelParseOptionSelector = ReturnType<typeof makePixelParseOptionSelector>
 
+export type PixelParseOptions = {
+  position: PixelPosition
+  size: MediaSize
+  skip: number
+}
+
 export const makePixelParseOptionSelector = (
   originalVideoSize: MediaSize,
   finalResolutionWidth: number
@@ -33,8 +39,8 @@ export const makePixelParseOptionSelector = (
         skip: getSkip(),
       }
     },
-    randomMagnify: () => {
-      magnifyLevel = randomIntInclusiveBetween(0, sizeCandidates.length - 1)
+    randomMagnify: (limit = sizeCandidates.length - 1) => {
+      magnifyLevel = randomIntInclusiveBetween(0, limit)
       if (magnifyLevel === 0) {
         resetPosition()
       }
