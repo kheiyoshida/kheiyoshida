@@ -5,8 +5,8 @@ import {
   directionLoc,
   iterateMatrix,
   lookupMatrix,
-  randomMatrixLoc,
-  swapMatrix
+  getRandomMatrixPositionWithCondition,
+  swapMatrix,
 } from './matrix'
 import { MatrixDirection, MatrixLoc, RegionMatrix } from './types'
 
@@ -15,7 +15,7 @@ export const createRegion = (sizeX: number, sizeY: number): RegionMatrix => {
 }
 
 export const randomSeed = (matrix: RegionMatrix) => {
-  const init = randomMatrixLoc(matrix)
+  const init = getRandomMatrixPositionWithCondition(matrix, (v) => v !== null)
   swapMatrix(matrix, init, true)
 }
 
