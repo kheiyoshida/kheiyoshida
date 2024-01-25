@@ -13,16 +13,14 @@ import {
 import { parseVideo } from 'p5utils/src/lib/media/video'
 import { prepareVideoElements } from 'p5utils/src/lib/media/video/source'
 import { VideoSupply, makeVideoSupply } from 'p5utils/src/lib/media/video/supply'
-import sound from '../../assets/music/shinjuku.mp3'
-
 import { calcPixelSize } from 'p5utils/src/lib/media/pixel/pixels'
 import { memorize } from 'utils'
 import { calcWave, drawMatrix } from './render'
 import { videoSource } from './source'
 import { updateVideoOptions } from './update'
-
 import { iterateMatrix } from 'p5utils/src/lib/data/matrix/matrix'
 import { brightness } from 'p5utils/src/lib/media/pixel/analyze'
+import { requireMusic } from '../../assets'
 
 export const VIDEO_PARSE_PX_WIDTH = 200
 const FrameRate = 16
@@ -35,7 +33,7 @@ let fillColor: p5.Color
 let strokeColor: p5.Color
 
 const fftSize: FFTSize = 32
-const soundSource = createSoundSource(sound)
+const soundSource = createSoundSource(requireMusic('shinjuku_remaster.mp3'))
 const analyser = createAnalyzer(soundSource.source, fftSize)
 
 let videoSupply: VideoSupply

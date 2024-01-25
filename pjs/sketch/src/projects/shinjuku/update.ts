@@ -22,7 +22,7 @@ export const updateVideoOptions = (
   }
   if (random(0.4)) {
     videoSupply.updateOptions({
-      speed: randomItemFromArray([0.2, 0.3, 0.5]),
+      speed: randomItemFromArray([0.3, 0.5, 0.8]),
     })
   }
 }
