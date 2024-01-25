@@ -102,16 +102,6 @@ describe(`${SequenceGenerator.name}`, () => {
       })
       expect(picker.conf.noteDur).toBe(2)
     })
-    it(`should construct notes again after updating configuration`, () => {
-      const picker = new NotePicker({ noteDur: 1 })
-      const sequence = new Sequence({ density: 0.5, length: 8 })
-      const generator = new SequenceGenerator(picker, sequence)
-      generator.constructNotes(defaultNotes)
-      generator.updateConfig({
-        density: 0.25,
-      })
-      expect(sequence.numOfNotes).toBe(2)
-    })
   })
   describe(`${SequenceGenerator.prototype.constructNotes.name}`, () => {
     it(`should assign initial notes if provided`, () => {

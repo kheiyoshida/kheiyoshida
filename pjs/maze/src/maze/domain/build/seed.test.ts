@@ -1,7 +1,12 @@
-import * as random from 'src/lib/random'
+import * as utils from 'utils'
 import { Node } from 'src/maze/domain/matrix/node'
 import { countNodes } from '../matrix'
 import { initMatrix, seedNodes } from './seed'
+
+jest.mock('utils', () => ({
+  __esModule: true,
+  ...jest.requireActual('utils')
+}))
 
 afterEach(() => {
   jest.restoreAllMocks()
@@ -27,7 +32,7 @@ describe(`seedNodes`, () => {
     ])
   })
   it(`should put nodes in the matrix randomly based on fill rate`, () => {
-    jest.spyOn(random, 'random').mockImplementation(
+    jest.spyOn(utils, 'fireByRate').mockImplementation(
       (() => {
         let flip = false
         return (_) => {

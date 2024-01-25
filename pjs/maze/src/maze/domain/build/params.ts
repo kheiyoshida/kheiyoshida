@@ -1,5 +1,5 @@
-import { random, randomBetween, randomIntBetween } from "p5utils/src/lib/random"
-import { BuildParams } from "."
+import { fireByRate as random, randomFloatBetween as randomBetween, randomIntBetween } from 'utils'
+import { BuildParams } from '.'
 
 export const INITIAL_FLOOR_SIZE = 6
 const MAX_FLOOR_SIZE = 13
@@ -9,7 +9,7 @@ const MAX_FLOOR_SIZE = 13
  * but let's just keep it decently sized
  */
 export const floorSize = (floor: number): number => {
-  if (INITIAL_FLOOR_SIZE + floor < MAX_FLOOR_SIZE ) {
+  if (INITIAL_FLOOR_SIZE + floor < MAX_FLOOR_SIZE) {
     return randomIntBetween(INITIAL_FLOOR_SIZE, INITIAL_FLOOR_SIZE + floor)
   } else {
     return randomIntBetween(MAX_FLOOR_SIZE - 4, MAX_FLOOR_SIZE)

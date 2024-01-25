@@ -1,4 +1,4 @@
-import { random } from "p5utils/src/lib/random"
+import { fireByRate } from "utils"
 import { retry } from '../../utils/retry'
 import { Matrix, countNodes, putNode } from '../matrix'
 import { iteratePosition } from '../matrix/iterate'
@@ -15,7 +15,7 @@ export const initMatrix = (size: number): Matrix =>
 const _seedNodes = (matrix: Matrix, fillRate: number, maxNodes = 100) => {
   let numOfNodes = 0
   iteratePosition(matrix, (matrix, pos) => {
-    if (random(fillRate)) {
+    if (fireByRate(fillRate)) {
       numOfNodes += 1
       if (numOfNodes <= maxNodes) {
         putNode(matrix, pos)

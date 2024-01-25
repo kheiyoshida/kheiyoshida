@@ -56,15 +56,15 @@ importers:
       js-logger:
         specifier: ^1.6.1
         version: 1.6.1
-      mgnr-tone:
-        specifier: workspace:^
-        version: link:../../pkgs/mgnr-tone
       p5:
         specifier: ^1.9.0
         version: 1.9.0
       tone:
         specifier: ^14.7.77
         version: 14.7.77
+      utils:
+        specifier: workspace:^
+        version: link:../../pkgs/utils
     devDependencies:
       '@types/p5':
         specifier: ^1.7.4

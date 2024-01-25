@@ -1,4 +1,4 @@
-import { random, randomItem } from 'p5utils/src/lib/random'
+import { fireByRate as random, randomItemFromArray as randomItem } from 'utils'
 import { FinalMaze } from '.'
 import { Position } from '../../utils/position'
 import { compass } from '../maze/direction'
