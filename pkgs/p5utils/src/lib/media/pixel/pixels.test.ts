@@ -1,13 +1,13 @@
-import { partialParse } from './pixels'
+import { convertPixelDataIntoMatrix } from './pixels'
 
-test(`${partialParse.name}`, () => {
+test(`${convertPixelDataIntoMatrix.name}`, () => {
   const videoSize = { width: 16, height: 12 }
   const skip = 4 // resolution = 4p x 3p
   const magnifiedSize = { width: 8, height: 6 } // 2x
   const centerPosition = { x: 8, y: 6 }
   const mockPixelDataArray = [...new Array(16 * 12 * 4)].map((_, i) => i)
 
-  const result = partialParse(mockPixelDataArray, videoSize, skip, magnifiedSize, centerPosition)
+  const result = convertPixelDataIntoMatrix(mockPixelDataArray, videoSize, skip, magnifiedSize, centerPosition)
   expect(result).toMatchInlineSnapshot(`
     [
       [

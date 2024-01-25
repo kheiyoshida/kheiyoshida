@@ -11,9 +11,9 @@ import { MediaSize, PixelPosition } from './types'
  * @param position top left position of the magnified frame on the original media
  * @returns
  */
-export const partialParse = (
+export const convertPixelDataIntoMatrix = (
   pixels: number[] | Uint8ClampedArray,
-  videoSize: MediaSize,
+  mediaSize: MediaSize,
   skip: number,
   magnifiedSize: MediaSize,
   centerPosition: PixelPosition = { x: 0, y: 0 }
@@ -23,7 +23,7 @@ export const partialParse = (
   for (let y = leftTopPosition.y; y < leftTopPosition.y + magnifiedSize.height; y += skip) {
     const row: RGBA[] = []
     for (let x = leftTopPosition.x; x < leftTopPosition.x + magnifiedSize.width; x += skip) {
-      const i = y * videoSize.width + x
+      const i = y * mediaSize.width + x
       const pos = i * 4 // 4 items in each pixel
       const r = pixels[pos]
       const g = pixels[pos + 1]

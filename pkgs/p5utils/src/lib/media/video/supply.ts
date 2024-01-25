@@ -1,6 +1,8 @@
 import { makeRandomItemPicker as makeRandomArrayPicker } from 'utils'
 import { SupplyVideoOption, p5VideoElement } from './types'
 
+export type VideoSupply = ReturnType<typeof makeVideoSupply>
+
 export const makeVideoSupply = (
   videoElements: p5VideoElement[],
   options: SupplyVideoOption = { speed: 0.1 }

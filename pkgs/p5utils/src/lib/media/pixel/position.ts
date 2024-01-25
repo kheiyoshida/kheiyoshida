@@ -50,5 +50,3 @@ export const leftTopIze = (position: PixelPosition, magnifiedSize: MediaSize) =>
     y: position.y - halfHeight,
   }
 }
-
-

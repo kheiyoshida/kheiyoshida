@@ -7,15 +7,19 @@ import {
   createSoundSource,
 } from 'p5utils/src/lib/media/audio/analyzer'
 import { FFTSize } from 'p5utils/src/lib/media/audio/types'
-import { makeParseOptionSelector, parseVideo } from 'p5utils/src/lib/media/video'
-import { brightness } from 'p5utils/src/lib/media/video/analyze'
-import { calcPixelSize } from 'p5utils/src/lib/media/video/pixels'
+import { brightness } from 'p5utils/src/lib/media/pixel/analyze'
+import {
+  PixelParseOptionSelector,
+  makePixelParseOptionSelector,
+} from 'p5utils/src/lib/media/pixel/options'
+import { calcPixelSize } from 'p5utils/src/lib/media/pixel/pixels'
+import { parseVideo } from 'p5utils/src/lib/media/video'
 import { prepareVideoElements } from 'p5utils/src/lib/media/video/source'
-import { makeVideoSupply } from 'p5utils/src/lib/media/video/supply'
+import { VideoSupply, makeVideoSupply } from 'p5utils/src/lib/media/video/supply'
+import { pushPop } from 'p5utils/src/lib/utils/p5utils'
 import { makeIntWobbler, memorize, fireByRate as random, randomItemFromArray } from 'utils'
 import sound from '../../assets/music/shinjuku.mp3'
 import { videoSource } from './source'
-import { pushPop } from 'p5utils/src/lib/utils/p5utils'
 
 const VIDEO_PARSE_PX_WIDTH = 320
 
@@ -29,8 +33,8 @@ const fftSize: FFTSize = 32
 const soundSource = createSoundSource(sound)
 const analyser = createAnalyzer(soundSource.source, fftSize)
 
-let videoSupply: ReturnType<typeof makeVideoSupply>
-let parseOptions: ReturnType<typeof makeParseOptionSelector>
+let videoSupply: VideoSupply
+let parseOptions: PixelParseOptionSelector
 let started = false
 
 const playSound = () => {
@@ -46,7 +50,7 @@ const prepareVideo = () => {
   prepareVideoElements(videoSource).then((videoElements) => {
     videoSupply = makeVideoSupply(videoElements, { speed: 0.1 })
     videoSupply.onEnded(() => videoSupply.swapVideo())
-    parseOptions = makeParseOptionSelector(videoElements[0], VIDEO_PARSE_PX_WIDTH)
+    parseOptions = makePixelParseOptionSelector(videoElements[0], VIDEO_PARSE_PX_WIDTH)
     videoLoaded = true
   })
 }
