@@ -8,7 +8,7 @@ import { FFTSize } from 'p5utils/src/lib/media/audio/types'
 import { instruction } from 'p5utils/src/lib/utils/project'
 import { requireMusic } from 'src/assets'
 import { renderSoundShape } from './feather'
-import { spinNumber, centerPosition } from './state'
+import { centerPosition, spinNumber } from './state'
 
 let cw: number
 let ch: number
