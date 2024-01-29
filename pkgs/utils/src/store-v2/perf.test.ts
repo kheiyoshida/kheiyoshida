@@ -36,9 +36,9 @@ describe.skip(`performance comparision`, () => {
         const s3 = objStore.state3
       },
       () => {
-        const s1 = testStore.read('state1')
-        const s2 = testStore.read('state2')
-        const s3 = testStore.read('state3')
+        const s1 = testStore.current.state1
+        const s2 = testStore.current.state2
+        const s3 = testStore.current.state3
       }
     )
   })

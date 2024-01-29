@@ -1,4 +1,4 @@
-import { makeStoreV2 } from '.'
+import { makeStoreV2 } from '.';
 
 type TestState = { fieldA: string; arr: number[] }
 
@@ -22,7 +22,7 @@ test(`${makeStoreV2.name}`, () => {
   expect(store.current.fieldA).not.toBe('yeah')
 
   store.pushNumber(4)
-  expect(store.read('arr')).toMatchObject([1, 2, 3, 4])
+  expect(store.current.arr).toMatchObject([1, 2, 3, 4])
 
   store.pushNumbers([5, 6])
   expect(store.current.arr).toMatchObject([1, 2, 3, 4, 5, 6])
