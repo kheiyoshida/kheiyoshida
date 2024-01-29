@@ -1,38 +1,37 @@
-import p5 from 'p5'
 import {
   callContext,
   createAnalyzer,
   createSoundSource,
 } from 'p5utils/src/lib/media/audio/analyzer'
 import { FFTSize } from 'p5utils/src/lib/media/audio/types'
-import { instruction } from 'p5utils/src/lib/utils/project'
+import { SketchConfigStore, applyConfig, instruction } from 'p5utils/src/lib/utils/project'
 import { requireMusic } from 'src/assets'
+import { makeStoreV2 } from 'utils'
 import { renderSoundShape } from './feather'
-import { centerPosition, spinNumber } from './state'
-
-let cw: number
-let ch: number
-
-let fillColor: p5.Color
-let strokeColor: p5.Color
+import { spinNumber, wastedStore } from './state'
 
 const fftSize: FFTSize = 128
 const soundSource = createSoundSource(requireMusic('wasted.mp3'))
 const analyzer = createAnalyzer(soundSource.source, fftSize)
-
 let started = false
 
+const sketchStore = makeStoreV2<SketchConfigStore>(() => ({
+  cw: p.windowWidth,
+  ch: p.windowHeight,
+  fillColor: p.color(10, 245),
+  strokeColor: p.color(200, 100),
+  strokeWeight: 1,
+  frameRate: 60,
+  webgl: true,
+}))({})
+
+const paint = () => p.background(sketchStore.current.fillColor)
+
 const setup = () => {
-  cw = p.windowWidth
-  ch = p.windowHeight
-  p.createCanvas(cw, ch, p.WEBGL)
+  sketchStore.lazyInit()
+  wastedStore.lazyInit()
   p.angleMode(p.DEGREES)
-  fillColor = p.color(10, 245)
-  strokeColor = p.color(200, 100)
-  p.background(fillColor)
-  p.fill(strokeColor)
-  p.stroke(strokeColor)
-  p.strokeWeight(1)
+  applyConfig(sketchStore.current)
 
   const div = instruction()
 
@@ -52,11 +51,11 @@ const setup = () => {
 
 const draw = () => {
   if (!started) return
-  p.background(fillColor)
+  paint()
 
   // update camera & positions
   spinNumber.renew()
-  centerPosition.renew()
+  wastedStore.updateCenter()
 
   const m = p.millis() * 0.01
   p.rotateX(m * 0.2)
@@ -65,7 +64,7 @@ const draw = () => {
 
   // render
   const dataArray = analyzer.analyze()
-  renderSoundShape(dataArray, centerPosition.current, spinNumber.current)
+  renderSoundShape(dataArray, wastedStore.current.centerPosition, spinNumber.current)
 
   // camera
   p.camera(p.sin(m) * 1000, p.cos(m) * 1000, 500 + p.tan(m) * 100)

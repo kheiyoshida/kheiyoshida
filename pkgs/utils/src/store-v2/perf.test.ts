@@ -15,7 +15,7 @@ describe.skip(`performance comparision`, () => {
     state3: [1, 2, 3],
   }
 
-  const testStore = makeStoreV2<TestState>()({
+  const testStore = makeStoreV2<TestState>(deepCopy(objStore))({
     updateString: (s) => (val: string) => {
       s.state1 = val
     },
@@ -26,7 +26,6 @@ describe.skip(`performance comparision`, () => {
       s.state3 = s.state3.concat(val)
     },
   })
-  testStore.init(deepCopy(objStore))
 
   test.skip(`read`, () => {
     comparePerformance(

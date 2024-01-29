@@ -1,14 +1,14 @@
 export type State = Record<string, unknown>
 
-type Reducer<S extends State> = (state: S) => (...args: never[]) => void
+export type Reducer<S extends State> = (state: S) => (...args: never[]) => void
 
 export type ReducerMap<S extends State> = Record<string, Reducer<S>>
 
-interface Store<S> {
+export interface Store<S> {
   /**
-   * initialize state
+   * initializes the state using the given lazy initializer function
    */
-  init: (initialState: S) => void
+  lazyInit: () => void
 
   /**
    * current state
@@ -16,14 +16,23 @@ interface Store<S> {
   current: Readonly<S>
 }
 
-type StoreWithReducers<S extends State, RM extends ReducerMap<S>> = Store<S> & {
+export type StoreWithReducers<S extends State, RM extends ReducerMap<S>> = Store<S> & {
   [k in keyof RM]: ReturnType<RM[k]>
 }
 
+export type LazyInit<S> = () => S
+
 export const makeStoreV2 =
-  <S extends State>() =>
-  <RM extends ReducerMap<S>, K extends keyof S>(reducerMap: RM): StoreWithReducers<S, RM> => {
+  <S extends State>(initialState: S | LazyInit<S>) =>
+  <RM extends ReducerMap<S>>(reducerMap: RM): StoreWithReducers<S, RM> => {
     let state: Readonly<S>
+
+    let lazyInit: LazyInit<S>
+    if (initialState instanceof Function) {
+      lazyInit = initialState
+    } else {
+      state = initialState
+    }
 
     const bound = Object.fromEntries(
       Object.entries(reducerMap).map(([k, reducer]) => [k, (...args) => reducer(state)(...args)])
@@ -33,13 +42,12 @@ export const makeStoreV2 =
 
     return {
       ...bound,
-      init: (initialState: S) => {
-        if (state) {
-          throw new Error(`already initialized`)
-        }
-        state = initialState
+      lazyInit() {
+        if (!lazyInit) throw Error(`lazy initializer was not provided`)
+        state = lazyInit()
       },
       get current() {
+        if (!state) throw Error(`state is not initalized yet`)
         return state
       },
     }

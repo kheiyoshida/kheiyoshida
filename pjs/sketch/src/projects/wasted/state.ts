@@ -1,5 +1,5 @@
-import { make3DPositionWobbler } from 'p5utils/src/lib/utils/3d'
-import { makePingpongNumberStore, randomFloatBetween } from 'utils'
+import p5 from 'p5'
+import { makePingpongNumberStore, makeStoreV2, randomFloatBetween } from 'utils'
 
 const MinSpin = 0.5
 const MaxSpin = 2
@@ -12,4 +12,16 @@ export const spinNumber = makePingpongNumberStore(
   InitialSpin
 )
 
-export const centerPosition = make3DPositionWobbler(3)
+export type WastedState = {
+  centerPosition: p5.Vector
+}
+
+export const wastedStore = makeStoreV2<WastedState>(() => ({
+  centerPosition: new p5.Vector(),
+}))({
+  updateCenter:
+    (s) =>
+    (wobbleAmount: number = 3) => {
+      s.centerPosition = s.centerPosition.add(p5.Vector.random3D().mult(wobbleAmount))
+    },
+})
