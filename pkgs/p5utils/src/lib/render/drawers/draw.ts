@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { shakeVector, shakeVector3D } from '../../utils/p5utils'
+import { pushPop, shakeVector, shakeVector3D } from '../../utils/p5utils'
 
 export const drawLineBetweenVectors = (p1: p5.Vector, p2: p5.Vector) => {
   p.line(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z)
@@ -15,4 +15,11 @@ export const shakyLineBetweenVectors2D = (p1: p5.Vector, p2: p5.Vector, shake: n
 
 export const shakyLineBetweenVectors3D = (p1: p5.Vector, p2: p5.Vector, shake: number) => {
   drawLineBetweenVectors(shakeVector3D(p1, shake), shakeVector3D(p2, shake))
+}
+
+export const drawAtPosition = (v: p5.Vector, draw: () => void) => {
+  pushPop(() => {
+    p.translate(v)
+    draw()
+  })
 }

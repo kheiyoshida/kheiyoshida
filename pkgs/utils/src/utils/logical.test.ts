@@ -1,4 +1,4 @@
-import { compareTuples, negateIf } from "./logical";
+import { compareTuples, loop, negateIf } from "./logical";
 
 test(`${compareTuples.name}`, () => {
   expect(compareTuples([0, 1], [0, 1])).toBe(true)
@@ -12,4 +12,10 @@ test(`${negateIf.name}`, () => {
   expect(negateIf(true, false)).toBe(true)
   expect(negateIf(false, true)).toBe(true)
   expect(negateIf(false, false)).toBe(false)
+})
+
+test(`${loop.name}`, () => {
+  const fn = jest.fn()
+  loop(3, fn)
+  expect(fn).toHaveBeenCalledTimes(3)
 })
