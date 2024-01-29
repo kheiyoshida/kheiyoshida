@@ -1,6 +1,6 @@
-import * as G from 'p5utils/src/lib/data/graph'
-import { NodeGraph } from 'p5utils/src/lib/data/graph/types'
-import * as N from 'p5utils/src/lib/data/node'
+import * as G from 'p5utils/src/data/graph'
+import { NodeGraph } from 'p5utils/src/data/graph/types'
+import * as N from 'p5utils/src/data/node'
 import { Node } from './node'
 
 export type Graph = NodeGraph<Node>

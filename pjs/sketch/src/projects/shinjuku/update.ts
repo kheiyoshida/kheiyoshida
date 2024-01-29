@@ -1,5 +1,5 @@
-import { PixelParseOptionSelector } from 'p5utils/src/lib/media/pixel/options'
-import { VideoSupply } from 'p5utils/src/lib/media/video/supply'
+import { PixelParseOptionSelector } from 'p5utils/src/media/pixel/options'
+import { VideoSupply } from 'p5utils/src/media/video/supply'
 import { makeIntWobbler, fireByRate as random, randomItemFromArray } from 'utils'
 
 const wobble = makeIntWobbler(5)

@@ -1,4 +1,4 @@
-import { pushPop } from "p5utils/src/lib/p5utils"
+import { pushPop } from "p5utils/src/p5utils"
 
 const btnFac = (base: number) => (
   text: string, x: number, y: number

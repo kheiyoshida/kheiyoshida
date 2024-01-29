@@ -4,13 +4,13 @@ import {
   callContext,
   createAnalyzer,
   createSoundSource
-} from 'p5utils/src/lib/media/audio/analyzer'
-import { FFTSize } from 'p5utils/src/lib/media/audio/types'
-import { drawLineBetweenVectors } from 'p5utils/src/lib/render/drawers/draw'
-import { mapToSphere } from 'p5utils/src/lib/render/helpers/sphere'
-import { instruction } from "p5utils/src/lib/utils/project"
+} from 'p5utils/src/media/audio/analyzer'
+import { FFTSize } from 'p5utils/src/media/audio/types'
+import { drawLineBetweenVectors } from 'p5utils/src/render/drawers/draw'
+import { mapToSphere } from 'p5utils/src/render/helpers/sphere'
+import { instruction } from "p5utils/src/utils/project"
 import { randomFloatBetween as randomBetween } from "utils"
-import { degree2Vector, pushPop } from 'p5utils/src/lib/utils/p5utils'
+import { degree2Vector, pushPop } from 'p5utils/src/utils/p5utils'
 
 let cw: number
 let ch: number

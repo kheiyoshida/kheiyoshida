@@ -1,5 +1,5 @@
-import { Analyzer } from 'p5utils/src/lib/media/audio/types'
-import { pushPop } from 'p5utils/src/lib/utils/p5utils'
+import { Analyzer } from 'p5utils/src/media/audio/types'
+import { pushPop } from 'p5utils/src/utils/p5utils'
 import { clamp, makeIntWobbler } from 'utils'
 import { LocBrightness } from '.'
 

@@ -1,5 +1,5 @@
-import { draw3DGrid } from 'p5utils/src/lib/debug/3d'
-import { SketchConfigStore, applyConfig } from 'p5utils/src/lib/utils/project'
+import { draw3DGrid } from 'p5utils/src/debug/3d'
+import { SketchConfigStore, applyConfig } from 'p5utils/src/utils/project'
 import { makeStoreV2 } from 'utils'
 import { cameraStore } from './state'
 

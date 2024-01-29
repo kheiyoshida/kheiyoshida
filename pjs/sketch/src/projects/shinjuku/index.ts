@@ -4,22 +4,22 @@ import {
   callContext,
   createAnalyzer,
   createSoundSource,
-} from 'p5utils/src/lib/media/audio/analyzer'
-import { FFTSize } from 'p5utils/src/lib/media/audio/types'
+} from 'p5utils/src/media/audio/analyzer'
+import { FFTSize } from 'p5utils/src/media/audio/types'
 import {
   PixelParseOptionSelector,
   makePixelParseOptionSelector,
-} from 'p5utils/src/lib/media/pixel/options'
-import { parseVideo } from 'p5utils/src/lib/media/video'
-import { prepareVideoElements } from 'p5utils/src/lib/media/video/source'
-import { VideoSupply, makeVideoSupply } from 'p5utils/src/lib/media/video/supply'
-import { calcPixelSize } from 'p5utils/src/lib/media/pixel/pixels'
+} from 'p5utils/src/media/pixel/options'
+import { parseVideo } from 'p5utils/src/media/video'
+import { prepareVideoElements } from 'p5utils/src/media/video/source'
+import { VideoSupply, makeVideoSupply } from 'p5utils/src/media/video/supply'
+import { calcPixelSize } from 'p5utils/src/media/pixel/pixels'
 import { memorize } from 'utils'
 import { calcWave, drawMatrix } from './render'
 import { videoSource } from './source'
 import { updateVideoOptions } from './update'
-import { iterateMatrix } from 'p5utils/src/lib/data/matrix/matrix'
-import { brightness } from 'p5utils/src/lib/media/pixel/analyze'
+import { iterateMatrix } from 'p5utils/src/data/matrix/matrix'
+import { brightness } from 'p5utils/src/media/pixel/analyze'
 import { requireMusic } from '../../assets'
 
 export const VIDEO_PARSE_PX_WIDTH = 200

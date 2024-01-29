@@ -1,7 +1,7 @@
 import p5 from 'p5'
-import * as G from 'p5utils/src/lib/data/graph/index'
-import { restrain3D, restrainFromNode, rotate3D } from 'p5utils/src/lib/data/node/3d'
-import * as NODE from 'p5utils/src/lib/data/node/index'
+import * as G from 'p5utils/src/data/graph/index'
+import { restrain3D, restrainFromNode, rotate3D } from 'p5utils/src/data/node/3d'
+import * as NODE from 'p5utils/src/data/node/index'
 import { fireByRate as random, randomFloatBetween as randomBetween, randomIntBetween } from 'utils'
 import { Node, connectNode, createNode, disconnectNode, growNode } from './node'
 

@@ -1,5 +1,5 @@
-import { NodeTerritory } from 'p5utils/src/lib/data/node/types'
-import { SketchConfigStore, applyConfig } from 'p5utils/src/lib/utils/project'
+import { NodeTerritory } from 'p5utils/src/data/node/types'
+import { SketchConfigStore, applyConfig } from 'p5utils/src/utils/project'
 import { makeStore } from 'utils'
 import { Graph, cleanGraph } from './graph'
 import { live, move, seed } from './node'

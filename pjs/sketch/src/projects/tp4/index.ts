@@ -3,13 +3,13 @@ import {
   callContext,
   createAnalyzer,
   createSoundSource,
-} from 'p5utils/src/lib/media/audio/analyzer'
-import { FFTSize } from 'p5utils/src/lib/media/audio/types'
+} from 'p5utils/src/media/audio/analyzer'
+import { FFTSize } from 'p5utils/src/media/audio/types'
 import {
   SketchConfigStore,
   applyConfig,
   instruction,
-} from 'p5utils/src/lib/utils/project'
+} from 'p5utils/src/utils/project'
 import { makeStore } from 'utils'
 import {
   cleanGraph,

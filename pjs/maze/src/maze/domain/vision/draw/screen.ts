@@ -1,4 +1,4 @@
-import { pushPop } from 'p5utils/src/lib/p5utils'
+import { pushPop } from 'p5utils/src/p5utils'
 
 export const screenPaint = () => {
   pushPop(() => {

@@ -8,12 +8,6 @@
     "module": "CommonJS",
     "rootDir": "./src",
     "moduleResolution": "node",
-    "baseUrl": "./src",
-    "paths": {
-        "src/*": [
-            "./src/*"
-        ],
-    },
     "resolveJsonModule": true,
     "allowJs": true,
     "declaration": true,

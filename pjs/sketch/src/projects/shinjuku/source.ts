@@ -1,4 +1,4 @@
-import { GetVideoSource, VideoSourceList } from 'p5utils/src/lib/media/video/types'
+import { GetVideoSource, VideoSourceList } from 'p5utils/src/media/video/types'
 import { randomItemFromArray } from "utils"
 import { requireVideo } from "../../assets"
 

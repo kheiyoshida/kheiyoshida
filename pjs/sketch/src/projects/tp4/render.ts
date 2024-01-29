@@ -1,5 +1,5 @@
-import { drawLineBetweenVectors, shakyLineBetweenVectors3D } from 'p5utils/src/lib/render/drawers/draw'
-import { pushPop, shakeVector3D } from 'p5utils/src/lib/utils/p5utils'
+import { drawLineBetweenVectors, shakyLineBetweenVectors3D } from 'p5utils/src/render/drawers/draw'
+import { pushPop, shakeVector3D } from 'p5utils/src/utils/p5utils'
 import { Node } from './node'
 
 export const renderGraph = (graph: Node[]) => {

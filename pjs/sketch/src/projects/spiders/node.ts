@@ -1,6 +1,6 @@
-import { GraphNode } from 'p5utils/src/lib/data/graph/types'
-import * as N from 'p5utils/src/lib/data/node'
-import { NodeTerritory } from 'p5utils/src/lib/data/node/types'
+import { GraphNode } from 'p5utils/src/data/graph/types'
+import * as N from 'p5utils/src/data/node'
+import { NodeTerritory } from 'p5utils/src/data/node/types'
 import { fireByRate as random, randomIntBetween } from 'utils'
 
 const DEFAULT_NODE_SPEED = 30

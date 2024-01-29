@@ -1,4 +1,4 @@
-import { BaseNode3D } from "p5utils/src/lib/data/node/types"
+import { BaseNode3D } from "p5utils/src/data/node/types"
 
 export type CameraNode = BaseNode3D & {
   move: () => void

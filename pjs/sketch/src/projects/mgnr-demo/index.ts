@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { applyConfig } from 'p5utils/src/lib/utils/project'
+import { applyConfig } from 'p5utils/src/utils/project'
 import { randomIntBetween } from 'utils'
 import * as Tone from 'tone'
 import { randomIntInclusiveBetween } from 'utils'

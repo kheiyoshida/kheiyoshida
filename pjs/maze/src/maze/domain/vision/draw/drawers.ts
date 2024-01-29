@@ -1,4 +1,4 @@
-import { pointLine } from 'p5utils/src/lib/p5utils'
+import { pointLine } from 'p5utils/src/p5utils'
 import { defaultLayerFactory } from './layers'
 import { withBlurred } from './patterns/blur'
 import { distortedPath, distortedSpec } from './patterns/distorted'
