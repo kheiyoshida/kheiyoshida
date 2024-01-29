@@ -1,20 +1,13 @@
 import p5 from 'p5'
 import { valueOrFn } from 'utils'
-import { mutate } from '.'
+import { distanceBetweenNodes, mutate } from '.'
 import { BaseNode3D } from './types'
-
-export const createBase3D = () => {
-
-}
 
 /**
  * restrain node's position within territory
  * @param distance furthest distance that node can reach from the center (0,0,0)
  */
-export const restrain3D = <Node extends BaseNode3D>(
-  node: Node,
-  distance: number
-) => {
+export const restrain3D = <Node extends BaseNode3D>(node: Node, distance: number) => {
   const distanceFromCenter = node.position.mag()
   if (distanceFromCenter > distance) {
     node.position.sub(node.move)
@@ -25,10 +18,9 @@ export const restrain3D = <Node extends BaseNode3D>(
 export const restrainFromNode = <Node extends BaseNode3D>(
   parent: Node,
   child: Node,
-  distance: number,
-):boolean => {
-  const distanceFromParent = parent.position.copy().sub(child.position).mag()
-  return distanceFromParent > distance
+  distance: number
+): boolean => {
+  return distanceBetweenNodes(parent, child) > distance
 }
 
 /**
@@ -47,10 +39,6 @@ export const rotate3D = <Node extends BaseNode3D>(
   }
   mutate<BaseNode3D>(node, {
     angles,
-    move: p5.Vector.fromAngles(
-      p.radians(angles.theta),
-      p.radians(angles.phi),
-      node.move.mag()
-    ),
+    move: p5.Vector.fromAngles(p.radians(angles.theta), p.radians(angles.phi), node.move.mag()),
   })
 }
