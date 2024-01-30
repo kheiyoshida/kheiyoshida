@@ -1,7 +1,24 @@
 import p5 from 'p5'
 import { valueOrFn } from 'utils'
 import { distanceBetweenNodes, mutate } from '.'
-import { BaseNode3D } from './types'
+import { BaseNode3D, VectorAngles } from './types'
+
+export const createBase3D = (
+  position: p5.Vector = new p5.Vector(),
+  angles: VectorAngles = {
+    theta: 0,
+    phi: 0,
+  },
+  speed: number = 1,
+): BaseNode3D => ({
+  position,
+  move: p5.Vector.fromAngles(
+    p.radians(angles.theta),
+    p.radians(angles.phi),
+    speed
+  ),
+  angles: angles,
+})
 
 /**
  * restrain node's position within territory

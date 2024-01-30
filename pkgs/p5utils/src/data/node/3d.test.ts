@@ -1,10 +1,22 @@
 import p5 from 'p5'
 import { createBase } from '.'
-import { restrain3D, restrainFromNode, rotate3D } from './3d'
+import { createBase3D, restrain3D, restrainFromNode, rotate3D } from './3d'
 import { BaseNode3D } from './types'
 
 beforeAll(() => {
   jest.spyOn(p, 'radians').mockImplementation((d) => (d * Math.PI) / 180)
+})
+
+test(`${createBase3D.name}`, () => {
+  const spyFromAngles = jest.spyOn(p5.Vector, 'fromAngles')
+  const node = createBase3D(new p5.Vector(0, 100, 0), { theta: 10, phi: 30 }, 10)
+  expect(spyFromAngles.mock.calls[0]).toMatchInlineSnapshot(`
+    [
+      0.17453292519943295,
+      0.5235987755982988,
+      10,
+    ]
+  `)
 })
 
 test(`${restrain3D.name}`, () => {

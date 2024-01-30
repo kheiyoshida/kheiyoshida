@@ -1,9 +1,11 @@
+import p5 from 'p5'
 import { draw3DGrid } from 'p5utils/src/debug/3d'
+import { drawLineBetweenVectors } from 'p5utils/src/render/drawers/draw'
 import { SketchConfigStore, applyConfig } from 'p5utils/src/utils/project'
 import { makeStoreV2 } from 'utils'
-import { cameraStore } from './state'
-
-import { bindKeyEvent, Direction } from './commands'
+import { createCamera } from 'p5utils/src/camera'
+import { Camera } from 'p5utils/src/camera/types'
+import { Direction, bindKeyEvent } from './commands'
 
 const store = makeStoreV2<SketchConfigStore>(() => ({
   cw: p.windowWidth,
@@ -17,16 +19,16 @@ const store = makeStoreV2<SketchConfigStore>(() => ({
 
 const paint = () => p.background(store.current.fillColor)
 
-let dir: Direction = null
-
+let dir: Direction
+let camera: Camera
 const setup = () => {
   store.lazyInit()
   applyConfig(store.current)
-
-  cameraStore.lazyInit()
-  cameraStore.initialMove()
   p.angleMode(p.DEGREES)
 
+  camera = createCamera()
+  camera.setDirection({ theta: 90, phi: 0 })
+  camera.setSpeed(10)
   bindKeyEvent((d) => {
     dir = d
   })
@@ -35,22 +37,24 @@ const setup = () => {
 const draw = () => {
   paint()
   draw3DGrid()
-  const camera = cameraStore.current.camera
-  // camera.move()
+  // const camera = cameraStore.current.camera
+  camera.move()
   p.orbitControl()
+
+  drawLineBetweenVectors(new p5.Vector(), p5.Vector.fromAngles(p.radians(90), 0, 1000))
 
   switch (dir) {
     case 'left':
-      camera.camera.pan(-1)
+      camera.setDirection({ theta: 90, phi: 270 })
       break
     case 'right':
-      camera.camera.pan(1)
+      camera.setDirection({ theta: 90, phi: 90 })
       break
     case 'go':
-      camera.camera.tilt(1)
+      camera.setDirection({ theta: 0, phi: 0 })
       break
     case 'back':
-      camera.camera.tilt(-1)
+      camera.setDirection({ theta: 180, phi: 0 })
       break
   }
 }

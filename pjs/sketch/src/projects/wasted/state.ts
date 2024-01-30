@@ -1,23 +1,23 @@
-import { ReducerMap, makeStoreV2 } from 'utils'
-import { Camera, createCamera } from './camera'
-import p5 from 'p5'
+// import { ReducerMap, makeStoreV2 } from 'utils'
 
-export type CameraState = {
-  camera: Camera
-}
+// import p5 from 'p5'
 
-const initCameraStore = (): CameraState => {
-  const camera = createCamera()
-  camera.camera.setPosition(0, 0, 0)
-  return {
-    camera,
-  }
-}
+// export type CameraState = {
+//   camera: Camera
+// }
 
-const cameraStoreReducerMap: ReducerMap<CameraState> = {
-  initialMove: (s) => () => {
-    s.camera.setMovement(new p5.Vector(0, 1, 0))
-  },
-}
+// const initCameraStore = (): CameraState => {
+//   const camera = createCamera()
+//   camera.camera.setPosition(0, 0, 0)
+//   return {
+//     camera,
+//   }
+// }
 
-export const cameraStore = makeStoreV2<CameraState>(initCameraStore)(cameraStoreReducerMap)
+// const cameraStoreReducerMap: ReducerMap<CameraState> = {
+//   initialMove: (s) => () => {
+//     s.camera.setMovement(new p5.Vector(0, 1, 0))
+//   },
+// }
+
+// export const cameraStore = makeStoreV2<CameraState>(initCameraStore)(cameraStoreReducerMap)
