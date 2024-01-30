@@ -1,10 +1,10 @@
 import p5 from 'p5'
+import { createCamera } from 'p5utils/src/camera'
+import { Camera } from 'p5utils/src/camera/types'
 import { draw3DGrid } from 'p5utils/src/debug/3d'
 import { drawLineBetweenVectors } from 'p5utils/src/render/drawers/draw'
 import { SketchConfigStore, applyConfig } from 'p5utils/src/utils/project'
 import { makeStoreV2 } from 'utils'
-import { createCamera } from 'p5utils/src/camera'
-import { Camera } from 'p5utils/src/camera/types'
 import { Direction, bindKeyEvent } from './commands'
 
 const store = makeStoreV2<SketchConfigStore>(() => ({
@@ -12,7 +12,7 @@ const store = makeStoreV2<SketchConfigStore>(() => ({
   ch: p.windowHeight,
   fillColor: p.color(20),
   strokeColor: p.color(255),
-  frameRate: 60,
+  frameRate: 30,
   strokeWeight: 1,
   webgl: true,
 }))({})
@@ -27,8 +27,12 @@ const setup = () => {
   p.angleMode(p.DEGREES)
 
   camera = createCamera()
+  camera.setPosition(0, 0, 0)
   camera.setDirection({ theta: 90, phi: 0 })
   camera.setSpeed(10)
+  camera.setFocus([0, -100, 0])
+  camera.move()
+
   bindKeyEvent((d) => {
     dir = d
   })
@@ -36,10 +40,10 @@ const setup = () => {
 
 const draw = () => {
   paint()
-  draw3DGrid()
-  // const camera = cameraStore.current.camera
-  camera.move()
-  p.orbitControl()
+  draw3DGrid(3, 1000)
+
+  // camera.move()
+  camera.turn({ theta: 0.5, phi: 0 })
 
   drawLineBetweenVectors(new p5.Vector(), p5.Vector.fromAngles(p.radians(90), 0, 1000))
 

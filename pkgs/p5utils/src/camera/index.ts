@@ -1,10 +1,18 @@
 import p5 from 'p5'
-import { Camera } from './types'
 import { createCameraNode } from './node'
+import { Camera, Position3D } from './types'
 
 export function createCamera(p5camera?: p5.Camera): Camera {
   const camera = p5camera || p.createCamera()
   const node = createCameraNode()
+  let focus: Position3D | undefined
+  function keepFocus() {
+    if (!focus) return
+    camera.lookAt(...focus)
+  }
+  function setFocus(position?: Position3D) {
+    focus = position
+  }
   return {
     setPosition: (x, y, z) => {
       node.setPosition(x, y, z)
@@ -22,6 +30,16 @@ export function createCamera(p5camera?: p5.Camera): Camera {
     move() {
       node.move()
       camera.setPosition(...node.position)
+      keepFocus()
+    },
+    setFocus,
+    get focus() {
+      return focus
+    },
+    turn(angles) {
+      setFocus(undefined)
+      camera.tilt(angles.theta)
+      camera.pan(angles.phi)
     },
   }
 }

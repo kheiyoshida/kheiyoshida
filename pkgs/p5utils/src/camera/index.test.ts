@@ -1,10 +1,16 @@
 import p5 from 'p5'
 import { createCamera } from '.'
+import { Position3D } from './types'
+
+const radians = (degree: number) => degree * (Math.PI / 180)
 
 jest.mock('p5', () => ({
   ...jest.requireActual('p5'),
   Camera: jest.fn().mockImplementation(() => ({
     setPosition: jest.fn(),
+    lookAt: jest.fn(),
+    tilt: jest.fn(),
+    pan: jest.fn(),
   })),
 }))
 
@@ -31,9 +37,39 @@ describe(`${createCamera.name}`, () => {
   })
   it(`can set direction & speed to move`, () => {
     const { camera } = prepare()
-    camera.setDirection({theta: 90, phi: 90})
+    camera.setDirection({ theta: 90, phi: 90 })
     camera.setSpeed(100)
     camera.move()
     expect(camera.position[0]).toBe(100)
+  })
+  it(`can focus at the position while moving`, () => {
+    const { camera, p5camera } = prepare()
+    const spyLookAt = jest.spyOn(p5camera, 'lookAt')
+    const focusPoint: Position3D = [100, 100, 0]
+    camera.setFocus(focusPoint)
+    expect(camera.focus).toMatchObject(focusPoint)
+    camera.move()
+    expect(spyLookAt).toHaveBeenNthCalledWith(1, ...focusPoint)
+    camera.move()
+    expect(spyLookAt).toHaveBeenNthCalledWith(2, ...focusPoint)
+    camera.setFocus(undefined)
+    camera.move()
+    expect(spyLookAt).toHaveBeenCalledTimes(2)
+    expect(camera.focus).toBeUndefined()
+  })
+  it(`can turn around by passing degrees delta`, () => {
+    const { camera, p5camera } = prepare()
+    const spyTilt = jest.spyOn(p5camera, 'tilt')
+    const spyPan = jest.spyOn(p5camera, 'pan')
+    camera.turn({ theta: 20, phi: -10 })
+    expect(spyTilt).toHaveBeenCalledWith(20)
+    expect(spyPan).toHaveBeenCalledWith(-10)
+  })
+  it(`should cancel focusing when turning around`, () => {
+    const { camera } = prepare()
+    camera.setFocus([100, 100, 0])
+    expect(camera.focus).toBeDefined()
+    camera.turn({ theta: 20, phi: -10 })
+    expect(camera.focus).toBeUndefined()
   })
 })
