@@ -11,6 +11,7 @@ export type Camera = {
   setFocus: (position?: Position3D) => void
   focus: Position3D | undefined
   turn: (angles: VectorAngles)  => void
+  cameraCenter: Position3D
 }
 
 export type CameraNode = {

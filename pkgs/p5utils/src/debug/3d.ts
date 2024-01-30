@@ -1,12 +1,32 @@
 import p5 from 'p5'
 import { loop3D, memorize } from 'utils'
+import { revertToSphericalCoordinate } from '../3d'
+import { Position3D } from '../camera/types'
 import { drawAtPosition } from '../render/drawers/draw'
+import { pushPop } from '../utils'
 
-export const draw3DGrid = (numOfGrid = 3, size = 1000) => {
+export const draw3DGrid = (
+  numOfGrid = 3,
+  size = 1000,
+  cameraPosition?: Position3D,
+  cameraCenter?: Position3D
+) => {
   const vectors = memorize(create3dGrid)(numOfGrid, size)
   vectors.forEach((v) => {
-    p.text(v.array().toString(), v.x, v.y)
-    drawAtPosition(v, () => p.sphere(10, 8, 8))
+    drawAtPosition(v, () => {
+      if (cameraCenter) {
+        const toV = v.copy().sub(...cameraCenter)
+        const [theta, phi] = revertToSphericalCoordinate(toV)
+        pushPop(() => {
+          p.rotateX(p.degrees(theta))
+          p.rotateY(p.degrees(phi))
+          p.text(v.array().toString(), 0, 0)
+        })
+      } else {
+        p.text(v.array().toString(), 0, 0)
+      }
+      p.sphere(size / 100)
+    })
   })
 }
 

@@ -41,5 +41,8 @@ export function createCamera(p5camera?: p5.Camera): Camera {
       camera.tilt(angles.theta)
       camera.pan(angles.phi)
     },
+    get cameraCenter(): Position3D {
+      return [camera.centerX, camera.centerY, camera.centerZ]
+    },
   }
 }

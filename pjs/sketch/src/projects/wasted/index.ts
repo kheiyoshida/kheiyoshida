@@ -7,6 +7,8 @@ import { SketchConfigStore, applyConfig } from 'p5utils/src/utils/project'
 import { makeStoreV2 } from 'utils'
 import { Direction, bindKeyEvent } from './commands'
 
+import robotoFont from './font/Roboto/Roboto-Black.ttf'
+
 const store = makeStoreV2<SketchConfigStore>(() => ({
   cw: p.windowWidth,
   ch: p.windowHeight,
@@ -30,20 +32,25 @@ const setup = () => {
   camera.setPosition(0, 0, 0)
   camera.setDirection({ theta: 90, phi: 0 })
   camera.setSpeed(10)
-  camera.setFocus([0, -100, 0])
-  camera.move()
 
   bindKeyEvent((d) => {
     dir = d
+  })
+
+  p.loadFont(robotoFont, (font) => {
+    p.fill(store.current.strokeColor)
+    p.textFont(font)
+    p.textSize(80)
   })
 }
 
 const draw = () => {
   paint()
-  draw3DGrid(3, 1000)
+  draw3DGrid(3, 1000, camera.position, camera.cameraCenter)
 
-  // camera.move()
-  camera.turn({ theta: 0.5, phi: 0 })
+  swim()
+  camera.move()
+  // camera.turn({ theta: 0.2, phi: 0.5 })
 
   drawLineBetweenVectors(new p5.Vector(), p5.Vector.fromAngles(p.radians(90), 0, 1000))
 
@@ -61,6 +68,14 @@ const draw = () => {
       camera.setDirection({ theta: 180, phi: 0 })
       break
   }
+
+  
+}
+
+const swim = () => {
+  const x = p.mouseX - p.windowWidth / 2
+  const y = p.mouseY - p.windowHeight / 2
+  camera.turn({theta: y / 1000, phi: -x / 1000})
 }
 
 export default <Sketch>{

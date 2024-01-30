@@ -2,7 +2,7 @@ import p5 from 'p5'
 import { createCamera } from '.'
 import { Position3D } from './types'
 
-const radians = (degree: number) => degree * (Math.PI / 180)
+
 
 jest.mock('p5', () => ({
   ...jest.requireActual('p5'),
