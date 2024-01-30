@@ -1,6 +1,7 @@
 import p5 from 'p5'
 import { createCameraNode } from './node'
 import { Camera, Position3D } from './types'
+import { getCameraCenter, getForwardDir } from './helpers'
 
 export function createCamera(p5camera?: p5.Camera): Camera {
   const camera = p5camera || p.createCamera()
@@ -13,6 +14,7 @@ export function createCamera(p5camera?: p5.Camera): Camera {
   function setFocus(position?: Position3D) {
     focus = position
   }
+
   return {
     setPosition: (x, y, z) => {
       node.setPosition(x, y, z)
@@ -21,8 +23,15 @@ export function createCamera(p5camera?: p5.Camera): Camera {
     get position() {
       return node.position
     },
-    setDirection(angles) {
+    setAbsoluteDirection(angles) {
       node.setDirection(angles)
+    },
+    setRelativeDirection(angles) {
+      const currentLookinDirection = getForwardDir(this.cameraCenter, node.position)
+      node.setDirection({
+        theta: currentLookinDirection.theta + angles.theta,
+        phi: currentLookinDirection.phi + angles.phi,
+      })
     },
     setSpeed(speed) {
       node.setSpeed(speed)
@@ -42,7 +51,7 @@ export function createCamera(p5camera?: p5.Camera): Camera {
       camera.pan(angles.phi)
     },
     get cameraCenter(): Position3D {
-      return [camera.centerX, camera.centerY, camera.centerZ]
+      return getCameraCenter(camera)
     },
   }
 }

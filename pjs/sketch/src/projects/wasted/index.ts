@@ -30,7 +30,7 @@ const setup = () => {
 
   camera = createCamera()
   camera.setPosition(0, 0, 0)
-  camera.setDirection({ theta: 90, phi: 0 })
+  camera.setAbsoluteDirection({ theta: 90, phi: 0 })
   camera.setSpeed(10)
 
   bindKeyEvent((d) => {
@@ -56,16 +56,16 @@ const draw = () => {
 
   switch (dir) {
     case 'left':
-      camera.setDirection({ theta: 90, phi: 270 })
+      camera.setRelativeDirection({ theta: 0, phi: 90 })
       break
     case 'right':
-      camera.setDirection({ theta: 90, phi: 90 })
+      camera.setRelativeDirection({ theta: 0, phi: -90 })
       break
     case 'go':
-      camera.setDirection({ theta: 0, phi: 0 })
+      camera.setRelativeDirection({ theta: 0, phi: 0 })
       break
     case 'back':
-      camera.setDirection({ theta: 180, phi: 0 })
+      camera.setRelativeDirection({ theta: 0, phi: 180 })
       break
   }
 

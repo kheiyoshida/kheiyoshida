@@ -1,8 +1,7 @@
 import p5 from 'p5'
 import { createCamera } from '.'
 import { Position3D } from './types'
-
-
+import * as helpers from './helpers'
 
 jest.mock('p5', () => ({
   ...jest.requireActual('p5'),
@@ -37,10 +36,29 @@ describe(`${createCamera.name}`, () => {
   })
   it(`can set direction & speed to move`, () => {
     const { camera } = prepare()
-    camera.setDirection({ theta: 90, phi: 90 })
+    camera.setAbsoluteDirection({ theta: 90, phi: 90 })
     camera.setSpeed(100)
     camera.move()
     expect(camera.position[0]).toBe(100)
+  })
+  it(`can set direction relative to the current perspective`, () => {
+    const { camera } = prepare()
+    // suppose it's moving backward, facing right direction
+    camera.setPosition(0, 0, 100)
+    camera.setAbsoluteDirection({
+      theta: 90,
+      phi: 0
+    })
+    expect(camera.position[2]).toBeCloseTo(100)
+    camera.setSpeed(100)
+    jest.spyOn(helpers, 'getForwardDir').mockReturnValue({theta: 90, phi: 90})
+    
+    const toRelativeForward = { theta: 0, phi: 0 }
+    camera.setRelativeDirection(toRelativeForward)
+    camera.move()
+    expect(camera.position[0]).toBeCloseTo(100)
+    expect(camera.position[1]).toBeCloseTo(0)
+    expect(camera.position[2]).toBeCloseTo(100)
   })
   it(`can focus at the position while moving`, () => {
     const { camera, p5camera } = prepare()

@@ -5,7 +5,8 @@ export type Position3D = [x: number, y: number, z: number]
 export type Camera = {
   setPosition: (x: number, y: number, z: number) => void
   position: Position3D
-  setDirection: (angles: VectorAngles) => void
+  setAbsoluteDirection: (angles: VectorAngles) => void
+  setRelativeDirection: (angles: VectorAngles) => void
   setSpeed: (speed: number) => void
   move: () => void
   setFocus: (position?: Position3D) => void
