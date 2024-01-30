@@ -3,7 +3,7 @@ import p5 from 'p5'
 export type Camera = ReturnType<typeof createCamera>
 
 export const createCamera = () => {
-  const camera = p.createCamera()
+  const camera = new p5.Camera()
   let movement = new p5.Vector()
   return {
     get position() {

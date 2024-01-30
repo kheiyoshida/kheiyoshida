@@ -1,68 +1,94 @@
 import p5 from 'p5'
-import { changeSpeed, createBase, duplicate, kill, move, mutate, restrain, rotate } from '.'
-
-jest.mock('p5')
+import {
+  changeSpeed,
+  createBase,
+  distanceBetweenNodes,
+  duplicate,
+  kill,
+  move,
+  mutate,
+  restrain,
+  rotate,
+} from '.'
+import { BaseNode } from './types'
 
 beforeAll(() => {
   jest.spyOn(p, 'radians').mockReturnValue(3.14)
-  jest.spyOn(p5.Vector, 'fromAngle').mockImplementation(() => new p5.Vector())
 })
 
 test(`${createBase.name}`, () => {
-  createBase([100, 100], 180, 100)
-  expect(p5.Vector).toHaveBeenCalledWith(100, 100)
-  expect(p5.Vector.fromAngle).toHaveBeenCalledWith(3.14, 100)
+  const fromAngle = jest.spyOn(p5.Vector, 'fromAngle')
+  const node = createBase([100, 100], 180, 100)
+  expect(node.position.array()).toMatchObject([100, 100, 0])
+  expect(fromAngle).toHaveBeenCalledWith(3.14, 100)
+})
+
+test(`base node can be bound with functions`, () => {
+  const createCustom = (node: BaseNode) => {
+    return {
+      node,
+      rotate: (angle: number) => rotate(node, angle),
+      move: () => move(node),
+      duplicate: () => createCustom(duplicate(node)),
+    }
+  }
+  const createCustomizedNode = (...args: Parameters<typeof createBase>) => {
+    const node = createBase(...args)
+    return createCustom(node)
+  }
+
+  const custom = createCustomizedNode([0, 0], 0, 100)
+  const ro = jest.spyOn(custom.node.move, 'rotate')
+  custom.rotate(90)
+  expect(ro).toHaveBeenCalledWith(90)
+
+  const dupe = custom.duplicate()
+  custom.move()
+  expect(custom.node.position.array()).not.toMatchObject([0, 0, 0])
+  expect(dupe.node.position.array()).toMatchObject([0, 0, 0])
 })
 
 test(`${duplicate.name}`, () => {
   const node = createBase()
-  duplicate(node)
-  expect(node.position.copy).toHaveBeenCalled()
-  expect(node.move.copy).toHaveBeenCalled()
+  const dupe = duplicate(node)
+  expect(node.position.array()).toMatchObject(dupe.position.array())
+  expect(node.move.array()).toMatchObject(dupe.move.array())
 })
 
 test(`${move.name}`, () => {
-  const node = createBase()
+  jest.spyOn(p, 'radians').mockReturnValue(0)
+  const node = createBase([0, 0], 0, 100)
   move(node)
-  expect(node.position.add).toHaveBeenCalledWith(node.move)
+  expect(node.position.array()).toMatchObject([100, 0, 0])
 })
 
 test(`${restrain.name}`, () => {
-  const set = jest.fn()
-  const rotate = jest.fn()
-  const mockVector = jest.spyOn(p5, 'Vector').mockImplementation(
-    () =>
-      ({
-        x: -10,
-        y: 110,
-        set,
-        rotate,
-      }) as unknown as p5.Vector
-  )
-  const node = createBase()
-
+  const node = createBase([-10, 110])
+  const set = jest.spyOn(node.position, 'set')
+  const rotate = jest.spyOn(node.move, 'rotate')
   restrain(node, {
     l: 0,
     r: 100,
     t: 0,
     b: 100,
   })
-  expect(set.mock.calls[0][0]).toBe(0)
-  expect(set.mock.calls[1][1]).toBe(100)
+  expect(set.mock.calls[0]).toMatchObject([0, 110])
+  expect(set.mock.calls[1]).toMatchObject([0, 100])
   expect(rotate).toHaveBeenCalledTimes(2)
-  mockVector.mockReset()
 })
 
 test(`${rotate.name}`, () => {
   const node = createBase()
+  const ro = jest.spyOn(node.move, 'rotate')
   rotate(node, 180)
-  expect(node.move.rotate).toHaveBeenCalledWith(180)
+  expect(ro).toHaveBeenCalledWith(180)
 })
 
 test(`${changeSpeed.name}`, () => {
   const node = createBase()
+  const setMag = jest.spyOn(node.move, 'setMag')
   changeSpeed(node, 100)
-  expect(node.move.setMag).toHaveBeenCalledWith(100)
+  expect(setMag).toHaveBeenCalledWith(100)
 })
 
 test(`${mutate.name}`, () => {
@@ -78,3 +104,10 @@ test(`${kill.name}`, () => {
   expect(node.dead).toBe(true)
 })
 
+test(`${distanceBetweenNodes.name}`, () => {
+  const node1 = createBase([0, 0])
+  const node2 = createBase([0, 100])
+  expect(distanceBetweenNodes(node1, node2)).toBe(100)
+  expect(node1.position.array()).toMatchObject([0, 0, 0])
+  expect(node2.position.array()).toMatchObject([0, 100, 0])
+})
