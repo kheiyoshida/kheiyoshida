@@ -8,7 +8,7 @@ const workEntities: WorkInfo[] = [
       '<iframe style="margin-top: 8px;" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1733015109&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>'
     ],
     videoLoc: [
-      '<iframe width="560" height="315" src="https://www.youtube.com/embed/pj1A4TFzog0?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>'
+      '<iframe width="560" height="315" src="https://www.youtube.com/embed/lqn06t1xFOE?si=3C_m7jlGAPoFHtok" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>'
     ],
     description: `
     Every time you walk through the crowd in a city, you walk past the shadows of them. Sometimes you don't even realize they all have their names. They are the anonymous shadows, and so are you to them. Every time I walk through the Shinjuku station, which is one of the busiest with millions of people every day, I find myself blurred. So I shot tens of videos in the city, then I treated them as indifferent figures and turned them into this work. 
