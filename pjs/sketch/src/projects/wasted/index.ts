@@ -1,91 +1,73 @@
-import p5 from 'p5'
-import { createCamera } from 'p5utils/src/camera'
-import { Camera } from 'p5utils/src/camera/types'
-import { draw3DGrid } from 'p5utils/src/debug/3d'
-import { drawAtPosition, drawLineBetweenVectors } from 'p5utils/src/render/drawers/draw'
-import { SketchConfigStore, applyConfig } from 'p5utils/src/utils/project'
+import {
+  callContext,
+  createAnalyzer,
+  createSoundSource,
+} from 'p5utils/src/media/audio/analyzer'
+import { FFTSize } from 'p5utils/src/media/audio/types'
+import { SketchConfigStore, applyConfig, instruction } from 'p5utils/src/utils/project'
+import { requireMusic } from 'src/assets'
 import { makeStoreV2 } from 'utils'
-import { Direction, bindKeyEvent } from './commands'
+import { renderSoundShape } from './feather'
+import { spinNumber, wastedStore } from './state'
 
-import robotoFont from './font/Roboto/Roboto-Black.ttf'
+const fftSize: FFTSize = 128
+const soundSource = createSoundSource(requireMusic('wasted.mp3'))
+const analyzer = createAnalyzer(soundSource.source, fftSize)
+let started = false
 
-const store = makeStoreV2<SketchConfigStore>(() => ({
+const sketchStore = makeStoreV2<SketchConfigStore>(() => ({
   cw: p.windowWidth,
   ch: p.windowHeight,
-  fillColor: p.color(20),
-  strokeColor: p.color(255),
-  frameRate: 30,
+  fillColor: p.color(10, 245),
+  strokeColor: p.color(200, 100),
   strokeWeight: 1,
+  frameRate: 60,
   webgl: true,
 }))({})
 
-const paint = () => p.background(store.current.fillColor)
+const paint = () => p.background(sketchStore.current.fillColor)
 
-let dir: Direction
-let camera: Camera
 const setup = () => {
-  store.lazyInit()
-  applyConfig(store.current)
+  sketchStore.lazyInit()
+  wastedStore.lazyInit()
   p.angleMode(p.DEGREES)
+  applyConfig(sketchStore.current)
 
-  camera = createCamera()
-  camera.setPosition(0, 0, 0)
-  camera.setAbsoluteDirection({ theta: 90, phi: 0 })
-  camera.setSpeed(10)
+  const div = instruction()
 
-  bindKeyEvent((d) => {
-    dir = d
-  })
+  const start = () => {
+    const context = callContext()
+    if (context.state === 'suspended') {
+      context.resume()
+    }
+    soundSource.play()
+    started = true
+    div.remove()
+  }
 
-  p.loadFont(robotoFont, (font) => {
-    p.fill(store.current.strokeColor)
-    p.textFont(font)
-    p.textSize(80)
-    draw3DGrid(3, 1000, camera)
-  })
-
-  p.stroke(100)
-  drawLineBetweenVectors(new p5.Vector(), p5.Vector.fromAngles(p.radians(90), 0, 1000))
+  p.mousePressed = start
+  p.touchStarted = start
 }
 
 const draw = () => {
+  if (!started) return
   paint()
-  draw3DGrid(3, 1000, camera)
 
-  swim()
-  camera.move()
-  // camera.turn({ theta: 0.2, phi: 0.5 })
+  // update camera & positions
+  spinNumber.renew()
+  wastedStore.updateCenter()
 
-  p.stroke(100)
-  drawLineBetweenVectors(new p5.Vector(), p5.Vector.fromAngles(p.radians(90), 0, 1000))
+  const m = p.millis() * 0.01
+  p.rotateX(m * 0.2)
+  p.rotateY(m * 0.1)
+  p.rotateZ(m)
 
-  switch (dir) {
-    case 'left':
-      camera.setRelativeDirection({ theta: 0, phi: 90 })
-      break
-    case 'right':
-      camera.setRelativeDirection({ theta: 0, phi: -90 })
-      break
-    case 'go':
-      camera.setRelativeDirection({ theta: 0, phi: 0 })
-      break
-    case 'back':
-      camera.setRelativeDirection({ theta: 0, phi: 180 })
-      break
-  }
-}
+  // render
+  const dataArray = analyzer.analyze()
+  renderSoundShape(dataArray, wastedStore.current.centerPosition, spinNumber.current)
 
-const drawCenter = () => {
-  drawAtPosition(new p5.Vector(...camera.cameraCenter), () => {
-    p.sphere(2)
-  })
-}
-
-const swim = () => {
-  const x = p.mouseX - p.windowWidth / 2
-  // const y = p.mouseY - p.windowHeight / 2
-  const y = 0
-  camera.turn({ theta: y / 1000, phi: -x / 1000 })
+  // camera
+  p.camera(p.sin(m) * 1000, p.cos(m) * 1000, 500 + p.tan(m) * 100)
 }
 
 export default <Sketch>{

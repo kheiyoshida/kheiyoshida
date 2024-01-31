@@ -1,10 +1,6 @@
 /* eslint-disable no-extra-semi */
 import p5 from 'p5'
-import {
-  callContext,
-  createAnalyzer,
-  createSoundSource,
-} from 'p5utils/src/media/audio/analyzer'
+import { callContext, createAnalyzer, createSoundSource } from 'p5utils/src/media/audio/analyzer'
 import { FFTSize } from 'p5utils/src/media/audio/types'
 import {
   PixelParseOptionSelector,
@@ -21,6 +17,7 @@ import { updateVideoOptions } from './update'
 import { iterateMatrix } from 'p5utils/src/data/matrix/matrix'
 import { brightness } from 'p5utils/src/media/pixel/analyze'
 import { requireMusic } from '../../assets'
+import { instruction } from 'p5utils/src/utils/project'
 
 const LIGHT_THRESHOLD_DEVICE_WIDTH = 800
 const isLight = window.innerWidth < LIGHT_THRESHOLD_DEVICE_WIDTH
@@ -53,12 +50,15 @@ const playSound = () => {
 
 let videoLoaded = false
 const prepareVideo = () => {
+  const div = instruction('loading...')
   prepareVideoElements(videoSource).then((videoElements) => {
     videoSupply = makeVideoSupply(videoElements, { speed: 0.1 })
     videoSupply.onEnded(() => videoSupply.swapVideo())
     parseOptions = makePixelParseOptionSelector(videoElements[0], VIDEO_PARSE_PX_WIDTH)
     pxSize = calcPxSize(parseOptions.currentOptions.size, parseOptions.currentOptions.skip, cw, ch)
     videoLoaded = true
+    div.remove()
+    instruction('click/tap to play')
   })
 }
 
@@ -69,16 +69,17 @@ const start = () => {
   }
   playSound()
   started = true
+  p.removeElements()
 }
 
 const setup = () => {
   prepareVideo()
   if (isLight) {
     cw = p.windowWidth
-    ch = cw * 3/ 4
+    ch = (cw * 3) / 4
   } else {
     ch = p.windowHeight
-    cw = ch * 4/ 3
+    cw = (ch * 4) / 3
   }
   const canvas = document.getElementsByTagName('canvas')[0]
   const marginTop = (p.windowHeight - ch) / 2

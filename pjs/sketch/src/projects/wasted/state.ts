@@ -1,23 +1,27 @@
-// import { ReducerMap, makeStoreV2 } from 'utils'
+import p5 from 'p5'
+import { makePingpongNumberStore, makeStoreV2, randomFloatBetween } from 'utils'
 
-// import p5 from 'p5'
+const MinSpin = 0.5
+const MaxSpin = 2
+const InitialSpin = 1
 
-// export type CameraState = {
-//   camera: Camera
-// }
+export const spinNumber = makePingpongNumberStore(
+  () => randomFloatBetween(0, 0.01),
+  MinSpin,
+  MaxSpin,
+  InitialSpin
+)
 
-// const initCameraStore = (): CameraState => {
-//   const camera = createCamera()
-//   camera.camera.setPosition(0, 0, 0)
-//   return {
-//     camera,
-//   }
-// }
+export type WastedState = {
+  centerPosition: p5.Vector
+}
 
-// const cameraStoreReducerMap: ReducerMap<CameraState> = {
-//   initialMove: (s) => () => {
-//     s.camera.setMovement(new p5.Vector(0, 1, 0))
-//   },
-// }
-
-// export const cameraStore = makeStoreV2<CameraState>(initCameraStore)(cameraStoreReducerMap)
+export const wastedStore = makeStoreV2<WastedState>(() => ({
+  centerPosition: new p5.Vector(),
+}))({
+  updateCenter:
+    (s) =>
+    (wobbleAmount: number = 3) => {
+      s.centerPosition = s.centerPosition.add(p5.Vector.random3D().mult(wobbleAmount))
+    },
+})
