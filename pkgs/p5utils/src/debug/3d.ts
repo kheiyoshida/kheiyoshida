@@ -25,12 +25,19 @@ export const drawVectorPosition = (
 ) => {
   const relativeAngle = calcRelativeAngleFromPerspective(cameraPosition, forwardDir, v)
   pushPop(() => {
-    p.rotateY(forwardDir.phi + 180)
+    adjustToPerspective(forwardDir)
     p.rotateY(relativeAngle.phi)
-    p.rotateX(forwardDir.theta - 90)
     p.rotateX(relativeAngle.theta)
     p.text(v.array().toString(), 0, 0)
   })
+}
+
+/**
+ * rotate XY axis so that objects can face the camera's perspective
+ */
+export const adjustToPerspective = (forwardDir: VectorAngles):void => {
+  p.rotateX(forwardDir.theta - 90)
+  p.rotateY(forwardDir.phi + 180)
 }
 
 export const calcRelativeAngleFromPerspective = (

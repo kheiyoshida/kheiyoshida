@@ -50,7 +50,7 @@ const setup = () => {
 
 const draw = () => {
   paint()
-  draw3DGrid(5, 1000, camera)
+  draw3DGrid(3, 1000, camera)
 
   swim()
   camera.move()
@@ -83,8 +83,8 @@ const drawCenter = () => {
 
 const swim = () => {
   const x = p.mouseX - p.windowWidth / 2
-  const y = p.mouseY - p.windowHeight / 2
-  // const y = 0
+  // const y = p.mouseY - p.windowHeight / 2
+  const y = 0
   camera.turn({ theta: y / 1000, phi: -x / 1000 })
 }
 
