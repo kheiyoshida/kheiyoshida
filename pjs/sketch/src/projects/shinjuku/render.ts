@@ -19,15 +19,12 @@ export const drawMatrix = (
     const posX = wobble(x) * pxw
     const posY = wobble(y) * pxh
     p.ellipse(posX, posY, ...final(pxw, pxh))
-
-    // debug
-    // p.rect(x, y, 1, 1)
   }
 
   brighnessSnapshot.forEach(([x, y, bri]) => {
     if (bri > 110 - wave * 20) {
       pushPop(() => {
-        p.fill(bri, bri)
+        p.fill(bri - 50, bri)
         drawCell(x, y)
       })
     }

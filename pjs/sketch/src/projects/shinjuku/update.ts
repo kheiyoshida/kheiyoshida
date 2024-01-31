@@ -8,7 +8,7 @@ export const updateVideoOptions = (
   videoSupply: VideoSupply,
   parseOptions: PixelParseOptionSelector
 ) => {
-  if (random(0.1)) {
+  if (random(0.05)) {
     videoSupply.swapVideo()
   }
   if (random(0.1)) {
