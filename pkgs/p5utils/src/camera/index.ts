@@ -28,10 +28,11 @@ export function createCamera(p5camera?: p5.Camera): Camera {
     },
     setRelativeDirection(angles) {
       const currentLookinDirection = getForwardDir(this.cameraCenter, node.position)
-      node.setDirection({
+      const newDirection = {
         theta: currentLookinDirection.theta + angles.theta,
         phi: currentLookinDirection.phi + angles.phi,
-      })
+      }
+      node.setDirection(newDirection)
     },
     setSpeed(speed) {
       node.setSpeed(speed)
