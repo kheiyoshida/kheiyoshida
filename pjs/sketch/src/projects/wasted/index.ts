@@ -2,7 +2,7 @@ import p5 from 'p5'
 import { createCamera } from 'p5utils/src/camera'
 import { Camera } from 'p5utils/src/camera/types'
 import { draw3DGrid } from 'p5utils/src/debug/3d'
-import { drawLineBetweenVectors } from 'p5utils/src/render/drawers/draw'
+import { drawAtPosition, drawLineBetweenVectors } from 'p5utils/src/render/drawers/draw'
 import { SketchConfigStore, applyConfig } from 'p5utils/src/utils/project'
 import { makeStoreV2 } from 'utils'
 import { Direction, bindKeyEvent } from './commands'
@@ -41,17 +41,22 @@ const setup = () => {
     p.fill(store.current.strokeColor)
     p.textFont(font)
     p.textSize(80)
+    draw3DGrid(3, 1000, camera)
   })
+
+  p.stroke(100)
+  drawLineBetweenVectors(new p5.Vector(), p5.Vector.fromAngles(p.radians(90), 0, 1000))
 }
 
 const draw = () => {
   paint()
-  draw3DGrid(3, 1000, camera.position, camera.cameraCenter)
+  draw3DGrid(5, 1000, camera)
 
   swim()
   camera.move()
   // camera.turn({ theta: 0.2, phi: 0.5 })
 
+  p.stroke(100)
   drawLineBetweenVectors(new p5.Vector(), p5.Vector.fromAngles(p.radians(90), 0, 1000))
 
   switch (dir) {
@@ -68,14 +73,19 @@ const draw = () => {
       camera.setRelativeDirection({ theta: 0, phi: 180 })
       break
   }
+}
 
-  
+const drawCenter = () => {
+  drawAtPosition(new p5.Vector(...camera.cameraCenter), () => {
+    p.sphere(2)
+  })
 }
 
 const swim = () => {
   const x = p.mouseX - p.windowWidth / 2
   const y = p.mouseY - p.windowHeight / 2
-  camera.turn({theta: y / 1000, phi: -x / 1000})
+  // const y = 0
+  camera.turn({ theta: y / 1000, phi: -x / 1000 })
 }
 
 export default <Sketch>{
