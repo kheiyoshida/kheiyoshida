@@ -41,6 +41,8 @@ const draw = () => {
     () => fireByRate(0.5)
   )
 
+  graphStore.current.graph.forEach(n => n.move())
+
   // camera
   // cameraStore.turn()
   camera.move()

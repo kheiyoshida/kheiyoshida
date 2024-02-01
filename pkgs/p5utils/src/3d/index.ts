@@ -1,5 +1,7 @@
 import p5 from 'p5'
 import { VectorAngles } from '../data/node/types'
+import { randomIntInclusiveBetween } from 'utils'
+import { Position3D } from '../camera/types'
 
 export const toRadians = (degree: number) => degree * (Math.PI / 180)
 export const toDegrees = (radians: number) => radians / (Math.PI / 180)
@@ -31,3 +33,13 @@ export const sumVectorAngles = (...angles: VectorAngles[]) => {
 
 export const vectorFromDegreeAngles = (...args: Parameters<typeof p5.Vector.fromAngles>) =>
   p5.Vector.fromAngles(toRadians(args[0]), toRadians(args[1]), args[2])
+
+export const randomAngle = () => ({
+  theta: randomIntInclusiveBetween(0, 180),
+  phi: randomIntInclusiveBetween(0, 360),
+})
+
+export const distanceBetweenPositions = (pos1: Position3D, pos2: Position3D) =>
+  Math.sqrt(
+    Math.pow(pos1[0] - pos2[0], 2) + Math.pow(pos1[1] - pos2[1], 2) + Math.pow(pos1[2] - pos2[2], 2)
+  )

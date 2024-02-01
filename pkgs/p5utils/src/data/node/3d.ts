@@ -2,7 +2,8 @@ import p5 from 'p5'
 import { valueOrFn } from 'utils'
 import { distanceBetweenNodes, mutate } from '.'
 import { BaseNode3D, VectorAngles } from './types'
-import { toRadians } from '../../3d'
+import { distanceBetweenPositions, toRadians } from '../../3d'
+import { Position3D } from '../../camera/types'
 
 export const createBase3D = (
   position: p5.Vector = new p5.Vector(),
@@ -10,14 +11,10 @@ export const createBase3D = (
     theta: 0,
     phi: 0,
   },
-  speed: number = 1,
+  speed: number = 1
 ): BaseNode3D => ({
   position,
-  move: p5.Vector.fromAngles(
-    toRadians(angles.theta),
-    toRadians(angles.phi),
-    speed
-  ),
+  move: p5.Vector.fromAngles(toRadians(angles.theta), toRadians(angles.phi), speed),
   angles: angles,
 })
 
@@ -32,6 +29,16 @@ export const restrain3D = <Node extends BaseNode3D>(node: Node, distance: number
     rotate3D(node, node.angles.theta + 180, node.angles.phi)
   }
 }
+
+export const restrain3dFromPosition =
+  <Node extends BaseNode3D>(node: Node) =>
+  (position: Position3D, distance: number) => {
+    const dist = distanceBetweenPositions(node.position.array() as Position3D, position)
+    if (dist >= distance) {
+      node.position.sub(node.move)
+      rotate3D(node, node.angles.theta + 180, node.angles.phi)
+    }
+  }
 
 export const restrainFromNode = <Node extends BaseNode3D>(
   parent: Node,

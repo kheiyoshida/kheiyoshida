@@ -5,6 +5,7 @@ import {
   toDegrees,
   sumVectorAngles,
   vectorFromDegreeAngles,
+  distanceBetweenPositions,
 } from '.'
 
 test.each([
@@ -77,4 +78,8 @@ test(`${vectorFromDegreeAngles.name}`, () => {
   expect(r[0]).toBeCloseTo(0)
   expect(r[1]).toBeCloseTo(0)
   expect(r[2]).toBeCloseTo(-100)
+})
+
+test(`${distanceBetweenPositions.name}`, () => {
+  expect(distanceBetweenPositions([100,100,100], [100, 0, 100])).toBe(100)
 })

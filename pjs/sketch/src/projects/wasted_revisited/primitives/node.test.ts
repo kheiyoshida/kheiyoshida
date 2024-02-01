@@ -1,5 +1,6 @@
 import { toRadians } from 'p5utils/src/3d'
 import { createGraphNode, emitNodeEdge } from './node'
+import * as p5utils3d from 'p5utils/src/3d'
 
 describe(`node`, () => {
   it(`can be created with initial position`, () => {
@@ -43,5 +44,19 @@ describe(`node`, () => {
     })
     expect(edges.forEach((e) => node.edges.includes(e)))
     expect(edges.length).toBe(3)
+  })
+  it(`can move within range`, () => {
+    jest.spyOn(p5utils3d, 'randomAngle').mockReturnValue({ theta: 90, phi: 0 })
+    const moveAmount = 100
+    const movableDistance = 300
+    const node = createGraphNode([0, 0, 0], { theta: 0, phi: 0 }, moveAmount, movableDistance)
+    node.move()
+    expect(node.position[0]).toBeCloseTo(0)
+    expect(node.position[1]).toBeCloseTo(0)
+    expect(node.position[2]).toBeCloseTo(moveAmount)
+    node.move()
+    expect(node.position[2]).toBeCloseTo(moveAmount * 2)
+    node.move()
+    expect(node.position[2]).toBeCloseTo(moveAmount * 2) // restrained
   })
 })
