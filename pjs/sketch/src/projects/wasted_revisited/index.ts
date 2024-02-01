@@ -2,9 +2,7 @@ import { draw3DGrid } from 'p5utils/src/debug/3d'
 import { loadFont } from 'p5utils/src/font'
 import { applyConfig } from 'p5utils/src/utils/project'
 import { bindKeyEvent } from './commands'
-import { cameraStore } from './state/camera'
-import { sketchStore } from './state/sketch'
-import { controlStore } from './state/control'
+import { cameraStore, controlStore, graphStore, sketchStore } from './state'
 
 const setup = () => {
   // sketch
@@ -22,6 +20,9 @@ const setup = () => {
   bindKeyEvent((d) => {
     controlStore.updateDir(d)
   })
+
+  // graph
+  graphStore.lazyInit()
 }
 
 const draw = () => {

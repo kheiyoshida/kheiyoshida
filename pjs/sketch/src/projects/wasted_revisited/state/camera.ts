@@ -47,4 +47,4 @@ const reducers = {
   },
 } satisfies ReducerMap<CameraState>
 
-export const cameraStore = makeStoreV2<CameraState>(init)(reducers)
+export const makeCameraStore = () => makeStoreV2<CameraState>(init)(reducers)

@@ -2,6 +2,7 @@ import p5 from 'p5'
 import { valueOrFn } from 'utils'
 import { distanceBetweenNodes, mutate } from '.'
 import { BaseNode3D, VectorAngles } from './types'
+import { toRadians } from '../../3d'
 
 export const createBase3D = (
   position: p5.Vector = new p5.Vector(),
@@ -13,8 +14,8 @@ export const createBase3D = (
 ): BaseNode3D => ({
   position,
   move: p5.Vector.fromAngles(
-    p.radians(angles.theta),
-    p.radians(angles.phi),
+    toRadians(angles.theta),
+    toRadians(angles.phi),
     speed
   ),
   angles: angles,

@@ -1,5 +1,11 @@
 import p5 from 'p5'
-import { toRadians, revertToSphericalCoordinate, toDegrees } from '.'
+import {
+  toRadians,
+  revertToSphericalCoordinate,
+  toDegrees,
+  sumVectorAngles,
+  vectorFromDegreeAngles,
+} from '.'
 
 test.each([
   [60, Math.PI / 3],
@@ -56,4 +62,19 @@ test.each([
   [-10, 10, 315 - 360],
 ])('Math.atan2(%i, %i)', (x, y, expected) => {
   expect(toDegrees(Math.atan2(x, y))).toBeCloseTo(expected)
+})
+
+test(`${sumVectorAngles.name}`, () => {
+  expect(sumVectorAngles({ theta: 20, phi: 30 }, { theta: 50, phi: 120 })).toMatchObject({
+    theta: 70,
+    phi: 150,
+  })
+})
+
+test(`${vectorFromDegreeAngles.name}`, () => {
+  const result = vectorFromDegreeAngles(90, 180, 100)
+  const r = result.array()
+  expect(r[0]).toBeCloseTo(0)
+  expect(r[1]).toBeCloseTo(0)
+  expect(r[2]).toBeCloseTo(-100)
 })

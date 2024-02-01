@@ -6,7 +6,7 @@ type ControlState = {
   direction: Direction
 }
 
-export const controlStore = makeStoreV2<ControlState>({
+export const makeControlStore = () => makeStoreV2<ControlState>({
   direction: null
 })({
   updateDir: s => (dir: Direction) => {
