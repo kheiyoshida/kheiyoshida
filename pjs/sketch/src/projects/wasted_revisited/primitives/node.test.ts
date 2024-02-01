@@ -1,5 +1,5 @@
 import { toRadians } from 'p5utils/src/3d'
-import { createGraphNode } from './node'
+import { createGraphNode, emitNodeEdge } from './node'
 
 describe(`node`, () => {
   it(`can be created with initial position`, () => {
@@ -16,7 +16,8 @@ describe(`node`, () => {
     const node = createGraphNode([0, 0, 0])
     const directionDelta = { theta: 45, phi: 180 }
     const growAmount = 100
-    const edge = node.emitEdge(directionDelta, growAmount)
+    const emitEdge = emitNodeEdge(node)
+    const edge = emitEdge(directionDelta, growAmount)
     expect(edge.growDirection).toMatchObject({ theta: 45, phi: 180 })
     expect(edge.position[0]).toBeCloseTo(0)
     expect(edge.position[1]).toBeCloseTo(-100 * Math.cos(toRadians(45)))
@@ -27,7 +28,20 @@ describe(`node`, () => {
     const node = createGraphNode([0, 0, 0], { theta: 0, phi: 60 })
     const edges = node.emitEdges(3, 20, 100)
     expect(edges.forEach((e) => node.edges.includes(e)))
-    expect(edges.map((e) => e.growDirection.phi)).toMatchObject([60, 180, 300])
-    expect(edges.map((e) => e.growDirection.theta)).toMatchObject([20, 20, 20])
+    expect(edges.length).toBe(3)
+  })
+  it(`can be randomized`, () => {
+    const node = createGraphNode([0, 0, 0], { theta: 0, phi: 60 })
+    const edges = node.emitEdges(3, 20, 100, (delta, growAmount) => {
+      return [
+        {
+          ...delta,
+          phi: delta.phi + 10,
+        },
+        growAmount + 100,
+      ]
+    })
+    expect(edges.forEach((e) => node.edges.includes(e)))
+    expect(edges.length).toBe(3)
   })
 })

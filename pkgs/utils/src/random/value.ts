@@ -21,3 +21,7 @@ export const randomIntBetween = (min: number, max: number) => {
 export const randomIntInclusiveBetween = (min: number, max: number) => {
   return Math.floor(randomFloatBetween(min, max + 1))
 }
+
+export type ArgsRandomizer<Fn extends (...args: never[]) => unknown> = (
+  ...args: Parameters<Fn>
+) => Parameters<Fn>

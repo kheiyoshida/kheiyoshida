@@ -26,7 +26,7 @@ const reducers = {
   },
   turn: (s) => () => {
     const x = p.mouseX - p.windowWidth / 2
-    const y = 0
+    const y = p.mouseY - p.windowHeight / 2
     s.camera.turn({ theta: y / 1000, phi: -x / 1000 })
   },
   updateMoveDirection: (s) => (dir: Direction) => {

@@ -1,7 +1,8 @@
-import { draw3DGrid } from 'p5utils/src/debug/3d'
 import { loadFont } from 'p5utils/src/font'
 import { applyConfig } from 'p5utils/src/utils/project'
+import { fireByRate, randomIntInclusiveBetween } from 'utils'
 import { bindKeyEvent } from './commands'
+import { drawTree } from './render/drawGraph'
 import { cameraStore, controlStore, graphStore, sketchStore } from './state'
 
 const setup = () => {
@@ -15,6 +16,7 @@ const setup = () => {
 
   // camera
   cameraStore.lazyInit()
+  cameraStore.current.camera.setFocus([0,0,0])
 
   // control
   bindKeyEvent((d) => {
@@ -29,11 +31,24 @@ const draw = () => {
   const { camera } = cameraStore.current
   sketchStore.paint()
 
-  draw3DGrid(3, 1000, camera)
-  cameraStore.turn()
-  camera.move()
+  // update
+  console.log(graphStore.current.graph.length)
+  const numOfGrow = randomIntInclusiveBetween(0, 10)
+  graphStore.grow(
+    numOfGrow,
+    randomIntInclusiveBetween(0, 30),
+    randomIntInclusiveBetween(500, 1000),
+    () => fireByRate(0.5)
+  )
 
+  // camera
+  // cameraStore.turn()
+  camera.move()
   cameraStore.updateMoveDirection(controlStore.current.direction)
+
+  // render
+  // draw3DGrid(3, 1000, camera)
+  drawTree(graphStore.current.graph)
 }
 
 export default <Sketch>{
