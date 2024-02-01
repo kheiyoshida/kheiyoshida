@@ -7,12 +7,12 @@ import { SketchConfigStore, applyConfig } from 'p5utils/src/utils/project'
 import { makeStoreV2 } from 'utils'
 import { Direction, bindKeyEvent } from './commands'
 
-import robotoFont from './font/Roboto/Roboto-Black.ttf'
+import { loadFont } from 'p5utils/src/font'
 
 const store = makeStoreV2<SketchConfigStore>(() => ({
   cw: p.windowWidth,
   ch: p.windowHeight,
-  fillColor: p.color(20),
+  fillColor: p.color(200),
   strokeColor: p.color(255),
   frameRate: 30,
   strokeWeight: 1,
@@ -27,34 +27,25 @@ const setup = () => {
   store.lazyInit()
   applyConfig(store.current)
   p.angleMode(p.DEGREES)
+  p.background(store.current.fillColor)
+  p.fill(store.current.strokeColor)
+  loadFont()
 
   camera = createCamera()
-  camera.setPosition(0, 0, 0)
+  camera.setPosition(0, 0, 1000)
   camera.setAbsoluteDirection({ theta: 90, phi: 0 })
   camera.setSpeed(10)
 
   bindKeyEvent((d) => {
     dir = d
   })
-
-  p.loadFont(robotoFont, (font) => {
-    p.fill(store.current.strokeColor)
-    p.textFont(font)
-    p.textSize(80)
-    draw3DGrid(3, 1000, camera)
-  })
-
-  p.stroke(100)
-  drawLineBetweenVectors(new p5.Vector(), p5.Vector.fromAngles(p.radians(90), 0, 1000))
 }
 
 const draw = () => {
   paint()
   draw3DGrid(3, 1000, camera)
 
-  swim()
-  camera.move()
-  // camera.turn({ theta: 0.2, phi: 0.5 })
+  // swim()
 
   p.stroke(100)
   drawLineBetweenVectors(new p5.Vector(), p5.Vector.fromAngles(p.radians(90), 0, 1000))

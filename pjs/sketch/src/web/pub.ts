@@ -7,4 +7,5 @@ export const published: string[] = [
   'wasted',
   'tp4',
   'mgnr-demo',
+  'wasted_revisited'
 ]
