@@ -3,13 +3,13 @@ import { loop3D, memorize } from 'utils'
 import { revertToSphericalCoordinate, toDegrees } from '../3d'
 import { Camera, Position3D } from '../camera/types'
 import { VectorAngles } from '../data/node/types'
-import { drawAtPosition } from '../render/drawers/draw'
+import { drawAtVectorPosition } from '../render/drawers/draw'
 import { pushPop } from '../utils'
 
 export const draw3DGrid = (numOfGrid = 3, size = 1000, camera?: Camera) => {
   const vectors = memorize(create3dGrid)(numOfGrid, size)
   vectors.forEach((v) => {
-    drawAtPosition(v, () => {
+    drawAtVectorPosition(v, () => {
       if (camera) {
         drawVectorPosition(camera.position, camera.forwardDir, v)
       }

@@ -1,5 +1,6 @@
 import p5 from 'p5'
 import { pushPop, shakeVector, shakeVector3D } from '../../utils/p5utils'
+import { Position3D } from '../../camera/types'
 
 export const drawLineBetweenVectors = (p1: p5.Vector, p2: p5.Vector) => {
   p.line(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z)
@@ -17,9 +18,13 @@ export const shakyLineBetweenVectors3D = (p1: p5.Vector, p2: p5.Vector, shake: n
   drawLineBetweenVectors(shakeVector3D(p1, shake), shakeVector3D(p2, shake))
 }
 
-export const drawAtPosition = (v: p5.Vector, draw: () => void) => {
+export function drawAtVectorPosition(v: p5.Vector, draw: () => void) {
+  drawAtPosition3D(v.array() as Position3D, draw)
+}
+
+export function drawAtPosition3D(pos: Position3D, draw: () => void) {
   pushPop(() => {
-    p.translate(v)
+    p.translate(...pos)
     draw()
   })
 }

@@ -1,6 +1,6 @@
-const moveThreshold = 20
+import { Direction } from "./state/control"
 
-export type Direction = 'go' | 'back' | 'right' | 'left' | null
+const moveThreshold = 20
 
 export const bindTouchEvent = (updateDir: (dir: Direction) => void) => {
   p.touchMoved = () => {
