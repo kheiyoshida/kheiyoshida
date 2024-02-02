@@ -17,7 +17,7 @@ describe(`node`, () => {
     const node = createGraphNode([0, 0, 0])
     const directionDelta = { theta: 45, phi: 180 }
     const growAmount = 100
-    const emitEdge = emitNodeEdge(node)
+    const emitEdge = emitNodeEdge(node, )
     const edge = emitEdge(directionDelta, growAmount)
     expect(edge.growDirection).toMatchObject({ theta: 45, phi: 180 })
     expect(edge.position[0]).toBeCloseTo(0)
@@ -58,5 +58,16 @@ describe(`node`, () => {
     expect(node.position[2]).toBeCloseTo(moveAmount * 2)
     node.move()
     expect(node.position[2]).toBeCloseTo(moveAmount * 2) // restrained
+    jest.resetAllMocks()
+  })
+  it(`should gradually slow down its speed when moving`, () => {
+    const moveAmount = 100
+    const decreaseSpeed = (s: number) => s - 10
+    jest.spyOn(p5utils3d, 'randomAngle').mockReturnValue({ theta: 90, phi: 180 })
+    const node = createGraphNode([0, 0, 0], { theta: 0, phi: 0 }, moveAmount, 1000, decreaseSpeed)
+    node.move()
+    expect(node.position[2]).toBeCloseTo(-moveAmount)
+    node.move()
+    expect(node.position[2]).toBeCloseTo(-moveAmount * 2 + 10) // decreased velocity
   })
 })

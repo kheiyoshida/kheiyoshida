@@ -57,6 +57,17 @@ export const changeSpeed = <Node extends BaseNode>(
   node.move.setMag(valueOrFn(node, speed))
 }
 
+export const changeSpeedV2 = <Node extends BaseNode> (
+  node: Node,
+  speedChange: number | ((s: number) => number)
+) => {
+  if (typeof speedChange == 'number') {
+    node.move.setMag(speedChange)
+  } else {
+    node.move.setMag(speedChange(node.move.mag()))
+  }
+}
+
 export const mutate = <Node extends BaseNode>(
   node: Node,
   newValues: Partial<Node>

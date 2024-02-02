@@ -10,10 +10,16 @@ export type GraphState = {
 }
 
 export const init: LazyInit<GraphState> = () => {
-  const initialNode = createGraphNode([0, 1000, 0])
+  const initialNode = createGraphNode(
+    [0, 1000, 0],
+    { theta: 0, phi: 0 },
+    Config.DefaultMoveAmount,
+    Config.DefaultMovableDistance,
+    s => s > 0 ? s - 1 : 0
+  )
   return {
     graph: [initialNode],
-    maxNodes: Config.InitialMaxNodes
+    maxNodes: Config.InitialMaxNodes,
   }
 }
 
@@ -31,7 +37,7 @@ export const reducers = {
               theta: makeIntWobbler(20)(delta.theta),
               phi: makeIntWobbler((10 - numEdges) * 20)(delta.phi),
             },
-            amount + randomIntInclusiveBetween(-10, 40)
+            amount + randomIntInclusiveBetween(-10, 40),
           ])
           s.graph.push(...newNodes)
           node.hasGrown = true
