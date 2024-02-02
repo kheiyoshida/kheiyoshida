@@ -26,7 +26,8 @@ export const createGraphNode = (
   growDirection: VectorAngles = { theta: 0, phi: 0 },
   moveAmount = 100,
   movableDistance = moveAmount * 3,
-  decreaseSpeed = (speed: number) => speed
+  decreaseSpeed = (speed: number) => speed,
+  changeDirection = (angle: VectorAngles) => angle
 ): TreeNode => {
   const initialPosition = position
   const _node = createBase3D(new p5.Vector(...position), randomAngle(), moveAmount)
@@ -39,7 +40,7 @@ export const createGraphNode = (
     hasGrown: false,
     growDirection,
     emitEdges(numEdges, thetaDelta, growAmount, randomizer) {
-      const emit = emitNodeEdge(this, decreaseSpeed)
+      const emit = emitNodeEdge(this, decreaseSpeed, changeDirection)
       return distribute(360, numEdges).map((phiDelta) => {
         const delta = { theta: thetaDelta, phi: phiDelta }
         return randomizer ? emit(...randomizer(delta, growAmount)) : emit(delta, growAmount)
@@ -49,12 +50,18 @@ export const createGraphNode = (
       NODE.move(_node)
       NODE3D.restrain3dFromPosition(_node)(initialPosition, movableDistance)
       NODE.changeSpeedV2(_node, decreaseSpeed)
+      const { theta, phi } = changeDirection(_node.angles)
+      NODE3D.rotate3D(_node, theta, phi)
     },
   }
 }
 
 export const emitNodeEdge =
-  (node: TreeNode, decreaseSpeed?: (speed: number) => number) =>
+  (
+    node: TreeNode,
+    decreaseSpeed?: (speed: number) => number,
+    changeDirection?: (angle: VectorAngles) => VectorAngles
+  ) =>
   (directionDelta: VectorAngles, growAmount: number): TreeNode => {
     const newDir = sumVectorAngles(node.growDirection, directionDelta)
     const posDelta = vectorFromDegreeAngles(newDir.theta, newDir.phi, growAmount)
@@ -65,7 +72,8 @@ export const emitNodeEdge =
       newDir,
       moveAmount,
       moveAmount * 3,
-      decreaseSpeed
+      decreaseSpeed,
+      changeDirection
     )
     node.edges.push(edge)
     return edge

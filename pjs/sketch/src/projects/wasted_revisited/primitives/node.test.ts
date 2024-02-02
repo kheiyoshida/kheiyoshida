@@ -1,6 +1,7 @@
 import { toRadians } from 'p5utils/src/3d'
 import { createGraphNode, emitNodeEdge } from './node'
 import * as p5utils3d from 'p5utils/src/3d'
+import { VectorAngles } from 'p5utils/src/3d/types'
 
 describe(`node`, () => {
   it(`can be created with initial position`, () => {
@@ -60,7 +61,7 @@ describe(`node`, () => {
     expect(node.position[2]).toBeCloseTo(moveAmount * 2) // restrained
     jest.resetAllMocks()
   })
-  it(`should gradually slow down its speed when moving`, () => {
+  it(`can gradually slow down its speed when moving`, () => {
     const moveAmount = 100
     const decreaseSpeed = (s: number) => s - 10
     jest.spyOn(p5utils3d, 'randomAngle').mockReturnValue({ theta: 90, phi: 180 })
@@ -70,4 +71,19 @@ describe(`node`, () => {
     node.move()
     expect(node.position[2]).toBeCloseTo(-moveAmount * 2 + 10) // decreased velocity
   })
+  it(`can change the movement direction when moving`, () => {
+    const moveAmount = 100
+    const changeDirection = (angle: VectorAngles) => ({ theta: angle.theta + 45, phi: angle.phi })
+    jest.spyOn(p5utils3d, 'randomAngle').mockReturnValue({ theta: 90, phi: 0 })
+    const node = createGraphNode([0, 0, 0], { theta: 0, phi: 0 }, moveAmount, 1000, s => s, changeDirection)
+    node.move()
+    expect(node.position[0]).toBeCloseTo(0)
+    expect(node.position[1]).toBeCloseTo(0)
+    expect(node.position[2]).toBeCloseTo(moveAmount)
+    node.move()
+    expect(node.position[0]).toBeCloseTo(0)
+    expect(node.position[1]).toBeCloseTo(moveAmount * Math.sin(toRadians(45)))
+    expect(node.position[2]).toBeCloseTo(moveAmount + moveAmount * Math.cos(toRadians(45)))
+  })
+  it.todo(`should inherit the physics behaviors when emitting edges`)
 })
