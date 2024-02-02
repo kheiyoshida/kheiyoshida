@@ -7,7 +7,7 @@ import {
   create3dGrid,
   draw3DGrid,
   drawVectorPosition,
-} from './3d'
+} from './debug'
 
 test(`${draw3DGrid.name}`, () => {
   const sphere = jest.spyOn(p, 'sphere').mockImplementation()

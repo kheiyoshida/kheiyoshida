@@ -3,6 +3,7 @@ import { createBase, move } from '.'
 import { Position3D } from '../../camera/types'
 import { createBase3D, restrain3D, restrain3dFromPosition, rotate3D } from './3d'
 import { BaseNode3D } from './types'
+import * as module3d from '../../3d'
 
 beforeAll(() => {
   jest.spyOn(p, 'radians').mockImplementation((d) => (d * Math.PI) / 180)
@@ -30,7 +31,7 @@ test(`${restrain3D.name}`, () => {
 })
 
 test(`${restrain3dFromPosition.name}`, () => {
-  const initial: Position3D = [100,100,0]
+  const initial: Position3D = [100, 100, 0]
   const node: BaseNode3D = createBase3D(new p5.Vector(...initial), { theta: 90, phi: 180 }, 60)
   const restrainFrom = restrain3dFromPosition(node)
   move(node)
@@ -44,14 +45,14 @@ test(`${restrain3dFromPosition.name}`, () => {
 
 test(`${rotate3D.name}`, () => {
   const node: BaseNode3D = { ...createBase(), angles: { theta: 0, phi: 0 } }
-  jest.spyOn(p, 'radians').mockImplementation((d) => d)
   jest.spyOn(node.move, 'mag').mockReturnValue(100)
-  const newMove = new p5.Vector()
-  const fromAngles = jest.spyOn(p5.Vector, 'fromAngles').mockReturnValue(newMove)
+  const fromAngles = jest.spyOn(module3d, 'vectorFromDegreeAngles')
 
-  rotate3D(node, 10, 20)
+  rotate3D(node, 90, 180)
 
-  expect(node.angles).toMatchObject({ theta: 10, phi: 20 })
-  expect(node.move).toMatchObject(newMove)
-  expect(fromAngles).toHaveBeenCalledWith(10, 20, 100)
+  expect(node.angles).toMatchObject({ theta: 90, phi: 180 })
+  expect(node.move.x).toBeCloseTo(0)
+  expect(node.move.y).toBeCloseTo(0)
+  expect(node.move.z).toBeCloseTo(-100)
+  expect(fromAngles).toHaveBeenCalledWith(90, 180, 100)
 })

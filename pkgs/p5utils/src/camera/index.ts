@@ -2,7 +2,7 @@ import p5 from 'p5'
 import { createCameraNode } from './node'
 import { Camera, Position3D } from './types'
 import { getCameraCenter, getForwardDir } from './helpers'
-import { VectorAngles } from '../data/node/types'
+import { VectorAngles } from "../3d/types"
 
 export function createCamera(p5camera?: p5.Camera): Camera {
   const camera = p5camera || p.createCamera()

@@ -38,7 +38,7 @@ const draw = () => {
     numOfGrow,
     randomIntInclusiveBetween(0, 30),
     randomIntInclusiveBetween(500, 1000),
-    () => fireByRate(0.5)
+    () => fireByRate(0.1)
   )
 
   graphStore.current.graph.forEach(n => n.move())

@@ -44,10 +44,10 @@ export const createGraphNode = (
         return randomizer ? emit(...randomizer(delta, length)) : emit(delta, length)
       })
     },
-    move () {
+    move() {
       NODE.move(_node)
       NODE3D.restrain3dFromPosition(_node)(initialPosition, movableDistance)
-    }
+    },
   }
 }
 
@@ -57,7 +57,11 @@ export const emitNodeEdge =
     const newDir = sumVectorAngles(node.growDirection, directionDelta)
     const posDelta = vectorFromDegreeAngles(newDir.theta, newDir.phi, growAmount)
     const newPosition = posDelta.add(node.position).array() as Position3D
-    const edge = createGraphNode(newPosition as Position3D, newDir, randomIntInclusiveBetween(10, 50))
+    const edge = createGraphNode(
+      newPosition as Position3D,
+      newDir,
+      randomIntInclusiveBetween(10, 50)
+    )
     node.edges.push(edge)
     return edge
   }

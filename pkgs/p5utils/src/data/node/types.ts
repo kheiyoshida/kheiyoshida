@@ -1,4 +1,5 @@
 import p5 from "p5"
+import { VectorAngles } from "../../3d/types"
 
 /**
  * base type for node object
@@ -28,14 +29,6 @@ export type BaseNode3D = BaseNode & {
    * movement angles stored for calculation
    */
   angles: VectorAngles
-}
-
-/**
- * angles to determine 3d vector
- */
-export type VectorAngles = {
-  theta: number,
-  phi: number
 }
 
 /**

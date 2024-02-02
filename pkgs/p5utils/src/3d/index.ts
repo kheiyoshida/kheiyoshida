@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { VectorAngles } from '../data/node/types'
+import { VectorAngles } from "./types"
 import { randomIntInclusiveBetween } from 'utils'
 import { Position3D } from '../camera/types'
 

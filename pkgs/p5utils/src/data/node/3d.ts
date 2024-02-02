@@ -1,8 +1,9 @@
 import p5 from 'p5'
 import { valueOrFn } from 'utils'
 import { distanceBetweenNodes, mutate } from '.'
-import { BaseNode3D, VectorAngles } from './types'
-import { distanceBetweenPositions, toRadians } from '../../3d'
+import { BaseNode3D } from './types'
+import { VectorAngles } from "../../3d/types"
+import { distanceBetweenPositions, toRadians, vectorFromDegreeAngles } from '../../3d'
 import { Position3D } from '../../camera/types'
 
 export const createBase3D = (
@@ -64,6 +65,6 @@ export const rotate3D = <Node extends BaseNode3D>(
   }
   mutate<BaseNode3D>(node, {
     angles,
-    move: p5.Vector.fromAngles(p.radians(angles.theta), p.radians(angles.phi), node.move.mag()),
+    move: vectorFromDegreeAngles(angles.theta, angles.phi, node.move.mag()),
   })
 }
