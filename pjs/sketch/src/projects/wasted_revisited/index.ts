@@ -4,6 +4,7 @@ import { fireByRate, randomIntInclusiveBetween } from 'utils'
 import { bindKeyEvent } from './commands'
 import { drawTree } from './render/drawGraph'
 import { cameraStore, controlStore, graphStore, sketchStore } from './state'
+import { Config } from './config'
 
 const setup = () => {
   // sketch
@@ -41,10 +42,15 @@ const draw = () => {
     () => fireByRate(0.1)
   )
 
-  graphStore.current.graph.forEach(n => n.move())
+  graphStore.current.graph.forEach(n => {
+    n.move()
+    if (fireByRate(0.3)) {
+      n.updateSpeed(randomIntInclusiveBetween(Config.DefaultMoveAmount * 0.2, Config.DefaultMoveAmount))
+    }
+  })
 
   // camera
-  // cameraStore.turn()
+  cameraStore.turn()
   camera.move()
   cameraStore.updateMoveDirection(controlStore.current.direction)
 

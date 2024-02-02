@@ -19,6 +19,7 @@ export type TreeNode = {
     randomizer?: ArgsRandomizer<ReturnType<typeof emitNodeEdge>>
   ) => TreeNode[]
   move: () => void
+  updateSpeed: (speed: number) => void
 }
 
 export const createGraphNode = (
@@ -52,6 +53,9 @@ export const createGraphNode = (
       NODE.changeSpeedV2(_node, decreaseSpeed)
       const { theta, phi } = changeDirection(_node.angles)
       NODE3D.rotate3D(_node, theta, phi)
+    },
+    updateSpeed(speed) {
+      NODE.changeSpeedV2(_node, speed)
     },
   }
 }

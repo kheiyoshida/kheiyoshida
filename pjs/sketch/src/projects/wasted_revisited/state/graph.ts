@@ -15,7 +15,7 @@ export const init: LazyInit<GraphState> = () => {
     { theta: 0, phi: 0 },
     Config.DefaultMoveAmount,
     Config.DefaultMovableDistance,
-    (s) => (s > 0 ? s  : 0),
+    (s) => (s > 0 ? s - 10 : 0),
     (a) => ({ theta: a.theta + 1, phi: a.phi + 10 })
   )
   return {

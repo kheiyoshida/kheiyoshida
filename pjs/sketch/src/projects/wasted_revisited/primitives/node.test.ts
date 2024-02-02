@@ -86,4 +86,15 @@ describe(`node`, () => {
     expect(node.position[2]).toBeCloseTo(moveAmount + moveAmount * Math.cos(toRadians(45)))
   })
   it.todo(`should inherit the physics behaviors when emitting edges`)
+  it(`can update its speed`, () =>{
+    jest.spyOn(p5utils3d, 'randomAngle').mockReturnValue({ theta: 90, phi: 0 })
+    const initialSpeed = 100
+    const newSpeed = 120
+    const node = createGraphNode([0, 0, 0], { theta: 0, phi: 0 }, initialSpeed)
+    node.move()
+    expect(node.position[2]).toBeCloseTo(initialSpeed)
+    node.updateSpeed(newSpeed)
+    node.move()
+    expect(node.position[2]).toBeCloseTo(initialSpeed + newSpeed)
+  })
 })
