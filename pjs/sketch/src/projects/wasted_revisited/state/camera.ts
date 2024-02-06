@@ -1,8 +1,7 @@
+import { VectorAngles } from 'p5utils/src/3d/types'
 import { createCamera } from 'p5utils/src/camera'
 import { Camera } from 'p5utils/src/camera/types'
-import { drawAtPosition3D } from 'p5utils/src/render/drawers/draw'
 import { LazyInit, ReducerMap, makeStoreV2 } from 'utils'
-import { Direction } from './control'
 
 export type CameraState = {
   camera: Camera
@@ -19,32 +18,16 @@ const init: LazyInit<CameraState> = () => {
 }
 
 const reducers = {
-  drawCenter: (s) => () => {
-    drawAtPosition3D(s.camera.cameraCenter, () => {
-      p.sphere(2)
-    })
+  turn: (s) => (angle: VectorAngles) => {
+    s.camera.turn(angle)    
   },
-  turn: (s) => () => {
-    const x = p.mouseX - p.windowWidth / 2
-    const y = p.mouseY - p.windowHeight / 2
-    s.camera.turn({ theta: y / 1000, phi: -x / 1000 })
-  },
-  updateMoveDirection: (s) => (dir: Direction) => {
-    switch (dir) {
-      case 'left':
-        s.camera.setRelativeDirection({ theta: 0, phi: 90 })
-        break
-      case 'right':
-        s.camera.setRelativeDirection({ theta: 0, phi: -90 })
-        break
-      case 'go':
-        s.camera.setRelativeDirection({ theta: 0, phi: 0 })
-        break
-      case 'back':
-        s.camera.setRelativeDirection({ theta: 0, phi: 180 })
-        break
-    }
+  updateMove: (s) => (relativeAngle: VectorAngles, speed?: number) => {
+    s.camera.setRelativeDirection(relativeAngle)
+    speed && s.camera.setSpeed(speed)
+    
   },
 } satisfies ReducerMap<CameraState>
 
 export const makeCameraStore = () => makeStoreV2<CameraState>(init)(reducers)
+
+export type CameraStore = ReturnType<typeof makeCameraStore>

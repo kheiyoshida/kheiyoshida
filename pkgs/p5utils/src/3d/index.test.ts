@@ -6,6 +6,7 @@ import {
   sumVectorAngles,
   vectorFromDegreeAngles,
   distanceBetweenPositions,
+  divVectorAngles,
 } from '.'
 
 test.each([
@@ -72,6 +73,10 @@ test(`${sumVectorAngles.name}`, () => {
   })
 })
 
+test(`${divVectorAngles.name}`, () => {
+  expect(divVectorAngles({ theta: 90, phi: 180 }, 2)).toMatchObject({ theta: 45, phi: 90 })
+})
+
 test(`${vectorFromDegreeAngles.name}`, () => {
   const result = vectorFromDegreeAngles(90, 180, 100)
   const r = result.array()
@@ -81,5 +86,5 @@ test(`${vectorFromDegreeAngles.name}`, () => {
 })
 
 test(`${distanceBetweenPositions.name}`, () => {
-  expect(distanceBetweenPositions([100,100,100], [100, 0, 100])).toBe(100)
+  expect(distanceBetweenPositions([100, 100, 100], [100, 0, 100])).toBe(100)
 })

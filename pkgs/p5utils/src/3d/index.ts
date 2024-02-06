@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { VectorAngles } from "./types"
+import { VectorAngles } from './types'
 import { randomIntInclusiveBetween } from 'utils'
 import { Position3D } from '../camera/types'
 
@@ -29,6 +29,10 @@ export const sumVectorAngles = (...angles: VectorAngles[]) => {
     (prev, curr) => ({ theta: curr.theta + prev.theta, phi: curr.phi + prev.phi }),
     { theta: 0, phi: 0 }
   )
+}
+
+export const divVectorAngles = (angles: VectorAngles, by: number) => {
+  return { theta: angles.theta / by, phi: angles.phi / by }
 }
 
 export const vectorFromDegreeAngles = (...args: Parameters<typeof p5.Vector.fromAngles>) =>

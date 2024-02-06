@@ -1,11 +1,11 @@
 import { loadFont } from 'p5utils/src/font'
 import { applyConfig } from 'p5utils/src/utils/project'
 import { fireByRate, randomIntInclusiveBetween } from 'utils'
-import { bindKeyEvent } from './commands'
-import { drawTree } from './render/drawGraph'
-import { cameraStore, controlStore, graphStore, sketchStore } from './state'
 import { Config } from './config'
+import { bindControl } from './control'
 import { bindPlayEvent, soundAnalyzer } from './data/sound'
+import { cameraStore, graphStore, sketchStore } from './state'
+import { draw3DGrid } from 'p5utils/src/3d/debug'
 
 const setup = () => {
   // sketch
@@ -18,12 +18,10 @@ const setup = () => {
 
   // camera
   cameraStore.lazyInit()
-  cameraStore.current.camera.setFocus([0, 0, 0])
+  // cameraStore.current.camera.setFocus([0, 0, 0])
 
   // control
-  bindKeyEvent((d) => {
-    controlStore.updateDir(d)
-  })
+  bindControl(cameraStore)
 
   // graph
   graphStore.lazyInit()
@@ -55,13 +53,11 @@ const draw = () => {
   })
 
   // camera
-  cameraStore.turn()
   camera.move()
-  cameraStore.updateMoveDirection(controlStore.current.direction)
 
   // render
-  // draw3DGrid(3, 1000, camera)
-  drawTree(graphStore.current.graph)
+  draw3DGrid(3, 1000, camera)
+  // drawTree(graphStore.current.graph)
 }
 
 export default <Sketch>{
