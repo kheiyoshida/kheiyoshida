@@ -12,7 +12,7 @@ const init: LazyInit<CameraState> = () => {
   const camera = createCamera()
   camera.setPosition(0, 0, 1000)
   camera.setAbsoluteDirection({ theta: 90, phi: 0 })
-  camera.setSpeed(10)
+  camera.setSpeed(20)
   return {
     camera,
   }

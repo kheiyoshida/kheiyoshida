@@ -5,6 +5,7 @@ import { bindKeyEvent } from './commands'
 import { drawTree } from './render/drawGraph'
 import { cameraStore, controlStore, graphStore, sketchStore } from './state'
 import { Config } from './config'
+import { bindPlayEvent, soundAnalyzer } from './data/sound'
 
 const setup = () => {
   // sketch
@@ -17,7 +18,7 @@ const setup = () => {
 
   // camera
   cameraStore.lazyInit()
-  cameraStore.current.camera.setFocus([0,0,0])
+  cameraStore.current.camera.setFocus([0, 0, 0])
 
   // control
   bindKeyEvent((d) => {
@@ -26,6 +27,9 @@ const setup = () => {
 
   // graph
   graphStore.lazyInit()
+
+  // sound
+  bindPlayEvent()
 }
 
 const draw = () => {
@@ -33,7 +37,6 @@ const draw = () => {
   sketchStore.paint()
 
   // update
-  console.log(graphStore.current.graph.length)
   const numOfGrow = randomIntInclusiveBetween(0, 10)
   graphStore.grow(
     numOfGrow,
@@ -42,10 +45,12 @@ const draw = () => {
     () => fireByRate(0.1)
   )
 
-  graphStore.current.graph.forEach(n => {
+  const freqData = soundAnalyzer.analyze()
+  graphStore.current.graph.forEach((n, i) => {
     n.move()
-    if (fireByRate(0.3)) {
-      n.updateSpeed(randomIntInclusiveBetween(Config.DefaultMoveAmount * 0.2, Config.DefaultMoveAmount))
+    const freqAmount = freqData[i % soundAnalyzer.bufferLength]
+    if (freqAmount > 0.1) {
+      n.updateSpeed(freqAmount * Config.DefaultMoveAmount)
     }
   })
 

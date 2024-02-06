@@ -1,5 +1,10 @@
+import { FFTSize } from "p5utils/src/media/audio/types"
+
+export const fftSize: FFTSize = 32
+
 export const Config = {
-  InitialMaxNodes: 100,
-  DefaultMoveAmount: 100,
-  DefaultMovableDistance: 500,
+  InitialMaxNodes: fftSize * 3,
+  DefaultMoveAmount: 200,
+  DefaultMovableDistance: 600,
+  DecreaseSpeed: 10
 } as const

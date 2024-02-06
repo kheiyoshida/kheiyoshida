@@ -6,6 +6,7 @@ import { VectorAngles } from 'p5utils/src/3d/types'
 import { ArgsRandomizer, distribute, randomIntInclusiveBetween } from 'utils'
 import * as NODE from 'p5utils/src/data/node'
 import * as NODE3D from 'p5utils/src/data/node/3d'
+import { Config } from '../config'
 
 export type TreeNode = {
   position: Position3D
@@ -75,7 +76,7 @@ export const emitNodeEdge =
       newPosition as Position3D,
       newDir,
       moveAmount,
-      moveAmount * 3,
+      Config.DefaultMovableDistance,
       decreaseSpeed,
       changeDirection
     )
