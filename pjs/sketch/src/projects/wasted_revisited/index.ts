@@ -6,6 +6,8 @@ import { bindControl } from './control'
 import { bindPlayEvent, soundAnalyzer } from './data/sound'
 import { cameraStore, graphStore, sketchStore } from './state'
 import { draw3DGrid } from 'p5utils/src/3d/debug'
+import { drawAtVectorPosition } from 'p5utils/src/render/drawers/draw'
+import { drawTree } from './render/drawGraph'
 
 const setup = () => {
   // sketch
@@ -16,18 +18,17 @@ const setup = () => {
   p.fill(sketchStore.current.strokeColor)
   loadFont()
 
+  // sound
+  bindPlayEvent()
+
   // camera
   cameraStore.lazyInit()
-  // cameraStore.current.camera.setFocus([0, 0, 0])
 
   // control
   bindControl(cameraStore)
 
   // graph
   graphStore.lazyInit()
-
-  // sound
-  bindPlayEvent()
 }
 
 const draw = () => {
@@ -53,11 +54,12 @@ const draw = () => {
   })
 
   // camera
-  camera.move()
+  cameraStore.turnCamera()
+  cameraStore.moveCamera()
 
   // render
-  draw3DGrid(3, 1000, camera)
-  // drawTree(graphStore.current.graph)
+  draw3DGrid(6, 6000, camera)
+  drawTree(graphStore.current.graph)
 }
 
 export default <Sketch>{

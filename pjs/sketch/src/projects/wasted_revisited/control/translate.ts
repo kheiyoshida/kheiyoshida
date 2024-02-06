@@ -3,9 +3,9 @@ import { MoveDirection, MoveIntention, TurnIntention } from './types'
 import { CameraStore } from '../state/camera'
 import { divVectorAngles, sumVectorAngles } from 'p5utils/src/3d'
 
-export const translateMoveIntention = ({
-  direction,
-}: MoveIntention): Parameters<CameraStore['updateMove']> => {
+export const translateMoveIntention = (
+  direction: MoveIntention
+): Parameters<CameraStore['updateMove']> => {
   const angles =
     direction.length === 1
       ? DirectionAngles[direction[0]]
@@ -20,11 +20,23 @@ export const translateMoveIntention = ({
 export const translateTurnIntention = ({
   x,
   y,
-}: TurnIntention): Parameters<CameraStore['turn']> => {
+}: TurnIntention): Parameters<CameraStore['updateTurn']> => {
   return [
     {
-      theta: (y * Math.PI) / 2,
-      phi: (-x * Math.PI) / 2,
+      theta: y * 10,
+      phi: -x * 10,
+    },
+  ]
+}
+
+export const translateTargetIntention = ({
+  x,
+  y,
+}: TurnIntention, width = 120): Parameters<CameraStore['updateTarget']> => {
+  return [
+    {
+      phi: 180 - x * width / 2,
+      theta: 90 + y * width / 2,
     },
   ]
 }

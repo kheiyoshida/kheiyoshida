@@ -50,6 +50,9 @@ export const rotate = <Node extends BaseNode>(
   node.move.rotate(valueOrFn(node, angle))
 }
 
+/**
+ * @deprecated valueOrFn
+ */
 export const changeSpeed = <Node extends BaseNode>(
   node: Node,
   speed: number | ((n: Node) => number)

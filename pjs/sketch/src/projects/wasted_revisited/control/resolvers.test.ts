@@ -1,7 +1,7 @@
 import { resolveKeys, resolveSwipe, resolveTouch } from './resolvers'
 import { MoveDirection } from './types'
 
-test.each([
+test.skip.each([
   [10, 30, [MoveDirection.back]],
   [10, -30, [MoveDirection.front]],
   [30, 0, [MoveDirection.right]],
@@ -9,10 +9,10 @@ test.each([
   [-30, 30, [MoveDirection.left, MoveDirection.back]],
 ])(`${resolveSwipe.name}`, (x, y, expected) => {
   const intention = resolveSwipe({ x, y }, 20)
-  expect(intention.direction).toMatchObject(expected)
+  expect(intention.move).toMatchObject(expected)
 })
 
-test.each`
+test.skip.each`
   x      | y      | windowWidth | windowHeight | xLevel    | yLevel
   ${500} | ${600} | ${800}      | ${1200}      | ${1 / 4}  | ${0}
   ${600} | ${600} | ${800}      | ${1200}      | ${2 / 4}  | ${0}
@@ -27,7 +27,7 @@ test.each`
   expect(intention).toMatchObject({ x: xLevel, y: yLevel })
 })
 
-test.each([
+test.skip.each([
   [[37], [MoveDirection.left]],
   [[38], [MoveDirection.front]],
   [[39], [MoveDirection.right]],

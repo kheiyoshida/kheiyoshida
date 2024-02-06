@@ -38,7 +38,7 @@ export const reducers = {
               theta: makeIntWobbler(20)(delta.theta),
               phi: makeIntWobbler((10 - numEdges) * 20)(delta.phi),
             },
-            amount + randomIntInclusiveBetween(-10, 40),
+            amount + randomIntInclusiveBetween(-10, 100),
           ])
           s.graph.push(...newNodes)
           node.hasGrown = true

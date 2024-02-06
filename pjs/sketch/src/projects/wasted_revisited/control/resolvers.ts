@@ -1,32 +1,23 @@
 import { SwipeOrMouseMove, TouchOrMousePosition } from 'p5utils/src/control'
-import { MoveDirection, MoveIntention, TurnIntention } from './types'
+import { ControlIntention, MoveDirection, TurnIntention } from './types'
 import { MoveThreshold } from '../config'
 
-export const resolveSwipe = (swipe: SwipeOrMouseMove, threshold = MoveThreshold): MoveIntention => {
-  const direction = []
-  if (swipe.x > threshold) {
-    direction.push(MoveDirection.right)
-  } else if (swipe.x < -threshold) {
-    direction.push(MoveDirection.left)
+export const resolveSwipe = (
+  swipe: SwipeOrMouseMove,
+  threshold = MoveThreshold,
+  base = threshold * 4
+): ControlIntention => {
+  const turn = {
+    x: Math.abs(swipe.x) > threshold ? swipe.x / threshold : 0,
+    y: Math.abs(swipe.y) > threshold ? swipe.y / threshold : 0,
   }
-  if (swipe.y > threshold) {
-    direction.push(MoveDirection.back)
-  } else if (swipe.y < -threshold) {
-    direction.push(MoveDirection.front)
+  if (Math.abs(turn.x) > 0 || Math.abs(turn.y) > 0) {
+    return {turn}
   }
-  return {
-    direction,
-  }
+  return {}
 }
 
-export const resolveTouch = (touch: TouchOrMousePosition): TurnIntention => {
-  const [halfWidth, halfHeight] = [window.innerWidth / 2, window.innerHeight / 2]
-  const x = (touch.x - halfWidth) / halfWidth
-  const y = (touch.y - halfHeight) / halfHeight
-  return { x, y }
-}
-
-export const resolveKeys = (keys: number[]): MoveIntention => {
+export const resolveKeys = (keys: number[]): ControlIntention => {
   const KeyMap = {
     37: MoveDirection.left,
     38: MoveDirection.front,
@@ -40,13 +31,28 @@ export const resolveKeys = (keys: number[]): MoveIntention => {
     }
   }
   return {
-    direction,
+    move: direction,
   }
 }
 
-export const resolveMouse = (mouse: TouchOrMousePosition): TurnIntention => {
+export const resolveTouch = (touch: TouchOrMousePosition): ControlIntention => {
+  const target = resolveToAngleValues(touch)
+  return {
+    target,
+    // move: [MoveDirection.front]
+  }
+}
+
+export const resolveMouse = (mouse: TouchOrMousePosition): ControlIntention => {
+  const turn = resolveToAngleValues(mouse)
+  return {
+    turn,
+  }
+}
+
+const resolveToAngleValues = (pos: TouchOrMousePosition): TurnIntention => {
   const [halfWidth, halfHeight] = [window.innerWidth / 2, window.innerHeight / 2]
-  const x = (mouse.x - halfWidth) / halfWidth
-  const y = (mouse.y - halfHeight) / halfHeight
+  const x = (pos.x - halfWidth) / 1200
+  const y = (pos.y - halfHeight) / 1200
   return { x, y }
 }
