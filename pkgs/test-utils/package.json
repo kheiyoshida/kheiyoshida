@@ -1,0 +1,12 @@
+{
+  "name": "test-utils",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "cd ../.. && jest --selectProjects test-utils --silent",
+    "test:coverage": "cd ../.. && jest --selectProjects test-utils --coverage --silent"
+  },
+  "devDependencies": {
+    "@jest/expect": "^29.7.0",
+    "@jest/globals": "^29.7.0"
+  }
+}

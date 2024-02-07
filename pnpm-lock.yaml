@@ -322,12 +322,18 @@ importers:
         specifier: workspace:^
         version: link:../utils
     devDependencies:
+      '@jest/globals':
+        specifier: ^29.7.0
+        version: 29.7.0
       '@types/p5':
         specifier: ^1.7.6
         version: 1.7.6
       jest-canvas-mock:
         specifier: ^2.5.2
         version: 2.5.2
+      test-utils:
+        specifier: workspace:^
+        version: link:../test-utils
 
   pkgs/stream:
     dependencies:
@@ -350,6 +356,15 @@ importers:
       '@types/table-layout':
         specifier: link:./@types/table-layout
         version: link:@types/table-layout
+
+  pkgs/test-utils:
+    devDependencies:
+      '@jest/expect':
+        specifier: ^29.7.0
+        version: 29.7.0
+      '@jest/globals':
+        specifier: ^29.7.0
+        version: 29.7.0
 
   pkgs/utils:
     dependencies:

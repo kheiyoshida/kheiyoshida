@@ -83,6 +83,11 @@ const JestConfig: Config = {
         '<rootDir>/jest/setup.ts'
       ]
     },
+    {
+      ...RootConfig,
+      displayName: 'test-utils',
+      rootDir: './pkgs/test-utils',
+    },
   ],
 }
 export default JestConfig

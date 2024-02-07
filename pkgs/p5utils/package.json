@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@types/p5": "^1.7.6",
-    "jest-canvas-mock": "^2.5.2"
+    "jest-canvas-mock": "^2.5.2",
+    "test-utils": "workspace:^"
   }
 }
