@@ -4,10 +4,8 @@ import { fireByRate, randomIntInclusiveBetween } from 'utils'
 import { Config } from './config'
 import { bindControl } from './control'
 import { bindPlayEvent, soundAnalyzer } from './data/sound'
-import { cameraStore, graphStore, sketchStore } from './state'
-import { draw3DGrid } from 'p5utils/src/3d/debug'
-import { drawAtVectorPosition } from 'p5utils/src/render/drawers/draw'
 import { drawTree } from './render/drawGraph'
+import { cameraStore, graphStore, sketchStore } from './state'
 
 const setup = () => {
   // sketch
@@ -32,7 +30,6 @@ const setup = () => {
 }
 
 const draw = () => {
-  const { camera } = cameraStore.current
   sketchStore.paint()
 
   // update
@@ -58,7 +55,6 @@ const draw = () => {
   cameraStore.moveCamera()
 
   // render
-  draw3DGrid(6, 6000, camera)
   drawTree(graphStore.current.graph)
 }
 

@@ -33,3 +33,13 @@ export const splicedArray = <T>(arr: T[], ...args: Parameters<typeof Array.proto
   arr.splice(...args)
   return arr
 }
+
+export const createCosCurveArray = <T>(
+  original: T,
+  getVal: (original: T, sinValue: number) => T,
+  numOfQueue: number
+) => {
+  return [...Array(numOfQueue)].map((_, i) =>
+    getVal(original, Math.cos((Math.PI / 2) * (i / numOfQueue)))
+  )
+}

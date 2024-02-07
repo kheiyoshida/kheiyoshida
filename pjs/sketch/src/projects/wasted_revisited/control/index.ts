@@ -1,31 +1,11 @@
-import { detectMove, detectPosition, registerKeys } from 'p5utils/src/control'
+import { detectPosition, registerKeys } from 'p5utils/src/control'
 import { CameraStore } from '../state/camera'
-import { resolveKeys, resolveMouse, resolveSwipe, resolveTouch } from './resolvers'
-import {
-  translateMoveIntention,
-  translateTargetIntention,
-  translateTurnIntention,
-} from './translate'
+import { resolveKeys, resolveMouse } from './resolvers'
+import { translateMoveIntention, translateTurnIntention } from './translate'
 import { ControlIntention } from './types'
 
-const MOBILE_WIDTH = 800
-
 export const bindControl = (camera: CameraStore): void => {
-  if (window.innerWidth < MOBILE_WIDTH) bindDeviceTouchEvents(camera)
-  else bindMouseKeyControlEvents(camera)
-}
-
-export const bindDeviceTouchEvents = (cameraStore: CameraStore): void => {
-  p.touchMoved = () => {
-    const swipe = detectMove()
-    const intention = resolveSwipe(swipe)
-    resolveIntention(intention, cameraStore)
-  }
-  p.touchEnded = () => {
-    const position = detectPosition()
-    const intention = resolveTouch(position)
-    resolveIntention(intention, cameraStore)
-  }
+  bindMouseKeyControlEvents(camera)
 }
 
 export const bindMouseKeyControlEvents = (cameraStore: CameraStore): void => {
@@ -35,12 +15,7 @@ export const bindMouseKeyControlEvents = (cameraStore: CameraStore): void => {
     const intention = resolveKeys(keys)
     resolveIntention(intention, cameraStore)
   }
-  p.mouseDragged = () => {
-    const swipe = detectMove()
-    const intention = resolveSwipe(swipe)
-    resolveIntention(intention, cameraStore)
-  }
-  p.mouseClicked = () => {
+  p.mouseMoved = () => {
     const mousePosition = detectPosition()
     const intention = resolveMouse(mousePosition)
     resolveIntention(intention, cameraStore)
@@ -55,9 +30,5 @@ const resolveIntention = (intention: ControlIntention, camera: CameraStore) => {
   if (intention.turn) {
     const turnValue = translateTurnIntention(intention.turn)
     camera.updateTurn(...turnValue)
-  }
-  if (intention.target) {
-    const targetValue = translateTargetIntention(intention.target)
-    camera.updateTarget(...targetValue)
   }
 }
