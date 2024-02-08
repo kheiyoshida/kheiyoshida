@@ -31,8 +31,8 @@ export const calculateVertices = (graph: Shape['graph']): Shape => {
     const edgeVertices = collectEdgeVertices(node)
     const newVertices = calculateNodeVertices(node, edgeVertices)
     const nodeVertices = [...edgeVertices, ...newVertices]
-    nodeVertices.forEach((v) => node.vertices.push(v))
-    newVertices.forEach((v) => vertices.push(v))
+    node.vertices.push(...nodeVertices)
+    vertices.push(...newVertices)
     adjustNodePositionInTetra(node)
   }
   return { vertices, graph }

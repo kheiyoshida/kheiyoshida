@@ -17,18 +17,17 @@ export const translateMoveIntention = (
   else return [angles]
 }
 
-export const translateTurnIntention = ({
-  x,
-  y,
-}: TurnIntention): Parameters<CameraStore['updateTurn']> => {
+export const translateTurnIntention = (
+  { x, y }: TurnIntention,
+  sightWidth = 120
+): Parameters<CameraStore['updateTurn']> => {
   return [
     {
-      theta: y * 10,
-      phi: -x * 10,
+      theta: (y * sightWidth) / 2,
+      phi: (-x * sightWidth) / 2,
     },
   ]
 }
-
 export const translateTargetIntention = ({
   x,
   y,

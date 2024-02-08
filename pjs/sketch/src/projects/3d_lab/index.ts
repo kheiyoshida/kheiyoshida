@@ -2,7 +2,7 @@ import { draw3DGrid } from 'p5utils/src/3d/debug'
 import { loadFont } from 'p5utils/src/font'
 import { applyConfig } from 'p5utils/src/utils/project'
 import { bindControl } from './control'
-import { cameraStore, sketchStore } from './state'
+import { cameraStore, geometryStore, sketchStore } from './state'
 
 const setup = () => {
   // sketch
@@ -18,6 +18,9 @@ const setup = () => {
 
   // control
   bindControl(cameraStore)
+
+  // geo
+  geometryStore.lazyInit()
 }
 
 const draw = () => {
@@ -29,6 +32,8 @@ const draw = () => {
   cameraStore.moveCamera()
 
   // render
+  p.lights()
+  geometryStore.render()
   draw3DGrid(6, 6000, camera)
 }
 

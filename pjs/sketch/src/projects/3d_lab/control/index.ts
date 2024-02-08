@@ -35,14 +35,9 @@ export const bindMouseKeyControlEvents = (cameraStore: CameraStore): void => {
     const intention = resolveKeys(keys)
     resolveIntention(intention, cameraStore)
   }
-  p.mouseDragged = () => {
-    const swipe = detectMove()
-    const intention = resolveSwipe(swipe)
-    resolveIntention(intention, cameraStore)
-  }
-  p.mouseClicked = () => {
-    const mousePosition = detectPosition()
-    const intention = resolveMouse(mousePosition)
+  p.mouseMoved = () => {
+    const position = detectPosition()
+    const intention = resolveMouse(position)
     resolveIntention(intention, cameraStore)
   }
 }
