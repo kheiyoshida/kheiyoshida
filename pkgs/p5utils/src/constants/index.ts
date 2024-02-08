@@ -1,0 +1,2 @@
+export const TETRAHEDRAL_DEGREE = 109.5
+export const TETRAHEDRAL_RADIANS = 1.9111355

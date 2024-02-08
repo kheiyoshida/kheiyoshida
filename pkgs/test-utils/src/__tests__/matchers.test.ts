@@ -45,3 +45,12 @@ describe('toMatchCloseObject', () => {
     expect([1, 2, 3]).not.toMatchCloseObject([1.01, 2.001, 3.002, 4.002])
   })
 })
+
+describe('toBeSameValueArray', () => {
+  it(`should assert the same values in an array`, () => {
+    expect([1,1,1]).toBeSameValueArray()
+    expect([1,1,1,2,1]).not.toBeSameValueArray()
+    expect(['yay', 'yay', 'yay']).toBeSameValueArray()
+    expect(['yay', 'yay', 'foo']).not.toBeSameValueArray()
+  })
+})
