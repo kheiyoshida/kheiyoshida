@@ -1,12 +1,45 @@
 import { expect } from 'test-utils'
-import { createShapeNode } from '../tools'
-import { calcTetraVerticesAroundNode, calculateVerticesAroundNode } from './vertices'
+import { connectShapeNodes, createShapeNode } from '../tools'
+import { calcTetraVerticesAroundNode, calcVerticesAroundNode, collectEdgeVertices } from './vertices'
+import { ShapeNode } from '../types'
 
-describe(`${calculateVerticesAroundNode.name}`, () => {
+
+const distanceFromNode = 50
+
+const collectSharedVertices = (node: ShapeNode, node2: ShapeNode) => {
+  return node.vertices.filter((v) => node2.vertices.includes(v))
+}
+
+const prepareConnectedNodes = () => {
+  const node1 = createShapeNode([0,0,0])
+  const node2 = createShapeNode([0,0,200])
+  connectShapeNodes(node1, node2)
+  return { node1, node2 }
+}
+
+describe(`${calcVerticesAroundNode.name}`, () => {
   it(`should calculate shape vertices`, () => {
     const node = createShapeNode()
-    calculateVerticesAroundNode(node, 50)
+    calcVerticesAroundNode(node, distanceFromNode)
     expect(node.vertices).toHaveLength(4)
+  })
+  it(`should use the edge's vertices if present`, () => {
+    const { node1, node2 } = prepareConnectedNodes()
+    connectShapeNodes(node1, node2)
+    calcVerticesAroundNode(node2, distanceFromNode)
+
+    // node2 already has vertices
+    calcVerticesAroundNode(node1, distanceFromNode)
+    expect(collectSharedVertices(node1, node2)).toHaveLength(3)
+  })
+})
+
+describe(`${collectEdgeVertices.name}`, () => {
+  it(`should collect the edge's nearest 3 vertices`, () => {
+    const { node1, node2 } = prepareConnectedNodes()
+    calcVerticesAroundNode(node1, distanceFromNode)
+    const result = collectEdgeVertices(node2)
+    expect(result).toHaveLength(3)
   })
 })
 
