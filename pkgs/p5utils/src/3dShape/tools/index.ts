@@ -24,4 +24,3 @@ export const createTetraAngles = (baseAngles: VectorAngles): VectorAngles[] => {
     ),
   ]
 }
-
