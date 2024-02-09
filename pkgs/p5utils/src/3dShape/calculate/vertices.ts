@@ -1,6 +1,6 @@
-import p5, { Vector } from 'p5'
+import { Vector } from 'p5'
 import { vectorFromDegreeAngles } from '../../3d'
-import { createTetraAngles } from '../tools'
+import { calcPerpendicularVector, createTetraAngles, sortByDistance } from '../tools'
 import { ShapeNode, ShapeVertex } from '../types'
 
 export const calcVerticesAroundNode = (node: ShapeNode, distanceFromNode: number): void => {
@@ -17,12 +17,35 @@ export const collectEdgesVertices = (node: ShapeNode): ShapeVertex[] => {
   return collectVerticesEvenlyFromEachEdge(node.position, edgesWithVertices)
 }
 
+const VERTICES_PER_NODE = 4
+
 export const collectVerticesEvenlyFromEachEdge = (
   from: Vector,
   edgesWithVertices: ShapeNode[]
 ): ShapeVertex[] => {
-  const allVertices = edgesWithVertices.flatMap((edge) => edge.vertices)
-  return collectNearestVertices(from, allVertices, 4)
+  const sortedVertices = edgesWithVertices
+    .sort((a, b) => a.position.dist(from) - b.position.dist(from))
+    .map((edge) => edge.vertices.slice().sort(sortByDistance(from)))
+  const collected: ShapeVertex[] = []
+  for (const sv of sortedVertices) {
+    if (collected.length === VERTICES_PER_NODE) {
+      return collected
+    }
+    collected.push(pickHead(sv))
+  }
+  const flattened = sortedVertices.flatMap((sv) => sv)
+  const otherNearVertices = collectNearestVertices(
+    from,
+    flattened,
+    VERTICES_PER_NODE - collected.length
+  )
+  collected.push(...otherNearVertices)
+  return collected
+
+  function pickHead<T>(arr: T[]) {
+    const [r] = arr.splice(0, 1)
+    return r
+  }
 }
 
 export const collectNearestVertices = (
@@ -30,7 +53,7 @@ export const collectNearestVertices = (
   vertices: ShapeVertex[],
   numOfVertices: number
 ): ShapeVertex[] => {
-  return vertices.sort((a, b) => a.dist(from) - b.dist(from)).slice(0, numOfVertices)
+  return vertices.sort(sortByDistance(from)).slice(0, numOfVertices)
 }
 
 export const calcNewVertices = (
@@ -39,7 +62,7 @@ export const calcNewVertices = (
   distanceFromNode: number
 ): ShapeVertex[] => {
   if (existingEdgeVertices.length === 0) return calcTetraVerticesAroundNode(node, distanceFromNode)
-  if (existingEdgeVertices.length === 3) return [new p5.Vector(100, 100, 100)]
+  if (existingEdgeVertices.length === 3) return [calcLastVertex(node, existingEdgeVertices, distanceFromNode)]
   if (existingEdgeVertices.length >= 4) return []
   throw Error()
 }
@@ -48,6 +71,16 @@ export const calcTetraVerticesAroundNode = (
   node: ShapeNode,
   distanceFromNode: number
 ): ShapeVertex[] =>
-  createTetraAngles({ theta: 0, phi: 0 })
+  createTetraAngles(node.rotate || { theta: 0, phi: 0 })
     .map(({ theta, phi }) => vectorFromDegreeAngles(theta, phi, distanceFromNode))
     .map((tetraVec) => tetraVec.add(node.position))
+
+export const calcLastVertex = (node: ShapeNode, vertices: ShapeVertex[], distanceFromNode: number): ShapeVertex => {
+  if (vertices.length !== 3) throw Error(`should have 3 vertices`)
+  const surfaceCopies = vertices.map((vertex) => vertex.copy())
+  const perpendicular = calcPerpendicularVector(surfaceCopies)
+  if (perpendicular.dot(node.position) < 0) {
+    perpendicular.mult(-1)
+  }
+  return perpendicular.mult(distanceFromNode).add(node.position)
+}

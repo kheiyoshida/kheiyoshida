@@ -5,10 +5,14 @@ import { VectorAngles } from '../../3d/types'
 import { sumVectorAngles } from '../../3d'
 import { TETRAHEDRAL_DEGREE } from '../../constants'
 
-export const createShapeNode = (position: Position3D = [0, 0, 0]): ShapeNode => ({
+export const createShapeNode = (
+  position: Position3D = [0, 0, 0],
+  rotate?: VectorAngles
+): ShapeNode => ({
   position: new p5.Vector(...position),
   edges: [],
   vertices: [],
+  rotate,
 })
 
 export const connectShapeNodes = (node1: ShapeNode, node2: ShapeNode): void => {
@@ -24,3 +28,9 @@ export const createTetraAngles = (baseAngles: VectorAngles): VectorAngles[] => {
     ),
   ]
 }
+
+export const sortByDistance = (from: p5.Vector) => (a: p5.Vector, b: p5.Vector) =>
+  a.dist(from) - b.dist(from)
+
+export const calcPerpendicularVector = ([v1, v2, v3]: p5.Vector[]) =>
+  v2.copy().sub(v1).cross(v3.copy().sub(v1)).normalize()
