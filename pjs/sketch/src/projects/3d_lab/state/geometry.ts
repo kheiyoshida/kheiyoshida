@@ -2,37 +2,41 @@ import p5 from 'p5'
 import * as shape from 'p5utils/src/3dShape'
 import * as createGraph from 'p5utils/src/3dShape/create'
 import { finalizeGeometry } from 'p5utils/src/3dShape/finalize'
+import { ShapeGraph } from 'p5utils/src/3dShape/types'
 import { pushPop } from 'p5utils/src/utils'
-import { LazyInit, ReducerMap, createShuffledArray, makeStoreV2, randomIntInclusiveBetween } from 'utils'
+import { LazyInit, ReducerMap, makeStoreV2, randomIntInclusiveBetween } from 'utils'
+
 
 type GeometryState = {
-  geometries: p5.Geometry[]
-  positions: number[][]
+  geo: p5.Geometry
+  graph: ShapeGraph
 }
 
+const randomPlacement = (territoryLength = 1000) => [
+  randomIntInclusiveBetween(-territoryLength, territoryLength),
+  0,
+  randomIntInclusiveBetween(-territoryLength, territoryLength),
+]
+
+const createRandomPositions = (num: number, territoryLength?: number) =>
+  Array(num).fill(territoryLength).map(randomPlacement)
+
 const init: LazyInit<GeometryState> = () => {
-  const geometries = [...Array(20)].map(() =>
-    finalizeGeometry(createShuffledArray(createGraph.createDonutGraph(100, 30)))
-  )
-  const positions = [...Array(geometries.length)].map(() => [
-    randomIntInclusiveBetween(-1000, 1000),
-    0,
-    randomIntInclusiveBetween(-1000, 1000),
-  ])
+  // const graph = createGraph.createDonutGraph(500, 12)
+  const graph = createGraph.createTreeGraph(20, true)
+  const geo = finalizeGeometry(graph)
   return {
-    geometries,
-    positions,
+    geo,
+    graph,
   }
 }
 
 const reducers = {
   render: (s) => () => {
     p.noStroke()
-    s.geometries.forEach((geo, i) => {
-      shape.renderGeometry(geo, s.positions[i])
-    })
+    shape.renderGeometry(s.geo, [0, 0, 0])
     pushPop(() => {
-      p.translate(-100, 100, 0)
+      p.translate(-500, -500, -400)
       p.sphere(100)
     })
   },

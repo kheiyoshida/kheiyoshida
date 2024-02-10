@@ -8,10 +8,11 @@ export const createDonutGraph = (radius = 100, graphLen = 12) => {
   const graph: ShapeGraph = [...Array(graphLen)].map((_, i) => ({
     position: vectorFromDegreeAngles(90, (360 * i) / graphLen, radius),
     edges: [],
+    distanceToEachVertex: 100,
     vertices: [],
     id: i,
   }))
   loop(graphLen, (i) => connectShapeNodes(graph[i], graph[i + 1] || graph[0]))
-  calculateVerticesForShapeGraph(graph, { distanceFromNode: 100 })
+  calculateVerticesForShapeGraph(graph)
   return graph
 }

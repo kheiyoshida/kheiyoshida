@@ -1,18 +1,24 @@
 import p5 from 'p5'
-import { randomIntBetween } from 'utils'
-import { Position3D } from "../../3d/types"
+import { createShuffledArray, randomIntBetween } from 'utils'
+import { Position3D } from '../../3d/types'
 import { calculateVerticesForShapeGraph } from '../calculate'
 import { connectShapeNodes, createShapeNode } from '../tools'
 import { ShapeGraph, ShapeNode } from '../types'
 
-export const createTreeGraph = (maxRecursion = 30): ShapeGraph => {
+export const createTreeGraph = (maxRecursion = 30, shuffle = false): ShapeGraph => {
   if (maxRecursion > 50 || maxRecursion < 5) {
     throw Error('invalid max recursion value')
   }
-  const initialNode = createShapeNode()
+  const initialNode = createShapeNode([0, 0, 0], 50)
   const graph = growTree(initialNode, maxRecursion)
-  calculateVerticesForShapeGraph(graph, { distanceFromNode: 50 })
-  return graph
+  if (!shuffle) {
+    calculateVerticesForShapeGraph(graph)
+    return graph
+  } else {
+    const shuffled = createShuffledArray(graph)
+    calculateVerticesForShapeGraph(shuffled)
+    return shuffled
+  }
 }
 
 const growTree = (initialNode: ShapeNode, maxRecursion: number): ShapeGraph => {
@@ -28,7 +34,10 @@ const growTree = (initialNode: ShapeNode, maxRecursion: number): ShapeGraph => {
     const g = grow()
     const grownNodes = prevNodes.flatMap((prev) =>
       [...Array(randomIntBetween(recursion < 3 ? 1 : 0, recursion > 7 ? 4 : 3))].map(() => {
-        const nextNode = createShapeNode(prev.position.copy().add(g).array() as Position3D)
+        const nextNode = createShapeNode(
+          prev.position.copy().add(g).array() as Position3D,
+          2 + Math.pow(recursion, 0.5)
+        )
         connectShapeNodes(prev, nextNode)
         return nextNode
       })

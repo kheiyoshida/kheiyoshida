@@ -22,7 +22,6 @@ const setup = () => {
   // geo
   geometryStore.lazyInit()
 
-  // p.noLoop()
 }
 
 const draw = () => {
@@ -42,5 +41,5 @@ const draw = () => {
 
 export default <Sketch>{
   setup,
-  draw,
+  draw
 }
