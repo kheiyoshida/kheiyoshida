@@ -1,9 +1,9 @@
 import p5 from 'p5'
-import { ShapeNode } from '../types'
-import { Position3D } from '../../camera/types'
-import { VectorAngles } from '../../3d/types'
 import { sumVectorAngles } from '../../3d'
+import { VectorAngles } from '../../3d/types'
+import { Position3D } from '../../camera/types'
 import { TETRAHEDRAL_DEGREE } from '../../constants'
+import { ShapeNode } from '../types'
 
 export const createShapeNode = (
   position: Position3D = [0, 0, 0],
