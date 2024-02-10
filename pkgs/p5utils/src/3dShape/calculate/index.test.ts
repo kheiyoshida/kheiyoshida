@@ -1,13 +1,16 @@
-import { calculateVerticesForShapeGraph } from '.'
+import { calcVerticesAroundNode, calculateVerticesForShapeGraph } from '.'
 import { createShapeNode } from '../tools'
-import * as vertices from './vertices'
 
-describe(`${calculateVerticesForShapeGraph.name}`, () => {
-  it(`should calculate vertices for all the nodes in the graph`, () => {
-    const calcNode = jest.spyOn(vertices, 'calcVerticesAroundNode')
-    const graph = [createShapeNode(), createShapeNode()]
-    const createOptions = { distanceFromNode: 10 }
-    calculateVerticesForShapeGraph(graph, createOptions)
-    expect(calcNode).toHaveBeenCalledTimes(2)
+test(`${calculateVerticesForShapeGraph.name}`, () => {
+  const graph = [createShapeNode(), createShapeNode()]
+  calculateVerticesForShapeGraph(graph)
+  graph.forEach((node) => {
+    expect(node.vertices).toHaveLength(4)
   })
+})
+
+test(`${calcVerticesAroundNode.name}`, () => {
+  const node = createShapeNode()
+  calcVerticesAroundNode(node)
+  expect(node.vertices).toHaveLength(4)
 })

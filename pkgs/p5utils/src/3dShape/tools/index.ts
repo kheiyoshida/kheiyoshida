@@ -7,10 +7,12 @@ import { ShapeNode } from '../types'
 
 export const createShapeNode = (
   position: Position3D = [0, 0, 0],
+  distanceToEachVertex = 50,
   rotate?: VectorAngles
 ): ShapeNode => ({
   position: new p5.Vector(...position),
   edges: [],
+  distanceToEachVertex,
   vertices: [],
   rotate,
 })

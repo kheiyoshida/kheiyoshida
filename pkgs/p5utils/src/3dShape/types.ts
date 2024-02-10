@@ -1,16 +1,13 @@
 import type { Geometry, Vector } from 'p5'
 import { VectorAngles } from '../3d/types'
 
-export type ShapeCreateOptions = {
-  distanceFromNode: number
-}
-
 export type ShapeGraph = ShapeNode[]
 
 export type ShapeNode = {
   position: Vector
   vertices: ShapeVertex[]
   edges: ShapeNode[]
+  distanceToEachVertex: number
   rotate?: VectorAngles
   id?: string | number
 }

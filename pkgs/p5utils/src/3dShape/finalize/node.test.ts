@@ -12,6 +12,7 @@ const prepare = () => {
   ]
   const node: ShapeNode = {
     position: new p5.Vector(),
+    distanceToEachVertex: 50,
     edges: [],
     vertices,
   }

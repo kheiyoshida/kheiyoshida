@@ -12,7 +12,7 @@ type GeometryState = {
 
 const init: LazyInit<GeometryState> = () => {
   const geometries = [...Array(20)].map(() =>
-    finalizeGeometry(createShuffledArray(createGraph.createTreeGraph(50)))
+    finalizeGeometry(createShuffledArray(createGraph.createDonutGraph(100, 30)))
   )
   const positions = [...Array(geometries.length)].map(() => [
     randomIntInclusiveBetween(-1000, 1000),
