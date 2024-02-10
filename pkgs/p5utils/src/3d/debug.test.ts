@@ -1,6 +1,6 @@
 import p5 from 'p5'
 import { getForwardDir } from '../camera/helpers'
-import { Position3D } from '../camera/types'
+import { Position3D } from "./types"
 import {
   adjustToPerspective,
   calcRelativeAngleFromPerspective,

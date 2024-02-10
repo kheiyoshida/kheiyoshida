@@ -10,7 +10,7 @@ import {
   sortByDistance,
 } from '.'
 import { vectorFromDegreeAngles } from '../../3d'
-import { Position3D } from '../../camera/types'
+import { Position3D } from "../../3d/types"
 import { TETRAHEDRAL_DEGREE } from '../../constants'
 
 test(`${createShapeNode.name}`, () => {

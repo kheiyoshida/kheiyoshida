@@ -1,5 +1,5 @@
 import { Geometry } from 'p5'
-import { Position3D } from '../../camera/types'
+import { Position3D } from "../../3d/types"
 import { VectorAngles } from '../../3d/types'
 import { pushPop } from '../../utils'
 

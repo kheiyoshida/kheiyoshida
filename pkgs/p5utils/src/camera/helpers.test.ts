@@ -1,6 +1,6 @@
 import p5 from 'p5'
 import { getCameraCenter, getForwardDir } from './helpers'
-import { Position3D } from './types'
+import { Position3D } from "../3d/types"
 
 jest.mock('p5', () => ({
   ...jest.requireActual('p5'),

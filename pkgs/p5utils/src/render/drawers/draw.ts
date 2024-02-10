@@ -1,6 +1,6 @@
 import p5 from 'p5'
 import { pushPop, shakeVector, shakeVector3D } from '../../utils/p5utils'
-import { Position3D } from '../../camera/types'
+import { Position3D } from "../../3d/types"
 
 export const drawLineBetweenVectors = (p1: p5.Vector, p2: p5.Vector) => {
   p.line(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z)

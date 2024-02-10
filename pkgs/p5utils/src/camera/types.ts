@@ -1,6 +1,5 @@
+import { Position3D } from "../3d/types"
 import { VectorAngles } from "../3d/types"
-
-export type Position3D = [x: number, y: number, z: number]
 
 export type Camera = {
   setPosition: (x: number, y: number, z: number) => void

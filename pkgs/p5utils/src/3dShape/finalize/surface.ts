@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { Position3D } from '../../camera/types'
+import { Position3D } from "../../3d/types"
 import { calcAverageVector, calcPerpendicularVector, isInTheSameSide } from '../tools'
 import { ShapeVertex } from '../types'
 

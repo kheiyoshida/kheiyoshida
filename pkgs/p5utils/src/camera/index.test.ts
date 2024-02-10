@@ -1,6 +1,6 @@
 import p5 from 'p5'
 import { createCamera } from '.'
-import { Position3D } from './types'
+import { Position3D } from "../3d/types"
 import * as helpers from './helpers'
 
 jest.mock('p5', () => ({

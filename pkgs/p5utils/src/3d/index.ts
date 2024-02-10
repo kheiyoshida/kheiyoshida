@@ -1,7 +1,7 @@
 import p5 from 'p5'
 import { VectorAngles } from './types'
 import { randomIntInclusiveBetween } from 'utils'
-import { Position3D } from '../camera/types'
+import { Position3D } from "./types"
 
 export const toRadians = (degree: number) => degree * (Math.PI / 180)
 export const toDegrees = (radians: number) => radians / (Math.PI / 180)

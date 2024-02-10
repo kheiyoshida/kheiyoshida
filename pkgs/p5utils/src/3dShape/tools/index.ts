@@ -1,7 +1,7 @@
 import p5 from 'p5'
 import { sumVectorAngles } from '../../3d'
 import { VectorAngles } from '../../3d/types'
-import { Position3D } from '../../camera/types'
+import { Position3D } from "../../3d/types"
 import { TETRAHEDRAL_DEGREE } from '../../constants'
 import { ShapeNode } from '../types'
 

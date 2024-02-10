@@ -1,6 +1,6 @@
 import p5 from 'p5'
 import { randomAngle, sumVectorAngles, vectorFromDegreeAngles } from 'p5utils/src/3d'
-import { Position3D } from 'p5utils/src/camera/types'
+import { Position3D } from 'p5utils/src/3d/types'
 import { createBase3D } from 'p5utils/src/data/node/3d'
 import { VectorAngles } from 'p5utils/src/3d/types'
 import { ArgsRandomizer, distribute, randomIntInclusiveBetween } from 'utils'

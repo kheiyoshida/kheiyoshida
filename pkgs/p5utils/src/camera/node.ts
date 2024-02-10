@@ -1,6 +1,7 @@
 import { changeSpeed, move } from '../data/node'
 import { createBase3D, rotate3D } from '../data/node/3d'
-import { CameraNode, Position3D } from './types'
+import { CameraNode } from './types'
+import { Position3D } from "../3d/types"
 
 export const createCameraNode = (...args: Parameters<typeof createBase3D>): CameraNode => {
   const node = createBase3D(...args)

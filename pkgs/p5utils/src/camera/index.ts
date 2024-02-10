@@ -1,6 +1,7 @@
 import p5 from 'p5'
 import { createCameraNode } from './node'
-import { Camera, Position3D } from './types'
+import { Camera } from './types'
+import { Position3D } from "../3d/types"
 import { getCameraCenter, getForwardDir } from './helpers'
 import { VectorAngles } from "../3d/types"
 

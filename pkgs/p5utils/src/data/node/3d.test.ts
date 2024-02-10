@@ -1,6 +1,6 @@
 import p5 from 'p5'
 import { createBase, move } from '.'
-import { Position3D } from '../../camera/types'
+import { Position3D } from "../../3d/types"
 import { createBase3D, restrain3D, restrain3dFromPosition, rotate3D } from './3d'
 import { BaseNode3D } from './types'
 import * as module3d from '../../3d'

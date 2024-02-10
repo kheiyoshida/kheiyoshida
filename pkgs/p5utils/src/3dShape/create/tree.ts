@@ -1,6 +1,6 @@
 import p5 from 'p5'
 import { randomIntBetween } from 'utils'
-import { Position3D } from '../../camera/types'
+import { Position3D } from "../../3d/types"
 import { calculateVerticesForShapeGraph } from '../calculate'
 import { connectShapeNodes, createShapeNode } from '../tools'
 import { ShapeGraph, ShapeNode } from '../types'

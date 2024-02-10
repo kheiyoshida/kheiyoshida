@@ -4,7 +4,7 @@ import { distanceBetweenNodes, mutate } from '.'
 import { BaseNode3D } from './types'
 import { VectorAngles } from "../../3d/types"
 import { distanceBetweenPositions, toRadians, vectorFromDegreeAngles } from '../../3d'
-import { Position3D } from '../../camera/types'
+import { Position3D } from "../../3d/types"
 
 export const createBase3D = (
   position: p5.Vector = new p5.Vector(),

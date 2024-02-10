@@ -1,7 +1,7 @@
 import p5 from 'p5'
 import { VectorAngles } from "../3d/types"
 import { revertToSphericalCoordinate, toDegrees } from '../3d'
-import { Position3D } from './types'
+import { Position3D } from "../3d/types"
 
 export function getCameraCenter(camera: p5.Camera): Position3D {
   return [camera.centerX, camera.centerY, camera.centerZ]

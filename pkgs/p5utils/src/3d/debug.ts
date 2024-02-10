@@ -1,7 +1,8 @@
 import p5 from 'p5'
 import { loop3D, memorize } from 'utils'
 import { revertToSphericalCoordinate, toDegrees } from '.'
-import { Camera, Position3D } from '../camera/types'
+import { Camera } from '../camera/types'
+import { Position3D } from "./types"
 import { VectorAngles } from "./types"
 import { drawAtVectorPosition } from '../render/drawers/draw'
 import { pushPop } from '../utils'
