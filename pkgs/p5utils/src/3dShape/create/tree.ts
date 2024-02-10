@@ -1,5 +1,6 @@
 import p5 from 'p5'
-import { createShuffledArray, randomIntBetween } from 'utils'
+import { createShuffledArray, randomIntInclusiveBetween } from 'utils'
+import { vectorFromDegreeAngles } from '../../3d'
 import { Position3D } from '../../3d/types'
 import { calculateVerticesForShapeGraph } from '../calculate'
 import { connectShapeNodes, createShapeNode } from '../tools'
@@ -23,28 +24,34 @@ export const createTreeGraph = (maxRecursion = 30, shuffle = false): ShapeGraph 
 
 const growTree = (initialNode: ShapeNode, maxRecursion: number): ShapeGraph => {
   const nodes: ShapeNode[] = [initialNode]
-  const _growFlower = (prevNodes: ShapeNode[], recursion = 1) => {
-    if (prevNodes.length === 0 || recursion > maxRecursion || nodes.length > 200) return
-    const grow = () =>
-      p5.Vector.fromAngles(
-        p.radians(randomIntBetween(0, recursion * 10)),
-        p.radians(randomIntBetween(0, 360)),
-        randomIntBetween(10, 10 + Math.pow(recursion, 2))
-      )
-    const g = grow()
-    const grownNodes = prevNodes.flatMap((prev) =>
-      [...Array(randomIntBetween(recursion < 3 ? 1 : 0, recursion > 7 ? 4 : 3))].map(() => {
-        const nextNode = createShapeNode(
-          prev.position.copy().add(g).array() as Position3D,
-          2 + Math.pow(recursion, 0.5)
-        )
-        connectShapeNodes(prev, nextNode)
-        return nextNode
-      })
-    )
-    grownNodes.forEach((n) => nodes.push(n))
-    _growFlower(grownNodes, recursion + 1)
+  const _growFlower = (prevNodes: ShapeNode[], stage = 1) => {
+    if (prevNodes.length === 0 || stage > maxRecursion || nodes.length > 200) return
+    const grownNodes = prevNodes.flatMap((node) => growNode(node, getGrowNumber(stage), stage))
+    nodes.push(...grownNodes)
+    _growFlower(grownNodes, stage + 1)
   }
   _growFlower(nodes)
   return nodes
 }
+
+const growNode = (prev: ShapeNode, growNumber: number, stage: number) => {
+  return [...Array(growNumber)].map(() => {
+    const growAmount = getGrowAmount(stage)
+    const nextNode = createShapeNode(
+      prev.position.copy().add(growAmount).array() as Position3D,
+      prev.distanceToEachVertex + Math.pow(stage, 0.5)
+    )
+    connectShapeNodes(prev, nextNode)
+    return nextNode
+  })
+}
+
+const getGrowNumber = (stage: number) =>
+  randomIntInclusiveBetween(stage < 5 ? 1 : 0, stage > 5 ? 4 : 1)
+
+const getGrowAmount = (stage: number): p5.Vector =>
+  vectorFromDegreeAngles(
+    randomIntInclusiveBetween(0, stage * 9),
+    randomIntInclusiveBetween(0, 360),
+    randomIntInclusiveBetween(50, 50 + Math.pow(stage, 2))
+  )

@@ -6,7 +6,6 @@ import { ShapeGraph } from 'p5utils/src/3dShape/types'
 import { pushPop } from 'p5utils/src/utils'
 import { LazyInit, ReducerMap, makeStoreV2, randomIntInclusiveBetween } from 'utils'
 
-
 type GeometryState = {
   geo: p5.Geometry
   graph: ShapeGraph
@@ -22,8 +21,7 @@ const createRandomPositions = (num: number, territoryLength?: number) =>
   Array(num).fill(territoryLength).map(randomPlacement)
 
 const init: LazyInit<GeometryState> = () => {
-  // const graph = createGraph.createDonutGraph(500, 12)
-  const graph = createGraph.createTreeGraph(20, true)
+  const graph = createGraph.createTreeGraph(20)
   const geo = finalizeGeometry(graph)
   return {
     geo,
