@@ -3,7 +3,6 @@ import { loadFont } from 'p5utils/src/font'
 import { applyConfig } from 'p5utils/src/utils/project'
 import { bindControl } from './control'
 import { cameraStore, geometryStore, sketchStore } from './state'
-import p5 from 'p5'
 
 const setup = () => {
   // sketch
@@ -38,7 +37,7 @@ const draw = () => {
   p.lights()
   // p.spotLight(p.color(255), new p5.Vector(0, 0, 1000), new p5.Vector())
   geometryStore.render()
-  draw3DGrid(6, 6000, camera)
+  draw3DGrid(3, 2000, camera)
 }
 
 export default <Sketch>{

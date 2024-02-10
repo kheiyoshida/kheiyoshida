@@ -35,8 +35,10 @@ export const createTetraAngles = (baseAngles: VectorAngles): VectorAngles[] => {
 export const sortByDistance = (from: p5.Vector) => (a: p5.Vector, b: p5.Vector) =>
   a.dist(from) - b.dist(from)
 
-export const calcPerpendicularVector = ([v1, v2, v3]: p5.Vector[]) =>
-  v2.copy().sub(v1).cross(v3.copy().sub(v1)).normalize()
+export const calcPerpendicularVector = ([v1, v2, v3]: p5.Vector[]): p5.Vector => {
+  if (!v1 || !v2 || !v3) throw Error(`surface vector is missing`)
+  return v2.copy().sub(v1).cross(v3.copy().sub(v1)).normalize()
+}
 
 export const calcAverageVector = (vectors: p5.Vector[]): p5.Vector => {
   return new p5.Vector(
