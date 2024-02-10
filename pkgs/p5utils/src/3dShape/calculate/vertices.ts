@@ -1,6 +1,6 @@
 import { Vector } from 'p5'
 import { vectorFromDegreeAngles } from '../../3d'
-import { calcPerpendicularVector, createTetraAngles, sortByDistance } from '../tools'
+import { calcPerpendicularVector, createTetraAngles, isInTheSameSide, sortByDistance } from '../tools'
 import { ShapeNode, ShapeVertex } from '../types'
 
 export const calcVerticesAroundNode = (node: ShapeNode, distanceFromNode: number): void => {
@@ -79,7 +79,7 @@ export const calcLastVertex = (node: ShapeNode, vertices: ShapeVertex[], distanc
   if (vertices.length !== 3) throw Error(`should have 3 vertices`)
   const surfaceCopies = vertices.map((vertex) => vertex.copy())
   const perpendicular = calcPerpendicularVector(surfaceCopies)
-  if (perpendicular.dot(node.position) < 0) {
+  if (!isInTheSameSide(perpendicular, node.position)) {
     perpendicular.mult(-1)
   }
   return perpendicular.mult(distanceFromNode).add(node.position)

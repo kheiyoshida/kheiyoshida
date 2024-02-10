@@ -12,6 +12,7 @@ export type ShapeNode = {
   vertices: ShapeVertex[]
   edges: ShapeNode[]
   rotate?: VectorAngles
+  id?: string | number
 }
 
 export type ShapeVertex = Vector

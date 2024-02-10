@@ -6,7 +6,7 @@ export const makeSketchStore = () =>
     cw: p.windowWidth,
     ch: p.windowHeight,
     fillColor: p.color(230),
-    strokeColor: p.color(100, 100),
+    strokeColor: p.color(100),
     frameRate: 30,
     strokeWeight: 1,
     webgl: true,

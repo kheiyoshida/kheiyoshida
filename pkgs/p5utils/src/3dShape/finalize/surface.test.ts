@@ -1,11 +1,37 @@
 import p5 from 'p5'
-import { finalizeSurface } from './surface'
+import { calcNormal, finalizeSurface } from './surface'
 
 test(`${finalizeSurface.name}`, () => {
-  const surface = [new p5.Vector(100, 0, 0), new p5.Vector(-100, 0, 0), new p5.Vector(0, 0, 0)]
+  const surface = [new p5.Vector(100, 0, 0), new p5.Vector(-100, 0, 0), new p5.Vector(0, 0, -100)]
+  const theOther = new p5.Vector(0, -100, -50)
   const spyVertex = jest.spyOn(p, 'vertex')
-  finalizeSurface(surface)
-  surface.forEach(v => {
+  jest.spyOn(p, 'normal').mockImplementation()
+  finalizeSurface(surface, theOther)
+  surface.forEach((v) => {
     expect(spyVertex).toHaveBeenCalledWith(...v.array())
   })
+})
+
+test.each([
+  [
+    [
+      [100, 0, 0],
+      [-100, 0, 0],
+      [0, 0, -100],
+    ],
+    [0, -100, -50],
+  ],
+  [
+    [
+      [100, 0, 0],
+      [-100, 0, 0],
+      [0, 0, -100],
+    ],
+    [0, 100, -50],
+  ],
+])(`${calcNormal.name}`, (surface, theOther) => {
+  const surfaceVertices = surface.map((s) => new p5.Vector(...s))
+  const theOtherVertex = new p5.Vector(...theOther)
+  const normal = calcNormal(surfaceVertices, theOtherVertex)
+  expect(normal.array()).toMatchSnapshot()
 })

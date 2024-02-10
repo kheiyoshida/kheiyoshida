@@ -21,7 +21,7 @@ const prepare = () => {
 describe(`${finalizeNodeSurfaces.name}`, () => {
   it(`should finalize the shape for each surface of tetra node`, () => {
     const { node } = prepare()
-    const spyFinalizeSurface = jest.spyOn(surface, 'finalizeSurface')
+    const spyFinalizeSurface = jest.spyOn(surface, 'finalizeSurface').mockImplementation()
     finalizeNodeSurfaces(node)
     expect(spyFinalizeSurface).toHaveBeenCalledTimes(4)
   })
@@ -30,5 +30,6 @@ describe(`${finalizeNodeSurfaces.name}`, () => {
 test(`${extractNodeSurfaceVertices.name}`, () => {
   const { vertices, node } = prepare()
   const surfaces = extractNodeSurfaceVertices(node)
-  expect(surfaces[0]).toMatchObject([vertices[1], vertices[2], vertices[3]])
+  expect(surfaces[0][0]).toMatchObject([vertices[1], vertices[2], vertices[3]])
+  expect(surfaces[0][1]).toMatchObject(vertices[0])
 })
