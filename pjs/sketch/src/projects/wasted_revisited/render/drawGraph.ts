@@ -1,24 +1,33 @@
+import { renderGeometry } from 'p5utils/src/3dShape'
 import { drawAtPosition3D } from 'p5utils/src/render/drawers/draw'
+import { calcEdgeAngle } from '../primitives/edgeGeometry'
 import { TreeNode } from '../primitives/node'
-import { TreeGraph } from '../state/graph'
+import { GraphState } from '../state/graph'
+import p5 from 'p5'
 
-export const drawTree = (graph: TreeGraph) => {
-  graph.forEach((node) => {
-    drawNode(node)
-    drawEdges(node)
+export const render = ({ graph, geometries }: GraphState) => {
+  graph.forEach((node, i) => {
+    const edgeGeos = geometries[i]
+    if (edgeGeos) {
+      drawEdges(node, edgeGeos)
+    }
   })
 }
 
-export const drawNode = (node: TreeNode) => {
+const drawNode = (node: TreeNode) => {
   drawAtPosition3D(node.position, () => {
     p.sphere(6)
   })
 }
 
-const drawEdges = (node: TreeNode) => {
-  node.edges.forEach((e) => drawEdge(node, e))
+const drawEdges = (node: TreeNode, edgeGeos: p5.Geometry[]) => {
+  edgeGeos.forEach((geo, edgeIndex) => {
+    const edge = node.edges[edgeIndex]
+    renderEdge(node, edge, geo)
+  })
 }
 
-export const drawEdge = (node: TreeNode, edge: TreeNode) => {
-  p.line(...node.position, ...edge.position)
+const renderEdge = (node: TreeNode, edge: TreeNode, edgeGeo: p5.Geometry) => {
+  const angle = calcEdgeAngle(node.position, edge.position)
+  renderGeometry(edgeGeo, node.position, angle)
 }

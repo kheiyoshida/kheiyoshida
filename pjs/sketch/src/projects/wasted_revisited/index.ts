@@ -1,10 +1,10 @@
 import { loadFont } from 'p5utils/src/font'
 import { applyConfig } from 'p5utils/src/utils/project'
-import { fireByRate, randomIntInclusiveBetween } from 'utils'
+import { randomIntInclusiveBetween } from 'utils'
 import { Config } from './config'
 import { bindControl } from './control'
 import { bindPlayEvent, soundAnalyzer } from './data/sound'
-import { drawTree } from './render/drawGraph'
+import { render } from './render/drawGraph'
 import { cameraStore, graphStore, sketchStore } from './state'
 
 const setup = () => {
@@ -14,6 +14,7 @@ const setup = () => {
   p.angleMode(p.DEGREES)
   p.background(sketchStore.current.fillColor)
   p.fill(sketchStore.current.strokeColor)
+  p.noStroke()
   loadFont()
 
   // sound
@@ -33,13 +34,13 @@ const draw = () => {
   sketchStore.paint()
 
   // update
-  const numOfGrow = randomIntInclusiveBetween(0, 10)
-  graphStore.grow(
-    numOfGrow,
-    randomIntInclusiveBetween(0, 30),
-    randomIntInclusiveBetween(500, 1000),
-    () => fireByRate(0.1)
-  )
+  graphStore.setGrowOptions({
+    numOfGrowEdges: randomIntInclusiveBetween(0, 3),
+    thetaDelta: randomIntInclusiveBetween(0, 30),
+    growAmount: randomIntInclusiveBetween(500, 1000),
+    randomAbortRate: 0.1,
+  })
+  graphStore.grow()
 
   const freqData = soundAnalyzer.analyze()
   graphStore.current.graph.forEach((n, i) => {
@@ -49,13 +50,15 @@ const draw = () => {
       n.updateSpeed(freqAmount * Config.DefaultMoveAmount)
     }
   })
+  graphStore.calculateGeometries()
 
   // camera
   cameraStore.turnCamera()
   cameraStore.moveCamera()
 
   // render
-  drawTree(graphStore.current.graph)
+  p.lights()
+  render(graphStore.current)
 }
 
 export default <Sketch>{

@@ -48,6 +48,9 @@ const JestConfig: Config = {
       ...RootConfig,
       displayName: 'sketch',
       rootDir: './pjs/sketch',
+      setupFilesAfterEnv: [
+        '<rootDir>/jest/setup.ts'
+      ]
     },
     // pkgs
     {

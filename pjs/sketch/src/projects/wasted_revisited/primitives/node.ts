@@ -1,11 +1,10 @@
 import p5 from 'p5'
 import { randomAngle, sumVectorAngles, vectorFromDegreeAngles } from 'p5utils/src/3d'
-import { Position3D } from 'p5utils/src/3d/types'
-import { createBase3D } from 'p5utils/src/data/node/3d'
-import { VectorAngles } from 'p5utils/src/3d/types'
-import { ArgsRandomizer, distribute, randomIntInclusiveBetween } from 'utils'
+import { Position3D, VectorAngles } from 'p5utils/src/3d/types'
 import * as NODE from 'p5utils/src/data/node'
 import * as NODE3D from 'p5utils/src/data/node/3d'
+import { createBase3D } from 'p5utils/src/data/node/3d'
+import { ArgsRandomizer, distribute, randomIntInclusiveBetween } from 'utils'
 import { Config } from '../config'
 
 export type TreeNode = {
@@ -17,11 +16,13 @@ export type TreeNode = {
     numEdges: number,
     thetaDelta: number,
     growAmount: number,
-    randomizer?: ArgsRandomizer<ReturnType<typeof emitNodeEdge>>
+    randomizer?: EmitNodeEdgeRandomizer
   ) => TreeNode[]
   move: () => void
   updateSpeed: (speed: number) => void
 }
+
+export type EmitNodeEdgeRandomizer = ArgsRandomizer<ReturnType<typeof emitNodeEdge>>
 
 export const createGraphNode = (
   position: Position3D,
@@ -34,6 +35,7 @@ export const createGraphNode = (
   const initialPosition = position
   const _node = createBase3D(new p5.Vector(...position), randomAngle(), moveAmount)
   const edges: TreeNode[] = []
+
   return {
     get position() {
       return _node.position.array() as Position3D
