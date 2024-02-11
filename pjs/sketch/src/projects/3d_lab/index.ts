@@ -29,8 +29,8 @@ const draw = () => {
   sketchStore.paint()
 
   // camera
-  // cameraStore.turnCamera()
-  // cameraStore.moveCamera()
+  cameraStore.turnCamera()
+  cameraStore.moveCamera()
 
   // render
   p.lights()

@@ -1,4 +1,6 @@
 import p5 from 'p5'
+import { vectorFromDegreeAngles } from 'p5utils/src/3d'
+import { Position3D } from 'p5utils/src/3d/types'
 import * as shape from 'p5utils/src/3dShape'
 import * as createGraph from 'p5utils/src/3dShape/create'
 import { finalizeGeometry } from 'p5utils/src/3dShape/finalize'
@@ -21,7 +23,7 @@ const createRandomPositions = (num: number, territoryLength?: number) =>
   Array(num).fill(territoryLength).map(randomPlacement)
 
 const init: LazyInit<GeometryState> = () => {
-  const graph = createGraph.createRandomAngularGraph(300, 4, true)
+  const graph = createGraph.createStickGraph(200, 20, 20)
   const geo = finalizeGeometry(graph)
   return {
     geo,
@@ -33,7 +35,14 @@ const reducers = {
   render: (s) => () => {
     p.noStroke()
     const angle = {theta: p.millis() * 0.2, phi: p.millis() * 0.1 }
-    shape.renderGeometry(s.geo, [0, -100, 0], angle)
+    // const angle = { theta: 30, phi: 0 }
+    const vec = vectorFromDegreeAngles(angle.theta, angle.phi, 200)
+    shape.renderGeometry(s.geo, [0, 0, 0], angle)
+    pushPop(() => {
+      p.stroke('red')
+      p.line(0, 0, 0, ...(vec.array() as Position3D))
+    })
+
     pushPop(() => {
       p.translate(-500, -500, -400)
       p.sphere(100)

@@ -7,7 +7,7 @@ export const fftSize: FFTSize = 32
 export const MoveThreshold = 20
 
 export const Config = {
-  InitialMaxNodes: fftSize ,
+  InitialMaxNodes: fftSize * 2,
   DefaultMoveAmount: 200,
   DefaultMovableDistance: 600,
   DecreaseSpeed: 10,

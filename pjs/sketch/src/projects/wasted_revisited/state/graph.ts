@@ -82,7 +82,7 @@ export const reducers = {
       if (node.edges.length === 0) return
       const edgeGeometries: p5.Geometry[] = node.edges.map((edge) => {
         const dist = distanceBetweenPositions(node.position, edge.position)
-        const geo = createEdgeGeometry(dist / 3)
+        const geo = createEdgeGeometry(dist)
         return geo
       })
       s.geometries[i] = edgeGeometries

@@ -2,11 +2,7 @@ import p5 from 'p5'
 import { randomIntInclusiveBetween } from 'utils'
 import { vectorFromDegreeAngles } from '../../3d'
 import { calculateVerticesForShapeGraph } from '../calculate'
-import {
-  connectAdjacentNodes,
-  connectShapeNodes,
-  fulfillShapeNode
-} from '../tools'
+import { connectAdjacentNodes, connectShapeNodes, fulfillShapeNode } from '../tools'
 import { ShapeGraph, ShapeNode } from '../types'
 
 /**
@@ -60,10 +56,22 @@ const createSurroundNodes = (center: ShapeNode, round = 3): ShapeNode[] => {
         phi(i),
         center.distanceToEachVertex
       ).add(center.position),
-      distanceToEachVertex: center.distanceToEachVertex * 2 / 3,
+      distanceToEachVertex: (center.distanceToEachVertex * 2) / 3,
       rotate: { theta: 0, phi: phi(i) },
     })
   )
   around.forEach((a) => connectShapeNodes(center, a))
   return around
+}
+
+export const createStickGraph = (length: number, parts = 8, radius = 10) => {
+  const randomTheta = () => randomIntInclusiveBetween(0, 10)
+  const randomPhi = () => randomIntInclusiveBetween(0, 360)
+  const graph = [...Array(parts + 1)].map((_, i) => fulfillShapeNode({
+    position: vectorFromDegreeAngles(randomTheta(), randomPhi(), i * (length / parts)),
+    distanceToEachVertex: radius
+  }))
+  connectAdjacentNodes(graph, false)
+  calculateVerticesForShapeGraph(graph)
+  return graph
 }

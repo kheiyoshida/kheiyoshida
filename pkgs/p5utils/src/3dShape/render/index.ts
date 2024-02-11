@@ -7,8 +7,8 @@ export const renderGeometry = (geo: Geometry, position: number[], rotate?: Vecto
   pushPop(() => {
     p.translate(...(position as Position3D))
     if (rotate) {
-      p.rotateX(rotate.theta)
       p.rotateY(rotate.phi)
+      p.rotateX(-rotate.theta)
     }
     model(geo)
   })

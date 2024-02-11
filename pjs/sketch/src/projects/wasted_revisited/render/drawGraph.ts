@@ -1,12 +1,14 @@
+import p5 from 'p5'
 import { renderGeometry } from 'p5utils/src/3dShape'
 import { drawAtPosition3D } from 'p5utils/src/render/drawers/draw'
+import { pushPop } from 'p5utils/src/utils'
 import { calcEdgeAngle } from '../primitives/edgeGeometry'
 import { TreeNode } from '../primitives/node'
 import { GraphState } from '../state/graph'
-import p5 from 'p5'
 
 export const render = ({ graph, geometries }: GraphState) => {
   graph.forEach((node, i) => {
+    // drawNode(node)
     const edgeGeos = geometries[i]
     if (edgeGeos) {
       drawEdges(node, edgeGeos)
@@ -30,4 +32,9 @@ const drawEdges = (node: TreeNode, edgeGeos: p5.Geometry[]) => {
 const renderEdge = (node: TreeNode, edge: TreeNode, edgeGeo: p5.Geometry) => {
   const angle = calcEdgeAngle(node.position, edge.position)
   renderGeometry(edgeGeo, node.position, angle)
+
+  // pushPop(() => {
+  //   p.stroke('red')
+  //   p.line(...node.position, ...edge.position)
+  // })
 }

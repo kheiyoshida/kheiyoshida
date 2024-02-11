@@ -28,6 +28,18 @@ const setup = () => {
 
   // graph
   graphStore.lazyInit()
+
+  // graphStore.setGrowOptions({
+  //   numOfGrowEdges: 3,
+  //   thetaDelta: 30,
+  //   growAmount: 500,
+  // })
+  // graphStore.grow()
+  // graphStore.grow()
+  // graphStore.grow()
+  // graphStore.grow()
+  // graphStore.grow()
+  // graphStore.calculateGeometries()
 }
 
 const draw = () => {
@@ -35,12 +47,13 @@ const draw = () => {
 
   // update
   graphStore.setGrowOptions({
-    numOfGrowEdges: randomIntInclusiveBetween(0, 3),
+    numOfGrowEdges: randomIntInclusiveBetween(1, 3),
     thetaDelta: randomIntInclusiveBetween(0, 30),
-    growAmount: randomIntInclusiveBetween(500, 1000),
+    growAmount: randomIntInclusiveBetween(600, 800),
     randomAbortRate: 0.1,
   })
   graphStore.grow()
+  graphStore.calculateGeometries()
 
   const freqData = soundAnalyzer.analyze()
   graphStore.current.graph.forEach((n, i) => {
@@ -50,7 +63,7 @@ const draw = () => {
       n.updateSpeed(freqAmount * Config.DefaultMoveAmount)
     }
   })
-  graphStore.calculateGeometries()
+  
 
   // camera
   cameraStore.turnCamera()
