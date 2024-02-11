@@ -30,6 +30,6 @@ const model = (geo: Geometry) => {
  */
 export class RenderGeometryError extends Error {
   constructor() {
-    super(`seems p5 could not sort out the vertices, why don't you try with another pattern? `)
+    super(`RenderGeometryError: seems p5 could not sort out the vertices, why don't you try with another pattern? `)
   }
 }

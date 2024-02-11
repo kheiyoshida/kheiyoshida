@@ -6,17 +6,24 @@ import {
   connectShapeNodes,
   createShapeNode,
   createTetraAngles,
+  fulfillShapeNode,
   isInTheSameSide,
   sortByDistance,
 } from '.'
 import { vectorFromDegreeAngles } from '../../3d'
-import { Position3D } from "../../3d/types"
+import { Position3D } from '../../3d/types'
 import { TETRAHEDRAL_DEGREE } from '../../constants'
 
 test(`${createShapeNode.name}`, () => {
   const pos = [100, 100, 0]
   const node = createShapeNode(pos as Position3D)
   expect(node.position.array()).toMatchObject(pos as any)
+})
+
+test(`${fulfillShapeNode.name}`, () => {
+  const node = fulfillShapeNode({ position: new p5.Vector(0, 100, 0), distanceToEachVertex: 100 })
+  expect(node.position.y).toBe(100)
+  expect(node.distanceToEachVertex).toBe(100)
 })
 
 test(`${connectShapeNodes.name}`, () => {

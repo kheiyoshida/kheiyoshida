@@ -21,7 +21,7 @@ const createRandomPositions = (num: number, territoryLength?: number) =>
   Array(num).fill(territoryLength).map(randomPlacement)
 
 const init: LazyInit<GeometryState> = () => {
-  const graph = createGraph.createTreeGraph(20)
+  const graph = createGraph.createRandomAngularGraph(300, 4, true)
   const geo = finalizeGeometry(graph)
   return {
     geo,
@@ -32,7 +32,8 @@ const init: LazyInit<GeometryState> = () => {
 const reducers = {
   render: (s) => () => {
     p.noStroke()
-    shape.renderGeometry(s.geo, [0, 0, 0])
+    const angle = {theta: p.millis() * 0.2, phi: p.millis() * 0.1 }
+    shape.renderGeometry(s.geo, [0, -100, 0], angle)
     pushPop(() => {
       p.translate(-500, -500, -400)
       p.sphere(100)

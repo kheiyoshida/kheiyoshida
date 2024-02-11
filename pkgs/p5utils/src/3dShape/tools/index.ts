@@ -1,21 +1,35 @@
 import p5 from 'p5'
+import { PartialRequired, loop } from 'utils'
 import { sumVectorAngles } from '../../3d'
-import { VectorAngles } from '../../3d/types'
-import { Position3D } from "../../3d/types"
+import { Position3D, VectorAngles } from '../../3d/types'
 import { TETRAHEDRAL_DEGREE } from '../../constants'
-import { ShapeNode } from '../types'
+import { ShapeGraph, ShapeNode } from '../types'
 
-export const createShapeNode = (
+export function createShapeNode(
   position: Position3D = [0, 0, 0],
   distanceToEachVertex = 50,
-  rotate?: VectorAngles
-): ShapeNode => ({
-  position: new p5.Vector(...position),
-  edges: [],
-  distanceToEachVertex,
-  vertices: [],
-  rotate,
-})
+  rotate?: VectorAngles,
+  id?: number
+): ShapeNode {
+  return {
+    position: new p5.Vector(...position),
+    edges: [],
+    distanceToEachVertex,
+    vertices: [],
+    rotate,
+    id,
+  }
+}
+
+export function fulfillShapeNode(
+  partialFields: PartialRequired<ShapeNode, 'position' | 'distanceToEachVertex'>
+): ShapeNode {
+  return {
+    edges: [],
+    vertices: [],
+    ...partialFields,
+  }
+}
 
 export const connectShapeNodes = (node1: ShapeNode, node2: ShapeNode): void => {
   node1.edges = [...node1.edges, node2]
@@ -53,3 +67,9 @@ export const calcAverageVector = (vectors: p5.Vector[]): p5.Vector => {
 export const isInTheSameSide = (surfacePerpendicularVector: p5.Vector, position: p5.Vector) => {
   return surfacePerpendicularVector.dot(position) > 0
 }
+
+export const connectAdjacentNodes = (graph: ShapeGraph, connectLast = true) =>
+  loop(graph.length, (i) => {
+    if (i === graph.length - 1 && !connectLast) return
+    connectShapeNodes(graph[i], graph[i + 1] || graph[0])
+  })
