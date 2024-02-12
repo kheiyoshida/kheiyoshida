@@ -23,7 +23,7 @@ const createRandomPositions = (num: number, territoryLength?: number) =>
   Array(num).fill(territoryLength).map(randomPlacement)
 
 const init: LazyInit<GeometryState> = () => {
-  const graph = createGraph.createStickGraph(200, 20, 20)
+  const graph = createGraph.createRandomAngularGraph(1000, 2, true)
   const geo = finalizeGeometry(graph)
   return {
     geo,

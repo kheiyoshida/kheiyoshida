@@ -1,8 +1,36 @@
-import { draw3DGrid } from 'p5utils/src/3d/debug'
+import p5 from 'p5'
 import { loadFont } from 'p5utils/src/font'
+import {
+  applyBlackAndWhiteFilter,
+  applyBlurFilter,
+  applyMonochromeFilter,
+  randomSwap,
+  randomizeImagePixels,
+  updateImagePixels,
+} from 'p5utils/src/media/image'
 import { applyConfig } from 'p5utils/src/utils/project'
+import { loop } from 'utils'
 import { bindControl } from './control'
+import { loadImage } from './data/image'
 import { cameraStore, geometryStore, sketchStore } from './state'
+
+let img: p5.Image
+const preload = () => {
+  img = loadImage()
+}
+
+const updateImage = () => {
+  img.resize(500, 500)
+
+  randomizeImagePixels(img, 200)
+  updateImagePixels(img, ([r, g, b, a]) => {
+    return [r, g, b + 100, 255]
+  })
+  img.updatePixels()
+  loop(10, () => randomSwap(img))
+  applyMonochromeFilter(img)
+  applyBlackAndWhiteFilter(img, 0.5)
+}
 
 const setup = () => {
   // sketch
@@ -22,6 +50,8 @@ const setup = () => {
   // geo
   geometryStore.lazyInit()
 
+  updateImage()
+  p.noStroke()
 }
 
 const draw = () => {
@@ -34,12 +64,18 @@ const draw = () => {
 
   // render
   p.lights()
-  // p.spotLight(p.color(255), new p5.Vector(0, 0, 1000), new p5.Vector())
+
+  // draw3DGrid(3, 2000, camera)
+
+  p.texture(img)
+
+  // p.translate(0, 0, 400)
+  // p.plane()
   geometryStore.render()
-  draw3DGrid(3, 2000, camera)
 }
 
 export default <Sketch>{
+  preload,
   setup,
-  draw
+  draw,
 }

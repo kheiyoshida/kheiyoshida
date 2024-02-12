@@ -37,7 +37,7 @@ const config: Configuration = {
         use: [require.resolve('source-map-loader')],
       },
       {
-        test: /\.(wav|mp3|mov|mp4|ttf)$/,
+        test: /\.(wav|mp3|mov|mp4|ttf|jpg)$/,
         type: 'asset/resource',
       }
     ]

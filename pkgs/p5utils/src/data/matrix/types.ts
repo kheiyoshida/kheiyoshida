@@ -1,4 +1,5 @@
-export type RGBA = [number, number, number, number]
+export type RGBAIndexes = [ri:number, gi:number, bi:number, ai: number]
+export type RGBA = [r:number, g:number, b:number, a: number]
 
 export type Matrix<T> = T[][]
 export type RGBAMatrix = Matrix<RGBA>

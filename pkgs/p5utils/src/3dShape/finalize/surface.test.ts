@@ -8,7 +8,7 @@ test(`${finalizeSurface.name}`, () => {
   jest.spyOn(p, 'normal').mockImplementation()
   finalizeSurface(surface, theOther)
   surface.forEach((v) => {
-    expect(spyVertex).toHaveBeenCalledWith(...v.array())
+    expect(spyVertex).toHaveBeenCalledWith(...v.array(), expect.any(Number), expect.any(Number))
   })
 })
 

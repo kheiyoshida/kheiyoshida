@@ -1,13 +1,34 @@
-import { convertPixelDataIntoMatrix } from './pixels'
+import { convertPixelDataIntoMatrix, iteratePixels } from './pixels'
+import { MediaSize } from './types'
+
+const createMockPixelData = ({ width, height }: MediaSize) =>
+  [...new Array(width * height * 4)].map((_, i) => i)
+
+test(`${iteratePixels.name}`, () => {
+  const mediaSize = { width: 4, height: 4 }
+  const iterate = jest.fn()
+  iteratePixels(mediaSize, iterate)
+  expect(iterate).toHaveBeenCalledTimes(mediaSize.width * mediaSize.height)
+  iterate.mock.calls.forEach(call => {
+    expect(call[1]).toBeLessThan(mediaSize.width)
+    expect(call[2]).toBeLessThan(mediaSize.height)
+  })
+})
 
 test(`${convertPixelDataIntoMatrix.name}`, () => {
   const videoSize = { width: 16, height: 12 }
   const skip = 4 // resolution = 4p x 3p
   const magnifiedSize = { width: 8, height: 6 } // 2x
   const centerPosition = { x: 8, y: 6 }
-  const mockPixelDataArray = [...new Array(16 * 12 * 4)].map((_, i) => i)
+  const mockPixelDataArray = createMockPixelData(videoSize)
 
-  const result = convertPixelDataIntoMatrix(mockPixelDataArray, videoSize, skip, magnifiedSize, centerPosition)
+  const result = convertPixelDataIntoMatrix(
+    mockPixelDataArray,
+    videoSize,
+    skip,
+    magnifiedSize,
+    centerPosition
+  )
   expect(result).toMatchInlineSnapshot(`
     [
       [

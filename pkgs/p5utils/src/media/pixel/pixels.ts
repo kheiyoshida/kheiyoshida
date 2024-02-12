@@ -1,6 +1,20 @@
-import { RGBA, RGBAMatrix } from '../../data/matrix/types'
+import { RGBA, RGBAIndexes, RGBAMatrix } from '../../data/matrix/types'
 import { leftTopIze } from './position'
 import { MediaSize, PixelPosition } from './types'
+
+export const iteratePixels = (
+  mediaSize: MediaSize,
+  iterate: (rgbaIndexes: RGBAIndexes, x: number, y: number) => void
+) => {
+  for (let y = 0; y < mediaSize.height; y++) {
+    for (let x = 0; x < mediaSize.width; x++) {
+      const i = y * mediaSize.width + x
+      const pos = i * 4
+      const rgbaIndexes: RGBA = [pos, pos + 1, pos + 2, pos + 3]
+      iterate(rgbaIndexes, x, y)
+    }
+  }
+}
 
 /**
  * Parse media pixels and make RGBA matrix

@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { Position3D } from "../../3d/types"
+import { Position3D } from '../../3d/types'
 import { calcAverageVector, calcPerpendicularVector, isInTheSameSide } from '../tools'
 import { ShapeVertex } from '../types'
 
@@ -26,6 +26,12 @@ export const calcNormal = (
   return normal
 }
 
-const vectorVertex = (v: ShapeVertex): void => {
-  p.vertex(...(v.array() as Position3D))
+const vectorVertex = (v: ShapeVertex, i: number): void => {
+  p.vertex(...(v.array() as Position3D), ...uv[i])
 }
+
+const uv = [
+  [0, 0],
+  [1, 0],
+  [0.5, 1],
+]
