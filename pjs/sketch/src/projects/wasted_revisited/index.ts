@@ -5,35 +5,10 @@ import { Config } from './config'
 import { bindControl } from './control'
 import { bindPlayEvent, soundAnalyzer } from './data/sound'
 import { render } from './render/drawGraph'
-import { cameraStore, graphStore, sketchStore } from './state'
-import {
-  applyBlackAndWhiteFilter,
-  applyMonochromeFilter,
-  loadImage,
-  randomSwap,
-  randomizeImagePixels,
-  updateImagePixels,
-} from 'p5utils/src/media/image'
-import p5 from 'p5'
+import { cameraStore, graphStore, sketchStore, skinStore } from './state'
 
-let img: p5.Image
 const preload = () => {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const imgLoc = require('../../assets/img/man.jpg')
-  img = loadImage(imgLoc)
-}
-
-const updateImage = () => {
-  img.resize(100, 100)
-
-  randomizeImagePixels(img, 200)
-  updateImagePixels(img, ([r, g, b, a]) => {
-    return [r, g, b + 100, 255]
-  })
-  img.updatePixels()
-  loop(10, () => randomSwap(img))
-  applyMonochromeFilter(img)
-  applyBlackAndWhiteFilter(img, 0.5)
+  skinStore.lazyInit()
 }
 
 const setup = () => {
@@ -58,9 +33,8 @@ const setup = () => {
   // graph
   graphStore.lazyInit()
 
-  updateImage()
-
   // update
+  skinStore.updateImageAppearance()
   graphStore.setGrowOptions({
     numOfGrowEdges: randomIntInclusiveBetween(1, 3),
     thetaDelta: randomIntInclusiveBetween(0, 30),
@@ -91,7 +65,7 @@ const draw = () => {
 
   // render
 
-  p.texture(img)
+  p.texture(skinStore.current.img)
   p.lights()
 
   render(graphStore.current)
