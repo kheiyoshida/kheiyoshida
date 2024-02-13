@@ -1,29 +1,36 @@
-import { TouchOrMousePosition } from 'p5utils/src/control'
-import { ControlIntention, MoveDirection } from './types'
+import { SwipeOrMouseMove, TouchOrMousePosition } from 'p5utils/src/control'
+import { ControlIntention } from './types'
 
-export const resolveKeys = (keys: number[]): ControlIntention => {
-  const KeyMap = {
-    37: MoveDirection.left,
-    38: MoveDirection.front,
-    39: MoveDirection.right,
-    40: MoveDirection.back,
-  } as const
-  const direction = []
-  for (const key of keys) {
-    if (key in KeyMap) {
-      direction.push(KeyMap[key as unknown as keyof typeof KeyMap])
-    }
-  }
+export const resolveMouse = (mouse: TouchOrMousePosition): ControlIntention => {
+  return { turn: resolvePosition(mouse) }
+}
+
+export const resolvePosition = (position: TouchOrMousePosition, oneEquivalent = 1200) => {
+  const [halfWidth, halfHeight] = [window.innerWidth / 2, window.innerHeight / 2]
+  const x = (position.x - halfWidth) / oneEquivalent
+  const y = (position.y - halfHeight) / oneEquivalent
+  return { x, y }
+}
+
+export const makeSwipeTracker = () => {
+  let swipeStarted: SwipeOrMouseMove
   return {
-    move: direction,
+    start: (position: SwipeOrMouseMove) => {
+      swipeStarted = position
+    },
+    diff: (currentPosition: SwipeOrMouseMove) => {
+      return { x: currentPosition.x - swipeStarted.x, y: currentPosition.y - swipeStarted.y }
+    },
   }
 }
 
-export const resolveMouse = (mouse: TouchOrMousePosition): ControlIntention => {
-  const [halfWidth, halfHeight] = [window.innerWidth / 2, window.innerHeight / 2]
-  const x = (mouse.x - halfWidth) / 1200
-  const y = (mouse.y - halfHeight) / 1200
-  return {
-    turn: { x, y },
-  }
+export const resolveSwipe = (
+  touch: TouchOrMousePosition,
+  swipe: ReturnType<typeof makeSwipeTracker>
+): ControlIntention => {
+  const diff = swipe.diff(touch)
+  const oneEquivalent = 400
+  const x = diff.x / oneEquivalent
+  const y = diff.y / oneEquivalent
+  return { turn: { x, y } }
 }

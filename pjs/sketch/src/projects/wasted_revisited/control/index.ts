@@ -1,20 +1,39 @@
-import { detectPosition, registerKeys } from 'p5utils/src/control'
+import { detectPosition } from 'p5utils/src/control'
 import { CameraStore } from '../state/camera'
-import { resolveKeys, resolveMouse } from './resolvers'
-import { translateMoveIntention, translateTurnIntention } from './translate'
+import { makeSwipeTracker, resolveMouse, resolveSwipe } from './resolvers'
+import { translateTurnIntention } from './translate'
 import { ControlIntention } from './types'
 
-export const bindControl = (camera: CameraStore): void => {
-  bindMouseKeyControlEvents(camera)
+const MOBILE_WIDTH = 800
+
+export const bindControl = (camera: CameraStore, soundStart: () => void): void => {
+  if (window.innerWidth < MOBILE_WIDTH) bindDeviceTouchEvents(camera, soundStart)
+  else bindMouseKeyControlEvents(camera, soundStart)
 }
 
-export const bindMouseKeyControlEvents = (cameraStore: CameraStore): void => {
-  const detectKeys = registerKeys([p.UP_ARROW, p.DOWN_ARROW, p.RIGHT_ARROW, p.LEFT_ARROW])
-  p.keyPressed = () => {
-    const keys = detectKeys()
-    const intention = resolveKeys(keys)
+export const bindDeviceTouchEvents = (cameraStore: CameraStore, soundStart: () => void): void => {
+  const swipe = makeSwipeTracker()
+  p.touchStarted = () => {
+    soundStart()
+    const position = detectPosition()
+    swipe.start(position)
+  }
+  p.touchMoved = () => {
+    const position = detectPosition()
+    const intention = resolveSwipe(position, swipe)
     resolveIntention(intention, cameraStore)
   }
+  p.touchEnded = () => {
+    const intention = { turn: { x: 0, y: 0 } }
+    resolveIntention(intention, cameraStore)
+  }
+}
+
+export const bindMouseKeyControlEvents = (
+  cameraStore: CameraStore,
+  soundStart: () => void
+): void => {
+  p.mouseClicked = soundStart
   p.mouseMoved = () => {
     const mousePosition = detectPosition()
     const intention = resolveMouse(mousePosition)
@@ -23,10 +42,6 @@ export const bindMouseKeyControlEvents = (cameraStore: CameraStore): void => {
 }
 
 const resolveIntention = (intention: ControlIntention, camera: CameraStore) => {
-  if (intention.move && intention.move.length) {
-    const moveValue = translateMoveIntention(intention.move)
-    camera.updateMove(...moveValue)
-  }
   if (intention.turn) {
     const turnValue = translateTurnIntention(intention.turn)
     camera.updateTurn(...turnValue)

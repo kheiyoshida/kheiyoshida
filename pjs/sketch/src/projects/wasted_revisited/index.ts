@@ -6,6 +6,7 @@ import { bindControl } from './control'
 import { bindPlayEvent, soundAnalyzer } from './data/sound'
 import { render } from './render/drawGraph'
 import { cameraStore, graphStore, sketchStore, skinStore } from './state'
+import { draw3DGrid} from 'p5utils/src/3d/debug'
 
 const preload = () => {
   skinStore.lazyInit()
@@ -22,19 +23,20 @@ const setup = () => {
   loadFont()
 
   // sound
-  bindPlayEvent()
+  const soundStart = bindPlayEvent()
 
   // camera
   cameraStore.lazyInit()
 
   // control
-  bindControl(cameraStore)
+  bindControl(cameraStore, soundStart)
 
   // graph
   graphStore.lazyInit()
 
   // update
   skinStore.updateImageAppearance()
+  p.texture(skinStore.current.img)
   graphStore.setGrowOptions({
     numOfGrowEdges: randomIntInclusiveBetween(1, 3),
     thetaDelta: randomIntInclusiveBetween(0, 30),
@@ -65,10 +67,11 @@ const draw = () => {
 
   // render
 
-  p.texture(skinStore.current.img)
+  
   p.lights()
 
-  render(graphStore.current)
+  // render(graphStore.current)
+  draw3DGrid(3, 1000, cameraStore.current.camera)
 }
 
 export default <Sketch>{

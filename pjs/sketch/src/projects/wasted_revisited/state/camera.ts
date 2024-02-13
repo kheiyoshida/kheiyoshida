@@ -1,4 +1,3 @@
-import p5 from 'p5'
 import { VectorAngles } from 'p5utils/src/3d/types'
 import { createCamera } from 'p5utils/src/camera'
 import { makeCircularMove } from 'p5utils/src/camera/helpers'
@@ -10,8 +9,7 @@ export type CameraState = {
   camera: Camera
   speed: number
   turn: VectorAngles
-  target?: p5.Vector
-  turnQueue: VectorAngles[]
+  reverting: boolean
 }
 
 export const init: LazyInit<CameraState> = () => {
@@ -24,15 +22,19 @@ export const init: LazyInit<CameraState> = () => {
   return {
     camera,
     speed: initialSpeed,
-    target: undefined,
     turn: { theta: 0, phi: 0 },
-    turnQueue: [],
+    reverting: false,
   }
 }
 
 export const reducers = {
   updateTurn: (s) => (angle: VectorAngles) => {
-    s.turn = angle
+    if (angle.theta === 0 && angle.phi === 0) {
+      s.reverting = true
+    } else {
+      s.reverting = false
+      s.turn = angle
+    }
   },
   updateMove:
     (s) =>
@@ -41,6 +43,9 @@ export const reducers = {
       s.speed = speed
     },
   turnCamera: (s) => () => {
+    if (s.reverting) {
+      s.turn = { theta: (s.turn.theta * 7) / 8, phi: (s.turn.phi * 7) / 8 }
+    }
     s.camera.turnWithFocus(s.turn, [0, 0, 0])
   },
   moveCamera: (s) => () => {

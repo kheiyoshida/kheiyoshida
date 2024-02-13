@@ -9,7 +9,6 @@ export const soundAnalyzer = createAnalyzer(soundSource.source, fftSize)
 
 export const bindPlayEvent = () => {
   const div = instruction()
-
   const start = () => {
     const context = callContext()
     if (context.state === 'suspended') {
@@ -18,6 +17,6 @@ export const bindPlayEvent = () => {
     soundSource.play()
     div.remove()
   }
-  p.mousePressed = start
-  p.touchStarted = start
+  return start
+  
 }
