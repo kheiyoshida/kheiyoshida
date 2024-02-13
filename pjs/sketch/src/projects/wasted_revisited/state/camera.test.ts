@@ -15,10 +15,12 @@ jest.mock('p5', () => ({
 }))
 
 const mockCameraState = () => {
-  const camera = new p5.Camera()
-  camera.setPosition(0, 0, 1000)
+  const p5camera = new p5.Camera()
+  p5camera.setPosition(0, 0, 1000)
+  const camera = createCamera(p5camera)
+  camera.setFocus([0, 0, 0])
   const state: CameraState = {
-    camera: createCamera(camera),
+    camera,
     speed: 0,
     turn: {
       theta: 0,
@@ -26,19 +28,20 @@ const mockCameraState = () => {
     },
     turnQueue: [],
   }
-  return { state, camera }
+  return { state, camera, p5camera }
 }
 
 describe(`camera reducers`, () => {
   it(`should always look at the center while moving around`, () => {
     const { state } = mockCameraState()
-    const center: Position3D = [0, 0, 0]
-    state.camera.setFocus(center)
     reducers.updateMove(state)({ theta: 0, phi: 90 }, 100)
     reducers.moveCamera(state)()
     expect(state.camera.focus).toMatchCloseObject([0, 0, 0])
   })
-  it(`can move in a circle around the center`, () => {
-    
+  it.todo(`can move in a circle around the center`)
+  it(`should look at the tilted position relative to the center`, () => {
+    const { state, camera } = mockCameraState()
+    reducers.updateTurn(state)({ theta: 20, phi: 30 })
+    reducers.turnCamera(state)()
   })
 })

@@ -1,9 +1,17 @@
 import p5 from 'p5'
 import { createCameraNode } from './node'
 import { Camera } from './types'
-import { Position3D } from "../3d/types"
-import { getCameraCenter, getForwardDir } from './helpers'
-import { VectorAngles } from "../3d/types"
+import { Position3D } from '../3d/types'
+import { getCameraCenter, getForwardDirAngles, turnVectorByAngles } from './helpers'
+import { VectorAngles } from '../3d/types'
+import {
+  revertToSphericalCoordinate,
+  sumPosition3d,
+  sumVectorAngles,
+  toDegrees,
+  vectorBetweenPositions,
+  vectorFromDegreeAngles,
+} from '../3d'
 
 export function createCamera(p5camera?: p5.Camera): Camera {
   const camera = p5camera || p.createCamera()
@@ -30,7 +38,7 @@ export function createCamera(p5camera?: p5.Camera): Camera {
       node.setDirection(angles)
     },
     setRelativeDirection(angles) {
-      const currentLookinDirection = getForwardDir(this.cameraCenter, node.position)
+      const currentLookinDirection = getForwardDirAngles(this.cameraCenter, node.position)
       const newDirection = {
         theta: currentLookinDirection.theta + angles.theta,
         phi: currentLookinDirection.phi + angles.phi,
@@ -58,7 +66,13 @@ export function createCamera(p5camera?: p5.Camera): Camera {
       return getCameraCenter(camera)
     },
     get forwardDir(): VectorAngles {
-      return getForwardDir(this.cameraCenter, node.position)
-    }
+      return getForwardDirAngles(this.cameraCenter, node.position)
+    },
+    turnWithFocus(angles, focus) {
+      const forward = vectorBetweenPositions(node.position, focus)
+      const turned = turnVectorByAngles(forward, angles)
+      const newFocus = sumPosition3d(node.position, turned.array() as Position3D)
+      setFocus(newFocus)
+    },
   }
 }

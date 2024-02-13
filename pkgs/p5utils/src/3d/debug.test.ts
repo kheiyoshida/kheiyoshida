@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { getForwardDir } from '../camera/helpers'
+import { getForwardDirAngles } from '../camera/helpers'
 import { Position3D } from "./types"
 import {
   adjustToPerspective,
@@ -42,7 +42,7 @@ describe(`${calcRelativeAngleFromPerspective.name}`, () => {
   ])('from (0,0,0), looking straight front (with object at %i,%i,%i)', (targetPos, theta, phi) => {
     const position: Position3D = [0, 0, 0]
     const center: Position3D = [0, 0, -50]
-    const forwardDir = getForwardDir(center, position)
+    const forwardDir = getForwardDirAngles(center, position)
     const target = new p5.Vector(...targetPos)
     const angle = calcRelativeAngleFromPerspective(position, forwardDir, target)
     expect(angle.theta).toBeCloseTo(theta)

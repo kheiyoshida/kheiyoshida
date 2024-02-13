@@ -1,7 +1,9 @@
 import p5 from 'p5'
+import { expect } from 'test-utils'
 import { createCamera } from '.'
-import { Position3D } from "../3d/types"
+import { Position3D } from '../3d/types'
 import * as helpers from './helpers'
+import { toRadians } from '../3d'
 
 jest.mock('p5', () => ({
   ...jest.requireActual('p5'),
@@ -25,14 +27,14 @@ describe(`${createCamera.name}`, () => {
   })
   it(`should hold its position`, () => {
     const camera = createCamera(new p5.Camera())
-    expect(camera.position).toMatchObject([0, 0, 0])
+    expect(camera.position).toMatchCloseObject([0, 0, 0])
   })
   it(`can change its position`, () => {
     const { p5camera, camera } = prepare()
     const spySetPosition = jest.spyOn(p5camera, 'setPosition')
     camera.setPosition(0, 10, 10)
     expect(spySetPosition).toHaveBeenCalledWith(0, 10, 10)
-    expect(camera.position).toMatchObject([0, 10, 10])
+    expect(camera.position).toMatchCloseObject([0, 10, 10])
   })
   it(`can set direction & speed to move`, () => {
     const { camera } = prepare()
@@ -47,12 +49,12 @@ describe(`${createCamera.name}`, () => {
     camera.setPosition(0, 0, 100)
     camera.setAbsoluteDirection({
       theta: 90,
-      phi: 0
+      phi: 0,
     })
     expect(camera.position[2]).toBeCloseTo(100)
     camera.setSpeed(100)
-    jest.spyOn(helpers, 'getForwardDir').mockReturnValue({theta: 90, phi: 90})
-    
+    jest.spyOn(helpers, 'getForwardDirAngles').mockReturnValue({ theta: 90, phi: 90 })
+
     const toRelativeForward = { theta: 0, phi: 0 }
     camera.setRelativeDirection(toRelativeForward)
     camera.move()
@@ -65,7 +67,7 @@ describe(`${createCamera.name}`, () => {
     const spyLookAt = jest.spyOn(p5camera, 'lookAt')
     const focusPoint: Position3D = [100, 100, 0]
     camera.setFocus(focusPoint)
-    expect(camera.focus).toMatchObject(focusPoint)
+    expect(camera.focus).toMatchCloseObject(focusPoint)
     camera.move()
     expect(spyLookAt).toHaveBeenNthCalledWith(1, ...focusPoint)
     camera.move()
@@ -89,5 +91,14 @@ describe(`${createCamera.name}`, () => {
     expect(camera.focus).toBeDefined()
     camera.turn({ theta: 20, phi: -10 })
     expect(camera.focus).toBeUndefined()
+  })
+  it(`can turn relatively from the current focus position`, () => {
+    const { camera } = prepare()
+    const center: Position3D = [0, 0, 0]
+    camera.setFocus(center)
+    camera.setPosition(0, 0, 1000)
+    camera.turnWithFocus({ theta: 0, phi: 45 }, center)
+    const v45 = Math.sin(toRadians(45)) * 1000
+    expect(camera.focus).toMatchCloseObject([-v45, 0, 1000 - v45])
   })
 })
