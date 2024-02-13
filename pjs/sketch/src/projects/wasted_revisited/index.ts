@@ -60,7 +60,7 @@ const draw = () => {
   })
 
   // camera
-  cameraStore.turnCamera()
+  // cameraStore.turnCamera()
   cameraStore.moveCamera()
 
   // render

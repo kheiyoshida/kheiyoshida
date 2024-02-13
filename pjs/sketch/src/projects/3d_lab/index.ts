@@ -2,17 +2,20 @@ import p5 from 'p5'
 import { loadFont } from 'p5utils/src/font'
 import {
   applyBlackAndWhiteFilter,
-  applyBlurFilter,
   applyMonochromeFilter,
   randomSwap,
   randomizeImagePixels,
   updateImagePixels,
 } from 'p5utils/src/media/image'
+import { drawAtVectorPosition } from 'p5utils/src/render/drawers/draw'
 import { applyConfig } from 'p5utils/src/utils/project'
-import { loop } from 'utils'
+import { loop, makePingpongNumberStore } from 'utils'
 import { bindControl } from './control'
 import { loadImage } from './data/image'
 import { cameraStore, geometryStore, sketchStore } from './state'
+import { draw3DGrid } from 'p5utils/src/3d/debug'
+import { vectorFromDegreeAngles } from 'p5utils/src/3d'
+import { makeCircularMove } from 'p5utils/src/camera/helpers'
 
 let img: p5.Image
 const preload = () => {
@@ -54,24 +57,34 @@ const setup = () => {
   p.noStroke()
 }
 
+let pos: p5.Vector
+
+const circularMove = makeCircularMove([30, 150])
+
 const draw = () => {
   const { camera } = cameraStore.current
   sketchStore.paint()
 
   // camera
-  cameraStore.turnCamera()
-  cameraStore.moveCamera()
+  // cameraStore.turnCamera()
+  // cameraStore.moveCamera()
+
+  pos = circularMove({ theta: 0.01, phi: 0.001 }).mult(200)
 
   // render
   p.lights()
 
-  // draw3DGrid(3, 2000, camera)
+  draw3DGrid(3, 2000, camera)
 
-  p.texture(img)
+  drawAtVectorPosition(pos, () => {
+    p.sphere(20)
+  })
+
+  // p.texture(img)
 
   // p.translate(0, 0, 400)
   // p.plane()
-  geometryStore.render()
+  // geometryStore.render()
 }
 
 export default <Sketch>{

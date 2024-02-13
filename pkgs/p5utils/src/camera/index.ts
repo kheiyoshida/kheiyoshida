@@ -21,6 +21,7 @@ export function createCamera(p5camera?: p5.Camera): Camera {
     setPosition: (x, y, z) => {
       node.setPosition(x, y, z)
       camera.setPosition(x, y, z)
+      keepFocus()
     },
     get position() {
       return node.position

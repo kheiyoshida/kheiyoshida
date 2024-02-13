@@ -4,6 +4,8 @@ import { createCamera } from 'p5utils/src/camera'
 import { Camera } from 'p5utils/src/camera/types'
 import { LazyInit, ReducerMap, createCosCurveArray, makeStoreV2 } from 'utils'
 import { Config } from '../config'
+import { makeSpeedConsumer } from 'p5utils/src/3d/phyisics'
+import { makeCircularMove } from 'p5utils/src/camera/helpers'
 
 export type CameraState = {
   camera: Camera
@@ -17,8 +19,8 @@ export const init: LazyInit<CameraState> = () => {
   const camera = createCamera()
   const initialSpeed = Config.CameraDefaultMoveSpeed
   camera.setPosition(0, 0, 1000)
+  camera.setFocus([0, 0, 0])
   camera.setSpeed(initialSpeed)
-  camera.setFocus(undefined)
   camera.setAbsoluteDirection({ theta: 90, phi: 180 })
   return {
     camera,
@@ -52,17 +54,16 @@ export const reducers = {
     s.camera.turn(turnDelta)
   },
   moveCamera: (s) => () => {
-    const moveDelta = s.speed / 8
-    const newSpeed = s.speed - moveDelta
-    if (newSpeed < Config.CameraDefaultMoveSpeed) {
-      s.speed = Config.CameraDefaultMoveSpeed
-    } else {
-      s.speed = newSpeed
-    }
-    s.camera.setSpeed(s.speed)
-    s.camera.move()
+    // const consume = makeSpeedConsumer(Config.CameraDefaultMoveSpeed, (s) => s * (7 / 8))
+    // s.speed = consume(s.speed)
+    // s.camera.setSpeed(s.speed)
+    // s.camera.move()
+    const { x, y, z } = circularMove({ theta: 0.01, phi: 0.02 }).mult(2000)
+    s.camera.setPosition(x, y, z)
   },
 } satisfies ReducerMap<CameraState>
+
+const circularMove = makeCircularMove([30, 150])
 
 export const makeCameraStore = () => makeStoreV2<CameraState>(init)(reducers)
 
