@@ -1,12 +1,12 @@
 import { loadFont } from 'p5utils/src/font'
 import { applyConfig } from 'p5utils/src/utils/project'
-import { loop, randomIntInclusiveBetween } from 'utils'
+import { loop, randomFloatBetween, randomIntInclusiveBetween } from 'utils'
 import { Config } from './config'
 import { bindControl } from './control'
 import { bindPlayEvent, soundAnalyzer } from './data/sound'
 import { render } from './render/drawGraph'
 import { cameraStore, graphStore, sketchStore, skinStore } from './state'
-import { draw3DGrid} from 'p5utils/src/3d/debug'
+import { draw3DGrid } from 'p5utils/src/3d/debug'
 
 const preload = () => {
   skinStore.lazyInit()
@@ -36,16 +36,18 @@ const setup = () => {
 
   // update
   skinStore.updateImageAppearance()
-  p.texture(skinStore.current.img)
+  
   graphStore.setGrowOptions({
     numOfGrowEdges: randomIntInclusiveBetween(1, 3),
     thetaDelta: randomIntInclusiveBetween(0, 30),
     growAmount: randomIntInclusiveBetween(600, 800),
     randomAbortRate: 0.1,
   })
-  loop(4, () => {
+  while(graphStore.current.graph.length < Config.InitialMaxNodes) {
     graphStore.grow()
-  })
+  }
+  // loop(4, () => {
+  // })
   graphStore.calculateGeometries()
 }
 
@@ -57,21 +59,21 @@ const draw = () => {
     n.move()
     const freqAmount = freqData[i % soundAnalyzer.bufferLength]
     if (freqAmount > 0.1) {
-      n.updateSpeed(freqAmount * 0.1 * Config.DefaultMoveAmount)
+      n.updateSpeed(freqAmount * Config.DefaultMoveAmount)
     }
   })
 
   // camera
   cameraStore.turnCamera()
-  cameraStore.moveCamera()
+  const theta = 0.01
+  const phi = 0.02
+  cameraStore.moveCamera(theta, phi)
 
   // render
-
-  
+  p.texture(skinStore.current.img)
   p.lights()
-
-  // render(graphStore.current)
-  draw3DGrid(3, 1000, cameraStore.current.camera)
+  render(graphStore.current)
+  // draw3DGrid(3, 1000, cameraStore.current.camera)
 }
 
 export default <Sketch>{

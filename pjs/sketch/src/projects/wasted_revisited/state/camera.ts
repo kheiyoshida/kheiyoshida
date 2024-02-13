@@ -2,7 +2,14 @@ import { VectorAngles } from 'p5utils/src/3d/types'
 import { createCamera } from 'p5utils/src/camera'
 import { makeCircularMove } from 'p5utils/src/camera/helpers'
 import { Camera } from 'p5utils/src/camera/types'
-import { LazyInit, ReducerMap, makeStoreV2 } from 'utils'
+import {
+  LazyInit,
+  ReducerMap,
+  makePingpongNumberStore,
+  makeStoreV2,
+  randomFloatBetween,
+  randomIntInclusiveBetween,
+} from 'utils'
 import { Config } from '../config'
 
 export type CameraState = {
@@ -48,13 +55,16 @@ export const reducers = {
     }
     s.camera.turnWithFocus(s.turn, [0, 0, 0])
   },
-  moveCamera: (s) => () => {
-    const { x, y, z } = circularMove({ theta: 0.01, phi: 0.02 }).mult(2000)
+  moveCamera: (s) => (theta: number, phi: number) => {
+    dist.renew()
+    const { x, y, z } = circularMove({ theta, phi }).mult(dist.current)
     s.camera.setPosition(x, y, z)
   },
 } satisfies ReducerMap<CameraState>
 
 const circularMove = makeCircularMove([30, 150])
+
+const dist = makePingpongNumberStore(() => randomFloatBetween(0, 20), 500, 5000, 3000)
 
 export const makeCameraStore = () => makeStoreV2<CameraState>(init)(reducers)
 
