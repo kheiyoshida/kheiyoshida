@@ -1,12 +1,11 @@
 import { loadFont } from 'p5utils/src/font'
 import { applyConfig } from 'p5utils/src/utils/project'
-import { loop, randomFloatBetween, randomIntInclusiveBetween } from 'utils'
+import { randomIntInclusiveBetween } from 'utils'
 import { Config } from './config'
 import { bindControl } from './control'
 import { bindPlayEvent, soundAnalyzer } from './data/sound'
 import { render } from './render/drawGraph'
 import { cameraStore, graphStore, sketchStore, skinStore } from './state'
-import { draw3DGrid } from 'p5utils/src/3d/debug'
 
 const preload = () => {
   skinStore.lazyInit()
@@ -46,8 +45,6 @@ const setup = () => {
   while(graphStore.current.graph.length < Config.InitialMaxNodes) {
     graphStore.grow()
   }
-  // loop(4, () => {
-  // })
   graphStore.calculateGeometries()
 }
 

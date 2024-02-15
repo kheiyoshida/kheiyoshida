@@ -2,12 +2,12 @@ import p5 from 'p5'
 import {
   applyBlackAndWhiteFilter,
   applyMonochromeFilter,
+  applyRandomSwap,
   loadImage,
-  randomSwap,
   randomizeImagePixels,
   updateImagePixels,
 } from 'p5utils/src/media/image'
-import { LazyInit, ReducerMap, loop, makeStoreV2 } from 'utils'
+import { LazyInit, ReducerMap, makeStoreV2, pipe } from 'utils'
 import { imgLoc } from '../data/images'
 
 export type SkinState = {
@@ -28,9 +28,7 @@ const updateImage = (img: p5.Image) => {
     return [r, g, b + 100, 255]
   })
   img.updatePixels()
-  loop(10, () => randomSwap(img))
-  applyMonochromeFilter(img)
-  applyBlackAndWhiteFilter(img, 0.5)
+  pipe(img, applyRandomSwap(10), applyMonochromeFilter, applyBlackAndWhiteFilter(0.5))
 }
 
 const reducers = {

@@ -3,7 +3,7 @@ import { loadFont } from 'p5utils/src/font'
 import {
   applyBlackAndWhiteFilter,
   applyMonochromeFilter,
-  randomSwap,
+  applyRandomSwap,
   randomizeImagePixels,
   updateImagePixels,
 } from 'p5utils/src/media/image'
@@ -30,7 +30,7 @@ const updateImage = () => {
     return [r, g, b + 100, 255]
   })
   img.updatePixels()
-  loop(10, () => randomSwap(img))
+  loop(10, () => applyRandomSwap(img))
   applyMonochromeFilter(img)
   applyBlackAndWhiteFilter(img, 0.5)
 }

@@ -7,8 +7,7 @@ import {
   ReducerMap,
   makePingpongNumberStore,
   makeStoreV2,
-  randomFloatBetween,
-  randomIntInclusiveBetween,
+  randomFloatBetween
 } from 'utils'
 import { Config } from '../config'
 
