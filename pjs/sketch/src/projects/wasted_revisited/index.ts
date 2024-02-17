@@ -58,8 +58,11 @@ const setup = () => {
 const draw = () => {
   if (p.frameCount % (Config.PaintInterval * 10) === 0) {
     sketchStore.updateFill()
-    skinStore.updateAlpha(Math.sin(p.millis() * 0.0001) * 100 + 100)
-    cameraStore.updateMove({ theta: randomFloatBetween(-0.01, 0.01), phi: randomFloatBetween(-0.02, 0.02) })
+    skinStore.updateAlpha(Math.sin(p.millis() * 0.0001))
+    cameraStore.updateMove({
+      theta: randomFloatBetween(-0.01, 0.01),
+      phi: randomFloatBetween(-0.02, 0.02),
+    })
   } else {
     skinStore.updateImageAppearance()
     sketchStore.paint()

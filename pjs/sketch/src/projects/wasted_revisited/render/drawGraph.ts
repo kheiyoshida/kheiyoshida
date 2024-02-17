@@ -1,10 +1,10 @@
 import p5 from 'p5'
 import { renderGeometry } from 'p5utils/src/3dShape'
+import { FrequencyData } from 'p5utils/src/media/audio/types'
+import { Config, fftSize } from '../config'
 import { calcEdgeAngle } from '../primitives/edgeGeometry'
 import { TreeNode } from '../primitives/node'
 import { GraphState } from '../state/graph'
-import { FrequencyData } from 'p5utils/src/media/audio/types'
-import { Config, fftSize } from '../config'
 
 const bufferLength = fftSize / 2
 
@@ -18,10 +18,6 @@ export const render = ({ graph, edgeGeometries }: GraphState, freqData: Frequenc
       drawEdges(node, edgeGeos)
     }
   })
-}
-
-const drawNode = (node: TreeNode, nodeGeo: p5.Geometry) => {
-  renderGeometry(nodeGeo, node.position, node.growDirection)
 }
 
 const drawEdges = (node: TreeNode, edgeGeos: p5.Geometry[]) => {

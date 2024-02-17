@@ -4,8 +4,6 @@ import { createShapeNode } from '../tools'
 import { ShapeNode, ShapeVertex } from '../types'
 import { calcLastVertex, calcNewVertices, calcTetraVerticesAroundNode } from './calculate'
 
-
-
 describe(`${calcNewVertices.name}`, () => {
   it(`should calc tetra when no vertices given`, () => {
     const node = createShapeNode()

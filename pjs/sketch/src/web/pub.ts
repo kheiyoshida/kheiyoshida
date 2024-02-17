@@ -8,5 +8,5 @@ export const published: string[] = [
   'tp4',
   'mgnr-demo',
   'wasted_revisited',
-  '3d_lab'
+  // '3d_lab'
 ]

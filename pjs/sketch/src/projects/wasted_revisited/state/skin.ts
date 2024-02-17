@@ -1,15 +1,11 @@
 import p5 from 'p5'
-import { createImageTexture, createRenderedTexture } from 'p5utils/src/3dShape/texture'
+import { createRenderedTexture } from 'p5utils/src/3dShape/texture'
 import {
-  applyBlackAndWhiteFilter,
-  applyBlurFilter,
-  applyMonochromeFilter,
   applyRandomSwap,
   randomizeImagePixels,
-  updateImagePixels,
+  updateImagePixels
 } from 'p5utils/src/media/image'
 import { LazyInit, ReducerMap, makeStoreV2, pipe, randomIntInclusiveBetween } from 'utils'
-import { imgLoc } from '../data/images'
 
 export type SkinState = {
   img: p5.Image
@@ -17,8 +13,6 @@ export type SkinState = {
 }
 
 const init: LazyInit<SkinState> = () => {
-  // const img = createImageTexture(imgLoc)
-  // img.resize(30, 30)
   const img = createRenderedTexture(30)
   return {
     img,
@@ -36,8 +30,8 @@ const updateImage = (img: p5.Image, alpha: number) => {
 
 const reducers = {
   updateImageAppearance: (s) => () => updateImage(s.img, s.alpha),
-  updateAlpha: (s) => (value: number) => {
-    s.alpha = value
+  updateAlpha: (s) => (MinusOneToOne: number) => {
+    s.alpha = 100 + Math.sin(MinusOneToOne) 
   }
 } satisfies ReducerMap<SkinState>
 

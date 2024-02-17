@@ -48,5 +48,3 @@ export const collectNearestVertices = (
 ): ShapeVertex[] => {
   return vertices.sort(sortByDistance(from)).slice(0, numOfVertices)
 }
-
-

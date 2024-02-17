@@ -1,10 +1,7 @@
 import { FFTSize } from 'p5utils/src/media/audio/types'
 
 export const MOBILE_WIDTH = 800
-
 export const fftSize: FFTSize = 32
-
-export const MoveThreshold = 20
 
 export const Config = {
   InitialMaxNodes: fftSize * 4,
@@ -16,5 +13,7 @@ export const Config = {
   CameraDefaultMoveSpeed: 10,
   CameraDecreaseSpeed: 2,
   RenderThreshold: 0.3,
-  PaintInterval: 4
+  PaintInterval: 4,
+  CameraDistance: window.innerWidth > MOBILE_WIDTH ? [2000, 6000, 3000] : [3000, 7000, 4000],
+  BackgroundGray: 250,
 } as const

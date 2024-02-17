@@ -8,7 +8,7 @@ import {
   clamp,
   makePingpongNumberStore,
   makeStoreV2,
-  randomFloatBetween
+  randomFloatBetween,
 } from 'utils'
 import { Config } from '../config'
 import { sumVectorAngles } from 'p5utils/src/3d'
@@ -33,7 +33,7 @@ export const init: LazyInit<CameraState> = () => {
     speed: initialSpeed,
     turn: { theta: 0, phi: 0 },
     reverting: false,
-    move: { theta: 0.01, phi: 0.02 }
+    move: { theta: 0.01, phi: 0.02 },
   }
 }
 
@@ -46,15 +46,13 @@ export const reducers = {
       s.turn = angle
     }
   },
-  updateMove:
-    (s) =>
-    (moveAngle: VectorAngles) => {
-      const newAngle = sumVectorAngles(s.move, moveAngle)
-      s.move = {
-        theta: clamp(newAngle.theta, -0.03, 0.03),
-        phi: clamp(newAngle.phi, -0.03, 0.03),
-      }
-    },
+  updateMove: (s) => (moveAngle: VectorAngles) => {
+    const newAngle = sumVectorAngles(s.move, moveAngle)
+    s.move = {
+      theta: clamp(newAngle.theta, -0.03, 0.03),
+      phi: clamp(newAngle.phi, -0.03, 0.03),
+    }
+  },
   turnCamera: (s) => () => {
     if (s.reverting) {
       s.turn = { theta: (s.turn.theta * 7) / 8, phi: (s.turn.phi * 7) / 8 }
@@ -70,7 +68,10 @@ export const reducers = {
 
 const circularMove = makeCircularMove([30, 150])
 
-const dist = makePingpongNumberStore(() => randomFloatBetween(0, 20), 2000, 6000, 3000)
+const dist = makePingpongNumberStore(
+  () => randomFloatBetween(0, 20),
+  ...(Config.CameraDistance as [number, number, number])
+)
 
 export const makeCameraStore = () => makeStoreV2<CameraState>(init)(reducers)
 

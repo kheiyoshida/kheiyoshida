@@ -16,7 +16,6 @@ export type TreeGraph = TreeNode[]
 
 export type GraphState = {
   graph: TreeGraph
-  maxNodes: number
   growOptions: GrowOptions
   edgeGeometries: (p5.Geometry[] | null)[]
 }
@@ -39,7 +38,6 @@ export const init: LazyInit<GraphState> = () => {
   )
   return {
     graph: [initialNode],
-    maxNodes: Config.InitialMaxNodes,
     growOptions: {
       numOfGrowEdges: 10,
       thetaDelta: 10,
@@ -64,9 +62,9 @@ export const reducers = {
     })
   },
   grow: (s) => () => {
-    if (s.graph.length >= s.maxNodes) return
+    if (s.graph.length >= Config.InitialMaxNodes) return
     s.graph
-      .filter((node, i) => !node.hasGrown || i === 0) // core should always grow
+      .filter((node, i) => !node.hasGrown || i !== 0)
       .forEach((node) => {
         const newNodes = growNode(node, s.growOptions)
         s.graph.push(...newNodes)
@@ -109,9 +107,7 @@ const makeRandomizer =
 
 const calcNodeEdgeGeometries = (node: TreeNode): p5.Geometry[] => {
   return node.edges.map((edge) => {
-    if (node.growIndex === 0) {
-      return createNodeGeometry(1, 4)
-    }
+    if (node.growIndex === 0) return createNodeGeometry(1, 4) // don't render
     const dist = distanceBetweenPositions(node.position, edge.position)
     const geo = createEdgeGeometry(dist, 500 / Math.pow(node.growIndex, 1.8))
     return geo

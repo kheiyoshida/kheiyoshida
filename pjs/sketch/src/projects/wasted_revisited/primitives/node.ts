@@ -4,7 +4,7 @@ import { Position3D, VectorAngles } from 'p5utils/src/3d/types'
 import * as NODE from 'p5utils/src/data/node'
 import * as NODE3D from 'p5utils/src/data/node/3d'
 import { createBase3D } from 'p5utils/src/data/node/3d'
-import { ArgsRandomizer, distribute, randomIntInclusiveBetween } from 'utils'
+import { ArgsRandomizer, distribute } from 'utils'
 import { Config } from '../config'
 
 export type TreeNode = {
