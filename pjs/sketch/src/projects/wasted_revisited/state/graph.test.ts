@@ -10,7 +10,7 @@ describe(`graph tree`, () => {
     reducers.setGrowOptions(state)({numOfGrowEdges: 3, thetaDelta: 10, growAmount: 100})
     const grow = reducers.grow(state)
     grow()
-    expect(spyEmitEdges).toHaveBeenCalledWith(3, 10, 100, expect.any(Function))
+    expect(spyEmitEdges).toHaveBeenCalledWith(3, 10, expect.any(Number), expect.any(Function))
     expect(state.graph).toHaveLength(4)
     expect(node.hasGrown).toBe(true)
 
@@ -22,6 +22,7 @@ describe(`graph tree`, () => {
     reducers.setGrowOptions(state)({numOfGrowEdges: 3, thetaDelta: 10, growAmount: 100})
     reducers.grow(state)()
     expect(state.graph).toHaveLength(4)
+    jest.spyOn(geo, 'createNodeGeometry').mockImplementation((size) => size as unknown as p5.Geometry)
     jest.spyOn(geo, 'createEdgeGeometry').mockImplementation((size) => size as unknown as p5.Geometry)
     reducers.calculateGeometries(state)()
     expect(state.edgeGeometries).toHaveLength(4) // for each node

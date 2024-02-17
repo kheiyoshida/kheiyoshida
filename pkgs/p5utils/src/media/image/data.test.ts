@@ -21,7 +21,9 @@ test(`${loadImage.name}`, () => {
 })
 
 test(`${loadEmptyImage.name}`, () => {
+  const spyLoadImage = jest.spyOn(p, 'createImage').mockImplementation(() => new p5.Image(1,1))
   const img = loadEmptyImage(100,100)
+  expect(spyLoadImage).toHaveBeenCalled()
   expect(img.loadPixels).toHaveBeenCalled()
 })
 

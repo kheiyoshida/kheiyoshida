@@ -82,10 +82,11 @@ export const reducers = {
   },
 } satisfies ReducerMap<GraphState>
 
+const BaseGrowAmount = 500
 const growNode = (node: TreeNode, options: GrowOptions) => {
   const { numOfGrowEdges, thetaDelta, growAmount, randomAbortRate } = options
   if (fireByRate(randomAbortRate)) return []
-  const finalGrowAmount = 500 + node.growIndex * growAmount
+  const finalGrowAmount = BaseGrowAmount + node.growIndex * growAmount
   const newNodes = node.emitEdges(
     numOfGrowEdges,
     thetaDelta,

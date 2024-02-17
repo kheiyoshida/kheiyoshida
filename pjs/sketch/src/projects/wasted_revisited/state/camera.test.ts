@@ -26,6 +26,10 @@ const mockCameraState = () => {
       phi: 0,
     },
     reverting: false,
+    move: {
+      theta: 0,
+      phi: 0
+    }
   }
   return { state, camera, p5camera }
 }
@@ -33,8 +37,8 @@ const mockCameraState = () => {
 describe(`camera reducers`, () => {
   it(`should always look at the center while moving around`, () => {
     const { state } = mockCameraState()
-    reducers.updateMove(state)({ theta: 0, phi: 90 }, 100)
-    reducers.moveCamera(state)(1, 10)
+    reducers.updateMove(state)({ theta: 0.01, phi: 0.01 })
+    reducers.moveCamera(state)()
     expect(state.camera.focus).toMatchCloseObject([0, 0, 0])
   })
   it(`should look at the tilted position relative to the center`, () => {
