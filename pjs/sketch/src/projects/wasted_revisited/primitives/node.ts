@@ -83,7 +83,7 @@ export const emitNodeEdge =
       newPosition as Position3D,
       newDir,
       moveAmount,
-      Config.DefaultMovableDistance,
+      getMovableDistance(node.growIndex),
       decreaseSpeed,
       changeDirection,
       node.growIndex + 1
@@ -91,3 +91,7 @@ export const emitNodeEdge =
     node.edges.push(edge)
     return edge
   }
+
+const getMovableDistance = (nodeIndex: number) => {
+  return Config.DefaultMovableDistance / Math.log(nodeIndex + 1)
+}

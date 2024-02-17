@@ -5,17 +5,20 @@ import { Camera } from 'p5utils/src/camera/types'
 import {
   LazyInit,
   ReducerMap,
+  clamp,
   makePingpongNumberStore,
   makeStoreV2,
   randomFloatBetween
 } from 'utils'
 import { Config } from '../config'
+import { sumVectorAngles } from 'p5utils/src/3d'
 
 export type CameraState = {
   camera: Camera
   speed: number
   turn: VectorAngles
   reverting: boolean
+  move: VectorAngles
 }
 
 export const init: LazyInit<CameraState> = () => {
@@ -30,6 +33,7 @@ export const init: LazyInit<CameraState> = () => {
     speed: initialSpeed,
     turn: { theta: 0, phi: 0 },
     reverting: false,
+    move: { theta: 0.01, phi: 0.02 }
   }
 }
 
@@ -44,9 +48,12 @@ export const reducers = {
   },
   updateMove:
     (s) =>
-    (relativeAngle: VectorAngles, speed: number = Config.CameraMoveSpeed) => {
-      s.camera.setRelativeDirection(relativeAngle)
-      s.speed = speed
+    (moveAngle: VectorAngles) => {
+      const newAngle = sumVectorAngles(s.move, moveAngle)
+      s.move = {
+        theta: clamp(newAngle.theta, -0.03, 0.03),
+        phi: clamp(newAngle.phi, -0.03, 0.03),
+      }
     },
   turnCamera: (s) => () => {
     if (s.reverting) {
@@ -54,16 +61,16 @@ export const reducers = {
     }
     s.camera.turnWithFocus(s.turn, [0, 0, 0])
   },
-  moveCamera: (s) => (theta: number, phi: number) => {
+  moveCamera: (s) => () => {
     dist.renew()
-    const { x, y, z } = circularMove({ theta, phi }).mult(dist.current)
+    const { x, y, z } = circularMove(s.move).mult(dist.current)
     s.camera.setPosition(x, y, z)
   },
 } satisfies ReducerMap<CameraState>
 
 const circularMove = makeCircularMove([30, 150])
 
-const dist = makePingpongNumberStore(() => randomFloatBetween(0, 20), 500, 5000, 3000)
+const dist = makePingpongNumberStore(() => randomFloatBetween(0, 20), 2000, 6000, 3000)
 
 export const makeCameraStore = () => makeStoreV2<CameraState>(init)(reducers)
 

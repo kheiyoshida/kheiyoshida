@@ -1,12 +1,11 @@
 import { loadFont } from 'p5utils/src/font'
 import { applyConfig } from 'p5utils/src/utils/project'
-import { randomIntInclusiveBetween } from 'utils'
+import { randomFloatBetween, randomIntInclusiveBetween } from 'utils'
 import { Config } from './config'
 import { bindControl } from './control'
 import { bindPlayEvent, soundAnalyzer } from './data/sound'
 import { render } from './render/drawGraph'
 import { cameraStore, graphStore, sketchStore, skinStore } from './state'
-import { draw3DGrid } from 'p5utils/src/3d/debug'
 
 const preload = () => {
   skinStore.lazyInit()
@@ -38,40 +37,51 @@ const setup = () => {
   skinStore.updateImageAppearance()
 
   graphStore.setGrowOptions({
-    numOfGrowEdges: randomIntInclusiveBetween(1, 3),
-    thetaDelta: randomIntInclusiveBetween(0, 30),
-    growAmount: randomIntInclusiveBetween(600, 800),
+    numOfGrowEdges: 2,
+    thetaDelta: 0,
+    growAmount: 10,
     randomAbortRate: 0.1,
   })
   graphStore.initialGrow()
   while (graphStore.current.graph.length < Config.InitialMaxNodes) {
+    graphStore.setGrowOptions({
+      numOfGrowEdges: randomIntInclusiveBetween(1, 3),
+      thetaDelta: randomIntInclusiveBetween(-10, 30),
+      growAmount: randomIntInclusiveBetween(500, 800),
+      randomAbortRate: 0.1,
+    })
     graphStore.grow()
   }
   graphStore.calculateGeometries()
 }
 
 const draw = () => {
-  sketchStore.paint()
+  if (p.frameCount % (Config.PaintInterval * 10) === 0) {
+    sketchStore.updateFill()
+    skinStore.updateAlpha(Math.sin(p.millis() * 0.0001) * 100 + 100)
+    cameraStore.updateMove({ theta: randomFloatBetween(-0.01, 0.01), phi: randomFloatBetween(-0.02, 0.02) })
+  } else {
+    skinStore.updateImageAppearance()
+    sketchStore.paint()
+  }
 
   const freqData = soundAnalyzer.analyze()
   graphStore.current.graph.forEach((n, i) => {
     n.move()
     const freqAmount = freqData[i % soundAnalyzer.bufferLength]
     if (freqAmount > 0.1) {
-      n.updateSpeed(freqAmount * Config.DefaultMoveAmount )
+      n.updateSpeed(freqAmount * Config.DefaultMoveAmount)
     }
   })
 
   // camera
   cameraStore.turnCamera()
-  const theta = 0.01
-  const phi = 0.02
-  cameraStore.moveCamera(theta, phi)
+  cameraStore.moveCamera()
 
   // render
   p.texture(skinStore.current.img)
   p.lights()
-  render(graphStore.current)
+  render(graphStore.current, freqData)
   // draw3DGrid(3, 1000, cameraStore.current.camera)
 }
 

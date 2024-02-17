@@ -3,12 +3,18 @@ import { revertToSphericalCoordinate, toDegrees } from 'p5utils/src/3d'
 import { Position3D, VectorAngles } from 'p5utils/src/3d/types'
 import * as shape from 'p5utils/src/3dShape'
 
-export const createEdgeGeometry = (length: number): p5.Geometry => {
-  const graph = shape.createStickGraph(length, 12, 10)
+const LengthPerUnit = 200
+
+export const createEdgeGeometry = (length: number, radius: number): p5.Geometry => {
+  const graph = shape.createStickGraph(
+    length,
+    Number(Math.max(1, length / LengthPerUnit).toFixed()),
+    radius
+  )
   return shape.finalizeGeometry(graph)
 }
 
-export const createNodeGeometry = (size: number, round: number):p5.Geometry => {
+export const createNodeGeometry = (size: number, round: number): p5.Geometry => {
   const graph = shape.createRandomAngularGraph(size, round)
   return shape.finalizeGeometry(graph)
 }

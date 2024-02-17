@@ -3,9 +3,16 @@ import { renderGeometry } from 'p5utils/src/3dShape'
 import { calcEdgeAngle } from '../primitives/edgeGeometry'
 import { TreeNode } from '../primitives/node'
 import { GraphState } from '../state/graph'
+import { FrequencyData } from 'p5utils/src/media/audio/types'
+import { Config, fftSize } from '../config'
 
-export const render = ({ graph, edgeGeometries }: GraphState) => {
+const bufferLength = fftSize / 2
+
+export const render = ({ graph, edgeGeometries }: GraphState, freqData: FrequencyData) => {
   graph.forEach((node, i) => {
+    if (node.growIndex === 0) return
+    const freqAmount = freqData[i % bufferLength]
+    if (freqAmount < Config.RenderThreshold) return
     const edgeGeos = edgeGeometries[i]
     if (edgeGeos) {
       drawEdges(node, edgeGeos)

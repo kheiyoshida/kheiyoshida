@@ -9,6 +9,12 @@ export const loadImage = (imgLoc: string) => {
   return img
 }
 
+export const loadEmptyImage = (width: number, height: number) => {
+  const img = p.createImage(width, height)
+  img.loadPixels()
+  return img
+}
+
 export const updateImagePixels = (
   img: p5.Image,
   updater: (originalRGBA: RGBA, x: number, y: number) => RGBA

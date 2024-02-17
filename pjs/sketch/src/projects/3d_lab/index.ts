@@ -1,38 +1,11 @@
-import p5 from 'p5'
-import { loadFont } from 'p5utils/src/font'
-import {
-  applyBlackAndWhiteFilter,
-  applyMonochromeFilter,
-  applyRandomSwap,
-  randomizeImagePixels,
-  updateImagePixels,
-} from 'p5utils/src/media/image'
-import { drawAtVectorPosition } from 'p5utils/src/render/drawers/draw'
-import { applyConfig } from 'p5utils/src/utils/project'
-import { loop, makePingpongNumberStore } from 'utils'
-import { bindControl } from './control'
-import { loadImage } from './data/image'
-import { cameraStore, geometryStore, sketchStore } from './state'
 import { draw3DGrid } from 'p5utils/src/3d/debug'
-import { vectorFromDegreeAngles } from 'p5utils/src/3d'
-import { makeCircularMove } from 'p5utils/src/camera/helpers'
+import { loadFont } from 'p5utils/src/font'
+import { applyConfig } from 'p5utils/src/utils/project'
+import { bindControl } from './control'
+import { cameraStore, geometryStore, sketchStore, skinStore } from './state'
 
-let img: p5.Image
 const preload = () => {
-  img = loadImage()
-}
-
-const updateImage = () => {
-  img.resize(500, 500)
-
-  randomizeImagePixels(img, 200)
-  updateImagePixels(img, ([r, g, b, a]) => {
-    return [r, g, b + 100, 255]
-  })
-  img.updatePixels()
-  loop(10, () => applyRandomSwap(img))
-  applyMonochromeFilter(img)
-  applyBlackAndWhiteFilter(img, 0.5)
+  skinStore.lazyInit()
 }
 
 const setup = () => {
@@ -53,38 +26,29 @@ const setup = () => {
   // geo
   geometryStore.lazyInit()
 
-  updateImage()
+  skinStore.updateImageAppearance()
+
   p.noStroke()
 }
-
-let pos: p5.Vector
-
-const circularMove = makeCircularMove([30, 150])
 
 const draw = () => {
   const { camera } = cameraStore.current
   sketchStore.paint()
 
   // camera
-  // cameraStore.turnCamera()
-  // cameraStore.moveCamera()
-
-  pos = circularMove({ theta: 0.01, phi: 0.001 }).mult(200)
+  cameraStore.turnCamera()
+  cameraStore.moveCamera()
 
   // render
   p.lights()
 
   draw3DGrid(3, 2000, camera)
 
-  drawAtVectorPosition(pos, () => {
-    p.sphere(20)
-  })
+  p.texture(skinStore.current.img)
 
-  // p.texture(img)
-
-  // p.translate(0, 0, 400)
-  // p.plane()
-  // geometryStore.render()
+  p.translate(0, 0, 400)
+  p.plane()
+  geometryStore.render()
 }
 
 export default <Sketch>{

@@ -87,7 +87,7 @@ export const reducers = {
 const growNode = (node: TreeNode, options: GrowOptions) => {
   const { numOfGrowEdges, thetaDelta, growAmount, randomAbortRate } = options
   if (fireByRate(randomAbortRate)) return []
-  const finalGrowAmount = 300 + node.growIndex * 1000
+  const finalGrowAmount = 500 + node.growIndex * growAmount
   const newNodes = node.emitEdges(
     numOfGrowEdges,
     thetaDelta,
@@ -110,10 +110,10 @@ const makeRandomizer =
 const calcNodeEdgeGeometries = (node: TreeNode): p5.Geometry[] => {
   return node.edges.map((edge) => {
     if (node.growIndex === 0) {
-      return createNodeGeometry(10, 8)
+      return createNodeGeometry(1, 4)
     }
     const dist = distanceBetweenPositions(node.position, edge.position)
-    const geo = createEdgeGeometry(dist)
+    const geo = createEdgeGeometry(dist, 500 / Math.pow(node.growIndex, 1.8))
     return geo
   })
 }

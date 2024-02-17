@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { loadImage, updateImagePixels } from './data'
+import { loadEmptyImage, loadImage, updateImagePixels } from './data'
 import * as pixels from '../pixel/pixels'
 
 jest.mock('p5', () => ({
@@ -17,6 +17,11 @@ test(`${loadImage.name}`, () => {
   const imageLoc = 'somewhere/pic.jpg'
   const img = loadImage(imageLoc)
   expect(spyLoadImage).toHaveBeenCalledWith(imageLoc)
+  expect(img.loadPixels).toHaveBeenCalled()
+})
+
+test(`${loadEmptyImage.name}`, () => {
+  const img = loadEmptyImage(100,100)
   expect(img.loadPixels).toHaveBeenCalled()
 })
 
