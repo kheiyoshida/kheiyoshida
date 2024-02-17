@@ -3,7 +3,7 @@ import { requireMusic } from '../../../assets'
 import { fftSize } from '../config'
 import { instruction } from 'p5utils/src/utils/project'
 
-const soundSource = createSoundSource(requireMusic('wasted_new.mp3'))
+const soundSource = createSoundSource(requireMusic('wasted_240217.mp3'))
 
 export const soundAnalyzer = createAnalyzer(soundSource.source, fftSize)
 

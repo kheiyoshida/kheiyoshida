@@ -4,9 +4,13 @@ import { Position3D, VectorAngles } from 'p5utils/src/3d/types'
 import * as shape from 'p5utils/src/3dShape'
 
 export const createEdgeGeometry = (length: number): p5.Geometry => {
-  const graph = shape.createStickGraph(length, 20, 30)
-  const graph2 = shape.createRandomAngularGraph(length/4, 3)
-  return shape.finalizeGeometry([...graph, ...graph2])
+  const graph = shape.createStickGraph(length, 12, 10)
+  return shape.finalizeGeometry(graph)
+}
+
+export const createNodeGeometry = (size: number, round: number):p5.Geometry => {
+  const graph = shape.createRandomAngularGraph(size, round)
+  return shape.finalizeGeometry(graph)
 }
 
 export const calcEdgeAngle = (nodePosition: Position3D, edgePosition: Position3D): VectorAngles => {

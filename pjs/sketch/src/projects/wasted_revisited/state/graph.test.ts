@@ -24,8 +24,8 @@ describe(`graph tree`, () => {
     expect(state.graph).toHaveLength(4)
     jest.spyOn(geo, 'createEdgeGeometry').mockImplementation((size) => size as unknown as p5.Geometry)
     reducers.calculateGeometries(state)()
-    expect(state.geometries).toHaveLength(4) // for each node
-    expect(state.geometries[0]).toHaveLength(3) // for each edge
-    expect(state.geometries[1]).toBe(null) // doesn't have edges yet
+    expect(state.edgeGeometries).toHaveLength(4) // for each node
+    expect(state.edgeGeometries[0]).toHaveLength(3) // for each edge
+    expect(state.edgeGeometries[1]).toBe(null) // doesn't have edges yet
   })
 })

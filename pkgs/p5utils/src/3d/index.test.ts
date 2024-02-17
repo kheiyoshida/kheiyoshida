@@ -9,6 +9,7 @@ import {
   divVectorAngles,
   vectorBetweenPositions,
   sumPosition3d,
+  getEvenlyMappedSphericalAngles,
 } from '.'
 
 test.each([
@@ -98,4 +99,11 @@ test(`${vectorBetweenPositions.name}`, () => {
 
 test(`${sumPosition3d.name}`, () => {
   expect(sumPosition3d([0, 10, 10], [20, 30, 0], [0, 10, 10])).toMatchObject([20, 50, 20])
+})
+
+test(`${getEvenlyMappedSphericalAngles.name}`, () => {
+  const angles = getEvenlyMappedSphericalAngles(3, [30, 150])
+  expect(angles).toHaveLength(3 * 3)
+  expect(angles.map((a) => a.theta)).toMatchObject([30, 30, 30, 90, 90, 90, 150, 150, 150])
+  expect(angles.map((a) => a.phi)).toMatchObject([0, 120, 240, 0, 120, 240, 0, 120, 240])
 })

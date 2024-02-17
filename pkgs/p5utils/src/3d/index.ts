@@ -1,6 +1,6 @@
 import p5 from 'p5'
 import { VectorAngles } from './types'
-import { randomIntInclusiveBetween } from 'utils'
+import { loop2D, randomIntInclusiveBetween } from 'utils'
 import { Position3D } from './types'
 
 export const toRadians = (degree: number) => degree * (Math.PI / 180)
@@ -53,3 +53,16 @@ export const vectorBetweenPositions = (v1: Position3D, v2: Position3D) =>
 
 export const sumPosition3d = (...positions: Position3D[]) =>
   positions.reduce((p, c) => [p[0] + c[0], p[1] + c[1], p[2] + c[2]], [0, 0, 0])
+
+export const getEvenlyMappedSphericalAngles = (divisions: number, thetaRange: [number, number] = [30, 150]): VectorAngles[] => {
+  const angles: VectorAngles[] = []
+  const minTheta = thetaRange[0]
+  const thetaUnit = thetaRange[1] - thetaRange[0]
+  loop2D(divisions, (t, p) => {
+    angles.push({
+      theta: (t / (divisions - 1)) * thetaUnit + minTheta,
+      phi: (p / divisions) * 360,
+    })
+  })
+  return angles
+}

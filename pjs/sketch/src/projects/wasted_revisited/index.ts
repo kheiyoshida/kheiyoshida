@@ -6,6 +6,7 @@ import { bindControl } from './control'
 import { bindPlayEvent, soundAnalyzer } from './data/sound'
 import { render } from './render/drawGraph'
 import { cameraStore, graphStore, sketchStore, skinStore } from './state'
+import { draw3DGrid } from 'p5utils/src/3d/debug'
 
 const preload = () => {
   skinStore.lazyInit()
@@ -35,14 +36,15 @@ const setup = () => {
 
   // update
   skinStore.updateImageAppearance()
-  
+
   graphStore.setGrowOptions({
     numOfGrowEdges: randomIntInclusiveBetween(1, 3),
     thetaDelta: randomIntInclusiveBetween(0, 30),
     growAmount: randomIntInclusiveBetween(600, 800),
     randomAbortRate: 0.1,
   })
-  while(graphStore.current.graph.length < Config.InitialMaxNodes) {
+  graphStore.initialGrow()
+  while (graphStore.current.graph.length < Config.InitialMaxNodes) {
     graphStore.grow()
   }
   graphStore.calculateGeometries()
@@ -56,7 +58,7 @@ const draw = () => {
     n.move()
     const freqAmount = freqData[i % soundAnalyzer.bufferLength]
     if (freqAmount > 0.1) {
-      n.updateSpeed(freqAmount * Config.DefaultMoveAmount)
+      n.updateSpeed(freqAmount * Config.DefaultMoveAmount )
     }
   })
 

@@ -8,8 +8,9 @@ export const MoveThreshold = 20
 
 export const Config = {
   InitialMaxNodes: fftSize * 2,
-  DefaultMoveAmount: 50,
-  DefaultMovableDistance: 600,
+  InitialGrowDimensions: 3,
+  DefaultMoveAmount: 100,
+  DefaultMovableDistance: 100 * 3,
   DecreaseSpeed: 10,
   CameraMoveSpeed: 100,
   CameraDefaultMoveSpeed: 10,

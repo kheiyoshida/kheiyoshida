@@ -20,6 +20,7 @@ export type TreeNode = {
   ) => TreeNode[]
   move: () => void
   updateSpeed: (speed: number) => void
+  growIndex: number
 }
 
 export type EmitNodeEdgeRandomizer = ArgsRandomizer<ReturnType<typeof emitNodeEdge>>
@@ -30,7 +31,8 @@ export const createGraphNode = (
   moveAmount = 100,
   movableDistance = moveAmount * 3,
   decreaseSpeed = (speed: number) => speed,
-  changeDirection = (angle: VectorAngles) => angle
+  changeDirection = (angle: VectorAngles) => angle,
+  growIndex = 0
 ): TreeNode => {
   const initialPosition = position
   const _node = createBase3D(new p5.Vector(...position), randomAngle(), moveAmount)
@@ -43,6 +45,9 @@ export const createGraphNode = (
     edges,
     hasGrown: false,
     growDirection,
+    get growIndex() {
+      return growIndex
+    },
     emitEdges(numEdges, thetaDelta, growAmount, randomizer) {
       const emit = emitNodeEdge(this, decreaseSpeed, changeDirection)
       return distribute(360, numEdges).map((phiDelta) => {
@@ -73,14 +78,15 @@ export const emitNodeEdge =
     const newDir = sumVectorAngles(node.growDirection, directionDelta)
     const posDelta = vectorFromDegreeAngles(newDir.theta, newDir.phi, growAmount)
     const newPosition = posDelta.add(node.position).array() as Position3D
-    const moveAmount = randomIntInclusiveBetween(10, 50)
+    const moveAmount = Config.DefaultMoveAmount
     const edge = createGraphNode(
       newPosition as Position3D,
       newDir,
       moveAmount,
       Config.DefaultMovableDistance,
       decreaseSpeed,
-      changeDirection
+      changeDirection,
+      node.growIndex + 1
     )
     node.edges.push(edge)
     return edge

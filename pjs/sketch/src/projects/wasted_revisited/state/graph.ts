@@ -1,17 +1,16 @@
+import p5 from 'p5'
+import { distanceBetweenPositions, getEvenlyMappedSphericalAngles } from 'p5utils/src/3d'
 import {
   LazyInit,
   ReducerMap,
   fireByRate,
-  loop,
   makeIntWobbler,
   makeStoreV2,
   randomIntInclusiveBetween,
 } from 'utils'
-import { EmitNodeEdgeRandomizer, TreeNode, createGraphNode } from '../primitives/node'
 import { Config } from '../config'
-import p5 from 'p5'
-import { distanceBetweenPositions } from 'p5utils/src/3d'
-import { createEdgeGeometry } from '../primitives/edgeGeometry'
+import { createEdgeGeometry, createNodeGeometry } from '../primitives/edgeGeometry'
+import { EmitNodeEdgeRandomizer, TreeNode, createGraphNode } from '../primitives/node'
 
 export type TreeGraph = TreeNode[]
 
@@ -19,7 +18,7 @@ export type GraphState = {
   graph: TreeGraph
   maxNodes: number
   growOptions: GrowOptions
-  geometries: (p5.Geometry[] | null)[]
+  edgeGeometries: (p5.Geometry[] | null)[]
 }
 
 export type GrowOptions = {
@@ -31,7 +30,7 @@ export type GrowOptions = {
 
 export const init: LazyInit<GraphState> = () => {
   const initialNode = createGraphNode(
-    [0, 1000, 0],
+    [0, 0, 0],
     { theta: 0, phi: 0 },
     Config.DefaultMoveAmount,
     Config.DefaultMovableDistance,
@@ -47,7 +46,7 @@ export const init: LazyInit<GraphState> = () => {
       growAmount: 1000,
       randomAbortRate: 0,
     },
-    geometries: [],
+    edgeGeometries: [],
   }
 }
 
@@ -55,39 +54,68 @@ export const reducers = {
   setGrowOptions: (s) => (growOptions: Partial<GrowOptions>) => {
     s.growOptions = { ...s.growOptions, ...growOptions }
   },
+  initialGrow: (s) => () => {
+    const directions = getEvenlyMappedSphericalAngles(Config.InitialGrowDimensions, [45, 135])
+    directions.forEach((direction) => {
+      const initialNode = s.graph[0]
+      initialNode.growDirection = direction
+      const newNodes = growNode(initialNode, s.growOptions)
+      s.graph.push(...newNodes)
+    })
+  },
   grow: (s) => () => {
     if (s.graph.length >= s.maxNodes) return
-    const { numOfGrowEdges, thetaDelta, growAmount, randomAbortRate } = s.growOptions
     s.graph
-      .filter((node) => !node.hasGrown)
+      .filter((node, i) => !node.hasGrown || i === 0) // core should always grow
       .forEach((node) => {
-        if (fireByRate(randomAbortRate)) return
-        const randomizer: EmitNodeEdgeRandomizer = (delta, amount) => [
-          {
-            theta: makeIntWobbler(20)(delta.theta),
-            phi: makeIntWobbler((10 - numOfGrowEdges) * 20)(delta.phi),
-          },
-          amount + randomIntInclusiveBetween(-10, 100),
-        ]
-        const newNodes = node.emitEdges(numOfGrowEdges, thetaDelta, growAmount, randomizer)
+        const newNodes = growNode(node, s.growOptions)
         s.graph.push(...newNodes)
         node.hasGrown = true
       })
   },
   calculateGeometries: (s) => () => {
-    loop(s.graph.length, (i) => {
-      if (s.geometries[i]) return
-      const node = s.graph[i]
-      s.geometries.push(null) // fill
-      if (node.edges.length === 0) return
-      const edgeGeometries: p5.Geometry[] = node.edges.map((edge) => {
-        const dist = distanceBetweenPositions(node.position, edge.position)
-        const geo = createEdgeGeometry(dist)
-        return geo
-      })
-      s.geometries[i] = edgeGeometries
+    s.graph.forEach((node, i) => {
+      if (s.edgeGeometries[i]) return
+      s.edgeGeometries.push(null) // fill
+      if (node.edges.length) {
+        s.edgeGeometries[i] = calcNodeEdgeGeometries(node)
+      }
     })
   },
 } satisfies ReducerMap<GraphState>
+
+const growNode = (node: TreeNode, options: GrowOptions) => {
+  const { numOfGrowEdges, thetaDelta, growAmount, randomAbortRate } = options
+  if (fireByRate(randomAbortRate)) return []
+  const finalGrowAmount = 300 + node.growIndex * 1000
+  const newNodes = node.emitEdges(
+    numOfGrowEdges,
+    thetaDelta,
+    finalGrowAmount,
+    makeRandomizer(numOfGrowEdges)
+  )
+  return newNodes
+}
+
+const makeRandomizer =
+  (numOfGrowEdges: number): EmitNodeEdgeRandomizer =>
+  (delta, amount) => [
+    {
+      theta: makeIntWobbler(20)(delta.theta),
+      phi: makeIntWobbler((10 - numOfGrowEdges) * 20)(delta.phi),
+    },
+    amount + randomIntInclusiveBetween(-10, 100),
+  ]
+
+const calcNodeEdgeGeometries = (node: TreeNode): p5.Geometry[] => {
+  return node.edges.map((edge) => {
+    if (node.growIndex === 0) {
+      return createNodeGeometry(10, 8)
+    }
+    const dist = distanceBetweenPositions(node.position, edge.position)
+    const geo = createEdgeGeometry(dist)
+    return geo
+  })
+}
 
 export const makeGraphStore = () => makeStoreV2<GraphState>(init)(reducers)

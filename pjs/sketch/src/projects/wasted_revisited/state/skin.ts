@@ -28,7 +28,12 @@ const updateImage = (img: p5.Image) => {
     return [r, g, b + 100, 255]
   })
   img.updatePixels()
-  pipe(img, applyRandomSwap(10), applyMonochromeFilter, applyBlackAndWhiteFilter(0.5))
+  pipe(img, 
+    applyRandomSwap(10), 
+    applyMonochromeFilter, 
+    applyBlackAndWhiteFilter(0.5),
+    applyRandomSwap(4)
+  )
 }
 
 const reducers = {
