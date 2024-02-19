@@ -1,3 +1,3 @@
-export * from './mouse'
-export * from './keys'
+export * from './input'
+export * from './normalize'
 export * from './types'

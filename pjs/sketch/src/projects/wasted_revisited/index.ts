@@ -85,7 +85,6 @@ const draw = () => {
   p.texture(skinStore.current.img)
   p.lights()
   render(graphStore.current, freqData)
-  // draw3DGrid(3, 1000, cameraStore.current.camera)
 }
 
 export default <Sketch>{

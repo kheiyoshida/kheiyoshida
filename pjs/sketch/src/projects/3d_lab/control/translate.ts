@@ -1,48 +1,49 @@
-import { VectorAngles } from 'p5utils/src/3d/types'
-import { MoveDirection, MoveIntention, TurnIntention } from './types'
-import { CameraStore } from '../state/camera'
-import { divVectorAngles, sumVectorAngles } from 'p5utils/src/3d'
+import { SwipeOrMouseMove, TouchOrMousePosition, normalizeMouseInput } from 'p5utils/src/control'
+import { MoveThreshold } from '../config'
+import { ControlIntention, MoveDirection } from './types'
 
-export const translateMoveIntention = (
-  direction: MoveIntention
-): Parameters<CameraStore['updateMove']> => {
-  const angles =
-    direction.length === 1
-      ? DirectionAngles[direction[0]]
-      : divVectorAngles(
-          sumVectorAngles(DirectionAngles[direction[0]], DirectionAngles[direction[1]]),
-          2
-        )
-  if (direction.length === 1) return [angles]
-  else return [angles]
+export const translateSwipeIntention = (
+  swipe: SwipeOrMouseMove,
+  threshold = MoveThreshold,
+): ControlIntention => {
+  const turn = {
+    x: Math.abs(swipe.x) > threshold ? swipe.x / threshold : 0,
+    y: Math.abs(swipe.y) > threshold ? swipe.y / threshold : 0,
+  }
+  if (Math.abs(turn.x) > 0 || Math.abs(turn.y) > 0) {
+    return {turn}
+  }
+  return {}
 }
 
-export const translateTurnIntention = (
-  { x, y }: TurnIntention,
-  sightWidth = 120
-): Parameters<CameraStore['updateTurn']> => {
-  return [
-    {
-      theta: (y * sightWidth) / 2,
-      phi: (-x * sightWidth) / 2,
-    },
-  ]
-}
-export const translateTargetIntention = ({
-  x,
-  y,
-}: TurnIntention, width = 120): Parameters<CameraStore['updateTarget']> => {
-  return [
-    {
-      phi: 180 - x * width / 2,
-      theta: 90 + y * width / 2,
-    },
-  ]
+export const translateKeyIntention = (keys: number[]): ControlIntention => {
+  const KeyMap = {
+    37: MoveDirection.left,
+    38: MoveDirection.front,
+    39: MoveDirection.right,
+    40: MoveDirection.back,
+  } as const
+  const direction = []
+  for (const key of keys) {
+    if (key in KeyMap) {
+      direction.push(KeyMap[key as unknown as keyof typeof KeyMap])
+    }
+  }
+  return {
+    move: direction,
+  }
 }
 
-const DirectionAngles: { [k in MoveDirection]: VectorAngles } = {
-  front: { theta: 0, phi: 0 },
-  back: { theta: 0, phi: 180 },
-  left: { theta: 0, phi: 90 },
-  right: { theta: 0, phi: -90 },
+export const translateTouchIntention = (touch: TouchOrMousePosition): ControlIntention => {
+  const target = normalizeMouseInput(touch, 400)
+  return {
+    target,
+  }
+}
+
+export const translateMouseIntention = (mouse: TouchOrMousePosition): ControlIntention => {
+  const turn = normalizeMouseInput(mouse, 1200)
+  return {
+    turn,
+  }
 }

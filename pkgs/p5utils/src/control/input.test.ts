@@ -1,5 +1,5 @@
 import { mockP5variable } from '../__test__/mock'
-import { detectMove, detectPosition } from './mouse'
+import { detectMove, detectPosition, makeDetectKeys } from './input'
 
 test(`${detectMove.name}`, () => {
   mockP5variable('pmouseX', 0)
@@ -21,4 +21,11 @@ test(`${detectPosition.name}`, () => {
     x: 20,
     y: -10,
   })
+})
+
+test(`${makeDetectKeys.name}`, () => {
+  jest.spyOn(p, 'keyIsDown').mockImplementation((k) => k === 32 || k === 35)
+  const detectKeys = makeDetectKeys([30, 32, 33, 35])
+  const keys = detectKeys()
+  expect(keys).toMatchObject([32, 35])
 })

@@ -1,14 +1,13 @@
-import { CameraStore } from '../state/camera'
-import { TurnIntention } from './types'
+import { TouchOrMousePosition, makeSwipeTracker, normalizeMouseInput } from 'p5utils/src/control'
+import { ControlIntention } from './types'
 
-export const translateTurnIntention = (
-  { x, y }: TurnIntention,
-  sightWidth = 120
-): Parameters<CameraStore['updateTurn']> => {
-  return [
-    {
-      theta: (y * sightWidth) / 2,
-      phi: (-x * sightWidth) / 2,
-    },
-  ]
+export const translateMouseIntention = (mouse: TouchOrMousePosition): ControlIntention => {
+  return { turn: normalizeMouseInput(mouse, 1200) }
+}
+
+export const translateSwipeIntention = (
+  currentTouchPosition: TouchOrMousePosition,
+  swipe: ReturnType<typeof makeSwipeTracker>
+): ControlIntention => {
+  return { turn: swipe.getNormalizedValues(currentTouchPosition) }
 }

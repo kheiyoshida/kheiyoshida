@@ -1,8 +1,7 @@
-import { detectPosition } from 'p5utils/src/control'
+import { detectPosition, makeSwipeTracker } from 'p5utils/src/control'
 import { CameraStore } from '../state/camera'
-import { makeSwipeTracker, resolveMouse, resolveSwipe } from './resolvers'
-import { translateTurnIntention } from './translate'
-import { ControlIntention } from './types'
+import { resolveIntention } from './resolve'
+import { translateMouseIntention, translateSwipeIntention } from './translate'
 
 const MOBILE_WIDTH = 800
 
@@ -16,11 +15,11 @@ export const bindDeviceTouchEvents = (cameraStore: CameraStore, soundStart: () =
   p.touchStarted = () => {
     soundStart()
     const position = detectPosition()
-    swipe.start(position)
+    swipe.startSwipe(position)
   }
   p.touchMoved = () => {
     const position = detectPosition()
-    const intention = resolveSwipe(position, swipe)
+    const intention = translateSwipeIntention(position, swipe)
     resolveIntention(intention, cameraStore)
   }
   p.touchEnded = () => {
@@ -36,14 +35,7 @@ export const bindMouseKeyControlEvents = (
   p.mouseClicked = soundStart
   p.mouseMoved = () => {
     const mousePosition = detectPosition()
-    const intention = resolveMouse(mousePosition)
+    const intention = translateMouseIntention(mousePosition)
     resolveIntention(intention, cameraStore)
-  }
-}
-
-const resolveIntention = (intention: ControlIntention, camera: CameraStore) => {
-  if (intention.turn) {
-    const turnValue = translateTurnIntention(intention.turn)
-    camera.updateTurn(...turnValue)
   }
 }

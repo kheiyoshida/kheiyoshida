@@ -8,6 +8,11 @@ export type TouchOrMousePosition = {
   y: number
 }
 
+export type NormalizedInputValues = {
+  x: number
+  y: number
+}
+
 export type ControlEventInfo = {
   move: SwipeOrMouseMove | null
   position: TouchOrMousePosition | null

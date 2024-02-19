@@ -6,3 +6,7 @@ export const detectMove = (): SwipeOrMouseMove => ({
 })
 
 export const detectPosition = (): TouchOrMousePosition => ({ x: p.mouseX, y: p.mouseY })
+
+export const makeDetectKeys = (keyCodes: number[]) => (): number[] => {
+  return keyCodes.filter((keyCode) => p.keyIsDown(keyCode))
+}
