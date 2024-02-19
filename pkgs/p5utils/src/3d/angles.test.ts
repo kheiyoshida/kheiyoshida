@@ -1,16 +1,13 @@
 import p5 from 'p5'
 import {
-  toRadians,
-  revertToSphericalCoordinate,
-  toDegrees,
-  sumVectorAngles,
-  vectorFromDegreeAngles,
-  distanceBetweenPositions,
   divVectorAngles,
-  vectorBetweenPositions,
-  sumPosition3d,
   getEvenlyMappedSphericalAngles,
-} from '.'
+  revertToSphericalCoordinate,
+  sumVectorAngles,
+  toDegrees,
+  toRadians,
+  vectorFromDegreeAngles,
+} from './angles'
 
 test.each([
   [60, Math.PI / 3],
@@ -47,28 +44,6 @@ test.each([
   expect(toDegrees(rPhi)).toBeCloseTo(phi)
 })
 
-test('same?', () => {
-  const v1 = p5.Vector.fromAngles(20, 20)
-  const v2 = p5.Vector.fromAngles(20, 200)
-  expect(v1.x).not.toBeCloseTo(v2.x)
-  expect(v1.z).not.toBeCloseTo(v2.z)
-
-  expect(Math.atan(v1.x / v1.z)).not.toBeCloseTo(v2.x / v2.z)
-})
-
-test.each([
-  [0, 10, 0],
-  [10, 10, 45],
-  [10, 0, 90],
-  [10, -10, 135],
-  [0, -10, 180],
-  [-10, -10, 225 - 360],
-  [-10, 0, 270 - 360],
-  [-10, 10, 315 - 360],
-])('Math.atan2(%i, %i)', (x, y, expected) => {
-  expect(toDegrees(Math.atan2(x, y))).toBeCloseTo(expected)
-})
-
 test(`${sumVectorAngles.name}`, () => {
   expect(sumVectorAngles({ theta: 20, phi: 30 }, { theta: 50, phi: 120 })).toMatchObject({
     theta: 70,
@@ -80,30 +55,17 @@ test(`${divVectorAngles.name}`, () => {
   expect(divVectorAngles({ theta: 90, phi: 180 }, 2)).toMatchObject({ theta: 45, phi: 90 })
 })
 
+test(`${getEvenlyMappedSphericalAngles.name}`, () => {
+  const angles = getEvenlyMappedSphericalAngles(3, [30, 150])
+  expect(angles).toHaveLength(3 * 3)
+  expect(angles.map((a) => a.theta)).toMatchObject([30, 30, 30, 90, 90, 90, 150, 150, 150])
+  expect(angles.map((a) => a.phi)).toMatchObject([0, 120, 240, 0, 120, 240, 0, 120, 240])
+})
+
 test(`${vectorFromDegreeAngles.name}`, () => {
   const result = vectorFromDegreeAngles(90, 180, 100)
   const r = result.array()
   expect(r[0]).toBeCloseTo(0)
   expect(r[1]).toBeCloseTo(0)
   expect(r[2]).toBeCloseTo(-100)
-})
-
-test(`${distanceBetweenPositions.name}`, () => {
-  expect(distanceBetweenPositions([100, 100, 100], [100, 0, 100])).toBe(100)
-})
-
-test(`${vectorBetweenPositions.name}`, () => {
-  const result = vectorBetweenPositions([100, 100, 0], [0, 100, 0])
-  expect(result.array()).toMatchObject([-100, 0, 0])
-})
-
-test(`${sumPosition3d.name}`, () => {
-  expect(sumPosition3d([0, 10, 10], [20, 30, 0], [0, 10, 10])).toMatchObject([20, 50, 20])
-})
-
-test(`${getEvenlyMappedSphericalAngles.name}`, () => {
-  const angles = getEvenlyMappedSphericalAngles(3, [30, 150])
-  expect(angles).toHaveLength(3 * 3)
-  expect(angles.map((a) => a.theta)).toMatchObject([30, 30, 30, 90, 90, 90, 150, 150, 150])
-  expect(angles.map((a) => a.phi)).toMatchObject([0, 120, 240, 0, 120, 240, 0, 120, 240])
 })

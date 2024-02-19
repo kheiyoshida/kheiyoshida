@@ -3,7 +3,7 @@ import { loop3D, memorize } from 'utils'
 import { revertToSphericalCoordinate, toDegrees } from '.'
 import { Camera } from '../camera/types'
 import { Position3D } from "./types"
-import { VectorAngles } from "./types"
+import { SphericalAngles } from "./types"
 import { drawAtVectorPosition } from '../render/drawers/draw'
 import { pushPop } from '../utils'
 
@@ -21,7 +21,7 @@ export const draw3DGrid = (numOfGrid = 3, size = 1000, camera?: Camera) => {
 
 export const drawVectorPosition = (
   cameraPosition: Position3D,
-  forwardDir: VectorAngles,
+  forwardDir: SphericalAngles,
   v: p5.Vector
 ) => {
   const relativeAngle = calcRelativeAngleFromPerspective(cameraPosition, forwardDir, v)
@@ -36,14 +36,14 @@ export const drawVectorPosition = (
 /**
  * rotate XY axis so that objects can face the camera's perspective
  */
-export const adjustToPerspective = (forwardDir: VectorAngles):void => {
+export const adjustToPerspective = (forwardDir: SphericalAngles):void => {
   p.rotateX(forwardDir.theta - 90)
   p.rotateY(forwardDir.phi + 180)
 }
 
 export const calcRelativeAngleFromPerspective = (
   position: Position3D,
-  forwardDir: VectorAngles,
+  forwardDir: SphericalAngles,
   target: p5.Vector
 ) => {
   const fromPositionToTarget = target.copy().sub(position)

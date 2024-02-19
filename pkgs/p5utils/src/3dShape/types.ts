@@ -1,5 +1,5 @@
 import type { Geometry, Vector } from 'p5'
-import { VectorAngles } from '../3d/types'
+import { SphericalAngles } from '../3d/types'
 
 export type ShapeGraph = ShapeNode[]
 
@@ -8,7 +8,7 @@ export type ShapeNode = {
   vertices: ShapeVertex[]
   edges: ShapeNode[]
   distanceToEachVertex: number
-  rotate?: VectorAngles
+  rotate?: SphericalAngles
   id?: string | number
 }
 

@@ -5,7 +5,7 @@ import {
   toDegrees,
   vectorFromDegreeAngles,
 } from '../3d'
-import { Position3D, VectorAngles } from '../3d/types'
+import { Position3D, SphericalAngles } from '../3d/types'
 
 export function getCameraCenter(camera: p5.Camera): Position3D {
   return [camera.centerX, camera.centerY, camera.centerZ]
@@ -14,7 +14,7 @@ export function getCameraCenter(camera: p5.Camera): Position3D {
 export function getForwardDirAngles(
   cameraCenter: Position3D,
   cameraPosition: Position3D
-): VectorAngles {
+): SphericalAngles {
   const cameraCenterV = new p5.Vector(...cameraCenter)
   const cameraPositionV = new p5.Vector(...cameraPosition)
   const [theta, phi] = revertToSphericalCoordinate(cameraCenterV.sub(cameraPositionV))
@@ -41,7 +41,7 @@ export const makeRangeMapper =
     return midValue + translate(value) * oneEquivalent
   }
 
-export const turnVectorByAngles = (vector: p5.Vector, angles: VectorAngles): p5.Vector => {
+export const turnVectorByAngles = (vector: p5.Vector, angles: SphericalAngles): p5.Vector => {
   const [theta, phi] = revertToSphericalCoordinate(vector).map(toDegrees)
   const vectorAngles = { theta, phi }
   const { theta: nt, phi: np } = sumVectorAngles(vectorAngles, angles)

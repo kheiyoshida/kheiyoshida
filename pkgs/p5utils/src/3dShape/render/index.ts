@@ -1,9 +1,9 @@
 import { Geometry } from 'p5'
 import { Position3D } from '../../3d/types'
-import { VectorAngles } from '../../3d/types'
+import { SphericalAngles } from '../../3d/types'
 import { pushPop } from '../../utils'
 
-export const renderGeometry = (geo: Geometry, position: number[], rotate?: VectorAngles): void => {
+export const renderGeometry = (geo: Geometry, position: number[], rotate?: SphericalAngles): void => {
   pushPop(() => {
     p.translate(...(position as Position3D))
     if (rotate) {

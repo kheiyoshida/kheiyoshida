@@ -1,5 +1,5 @@
 import p5 from "p5"
-import { VectorAngles } from "../../3d/types"
+import { SphericalAngles } from "../../3d/types"
 
 /**
  * base type for node object
@@ -28,7 +28,7 @@ export type BaseNode3D = BaseNode & {
   /**
    * movement angles stored for calculation
    */
-  angles: VectorAngles
+  angles: SphericalAngles
 }
 
 /**

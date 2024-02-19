@@ -3,7 +3,7 @@ import { createBase, move } from '.'
 import { Position3D } from "../../3d/types"
 import { createBase3D, restrain3D, restrain3dFromPosition, rotate3D } from './3d'
 import { BaseNode3D } from './types'
-import * as module3d from '../../3d'
+import * as angles from '../../3d/angles'
 
 beforeAll(() => {
   jest.spyOn(p, 'radians').mockImplementation((d) => (d * Math.PI) / 180)
@@ -46,7 +46,7 @@ test(`${restrain3dFromPosition.name}`, () => {
 test(`${rotate3D.name}`, () => {
   const node: BaseNode3D = { ...createBase(), angles: { theta: 0, phi: 0 } }
   jest.spyOn(node.move, 'mag').mockReturnValue(100)
-  const fromAngles = jest.spyOn(module3d, 'vectorFromDegreeAngles')
+  const fromAngles = jest.spyOn(angles, 'vectorFromDegreeAngles')
 
   rotate3D(node, 90, 180)
 

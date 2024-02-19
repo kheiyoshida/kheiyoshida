@@ -1,14 +1,14 @@
 import p5 from 'p5'
 import { PartialRequired, loop } from 'utils'
 import { sumVectorAngles } from '../../3d'
-import { Position3D, VectorAngles } from '../../3d/types'
+import { Position3D, SphericalAngles } from '../../3d/types'
 import { TETRAHEDRAL_DEGREE } from '../../constants'
 import { ShapeGraph, ShapeNode } from '../types'
 
 export function createShapeNode(
   position: Position3D = [0, 0, 0],
   distanceToEachVertex = 50,
-  rotate?: VectorAngles,
+  rotate?: SphericalAngles,
   id?: number
 ): ShapeNode {
   return {
@@ -39,7 +39,7 @@ export const connectShapeNodes = (node1: ShapeNode, node2: ShapeNode): void => {
 /**
  * note: theta axis rotation is not properly working
  */
-export const createTetraAngles = (baseAngles: VectorAngles): VectorAngles[] => {
+export const createTetraAngles = (baseAngles: SphericalAngles): SphericalAngles[] => {
   return [
     baseAngles,
     ...[...Array(3)].map((_, i) =>

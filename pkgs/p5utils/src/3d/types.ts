@@ -1,8 +1,5 @@
 
-/**
- * angles to determine 3d vector
- */
-export type VectorAngles = {
+export type SphericalAngles = {
   theta: number
   phi: number
 }

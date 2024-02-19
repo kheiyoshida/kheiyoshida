@@ -2,13 +2,13 @@ import p5 from 'p5'
 import { valueOrFn } from 'utils'
 import { distanceBetweenNodes, mutate } from '.'
 import { BaseNode3D } from './types'
-import { VectorAngles } from "../../3d/types"
+import { SphericalAngles } from "../../3d/types"
 import { distanceBetweenPositions, toRadians, vectorFromDegreeAngles } from '../../3d'
 import { Position3D } from "../../3d/types"
 
 export const createBase3D = (
   position: p5.Vector = new p5.Vector(),
-  angles: VectorAngles = {
+  angles: SphericalAngles = {
     theta: 0,
     phi: 0,
   },
