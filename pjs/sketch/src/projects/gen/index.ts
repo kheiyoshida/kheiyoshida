@@ -1,7 +1,7 @@
+import p5 from 'p5'
+import { pushPop } from 'p5utils/src/utils'
 import { SketchConfigStore, applyConfig } from 'p5utils/src/utils/project'
-import { randomFloatBetween as randomBetween } from 'utils'
-import { makeStore } from 'utils'
-import { expand } from 'p5utils/src/render/helpers/expand'
+import { makeStore, randomFloatBetween as randomBetween } from 'utils'
 import { Gene, grow } from './gene'
 
 const store = makeStore<SketchConfigStore>()
@@ -51,6 +51,29 @@ const seed = () => {
       )
     )
   )
+}
+
+export function expand<T>(
+  root: p5.Vector,
+  directions: number,
+  cb: (degree: number) => T,
+  rootDegree?: number
+) {
+  if (rootDegree) {
+    p.push()
+    p.rotate(rootDegree)
+  }
+  const devided = 360 / directions
+  const circle = [...Array(directions)].map((_, x) => x * devided)
+  const result: T[] = []
+  for (const degree of circle) {
+    pushPop(() => {
+      p.translate(root.x, root.y)
+      p.rotate(degree)
+      result.push(cb(degree))
+    })
+  }
+  return result
 }
 
 const draw = () => {
