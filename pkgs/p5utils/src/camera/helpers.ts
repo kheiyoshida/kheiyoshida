@@ -1,6 +1,6 @@
 import p5 from 'p5'
 import {
-  revertToSphericalCoordinate,
+  vectorToSphericalAngles,
   sumVectorAngles,
   toDegrees,
   vectorFromDegreeAngles,
@@ -17,7 +17,7 @@ export function getForwardDirAngles(
 ): SphericalAngles {
   const cameraCenterV = new p5.Vector(...cameraCenter)
   const cameraPositionV = new p5.Vector(...cameraPosition)
-  const [theta, phi] = revertToSphericalCoordinate(cameraCenterV.sub(cameraPositionV))
+  const [theta, phi] = vectorToSphericalAngles(cameraCenterV.sub(cameraPositionV))
   return { theta: toDegrees(theta), phi: toDegrees(phi) }
 }
 
@@ -42,7 +42,7 @@ export const makeRangeMapper =
   }
 
 export const turnVectorByAngles = (vector: p5.Vector, angles: SphericalAngles): p5.Vector => {
-  const [theta, phi] = revertToSphericalCoordinate(vector).map(toDegrees)
+  const [theta, phi] = vectorToSphericalAngles(vector).map(toDegrees)
   const vectorAngles = { theta, phi }
   const { theta: nt, phi: np } = sumVectorAngles(vectorAngles, angles)
   return vectorFromDegreeAngles(nt, np, vector.mag())

@@ -1,12 +1,12 @@
-import p5 from 'p5'
 import {
   divVectorAngles,
   getEvenlyMappedSphericalAngles,
-  revertToSphericalCoordinate,
   sumVectorAngles,
   toDegrees,
   toRadians,
   vectorFromDegreeAngles,
+  vectorToSphericalAngles,
+  vectorToSphericalAngles2,
 } from './angles'
 
 test.each([
@@ -23,25 +23,48 @@ test.each([
   expect(toDegrees(rad)).toBeCloseTo(deg)
 })
 
-test.each([
-  [50, 20],
-  [90, 30],
-  [90, 60],
-  [90, 80],
-  [90, 90],
-  [90, 100],
-  [20, 120],
-  [4, 120],
-  [140, 150],
-  [30, 180],
-  [30, 200],
-  [30, 270],
-  [150, 300],
-])(`${revertToSphericalCoordinate.name} (theta=%i, phi=%i)`, (theta, phi) => {
-  const vector = p5.Vector.fromAngles(toRadians(theta), toRadians(phi))
-  const [rTheta, rPhi] = revertToSphericalCoordinate(vector)
-  expect(toDegrees(rTheta)).toBeCloseTo(theta)
-  expect(toDegrees(rPhi)).toBeCloseTo(phi)
+describe(`vectorToAngles`, () => {
+  test.each([
+    [50, 20],
+    [90, 30],
+    [90, 60],
+    [90, 80],
+    [90, 90],
+    [90, 100],
+    [20, 120],
+    [4, 120],
+    [140, 150],
+    [30, 180],
+    [30, 200],
+    [30, 270],
+    [150, 300],
+  ])(`${vectorToSphericalAngles2.name} (theta=%i, phi=%i)`, (theta, phi) => {
+    const vector = vectorFromDegreeAngles(theta, phi)
+    const { theta: rt, phi: rp } = vectorToSphericalAngles2(vector)
+    expect(rt).toBeCloseTo(theta)
+    expect(rp < 0 ? rp + 360 : rp).toBeCloseTo(phi)
+  })
+
+  test.each([
+    [50, 20],
+    [90, 30],
+    [90, 60],
+    [90, 80],
+    [90, 90],
+    [90, 100],
+    [20, 120],
+    [4, 120],
+    [140, 150],
+    [30, 180],
+    [30, 200],
+    [30, 270],
+    [150, 300],
+  ])(`${vectorToSphericalAngles.name} (theta=%i, phi=%i)`, (theta, phi) => {
+    const vector = vectorFromDegreeAngles(theta, phi)
+    const [rTheta, rPhi] = vectorToSphericalAngles(vector)
+    expect(toDegrees(rTheta)).toBeCloseTo(theta)
+    expect(toDegrees(rPhi)).toBeCloseTo(phi)
+  })
 })
 
 test(`${sumVectorAngles.name}`, () => {

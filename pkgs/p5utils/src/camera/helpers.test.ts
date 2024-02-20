@@ -1,6 +1,6 @@
 import p5 from 'p5'
 import { expect } from 'test-utils'
-import { revertToSphericalCoordinate, toDegrees, toRadians } from '../3d'
+import { vectorToSphericalAngles, toDegrees, toRadians } from '../3d'
 import { Position3D } from '../3d/types'
 import {
   getCameraCenter,
@@ -35,12 +35,12 @@ test(`${getForwardDirAngles.name}`, () => {
 test(`${makeCircularMove.name}`, () => {
   const circularMove = makeCircularMove([30, 150])
   const result = circularMove({ theta: 0, phi: 0 })
-  const [theta, phi] = revertToSphericalCoordinate(result).map(toDegrees)
+  const [theta, phi] = vectorToSphericalAngles(result).map(toDegrees)
   expect(theta).toBeCloseTo(90)
   expect(phi).toBeCloseTo(360)
 
   const result2 = circularMove({ theta: toRadians(10), phi: toRadians(20) })
-  const [theta2, phi2] = revertToSphericalCoordinate(result2).map(toDegrees)
+  const [theta2, phi2] = vectorToSphericalAngles(result2).map(toDegrees)
   expect(Number(theta2.toFixed())).toBeCloseTo(100)
   expect(Number(phi2.toFixed())).toBeCloseTo(20)
 })

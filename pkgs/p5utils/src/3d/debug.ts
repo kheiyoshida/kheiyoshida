@@ -1,6 +1,6 @@
 import p5 from 'p5'
 import { loop3D, memorize } from 'utils'
-import { revertToSphericalCoordinate, toDegrees } from '.'
+import { vectorToSphericalAngles, toDegrees } from '.'
 import { Camera } from '../camera/types'
 import { Position3D } from "./types"
 import { SphericalAngles } from "./types"
@@ -47,7 +47,7 @@ export const calcRelativeAngleFromPerspective = (
   target: p5.Vector
 ) => {
   const fromPositionToTarget = target.copy().sub(position)
-  const [t, p] = revertToSphericalCoordinate(fromPositionToTarget)
+  const [t, p] = vectorToSphericalAngles(fromPositionToTarget)
   const [targetTheta, targetPhi] = [toDegrees(t), toDegrees(p)]
   const relativeAngle = {
     theta: targetTheta - forwardDir.theta,

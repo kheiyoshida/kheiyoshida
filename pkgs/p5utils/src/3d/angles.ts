@@ -6,20 +6,31 @@ export const toRadians = (degree: number) => degree * (Math.PI / 180)
 export const toDegrees = (radians: number) => radians / (Math.PI / 180)
 
 /**
+ * @returns spherical angels in *degrees*
  * https://en.wikipedia.org/wiki/Vector_fields_in_cylindrical_and_spherical_coordinates
  */
-export const revertToSphericalCoordinate = (vector: p5.Vector): [theta: number, phi: number] => {
+export const vectorToSphericalAngles2 = (vector: p5.Vector): SphericalAngles => {
+  const thetaRadians = Math.acos(-vector.y / vector.mag())
+  const phiRadians = Math.atan2(vector.x, vector.z)
+  return { theta: toDegrees(thetaRadians), phi: toDegrees(phiRadians) }
+}
+
+/**
+ * @returns spherical angels in *radians*, in tuple
+ * @deprecated use `vectorToSphericalAngles2`
+ * https://en.wikipedia.org/wiki/Vector_fields_in_cylindrical_and_spherical_coordinates
+ */
+export const vectorToSphericalAngles = (vector: p5.Vector): [theta: number, phi: number] => {
   const theta = Math.acos(-vector.y / vector.mag())
   const phi = Math.atan2(vector.x, vector.z)
   return [
     theta > 0 ? theta : Math.PI + theta,
     makePhiPositive(phi),
   ]
-}
-
-export const makePhiPositive = (phi: number) => {
-  if (phi > 0) return phi
-  return Math.PI * 2 + phi
+  function makePhiPositive(phi: number) {
+    if (phi > 0) return phi
+    return Math.PI * 2 + phi
+  }
 }
 
 export const sumVectorAngles = (...angles: SphericalAngles[]) => {
