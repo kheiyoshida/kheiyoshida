@@ -1,21 +1,7 @@
 import p5 from 'p5'
 import { randomIntBetween } from 'utils'
 
-export function gridPoint(unit = 100) {
-  for (let i = 0; i <= p.width; i += unit) {
-    for (let l = 0; l <= p.height; l += unit) {
-      p.point(i, l)
-    }
-  }
-}
-
-export function translateByRadius(degree: number, radius: number) {
-  const v = p5.Vector.fromAngle(p.radians(degree), radius)
-  p.translate(v)
-}
-
-// eslint-disable-next-line
-export function pushPop(cb: Function) {
+export function pushPop(cb: () => void) {
   p.push()
   cb()
   p.pop()
@@ -33,28 +19,18 @@ export const pointLine = (p1: number[], p2: number[]) => {
   p.line(p1[0], p1[1], p2[0], p2[1])
 }
 
-/**
- * convert degree into vector
- */
 export const degree2Vector = (theta: number, phi: number, velocity: number): p5.Vector => {
   const rad1 = p.radians(theta)
   const rad2 = p.radians(phi)
   return p5.Vector.fromAngles(rad1, rad2, velocity)
 }
 
-/**
- * quickly register capture handler on click
- */
 export const clickCapture = () => {
   p.mouseClicked = () => {
     p.saveCanvas(`${p.millis()}`, 'png')
   }
 }
 
-/**
- * randomize the vector's position
- * @param vec
- */
 export const shakeVector = (vec: p5.Vector, shake: number) =>
   p.createVector(vec.x + randomIntBetween(-shake, shake), vec.y + randomIntBetween(-shake, shake))
 
@@ -65,20 +41,12 @@ export const shakeVector3D = (vec: p5.Vector, shake: number) =>
     vec.z + randomIntBetween(-shake, shake)
   )
 
-/**
- * create x, y added vector
- */
 export const createAddedVector = (root: p5.Vector, x: number, y: number) => {
   const added = root.copy()
   added.add(x, y)
   return added
 }
 
-/**
- * calculate the angle from a vector to another
- * @param from
- * @param to
- */
 export const angleTowardsVector = (from: p5.Vector, to: p5.Vector) => {
   return to.copy().sub(from).heading()
 }
