@@ -1,6 +1,11 @@
 
 const workEntities: WorkInfo[] = [
   {
+    date: '240220',
+    type: ['sketch'],
+    title: 'wasted_revisited',
+  },
+  {
     date: '240131',
     type: ['sketch', 'music', 'video'],
     title: 'shinjuku',
