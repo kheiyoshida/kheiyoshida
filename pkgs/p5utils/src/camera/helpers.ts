@@ -1,7 +1,7 @@
 import p5 from 'p5'
 import {
   vectorToSphericalAngles,
-  sumVectorAngles,
+  sumAngles,
   toDegrees,
   vectorFromDegreeAngles,
 } from '../3d'
@@ -44,6 +44,6 @@ export const makeRangeMapper =
 export const turnVectorByAngles = (vector: p5.Vector, angles: SphericalAngles): p5.Vector => {
   const [theta, phi] = vectorToSphericalAngles(vector).map(toDegrees)
   const vectorAngles = { theta, phi }
-  const { theta: nt, phi: np } = sumVectorAngles(vectorAngles, angles)
+  const { theta: nt, phi: np } = sumAngles(vectorAngles, angles)
   return vectorFromDegreeAngles(nt, np, vector.mag())
 }

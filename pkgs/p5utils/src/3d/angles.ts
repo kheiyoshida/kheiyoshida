@@ -23,33 +23,37 @@ export const vectorToSphericalAngles2 = (vector: p5.Vector): SphericalAngles => 
 export const vectorToSphericalAngles = (vector: p5.Vector): [theta: number, phi: number] => {
   const theta = Math.acos(-vector.y / vector.mag())
   const phi = Math.atan2(vector.x, vector.z)
-  return [
-    theta > 0 ? theta : Math.PI + theta,
-    makePhiPositive(phi),
-  ]
+  return [theta > 0 ? theta : Math.PI + theta, makePhiPositive(phi)]
   function makePhiPositive(phi: number) {
     if (phi > 0) return phi
     return Math.PI * 2 + phi
   }
 }
 
-export const sumVectorAngles = (...angles: SphericalAngles[]) => {
+export const sumAngles = (...angles: SphericalAngles[]): SphericalAngles => {
   return angles.reduce(
     (prev, curr) => ({ theta: curr.theta + prev.theta, phi: curr.phi + prev.phi }),
     { theta: 0, phi: 0 }
   )
 }
 
-export const divVectorAngles = (angles: SphericalAngles, by: number) => {
+export const multAngles = (angles: SphericalAngles, by: number): SphericalAngles => {
+  return { theta: angles.theta * by, phi: angles.phi * by }
+}
+
+export const divAngles = (angles: SphericalAngles, by: number): SphericalAngles => {
   return { theta: angles.theta / by, phi: angles.phi / by }
 }
 
-export const randomAngle = () => ({
+export const randomAngles = (): SphericalAngles => ({
   theta: randomIntInclusiveBetween(0, 180),
   phi: randomIntInclusiveBetween(0, 360),
 })
 
-export const getEvenlyMappedSphericalAngles = (divisions: number, thetaRange: [number, number] = [30, 150]): SphericalAngles[] => {
+export const getEvenlyMappedSphericalAngles = (
+  divisions: number,
+  thetaRange: [number, number] = [30, 150]
+): SphericalAngles[] => {
   const angles: SphericalAngles[] = []
   const minTheta = thetaRange[0]
   const thetaUnit = thetaRange[1] - thetaRange[0]

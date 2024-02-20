@@ -1,6 +1,6 @@
 import p5 from 'p5'
 import { PartialRequired, loop } from 'utils'
-import { sumVectorAngles } from '../../3d'
+import { sumAngles } from '../../3d'
 import { Position3D, SphericalAngles } from '../../3d/types'
 import { TETRAHEDRAL_DEGREE } from '../../constants'
 import { ShapeGraph, ShapeNode } from '../types'
@@ -43,7 +43,7 @@ export const createTetraAngles = (baseAngles: SphericalAngles): SphericalAngles[
   return [
     baseAngles,
     ...[...Array(3)].map((_, i) =>
-      sumVectorAngles(baseAngles, { theta: TETRAHEDRAL_DEGREE, phi: i * 120 })
+      sumAngles(baseAngles, { theta: TETRAHEDRAL_DEGREE, phi: i * 120 })
     ),
   ]
 }

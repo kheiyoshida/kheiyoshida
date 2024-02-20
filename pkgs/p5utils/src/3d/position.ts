@@ -11,3 +11,9 @@ export const vectorBetweenPositions = (v1: Position3D, v2: Position3D) =>
 
 export const sumPosition3d = (...positions: Position3D[]) =>
   positions.reduce((p, c) => [p[0] + c[0], p[1] + c[1], p[2] + c[2]], [0, 0, 0])
+
+export const divPosition3d = (position: Position3D, by: number) =>
+  position.map((p) => p / by) as Position3D
+
+export const multPosition3d = (position: Position3D, by: number) =>
+  position.map((p) => p * by) as Position3D

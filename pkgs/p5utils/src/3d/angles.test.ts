@@ -1,7 +1,8 @@
 import {
-  divVectorAngles,
+  divAngles,
   getEvenlyMappedSphericalAngles,
-  sumVectorAngles,
+  multAngles,
+  sumAngles,
   toDegrees,
   toRadians,
   vectorFromDegreeAngles,
@@ -67,15 +68,19 @@ describe(`vectorToAngles`, () => {
   })
 })
 
-test(`${sumVectorAngles.name}`, () => {
-  expect(sumVectorAngles({ theta: 20, phi: 30 }, { theta: 50, phi: 120 })).toMatchObject({
+test(`${sumAngles.name}`, () => {
+  expect(sumAngles({ theta: 20, phi: 30 }, { theta: 50, phi: 120 })).toMatchObject({
     theta: 70,
     phi: 150,
   })
 })
 
-test(`${divVectorAngles.name}`, () => {
-  expect(divVectorAngles({ theta: 90, phi: 180 }, 2)).toMatchObject({ theta: 45, phi: 90 })
+test(`${multAngles.name}`, () => {
+  expect(multAngles({ theta: 90, phi: 180 }, 2)).toMatchObject({ theta: 180, phi: 360 })
+})
+
+test(`${divAngles.name}`, () => {
+  expect(divAngles({ theta: 90, phi: 180 }, 2)).toMatchObject({ theta: 45, phi: 90 })
 })
 
 test(`${getEvenlyMappedSphericalAngles.name}`, () => {
