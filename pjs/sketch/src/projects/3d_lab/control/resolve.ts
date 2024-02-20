@@ -1,7 +1,7 @@
-import { VectorAngles } from 'p5utils/src/3d/types'
-import { MoveDirection, MoveIntention, TurnIntention } from './types'
+import { divAngles, sumAngles } from 'p5utils/src/3d'
+import { SphericalAngles } from 'p5utils/src/3d/types'
 import { CameraStore } from '../state/camera'
-import { divVectorAngles, sumVectorAngles } from 'p5utils/src/3d'
+import { MoveDirection, MoveIntention, TurnIntention } from './types'
 
 export const resolveMoveIntention = (
   direction: MoveIntention
@@ -9,10 +9,7 @@ export const resolveMoveIntention = (
   const angles =
     direction.length === 1
       ? DirectionAngles[direction[0]]
-      : divVectorAngles(
-          sumVectorAngles(DirectionAngles[direction[0]], DirectionAngles[direction[1]]),
-          2
-        )
+      : divAngles(sumAngles(DirectionAngles[direction[0]], DirectionAngles[direction[1]]), 2)
   if (direction.length === 1) return [angles]
   else return [angles]
 }
@@ -28,19 +25,19 @@ export const resolveTurnIntention = (
     },
   ]
 }
-export const resolveTargetIntention = ({
-  x,
-  y,
-}: TurnIntention, width = 120): Parameters<CameraStore['updateTarget']> => {
+export const resolveTargetIntention = (
+  { x, y }: TurnIntention,
+  width = 120
+): Parameters<CameraStore['updateTarget']> => {
   return [
     {
-      phi: 180 - x * width / 2,
-      theta: 90 + y * width / 2,
+      phi: 180 - (x * width) / 2,
+      theta: 90 + (y * width) / 2,
     },
   ]
 }
 
-const DirectionAngles: { [k in MoveDirection]: VectorAngles } = {
+const DirectionAngles: { [k in MoveDirection]: SphericalAngles } = {
   front: { theta: 0, phi: 0 },
   back: { theta: 0, phi: 180 },
   left: { theta: 0, phi: 90 },

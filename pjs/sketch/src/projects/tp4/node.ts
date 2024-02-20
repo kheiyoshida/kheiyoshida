@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { VectorAngles } from 'p5utils/src/3d/types'
+import { SphericalAngles } from 'p5utils/src/3d/types'
 import { connect, disconnect } from 'p5utils/src/data/graph/node'
 import { GraphNode } from 'p5utils/src/data/graph/types'
 import { mutate } from 'p5utils/src/data/node'
@@ -16,7 +16,7 @@ export type Node = GraphNode<
 
 export const createNode = (
   position: p5.Vector,
-  angles: VectorAngles = {
+  angles: SphericalAngles = {
     theta: 0,
     phi: 0,
   },
@@ -24,11 +24,7 @@ export const createNode = (
   headID: number
 ): Node => ({
   position,
-  move: p5.Vector.fromAngles(
-    p.radians(angles.theta),
-    p.radians(angles.phi),
-    speed
-  ),
+  move: p5.Vector.fromAngles(p.radians(angles.theta), p.radians(angles.phi), speed),
   angles,
   edges: [],
   rank: 'head',
@@ -36,8 +32,7 @@ export const createNode = (
 })
 
 export const connectNode = (node: Node, edge: Node) => {
-  if (!node.edges.includes(edge) && !edge.edges.includes(node))
-    connect(node, edge)
+  if (!node.edges.includes(edge) && !edge.edges.includes(node)) connect(node, edge)
 }
 
 export const disconnectNode = (node: Node, edge: Node) => {

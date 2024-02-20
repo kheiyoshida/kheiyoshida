@@ -1,6 +1,6 @@
 import p5 from 'p5'
-import { revertToSphericalCoordinate, toDegrees } from 'p5utils/src/3d'
-import { Position3D, VectorAngles } from 'p5utils/src/3d/types'
+import { vectorToSphericalAngles2 } from 'p5utils/src/3d'
+import { Position3D, SphericalAngles } from 'p5utils/src/3d/types'
 import * as shape from 'p5utils/src/3dShape'
 
 const LengthPerUnit = 200
@@ -19,9 +19,8 @@ export const createNodeGeometry = (size: number, round: number): p5.Geometry => 
   return shape.finalizeGeometry(graph)
 }
 
-export const calcEdgeAngle = (nodePosition: Position3D, edgePosition: Position3D): VectorAngles => {
+export const calcEdgeAngle = (nodePosition: Position3D, edgePosition: Position3D): SphericalAngles => {
   const node = new p5.Vector(...nodePosition)
   const edge = new p5.Vector(...edgePosition)
-  const [theta, phi] = revertToSphericalCoordinate(edge.sub(node))
-  return { theta: toDegrees(theta), phi: toDegrees(phi) }
+  return vectorToSphericalAngles2(edge.sub(node))
 }

@@ -21,7 +21,7 @@ test.each([
   const edgePosition = p5.Vector.fromAngles(toRadians(t), toRadians(p)).array()
   const { theta, phi } = calcEdgeAngle([0, 0, 0], edgePosition as Position3D)
   expect(theta).toBeCloseTo(t)
-  expect(phi).toBeCloseTo(p)
+  expect(phi < 0 ? phi + 360 : phi).toBeCloseTo(p)
 })
 
 test.each([

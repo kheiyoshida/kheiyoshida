@@ -1,7 +1,12 @@
-import { toRadians } from 'p5utils/src/3d'
-import { createGraphNode, emitNodeEdge } from './node'
 import * as p5utils3d from 'p5utils/src/3d'
-import { VectorAngles } from 'p5utils/src/3d/types'
+import { toRadians } from 'p5utils/src/3d'
+import { SphericalAngles } from 'p5utils/src/3d/types'
+import { createGraphNode, emitNodeEdge } from './node'
+
+jest.mock('p5utils/src/3d', () => ({
+  __esModule: true,
+  ...jest.requireActual('p5utils/src/3d')
+}))
 
 describe(`node`, () => {
   it(`can be created with initial position`, () => {
@@ -18,7 +23,7 @@ describe(`node`, () => {
     const node = createGraphNode([0, 0, 0])
     const directionDelta = { theta: 45, phi: 180 }
     const growAmount = 100
-    const emitEdge = emitNodeEdge(node, )
+    const emitEdge = emitNodeEdge(node)
     const edge = emitEdge(directionDelta, growAmount)
     expect(edge.growDirection).toMatchObject({ theta: 45, phi: 180 })
     expect(edge.position[0]).toBeCloseTo(0)
@@ -47,7 +52,7 @@ describe(`node`, () => {
     expect(edges.length).toBe(3)
   })
   it(`can move within range`, () => {
-    jest.spyOn(p5utils3d, 'randomAngle').mockReturnValue({ theta: 90, phi: 0 })
+    jest.spyOn(p5utils3d, 'randomAngles').mockReturnValue({ theta: 90, phi: 0 })
     const moveAmount = 100
     const movableDistance = 300
     const node = createGraphNode([0, 0, 0], { theta: 0, phi: 0 }, moveAmount, movableDistance)
@@ -64,7 +69,7 @@ describe(`node`, () => {
   it(`can gradually slow down its speed when moving`, () => {
     const moveAmount = 100
     const decreaseSpeed = (s: number) => s - 10
-    jest.spyOn(p5utils3d, 'randomAngle').mockReturnValue({ theta: 90, phi: 180 })
+    jest.spyOn(p5utils3d, 'randomAngles').mockReturnValue({ theta: 90, phi: 180 })
     const node = createGraphNode([0, 0, 0], { theta: 0, phi: 0 }, moveAmount, 1000, decreaseSpeed)
     node.move()
     expect(node.position[2]).toBeCloseTo(-moveAmount)
@@ -73,9 +78,19 @@ describe(`node`, () => {
   })
   it(`can change the movement direction when moving`, () => {
     const moveAmount = 100
-    const changeDirection = (angle: VectorAngles) => ({ theta: angle.theta + 45, phi: angle.phi })
-    jest.spyOn(p5utils3d, 'randomAngle').mockReturnValue({ theta: 90, phi: 0 })
-    const node = createGraphNode([0, 0, 0], { theta: 0, phi: 0 }, moveAmount, 1000, s => s, changeDirection)
+    const changeDirection = (angle: SphericalAngles) => ({
+      theta: angle.theta + 45,
+      phi: angle.phi,
+    })
+    jest.spyOn(p5utils3d, 'randomAngles').mockReturnValue({ theta: 90, phi: 0 })
+    const node = createGraphNode(
+      [0, 0, 0],
+      { theta: 0, phi: 0 },
+      moveAmount,
+      1000,
+      (s) => s,
+      changeDirection
+    )
     node.move()
     expect(node.position[0]).toBeCloseTo(0)
     expect(node.position[1]).toBeCloseTo(0)
@@ -85,8 +100,8 @@ describe(`node`, () => {
     expect(node.position[1]).toBeCloseTo(moveAmount * Math.sin(toRadians(45)))
     expect(node.position[2]).toBeCloseTo(moveAmount + moveAmount * Math.cos(toRadians(45)))
   })
-  it(`can update its speed`, () =>{
-    jest.spyOn(p5utils3d, 'randomAngle').mockReturnValue({ theta: 90, phi: 0 })
+  it(`can update its speed`, () => {
+    jest.spyOn(p5utils3d, 'randomAngles').mockReturnValue({ theta: 90, phi: 0 })
     const initialSpeed = 100
     const newSpeed = 120
     const node = createGraphNode([0, 0, 0], { theta: 0, phi: 0 }, initialSpeed)

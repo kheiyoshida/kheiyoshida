@@ -1,6 +1,6 @@
 import p5 from 'p5'
-import { randomAngle, sumVectorAngles, vectorFromDegreeAngles } from 'p5utils/src/3d'
-import { Position3D, VectorAngles } from 'p5utils/src/3d/types'
+import { randomAngles, sumAngles, vectorFromDegreeAngles } from 'p5utils/src/3d'
+import { Position3D, SphericalAngles } from 'p5utils/src/3d/types'
 import * as NODE from 'p5utils/src/data/node'
 import * as NODE3D from 'p5utils/src/data/node/3d'
 import { createBase3D } from 'p5utils/src/data/node/3d'
@@ -10,7 +10,7 @@ import { Config } from '../config'
 export type TreeNode = {
   position: Position3D
   hasGrown: boolean
-  growDirection: VectorAngles
+  growDirection: SphericalAngles
   edges: TreeNode[]
   emitEdges: (
     numEdges: number,
@@ -27,15 +27,15 @@ export type EmitNodeEdgeRandomizer = ArgsRandomizer<ReturnType<typeof emitNodeEd
 
 export const createGraphNode = (
   position: Position3D,
-  growDirection: VectorAngles = { theta: 0, phi: 0 },
+  growDirection: SphericalAngles = { theta: 0, phi: 0 },
   moveAmount = 100,
   movableDistance = moveAmount * 3,
   decreaseSpeed = (speed: number) => speed,
-  changeDirection = (angle: VectorAngles) => angle,
+  changeDirection = (angle: SphericalAngles) => angle,
   growIndex = 0
 ): TreeNode => {
   const initialPosition = position
-  const _node = createBase3D(new p5.Vector(...position), randomAngle(), moveAmount)
+  const _node = createBase3D(new p5.Vector(...position), randomAngles(), moveAmount)
   const edges: TreeNode[] = []
 
   return {
@@ -72,10 +72,10 @@ export const emitNodeEdge =
   (
     node: TreeNode,
     decreaseSpeed?: (speed: number) => number,
-    changeDirection?: (angle: VectorAngles) => VectorAngles
+    changeDirection?: (angle: SphericalAngles) => SphericalAngles
   ) =>
-  (directionDelta: VectorAngles, growAmount: number): TreeNode => {
-    const newDir = sumVectorAngles(node.growDirection, directionDelta)
+  (directionDelta: SphericalAngles, growAmount: number): TreeNode => {
+    const newDir = sumAngles(node.growDirection, directionDelta)
     const posDelta = vectorFromDegreeAngles(newDir.theta, newDir.phi, growAmount)
     const newPosition = posDelta.add(node.position).array() as Position3D
     const moveAmount = Config.DefaultMoveAmount

@@ -1,4 +1,5 @@
-import { VectorAngles } from 'p5utils/src/3d/types'
+import { sumAngles } from 'p5utils/src/3d'
+import { SphericalAngles } from 'p5utils/src/3d/types'
 import { createCamera } from 'p5utils/src/camera'
 import { makeCircularMove } from 'p5utils/src/camera/helpers'
 import { Camera } from 'p5utils/src/camera/types'
@@ -11,14 +12,13 @@ import {
   randomFloatBetween,
 } from 'utils'
 import { Config } from '../config'
-import { sumVectorAngles } from 'p5utils/src/3d'
 
 export type CameraState = {
   camera: Camera
   speed: number
-  turn: VectorAngles
+  turn: SphericalAngles
   reverting: boolean
-  move: VectorAngles
+  move: SphericalAngles
 }
 
 export const init: LazyInit<CameraState> = () => {
@@ -38,7 +38,7 @@ export const init: LazyInit<CameraState> = () => {
 }
 
 export const reducers = {
-  updateTurn: (s) => (angle: VectorAngles) => {
+  updateTurn: (s) => (angle: SphericalAngles) => {
     if (angle.theta === 0 && angle.phi === 0) {
       s.reverting = true
     } else {
@@ -46,8 +46,8 @@ export const reducers = {
       s.turn = angle
     }
   },
-  updateMove: (s) => (moveAngle: VectorAngles) => {
-    const newAngle = sumVectorAngles(s.move, moveAngle)
+  updateMove: (s) => (moveAngle: SphericalAngles) => {
+    const newAngle = sumAngles(s.move, moveAngle)
     s.move = {
       theta: clamp(newAngle.theta, -0.03, 0.03),
       phi: clamp(newAngle.phi, -0.03, 0.03),

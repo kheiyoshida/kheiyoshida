@@ -1,5 +1,3 @@
-import { VectorAngles } from 'p5utils/src/3d/types'
-
 export type ControlIntention = {
   turn?: TurnIntention
   move?: MoveIntention

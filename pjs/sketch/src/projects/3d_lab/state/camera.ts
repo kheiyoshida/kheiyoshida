@@ -1,6 +1,6 @@
 import p5 from 'p5'
-import { sumVectorAngles } from 'p5utils/src/3d'
-import { VectorAngles } from 'p5utils/src/3d/types'
+import { sumAngles } from 'p5utils/src/3d'
+import { SphericalAngles } from 'p5utils/src/3d/types'
 import { createCamera } from 'p5utils/src/camera'
 import { Camera } from 'p5utils/src/camera/types'
 import { LazyInit, ReducerMap, createCosCurveArray, makeStoreV2 } from 'utils'
@@ -9,9 +9,9 @@ import { Config } from '../config'
 export type CameraState = {
   camera: Camera
   speed: number
-  turn: VectorAngles
+  turn: SphericalAngles
   target?: p5.Vector
-  turnQueue: VectorAngles[]
+  turnQueue: SphericalAngles[]
 }
 
 export const init: LazyInit<CameraState> = () => {
@@ -31,12 +31,12 @@ export const init: LazyInit<CameraState> = () => {
 }
 
 export const reducers = {
-  updateTarget: (s) => (angles: VectorAngles) => {
-    const trueAngles = sumVectorAngles(angles, { theta: -90, phi: -180 })
+  updateTarget: (s) => (angles: SphericalAngles) => {
+    const trueAngles = sumAngles(angles, { theta: -90, phi: -180 })
     s.camera.setRelativeDirection(trueAngles)
     s.speed = Config.CameraMoveSpeed
   },
-  updateTurn: (s) => (angle: VectorAngles) => {
+  updateTurn: (s) => (angle: SphericalAngles) => {
     s.turnQueue = createCosCurveArray(
       angle,
       (a, sv) => ({
@@ -48,7 +48,7 @@ export const reducers = {
   },
   updateMove:
     (s) =>
-    (relativeAngle: VectorAngles, speed: number = Config.CameraMoveSpeed) => {
+    (relativeAngle: SphericalAngles, speed: number = Config.CameraMoveSpeed) => {
       s.camera.setRelativeDirection(relativeAngle)
       s.speed = speed
     },
