@@ -16,7 +16,7 @@ const init: LazyInit<SkinState> = () => {
   const img = createRenderedTexture(30)
   return {
     img,
-    alpha: 200
+    alpha: 255
   }
 }
 
@@ -31,7 +31,7 @@ const updateImage = (img: p5.Image, alpha: number) => {
 const reducers = {
   updateImageAppearance: (s) => () => updateImage(s.img, s.alpha),
   updateAlpha: (s) => (MinusOneToOne: number) => {
-    s.alpha = 100 + Math.sin(MinusOneToOne) 
+    s.alpha = 100 + 150 * MinusOneToOne
   }
 } satisfies ReducerMap<SkinState>
 

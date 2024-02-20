@@ -14,6 +14,6 @@ export const Config = {
   CameraDecreaseSpeed: 2,
   RenderThreshold: 0.3,
   PaintInterval: 4,
-  CameraDistance: window.innerWidth > MOBILE_WIDTH ? [2000, 6000, 3000] : [3000, 7000, 4000],
+  CameraDistance: window.innerWidth > MOBILE_WIDTH ? [2000, 6000, 4000] : [4000, 8000, 6000],
   BackgroundGray: 250,
 } as const
