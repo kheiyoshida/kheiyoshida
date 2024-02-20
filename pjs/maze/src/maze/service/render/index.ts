@@ -1,4 +1,4 @@
-import { transColor } from 'p5utils/src/p5utils/color'
+import { transColor } from 'p5utils/src/render'
 import {
   changePaletteColor,
   getPalette,

@@ -1,7 +1,7 @@
 import { Geometry } from 'p5'
 import { Position3D } from '../../3d/types'
 import { SphericalAngles } from '../../3d/types'
-import { pushPop } from '../../utils'
+import { pushPop } from '../../render/utils'
 
 export const renderGeometry = (geo: Geometry, position: number[], rotate?: SphericalAngles): void => {
   pushPop(() => {

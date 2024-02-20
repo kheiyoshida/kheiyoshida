@@ -1,8 +1,8 @@
 import p5 from 'p5'
 import { FrequencyData } from 'p5utils/src/media/audio/types'
-import { drawLineBetweenVectors } from 'p5utils/src/render/drawers/draw'
-import { mapToSphere } from 'p5utils/src/render/helpers/sphere'
-import { degree2Vector, pushPop } from 'p5utils/src/utils/p5utils'
+import { drawLineBetweenVectors } from 'p5utils/src/render'
+import { mapToSphere } from 'p5utils/src/render'
+import { degree2Vector, pushPop } from 'p5utils/src/render'
 import { makePingpongNumberStore, randomIntInclusiveBetween } from 'utils'
 
 export const renderSoundShape = (dataArray: FrequencyData, center: p5.Vector, spin: number) => {

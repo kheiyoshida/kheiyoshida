@@ -4,7 +4,7 @@ import {
   randomColor,
   randomColorVector,
   transColor,
-} from 'p5utils/src/p5utils/color'
+} from 'p5utils/src/render'
 import { ColorPalette } from '.'
 import { Colors } from '../constants'
 

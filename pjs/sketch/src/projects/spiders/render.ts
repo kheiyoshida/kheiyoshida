@@ -1,5 +1,5 @@
-import { shakyLineBetweenVectors2D } from 'p5utils/src/render/drawers/draw'
-import { shakeVector } from 'p5utils/src/utils/p5utils'
+import { shakyLineBetweenVectors2D } from 'p5utils/src/render'
+import { shakeVector } from 'p5utils/src/render'
 import { Graph } from './graph'
 import { Node } from './node'
 

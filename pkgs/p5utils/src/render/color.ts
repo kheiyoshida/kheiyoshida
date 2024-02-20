@@ -1,15 +1,19 @@
 import p5 from 'p5'
-import { randomFloatBetween as randomBetween } from 'utils'
+import { randomIntInclusiveBetween } from 'utils'
 
-/**
- * generate random color, alpha can be inherited
- * @param original original color to copy alpha from
- * @returns new color
- */
+export function _randomColor(alpha = 255) {
+  const [c1, c2, c3] = [...Array(3)].map((_) => randomIntInclusiveBetween(0, 255))
+  return p.color(c1, c2, c3, alpha)
+}
+
+export function _moveColor(c: p5.Color, r: number, g: number, b: number, a = 0): p5.Color {
+  return p.color(p.red(c) + r, p.green(c) + g, p.blue(c) + b, p.alpha(c) + a)
+}
+
 export function randomColor(original?: p5.Color) {
   const [c1, c2, c3] = Array(3)
     .fill(0)
-    .map((_) => randomBetween(0, 255))
+    .map((_) => randomIntInclusiveBetween(0, 255))
   return original ? p.color(c1, c2, c3, p.alpha(original)) : p.color(c1, c2, c3)
 }
 
@@ -18,7 +22,8 @@ export type ColorVector = [number, number, number]
 export const randomColorVector = ([min, max]: [number, number]): ColorVector =>
   Array(3)
     .fill(0)
-    .map((_) => randomBetween(min, max)) as ColorVector
+    .map((_) => randomIntInclusiveBetween(min, max)) as ColorVector
+
 
 /**
  * move color by vector value, alpha can be inherited
@@ -26,7 +31,7 @@ export const randomColorVector = ([min, max]: [number, number]): ColorVector =>
  * @returns new color
  */
 export function moveColor(original: p5.Color, colorVector: ColorVector) {
-  const [c1, c2, c3] = colorVector.map((v) => randomBetween(0, v))
+  const [c1, c2, c3] = colorVector.map((v) => randomIntInclusiveBetween(0, v))
   return p.color(
     p.red(original) + c1,
     p.green(original) + c2,
@@ -34,6 +39,7 @@ export function moveColor(original: p5.Color, colorVector: ColorVector) {
     p.alpha(original)
   )
 }
+
 
 export function colorCopy(color: p5.Color) {
   return p.color(p.red(color), p.green(color), p.blue(color), p.alpha(color))

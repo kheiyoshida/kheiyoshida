@@ -5,7 +5,7 @@ import * as shape from 'p5utils/src/3dShape'
 import * as createGraph from 'p5utils/src/3dShape/create'
 import { finalizeGeometry } from 'p5utils/src/3dShape/finalize'
 import { ShapeGraph } from 'p5utils/src/3dShape/types'
-import { pushPop } from 'p5utils/src/utils'
+import { pushPop } from 'p5utils/src/render'
 import { LazyInit, ReducerMap, makeStoreV2, randomIntInclusiveBetween } from 'utils'
 
 type GeometryState = {

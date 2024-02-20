@@ -1,7 +1,7 @@
 import p5 from 'p5'
-import { randomFloatBetween as randomBetween, randomIntBetween } from 'utils'
+import { randomIntBetween } from 'utils'
 
-export const gridPoint = (unit = 100) => {
+export function gridPoint(unit = 100) {
   for (let i = 0; i <= p.width; i += unit) {
     for (let l = 0; l <= p.height; l += unit) {
       p.point(i, l)
@@ -9,38 +9,18 @@ export const gridPoint = (unit = 100) => {
   }
 }
 
-export const translateByRadius = (degree: number, radius: number) => {
+export function translateByRadius(degree: number, radius: number) {
   const v = p5.Vector.fromAngle(p.radians(degree), radius)
   p.translate(v)
 }
 
-export function randomColor(alpha = 255) {
-  const [c1, c2, c3] = [...Array(3)].map((_) => randomBetween(0, 255))
-  return p.color(c1, c2, c3, alpha)
-}
-
-/**
- * change color variables with delta values
- */
-export function moveColor(c: p5.Color, r: number, g: number, b: number, a = 0): p5.Color {
-  return p.color(p.red(c) + r, p.green(c) + g, p.blue(c) + b, p.alpha(c) + a)
-}
-
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line
 export function pushPop(cb: Function) {
   p.push()
   cb()
   p.pop()
 }
 
-/**
- * create a vector that's in specified distance/angle
- * from the original vector
- * @param v
- * @param angle
- * @param len
- * @returns
- */
 export function destVect(v: p5.Vector, angle: number, len: number) {
   return v.copy().add(p5.Vector.fromAngle(p.radians(angle), len))
 }
@@ -49,8 +29,8 @@ export function vline(v1: p5.Vector, v2: p5.Vector) {
   p.line(v1.x, v1.y, v2.x, v2.y)
 }
 
-export function colorCopy(color: p5.Color) {
-  return p.color(p.red(color), p.green(color), p.blue(color), p.alpha(color))
+export const pointLine = (p1: number[], p2: number[]) => {
+  p.line(p1[0], p1[1], p2[0], p2[1])
 }
 
 /**

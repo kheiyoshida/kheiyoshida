@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { pushPop } from 'p5utils/src/utils'
+import { pushPop } from 'p5utils/src/render'
 import { SketchConfigStore, applyConfig } from 'p5utils/src/utils/project'
 import { makeStore, randomFloatBetween as randomBetween } from 'utils'
 import { Gene, grow } from './gene'

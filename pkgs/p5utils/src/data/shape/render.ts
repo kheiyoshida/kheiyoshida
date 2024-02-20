@@ -1,7 +1,7 @@
 /* eslint-disable no-extra-semi */
 import p5, { Geometry } from 'p5'
-import { Shape, ShapeNode } from '../../data/shape/types'
-import { calcPerpendicularVector } from '../../data/shape/utils'
+import { Shape, ShapeNode } from './types'
+import { calcPerpendicularVector } from './utils'
 
 type pExtended = p5 & { beginGeometry: any; endGeometry: any }
 

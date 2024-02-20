@@ -1,4 +1,4 @@
-import { pushPop } from 'p5utils/src/p5utils'
+import { pushPop } from 'p5utils/src/render'
 import { Frame } from '.'
 
 export const debugFrames = (frames: Frame[]) => {

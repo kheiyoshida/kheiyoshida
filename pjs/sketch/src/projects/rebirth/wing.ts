@@ -1,5 +1,5 @@
 import p5 from 'p5'
-import { destVect } from 'p5utils/src/utils/p5utils'
+import { destVect } from 'p5utils/src/render'
 import { randomFloatBetween as randomBetween } from "utils"
 
 export class Wing {

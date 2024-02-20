@@ -1,8 +1,8 @@
 import p5 from 'p5'
 import { SphericalAngles } from 'p5utils/src/3d'
 import { BaseNode3D } from 'p5utils/src/data/node/types'
-import { shakyLineBetweenVectors3D } from 'p5utils/src/render/drawers/draw'
-import { pushPop, shakeVector3D } from 'p5utils/src/utils/p5utils'
+import { shakyLineBetweenVectors3D } from 'p5utils/src/render'
+import { pushPop, shakeVector3D } from 'p5utils/src/render'
 
 export type MidiNode3D = BaseNode3D
 

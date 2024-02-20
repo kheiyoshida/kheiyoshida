@@ -59,6 +59,9 @@ importers:
       p5:
         specifier: ^1.9.0
         version: 1.9.0
+      p5utils:
+        specifier: workspace:^
+        version: link:../../pkgs/p5utils
       tone:
         specifier: ^14.7.77
         version: 14.7.77

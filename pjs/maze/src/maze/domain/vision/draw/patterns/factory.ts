@@ -1,4 +1,4 @@
-import { pointLine } from 'p5utils/src/p5utils'
+import { pointLine } from 'p5utils/src/render'
 import {
   GridDrawerFactory,
   LayerDrawerFactory,

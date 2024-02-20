@@ -6,11 +6,11 @@ import {
   createSoundSource
 } from 'p5utils/src/media/audio/analyzer'
 import { FFTSize } from 'p5utils/src/media/audio/types'
-import { drawLineBetweenVectors } from 'p5utils/src/render/drawers/draw'
-import { mapToSphere } from 'p5utils/src/render/helpers/sphere'
+import { drawLineBetweenVectors } from 'p5utils/src/render'
+import { mapToSphere } from 'p5utils/src/render'
 import { instruction } from "p5utils/src/utils/project"
 import { randomFloatBetween as randomBetween } from "utils"
-import { degree2Vector, pushPop } from 'p5utils/src/utils/p5utils'
+import { degree2Vector, pushPop } from 'p5utils/src/render'
 
 let cw: number
 let ch: number
