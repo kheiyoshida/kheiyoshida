@@ -8,9 +8,6 @@ import {
 import { LazyInit, ReducerMap, makeStoreV2, pipe } from 'utils'
 import { createRenderedTexture } from 'p5utils/src/3dShape/texture'
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const imgLoc = require('../../../assets/img/man.jpg')
-
 export type SkinState = {
   img: p5.Image
   pg: p5.Graphics
