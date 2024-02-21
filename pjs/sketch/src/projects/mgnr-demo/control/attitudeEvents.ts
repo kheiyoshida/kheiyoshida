@@ -1,4 +1,3 @@
-import { _moveColor, moveColor } from 'p5utils/src/render'
 import {
   EventThresholdFrameNumber1,
   EventThresholdFrameNumber2,
@@ -9,7 +8,7 @@ import {
   SilentThreshold,
 } from '../constants'
 import { music } from '../sound'
-import { sketchConfigStore } from '../state'
+import { sketchStore } from '../state'
 import { CommandGrid, Scenes, buildCommandGrid } from './commandGrid'
 
 export const resolveEvents =
@@ -47,7 +46,7 @@ export const buildActiveCommandGrid = (m: ReturnType<typeof music>): CommandGrid
   buildCommandGrid({
     common: {
       1: () => {
-        sketchConfigStore.update('fillColor', (c) => _moveColor(c, 1, 1, 1, -1))
+        sketchStore.updateFillColor('brighten')
       },
       5: () => {
         m.startMod()
@@ -99,13 +98,11 @@ export const buildStillCommandGrid = (m: ReturnType<typeof music>): CommandGrid 
   buildCommandGrid({
     common: {
       1: () => {
-        sketchConfigStore.update('fillColor', (c) => _moveColor(c, -2, -2, -2, 2))
+        sketchStore.updateFillColor('darken')
         m.startMod()
         m.exSynFadeIn()
-        
       },
-      5: () => {
-      },
+      5: () => {},
     },
     neutral: {
       1: () => {
