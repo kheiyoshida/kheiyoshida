@@ -19,3 +19,7 @@ export const SilentThreshold = 20
 export const LoudThreshold = 30
 
 export const SECONDS_TO_CHANGE_ATTITUDE = 2.5
+
+export const MinRoomVar = 10
+export const InitialRoomVar = 30
+export const MaxRoomVar = 40

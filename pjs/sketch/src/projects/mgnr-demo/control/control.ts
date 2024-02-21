@@ -1,6 +1,7 @@
 import p5 from 'p5'
 import { makeStore } from 'utils'
 import { bindKeyEvent, bindTouchEvent } from './bindInput'
+import { variableStore } from '../state'
 
 export type Direction = 'go' | 'back' | 'right' | 'left' | null
 
@@ -8,8 +9,6 @@ const controlStore = makeStore<{
   camera: p5.Camera
   dir: Direction
   fieldRange: number
-  active: number
-  still: number
 }>()
 
 export const setupControl = (fieldRange: number, attitudeThreshold: number) => {
@@ -17,8 +16,6 @@ export const setupControl = (fieldRange: number, attitudeThreshold: number) => {
     camera: p.createCamera(),
     dir: null,
     fieldRange,
-    active: 0,
-    still: 0,
   })
 
   const updateDir = (dir: Direction) => controlStore.update('dir', dir)
@@ -34,18 +31,18 @@ export const setupControl = (fieldRange: number, attitudeThreshold: number) => {
   }) => {
     const dir = controlStore.read('dir')
     if (dir === 'go') {
-      controlStore.update('active', (f) => f + 1)
-      if (controlStore.read('active') > attitudeThreshold) {
-        controlStore.update('still', 0)
+      variableStore.updateAttitude('active')
+      if (variableStore.current.active > attitudeThreshold) {
+        variableStore.resetAttitude('still')
       }
     }
     if (dir === null || dir === 'left' || dir === 'right') {
-      controlStore.update('still', (f) => f + 1)
-      if (controlStore.read('still') > attitudeThreshold) {
-        controlStore.update('active', 0)
+      variableStore.updateAttitude('still')
+      if (variableStore.current.still > attitudeThreshold) {
+        variableStore.resetAttitude('active')
       }
     }
-    const { active, still } = controlStore.read()
+    const { active, still } = variableStore.current
     onActive(active)
     onStill(still)
   }

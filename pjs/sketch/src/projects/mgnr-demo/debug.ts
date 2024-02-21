@@ -16,7 +16,6 @@ export const createManualCommandInvokeButtons = (activeCommands: CommandGrid, st
         const btn = document.createElement('button')
         btn.innerText = `${scene} ${threshold}`
         btn.onclick = () => {
-          console.log(scene, threshold)
           commands[scene][threshold](20)
           commands['common'][threshold](20)
         }

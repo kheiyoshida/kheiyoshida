@@ -1,7 +1,6 @@
 import p5 from 'p5'
 import { applyConfig } from 'p5utils/src/utils/project'
 import * as Tone from 'tone'
-import { randomIntInclusiveBetween } from 'utils'
 import { FrameRate, SECONDS_TO_CHANGE_ATTITUDE, fieldRange, treeRange } from './constants'
 import {
   buildActiveCommandGrid,
@@ -11,12 +10,11 @@ import {
 import { setupControl } from './control/control'
 import { generateTrees } from './objects'
 import { music } from './sound'
-import { sketchStore } from './state'
+import { sketchStore, variableStore } from './state'
 import { showInstruction } from './ui'
 
 // state
 let geometries: p5.Geometry[]
-let roomVar = 30
 
 // services
 const musicCommands = music()
@@ -42,14 +40,15 @@ const setup = () => {
 }
 
 const draw = () => {
+  const { active, still, roomVar } = variableStore.current
+  console.log(active, still)
   control.move()
   control.detectAttitude({
     onActive: resolveEvents(roomVar, activeCommands, 'active'),
     onStill: resolveEvents(roomVar, stillCommands, 'still'),
   })
   control.restrictPosition(() => {
-    // room var holds random value between 10 and 40
-    roomVar = Math.max(10, Math.min(roomVar + randomIntInclusiveBetween(-10, 10), 40))
+    variableStore.updateRoomVar()
     geometries = generateTrees(treeRange, roomVar, roomVar)
     sketchStore.updateStrokeColor(roomVar)
   })
