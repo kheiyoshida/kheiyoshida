@@ -1,5 +1,5 @@
-export const fieldRange = 2000
-export const treeRange = fieldRange * 0.9
+export const FieldRange = 2000
+export const TreeRange = FieldRange * 0.9
 export const FrameRate = 30
 
 // thresholds
@@ -19,6 +19,7 @@ export const SilentThreshold = 20
 export const LoudThreshold = 30
 
 export const SECONDS_TO_CHANGE_ATTITUDE = 2.5
+export const AttitudeThresholdFrames = FrameRate * SECONDS_TO_CHANGE_ATTITUDE
 
 export const MinRoomVar = 10
 export const InitialRoomVar = 30

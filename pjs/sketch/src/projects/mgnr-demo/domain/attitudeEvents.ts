@@ -7,12 +7,12 @@ import {
   LoudThreshold,
   SilentThreshold,
 } from '../constants'
-import { music } from '../sound'
-import { sketchStore } from '../state'
+import { MusicCommands } from '../sound'
+import { makeSketchStore } from '../state/sketch'
 import { CommandGrid, Scenes, buildCommandGrid } from './commandGrid'
 
-export const resolveEvents =
-  (roomVar: number, commandGrid: CommandGrid, id?: string) => (frames: number) => {
+export const makeEventResolver =
+  (commandGrid: CommandGrid) => (roomVar: number, frames: number) => {
     handleThreshold('common')
     if (roomVar <= SilentThreshold) {
       handleThreshold('silent')
@@ -42,7 +42,10 @@ export const resolveEvents =
     }
   }
 
-export const buildActiveCommandGrid = (m: ReturnType<typeof music>): CommandGrid =>
+export const buildActiveCommandGrid = (
+  m: MusicCommands,
+  sketchStore: ReturnType<typeof makeSketchStore>
+): CommandGrid =>
   buildCommandGrid({
     common: {
       1: () => {
@@ -94,7 +97,10 @@ export const buildActiveCommandGrid = (m: ReturnType<typeof music>): CommandGrid
     },
   })
 
-export const buildStillCommandGrid = (m: ReturnType<typeof music>): CommandGrid =>
+export const buildStillCommandGrid = (
+  m: MusicCommands,
+  sketchStore: ReturnType<typeof makeSketchStore>
+): CommandGrid =>
   buildCommandGrid({
     common: {
       1: () => {

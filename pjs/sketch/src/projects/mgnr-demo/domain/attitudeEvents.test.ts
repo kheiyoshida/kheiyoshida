@@ -5,7 +5,7 @@ import {
   LoudThreshold,
   SilentThreshold,
 } from '../constants'
-import { resolveEvents } from './attitudeEvents'
+import { makeEventResolver } from './attitudeEvents'
 import { CommandGrid } from './commandGrid'
 
 const commandGrid: CommandGrid = {
@@ -39,7 +39,7 @@ const commandGrid: CommandGrid = {
   },
 }
 
-describe(`${resolveEvents.name}`, () => {
+describe(`${makeEventResolver.name}`, () => {
   beforeEach(() => {
     jest.resetAllMocks()
   })
@@ -60,7 +60,8 @@ describe(`${resolveEvents.name}`, () => {
   `(
     `should run the matching event handler from provided command grid`,
     ({ roomVar, frames, handler }) => {
-      resolveEvents(roomVar, commandGrid)(frames)
+      const resolver = makeEventResolver(commandGrid)
+      resolver(roomVar, frames, )
       expect(handler).toHaveBeenCalledWith(roomVar)
     }
   )

@@ -1,4 +1,4 @@
-import { Direction } from './control'
+import { Direction } from '../types'
 
 export const bindTouchEvent = (updateDir: (dir: Direction) => void) => {
   p.touchMoved = () => {

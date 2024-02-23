@@ -1,4 +1,4 @@
-import { CommandGrid, Scenes, Thresholds } from './control/commandGrid'
+import { CommandGrid, Scenes, Thresholds } from '../domain/commandGrid'
 
 export const createManualCommandInvokeButtons = (activeCommands: CommandGrid, stillCommands: CommandGrid) => {
   const scenes: Scenes[] = ['loud', 'neutral', 'silent']

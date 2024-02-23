@@ -1,16 +1,18 @@
 import p5 from 'p5'
 import { applyConfig } from 'p5utils/src/utils/project'
 import * as Tone from 'tone'
-import { FrameRate, SECONDS_TO_CHANGE_ATTITUDE, fieldRange, treeRange } from './constants'
+import { TreeRange } from './constants'
+import { bindKeyEvent, bindTouchEvent } from './control/bindInput'
+import { restrictPosition } from './domain'
+import { updateAttitude } from './domain/attitude'
 import {
   buildActiveCommandGrid,
   buildStillCommandGrid,
-  resolveEvents,
-} from './control/attitudeEvents'
-import { setupControl } from './control/control'
-import { generateTrees } from './objects'
+  makeEventResolver,
+} from './domain/attitudeEvents'
+import { generateTrees } from './services/objects'
 import { music } from './sound'
-import { sketchStore, variableStore } from './state'
+import { cameraStore, sketchStore, variableStore } from './state'
 import { showInstruction } from './ui'
 
 // state
@@ -22,11 +24,12 @@ const startSound = () => {
   Tone.start()
   Tone.Transport.start()
 }
-let control: ReturnType<typeof setupControl>
 
 // commands
-const activeCommands = buildActiveCommandGrid(musicCommands)
-const stillCommands = buildStillCommandGrid(musicCommands)
+const activeCommands = buildActiveCommandGrid(musicCommands, sketchStore)
+const stillCommands = buildStillCommandGrid(musicCommands, sketchStore)
+const onActive = makeEventResolver(activeCommands)
+const onStill = makeEventResolver(stillCommands)
 
 const setup = () => {
   showInstruction(startSound)
@@ -35,21 +38,25 @@ const setup = () => {
   applyConfig(sketchStore.current)
   p.noStroke()
 
-  geometries = generateTrees(treeRange, 40)
-  control = setupControl(fieldRange, FrameRate * SECONDS_TO_CHANGE_ATTITUDE)
+  cameraStore.lazyInit()
+  bindKeyEvent(cameraStore.updateDir)
+  bindTouchEvent(cameraStore.updateDir)
+
+  geometries = generateTrees(TreeRange, 40)
 }
 
 const draw = () => {
-  const { active, still, roomVar } = variableStore.current
-  console.log(active, still)
-  control.move()
-  control.detectAttitude({
-    onActive: resolveEvents(roomVar, activeCommands, 'active'),
-    onStill: resolveEvents(roomVar, stillCommands, 'still'),
-  })
-  control.restrictPosition(() => {
+  const { roomVar } = variableStore.current
+
+  cameraStore.move()
+  updateAttitude(cameraStore.current.dir, variableStore)
+
+  onActive(variableStore.current.roomVar, variableStore.current.active)
+  onStill(variableStore.current.roomVar, variableStore.current.active)
+
+  restrictPosition(cameraStore.current.camera, () => {
     variableStore.updateRoomVar()
-    geometries = generateTrees(treeRange, roomVar, roomVar)
+    geometries = generateTrees(TreeRange, roomVar, roomVar)
     sketchStore.updateStrokeColor(roomVar)
   })
 

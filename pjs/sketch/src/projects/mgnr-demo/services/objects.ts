@@ -70,13 +70,6 @@ const growTree = (initialNode: ShapeNode, maxRecursion: number) => {
   return nodes
 }
 
-/**
- * generate trees with given configs
- * @param range 
- * @param numOfTrees 
- * @param maxRecursion 
- * @returns 
- */
 export const generateTrees = (
   range: number,
   numOfTrees: number,

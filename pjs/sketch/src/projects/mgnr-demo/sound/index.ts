@@ -10,6 +10,8 @@ import { setupPadCh } from './inst/pad'
 import { setupSynCh } from './inst/syn'
 import { setupTom } from './inst/tom'
 
+export type MusicCommands = ReturnType<typeof music>
+
 export const music = () => {
   Transport.bpm.value = randomIntInclusiveBetween(96, 106)
 
