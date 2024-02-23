@@ -1,18 +1,20 @@
+import { detectMove } from 'p5utils/src/control'
+import { moveThreshold } from '../constants'
 import { Direction } from '../types'
 
 export const bindTouchEvent = (updateDir: (dir: Direction) => void) => {
   p.touchMoved = () => {
-    const moveThreshold = 20
-    if (p.winMouseX > p.pwinMouseX + moveThreshold) {
+    const { x, y } = detectMove()
+    if (x > moveThreshold) {
       updateDir('right')
     }
-    if (p.winMouseX < p.pwinMouseX - moveThreshold) {
+    if (x < -moveThreshold) {
       updateDir('left')
     }
-    if (p.winMouseY > p.pwinMouseY + moveThreshold) {
+    if (y > moveThreshold) {
       updateDir('back')
     }
-    if (p.winMouseY < p.pwinMouseY - moveThreshold) {
+    if (y < -moveThreshold) {
       updateDir('go')
     }
   }

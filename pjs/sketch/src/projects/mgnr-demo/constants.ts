@@ -1,5 +1,8 @@
 export const FieldRange = 2000
 export const TreeRange = FieldRange * 0.9
+
+export const InitialNumOfTrees = 40
+
 export const FrameRate = 30
 
 // thresholds
@@ -24,3 +27,5 @@ export const AttitudeThresholdFrames = FrameRate * SECONDS_TO_CHANGE_ATTITUDE
 export const MinRoomVar = 10
 export const InitialRoomVar = 30
 export const MaxRoomVar = 40
+
+export const moveThreshold = 20
