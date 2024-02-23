@@ -1,4 +1,9 @@
-import { SwipeOrMouseMove, TouchOrMousePosition, normalizeInputValues } from 'p5utils/src/control'
+import {
+  SwipeOrMouseMove,
+  TouchOrMousePosition,
+  makeSwipeTracker,
+  normalizeInputValues,
+} from 'p5utils/src/control'
 import { moveThreshold } from '../constants'
 import { MoveDirection } from '../types'
 import { ControlIntention } from './types'
@@ -36,5 +41,14 @@ export const translateMouseIntention = (
 ): ControlIntention => {
   return {
     turn: normalizeInputValues(position, center, 1200),
+  }
+}
+
+export const translateSwipeLookIntention = (
+  position: TouchOrMousePosition,
+  swipe: ReturnType<typeof makeSwipeTracker>
+): ControlIntention => {
+  return {
+    turn: swipe.getNormalizedValues(position),
   }
 }
