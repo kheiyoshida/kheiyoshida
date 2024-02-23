@@ -25,8 +25,8 @@ export const resolveTurnIntention = ({
 }: TurnIntention): Parameters<CameraStore['updateTurn']> => {
   return [
     {
-      theta: y / FrameRate,
-      phi: -x / FrameRate,
+      theta: (y * 60) / FrameRate,
+      phi: (-x * 60) / FrameRate,
     },
   ]
 }

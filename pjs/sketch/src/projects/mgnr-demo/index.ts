@@ -1,3 +1,5 @@
+import { draw3DGrid } from 'p5utils/src/3d'
+import { loadFont } from 'p5utils/src/font'
 import { applyConfig } from 'p5utils/src/utils/project'
 import * as Tone from 'tone'
 import { bindControl, bindRoutineControl } from './control'
@@ -28,11 +30,13 @@ const setup = () => {
   sketchStore.lazyInit()
   applyConfig(sketchStore.current)
   p.noStroke()
+  p.angleMode(p.DEGREES)
 
   cameraStore.lazyInit()
   bindControl(cameraStore)
 
   objectStore.lazyInit()
+  loadFont()
 }
 
 const draw = () => {
@@ -58,6 +62,8 @@ const draw = () => {
   objectStore.current.trees.forEach((tree) => {
     p.model(tree)
   })
+  // p.fill('white')
+  // draw3DGrid(3, 500, cameraStore.current.camera)
 }
 
 export default <Sketch>{

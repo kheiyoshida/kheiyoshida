@@ -34,11 +34,7 @@ export const translateMouseIntention = (
   position: TouchOrMousePosition,
   center = { x: window.innerWidth / 2, y: window.innerHeight / 2 }
 ): ControlIntention => {
-  const { x, y } = normalizeInputValues(position, center, 1200)
   return {
-    turn: {
-      x: Math.abs(x) > 0.1 ? x : 0,
-      y: Math.abs(y) > 0.1 ? y : 0,
-    },
+    turn: normalizeInputValues(position, center, 1200),
   }
 }

@@ -14,6 +14,7 @@ export type Camera = {
   cameraCenter: Position3D
   forwardDir: SphericalAngles
   turnWithFocus: (angles: SphericalAngles, focus: Position3D) => void
+  keepFocus: () => void
 }
 
 export type CameraNode = {

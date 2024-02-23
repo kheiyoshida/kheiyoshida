@@ -69,5 +69,6 @@ export function createCamera(p5camera?: p5.Camera): Camera {
       const newFocus = sumPosition3d(node.position, turned.array() as Position3D)
       setFocus(newFocus)
     },
+    keepFocus
   }
 }

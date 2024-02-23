@@ -10,7 +10,7 @@ import {
 const MOBILE_WIDTH = 800
 export const bindControl = (camera: CameraStore): void => {
   if (window.innerWidth < MOBILE_WIDTH) bindDeviceTouchEvents(camera)
-  else bindMouseKeyControlEvents()
+  else bindMouseKeyControlEvents(camera)
 }
 
 const bindDeviceTouchEvents = (cameraStore: CameraStore): void => {
@@ -26,8 +26,11 @@ const bindDeviceTouchEvents = (cameraStore: CameraStore): void => {
 }
 
 let detectKeys: ReturnType<typeof makeDetectKeys>
-const bindMouseKeyControlEvents = (): void => {
+const bindMouseKeyControlEvents = (cameraStore: CameraStore): void => {
   detectKeys = makeDetectKeys([p.UP_ARROW, p.DOWN_ARROW, p.RIGHT_ARROW, p.LEFT_ARROW])
+  p.mouseClicked = () => {
+    cameraStore.toggleMode()
+  }
 }
 
 export const bindRoutineControl = (camera: CameraStore): void => {
