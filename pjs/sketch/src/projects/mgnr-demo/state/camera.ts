@@ -8,7 +8,7 @@ import { MoveDirection } from '../types'
 type CameraState = {
   camera: Camera
   speed: number
-  dirs: MoveDirection[]
+  dirs: MoveDirection[] | null
   mode: CameraMode
   look: SphericalAngles
   lookCenter: Position3D
@@ -47,13 +47,14 @@ const reducers = {
       s.lookCenter = lookCenter.array() as Position3D
     }
   },
-  updateMove: (s) => (dirs: MoveDirection[]) => {
+  updateMove: (s) => (dirs: CameraState['dirs']) => {
     s.dirs = dirs
+    if (s.dirs === null) return
     if (s.dirs.length !== 0) {
-      s.speed = DefaultSpeed
-      const phiValue = dirs.reduce((prev, dir) => prev + DirectionalPhiValues[dir], 0) / dirs.length
+      const phiValue = s.dirs.reduce((prev, dir) => prev + DirectionalPhiValues[dir], 0) / s.dirs.length
       s.camera.setRelativeMoveDirection({ theta: 0, phi: phiValue })
     }
+    s.speed = DefaultSpeed
   },
   updateTurn: (s) => (relativeAngles: SphericalAngles) => {
     if (s.mode === 'move') {
@@ -66,7 +67,9 @@ const reducers = {
   },
   move: (s) => () => {
     if (s.speed === 1 || s.mode !== 'move') return
-    s.speed = consumeSpeed(s.speed)
+    if (s.dirs === null) {
+      s.speed = consumeSpeed(s.speed)
+    }
     s.camera.setMoveSpeed(s.speed)
     s.camera.move()
   },

@@ -28,4 +28,7 @@ export const MinRoomVar = 10
 export const InitialRoomVar = 30
 export const MaxRoomVar = 40
 
-export const moveThreshold = 20
+export const SwipeOneEquivalent = 500
+export const SwipeMoveThreshold = 20 / SwipeOneEquivalent
+
+export const SightAngleWidth = 160

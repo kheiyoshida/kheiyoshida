@@ -8,14 +8,23 @@ export const normalizeMouseInput = (mouse: TouchOrMousePosition, oneEquivalent =
 export const getCenterPosition = () => ({ x: window.innerWidth / 2, y: window.innerHeight / 2 })
 
 export const makeSwipeTracker = (oneEquivalent = 400) => {
-  let swipeStarted: SwipeOrMouseMove
+  let swipeStarted: SwipeOrMouseMove | undefined
   return {
+    get isSwipeHappening() {
+      return swipeStarted ? true : false
+    },
     startSwipe: (position: SwipeOrMouseMove) => {
       swipeStarted = position
     },
     getNormalizedValues: (currentPosition: SwipeOrMouseMove): NormalizedInputValues => {
+      if (!swipeStarted) {
+        throw Error(`swipe is not happening`)
+      }
       return normalizeInputValues(currentPosition, swipeStarted, oneEquivalent)
     },
+    endSwipe: () => {
+      swipeStarted = undefined
+    }
   }
 }
 

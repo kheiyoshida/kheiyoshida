@@ -12,6 +12,7 @@ import {
 import { music } from './services/sound'
 import { showInstruction } from './services/ui'
 import { cameraStore, objectStore, sketchStore, variableStore } from './state'
+import { updateAttitude } from './domain/attitude'
 
 const musicCommands = music()
 const startSound = () => {
@@ -44,7 +45,7 @@ const draw = () => {
 
   bindRoutineControl(cameraStore)
   cameraStore.move()
-  // updateAttitude(cameraStore.current.dir, variableStore)
+  updateAttitude(cameraStore.current.dirs, variableStore)
   onActive(variableStore.current.roomVar, variableStore.current.active)
   onStill(variableStore.current.roomVar, variableStore.current.active)
 

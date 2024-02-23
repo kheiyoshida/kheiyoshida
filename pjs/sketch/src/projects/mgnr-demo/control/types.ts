@@ -10,4 +10,4 @@ export type TurnIntention = {
   y: number
 }
 
-export type MoveIntention = MoveDirection[]
+export type MoveIntention = MoveDirection[] | null

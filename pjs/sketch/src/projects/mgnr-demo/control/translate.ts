@@ -1,20 +1,24 @@
-import {
-  SwipeOrMouseMove,
-  TouchOrMousePosition,
-  makeSwipeTracker,
-  normalizeInputValues,
-} from 'p5utils/src/control'
-import { moveThreshold } from '../constants'
+import { TouchOrMousePosition, makeSwipeTracker, normalizeInputValues } from 'p5utils/src/control'
+import { SwipeMoveThreshold } from '../constants'
 import { MoveDirection } from '../types'
 import { ControlIntention } from './types'
 
-export const translateSwipeIntention = ({ x, y }: SwipeOrMouseMove): ControlIntention => {
+export const translateSwipeMoveIntention = (
+  position: TouchOrMousePosition,
+  swipe: ReturnType<typeof makeSwipeTracker>
+): ControlIntention => {
+  const { x, y } = swipe.getNormalizedValues(position)
+  return {
+    move: swipeMove(y),
+    turn: { x, y },
+  }
+}
+
+const swipeMove = (y: number) => {
   const move: MoveDirection[] = []
-  if (x > moveThreshold) move.push(MoveDirection.right)
-  if (x < -moveThreshold) move.push(MoveDirection.left)
-  if (y > moveThreshold) move.push(MoveDirection.back)
-  if (y < -moveThreshold) move.push(MoveDirection.front)
-  return { move }
+  if (y > SwipeMoveThreshold) move.push(MoveDirection.back)
+  else if (y < -SwipeMoveThreshold) move.push(MoveDirection.front)
+  return move.length ? move : null
 }
 
 export const translateKeyIntention = (keys: number[]): ControlIntention => {
@@ -31,7 +35,7 @@ export const translateKeyIntention = (keys: number[]): ControlIntention => {
     }
   }
   return {
-    move: direction,
+    move: direction.length ? direction : null,
   }
 }
 

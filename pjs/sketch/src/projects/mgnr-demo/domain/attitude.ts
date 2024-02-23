@@ -1,18 +1,18 @@
 import { AttitudeThresholdFrames } from '../constants'
 import { makeVariableStore } from '../state/variable'
-import { Direction } from '../types'
+import { MoveDirection } from '../types'
 
 export const updateAttitude = (
-  dir: Direction,
+  dir: MoveDirection[] | null,
   variableStore: ReturnType<typeof makeVariableStore>
 ) => {
-  if (dir === 'go') {
+  if (dir) {
     variableStore.updateAttitude('active')
     if (variableStore.current.active > AttitudeThresholdFrames) {
       variableStore.resetAttitude('still')
     }
   }
-  if (dir === null || dir === 'left' || dir === 'right') {
+  if (dir === null) {
     variableStore.updateAttitude('still')
     if (variableStore.current.still > AttitudeThresholdFrames) {
       variableStore.resetAttitude('active')

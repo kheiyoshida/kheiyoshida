@@ -1,13 +1,13 @@
-import { FrameRate } from '../constants'
+import { FrameRate, SightAngleWidth } from '../constants'
 import { CameraStore } from '../state/camera'
 import { ControlIntention, MoveIntention, TurnIntention } from './types'
 
 export const resolveIntention = (intention: ControlIntention, camera: CameraStore) => {
-  if (intention.move) {
+  if (intention.move !== undefined) {
     const moveValue = resolveMoveIntention(intention.move)
     camera.updateMove(...moveValue)
   }
-  if (intention.turn) {
+  if (intention.turn !== undefined) {
     const turnValue = resolveTurnIntention(intention.turn)
     camera.updateTurn(...turnValue)
   }
@@ -25,8 +25,8 @@ export const resolveTurnIntention = ({
 }: TurnIntention): Parameters<CameraStore['updateTurn']> => {
   return [
     {
-      theta: (y * 60) / FrameRate,
-      phi: (-x * 60) / FrameRate,
+      theta: (y * SightAngleWidth) / 2 / FrameRate,
+      phi: (-x * SightAngleWidth) / 2 / FrameRate,
     },
   ]
 }

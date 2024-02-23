@@ -1,16 +1,12 @@
-import {
-  detectMove,
-  detectPosition,
-  makeDetectKeys,
-  makeSwipeTracker
-} from 'p5utils/src/control'
+import { detectPosition, makeDetectKeys, makeSwipeTracker } from 'p5utils/src/control'
+import { SwipeOneEquivalent } from '../constants'
 import { CameraStore } from '../state/camera'
 import { resolveIntention } from './resolve'
 import {
   translateKeyIntention,
   translateMouseIntention,
-  translateSwipeIntention,
   translateSwipeLookIntention,
+  translateSwipeMoveIntention,
 } from './translate'
 
 const MOBILE_WIDTH = 800
@@ -19,26 +15,21 @@ export const bindControl = (camera: CameraStore): void => {
   else bindMouseKeyControlEvents(camera)
 }
 
+const swipeTracker = makeSwipeTracker(SwipeOneEquivalent)
+
 const bindDeviceTouchEvents = (cameraStore: CameraStore): void => {
-  const swipe = makeSwipeTracker(400)
   p.touchStarted = () => {
-    swipe.startSwipe(detectPosition())
-  }
-  p.touchMoved = () => {
-    if (cameraStore.current.mode === 'move') {
-      const swipe = detectMove()
-      const intention = translateSwipeIntention(swipe)
-      resolveIntention(intention, cameraStore)
-    } else {
-      const intention = translateSwipeLookIntention(detectPosition(), swipe)
-      resolveIntention(intention, cameraStore)
-    }
+    swipeTracker.startSwipe(detectPosition())
   }
   p.touchEnded = () => {
-    const delta = swipe.getNormalizedValues(detectPosition())
+    const delta = swipeTracker.getNormalizedValues(detectPosition())
     const wasBriefTap = Math.abs(delta.x) < 0.1 && Math.abs(delta.y) < 0.1
     if (wasBriefTap) {
       cameraStore.toggleMode()
+    } else {
+      const intention = { move: null }
+      resolveIntention(intention, cameraStore)
+      swipeTracker.endSwipe()
     }
   }
 }
@@ -52,8 +43,19 @@ const bindMouseKeyControlEvents = (cameraStore: CameraStore): void => {
 }
 
 export const bindRoutineControl = (camera: CameraStore): void => {
-  if (window.innerWidth < MOBILE_WIDTH) return
-  mouseKeyControlRoutine(camera)
+  if (window.innerWidth < MOBILE_WIDTH) swipeRoutine(camera)
+  else mouseKeyControlRoutine(camera)
+}
+
+const swipeRoutine = (cameraStore: CameraStore) => {
+  if (!swipeTracker.isSwipeHappening) return
+  if (cameraStore.current.mode === 'move') {
+    const intention = translateSwipeMoveIntention(detectPosition(), swipeTracker)
+    resolveIntention(intention, cameraStore)
+  } else {
+    const intention = translateSwipeLookIntention(detectPosition(), swipeTracker)
+    resolveIntention(intention, cameraStore)
+  }
 }
 
 const mouseKeyControlRoutine = (cameraStore: CameraStore) => {
