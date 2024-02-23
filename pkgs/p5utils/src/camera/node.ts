@@ -1,4 +1,4 @@
-import { changeSpeed, move } from '../data/node'
+import { changeSpeed, changeSpeedV2, move } from '../data/node'
 import { createBase3D, rotate3D } from '../data/node/3d'
 import { CameraNode } from './types'
 import { Position3D } from "../3d/types"
@@ -16,7 +16,7 @@ export const createCameraNode = (...args: Parameters<typeof createBase3D>): Came
       rotate3D(node, angles.theta, angles.phi)
     },
     setSpeed(speed) {
-      changeSpeed(node, speed)
+      changeSpeedV2(node, speed)
     },
     move() {
       move(node)

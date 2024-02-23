@@ -18,9 +18,9 @@ export const init: LazyInit<CameraState> = () => {
   const camera = createCamera()
   const initialSpeed = Config.CameraDefaultMoveSpeed
   camera.setPosition(0, 0, 500)
-  camera.setSpeed(initialSpeed)
+  camera.setMoveSpeed(initialSpeed)
   camera.setFocus(undefined)
-  camera.setAbsoluteDirection({ theta: 90, phi: 180 })
+  camera.setAbsoluteMoveDirection({ theta: 90, phi: 180 })
   return {
     camera,
     speed: initialSpeed,
@@ -33,7 +33,7 @@ export const init: LazyInit<CameraState> = () => {
 export const reducers = {
   updateTarget: (s) => (angles: SphericalAngles) => {
     const trueAngles = sumAngles(angles, { theta: -90, phi: -180 })
-    s.camera.setRelativeDirection(trueAngles)
+    s.camera.setRelativeMoveDirection(trueAngles)
     s.speed = Config.CameraMoveSpeed
   },
   updateTurn: (s) => (angle: SphericalAngles) => {
@@ -49,7 +49,7 @@ export const reducers = {
   updateMove:
     (s) =>
     (relativeAngle: SphericalAngles, speed: number = Config.CameraMoveSpeed) => {
-      s.camera.setRelativeDirection(relativeAngle)
+      s.camera.setRelativeMoveDirection(relativeAngle)
       s.speed = speed
     },
   turnCamera: (s) => () => {
@@ -65,7 +65,7 @@ export const reducers = {
     } else {
       s.speed = newSpeed
     }
-    s.camera.setSpeed(s.speed)
+    s.camera.setMoveSpeed(s.speed)
     s.camera.move()
   },
 } satisfies ReducerMap<CameraState>

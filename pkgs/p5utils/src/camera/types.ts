@@ -4,9 +4,9 @@ import { SphericalAngles } from "../3d/types"
 export type Camera = {
   setPosition: (x: number, y: number, z: number) => void
   position: Position3D
-  setAbsoluteDirection: (angles: SphericalAngles) => void
-  setRelativeDirection: (angles: SphericalAngles) => void
-  setSpeed: (speed: number) => void
+  setAbsoluteMoveDirection: (angles: SphericalAngles) => void
+  setRelativeMoveDirection: (angles: SphericalAngles) => void
+  setMoveSpeed: (speed: number) => void
   move: () => void
   setFocus: (position?: Position3D) => void
   focus: Position3D | undefined

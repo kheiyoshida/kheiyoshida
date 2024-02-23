@@ -1,63 +1,59 @@
+import { SphericalAngles } from 'p5utils/src/3d'
+import { makeSpeedConsumer } from 'p5utils/src/3d/phyisics'
 import { createCamera } from 'p5utils/src/camera'
 import { Camera } from 'p5utils/src/camera/types'
 import { LazyInit, ReducerMap, makeStoreV2 } from 'utils'
-import { FieldRange } from '../constants'
-import { Direction } from '../types'
+import { MoveDirection } from '../types'
 
 type CameraState = {
   camera: Camera
-  dir: Direction
+  speed: number
+  dirs: MoveDirection[]
 }
 
 const init: LazyInit<CameraState> = () => {
   const camera = createCamera()
   camera.setPosition(0, 0, 0)
   camera.setFocus(undefined)
-  camera.setAbsoluteDirection({ theta: 90, phi: 180 })
-  camera.setSpeed(20)
+  camera.setAbsoluteMoveDirection({ theta: 90, phi: 180 })
+  camera.setMoveSpeed(20)
   return {
     camera,
-    dir: null,
+    speed: ZeroSpeed,
+    dirs: [],
   }
 }
 
+const ZeroSpeed = 1
+
 const reducers = {
-  updateDir: (s) => (dir: Direction) => {
-    s.dir = dir
+  updateMove: (s) => (dirs: MoveDirection[]) => {
+    s.dirs = dirs
+    if (s.dirs.length !== 0) {
+      s.speed = 10
+      const phiValue = dirs.reduce((prev, dir) => prev + DirectionalPhiValues[dir], 0) / dirs.length
+      s.camera.setRelativeMoveDirection({ theta: 0, phi: phiValue })
+    }
+  },
+  updateTurn: (s) => (relativeAngles: SphericalAngles) => {
+    s.camera.turn({ ...relativeAngles, theta: 0 })
   },
   move: (s) => () => {
-    moveCamera(s.camera, s.dir)
-  },
-  restrictPosition: (s) => (callback?: () => void) => {
-    const [x, _, z] = s.camera.position
-    if (Math.abs(x) > FieldRange || Math.abs(z) > FieldRange) {
-      s.camera.setPosition(0, 0, FieldRange)
-      callback && callback()
-    }
+    if (s.speed === 1) return
+    s.speed = consumeSpeed(s.speed)
+    s.camera.setMoveSpeed(s.speed)
+    s.camera.move()
   },
 } satisfies ReducerMap<CameraState>
 
+const consumeSpeed = makeSpeedConsumer(ZeroSpeed, (s) => (s * 7) / 8)
 
-
-const moveCamera = (camera: Camera, dir: Direction) => {
-  switch (dir) {
-    case 'go':
-      camera.setSpeed(20)
-      camera.move()
-      break
-    case 'back':
-      // camera.setSpeed(-10)
-      // camera.move()
-      break
-    case 'right':
-      camera.setRelativeDirection({theta: 0, phi: -0.1})
-      camera.turn({ theta: 0, phi: -0.1 })
-      break
-    case 'left':
-      camera.setRelativeDirection({theta: 0, phi: 0.1})
-      camera.turn({ theta: 0, phi: 0.1 })
-      break
-  }
+const DirectionalPhiValues: { [k in MoveDirection]: number } = {
+  front: 0,
+  back: 180,
+  left: 90,
+  right: -90,
 }
 
 export const makeCameraStore = () => makeStoreV2<CameraState>(init)(reducers)
+export type CameraStore = ReturnType<typeof makeCameraStore>

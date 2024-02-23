@@ -1,8 +1,7 @@
 import { applyConfig } from 'p5utils/src/utils/project'
 import * as Tone from 'tone'
-import { bindKeyEvent, bindTouchEvent } from './control/bindInput'
+import { bindControl, bindRoutineControl } from './control'
 import { restrictPosition } from './domain'
-import { updateAttitude } from './domain/attitude'
 import {
   buildActiveCommandGrid,
   buildStillCommandGrid,
@@ -31,8 +30,7 @@ const setup = () => {
   p.noStroke()
 
   cameraStore.lazyInit()
-  bindKeyEvent(cameraStore.updateDir)
-  bindTouchEvent(cameraStore.updateDir)
+  bindControl(cameraStore)
 
   objectStore.lazyInit()
 }
@@ -40,8 +38,9 @@ const setup = () => {
 const draw = () => {
   const { roomVar } = variableStore.current
 
+  bindRoutineControl(cameraStore)
   cameraStore.move()
-  updateAttitude(cameraStore.current.dir, variableStore)
+  // updateAttitude(cameraStore.current.dir, variableStore)
   onActive(variableStore.current.roomVar, variableStore.current.active)
   onStill(variableStore.current.roomVar, variableStore.current.active)
 

@@ -38,8 +38,8 @@ describe(`${createCamera.name}`, () => {
   })
   it(`can set direction & speed to move`, () => {
     const { camera } = prepare()
-    camera.setAbsoluteDirection({ theta: 90, phi: 90 })
-    camera.setSpeed(100)
+    camera.setAbsoluteMoveDirection({ theta: 90, phi: 90 })
+    camera.setMoveSpeed(100)
     camera.move()
     expect(camera.position[0]).toBe(100)
   })
@@ -47,16 +47,16 @@ describe(`${createCamera.name}`, () => {
     const { camera } = prepare()
     // suppose it's moving backward, facing right direction
     camera.setPosition(0, 0, 100)
-    camera.setAbsoluteDirection({
+    camera.setAbsoluteMoveDirection({
       theta: 90,
       phi: 0,
     })
     expect(camera.position[2]).toBeCloseTo(100)
-    camera.setSpeed(100)
+    camera.setMoveSpeed(100)
     jest.spyOn(helpers, 'getForwardDirAngles').mockReturnValue({ theta: 90, phi: 90 })
 
     const toRelativeForward = { theta: 0, phi: 0 }
-    camera.setRelativeDirection(toRelativeForward)
+    camera.setRelativeMoveDirection(toRelativeForward)
     camera.move()
     expect(camera.position[0]).toBeCloseTo(100)
     expect(camera.position[1]).toBeCloseTo(0)
