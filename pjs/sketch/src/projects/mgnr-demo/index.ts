@@ -11,9 +11,9 @@ import {
   makeEventResolver,
 } from './domain/attitudeEvents'
 import { generateTrees } from './services/objects'
-import { music } from './sound'
+import { music } from './services/sound'
 import { cameraStore, sketchStore, variableStore } from './state'
-import { showInstruction } from './ui'
+import { showInstruction } from './services/ui'
 
 // state
 let geometries: p5.Geometry[]

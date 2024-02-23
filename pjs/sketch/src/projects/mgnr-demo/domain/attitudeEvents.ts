@@ -7,7 +7,7 @@ import {
   LoudThreshold,
   SilentThreshold,
 } from '../constants'
-import { MusicCommands } from '../sound'
+import { MusicCommands } from '../services/sound'
 import { makeSketchStore } from '../state/sketch'
 import { CommandGrid, Scenes, buildCommandGrid } from './commandGrid'
 
