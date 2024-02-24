@@ -1,28 +1,27 @@
 import p5 from 'p5'
+import { vectorFromDegreeAngles } from 'p5utils/src/3d'
+import { createTreeGraph, finalizeGeometry } from 'p5utils/src/3dShape'
 import { connect } from 'p5utils/src/data/graph/node'
 import { calculateVertices, createInitialNode } from 'p5utils/src/data/shape/create'
 import { geometryFromShape } from 'p5utils/src/data/shape/render'
 import { ShapeNode } from 'p5utils/src/data/shape/types'
-import { randomIntBetween, randomIntInclusiveBetween, createShuffledArray as shuffle } from 'utils'
+import { randomFloatBetween, randomIntBetween, createShuffledArray as shuffle } from 'utils'
 import { GeometryObject } from './object'
-import { createTreeGraph, finalizeGeometry } from 'p5utils/src/3dShape'
 
 export const generateTrees = (
+  fieldCenter: p5.Vector,
   fieldRange: number,
   numOfTrees: number,
   maxRecursion = 30
 ): GeometryObject[] =>
   [...Array(numOfTrees)].map(() => ({
     geometry: finalizeGeometry(createTreeGraph(maxRecursion)),
-    placement: randomTreePlacement(fieldRange),
+    placement: randomTreePlacement(fieldCenter, fieldRange),
   }))
 
-export const randomTreePlacement = (fieldRange: number) =>
-  new p5.Vector(
-    randomIntInclusiveBetween(-fieldRange, fieldRange),
-    50,
-    randomIntInclusiveBetween(-fieldRange, fieldRange)
-  )
+export const randomTreePlacement = (fieldCenter: p5.Vector, fieldRange: number) => {
+  return vectorFromDegreeAngles(90, randomFloatBetween(0, 360), randomFloatBetween(0, fieldRange)).add(fieldCenter)
+}
 
 const generateTree = (base = new p5.Vector(), maxRecursion = 30): p5.Geometry => {
   if (maxRecursion > 50 || maxRecursion < 5) {

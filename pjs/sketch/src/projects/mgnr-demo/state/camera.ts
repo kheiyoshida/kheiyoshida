@@ -18,7 +18,7 @@ type CameraMode = 'look' | 'move'
 
 const init: LazyInit<CameraState> = () => {
   const camera = createCamera()
-  camera.setPosition(0, -100, 0)
+  camera.setPosition(0, 0, 0)
   camera.setFocus(undefined)
   camera.setAbsoluteMoveDirection({ theta: 90, phi: 180 })
   camera.setMoveSpeed(20)

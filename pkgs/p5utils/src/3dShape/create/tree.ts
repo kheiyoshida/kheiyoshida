@@ -47,11 +47,11 @@ const growNode = (prev: ShapeNode, growNumber: number, stage: number) => {
 }
 
 const getGrowNumber = (stage: number) =>
-  randomIntInclusiveBetween(stage < 3 ? 2 : 0, stage > 7 ? 4 : 3)
+  randomIntInclusiveBetween(stage < 5 ? 2 : 1, stage > 10 ? 3 : 1)
 
 const getGrowAmount = (stage: number): p5.Vector =>
   vectorFromDegreeAngles(
     randomIntInclusiveBetween(0, stage * 20),
     randomIntInclusiveBetween(0, 360),
-    randomIntInclusiveBetween(50, 50 + Math.pow(stage, 2))
+    randomIntInclusiveBetween(50, 50 + Math.pow(stage, 1.2))
   )

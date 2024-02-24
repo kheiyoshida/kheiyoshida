@@ -1,7 +1,12 @@
-export const FieldRange = 2000
-export const TreeRange = FieldRange * 0.9
+export const FieldRange = 3000
 
-export const InitialNumOfTrees = 20
+export const VisibleRange = FieldRange * 1.2
+export const LookAhead = FieldRange * 1.5
+export const CenterToOutsideDistance = FieldRange * 2
+
+export const GroundY = 100
+
+export const InitialNumOfTrees = 30
 
 export const FrameRate = 30
 

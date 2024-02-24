@@ -1,14 +1,11 @@
 import p5 from 'p5'
+import { Position3D, distanceBetweenPositions } from 'p5utils/src/3d'
 import { createRenderedTexture } from 'p5utils/src/3dShape/texture'
-import {
-  applyRandomSwap,
-  randomizeImagePixels,
-  updateImagePixels
-} from 'p5utils/src/media/image'
+import { applyRandomSwap, randomizeImagePixels, updateImagePixels } from 'p5utils/src/media/image'
 import { LazyInit, ReducerMap, makeStoreV2, pipe } from 'utils'
-import { InitialNumOfTrees, TreeRange } from '../constants'
-import { GeometryObject } from '../services/objects/object'
-import { generateTrees } from '../services/objects/tree'
+import { CenterToOutsideDistance, FieldRange, GroundY, InitialNumOfTrees } from '../constants'
+import { GeometryObject, distanceFromCenter } from '../services/objects/object'
+import { generateTrees, randomTreePlacement } from '../services/objects/tree'
 
 type ObjectState = {
   trees: GeometryObject[]
@@ -18,7 +15,7 @@ type ObjectState = {
 const init: LazyInit<ObjectState> = () => {
   const skin = createSkin()
   return {
-    trees: generateTrees(TreeRange, InitialNumOfTrees, 30),
+    trees: generateTrees(new p5.Vector(0, GroundY, 0), FieldRange, InitialNumOfTrees, 30),
     skin,
   }
 }
@@ -34,9 +31,14 @@ const createSkin = () => {
 }
 
 const reducers = {
-  renewTrees: (s) => (roomVar: number) => {
-    s.trees = generateTrees(TreeRange, roomVar, roomVar)
+  replaceTrees: (s) => (prevFieldCenter: Position3D, newFieldCenter: Position3D) => {
+    s.trees.forEach((tree) => {
+      if (distanceFromCenter(tree.placement, newFieldCenter) > CenterToOutsideDistance) {
+        tree.placement = randomTreePlacement(new p5.Vector(...newFieldCenter), FieldRange)
+      }
+    })
   },
 } satisfies ReducerMap<ObjectState>
 
 export const makeObjectStore = () => makeStoreV2<ObjectState>(init)(reducers)
+export type ObjectStore = ReturnType<typeof makeObjectStore>
