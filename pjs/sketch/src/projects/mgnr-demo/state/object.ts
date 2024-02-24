@@ -1,27 +1,26 @@
 import p5 from 'p5'
-import { Position3D, distanceBetweenPositions } from 'p5utils/src/3d'
+import { Position3D } from 'p5utils/src/3d'
 import { createRenderedTexture } from 'p5utils/src/3dShape/texture'
 import {
-  applyBlackAndWhiteFilter,
   applyMonochromeFilter,
   applyRandomSwap,
   randomizeImagePixels,
   updateImagePixels,
 } from 'p5utils/src/media/image'
 import { LazyInit, ReducerMap, makeStoreV2, pipe } from 'utils'
-import { CenterToOutsideDistance, FieldRange, GroundY, InitialNumOfTrees } from '../constants'
-import { GeometryObject, distanceFromCenter } from '../services/objects/object'
-import { generateTrees, randomTreePlacement } from '../services/objects/tree'
+import { FieldRange, GroundY, InitialNumOfTrees } from '../constants'
+import { adjustNumOfTrees, adjustTreePlacement, filterReusableTrees } from '../domain/trees'
+import { TreeObject, generateTrees } from '../services/objects/tree'
 
 type ObjectState = {
-  trees: GeometryObject[]
+  trees: TreeObject[]
   skin: p5.Image
 }
 
 const init: LazyInit<ObjectState> = () => {
   const skin = createSkin()
   return {
-    trees: generateTrees(new p5.Vector(0, GroundY, 0), FieldRange, InitialNumOfTrees, 30),
+    trees: generateTrees([0, GroundY, 0], FieldRange, InitialNumOfTrees, 30),
     skin,
   }
 }
@@ -37,13 +36,12 @@ const createSkin = () => {
 }
 
 const reducers = {
-  replaceTrees: (s) => (prevFieldCenter: Position3D, newFieldCenter: Position3D) => {
-    s.trees.forEach((tree) => {
-      if (distanceFromCenter(tree.placement, newFieldCenter) > CenterToOutsideDistance) {
-        tree.placement = randomTreePlacement(new p5.Vector(...newFieldCenter), FieldRange)
-      }
-    })
-  },
+  updateTrees:
+    (s) => (previousCenter: Position3D, newFieldCenter: Position3D, roomVar: number) => {
+      s.trees = filterReusableTrees(s.trees, roomVar, previousCenter)
+      s.trees = adjustNumOfTrees(s.trees, roomVar, newFieldCenter)
+      s.trees.forEach(adjustTreePlacement(newFieldCenter))
+    },
 } satisfies ReducerMap<ObjectState>
 
 export const makeObjectStore = () => makeStoreV2<ObjectState>(init)(reducers)

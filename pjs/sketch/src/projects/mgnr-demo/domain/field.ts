@@ -9,6 +9,8 @@ import { CenterToOutsideDistance, GroundY, LookAhead } from '../constants'
 import { ObjectStore } from '../state/object'
 import { VariableStore } from '../state/variable'
 
+export const checkFieldEdgeEvent = () => {}
+
 export const cameraReachedEdgeEvent = (
   camera: Camera,
   variableStore: VariableStore,
@@ -16,11 +18,16 @@ export const cameraReachedEdgeEvent = (
 ) => {
   const forward = forwardPosition(camera, LookAhead)
   if (isCameraOnEdge(forward, variableStore.current.fieldCenter)) {
-    const [forwardX, _, forwardZ] = forwardPosition(camera, CenterToOutsideDistance)
-    const newFieldCenter: Position3D = [forwardX, GroundY, forwardZ]
-    objectStore.replaceTrees(variableStore.current.fieldCenter, newFieldCenter)
-    variableStore.updateFieldCenter(newFieldCenter)
+    variableStore.updateRoomVar()
+    updateField(camera, objectStore, variableStore)
   }
+}
+
+const updateField = (camera: Camera, objectStore: ObjectStore, variableStore: VariableStore) => {
+  const [forwardX, _, forwardZ] = forwardPosition(camera, CenterToOutsideDistance)
+  const newFieldCenter: Position3D = [forwardX, GroundY, forwardZ]
+  objectStore.updateTrees(variableStore.current.fieldCenter, newFieldCenter, variableStore.current.roomVar)
+  variableStore.updateFieldCenter(newFieldCenter)
 }
 
 export const isCameraOnEdge = (

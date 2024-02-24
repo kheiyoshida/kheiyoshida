@@ -7,7 +7,7 @@ export type GeometryObject = {
   geometry: p5.Geometry
 }
 
-export const renderGeometryObject = (center: Position3D, object: GeometryObject) => {
+export const renderGeometryObject = (object: GeometryObject) => {
   drawAtVectorPosition(object.placement, () => {
     p.model(object.geometry)
   })
@@ -15,4 +15,8 @@ export const renderGeometryObject = (center: Position3D, object: GeometryObject)
 
 export const distanceFromCenter = (placement: p5.Vector, center: Position3D) => {
   return distanceBetweenPositions(placement.array() as Position3D, center)
+}
+
+export const isWithinRange = (object: GeometryObject, center: Position3D, distance: number) => {
+  return distanceFromCenter(object.placement, center) < distance
 }

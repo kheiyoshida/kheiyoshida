@@ -1,6 +1,6 @@
 import { Position3D } from 'p5utils/src/3d'
 import { ReducerMap, clamp, makeStoreV2, randomIntInclusiveBetween } from 'utils'
-import { GroundY, InitialRoomVar, MaxRoomVar, MinRoomVar } from '../constants'
+import { GroundY, InitialRoomVar, MaxRoomVar, MinRoomVar, RoomVarMaxDelta } from '../constants'
 
 type VariableState = {
   roomVar: number
@@ -20,7 +20,7 @@ const initialState: VariableState = {
 
 const reducers = {
   updateRoomVar: (s) => () => {
-    const vary = randomIntInclusiveBetween(-10, 10)
+    const vary = randomIntInclusiveBetween(-RoomVarMaxDelta, RoomVarMaxDelta)
     s.roomVar = clamp(s.roomVar + vary, MinRoomVar, MaxRoomVar)
   },
   updateAttitude: (s) => (attitude: Attitude) => {

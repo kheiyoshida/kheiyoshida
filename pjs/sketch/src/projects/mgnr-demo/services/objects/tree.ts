@@ -7,18 +7,26 @@ import { ShapeGraph, ShapeNode } from 'p5utils/src/3dShape/types'
 import { randomFloatBetween, randomIntInclusiveBetween } from 'utils'
 import { GeometryObject } from './object'
 
+export type TreeObject = GeometryObject & {
+  level: number
+}
+
 export const generateTrees = (
-  fieldCenter: p5.Vector,
+  fieldCenter: Position3D,
   fieldRange: number,
   numOfTrees: number,
   maxRecursion = 30
-): GeometryObject[] =>
-  [...Array(numOfTrees)].map(() => ({
-    placement: randomTreePlacement(fieldCenter, fieldRange),
-    geometry: finalizeGeometry(createTreeGraph(maxRecursion)),
-  }))
+): TreeObject[] =>
+  [...Array(numOfTrees)].map(() => {
+    const [graph, level] = createTreeGraph(maxRecursion)
+    return {
+      placement: randomTreePlacement(fieldCenter, fieldRange),
+      geometry: finalizeGeometry(graph),
+      level
+    }
+  })
 
-export const randomTreePlacement = (fieldCenter: p5.Vector, fieldRange: number) => {
+export const randomTreePlacement = (fieldCenter: Position3D, fieldRange: number) => {
   return vectorFromDegreeAngles(
     90,
     randomFloatBetween(0, 360),
@@ -26,26 +34,26 @@ export const randomTreePlacement = (fieldCenter: p5.Vector, fieldRange: number) 
   ).add(fieldCenter)
 }
 
-export const createTreeGraph = (maxRecursion = 30): ShapeGraph => {
+export const createTreeGraph = (maxRecursion = 30): [ShapeGraph, number] => {
   if (maxRecursion > 50 || maxRecursion < 5) {
     throw Error('invalid max recursion value')
   }
   const initialNode = createShapeNode([0, 0, 0], 12)
-  const graph = growTree(initialNode, maxRecursion)
+  const [graph, finalStage] = growTree(initialNode, maxRecursion)
   calculateVerticesForShapeGraph(graph)
-  return graph
+  return [graph, finalStage]
 }
 
-const growTree = (initialNode: ShapeNode, maxRecursion: number): ShapeGraph => {
+const growTree = (initialNode: ShapeNode, maxRecursion: number): [ShapeGraph, number] => {
   const nodes: ShapeNode[] = [initialNode]
-  const _growFlower = (prevNodes: ShapeNode[], stage = 1) => {
-    if (prevNodes.length === 0 || stage > maxRecursion || nodes.length > 200) return
+  const _growFlower = (prevNodes: ShapeNode[], stage = 1): number => {
+    if (prevNodes.length === 0 || stage > maxRecursion || nodes.length > 200) return stage
     const grownNodes = prevNodes.flatMap((node) => growNode(node, getGrowNumber(stage), stage))
     nodes.push(...grownNodes)
-    _growFlower(grownNodes, stage + 1)
+    return _growFlower(grownNodes, stage + 1)
   }
-  _growFlower(nodes)
-  return nodes
+  const finalStage = _growFlower(nodes)
+  return [nodes, finalStage]
 }
 
 const growNode = (prev: ShapeNode, growNumber: number, stage: number) => {

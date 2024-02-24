@@ -22,8 +22,8 @@ const startSound = () => {
 
 const activeCommands = buildActiveCommandGrid(musicCommands, sketchStore)
 const stillCommands = buildStillCommandGrid(musicCommands, sketchStore)
-const onActive = makeEventResolver(activeCommands)
-const onStill = makeEventResolver(stillCommands)
+const onActive = makeEventResolver(activeCommands, 'active')
+const onStill = makeEventResolver(stillCommands, 'still')
 
 const setup = () => {
   showInstruction(startSound)
@@ -47,19 +47,19 @@ const draw = () => {
   cameraStore.move()
   updateAttitude(cameraStore.current.dirs, variableStore)
   onActive(variableStore.current.roomVar, variableStore.current.active)
-  onStill(variableStore.current.roomVar, variableStore.current.active)
+  onStill(variableStore.current.roomVar, variableStore.current.still)
 
   cameraReachedEdgeEvent(cameraStore.current.camera, variableStore, objectStore)
 
   // render
-  const { fillColor, strokeColor } = sketchStore.current
+  const { fillColor } = sketchStore.current
   p.background(fillColor)
   p.lights()
   p.pointLight(100, 100, 100, ...cameraStore.current.camera.position)
 
   p.texture(objectStore.current.skin)
-  objectStore.current.trees.forEach((tree) =>
-    renderGeometryObject(cameraStore.current.camera.position, tree)
+  objectStore.current.trees.forEach(
+    renderGeometryObject
   )
 }
 

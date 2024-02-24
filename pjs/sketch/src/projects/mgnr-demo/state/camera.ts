@@ -3,6 +3,7 @@ import { makeSpeedConsumer } from 'p5utils/src/3d/phyisics'
 import { createCamera } from 'p5utils/src/camera'
 import { Camera } from 'p5utils/src/camera/types'
 import { LazyInit, ReducerMap, makeStoreV2 } from 'utils'
+import { DefaultSpeed, ZeroSpeed } from '../constants'
 import { MoveDirection } from '../types'
 
 type CameraState = {
@@ -32,9 +33,6 @@ const init: LazyInit<CameraState> = () => {
   }
 }
 
-const ZeroSpeed = 1
-const DefaultSpeed = 10
-
 const reducers = {
   toggleMode: (s) => () => {
     if (s.mode === 'look') {
@@ -51,7 +49,8 @@ const reducers = {
     s.dirs = dirs
     if (s.dirs === null) return
     if (s.dirs.length !== 0) {
-      const phiValue = s.dirs.reduce((prev, dir) => prev + DirectionalPhiValues[dir], 0) / s.dirs.length
+      const phiValue =
+        s.dirs.reduce((prev, dir) => prev + DirectionalPhiValues[dir], 0) / s.dirs.length
       s.camera.setRelativeMoveDirection({ theta: 0, phi: phiValue })
     }
     s.speed = DefaultSpeed

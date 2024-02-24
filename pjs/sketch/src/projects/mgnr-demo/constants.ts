@@ -1,14 +1,16 @@
-export const FieldRange = 3000
+// general
+export const FrameRate = 30
 
+// field
+export const FieldRange = 3000
 export const VisibleRange = FieldRange * 1.2
 export const LookAhead = FieldRange * 1.5
 export const CenterToOutsideDistance = FieldRange * 2
-
 export const GroundY = 100
 
-export const InitialNumOfTrees = 30
-
-export const FrameRate = 30
+// camera
+export const ZeroSpeed = 1
+export const DefaultSpeed = 15
 
 // thresholds
 export const eventThresholdSeconds = 2.5
@@ -29,11 +31,14 @@ export const LoudThreshold = 30
 export const SECONDS_TO_CHANGE_ATTITUDE = 2.5
 export const AttitudeThresholdFrames = FrameRate * SECONDS_TO_CHANGE_ATTITUDE
 
+// roomVar
 export const MinRoomVar = 10
 export const InitialRoomVar = 30
+export const InitialNumOfTrees = InitialRoomVar
 export const MaxRoomVar = 40
+export const RoomVarMaxDelta = 10
 
+// control
 export const SwipeOneEquivalent = 500
 export const SwipeMoveThreshold = 20 / SwipeOneEquivalent
-
 export const SightAngleWidth = 160
