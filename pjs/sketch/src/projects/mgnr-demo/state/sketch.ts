@@ -6,7 +6,7 @@ import { FrameRate } from '../constants'
 const init: LazyInit<SketchConfigStore> = () => ({
   cw: p.windowWidth,
   ch: p.windowHeight,
-  fillColor: p.color(0),
+  fillColor: p.color(30),
   strokeColor: p.color(100, 200),
   frameRate: FrameRate,
   strokeWeight: 1,

@@ -1,7 +1,13 @@
 import p5 from 'p5'
 import { Position3D, distanceBetweenPositions } from 'p5utils/src/3d'
 import { createRenderedTexture } from 'p5utils/src/3dShape/texture'
-import { applyRandomSwap, randomizeImagePixels, updateImagePixels } from 'p5utils/src/media/image'
+import {
+  applyBlackAndWhiteFilter,
+  applyMonochromeFilter,
+  applyRandomSwap,
+  randomizeImagePixels,
+  updateImagePixels,
+} from 'p5utils/src/media/image'
 import { LazyInit, ReducerMap, makeStoreV2, pipe } from 'utils'
 import { CenterToOutsideDistance, FieldRange, GroundY, InitialNumOfTrees } from '../constants'
 import { GeometryObject, distanceFromCenter } from '../services/objects/object'
@@ -22,11 +28,11 @@ const init: LazyInit<ObjectState> = () => {
 
 const createSkin = () => {
   const img = createRenderedTexture(40)
-  randomizeImagePixels(img, 100)
-  updateImagePixels(img, ([r, g, b, a]) => [200, g, b, 255])
+  randomizeImagePixels(img, 20)
+  updateImagePixels(img, ([r, g, b, a]) => [r, g, b, 200])
+  randomizeImagePixels(img, 50)
   img.updatePixels()
-  applyRandomSwap(4, 100)(img)
-  pipe(img, applyRandomSwap(4, 10))
+  pipe(img, applyRandomSwap(4, 10), applyMonochromeFilter, applyRandomSwap(4, 30))
   return img
 }
 
