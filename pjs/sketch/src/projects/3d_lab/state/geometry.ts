@@ -34,19 +34,15 @@ const init: LazyInit<GeometryState> = () => {
 const reducers = {
   render: (s) => () => {
     p.noStroke()
-    const angle = {theta: p.millis() * 0.2, phi: p.millis() * 0.1 }
-    // const angle = { theta: 30, phi: 0 }
-    const vec = vectorFromDegreeAngles(angle.theta, angle.phi, 200)
+    const angle = { theta: p.millis() * 0.2, phi: p.millis() * 0.1 }
+    // const geo = finalizeGeometry(s.graph)
     shape.renderGeometry(s.geo, [0, 0, 0], angle)
-    pushPop(() => {
-      p.stroke('red')
-      p.line(0, 0, 0, ...(vec.array() as Position3D))
-    })
 
-    pushPop(() => {
-      p.translate(-500, -500, -400)
-      p.sphere(100)
-    })
+    // reference
+    // pushPop(() => {
+    //   p.translate(-500, -500, -400)
+    //   p.sphere(100)
+    // })
   },
 } satisfies ReducerMap<GeometryState>
 

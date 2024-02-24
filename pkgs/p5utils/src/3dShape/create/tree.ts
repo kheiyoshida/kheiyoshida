@@ -10,7 +10,7 @@ export const createTreeGraph = (maxRecursion = 30, shuffle = false): ShapeGraph 
   if (maxRecursion > 50 || maxRecursion < 5) {
     throw Error('invalid max recursion value')
   }
-  const initialNode = createShapeNode([0, 0, 0], 50)
+  const initialNode = createShapeNode([0, 0, 0], 12)
   const graph = growTree(initialNode, maxRecursion)
   if (!shuffle) {
     calculateVerticesForShapeGraph(graph)
@@ -47,11 +47,11 @@ const growNode = (prev: ShapeNode, growNumber: number, stage: number) => {
 }
 
 const getGrowNumber = (stage: number) =>
-  randomIntInclusiveBetween(stage < 5 ? 1 : 0, stage > 5 ? 4 : 1)
+  randomIntInclusiveBetween(stage < 3 ? 2 : 0, stage > 7 ? 4 : 3)
 
 const getGrowAmount = (stage: number): p5.Vector =>
   vectorFromDegreeAngles(
-    randomIntInclusiveBetween(0, stage * 9),
+    randomIntInclusiveBetween(0, stage * 20),
     randomIntInclusiveBetween(0, 360),
     randomIntInclusiveBetween(50, 50 + Math.pow(stage, 2))
   )

@@ -1,7 +1,7 @@
 export const FieldRange = 2000
 export const TreeRange = FieldRange * 0.9
 
-export const InitialNumOfTrees = 40
+export const InitialNumOfTrees = 20
 
 export const FrameRate = 30
 

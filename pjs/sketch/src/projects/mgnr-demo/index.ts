@@ -1,18 +1,20 @@
-import { draw3DGrid } from 'p5utils/src/3d'
-import { loadFont } from 'p5utils/src/font'
 import { applyConfig } from 'p5utils/src/utils/project'
 import * as Tone from 'tone'
 import { bindControl, bindRoutineControl } from './control'
 import { restrictPosition } from './domain'
+import { updateAttitude } from './domain/attitude'
 import {
   buildActiveCommandGrid,
   buildStillCommandGrid,
   makeEventResolver,
 } from './domain/attitudeEvents'
+import { renderGeometryObject } from './services/objects/object'
 import { music } from './services/sound'
 import { showInstruction } from './services/ui'
 import { cameraStore, objectStore, sketchStore, variableStore } from './state'
-import { updateAttitude } from './domain/attitude'
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const imgLoc = require('../../assets/img/man.jpg')
 
 const musicCommands = music()
 const startSound = () => {
@@ -32,12 +34,12 @@ const setup = () => {
   applyConfig(sketchStore.current)
   p.noStroke()
   p.angleMode(p.DEGREES)
+  p.textureMode(p.NORMAL)
 
   cameraStore.lazyInit()
   bindControl(cameraStore)
 
   objectStore.lazyInit()
-  loadFont()
 }
 
 const draw = () => {
@@ -56,15 +58,11 @@ const draw = () => {
   })
 
   // render
-  const { fillColor, strokeColor } = sketchStore.current
+  const { fillColor } = sketchStore.current
   p.background(fillColor)
   p.lights()
-  p.fill(strokeColor)
-  objectStore.current.trees.forEach((tree) => {
-    p.model(tree)
-  })
-  // p.fill('white')
-  // draw3DGrid(3, 500, cameraStore.current.camera)
+  p.texture(objectStore.current.skin)
+  objectStore.current.trees.forEach(renderGeometryObject)
 }
 
 export default <Sketch>{

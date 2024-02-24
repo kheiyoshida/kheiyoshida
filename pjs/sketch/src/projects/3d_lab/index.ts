@@ -3,6 +3,7 @@ import { loadFont } from 'p5utils/src/font'
 import { applyConfig } from 'p5utils/src/utils/project'
 import { bindControl } from './control'
 import { cameraStore, geometryStore, sketchStore, skinStore } from './state'
+import { finalizeGeometry, renderGeometry } from 'p5utils/src/3dShape'
 
 const preload = () => {
   skinStore.lazyInit()
@@ -15,6 +16,7 @@ const setup = () => {
   p.angleMode(p.DEGREES)
   p.background(sketchStore.current.fillColor)
   p.fill(sketchStore.current.strokeColor)
+  p.textureMode(p.NORMAL)
   loadFont()
 
   // camera
@@ -36,8 +38,8 @@ const draw = () => {
   sketchStore.paint()
 
   // camera
-  cameraStore.turnCamera()
-  cameraStore.moveCamera()
+  // cameraStore.turnCamera()
+  // cameraStore.moveCamera()
 
   // render
   p.lights()
@@ -45,9 +47,6 @@ const draw = () => {
   draw3DGrid(3, 2000, camera)
 
   p.texture(skinStore.current.img)
-
-  p.translate(0, 0, 400)
-  p.plane()
   geometryStore.render()
 }
 
