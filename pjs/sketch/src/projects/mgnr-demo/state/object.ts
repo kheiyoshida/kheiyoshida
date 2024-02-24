@@ -39,7 +39,7 @@ const reducers = {
   updateTrees:
     (s) => (previousCenter: Position3D, newFieldCenter: Position3D, roomVar: number) => {
       s.trees = filterReusableTrees(s.trees, roomVar, previousCenter)
-      s.trees = adjustNumOfTrees(s.trees, roomVar, newFieldCenter)
+      s.trees = adjustNumOfTrees(s.trees, roomVar, newFieldCenter, previousCenter)
       s.trees.forEach(adjustTreePlacement(newFieldCenter))
     },
 } satisfies ReducerMap<ObjectState>

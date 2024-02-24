@@ -14,12 +14,23 @@ export const filterReusableTrees = (
 export const adjustNumOfTrees = (
   trees: TreeObject[],
   roomVar: number,
-  fieldCenter: Position3D
+  newFieldCenter: Position3D,
+  prevCenter: Position3D
 ): TreeObject[] => {
   const diff = trees.length - roomVar
   if (diff === 0) return trees
-  if (diff > 0) return trees.slice(0, roomVar)
-  else return trees.concat(generateTrees(fieldCenter, FieldRange, Math.abs(diff), roomVar))
+  if (diff > 0) return reduceNumOfTrees(trees, roomVar, prevCenter)
+  else return trees.concat(generateTrees(newFieldCenter, FieldRange, Math.abs(diff), roomVar))
+}
+
+const reduceNumOfTrees = (trees: TreeObject[], numOfTrees: number, prevCenter: Position3D) => {
+  trees
+    .sort(
+      (a, b) =>
+        distanceFromCenter(b.placement, prevCenter) - distanceFromCenter(a.placement, prevCenter)
+    )
+    .slice(0, numOfTrees)
+  return trees
 }
 
 const isWithinPreviousField = (tree: TreeObject, previousCenter: Position3D) => {
