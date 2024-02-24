@@ -2,7 +2,7 @@
 export const FrameRate = 30
 
 // field
-export const FieldRange = 3000
+export const FieldRange = 4000
 export const VisibleRange = FieldRange * 1.2
 export const LookAhead = FieldRange * 1.5
 export const CenterToOutsideDistance = FieldRange * 2
@@ -33,7 +33,7 @@ export const AttitudeThresholdFrames = FrameRate * SECONDS_TO_CHANGE_ATTITUDE
 
 // roomVar
 export const MinRoomVar = 10
-export const InitialRoomVar = 30
+export const InitialRoomVar = 25
 export const InitialNumOfTrees = InitialRoomVar
 export const MaxRoomVar = 40
 export const RoomVarMaxDelta = 10

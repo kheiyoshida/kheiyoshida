@@ -22,27 +22,21 @@ export const makeEventResolver =
       handleThreshold('neutral')
     }
     function handleThreshold(scene: Scenes) {
-      // console.log('handle', roomVar, frames)
       const sceneGrid = commandGrid[scene]
       if (frames === 0) return
       if (frames % EventThresholdFrameNumber1 === 0) {
-        console.log(scene, id, 1)
         sceneGrid[1](roomVar)
       }
       if (frames % EventThresholdFrameNumber2 === 0) {
-        console.log(scene, id, 2)
         sceneGrid[2](roomVar)
       }
       if (frames % EventThresholdFrameNumber3 === 0) {
-        console.log(scene, id, 3)
         sceneGrid[3](roomVar)
       }
       if (frames % EventThresholdFrameNumber4 === 0) {
-        console.log(scene, id, 4)
         sceneGrid[4](roomVar)
       }
       if (frames % EventThresholdFrameNumber5 === 0) {
-        console.log(scene, id, 5)
         sceneGrid[5](roomVar)
       }
     }
