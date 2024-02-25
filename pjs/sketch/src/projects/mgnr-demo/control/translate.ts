@@ -21,17 +21,22 @@ const swipeMove = (y: number) => {
   return move.length ? move : null
 }
 
+const KeyCodeMap = {
+  37: MoveDirection.left,
+  38: MoveDirection.front,
+  39: MoveDirection.right,
+  40: MoveDirection.back,
+  87: MoveDirection.front, // W
+  65: MoveDirection.left, // A
+  83: MoveDirection.back, // S
+  68: MoveDirection.right // D
+} as const
+
 export const translateKeyIntention = (keys: number[]): ControlIntention => {
-  const KeyMap = {
-    37: MoveDirection.left,
-    38: MoveDirection.front,
-    39: MoveDirection.right,
-    40: MoveDirection.back,
-  } as const
   const direction = []
   for (const key of keys) {
-    if (key in KeyMap) {
-      direction.push(KeyMap[key as unknown as keyof typeof KeyMap])
+    if (key in KeyCodeMap) {
+      direction.push(KeyCodeMap[key as unknown as keyof typeof KeyCodeMap])
     }
   }
   return {

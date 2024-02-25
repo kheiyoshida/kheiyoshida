@@ -35,7 +35,7 @@ const bindDeviceTouchEvents = (cameraStore: CameraStore): void => {
 
 let detectKeys: ReturnType<typeof makeDetectKeys>
 const bindMouseKeyControlEvents = (cameraStore: CameraStore): void => {
-  detectKeys = makeDetectKeys([p.UP_ARROW, p.DOWN_ARROW, p.RIGHT_ARROW, p.LEFT_ARROW])
+  detectKeys = makeDetectKeys([p.UP_ARROW, p.DOWN_ARROW, p.RIGHT_ARROW, p.LEFT_ARROW, 87, 65, 83, 68])
   p.mouseClicked = () => {
     cameraStore.toggleMode()
   }
