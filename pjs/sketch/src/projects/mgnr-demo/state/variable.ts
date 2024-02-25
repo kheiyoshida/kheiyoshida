@@ -1,6 +1,7 @@
 import { Position3D } from 'p5utils/src/3d'
 import { ReducerMap, clamp, makeStoreV2, randomIntInclusiveBetween } from 'utils'
 import { GroundY, InitialRoomVar, MaxRoomVar, MinRoomVar, RoomVarMaxDelta } from '../constants'
+import { Attitude } from '../types'
 
 type VariableState = {
   roomVar: number
@@ -8,8 +9,6 @@ type VariableState = {
   still: number
   fieldCenter: Position3D
 }
-
-type Attitude = 'active' | 'still'
 
 const initialState: VariableState = {
   roomVar: InitialRoomVar,

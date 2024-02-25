@@ -1,5 +1,6 @@
 // general
 export const FrameRate = 30
+export const MOBILE_WIDTH = 800
 
 // field
 export const FieldRange = 4000

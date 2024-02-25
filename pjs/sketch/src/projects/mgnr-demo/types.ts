@@ -4,3 +4,5 @@ export enum MoveDirection {
   left = 'left',
   right = 'right',
 }
+
+export type Attitude = 'active' | 'still'
