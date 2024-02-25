@@ -29,7 +29,7 @@ const KeyCodeMap = {
   87: MoveDirection.front, // W
   65: MoveDirection.left, // A
   83: MoveDirection.back, // S
-  68: MoveDirection.right // D
+  68: MoveDirection.right, // D
 } as const
 
 export const translateKeyIntention = (keys: number[]): ControlIntention => {
