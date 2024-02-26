@@ -13,7 +13,7 @@ export const Images = ({
 }: {
   imagePaths: string[]
   k: string
-  layout: Layout
+  layout?: ImageLayout
 }) => {
   const { type } = useContext(PageTypeContext)
   const displayOff = type === 'feed'

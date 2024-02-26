@@ -36,7 +36,7 @@ const buildBody = (work: WorkInfoNew) => {
     if (content.embed) return content.embed.map((loc, j) => <Embed key={k + j} iFrame={loc} />)
     if (content.images)
       return (
-        <Images key={k} imagePaths={resolveImagekitPath(content.images, work.date)} k={k} layout="row" />
+        <Images key={k} imagePaths={resolveImagekitPath(content.images, work.date)} k={k} layout={work.options?.imageLayout} />
       )
     if (content.sketch)
       return content.sketch.map((link, j) => <SketchEmbed key={k + j} link={link} />)
