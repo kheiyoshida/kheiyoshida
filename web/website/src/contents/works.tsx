@@ -4,11 +4,23 @@ const { wasted, shinjuku, forest, tp4, regrets, maze, medwEP, gene, zen4computer
   ContentData
 
 const _WorkEntities: OnePartial<ContentPageInfo, 'id'>[] = [
-  { title: wasted.title, date: wasted.date, contents: [{ sketch: [wasted.sketch] }] },
+  {
+    title: wasted.title,
+    date: wasted.date,
+    contents: [
+      {
+        images: [wasted.thumbnail],
+      },
+      { sketch: [wasted.sketch] },
+    ],
+  },
   {
     title: shinjuku.title,
     date: shinjuku.date,
     contents: [
+      {
+        images: [shinjuku.thumbnail],
+      },
       {
         sketch: [shinjuku.sketch],
       },
@@ -24,6 +36,9 @@ const _WorkEntities: OnePartial<ContentPageInfo, 'id'>[] = [
     title: forest.title,
     date: forest.date,
     contents: [
+      {
+        images: [forest.thumbnail],
+      },
       { sketch: [forest.sketch] },
       {
         text: [forest.caption],
@@ -33,12 +48,20 @@ const _WorkEntities: OnePartial<ContentPageInfo, 'id'>[] = [
   {
     title: tp4.title,
     date: tp4.date,
-    contents: [{ sketch: [tp4.sketch] }],
+    contents: [
+      {
+        images: [tp4.thumbnail],
+      },
+      { sketch: [tp4.sketch] },
+    ],
   },
   {
     title: regrets.title,
     date: regrets.date,
     contents: [
+      {
+        images: [regrets.thumbnail],
+      },
       {
         sketch: [regrets.sketch],
       },
@@ -51,6 +74,9 @@ const _WorkEntities: OnePartial<ContentPageInfo, 'id'>[] = [
     title: maze.title,
     date: maze.date,
     contents: [
+      {
+        images: [...maze.images],
+      },
       {
         sketch: [maze.sketch],
       },

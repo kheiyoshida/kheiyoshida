@@ -1,11 +1,8 @@
 import path from 'path'
 
 const IMGKIT = 'https://ik.imagekit.io/72lduu8js'
-const worksPath = '/works'
 
-export const resolveImagekitPath = (imagePaths: string[], workDate: string) => {
-  return imagePaths.map((p) => IMGKIT + path.join(worksPath, workDate, p))
-}
+export const resolveImagekitPath = (...paths: string[]) => IMGKIT + '/' + paths.join('/')
 
 export const retrieveImgAlt = (path: string) => {
   const p = path.split('/')

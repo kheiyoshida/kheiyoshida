@@ -30,7 +30,7 @@ export const Images = ({
             onClick={() => setCurrent(idx)}
             path={path}
             margin={type === 'work'}
-            link={displayOff ? retrieveImgLink(path) : undefined}
+            // link={displayOff ? retrieveImgLink(path) : undefined}
           />
         ))}
       </div>

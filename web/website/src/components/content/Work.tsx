@@ -1,10 +1,11 @@
 import styles from '@/styles/components/Work.module.scss'
 import Link from 'next/link'
-import { resolveImagekitPath } from '../../lib/image'
+import { Slug } from '../../constants'
 import { Embed, SketchEmbed } from './Embeds'
 import { Images } from './Image'
 import { Text } from './Text'
-import { Slug } from '../../constants'
+import { redirect } from 'next/navigation'
+import { useEffect } from 'react'
 
 export interface WorkPageProps {
   work: ContentPageInfo
@@ -22,6 +23,13 @@ export const FeedContentBlock = ({ work }: { work: ContentPageInfo }) => {
 }
 
 export const ContentBlock = ({ work, prev, next, slug }: WorkPageProps) => {
+  useEffect(() => {
+    if (slug === Slug.works) {
+      if (work.contents.find((c) => c.sketch)) {
+        window.location.href = work.contents.find((c) => c.sketch)!.sketch![0]
+      }
+    }
+  }, [])
   return (
     <div className={styles.work}>
       <div className={styles.work__title}>{work.title.toUpperCase()}</div>
@@ -37,14 +45,7 @@ const buildBody = (work: ContentPageInfo) => {
     if (content.text) return content.text.map((text, j) => <Text key={k + j} text={text} />)
     if (content.embed) return content.embed.map((loc, j) => <Embed key={k + j} iFrame={loc} />)
     if (content.images)
-      return (
-        <Images
-          key={k}
-          imagePaths={resolveImagekitPath(content.images, work.date)}
-          k={k}
-          layout={work.options?.imageLayout}
-        />
-      )
+      return <Images key={k} imagePaths={content.images} k={k} layout={work.options?.imageLayout} />
     if (content.sketch)
       return content.sketch.map((link, j) => <SketchEmbed key={k + j} link={link} />)
     throw Error(`unresolved content: ${content}`)

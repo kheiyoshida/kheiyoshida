@@ -9,8 +9,8 @@ export const Feed = ({ works }: { works: ContentPageInfo[] }) => {
       {works.map((w) => (
         <div key={`feed-${w.date}`} className={styles.feed__item}>
           <FeedContentBlock work={makeExcerpt(w)} />
-          {w.contents[0].sketch ? (
-            <a href={w.contents[0].sketch[0]}>{w.title}</a>
+          {w.contents[1]?.sketch ? (
+            <a href={w.contents[1].sketch[0]}>{w.title}</a>
           ) : (
             <Link href={`/${Slug.works}/${w.id}`}>{w.title}</Link>
           )}
