@@ -15,11 +15,11 @@ export default function App({ Component, pageProps }: AppProps) {
 
       <SpMenu />
 
-      <div className='container'>
-        <div className='container__menu'>
+      <div className="container">
+        <div className="container__menu">
           <Menu />
         </div>
-        <div className='container__body'>
+        <div className="container__body">
           <Component {...pageProps} />
         </div>
       </div>

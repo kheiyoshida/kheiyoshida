@@ -6,13 +6,8 @@
     color: rgba(vars.$text-color, 0.7);
     font-size: vars.$txt-small;
     margin-bottom: 2 * vars.$space;
-    letter-spacing: .18rem;
-    border-bottom: .1px solid rgba(vars.$text-color, 0.3) ;
-  }
-  &__body {
-    // > div {
-    //   margin-bottom: vars.$space;
-    // }
+    letter-spacing: 0.18rem;
+    border-bottom: 0.1px solid rgba(vars.$text-color, 0.3);
   }
   &__paginate {
     > a {

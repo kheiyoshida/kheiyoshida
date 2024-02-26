@@ -24,7 +24,7 @@
     &__lv3 {
       @include item;
       font-size: vars.$txt-small;
-      display:block;
+      display: block;
       margin-left: 2 * vars.$pd2;
     }
   }

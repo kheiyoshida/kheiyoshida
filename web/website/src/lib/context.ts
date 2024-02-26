@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext } from 'react'
 
-type PageType = {type: 'feed' | 'work'}
+type PageType = { type: 'feed' | 'work' }
 export const PageTypeContext = createContext({} as PageType)

@@ -1,7 +1,7 @@
-import { Images } from "./Image"
-import { Embeds, OtherEmbed, SketchEmbed } from "./Embeds"
+import { Images } from './Image'
+import { Embeds, OtherEmbed, SketchEmbed } from './Embeds'
 import styles from '@/styles/components/Work.module.scss'
-import Link from "next/link";
+import Link from 'next/link'
 
 export interface WorkPageProps {
   work: Work
@@ -17,7 +17,7 @@ const buildBody = (work: Work, feed: WorkPageProps['feed']) => {
       case 'visual':
         return <VisualWork key={key} work={work} />
       case 'sketch':
-        return <SketchWork key={key} work={work} feed={Boolean(feed)}/>
+        return <SketchWork key={key} work={work} feed={Boolean(feed)} />
       case 'music':
         return <MusicWork key={key} work={work} />
       case 'video':
@@ -26,37 +26,23 @@ const buildBody = (work: Work, feed: WorkPageProps['feed']) => {
         return <OtherWork key={key} work={work} />
     }
   })
-  return body;
+  return body
 }
 
-export const WorkBlock = ({work, prev, next, feed}: WorkPageProps) => {
+export const WorkBlock = ({ work, prev, next, feed }: WorkPageProps) => {
   const body = buildBody(work, feed)
   return (
     <div className={styles.work}>
-      {
-        !feed 
-          ? <div className={styles.work__title}>
-            {work.date}/{work.title}
-            </div>
-          : null
-      }
-      <div className={styles.work__body}>
-        {body}
-      </div>
-      {
-        !feed 
-          ? <div className={styles.work__description}>
-            {work.description}
-            </div>
-          : null
-      }
+      {!feed ? (
+        <div className={styles.work__title}>
+          {work.date}/{work.title}
+        </div>
+      ) : null}
+      <div className={styles.work__body}>{body}</div>
+      {!feed ? <div className={styles.work__description}>{work.description}</div> : null}
       <div className={styles.work__paginate}>
-        {
-          prev ? (<Link href={`/works/${prev}`}>⇦</Link>) : null
-        }
-        {
-          next ? (<Link href={`/works/${next}`}>⇨</Link>) : null
-        }
+        {prev ? <Link href={`/works/${prev}`}>⇦</Link> : null}
+        {next ? <Link href={`/works/${next}`}>⇨</Link> : null}
       </div>
     </div>
   )
@@ -66,69 +52,44 @@ interface WorkCp {
   work: Work
 }
 
-const VisualWork = ({work}: WorkCp) => {
+const VisualWork = ({ work }: WorkCp) => {
   return (
     <>
-      {
-        work.imagePaths ? (
-          <Images 
-            imagePaths={work.imagePaths} 
-            k={work.date}
-            layout={work.layout || 'row'}
-          />
-        ) : null
-      }
+      {work.imagePaths ? (
+        <Images imagePaths={work.imagePaths} k={work.date} layout={work.layout || 'row'} />
+      ) : null}
     </>
   )
 }
 
-const SketchWork = ({work, feed}: WorkCp & {feed: boolean}) => {
-  
+const SketchWork = ({ work, feed }: WorkCp & { feed: boolean }) => {
   const full = `https://sketch.kheiyoshida.com/${work.title}`
   const source = `https://github.com/kheiyoshida/sketch/tree/main/src/projects/${work.title}`
   return (
     <>
-      <SketchEmbed title={work.title} k={work.date}/> 
-      {
-        !feed ? (
+      <SketchEmbed title={work.title} k={work.date} />
+      {!feed ? (
+        <div>
           <div>
-            <div>
-              fullscreen=<a href={full}>{full}</a>
-            </div>
-            <div>
-              source=<a href={source}>{source}</a>
-            </div>
+            fullscreen=<a href={full}>{full}</a>
           </div>
-        ) : null
-      }
+          <div>
+            source=<a href={source}>{source}</a>
+          </div>
+        </div>
+      ) : null}
     </>
   )
 }
 
-const MusicWork = ({work}: WorkCp) => {
-  return (
-    <>
-      {
-        work.musicLoc ? (
-          <Embeds embeds={work.musicLoc} k={work.date}/> 
-        ) : null
-      }
-    </>
-  )
+const MusicWork = ({ work }: WorkCp) => {
+  return <>{work.musicLoc ? <Embeds embeds={work.musicLoc} k={work.date} /> : null}</>
 }
 
-const VideoWork = ({work}: WorkCp) => {
-  return (
-    <>
-      {
-        work.videoLoc ? (
-          <Embeds embeds={work.videoLoc} k={work.date}/> 
-        ) : null
-      }
-    </>
-  )
+const VideoWork = ({ work }: WorkCp) => {
+  return <>{work.videoLoc ? <Embeds embeds={work.videoLoc} k={work.date} /> : null}</>
 }
 
-const OtherWork = ({work}: WorkCp) => {
-  return <OtherEmbed title={work.title} k={work.date} info={work.info} /> 
+const OtherWork = ({ work }: WorkCp) => {
+  return <OtherEmbed title={work.title} k={work.date} info={work.info} />
 }

@@ -1,4 +1,3 @@
-
 type WorkType = 'music' | 'visual' | 'video' | 'sketch' | 'other'
 type Layout = 'row' | 'grid'
 
@@ -14,7 +13,7 @@ type WorkInfo = {
   videoLoc?: string[]
 
   // other
-  info?: {[k: string]: string}
+  info?: { [k: string]: string }
 
   // pref
   layout?: Layout

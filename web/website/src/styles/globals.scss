@@ -20,7 +20,7 @@ body {
     font-size: clamp(14px, 1.6vw, 16px);
   }
 
-  letter-spacing: .035rem;
+  letter-spacing: 0.035rem;
   line-height: 220%;
   text-align: left;
 
@@ -46,10 +46,9 @@ body {
   }
 
   @media screen and (max-width: vars.$sp-width) {
-
     margin-top: 2 * vars.$space + vars.$txt-small;
     padding: vars.$space;
-    
+
     &__menu {
       display: none;
     }
