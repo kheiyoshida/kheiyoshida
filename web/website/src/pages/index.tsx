@@ -4,7 +4,7 @@ import { GetStaticProps, NextPage } from 'next/types'
 import { WorkEntities } from '../contents'
 
 interface HomePageProps {
-  works: WorkInfoNew[]
+  works: Work[]
 }
 
 const Home: NextPage<HomePageProps> = ({ works }) => {

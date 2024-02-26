@@ -2,7 +2,7 @@ import { WorkBlock } from '../content/Work'
 import styles from '@/styles/components/Feed.module.scss'
 import Link from 'next/link'
 
-export const Feed = ({ works }: { works: WorkInfoNew[] }) => {
+export const Feed = ({ works }: { works: Work[] }) => {
   return (
     <div className={styles.feed}>
       {works.map((w) => (
@@ -18,7 +18,7 @@ export const Feed = ({ works }: { works: WorkInfoNew[] }) => {
 const ShownContentsInFeed = 1
 const ShownImagesInFeed = 2
 
-const makeExcerpt = (work: WorkInfoNew): WorkInfoNew => {
+const makeExcerpt = (work: Work): Work => {
   const excerpt = { ...work, contents: work.contents.slice(0, ShownContentsInFeed) }
   if (excerpt.contents[0].images) {
     excerpt.contents[0].images = excerpt.contents[0].images.slice(0, ShownImagesInFeed)

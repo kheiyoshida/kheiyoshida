@@ -1,4 +1,4 @@
-type WorkInfoNew = {
+type Work = {
   title: string
   date: string // YYMMDD
   contents: WorkContent[]
