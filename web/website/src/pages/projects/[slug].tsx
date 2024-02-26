@@ -1,15 +1,16 @@
-import { WorkBlock, WorkPageProps } from '@/components/content/Work'
+import { ContentBlock, WorkPageProps } from '@/components/content/Work'
 import { PageTypeContext } from '@/lib/context'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { ParsedUrlQuery } from 'querystring'
-import { WorkEntities } from '../../contents'
+import { ProjectEntities } from '../../contents/projects'
+import { Slug } from '../../constants'
 
 export default function Work(props: WorkPageProps) {
   return (
     <>
       {/* SEO meta needed */}
       <PageTypeContext.Provider value={{ type: 'work' }}>
-        <WorkBlock {...props} />
+        <ContentBlock {...props} />
       </PageTypeContext.Provider>
     </>
   )
@@ -21,9 +22,9 @@ interface PageParam extends ParsedUrlQuery {
 
 export const getStaticPaths: GetStaticPaths<PageParam> = () => {
   return {
-    paths: WorkEntities.map((work) => ({
+    paths: ProjectEntities.map((pj) => ({
       params: {
-        slug: work.date,
+        slug: pj.id,
       },
     })),
     fallback: false,
@@ -32,16 +33,18 @@ export const getStaticPaths: GetStaticPaths<PageParam> = () => {
 
 export const getStaticProps: GetStaticProps<WorkPageProps> = (ctx) => {
   const { slug } = ctx.params as PageParam
-  const idx = WorkEntities.findIndex((e) => e.date === slug)!
-  const work = WorkEntities[idx]
-  const prev = WorkEntities[idx + 1]
-  const next = WorkEntities[idx - 1]
+  const idx = ProjectEntities.findIndex((e) => e.id === slug)!
+
+  const work = ProjectEntities[idx]
+  const prev = ProjectEntities[idx + 1]
+  const next = ProjectEntities[idx - 1]
 
   return {
     props: {
       work,
-      prev: prev ? prev.date : null,
-      next: next ? next.date : null,
+      prev: prev ? prev.id : null,
+      next: next ? next.id : null,
+      slug: Slug.projects,
     },
     revalidate: 1,
   }

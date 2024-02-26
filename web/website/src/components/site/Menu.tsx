@@ -1,8 +1,9 @@
 import { useRouteChange } from '@/lib/hooks'
 import styles from '@/styles/components/Menu.module.scss'
-import { WorkEntities } from '@/contents'
 import Link from 'next/link'
 import { useState } from 'react'
+import { Slug } from '../../constants'
+import { ProjectEntities } from '../../contents/projects'
 import { Modal } from './Modal'
 
 export const SpMenu = () => {
@@ -40,7 +41,7 @@ export const Menu = () => {
   )
 }
 
-type Menu2Items = 'works' | 'links' | 'contact'
+type Menu2Items = 'projects' | 'links' | 'contact'
 
 const Menu2 = () => {
   const [opened, setOpened] = useState<Menu2Items[]>([])
@@ -57,17 +58,17 @@ const Menu2 = () => {
       <Link href={'/'} className={styles.menu__item__lv2}>
         ~
       </Link>
-      <div onClick={() => toggleItem('works')} className={styles.menu__item__lv2}>
-        Works
+      <div onClick={() => toggleItem('projects')} className={styles.menu__item__lv2}>
+        Projects
       </div>
-      {opened.includes('works')
-        ? WorkEntities.map((work) => (
+      {opened.includes('projects')
+        ? ProjectEntities.map((pj) => (
             <Link
               className={styles.menu__item__lv3}
-              href={`/works/${work.date}`}
-              key={`entry-${work.date}`}
+              href={`/${Slug.projects}/${pj.id}`}
+              key={`entry-${pj.id}`}
             >
-              {work.date} / {work.title}
+              {pj.title.toUpperCase()}
             </Link>
           ))
         : null}

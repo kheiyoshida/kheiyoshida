@@ -1,16 +1,20 @@
-type Work = {
+type OnePartial<R extends Record, K extends keyof R> = Omit<R, K> & Partial<Pick<R, K>>
+type ContentWithoutId = OnePartial<ContentPageInfo, 'id'>
+
+type ContentPageInfo = {
+  id: string
   title: string
   date: string // YYMMDD
-  contents: WorkContent[]
+  contents: PageContent[]
   options?: {
     imageLayout?: ImageLayout
   }
 }
 
-type WorkContent = {
-  [k in WorkContentType]?: string[]
+type PageContent = {
+  [k in ContentType]?: string[]
 }
 
-type WorkContentType = 'text' | 'images' | 'embed' | 'sketch'
+type ContentType = 'text' | 'images' | 'embed' | 'sketch'
 
 type ImageLayout = 'row' | 'grid'

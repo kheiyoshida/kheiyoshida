@@ -4,32 +4,34 @@ import { resolveImagekitPath } from '../../lib/image'
 import { Embed, SketchEmbed } from './Embeds'
 import { Images } from './Image'
 import { Text } from './Text'
+import { Slug } from '../../constants'
 
 export interface WorkPageProps {
-  work: Work
+  work: ContentPageInfo
   prev?: string | null
   next?: string | null
-  feed?: boolean
+  slug: Slug
 }
 
-export const WorkBlock = ({ work, prev, next, feed }: WorkPageProps) => {
+export const FeedContentBlock = ({ work }: { work: ContentPageInfo }) => {
   return (
     <div className={styles.work}>
-      {!feed ? (
-        <div className={styles.work__title}>
-          {work.date}/{work.title}
-        </div>
-      ) : null}
       <div className={styles.work__body}>{buildBody(work)}</div>
-      <div className={styles.work__paginate}>
-        {prev ? <Link href={`/works/${prev}`}>⇦</Link> : null}
-        {next ? <Link href={`/works/${next}`}>⇨</Link> : null}
-      </div>
     </div>
   )
 }
 
-const buildBody = (work: Work) => {
+export const ContentBlock = ({ work, prev, next, slug }: WorkPageProps) => {
+  return (
+    <div className={styles.work}>
+      <div className={styles.work__title}>{work.title.toUpperCase()}</div>
+      <div className={styles.work__body}>{buildBody(work)}</div>
+      <Paginate prev={prev} next={next} slug={slug} />
+    </div>
+  )
+}
+
+const buildBody = (work: ContentPageInfo) => {
   const body: JSX.Element[] = work.contents.flatMap((content, i) => {
     const k = `${work.title}-${i}`
     if (content.text) return content.text.map((text, j) => <Text key={k + j} text={text} />)
@@ -49,3 +51,10 @@ const buildBody = (work: Work) => {
   })
   return body
 }
+
+const Paginate = ({ prev, next, slug }: Pick<WorkPageProps, 'prev' | 'next' | 'slug'>) => (
+  <div className={styles.work__paginate}>
+    {prev ? <Link href={`/${slug}/${prev}`}>⇦</Link> : null}
+    {next ? <Link href={`/${slug}/${next}`}>⇨</Link> : null}
+  </div>
+)
