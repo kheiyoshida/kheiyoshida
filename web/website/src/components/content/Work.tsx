@@ -4,6 +4,7 @@ import { resolveImagekitPath } from '../../lib/image'
 import { Embed, SketchEmbed } from './Embeds'
 import { Images } from './Image'
 import { Text } from './Text'
+import { useEffect } from 'react'
 
 export interface WorkPageProps {
   work: WorkInfoNew
@@ -13,6 +14,9 @@ export interface WorkPageProps {
 }
 
 export const WorkBlock = ({ work, prev, next, feed }: WorkPageProps) => {
+  useEffect(() => {
+    console.log(work)
+  })
   return (
     <div className={styles.work}>
       {!feed ? (

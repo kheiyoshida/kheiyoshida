@@ -7,8 +7,7 @@ export const Feed = ({ works }: { works: WorkInfoNew[] }) => {
     <div className={styles.feed}>
       {works.map((w) => (
         <div key={`feed-${w.date}`} className={styles.feed__item}>
-          <WorkBlock work={w} feed />
-          {/* <WorkBlock work={excerpt(w)} feed /> */}
+          <WorkBlock work={makeExcerpt(w)} feed />
           <Link href={`/works/${w.date}`}>{w.title}</Link>
         </div>
       ))}
@@ -16,10 +15,13 @@ export const Feed = ({ works }: { works: WorkInfoNew[] }) => {
   )
 }
 
-const excerpt = (work: Work) => {
-  const th = 2
-  if (work.imagePaths.length > th) {
-    work.imagePaths = work.imagePaths.slice(0, th)
+const ShownContentsInFeed = 1
+const ShownImagesInFeed = 2
+
+const makeExcerpt = (work: WorkInfoNew): WorkInfoNew => {
+  const excerpt = { ...work, contents: work.contents.slice(0, ShownContentsInFeed) }
+  if (excerpt.contents[0].images) {
+    excerpt.contents[0].images = excerpt.contents[0].images.slice(0, ShownImagesInFeed)
   }
-  return work
+  return excerpt
 }

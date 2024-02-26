@@ -23,7 +23,7 @@ export const Images = ({
       {!displayOff && current !== undefined ? (
         <Display imagePaths={imagePaths} current={current} setCurrent={setCurrent} />
       ) : null}
-      <div className={layout === 'row' ? styles.images__row : styles.images__grid}>
+      <div className={layout === 'grid' ? styles.images__grid : styles.images__row}>
         {imagePaths.map((path, idx) => (
           <FlexibleImage
             key={`${k}-img-${idx}`}
