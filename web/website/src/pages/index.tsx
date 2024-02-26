@@ -1,11 +1,10 @@
-import { Feed } from '@/components/Feed'
+import { Feed } from '@/components/site/Feed'
 import { PageTypeContext } from '@/lib/context'
-import { resolveWorkInfo } from '@/lib/image'
-import workEntities from '@/works'
 import { GetStaticProps, NextPage } from 'next/types'
+import { WorkEntities } from '../contents'
 
 interface HomePageProps {
-  works: Work[]
+  works: WorkInfoNew[]
 }
 
 const Home: NextPage<HomePageProps> = ({ works }) => {
@@ -19,11 +18,9 @@ const Home: NextPage<HomePageProps> = ({ works }) => {
 }
 
 export const getStaticProps: GetStaticProps<HomePageProps> = () => {
-  const works = workEntities.map((w) => resolveWorkInfo(w))
-
   return {
     props: {
-      works,
+      works: WorkEntities,
     },
   }
 }

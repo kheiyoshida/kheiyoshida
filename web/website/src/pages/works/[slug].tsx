@@ -1,9 +1,8 @@
-import { WorkBlock, WorkPageProps } from '@/components/Work'
+import { WorkBlock, WorkPageProps } from '@/components/content/Work'
 import { PageTypeContext } from '@/lib/context'
-import { resolveWorkInfo } from '@/lib/image'
-import workEntities from '@/works'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { ParsedUrlQuery } from 'querystring'
+import { WorkEntities } from '../../contents'
 
 export default function Work(props: WorkPageProps) {
   return (
@@ -22,7 +21,7 @@ interface PageParam extends ParsedUrlQuery {
 
 export const getStaticPaths: GetStaticPaths<PageParam> = () => {
   return {
-    paths: workEntities.map((work) => ({
+    paths: WorkEntities.map((work) => ({
       params: {
         slug: work.date,
       },
@@ -33,10 +32,10 @@ export const getStaticPaths: GetStaticPaths<PageParam> = () => {
 
 export const getStaticProps: GetStaticProps<WorkPageProps> = (ctx) => {
   const { slug } = ctx.params as PageParam
-  const idx = workEntities.findIndex((e) => e.date === slug)!
-  const work = resolveWorkInfo(workEntities[idx])
-  const prev = workEntities[idx + 1]
-  const next = workEntities[idx - 1]
+  const idx = WorkEntities.findIndex((e) => e.date === slug)!
+  const work = WorkEntities[idx]
+  const prev = WorkEntities[idx + 1]
+  const next = WorkEntities[idx - 1]
 
   return {
     props: {

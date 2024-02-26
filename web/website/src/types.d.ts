@@ -25,3 +25,15 @@ type ResolvedImages = {
 }
 
 type Work = WorkInfo & ResolvedImages
+
+type WorkInfoNew = {
+  title: string
+  date: string // YYMMDD
+  contents: WorkContent[]
+}
+
+type WorkContent = {
+  [k in WorkContentType]?: string[]
+}
+
+type WorkContentType = 'text' | 'images' | 'embed' | 'sketch'

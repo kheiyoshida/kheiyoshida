@@ -1,10 +1,10 @@
-import Image from 'next/image'
-import styles from '@/styles/components/Image.module.scss'
-import { useContext, useState } from 'react'
-import { Modal } from './Modal'
 import { PageTypeContext } from '@/lib/context'
 import { retrieveImgAlt, retrieveImgLink } from '@/lib/image'
+import styles from '@/styles/components/Image.module.scss'
+import Image from 'next/image'
 import Link from 'next/link'
+import { useContext, useState } from 'react'
+import { Modal } from '../site/Modal'
 
 export const Images = ({
   imagePaths,
@@ -17,9 +17,7 @@ export const Images = ({
 }) => {
   const { type } = useContext(PageTypeContext)
   const displayOff = type === 'feed'
-
   const [current, setCurrent] = useState<number>()
-
   return (
     <>
       {!displayOff && current !== undefined ? (
@@ -84,13 +82,10 @@ const Display = ({
   setCurrent: (idx: number | undefined) => void
 }) => {
   const close = () => setCurrent(undefined)
-
   const [prevOk, nextOk] = [current !== 0, imagePaths.length - 1 !== current]
   const prev = () => prevOk && setCurrent(current - 1)
   const next = () => nextOk && setCurrent(current + 1)
-
   const path = imagePaths[current]
-
   return (
     <Modal close={close}>
       <div className={styles.display} onClick={close}>

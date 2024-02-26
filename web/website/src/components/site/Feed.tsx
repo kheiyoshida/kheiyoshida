@@ -1,13 +1,14 @@
-import { WorkBlock } from './Work'
+import { WorkBlock } from '../content/Work'
 import styles from '@/styles/components/Feed.module.scss'
 import Link from 'next/link'
 
-export const Feed = ({ works }: { works: Work[] }) => {
+export const Feed = ({ works }: { works: WorkInfoNew[] }) => {
   return (
     <div className={styles.feed}>
       {works.map((w) => (
         <div key={`feed-${w.date}`} className={styles.feed__item}>
-          <WorkBlock work={excerpt(w)} feed />
+          <WorkBlock work={w} feed />
+          {/* <WorkBlock work={excerpt(w)} feed /> */}
           <Link href={`/works/${w.date}`}>{w.title}</Link>
         </div>
       ))}

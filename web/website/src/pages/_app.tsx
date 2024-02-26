@@ -1,4 +1,4 @@
-import { Menu, SpMenu } from '@/components/Menu'
+import { Menu, SpMenu } from '@/components/site/Menu'
 import '@/styles/globals.scss'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'

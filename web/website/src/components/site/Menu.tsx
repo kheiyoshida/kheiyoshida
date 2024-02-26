@@ -1,6 +1,6 @@
 import { useRouteChange } from '@/lib/hooks'
 import styles from '@/styles/components/Menu.module.scss'
-import workEntities from '@/works'
+import { WorkEntities } from '@/contents'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Modal } from './Modal'
@@ -61,7 +61,7 @@ const Menu2 = () => {
         Works
       </div>
       {opened.includes('works')
-        ? workEntities.map((work) => (
+        ? WorkEntities.map((work) => (
             <Link
               className={styles.menu__item__lv3}
               href={`/works/${work.date}`}
@@ -103,9 +103,5 @@ const Links: { href: string; name: string }[] = [
   {
     href: 'https://soundcloud.com/khei-yoshida',
     name: 'soundcloud',
-  },
-  {
-    href: 'https://sketch.kheiyoshida.com',
-    name: 'sketch',
   },
 ]
