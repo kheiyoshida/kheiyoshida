@@ -13,6 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <div id="canvas"></div>
       <SpMenu />
 
       <div className="container">

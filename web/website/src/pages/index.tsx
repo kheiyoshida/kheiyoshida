@@ -2,9 +2,10 @@ import { Feed } from '@/components/site/Feed'
 import { PageTypeContext } from '@/lib/context'
 import { GetStaticProps, NextPage } from 'next/types'
 import { WorkEntities } from '../contents/works'
+import { WorkPageInfo } from '../types'
 
 interface HomePageProps {
-  works: ContentPageInfo[]
+  works: WorkPageInfo[]
 }
 
 const Home: NextPage<HomePageProps> = ({ works }) => {

@@ -3,8 +3,14 @@ import { useEffect, useMemo } from 'react'
 import { Sketch } from '../../contents/data'
 
 export const Canvas = ({ sketch }: { sketch: Sketch }) => {
-  const SketchComponent = useMemo(() => getSketchComponent(sketch), [sketch])
-  return <SketchComponent />
+  const SketchComponent = getSketchComponent(sketch)
+  useEffect(preventScroll, [])
+  return (
+    <>
+      <CnavasLoader />
+      <SketchComponent />
+    </>
+  )
 }
 
 const getSketchComponent = (sketch: Sketch) => {
@@ -22,7 +28,33 @@ const getSketchComponent = (sketch: Sketch) => {
     case Sketch.tp4:
       return dynamic(() => import('sketch/src/projects/tp4'), { ssr: false })
     default:
-      return () => <div>{sketch}</div>
       throw Error(`couldn't resolve the sketch: ${sketch}`)
   }
+}
+
+const preventScroll = () => {
+  document.body.style.position = 'fixed'
+  document.body.style.top = '0'
+}
+
+const CnavasLoader = () => (
+  <div style={loader}>
+    <div style={text}>loading...</div>
+  </div>
+)
+
+const loader: React.CSSProperties = {
+  zIndex: 5,
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  width: '100vw',
+  height: '100dvh',
+  overflow: 'hidden',
+  backgroundColor: 'black',
+}
+
+const text: React.CSSProperties = {
+  margin: '45vh auto',
+  width: '100px',
 }

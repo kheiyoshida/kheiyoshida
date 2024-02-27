@@ -10,21 +10,28 @@
 
 html,
 body {
-  min-height: 100vh;
-  overflow-y: scroll;
+  min-height: 100dvh;
   max-width: 100vw;
   overflow-x: hidden;
+  overscroll-behavior: none;
+
+  padding: 0;
+  margin: 0;
+  touch-action: manipulation;
+
+  letter-spacing: 0.035rem;
+  line-height: 220%;
+  text-align: left;
   color: vars.$text-color;
   background-color: vars.$bg-color;
   @media screen and (max-width: vars.$sp-width) {
     font-size: clamp(14px, 1.6vw, 16px);
   }
+}
 
-  letter-spacing: 0.035rem;
-  line-height: 220%;
-  text-align: left;
-
-  overscroll-behavior: none;
+canvas {
+  border: 1px solid black;
+  touch-action: manipulation;
 }
 
 .container {
