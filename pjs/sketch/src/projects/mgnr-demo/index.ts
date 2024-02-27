@@ -14,6 +14,7 @@ import { music } from './services/sound'
 import { showInstruction } from './services/ui'
 import { cameraStore, objectStore, sketchStore, variableStore } from './state'
 import { fireByRate } from 'utils'
+import { P5Canvas } from '../../lib/p5canvas'
 
 const musicCommands = music()
 const startSound = () => {
@@ -52,8 +53,6 @@ const draw = () => {
 
   cameraReachedEdgeEvent(cameraStore.current.camera, variableStore, objectStore)
 
-
-
   // render
   const { fillColor } = sketchStore.current
   p.background(fillColor)
@@ -64,12 +63,10 @@ const draw = () => {
     objectStore.renewSkin()
   }
   p.texture(objectStore.current.skin)
-  objectStore.current.trees.forEach(
-    renderGeometryObject
-  )
+  objectStore.current.trees.forEach(renderGeometryObject)
 }
 
-export default <Sketch>{
+export default P5Canvas({
   setup,
   draw,
-}
+})

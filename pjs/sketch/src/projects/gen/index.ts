@@ -3,6 +3,7 @@ import { pushPop } from 'p5utils/src/render'
 import { SketchConfigStore, applyConfig } from 'p5utils/src/utils/project'
 import { makeStore, randomFloatBetween as randomBetween } from 'utils'
 import { Gene, grow } from './gene'
+import { P5Canvas } from '../../lib/p5canvas'
 
 const store = makeStore<SketchConfigStore>()
 const geneStore = makeStore<{ stack: Gene[]; rootAngle: number }>()
@@ -102,8 +103,8 @@ const draw = () => {
   }
 }
 
-export default <Sketch>{
+export default P5Canvas({
   setup,
   draw,
   windowResized: () => {},
-}
+})

@@ -1,9 +1,9 @@
 import { draw3DGrid } from 'p5utils/src/3d/debug'
 import { loadFont } from 'p5utils/src/font'
 import { applyConfig } from 'p5utils/src/utils/project'
+import { P5Canvas } from '../../lib/p5canvas'
 import { bindControl } from './control'
 import { cameraStore, geometryStore, sketchStore, skinStore } from './state'
-import { finalizeGeometry, renderGeometry } from 'p5utils/src/3dShape'
 
 const preload = () => {
   skinStore.lazyInit()
@@ -38,8 +38,8 @@ const draw = () => {
   sketchStore.paint()
 
   // camera
-  // cameraStore.turnCamera()
-  // cameraStore.moveCamera()
+  cameraStore.turnCamera()
+  cameraStore.moveCamera()
 
   // render
   p.lights()
@@ -50,8 +50,8 @@ const draw = () => {
   geometryStore.render()
 }
 
-export default <Sketch>{
+export default P5Canvas({
   preload,
   setup,
   draw,
-}
+})

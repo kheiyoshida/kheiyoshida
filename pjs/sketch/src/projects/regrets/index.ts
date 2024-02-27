@@ -1,16 +1,13 @@
 import p5 from 'p5'
-import { requireMusic } from 'src/assets'
-import {
-  callContext,
-  createAnalyzer,
-  createSoundSource
-} from 'p5utils/src/media/audio/analyzer'
+import { requireMusic } from '../../assets/'
+import { callContext, createAnalyzer, createSoundSource } from 'p5utils/src/media/audio/analyzer'
 import { FFTSize } from 'p5utils/src/media/audio/types'
 import { drawLineBetweenVectors } from 'p5utils/src/render'
 import { mapToSphere } from 'p5utils/src/render'
-import { instruction } from "p5utils/src/utils/project"
-import { randomFloatBetween as randomBetween } from "utils"
+import { instruction } from 'p5utils/src/utils/project'
+import { randomFloatBetween as randomBetween } from 'utils'
 import { degree2Vector, pushPop } from 'p5utils/src/render'
+import { P5Canvas } from '../../lib/p5canvas'
 
 let cw: number
 let ch: number
@@ -38,7 +35,7 @@ const setup = () => {
   p.strokeWeight(1)
 
   const div = instruction()
-  
+
   const start = () => {
     const context = callContext()
     if (context.state === 'suspended') {
@@ -101,7 +98,7 @@ const draw = () => {
   p.camera(p.sin(m) * 1000, p.cos(m) * 1000, 500 + p.tan(m) * 500)
 }
 
-export default <Sketch>{
+export default P5Canvas({
   setup,
   draw,
-}
+})

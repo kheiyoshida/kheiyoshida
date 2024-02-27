@@ -6,6 +6,7 @@ import { bindControl } from './control'
 import { bindPlayEvent, soundAnalyzer } from './data/sound'
 import { render } from './render/drawGraph'
 import { cameraStore, graphStore, sketchStore, skinStore } from './state'
+import { P5Canvas } from '../../lib/p5canvas'
 
 const preload = () => {
   skinStore.lazyInit()
@@ -19,6 +20,7 @@ const setup = () => {
   p.background(sketchStore.current.fillColor)
   p.fill(sketchStore.current.strokeColor)
   p.noStroke()
+  p.textureMode(p.NORMAL)
   loadFont()
 
   // sound
@@ -87,8 +89,8 @@ const draw = () => {
   render(graphStore.current, freqData)
 }
 
-export default <Sketch>{
+export default P5Canvas({
   preload,
   setup,
   draw,
-}
+})

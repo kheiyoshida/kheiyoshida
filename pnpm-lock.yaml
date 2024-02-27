@@ -200,6 +200,12 @@ importers:
       p5utils:
         specifier: workspace:^
         version: link:../../pkgs/p5utils
+      react:
+        specifier: 18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
       tone:
         specifier: ^14.7.77
         version: 14.7.77
@@ -222,6 +228,15 @@ importers:
       '@types/p5':
         specifier: ^1.7.0
         version: 1.7.4
+      '@types/react':
+        specifier: ^18.2.56
+        version: 18.2.56
+      '@types/react-dom':
+        specifier: ^18.2.19
+        version: 18.2.19
+      '@vitejs/plugin-react':
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.1.4)
       babel-loader:
         specifier: ^9.0.0
         version: 9.1.3(@babel/core@7.23.5)(webpack@5.89.0)
@@ -252,6 +267,9 @@ importers:
       typescript:
         specifier: ^4.8.4
         version: 4.9.5
+      vite:
+        specifier: ^5.1.4
+        version: 5.1.4(@types/node@20.10.4)
       webpack:
         specifier: ^5.76.2
         version: 5.89.0(webpack-cli@4.10.0)
@@ -3045,7 +3063,7 @@ packages:
   /@types/react-dom@18.2.19:
     resolution: {integrity: sha512-aZvQL6uUbIJpjZk4U8JZGbau9KDeAwMfmhyWorxgBkqDIEf6ROjRozcmPIicqsUwPUjbkDfHKgGee1Lq65APcA==}
     dependencies:
-      '@types/react': 18.2.59
+      '@types/react': 18.2.56
     dev: true
 
   /@types/react@18.2.56:
@@ -3054,7 +3072,6 @@ packages:
       '@types/prop-types': 15.7.11
       '@types/scheduler': 0.16.8
       csstype: 3.1.2
-    dev: false
 
   /@types/react@18.2.59:
     resolution: {integrity: sha512-DE+F6BYEC8VtajY85Qr7mmhTd/79rJKIHCg99MU9SWPB4xvLb6D1za2vYflgZfmPqQVEr6UqJTnLXEwzpVPuOg==}

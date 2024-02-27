@@ -1,14 +1,11 @@
-import {
-  callContext,
-  createAnalyzer,
-  createSoundSource,
-} from 'p5utils/src/media/audio/analyzer'
+import { callContext, createAnalyzer, createSoundSource } from 'p5utils/src/media/audio/analyzer'
 import { FFTSize } from 'p5utils/src/media/audio/types'
 import { SketchConfigStore, applyConfig, instruction } from 'p5utils/src/utils/project'
-import { requireMusic } from 'src/assets'
+import { requireMusic } from '../../assets'
 import { makeStoreV2 } from 'utils'
 import { renderSoundShape } from './feather'
 import { spinNumber, wastedStore } from './state'
+import { P5Canvas } from '../../lib/p5canvas'
 
 const fftSize: FFTSize = 128
 const soundSource = createSoundSource(requireMusic('wasted.mp3'))
@@ -70,7 +67,7 @@ const draw = () => {
   p.camera(p.sin(m) * 1000, p.cos(m) * 1000, 500 + p.tan(m) * 100)
 }
 
-export default <Sketch>{
+export default P5Canvas({
   setup,
   draw,
-}
+})

@@ -18,6 +18,7 @@ import { iterateMatrix } from 'p5utils/src/data/matrix/matrix'
 import { brightness } from 'p5utils/src/media/pixel/analyze'
 import { requireMusic } from '../../assets'
 import { instruction } from 'p5utils/src/utils/project'
+import { P5Canvas } from '../../lib/p5canvas'
 
 const LIGHT_THRESHOLD_DEVICE_WIDTH = 800
 const isLight = window.innerWidth < LIGHT_THRESHOLD_DEVICE_WIDTH
@@ -125,7 +126,7 @@ const draw = () => {
 
 const calcPxSize = memorize(calcPixelSize)
 
-export default <Sketch>{
+export default P5Canvas({
   setup,
   draw,
-}
+})

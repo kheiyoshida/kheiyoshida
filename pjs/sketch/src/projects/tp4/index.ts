@@ -1,26 +1,12 @@
-import { requireMusic } from 'src/assets'
-import {
-  callContext,
-  createAnalyzer,
-  createSoundSource,
-} from 'p5utils/src/media/audio/analyzer'
+import { requireMusic } from '../../assets'
+import { callContext, createAnalyzer, createSoundSource } from 'p5utils/src/media/audio/analyzer'
 import { FFTSize } from 'p5utils/src/media/audio/types'
-import {
-  SketchConfigStore,
-  applyConfig,
-  instruction,
-} from 'p5utils/src/utils/project'
+import { SketchConfigStore, applyConfig, instruction } from 'p5utils/src/utils/project'
 import { makeStore } from 'utils'
-import {
-  cleanGraph,
-  connectGraph,
-  createGraph,
-  growGraph,
-  liveGraph,
-  restrainGraph,
-} from './graph'
+import { cleanGraph, connectGraph, createGraph, growGraph, liveGraph, restrainGraph } from './graph'
 import { Node } from './node'
 import { renderGraph } from './render'
+import { P5Canvas } from '../../lib/p5canvas'
 
 const store = makeStore<
   SketchConfigStore & {
@@ -101,7 +87,7 @@ const draw = () => {
   p.camera(0, 0, 2000 + p.sin(m * 0.01) * 1000)
 }
 
-export default <Sketch>{
+export default P5Canvas({
   setup,
   draw,
-}
+})

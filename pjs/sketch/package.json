@@ -4,10 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --mode development",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    
+    "dev:old": "webpack-dev-server --mode development",
     "pj:new": "sh -c 'mkdir src/projects/${0} && cp src/templates/pj.ts src/projects/${0}/index.ts'",
     "pj:list": "node ./scripts/projects",
-    "build": "webpack --mode production && cp public/index.html dist/index.html",
+    "build:old": "webpack --mode production && cp public/index.html dist/index.html",
     "test": "cd ../.. && jest --selectProjects sketch"
   },
   "keywords": [],
@@ -20,7 +24,9 @@
     "mgnr-tone-presets": "workspace:^",
     "p5utils": "workspace:^",
     "tone": "^14.7.77",
-    "utils": "workspace:^"
+    "utils": "workspace:^",
+    "react": "18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.19.6",
@@ -40,6 +46,10 @@
     "webpack": "^5.76.2",
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.11.1",
-    "test-utils": "workspace:^"
+    "test-utils": "workspace:^",
+    "@types/react": "^18.2.56",
+    "@types/react-dom": "^18.2.19",
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.1.4"
   }
 }

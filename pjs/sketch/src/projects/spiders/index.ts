@@ -4,6 +4,7 @@ import { makeStore } from 'utils'
 import { Graph, cleanGraph } from './graph'
 import { live, move, seed } from './node'
 import { render } from './render'
+import { P5Canvas } from '../../lib/p5canvas'
 
 const store = makeStore<
   SketchConfigStore & {
@@ -50,7 +51,7 @@ const draw = () => {
   store.update('graph', newGraph)
 }
 
-export default <Sketch>{
+export default P5Canvas({
   setup,
   draw,
-}
+})

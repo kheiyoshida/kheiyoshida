@@ -1,7 +1,8 @@
 import p5 from 'p5'
 import { destVect, vline } from 'p5utils/src/render'
-import { randomFloatBetween as randomBetween } from "utils"
+import { randomFloatBetween as randomBetween } from 'utils'
 import { Wing } from './wing'
+import { P5Canvas } from '../../lib/p5canvas'
 
 let cw: number
 let ch: number
@@ -29,8 +30,7 @@ const setup = () => {
     .map((_) => new Wing(randomVect(), randomBetween(0, 360), 40))
 }
 
-const randomVect = () =>
-  p.createVector(randomBetween(0, cw), randomBetween(0, ch))
+const randomVect = () => p.createVector(randomBetween(0, cw), randomBetween(0, ch))
 
 const draw = () => {
   p.rect(-1, -1, cw + 1, ch + 1)
@@ -87,7 +87,7 @@ const wing = (v: p5.Vector, angle = 315, len = 100, re = 10): undefined => {
   }
 }
 
-export default <Sketch>{
+export default P5Canvas({
   setup,
   draw,
-}
+})
