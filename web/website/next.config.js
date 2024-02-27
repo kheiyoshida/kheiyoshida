@@ -10,7 +10,18 @@ const nextConfig = {
         port: '',
       },
     ],
-  },  
+  },
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.ttf$/i,
+      use: [
+        {
+          loader: 'file-loader',
+        },
+      ],
+    })
+    return config
+  },
 }
 
 module.exports = nextConfig

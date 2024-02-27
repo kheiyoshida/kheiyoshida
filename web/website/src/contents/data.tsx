@@ -1,25 +1,33 @@
-  import { resolveImagekitPath } from '../lib/image'
-
-const sketchLink = (slug: string) => `https://sketch.kheiyoshida.com/${slug}`
+import { resolveImagekitPath } from '../lib/image'
+import { ContentWithoutId } from '../types'
 
 const thumbnailPath = (name: string) => resolveImagekitPath('works', 'thumbnails', name)
 
-export const insertSlug = (content: OnePartial<ContentPageInfo, 'id'>) => ({
+export const insertSlug = (content: ContentWithoutId) => ({
   ...content,
   id: content.title.replaceAll(' ', '-').toLowerCase(),
 })
+
+export enum Sketch {
+  wasted = 'wasted',
+  shinjuku = 'shinjuku',
+  forest = 'forest',
+  tp4 = 'tp4',
+  regrets = 'regrets',
+  maze = 'maze',
+}
 
 export const ContentData = {
   wasted: {
     title: 'wasted',
     date: '240220',
-    sketch: sketchLink('wasted_revisited'),
+    sketch: Sketch.wasted,
     thumbnail: thumbnailPath('wasted.png'),
   },
   shinjuku: {
     title: 'shinjuku',
     date: '240131',
-    sketch: sketchLink('shinjuku'),
+    sketch: Sketch.shinjuku,
     soundcloud:
       '<iframe style="margin-top: 8px;" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1733015109&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>',
     youtube:
@@ -32,7 +40,7 @@ export const ContentData = {
   forest: {
     title: 'forest',
     date: '231119',
-    sketch: sketchLink('mgnr-demo'),
+    sketch: Sketch.forest,
     caption: `
     This is the playground for my in-development music project "mgnr", a library to programmatically generate music. As you play the demo, you will hear a variety of auto-generated patterns. The music generation is also based on your play style. Try to go through the weird forest, or stand still in the darkness. 
     `,
@@ -41,13 +49,13 @@ export const ContentData = {
   tp4: {
     title: 'tp4',
     date: '231024',
-    sketch: sketchLink('tp4'),
+    sketch: Sketch.tp4,
     thumbnail: thumbnailPath('tp4.png'),
   },
   regrets: {
     title: 'regrets',
     date: '230927',
-    sketch: sketchLink(`regrets`),
+    sketch: Sketch.regrets,
     soundcloud:
       '<iframe style="margin-top: 8px;" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1625973738&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>',
     thumbnail: thumbnailPath('regrets.png'),

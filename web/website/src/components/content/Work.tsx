@@ -1,11 +1,11 @@
 import styles from '@/styles/components/Work.module.scss'
 import Link from 'next/link'
 import { Slug } from '../../constants'
-import { Embed, SketchEmbed } from './Embeds'
+import { ContentPageInfo } from '../../types'
+import { Canvas } from './Canvas'
+import { Embed } from './Embeds'
 import { Images } from './Image'
 import { Text } from './Text'
-import { redirect } from 'next/navigation'
-import { useEffect } from 'react'
 
 export interface WorkPageProps {
   work: ContentPageInfo
@@ -23,13 +23,6 @@ export const FeedContentBlock = ({ work }: { work: ContentPageInfo }) => {
 }
 
 export const ContentBlock = ({ work, prev, next, slug }: WorkPageProps) => {
-  useEffect(() => {
-    if (slug === Slug.works) {
-      if (work.contents.find((c) => c.sketch)) {
-        window.location.href = work.contents.find((c) => c.sketch)!.sketch![0]
-      }
-    }
-  }, [])
   return (
     <div className={styles.work}>
       <div className={styles.work__title}>{work.title.toUpperCase()}</div>
@@ -46,8 +39,7 @@ const buildBody = (work: ContentPageInfo) => {
     if (content.embed) return content.embed.map((loc, j) => <Embed key={k + j} iFrame={loc} />)
     if (content.images)
       return <Images key={k} imagePaths={content.images} k={k} layout={work.options?.imageLayout} />
-    if (content.sketch)
-      return content.sketch.map((link, j) => <SketchEmbed key={k + j} link={link} />)
+    if (content.sketch) return <Canvas sketch={content.sketch} />
     throw Error(`unresolved content: ${content}`)
   })
   return body

@@ -1,9 +1,10 @@
+import { ContentPageInfo, ContentWithoutId } from '../types'
 import { ContentData, insertSlug } from './data'
 
 const { wasted, shinjuku, forest, tp4, regrets, maze, medwEP, gene, zen4computers, kano } =
   ContentData
 
-const _WorkEntities: OnePartial<ContentPageInfo, 'id'>[] = [
+const _WorkEntities: ContentWithoutId[] = [
   {
     title: wasted.title,
     date: wasted.date,
@@ -11,7 +12,7 @@ const _WorkEntities: OnePartial<ContentPageInfo, 'id'>[] = [
       {
         images: [wasted.thumbnail],
       },
-      { sketch: [wasted.sketch] },
+      { sketch: wasted.sketch },
     ],
   },
   {
@@ -22,7 +23,7 @@ const _WorkEntities: OnePartial<ContentPageInfo, 'id'>[] = [
         images: [shinjuku.thumbnail],
       },
       {
-        sketch: [shinjuku.sketch],
+        sketch: shinjuku.sketch,
       },
       {
         embed: [shinjuku.soundcloud, shinjuku.youtube],
@@ -39,7 +40,7 @@ const _WorkEntities: OnePartial<ContentPageInfo, 'id'>[] = [
       {
         images: [forest.thumbnail],
       },
-      { sketch: [forest.sketch] },
+      { sketch: forest.sketch },
       {
         text: [forest.caption],
       },
@@ -52,7 +53,7 @@ const _WorkEntities: OnePartial<ContentPageInfo, 'id'>[] = [
       {
         images: [tp4.thumbnail],
       },
-      { sketch: [tp4.sketch] },
+      { sketch: tp4.sketch },
     ],
   },
   {
@@ -63,28 +64,28 @@ const _WorkEntities: OnePartial<ContentPageInfo, 'id'>[] = [
         images: [regrets.thumbnail],
       },
       {
-        sketch: [regrets.sketch],
+        sketch: regrets.sketch,
       },
       {
         embed: [regrets.soundcloud],
       },
     ],
   },
-  {
-    title: maze.title,
-    date: maze.date,
-    contents: [
-      {
-        images: [...maze.images],
-      },
-      {
-        sketch: [maze.sketch],
-      },
-      {
-        text: maze.caption.slice(),
-      },
-    ],
-  },
+  // {
+  //   title: maze.title,
+  //   date: maze.date,
+  //   contents: [
+  //     {
+  //       images: [...maze.images],
+  //     },
+  //     {
+  //       embed: [maze.sketch],
+  //     },
+  //     {
+  //       text: maze.caption.slice(),
+  //     },
+  //   ],
+  // },
   {
     title: medwEP.title,
     date: medwEP.date,
