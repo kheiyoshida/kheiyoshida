@@ -1,10 +1,11 @@
-import { TonePJ } from "../../components/content/Sketch";
+import dynamic from 'next/dynamic'
 
-export default function() {
-  
+const Pj1 = dynamic(() => import('sketch-components/src/projects/pj1'), { ssr: false })
+
+export default function () {
   return (
     <div>
-      <TonePJ />
+      <Pj1 />
     </div>
   )
 }

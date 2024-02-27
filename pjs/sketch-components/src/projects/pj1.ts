@@ -1,5 +1,7 @@
+import { P5Canvas } from '../lib/p5canvas'
+
 const setup = () => {
-  p.createCanvas(1000,1000)
+  p.createCanvas(1000, 1000)
   p.fill(255, 50)
 }
 const draw = () => {
@@ -7,7 +9,7 @@ const draw = () => {
   p.line(Math.random() * 1000, Math.random() * 1000, Math.random() * 1000, Math.random() * 1000)
 }
 
-export default <Sketch>{
+export default P5Canvas({
   setup,
   draw,
-}
+})
