@@ -35,13 +35,13 @@ export const getStaticProps: GetStaticProps<WorkPageProps> = (ctx) => {
   const { slug } = ctx.params as PageParam
   const idx = WorkEntities.findIndex((e) => e.id === slug)!
 
-  const work = WorkEntities[idx]
+  const content = WorkEntities[idx]
   const prev = WorkEntities[idx + 1]
   const next = WorkEntities[idx - 1]
 
   return {
     props: {
-      work,
+      content,
       prev: prev ? prev.id : null,
       next: next ? next.id : null,
       slug: Slug.works

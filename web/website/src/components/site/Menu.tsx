@@ -55,21 +55,21 @@ const Menu2 = () => {
 
   return (
     <>
-      <Link href={'/'} className={styles.menu__item__lv2}>
+      <a href={'/'} className={styles.menu__item__lv2}>
         ~
-      </Link>
+      </a>
       <div onClick={() => toggleItem('projects')} className={styles.menu__item__lv2}>
         Projects
       </div>
       {opened.includes('projects')
         ? ProjectEntities.map((pj) => (
-            <Link
+            <a
               className={styles.menu__item__lv3}
               href={`/${Slug.projects}/${pj.id}`}
               key={`entry-${pj.id}`}
             >
               {pj.title.toUpperCase()}
-            </Link>
+            </a>
           ))
         : null}
       <div onClick={() => toggleItem('links')} className={styles.menu__item__lv2}>

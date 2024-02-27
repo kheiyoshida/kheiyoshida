@@ -1,45 +1,49 @@
 import styles from '@/styles/components/Work.module.scss'
-import Link from 'next/link'
 import { Slug } from '../../constants'
-import { ContentPageInfo } from '../../types'
+import { ContentPageInfo, ProjectPageInfo, WorkPageInfo } from '../../types'
 import { Canvas } from './Canvas'
 import { Embed } from './Embeds'
 import { Images } from './Image'
 import { Text } from './Text'
 
-export interface WorkPageProps {
-  work: ContentPageInfo
+interface PageProps<P extends ContentPageInfo> {
+  content: P
   prev?: string | null
   next?: string | null
   slug: Slug
 }
 
-export const FeedContentBlock = ({ work }: { work: ContentPageInfo }) => {
+export type WorkPageProps = PageProps<WorkPageInfo>
+export type ProjectPageProps = PageProps<ProjectPageInfo>
+
+export const FeedContentBlock = ({ work }: { work: WorkPageInfo }) => {
   return (
     <div className={styles.work}>
-      <div className={styles.work__body}>{buildBody(work)}</div>
+      <div className={styles.work__body}>
+        <Images imageInfo={work.thumbnail} />
+      </div>
     </div>
   )
 }
 
-export const ContentBlock = ({ work, prev, next, slug }: WorkPageProps) => {
+export const ContentBlock = ({ content, prev, next, slug }: WorkPageProps | ProjectPageProps) => {
   return (
     <div className={styles.work}>
-      <div className={styles.work__title}>{work.title.toUpperCase()}</div>
-      <div className={styles.work__body}>{buildBody(work)}</div>
+      <div className={styles.work__title}>{content.title.toUpperCase()}</div>
+      <div className={styles.work__body}>{buildBody(content)}</div>
       <Paginate prev={prev} next={next} slug={slug} />
     </div>
   )
 }
 
-const buildBody = (work: ContentPageInfo) => {
+const buildBody = (work: WorkPageInfo | ProjectPageInfo) => {
+  if (typeof work.contents === 'string')
+    return <Canvas key={`${work.id}-sketch`} sketch={work.contents} />
   const body: JSX.Element[] = work.contents.flatMap((content, i) => {
     const k = `${work.title}-${i}`
-    if (content.text) return content.text.map((text, j) => <Text key={k + j} text={text} />)
+    if (content.text) return <Text key={k} text={content.text} />
     if (content.embed) return content.embed.map((loc, j) => <Embed key={k + j} iFrame={loc} />)
-    if (content.images)
-      return <Images key={k} imagePaths={content.images} k={k} layout={work.options?.imageLayout} />
-    if (content.sketch) return <Canvas sketch={content.sketch} />
+    if (content.image) return <Images key={k} imageInfo={content.image} />
     throw Error(`unresolved content: ${content}`)
   })
   return body
@@ -47,7 +51,7 @@ const buildBody = (work: ContentPageInfo) => {
 
 const Paginate = ({ prev, next, slug }: Pick<WorkPageProps, 'prev' | 'next' | 'slug'>) => (
   <div className={styles.work__paginate}>
-    {prev ? <Link href={`/${slug}/${prev}`}>⇦</Link> : null}
-    {next ? <Link href={`/${slug}/${next}`}>⇨</Link> : null}
+    {prev ? <a href={`/${slug}/${prev}`}>⇦</a> : null}
+    {next ? <a href={`/${slug}/${next}`}>⇨</a> : null}
   </div>
 )

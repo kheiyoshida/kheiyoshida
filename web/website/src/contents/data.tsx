@@ -1,12 +1,15 @@
+import { Slug } from '../constants'
 import { resolveImagekitPath } from '../lib/image'
-import { ContentWithoutId } from '../types'
+import { ContentPageInfo, WithoutId } from '../types'
 
 const thumbnailPath = (name: string) => resolveImagekitPath('works', 'thumbnails', name)
 
-export const insertSlug = (content: ContentWithoutId) => ({
+export const insertSlug = <T extends ContentPageInfo>(content: WithoutId<T>) => ({
   ...content,
-  id: content.title.replaceAll(' ', '-').toLowerCase(),
+  id: titleToSlug(content.title)
 })
+export const titleToSlug = (title: string) => title.replaceAll(' ', '-').toLowerCase()
+export const worksLink = (title: string) => '/' + [Slug.works, titleToSlug(title)].join('/')
 
 export enum Sketch {
   wasted = 'wasted',

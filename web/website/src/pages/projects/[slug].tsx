@@ -1,11 +1,11 @@
-import { ContentBlock, WorkPageProps } from '@/components/content/Work'
+import { ContentBlock, ProjectPageProps, WorkPageProps } from '@/components/content/Work'
 import { PageTypeContext } from '@/lib/context'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { ParsedUrlQuery } from 'querystring'
 import { ProjectEntities } from '../../contents/projects'
 import { Slug } from '../../constants'
 
-export default function Work(props: WorkPageProps) {
+export default function Work(props: ProjectPageProps) {
   return (
     <>
       {/* SEO meta needed */}
@@ -31,17 +31,17 @@ export const getStaticPaths: GetStaticPaths<PageParam> = () => {
   }
 }
 
-export const getStaticProps: GetStaticProps<WorkPageProps> = (ctx) => {
+export const getStaticProps: GetStaticProps<ProjectPageProps> = (ctx) => {
   const { slug } = ctx.params as PageParam
   const idx = ProjectEntities.findIndex((e) => e.id === slug)!
 
-  const work = ProjectEntities[idx]
+  const content = ProjectEntities[idx]
   const prev = ProjectEntities[idx + 1]
   const next = ProjectEntities[idx - 1]
 
   return {
     props: {
-      work,
+      content,
       prev: prev ? prev.id : null,
       next: next ? next.id : null,
       slug: Slug.projects,

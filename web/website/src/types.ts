@@ -2,25 +2,36 @@ import { Sketch } from './contents/data'
 
 export type OnePartial<R extends Record<string, unknown>, K extends keyof R> = Omit<R, K> &
   Partial<Pick<R, K>>
-export type ContentWithoutId = OnePartial<ContentPageInfo, 'id'>
+export type WithoutId<C extends ContentPageInfo> = OnePartial<C, 'id'>
 
 export type ContentPageInfo = {
   id: string
   title: string
   date: string // YYMMDD
+}
+export type ProjectPageInfo = ContentPageInfo & {
   contents: PageContent[]
-  options?: {
-    imageLayout?: ImageLayout
-  }
+}
+export type WorkPageInfo = ContentPageInfo & {
+  thumbnail: ImageInfo
+  caption?: string
+  contents: Sketch | PageContent[]
 }
 
 export type PageContent = {
-  text?: string[]
-  images?: string[]
+  text?: string
+  image?: ImageInfo
   embed?: string[]
-  sketch?: Sketch
 }
 
-export type ContentType = 'text' | 'images' | 'embed' | 'sketch'
+export type ImageInfo = {
+  images: ImgData[]
+  layout?: ImageLayout
+}
+
+export type ImgData = {
+  path: string
+  link?: string
+}
 
 export type ImageLayout = 'row' | 'grid'

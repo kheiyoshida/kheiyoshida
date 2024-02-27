@@ -1,42 +1,92 @@
-import { ContentData, insertSlug } from './data'
+import { ProjectPageInfo, WithoutId } from '../types'
+import { ContentData, insertSlug, worksLink } from './data'
 
 const { wasted, shinjuku, forest, tp4, regrets, maze, medwEP, gene, zen4computers, kano } =
   ContentData
 
-const _ProjectEntities: ContentWithoutId[] = [
+const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
   {
     title: 'Surface Water',
     date: '240226',
     contents: [
-      { sketch: [wasted.sketch] },
-      { sketch: [shinjuku.sketch] },
-      { sketch: [regrets.sketch] },
+      {
+        image: {
+          images: [
+            {
+              path: wasted.thumbnail,
+              link: worksLink(wasted.title),
+            },
+            {
+              path: shinjuku.thumbnail,
+              link: worksLink(shinjuku.title),
+            },
+          ],
+          layout: 'grid',
+        },
+      },
     ],
   },
   {
     title: 'forest',
     date: forest.date,
     contents: [
-      { sketch: [forest.sketch] },
-      { text: [forest.caption] },
+      {
+        image: {
+          images: [
+            {
+              path: forest.thumbnail,
+              link: worksLink(forest.title),
+            },
+          ],
+          layout: 'row',
+        },
+      },
+      {
+        text: forest.caption,
+      },
     ],
   },
   {
     title: 'maze',
     date: maze.date,
     contents: [
-      { sketch: [maze.sketch] },
-      { text: [...maze.caption] },
+      {
+        image: {
+          images: maze.images.map((img) => ({ path: img, link: worksLink(maze.title) })),
+        },
+      },
+      {
+        text: maze.caption.join('\n'),
+      },
     ],
   },
   {
     title: 'medw',
     date: medwEP.date,
     contents: [
-      { sketch: [tp4.sketch] },
-      { images: [medwEP.artwork]},
-      { embed: [medwEP.bandcamp]}
+      {
+        image: {
+          images: [
+            {
+              path: medwEP.artwork,
+            },
+          ],
+        },
+      },
+      {
+        embed: [medwEP.bandcamp],
+      },
+      {
+        image: {
+          images: [
+            {
+              path: tp4.thumbnail,
+              link: worksLink(tp4.title),
+            },
+          ],
+        },
+      },
     ],
   },
 ]
-export const ProjectEntities: ContentPageInfo[] = _ProjectEntities.map(insertSlug)
+export const ProjectEntities: ProjectPageInfo[] = _ProjectEntities.map(insertSlug)

@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Sketch } from '../../contents/data'
 
 export const Canvas = ({ sketch }: { sketch: Sketch }) => {
@@ -22,6 +22,7 @@ const getSketchComponent = (sketch: Sketch) => {
     case Sketch.tp4:
       return dynamic(() => import('sketch/src/projects/tp4'), { ssr: false })
     default:
-      throw Error(`couldn't resolve the sketch component`)
+      return () => <div>{sketch}</div>
+      throw Error(`couldn't resolve the sketch: ${sketch}`)
   }
 }
