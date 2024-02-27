@@ -1,0 +1,27 @@
+{
+  "name": "sketch-components",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --p ./tsconfig-build.json && vite build",
+    "build:normal": "vite build",
+    "preview": "vite preview"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "p5": "^1.9.0",
+    "p5utils": "workspace:^",
+    "react": "18.2.0",
+    "react-dom": "^18.2.0",
+    "utils": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/p5": "^1.7.0",
+    "@types/react": "^18.2.56",
+    "@types/react-dom": "^18.2.19",
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.1.4"
+  }
+}

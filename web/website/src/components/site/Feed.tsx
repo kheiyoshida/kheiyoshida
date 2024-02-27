@@ -1,7 +1,7 @@
-import { ContentBlock, FeedContentBlock } from '../content/Work'
 import styles from '@/styles/components/Feed.module.scss'
 import Link from 'next/link'
 import { Slug } from '../../constants'
+import { FeedContentBlock } from '../content/Work'
 
 export const Feed = ({ works }: { works: ContentPageInfo[] }) => {
   return (
