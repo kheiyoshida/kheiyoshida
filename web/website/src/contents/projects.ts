@@ -6,7 +6,7 @@ const { wasted, shinjuku, forest, tp4, maze, medwEP } = ContentData
 const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
   {
     title: 'Surface Water',
-    date: '240226',
+    date: '2024',
     contents: [
       {
         image: {

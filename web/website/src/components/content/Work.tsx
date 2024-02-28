@@ -40,7 +40,7 @@ const ContentTitle = () => {
   if (type !== 'project') return null
   return (
     <div className={styles.work__title}>
-      {content.title.toUpperCase()} {'(20' + content.date.slice(0, 2) + ')'}
+      {`${content.title.toUpperCase()} (${content.date})`}
     </div>
   )
 }

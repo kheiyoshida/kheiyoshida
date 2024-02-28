@@ -28,7 +28,7 @@ export const FooterExpanded = () => {
   const { content: work, prev, next } = useContext(PagePropsContext) as WorkPageProps
   return (
     <div className={styles.footer__expanded}>
-      <div>{`${work.title} (20${work.date.slice(0, 2)})`}</div>
+      <div>{`${work.title} (${work.date})`}</div>
       {work.caption ? <Text text={work.caption} /> : <span />}
       <div className={styles.footer__expanded__nav}>
         <div>
