@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { Sketch } from '../../contents/data'
 
 export const Canvas = ({ sketch }: { sketch: Sketch }) => {

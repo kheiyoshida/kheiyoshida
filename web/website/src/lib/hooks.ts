@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
-export const useRouteChange = (cb: Function) => {
+export const useRouteChange = (cb: () => void) => {
   const router = useRouter()
   useEffect(() => {
     router.events &&

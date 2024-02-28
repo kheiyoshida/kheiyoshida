@@ -1,6 +1,6 @@
+import { SendChConf } from 'mgnr-tone/src/mixer/Channel'
 import * as Tone from 'tone'
 import { providePreset } from '../utils/utils'
-import { SendChConf } from 'mgnr/src/mgnr-tone/mixer/Channel'
 
 export const filterDelay = providePreset(
   {},

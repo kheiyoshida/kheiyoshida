@@ -1,6 +1,17 @@
-import { useEffect, useRef, useState } from 'react'
 import p5 from 'p5'
-import { createPortal } from 'react-dom'
+import { useEffect, useRef, useState } from 'react'
+
+declare global {
+  // eslint-disable-next-line no-var
+  var p: p5
+}
+
+type Sketch = {
+  setup: () => void
+  draw: () => void
+  preload?: () => void
+  windowResized?: () => void
+}
 
 export const P5Canvas = (sketch: Sketch) => () => {
   const [canvas, setCanvas] = useState<p5>()
@@ -43,6 +54,6 @@ const styles: Record<string, React.CSSProperties> = {
     touchAction: 'manipulation',
     overflowX: 'hidden',
     overflowY: 'hidden',
-    overscrollBehavior: 'none'
+    overscrollBehavior: 'none',
   },
 }

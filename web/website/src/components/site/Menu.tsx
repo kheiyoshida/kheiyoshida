@@ -1,6 +1,5 @@
 import { useRouteChange } from '@/lib/hooks'
 import styles from '@/styles/components/Menu.module.scss'
-import Link from 'next/link'
 import { useState } from 'react'
 import { Slug } from '../../constants'
 import { ProjectEntities } from '../../contents/projects'

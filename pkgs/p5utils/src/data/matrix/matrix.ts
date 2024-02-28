@@ -73,7 +73,7 @@ export const DirectionLoc: { [d in MatrixDirection]: MatrixLoc } = {
   tl: [-1, -1],
   br: [1, 1],
   bl: [-1, 1],
-} as const
+} 
 
 export const directionLoc = (loc: MatrixLoc, direction: MatrixDirection): MatrixLoc => {
   return sumLocation(loc, DirectionLoc[direction])
