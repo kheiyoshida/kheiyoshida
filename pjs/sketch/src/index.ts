@@ -1,4 +1,4 @@
-import p5 from 'p5'
+import type p5 from 'p5'
 
 declare global {
   // eslint-disable-next-line no-var
