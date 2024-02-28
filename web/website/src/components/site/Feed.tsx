@@ -1,6 +1,7 @@
 import styles from '@/styles/components/Feed.module.scss'
+import stylesWork from '@/styles/components/Work.module.scss'
 import { WorkPageInfo } from '../../types'
-import { FeedContentBlock } from '../content/Work'
+import { Images } from '../content/Image'
 
 export const Feed = ({ works }: { works: WorkPageInfo[] }) => {
   return (
@@ -10,6 +11,16 @@ export const Feed = ({ works }: { works: WorkPageInfo[] }) => {
           <FeedContentBlock work={w} />
         </div>
       ))}
+    </div>
+  )
+}
+
+export const FeedContentBlock = ({ work }: { work: WorkPageInfo }) => {
+  return (
+    <div className={stylesWork.work}>
+      <div className={stylesWork.work__body}>
+        <Images imageInfo={work.thumbnail} />
+      </div>
     </div>
   )
 }

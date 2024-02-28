@@ -5,33 +5,42 @@ import { Canvas } from './Canvas'
 import { Embed } from './Embeds'
 import { Images } from './Image'
 import { Text } from './Text'
+import { FooterInfo } from './Footer'
+import { createContext, useContext } from 'react'
+import { PageTypeContext } from '../../lib/context'
 
-interface PageProps<P extends ContentPageInfo> {
+interface PagePropsBase<P extends ContentPageInfo> {
   content: P
   prev?: string | null
   next?: string | null
   slug: Slug
 }
 
-export type WorkPageProps = PageProps<WorkPageInfo>
-export type ProjectPageProps = PageProps<ProjectPageInfo>
+export type WorkPageProps = PagePropsBase<WorkPageInfo>
+export type ProjectPageProps = PagePropsBase<ProjectPageInfo>
+type PageProps = WorkPageProps | ProjectPageProps
 
-export const FeedContentBlock = ({ work }: { work: WorkPageInfo }) => {
+export const PagePropsContext = createContext({} as PageProps)
+
+export const ContentBlock = (props: WorkPageProps | ProjectPageProps) => {
   return (
-    <div className={styles.work}>
-      <div className={styles.work__body}>
-        <Images imageInfo={work.thumbnail} />
+    <PagePropsContext.Provider value={props}>
+      <div className={styles.work}>
+        <ContentTitle />
+        <div className={styles.work__body}>{buildBody(props.content)}</div>
+        <ContentFooter />
       </div>
-    </div>
+    </PagePropsContext.Provider>
   )
 }
 
-export const ContentBlock = ({ content, prev, next, slug }: WorkPageProps | ProjectPageProps) => {
+const ContentTitle = () => {
+  const { type } = useContext(PageTypeContext)
+  const { content } = useContext(PagePropsContext)
+  if (type !== 'project') return null
   return (
-    <div className={styles.work}>
-      <div className={styles.work__title}>{content.title.toUpperCase()}</div>
-      <div className={styles.work__body}>{buildBody(content)}</div>
-      <Paginate prev={prev} next={next} slug={slug} />
+    <div className={styles.work__title}>
+      {content.title.toUpperCase()} {'(20' + content.date.slice(0, 2) + ')'}
     </div>
   )
 }
@@ -49,9 +58,18 @@ const buildBody = (work: WorkPageInfo | ProjectPageInfo) => {
   return body
 }
 
-const Paginate = ({ prev, next, slug }: Pick<WorkPageProps, 'prev' | 'next' | 'slug'>) => (
-  <div className={styles.work__paginate}>
-    {prev ? <a href={`/${slug}/${prev}`}>⇦</a> : null}
-    {next ? <a href={`/${slug}/${next}`}>⇨</a> : null}
-  </div>
-)
+const ContentFooter = () => {
+  const { type } = useContext(PageTypeContext)
+  if (type === 'project') return <ProjectPaginate />
+  else return <FooterInfo />
+}
+
+const ProjectPaginate = () => {
+  const { prev, next } = useContext(PagePropsContext)
+  return (
+    <div className={styles.work__paginate}>
+      {prev ? <a href={`/${Slug.projects}/${prev}`}>⇦</a> : <span />}
+      {next ? <a href={`/${Slug.projects}/${next}`}>⇨</a> : <span />}
+    </div>
+  )
+}

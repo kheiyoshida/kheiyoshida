@@ -1,0 +1,48 @@
+@use '../module/vars';
+@use '../module/style';
+
+.footer {
+  @media screen and (min-width: vars.$sp-width) {
+    display: none;
+  }
+  position: fixed;
+  bottom: 0;
+  right: 0;
+
+  z-index: 100;
+  cursor: pointer;
+
+  &__expanded {
+    :first-child {
+      font-size: vars.$txt-big;
+      margin-bottom: vars.$space;
+    }
+    :nth-child(2) {
+      margin-bottom: vars.$space;
+    }
+    
+    width: 100vw;
+    background-color: rgba(vars.$bg-color, 0.8);
+    padding: vars.$space;
+
+    &__nav {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      :nth-child(1) {
+        > * {
+          margin: vars.$space;
+          font-size: vars.$txt-big;
+        }
+      }
+      :nth-child(2) {
+        // display: block;
+      }
+    }
+  }
+  &__shrank {
+    font-size: vars.$txt-small;
+    padding-bottom: vars.$space;
+    padding-right: vars.$space;
+  }
+}

@@ -1,5 +1,5 @@
 import { WithoutId, WorkPageInfo } from '../types'
-import { ContentData, insertSlug, titleToSlug, worksLink } from './data'
+import { ContentData, insertSlug, worksLink } from './data'
 
 const { wasted, shinjuku, forest, tp4, regrets, maze, medwEP, gene, zen4computers, kano } =
   ContentData
@@ -82,6 +82,7 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
         image: { images: makePaths(gene.title, gene.images.slice()), layout: 'row' },
       },
     ],
+    caption: forest.caption
   },
   {
     title: zen4computers.title,

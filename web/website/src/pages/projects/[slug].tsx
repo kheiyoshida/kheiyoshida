@@ -9,7 +9,7 @@ export default function Work(props: ProjectPageProps) {
   return (
     <>
       {/* SEO meta needed */}
-      <PageTypeContext.Provider value={{ type: 'work' }}>
+      <PageTypeContext.Provider value={{ type: 'project' }}>
         <ContentBlock {...props} />
       </PageTypeContext.Provider>
     </>
