@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Slug } from '../../constants'
 import { ProjectEntities } from '../../contents/projects'
 import { Modal } from './Modal'
+import { Links } from '../../contents/links'
 
 export const SpMenu = () => {
   const [isOpen, setOpen] = useState(false)
@@ -75,7 +76,7 @@ const Menu2 = () => {
         Links
       </div>
       {opened.includes('links')
-        ? Links.map((link, i) => (
+        ? socialLinks.map((link, i) => (
             <a className={styles.menu__item__lv3} href={link.href} key={`link-${i}`}>
               {link.name}
             </a>
@@ -91,17 +92,21 @@ const Menu2 = () => {
   )
 }
 
-const Links: { href: string; name: string }[] = [
+const socialLinks: {href: string, name: string}[] = [
   {
-    href: 'https://kheiyoshida.bandcamp.com/',
-    name: 'bandcamp',
+    href: Links.instagram,
+    name: 'Instagram'
   },
   {
-    href: 'https://www.instagram.com/kheiyoshida/',
-    name: 'instagram',
+    href: Links.github,
+    name: 'Github'
   },
   {
-    href: 'https://soundcloud.com/khei-yoshida',
-    name: 'soundcloud',
+    href: Links.youtube,
+    name: 'YouTube'
   },
+  {
+    href: Links.spotify,
+    name: 'Spotify'
+  }
 ]

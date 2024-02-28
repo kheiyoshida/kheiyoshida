@@ -30,8 +30,6 @@ const setup = () => {
   p.angleMode(p.DEGREES)
   applyConfig(sketchStore.current)
 
-  const div = instruction()
-
   const start = () => {
     const context = callContext()
     if (context.state === 'suspended') {
@@ -39,7 +37,6 @@ const setup = () => {
     }
     soundSource.play()
     started = true
-    div.remove()
   }
 
   p.mousePressed = start

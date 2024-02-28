@@ -39,15 +39,12 @@ const setup = () => {
   applyConfig(store.read())
   connectGraph(graph, 0.2)
 
-  const div = instruction()
-
   const start = () => {
     const context = callContext()
     if (context.state === 'suspended') {
       context.resume()
     }
     soundSource.play()
-    div.remove()
   }
 
   p.mousePressed = start

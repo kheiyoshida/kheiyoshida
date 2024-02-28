@@ -1,12 +1,9 @@
 import p5 from 'p5'
-import { requireMusic } from '../../assets/'
 import { callContext, createAnalyzer, createSoundSource } from 'p5utils/src/media/audio/analyzer'
 import { FFTSize } from 'p5utils/src/media/audio/types'
-import { drawLineBetweenVectors } from 'p5utils/src/render'
-import { mapToSphere } from 'p5utils/src/render'
-import { instruction } from 'p5utils/src/utils/project'
+import { degree2Vector, drawLineBetweenVectors, mapToSphere, pushPop } from 'p5utils/src/render'
 import { randomFloatBetween as randomBetween } from 'utils'
-import { degree2Vector, pushPop } from 'p5utils/src/render'
+import { requireMusic } from '../../assets/'
 import { P5Canvas } from '../../lib/p5canvas'
 
 let cw: number
@@ -34,14 +31,11 @@ const setup = () => {
   p.stroke(strokeColor)
   p.strokeWeight(1)
 
-  const div = instruction()
-
   const start = () => {
     const context = callContext()
     if (context.state === 'suspended') {
       context.resume()
     } else {
-      div.remove()
       started = true
       soundSource.play()
     }

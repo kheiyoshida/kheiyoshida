@@ -3,8 +3,8 @@ import p5 from 'p5'
 export const instruction = (text = 'click/tap to play') => {
   const div = p.createDiv(text)
   div.style('position', 'fixed')
-  div.style('top', '0')
-  div.style('left', '0')
+  div.style('top', '50vh')
+  div.style('left', '45vw')
   div.style('color', 'white')
   div.style('z-index', '100')
   return div
