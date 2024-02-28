@@ -7,7 +7,13 @@ export interface ModalProps extends React.PropsWithChildren {
 export const Modal = ({ close, children }: ModalProps) => {
   return (
     <div className={styles.modal} onClick={close}>
-      <div className={styles.modal__content} onClick={(e) => e.stopPropagation()}>
+      <div
+        className={styles.modal__content}
+        onClick={(e) => {
+          e.stopPropagation()
+          e.nativeEvent.stopImmediatePropagation()
+        }}
+      >
         {children}
       </div>
     </div>

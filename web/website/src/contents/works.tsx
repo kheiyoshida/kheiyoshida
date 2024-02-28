@@ -4,42 +4,44 @@ import { ContentData, insertSlug, worksLink } from './data'
 const { wasted, shinjuku, forest, tp4, regrets, maze, medwEP, gene, zen4computers, kano } =
   ContentData
 
-const makePaths = (title: string, paths: string[]) =>
+const makePathsWithLink = (title: string, paths: string[]) =>
   paths.map((p) => ({ path: p, link: worksLink(title) }))
+
+const makePathsWithoutLink = (paths: string[]) => paths.map((p) => ({ path: p }))
 
 const _WorkEntities: WithoutId<WorkPageInfo>[] = [
   {
     title: wasted.title,
     date: wasted.date,
     thumbnail: {
-      images: makePaths(wasted.title, [wasted.thumbnail]),
+      images: makePathsWithLink(wasted.title, [wasted.thumbnail]),
     },
     contents: wasted.sketch,
   },
   {
     title: shinjuku.title,
     date: shinjuku.date,
-    thumbnail: { images: makePaths(shinjuku.title, [shinjuku.thumbnail]) },
+    thumbnail: { images: makePathsWithLink(shinjuku.title, [shinjuku.thumbnail]) },
     contents: shinjuku.sketch,
     caption: shinjuku.caption,
   },
   {
     title: forest.title,
     date: forest.date,
-    thumbnail: { images: makePaths(forest.title, [forest.thumbnail]) },
+    thumbnail: { images: makePathsWithLink(forest.title, [forest.thumbnail]) },
     contents: forest.sketch,
     caption: forest.caption.concat(''),
   },
   {
     title: tp4.title,
     date: tp4.date,
-    thumbnail: { images: makePaths(tp4.title, [tp4.thumbnail]) },
+    thumbnail: { images: makePathsWithLink(tp4.title, [tp4.thumbnail]) },
     contents: tp4.sketch,
   },
   {
     title: regrets.title,
     date: regrets.date,
-    thumbnail: { images: makePaths(regrets.title, [regrets.thumbnail]) },
+    thumbnail: { images: makePathsWithLink(regrets.title, [regrets.thumbnail]) },
     contents: regrets.sketch,
   },
   // {
@@ -60,10 +62,10 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
   {
     title: medwEP.title,
     date: medwEP.date,
-    thumbnail: { images: makePaths(medwEP.title, [medwEP.artwork]) },
+    thumbnail: { images: makePathsWithLink(medwEP.title, [medwEP.artwork]) },
     contents: [
       {
-        image: { images: makePaths(medwEP.title, [medwEP.artwork]) },
+        image: { images: [{ path: medwEP.artwork }] },
       },
       {
         embed: [medwEP.bandcamp],
@@ -74,27 +76,26 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
     title: gene.title,
     date: gene.date,
     thumbnail: {
-      images: makePaths(gene.title, gene.images.slice(0, 2)),
+      images: makePathsWithLink(gene.title, gene.images.slice(0, 2)),
       layout: 'row',
     },
     contents: [
       {
-        image: { images: makePaths(gene.title, gene.images.slice()), layout: 'row' },
+        image: { images: makePathsWithoutLink(gene.images), layout: 'row' },
       },
     ],
-    caption: forest.caption
   },
   {
     title: zen4computers.title,
     date: zen4computers.date,
     thumbnail: {
-      images: makePaths(zen4computers.title, zen4computers.images.slice(0, 2)),
+      images: makePathsWithLink(zen4computers.title, zen4computers.images.slice(0, 2)),
       layout: 'grid',
     },
     contents: [
       {
         image: {
-          images: makePaths(zen4computers.title, zen4computers.images.slice()),
+          images: makePathsWithoutLink(zen4computers.images),
           layout: 'grid',
         },
       },
