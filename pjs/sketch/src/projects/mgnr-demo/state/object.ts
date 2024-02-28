@@ -1,14 +1,8 @@
 import p5 from 'p5'
 import { Position3D } from 'p5utils/src/3d'
 import { createRenderedTexture } from 'p5utils/src/3dShape/texture'
-import {
-  applyBlackAndWhiteFilter,
-  applyMonochromeFilter,
-  applyRandomSwap,
-  randomizeImagePixels,
-  updateImagePixels,
-} from 'p5utils/src/media/image'
-import { LazyInit, ReducerMap, makeStoreV2, pipe, randomIntInclusiveBetween } from 'utils'
+import { randomizeImagePixels, updateImagePixels } from 'p5utils/src/media/image'
+import { LazyInit, ReducerMap, makeStoreV2, randomIntInclusiveBetween } from 'utils'
 import { FieldRange, GroundY, InitialNumOfTrees } from '../constants'
 import { adjustNumOfTrees, adjustTreePlacement, filterReusableTrees } from '../domain/trees'
 import { TreeObject, generateTrees } from '../services/objects/tree'
@@ -37,7 +31,6 @@ const createSkin = (skinColor: SkinColorRange) => {
   updateImagePixels(img, () => skinColor.map(rand) as SkinColorRange)
   randomizeImagePixels(img, 50)
   img.updatePixels()
-  // pipe(img, applyRandomSwap(4, 10), applyMonochromeFilter)
   return img
 }
 
@@ -51,8 +44,8 @@ const reducers = {
     s.skin = createSkin(s.skinColor)
   },
   updateSkinColor: (s) => (roomVar: number) => {
-    s.skinColor = s.skinColor.map(
-      (c) => Math.max(c + randomIntInclusiveBetween(-roomVar, roomVar), roomVar * 3)
+    s.skinColor = s.skinColor.map((c) =>
+      Math.max(c + randomIntInclusiveBetween(-roomVar, roomVar), roomVar * 3)
     ) as SkinColorRange
   },
 } satisfies ReducerMap<ObjectState>

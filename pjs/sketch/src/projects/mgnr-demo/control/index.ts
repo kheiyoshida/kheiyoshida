@@ -1,5 +1,5 @@
 import { detectPosition, makeDetectKeys, makeSwipeTracker } from 'p5utils/src/control'
-import { SwipeOneEquivalent } from '../constants'
+import { MOBILE_WIDTH, SwipeOneEquivalent } from '../constants'
 import { CameraStore } from '../state/camera'
 import { resolveIntention } from './resolve'
 import {
@@ -9,7 +9,6 @@ import {
   translateSwipeMoveIntention,
 } from './translate'
 
-const MOBILE_WIDTH = 800
 export const bindControl = (camera: CameraStore): void => {
   if (window.innerWidth < MOBILE_WIDTH) bindDeviceTouchEvents(camera)
   else bindMouseKeyControlEvents(camera)
@@ -36,7 +35,7 @@ const bindDeviceTouchEvents = (cameraStore: CameraStore): void => {
 
 let detectKeys: ReturnType<typeof makeDetectKeys>
 const bindMouseKeyControlEvents = (cameraStore: CameraStore): void => {
-  detectKeys = makeDetectKeys([p.UP_ARROW, p.DOWN_ARROW, p.RIGHT_ARROW, p.LEFT_ARROW])
+  detectKeys = makeDetectKeys([p.UP_ARROW, p.DOWN_ARROW, p.RIGHT_ARROW, p.LEFT_ARROW, 87, 65, 83, 68])
   p.mouseClicked = () => {
     cameraStore.toggleMode()
   }

@@ -1,6 +1,6 @@
 import { _moveColor } from 'p5utils/src/render'
 import { SketchConfigStore } from 'p5utils/src/utils/project'
-import { LazyInit, ReducerMap, makeStoreV2, randomIntInclusiveBetween } from 'utils'
+import { LazyInit, ReducerMap, makeStoreV2 } from 'utils'
 import { FrameRate } from '../constants'
 
 const init: LazyInit<SketchConfigStore> = () => ({
@@ -14,14 +14,6 @@ const init: LazyInit<SketchConfigStore> = () => ({
 })
 
 const reducers = {
-  updateStrokeColor: (s) => (roomVar: number) => {
-    s.strokeColor = p.color(
-      randomIntInclusiveBetween(0, roomVar * 3),
-      randomIntInclusiveBetween(0, roomVar * 3),
-      randomIntInclusiveBetween(0, roomVar * 3),
-      200
-    )
-  },
   updateFillColor: (s) => (pattern: 'brighten' | 'darken') => {
     if (pattern === 'brighten') {
       s.fillColor = _moveColor(s.fillColor, 1, 1, 1, -1)

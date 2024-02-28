@@ -1,3 +1,5 @@
+import { MOBILE_WIDTH } from '../constants'
+
 export const showInstruction = (onConfirm: () => void) => {
   const div = p.createDiv()
   div.style('text-align', 'center')
@@ -14,9 +16,13 @@ export const showInstruction = (onConfirm: () => void) => {
   div.style('padding-top', '30vh')
 
   const text = p.createDiv(`[mgnr-demo]`)
-  const text2 = p.createDiv(`Click or tap to play`)
-  const text3 = p.createDiv(`(*plays sound*)`)
-  const text4 = p.createDiv(`Control: arrow keys/swipe`)
+  const text2 = p.createDiv(``)
+  const text3 = p.createDiv(``)
+  const text4 = p.createDiv(
+    window.innerWidth < MOBILE_WIDTH
+      ? `CONTROL: Swipe up/down to move, swipe right/left to turn, tap to look`
+      : `CONTROL: Arrow key or WASD to move, use mouse to turn, click to look`
+  )
   div.elt.appendChild(text.elt)
   div.elt.appendChild(text2.elt)
   div.elt.appendChild(text3.elt)
