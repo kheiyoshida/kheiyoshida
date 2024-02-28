@@ -2,6 +2,7 @@ import styles from '@/styles/components/Footer.module.scss'
 import { useContext, useEffect, useState } from 'react'
 import { PagePropsContext, WorkPageProps } from './Work'
 import { Slug } from '../../constants'
+import { Text } from './Text'
 
 const useFooter = () => {
   const [isExpanded, setExpanded] = useState(false)
@@ -28,7 +29,7 @@ export const FooterExpanded = () => {
   return (
     <div className={styles.footer__expanded}>
       <div>{`${work.title} (20${work.date.slice(0, 2)})`}</div>
-      <div>{work.caption}</div>
+      {work.caption ? <Text text={work.caption} /> : <span />}
       <div className={styles.footer__expanded__nav}>
         <div>
           {prev ? <a href={`/${Slug.works}/${prev}`}>←</a> : <span />}

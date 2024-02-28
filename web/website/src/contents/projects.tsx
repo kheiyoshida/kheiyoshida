@@ -1,8 +1,7 @@
 import { ProjectPageInfo, WithoutId } from '../types'
 import { ContentData, insertSlug, worksLink } from './data'
 
-const { wasted, shinjuku, forest, tp4, regrets, maze, medwEP, gene, zen4computers, kano } =
-  ContentData
+const { wasted, shinjuku, forest, tp4, maze, medwEP } = ContentData
 
 const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
   {
@@ -23,6 +22,9 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
           ],
           layout: 'grid',
         },
+      },
+      {
+        text: `Coming soon`,
       },
     ],
   },
@@ -86,6 +88,9 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
           ],
         },
       },
+      {
+        text: medwEP.caption
+      }
     ],
   },
 ]

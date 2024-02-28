@@ -37,6 +37,7 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
     date: tp4.date,
     thumbnail: { images: makePathsWithLink(tp4.title, [tp4.thumbnail]) },
     contents: tp4.sketch,
+    caption: tp4.caption,
   },
   {
     title: regrets.title,
@@ -47,17 +48,9 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
   // {
   //   title: maze.title,
   //   date: maze.date,
-  //   contents: [
-  //     {
-  //       images: [...maze.images],
-  //     },
-  //     {
-  //       embed: [maze.sketch],
-  //     },
-  //     {
-  //       text: maze.caption.slice(),
-  //     },
-  //   ],
+  //   contents: maze.sketch,
+  //   thumbnail: {images: makePathsWithLink(maze.title, [...maze.images])},
+  //   caption: maze.caption.join(`\n`),
   // },
   {
     title: medwEP.title,
@@ -71,6 +64,7 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
         embed: [medwEP.bandcamp],
       },
     ],
+    caption: medwEP.caption,
   },
   {
     title: gene.title,
