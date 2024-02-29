@@ -1,5 +1,5 @@
-import { createRandomSelect } from 'p5utils/src/random'
 import { ListenableState } from '.'
+import { createRandomSelect } from '../../../lib/random'
 
 export type VisionStrategy = 'normal' | 'highWall' | 'floor'
 

@@ -1,3 +1,5 @@
+import { makeWeightedRandomPicker } from "utils"
+
 export function random(rate: number) {
   if (rate > 1 || rate < 0) {
     throw Error('rate should be between 0.0 and 1.0')
@@ -56,17 +58,4 @@ export const mapPercentage = <C>(candidates: [number, C][]) => {
   return newCandidates
 }
 
-/**
- * creates a function that randomly select one from candidates by defined ratio
- */
-export const createRandomSelect = <C>(candidates: [number, C][]) => {
-  const candiWithPercentage = mapPercentage(ratioToPercentage(candidates))
-  return () => {
-    const r = Math.random()
-    const selected = candiWithPercentage.find(([p]) => r <= p)
-    if (!selected) {
-      throw Error(`could not randomly select`)
-    }
-    return selected[1]
-  }
-}
+export const createRandomSelect = makeWeightedRandomPicker

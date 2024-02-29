@@ -1,6 +1,6 @@
 import { randomColorVector } from 'p5utils/src/render'
-import { createRandomSelect } from 'p5utils/src/random'
 import { ManipMap, ParameterizeState, bundleScene } from '.'
+import { createRandomSelect } from '../../../../../lib/random'
 import { getPalette } from '../palette'
 import { defaultPalette, movePalette, returnTo } from '../palette/factories'
 
@@ -30,8 +30,7 @@ const parameterize: ParameterizeState<DefaultPatterns> = ({ floor, sanity }) => 
 const map: ManipMap<DefaultPatterns> = {
   default: defaultPalette,
   stay: getPalette,
-  gradation: (palette, params) =>
-    movePalette(randomColorVector([params[1], params[2]]))(palette),
+  gradation: (palette, params) => movePalette(randomColorVector([params[1], params[2]]))(palette),
   return: (palette, params) => returnTo(defaultPalette(), params[1])(palette),
 }
 
