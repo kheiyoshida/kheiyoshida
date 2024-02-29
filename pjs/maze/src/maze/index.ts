@@ -1,15 +1,15 @@
-import { start as toneStart } from 'tone'
 import { Conf } from './config'
 import { bindControl } from './control'
 import { renderHelp } from './control/gui'
 import { applyPalette, getPalette } from './domain/vision/color/palette'
-import { music } from './service/sound'
+import { toneStart } from './service/sound'
+import { demo } from './service/sound/songs/demo'
 import { renderStartPage } from './start'
 
 let started = false
 
 const setup = () => {
-  const c = p.createCanvas(Conf.ww, Conf.wh)
+  p.createCanvas(Conf.ww, Conf.wh)
   applyPalette(getPalette())
   p.noLoop()
   p.touchStarted = () => false
@@ -17,20 +17,19 @@ const setup = () => {
   p.touchMoved = () => false
   p.textSize(32)
 
-  renderStartPage()
-
-  const fadein = music()
   const start = () => {
     if (!started) {
       started = true
+      demo()
       setupMaze()
-      toneStart()
-      fadein()
     }
+    toneStart()
   }
 
-  c.mousePressed(start)
-  c.touchStarted(start)
+  renderStartPage()
+
+  p.mouseClicked = start
+  p.touchStarted = start
 }
 
 const setupMaze = () => {
@@ -40,5 +39,5 @@ const setupMaze = () => {
 
 export default <Sketch>{
   setup,
-  draw: () => {},
+  draw: () => undefined,
 }

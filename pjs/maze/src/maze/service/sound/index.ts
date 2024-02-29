@@ -1,11 +1,6 @@
 import * as Tone from 'tone'
-import { demo } from './songs/demo'
 
-export const music = () => {
-  demo()
-
-  return () => {
-    Tone.start()
-    Tone.Transport.start()
-  }
+export const toneStart = () => {
+  Tone.start()
+  Tone.Transport.start()
 }
