@@ -9,16 +9,19 @@
   z-index: 100;
   cursor: pointer;
 
+  width: 100%;
+  max-width: vars.$max-width;
+
   &__expanded {
-    :first-child {
+    &__title {
       font-size: vars.$txt-big;
       margin-bottom: vars.$space;
     }
-    :nth-child(2) {
+    &__caption {
       margin-bottom: vars.$space;
     }
-    
-    width: 100vw;
+
+    width: 100%;
     background-color: rgba(vars.$bg-color, 0.8);
     padding: vars.$space;
 
@@ -26,9 +29,7 @@
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      * {
-        line-height: 140%;
-      }
+      padding: vars.$pd1;
       :nth-child(1) {
         > * {
           line-height: 100%;
@@ -39,6 +40,9 @@
     }
   }
   &__shrank {
+    position: fixed;
+    bottom: 0;
+    right: 0;
     font-size: vars.$txt-small;
     padding-bottom: vars.$space;
     padding-right: vars.$space;

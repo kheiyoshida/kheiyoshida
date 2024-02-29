@@ -28,8 +28,10 @@ export const FooterExpanded = () => {
   const { content: work, prev, next } = useContext(PagePropsContext) as WorkPageProps
   return (
     <div className={styles.footer__expanded}>
-      <div>{`${work.title} (${work.date})`}</div>
-      {work.caption ? <Text text={work.caption} /> : <span />}
+      <div className={styles.footer__expanded__title}>{`${work.title} (${work.date})`}</div>
+      <div className={styles.footer__expanded__caption}>
+        {work.caption ? <Text text={work.caption} /> : <span />}
+      </div>
       <div className={styles.footer__expanded__nav}>
         <div>
           {prev ? <a href={`/${Slug.works}/${prev}`}>←</a> : <span />}
