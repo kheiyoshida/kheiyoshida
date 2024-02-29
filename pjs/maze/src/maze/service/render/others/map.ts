@@ -33,7 +33,7 @@ export const renderMap = (grid: Grid, current: number[], direction: Direction, f
   for (let i = 0; i < gridL; i++) {
     for (let j = 0; j < gridL; j++) {
       const cell = grid[i][j]
-      if (cell && (process.env.DEBUG || cell.visited)) {
+      if (cell && (cell.visited)) {
         // if (cell && cell.visited) {
         p.fill(100, 200)
         const [ie, je] = [i % 2 === 0, j % 2 === 0]

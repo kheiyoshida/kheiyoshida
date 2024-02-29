@@ -38,10 +38,6 @@ export const genRender =
   (frames: Frame[]) => {
     screenPaint()
     draw(finalize(grid, frames))
-    if (process.env.DEBUG) {
-      // debugFrames(frames)
-      debugStats()
-    }
   }
 
 export const intervalRender = (
