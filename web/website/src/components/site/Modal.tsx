@@ -1,4 +1,4 @@
-import styles from '@/styles/components/Modal.module.scss'
+import styles from '@/styles/components/site/Modal.module.scss'
 
 export interface ModalProps extends React.PropsWithChildren {
   close: () => void

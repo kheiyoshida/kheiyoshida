@@ -33,8 +33,15 @@ body {
   }
 }
 
+a {
+  color: vars.$text-color;
+  text-decoration: none;
+  &:hover {
+    @include animation.hover;
+  }
+}
+
 canvas {
-  border: 1px solid black;
   touch-action: manipulation;
 }
 
@@ -70,31 +77,5 @@ canvas {
       width: 100%;
       position: relative;
     }
-  }
-}
-
-.spmenu-btn {
-  @media screen and (min-width: vars.$sp-width) {
-    display: none;
-  }
-  position: fixed;
-  top: vars.$space;
-  margin-left: vars.$space;
-  z-index: 100;
-  cursor: pointer;
-}
-
-a {
-  color: vars.$text-color;
-  text-decoration: none;
-  &:hover {
-    @include animation.hover;
-  }
-}
-
-.content-text {
-  > a {
-    font-size: 1rem !important;
-    text-decoration: underline;
   }
 }

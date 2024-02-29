@@ -1,4 +1,4 @@
-import styles from '@/styles/components/Work.module.scss'
+import styles from '@/styles/components/content/Work.module.scss'
 import { Slug } from '../../constants'
 import { ContentPageInfo, ProjectPageInfo, WorkPageInfo } from '../../types'
 import { Canvas } from './Canvas'
@@ -27,7 +27,7 @@ export const ContentBlock = (props: WorkPageProps | ProjectPageProps) => {
     <PagePropsContext.Provider value={props}>
       <div className={styles.work}>
         <ContentTitle />
-        <div className={styles.work__body}>{buildBody(props.content)}</div>
+        <div>{buildBody(props.content)}</div>
         <ContentFooter />
       </div>
     </PagePropsContext.Provider>

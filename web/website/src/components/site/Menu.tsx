@@ -1,5 +1,5 @@
 import { useRouteChange } from '@/lib/hooks'
-import styles from '@/styles/components/Menu.module.scss'
+import styles from '@/styles/components/site/Menu.module.scss'
 import { useState } from 'react'
 import { Slug } from '../../constants'
 import { ProjectEntities } from '../../contents/projects'
@@ -15,7 +15,7 @@ export const SpMenu = () => {
   return (
     <>
       {!isOpen ? (
-        <div className="spmenu-btn" onClick={open}>
+        <div className={styles.spmenu} onClick={open}>
           kheiyoshida
         </div>
       ) : (
@@ -92,21 +92,21 @@ const Menu2 = () => {
   )
 }
 
-const socialLinks: {href: string, name: string}[] = [
+const socialLinks: { href: string; name: string }[] = [
   {
     href: Links.instagram,
-    name: 'Instagram'
+    name: 'Instagram',
   },
   {
     href: Links.github,
-    name: 'Github'
+    name: 'Github',
   },
   {
     href: Links.youtube,
-    name: 'YouTube'
+    name: 'YouTube',
   },
   {
     href: Links.spotify,
-    name: 'Spotify'
-  }
+    name: 'Spotify',
+  },
 ]

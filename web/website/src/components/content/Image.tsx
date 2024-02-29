@@ -1,6 +1,6 @@
 import { PageTypeContext } from '@/lib/context'
 import { retrieveImgAlt } from '@/lib/image'
-import styles from '@/styles/components/Image.module.scss'
+import styles from '@/styles/components/content/Image.module.scss'
 import Image from 'next/image'
 import { useContext, useState } from 'react'
 import { ImageInfo } from '../../types'

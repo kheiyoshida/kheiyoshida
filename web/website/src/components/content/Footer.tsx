@@ -1,4 +1,4 @@
-import styles from '@/styles/components/Footer.module.scss'
+import styles from '@/styles/components/content/Footer.module.scss'
 import { useContext, useEffect, useState } from 'react'
 import { PagePropsContext, WorkPageProps } from './Work'
 import { Slug } from '../../constants'

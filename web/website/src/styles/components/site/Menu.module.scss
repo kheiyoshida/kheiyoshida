@@ -1,5 +1,5 @@
-@use '../module/vars';
-@use '../module/animation';
+@use '../../module/vars';
+@use '../../module/animation';
 
 @mixin item {
   cursor: pointer;
@@ -7,6 +7,18 @@
     @include animation.hover;
   }
 }
+
+.spmenu {
+  @media screen and (min-width: vars.$sp-width) {
+    display: none;
+  }
+  position: fixed;
+  top: vars.$space;
+  margin-left: vars.$space;
+  z-index: 100;
+  cursor: pointer;
+}
+
 
 .menu {
   width: 100%;
