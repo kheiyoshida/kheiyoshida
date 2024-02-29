@@ -1,5 +1,5 @@
 import styles from '@/styles/components/site/Feed.module.scss'
-import stylesWork from '@/styles/components/Work.module.scss'
+import stylesWork from '@/styles/components/content/Work.module.scss'
 import { WorkPageInfo } from '../../types'
 import { Images } from '../content/Image'
 

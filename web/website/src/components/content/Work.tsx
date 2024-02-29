@@ -37,6 +37,7 @@ export const ContentBlock = (props: WorkPageProps | ProjectPageProps) => {
 const ContentTitle = () => {
   const { type } = useContext(PageTypeContext)
   const { content } = useContext(PagePropsContext)
+  return null
   if (type !== 'project') return null
   return (
     <div className={styles.work__title}>
