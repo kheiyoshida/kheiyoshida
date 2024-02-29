@@ -4,30 +4,34 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --mode development",
-    "build": "webpack && cp public/index.html dist/index.html",
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview",
     "test": "cd ../.. && jest --selectProjects maze"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "js-logger": "^1.6.1",
     "p5": "^1.9.0",
-    "tone": "^14.7.77",
-    "utils": "workspace:^",
     "p5utils": "workspace:^",
+    "tone": "^14.7.77",
     "mgnr-core": "workspace:^",
     "mgnr-tone": "workspace:^",
-    "mgnr-tone-presets": "workspace:^"
+    "mgnr-tone-presets": "workspace:^",
+    "react": "18.2.0",
+    "react-dom": "^18.2.0",
+    "utils": "workspace:^",
+    "js-logger": "^1.6.1"
   },
   "devDependencies": {
-    "@types/p5": "^1.7.4",
-    "esbuild-loader": "^3.2.0",
-    "source-map-loader": "^4.0.1",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.9.5",
-    "webpack": "^5.89.0",
-    "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "^4.15.1"
+    "jest-canvas-mock": "^2.5.2",
+    "typescript": "^4.8.4",
+    "vite": "^5.1.4",
+    "@vitejs/plugin-react": "^4.2.1",
+    "@types/node": "^20.10.4",
+    "@types/p5": "^1.7.0",
+    "@types/react": "^18.2.56",
+    "@types/react-dom": "^18.2.19",
+    "test-utils": "workspace:^"
   }
 }

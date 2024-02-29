@@ -1,3 +1,4 @@
+import { P5Canvas } from '../lib/p5canvas'
 import { Conf } from './config'
 import { bindControl } from './control'
 import { renderHelp } from './control/gui'
@@ -37,7 +38,8 @@ const setupMaze = () => {
   renderHelp(Conf.ww, Conf.wh)
 }
 
-export default <Sketch>{
+export default P5Canvas({
   setup,
   draw: () => undefined,
 }
+)
