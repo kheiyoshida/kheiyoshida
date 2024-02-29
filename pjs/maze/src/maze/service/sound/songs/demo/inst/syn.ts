@@ -1,15 +1,10 @@
-import * as E from 'mgnr/src/core/events'
-import * as TC from 'mgnr/src/externals/tone/commands'
-import * as TE from 'mgnr/src/externals/tone/events'
-import { ChConf, InstCh } from 'mgnr/src/externals/tone/mixer/Channel'
-import { Scale } from 'mgnr/src/generator/Scale'
+import * as mgnr from 'mgnr-tone/src'
+import { InstChConf } from 'mgnr-tone/src/mixer/Channel'
 import * as Tone from 'tone'
-import { createFilteredDelaySend } from '../mix/send'
-import { fade } from '../mix/fade'
-import { random } from 'mgnr/src/utils/calc'
+import { fireByRate } from 'utils'
 
 export const createSynCh = () => {
-  const synCh: ChConf<InstCh> = {
+  const synCh: InstChConf = {
     id: 'syn1',
     inst: new Tone.PolySynth(Tone.AMSynth).set({
       envelope: { attack: 0.2, sustain: 0.2, release: 0.3 },
@@ -20,132 +15,107 @@ export const createSynCh = () => {
       new Tone.AutoPanner('4n'),
     ],
     initialVolume: -60,
+    volumeRange: {
+      max: -10,
+      min: -60,
+    },
   }
-  TC.SetupInstChannel.pub({ conf: synCh })
   return synCh
 }
 
-export const setupSynCh = (
-  scale: Scale,
-  delaySend: ReturnType<typeof createFilteredDelaySend>
-) => {
-  const synCh = createSynCh()
+export const setupSynCh = (scale: mgnr.Scale) => {
+  const mixer = mgnr.getMixer()
+  const synCh = mixer.createInstChannel(createSynCh())
 
-  TC.AssignSendChannel.pub({
-    from: synCh.id,
-    to: delaySend.id,
-    gainAmount: 1.4,
-  })
-
-  TC.AssignGenerator.pub({
-    channelId: synCh.id,
-    loop: 4,
-    conf: {
-      scale,
-      length: 10,
-      division: 8,
-      density: 0.3,
-      fillStrategy: 'fill',
-      fillPref: 'allowPoly',
-      noteDur: {
-        min: 4,
-        max: 6,
-      },
-      lenRange: {
-        min: 30,
-        max: 50,
-      },
-      harmonizer: {
-        degree: ['3'],
-        lookDown: true
-      },
+  const generator = mgnr.createGenerator({
+    scale,
+    length: 10,
+    division: 8,
+    density: 0.3,
+    fillStrategy: 'fill',
+    fillPref: 'allowPoly',
+    noteDur: {
+      min: 4,
+      max: 6,
     },
-    events: {
-      elapsed: {
-        strategy: 'randomize',
-        rate: 0.3,
-      },
-      ended: (mes) => {
-        mes.out.generator.mutate({ rate: 0.2, strategy: 'inPlace' })
-        return [
-          E.SequenceLengthChangeRequired.create({
-            gen: mes.out.generator,
-            method: 'extend',
-            len: 4,
-            exceeded: 'reverse',
-          }),
-          E.SequenceReAssignRequired.create({
-            out: mes.out,
-            startTime: mes.endTime,
-          }),
-        ]
-      },
+    lenRange: {
+      min: 30,
+      max: 50,
+    },
+    harmonizer: {
+      degree: ['3'],
+      lookDown: true,
     },
   })
+  const outlet = mgnr.createOutlet(synCh)
+  generator.constructNotes()
+  generator.feedOutlet(outlet)
 
-  TC.AssignGenerator.pub({
-    channelId: synCh.id,
-    loop: 4,
-    conf: {
-      scale,
-      length: 16,
-      division: 16,
-      density: 0.3,
-      fillStrategy: 'fill',
-      fillPref: 'mono',
-      noteDur: 1,
-      lenRange: {
-        min: 2,
-        max: 40,
-      },
+  const changeLength = mgnr.pingpongSequenceLength('extend')
+  outlet
+    .loopSequence(4)
+    .onElapsed(() => {
+      generator.mutate({ strategy: 'randomize', rate: 0.3 })
+    })
+    .onEnded(({ repeatLoop }) => {
+      generator.mutate({ rate: 0.2, strategy: 'inPlace' })
+      changeLength(generator, 4)
+      repeatLoop()
+    })
+
+  const generator2 = mgnr.createGenerator({
+    scale,
+    length: 16,
+    division: 16,
+    density: 0.3,
+    fillStrategy: 'fill',
+    fillPref: 'mono',
+    noteDur: 1,
+    lenRange: {
+      min: 2,
+      max: 40,
     },
-    notes: {
-      0: [
-        {
-          pitch: 'random',
-          vel: 100,
-          dur: 4,
+  })
+  generator2.constructNotes()
+  const outlet2 = mgnr.createOutlet(synCh)
+  generator2.feedOutlet(outlet2)
+  generator2.constructNotes({
+    0: [
+      {
+        pitch: 'random',
+        vel: 100,
+        dur: 4,
+      },
+    ],
+    12: [
+      {
+        pitch: 'random',
+        vel: 100,
+        dur: 4,
+      },
+    ],
+  })
+  const changeLength2 = mgnr.pingpongSequenceLength('extend')
+  outlet2.loopSequence(4).onEnded(({ repeatLoop }) => {
+    generator2.mutate({ rate: 0.2, strategy: 'inPlace' })
+    changeLength2(generator2, 4)
+    repeatLoop()
+  })
+
+  mgnr.registerTimeEvents({
+    repeat: [
+      {
+        interval: '16m',
+        handler: () => {
+          if (fireByRate(0.8)) {
+            synCh.dynamicVolumeFade(synCh.volumeRangeDiff, '32m')
+          }
+          if (fireByRate(0.2)) {
+            synCh.dynamicVolumeFade(-synCh.volumeRangeDiff, '16m')
+          }
         },
-      ],
-      12: [
-        {
-          pitch: 'random',
-          vel: 100,
-          dur: 4,
-        },
-      ],
-    },
-    events: {
-      ended: (mes) => {
-        mes.out.generator.mutate({ rate: 0.2, strategy: 'inPlace' })
-        return [
-          E.SequenceLengthChangeRequired.create({
-            gen: mes.out.generator,
-            method: 'extend',
-            len: 4,
-            exceeded: 'reverse',
-          }),
-          E.SequenceReAssignRequired.create({
-            out: mes.out,
-            startTime: mes.endTime,
-          }),
-        ]
       },
-    },
+    ],
   })
-
-  fade(
-    synCh.id,
-    '16mm',
-    {
-      rate: 0.8,
-      duration: '32m',
-      volume: -10,
-    },
-    {
-      rate: 0.2,
-      duration: '16m',
-      volume: -60,
-    }
-  )
+  return synCh
 }

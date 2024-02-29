@@ -56,6 +56,15 @@ importers:
       js-logger:
         specifier: ^1.6.1
         version: 1.6.1
+      mgnr-core:
+        specifier: workspace:^
+        version: link:../../pkgs/mgnr-core
+      mgnr-tone:
+        specifier: workspace:^
+        version: link:../../pkgs/mgnr-tone
+      mgnr-tone-presets:
+        specifier: workspace:^
+        version: link:../../pkgs/mgnr-tone-presets
       p5:
         specifier: ^1.9.0
         version: 1.9.0
@@ -241,40 +250,6 @@ importers:
         specifier: ^5.1.4
         version: 5.1.4(@types/node@20.10.4)
 
-  pjs/sketch-components:
-    dependencies:
-      p5:
-        specifier: ^1.9.0
-        version: 1.9.0
-      p5utils:
-        specifier: workspace:^
-        version: link:../../pkgs/p5utils
-      react:
-        specifier: 18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.2.0(react@18.2.0)
-      utils:
-        specifier: workspace:^
-        version: link:../../pkgs/utils
-    devDependencies:
-      '@types/p5':
-        specifier: ^1.7.0
-        version: 1.7.6
-      '@types/react':
-        specifier: ^18.2.56
-        version: 18.2.59
-      '@types/react-dom':
-        specifier: ^18.2.19
-        version: 18.2.19
-      '@vitejs/plugin-react':
-        specifier: ^4.2.1
-        version: 4.2.1(vite@5.1.4)
-      vite:
-        specifier: ^5.1.4
-        version: 5.1.4(@types/node@20.10.4)
-
   pkgs/mgnr-core:
     dependencies:
       js-logger:
@@ -426,9 +401,6 @@ importers:
       sketch:
         specifier: workspace:^
         version: link:../../pjs/sketch
-      sketch-components:
-        specifier: workspace:^
-        version: link:../../pjs/sketch-components
       typescript:
         specifier: 4.9.4
         version: 4.9.4
@@ -3056,14 +3028,6 @@ packages:
       '@types/prop-types': 15.7.11
       '@types/scheduler': 0.16.8
       csstype: 3.1.2
-
-  /@types/react@18.2.59:
-    resolution: {integrity: sha512-DE+F6BYEC8VtajY85Qr7mmhTd/79rJKIHCg99MU9SWPB4xvLb6D1za2vYflgZfmPqQVEr6UqJTnLXEwzpVPuOg==}
-    dependencies:
-      '@types/prop-types': 15.7.11
-      '@types/scheduler': 0.16.8
-      csstype: 3.1.2
-    dev: true
 
   /@types/retry@0.12.0:
     resolution: {integrity: sha512-wWKOClTTiizcZhXnPY4wikVAwmdYHp8q6DmC+EJUzAMsycb7HB32Kh9RN4+0gExjmPmZSAQjgURXIGATPegAvA==}

@@ -25,7 +25,7 @@ const setup = () => {
       started = true
       setupMaze()
       toneStart()
-      // fadein()
+      fadein()
     }
   }
 

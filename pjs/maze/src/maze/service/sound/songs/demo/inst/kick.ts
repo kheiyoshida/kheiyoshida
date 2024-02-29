@@ -1,67 +1,61 @@
-import * as E from 'mgnr/src/core/events'
-import * as TC from 'mgnr/src/externals/tone/commands'
-import { ChConf, InstCh } from 'mgnr/src/externals/tone/mixer/Channel'
-import { Scale } from 'mgnr/src/generator/Scale'
+import * as mgnr from 'mgnr-tone/src'
+import { InstChConf } from 'mgnr-tone/src/mixer/Channel'
 import { kickFactory } from 'src/maze/service/sound/notes/kick'
 import * as Tone from 'tone'
-import { fade } from '../mix/fade'
-import { createFilteredDelaySend } from '../mix/send'
+import { fireByRate } from 'utils'
 
 const createKickCh = () => {
-  const kickCh: ChConf<InstCh> = {
+  const kickCh: InstChConf = {
     id: 'kick',
     inst: new Tone.MembraneSynth(),
     effects: [
       new Tone.Filter({ frequency: 100, type: 'highpass' }),
       new Tone.Filter({ frequency: 200, type: 'lowpass' }),
-      new Tone.Compressor(-10, 1.5).set({attack: 0.8, release: 0.1})
+      new Tone.Compressor(-10, 1.5).set({ attack: 0.8, release: 0.1 }),
     ],
     initialVolume: -80,
+    volumeRange: {
+      max: -16,
+      min: -40,
+    },
   }
-  TC.SetupInstChannel.pub({ conf: kickCh })
   return kickCh
 }
 
-export const setupKick = (
-  delaySend: ReturnType<typeof createFilteredDelaySend>
-) => {
-  const kickCh = createKickCh()
-
-  TC.AssignGenerator.pub({
-    channelId: kickCh.id,
-    loop: 2,
-    conf: {
-      scale: new Scale({ range: { min: 30, max: 31 } }),
-      length: 32,
-      division: 8,
-      density: 0.55,
-      fillStrategy: 'fill',
-      fillPref: 'mono',
-    },
-    notes: kickFactory(32, 8),
-    events: {
-      ended: (mes) => [
-        E.SequenceReAssignRequired.create({
-          out: mes.out,
-          startTime: mes.endTime,
-          reset: true,
-        }),
-      ],
-    },
+export const setupKick = () => {
+  const mixer = mgnr.getMixer()
+  const kickCh = mixer.createInstChannel(createKickCh())
+  const kickOut = mgnr.createOutlet(kickCh)
+  const generator = mgnr.createGenerator({
+    scale: mgnr.createScale({ range: { min: 30, max: 31 } }),
+    length: 32,
+    division: 8,
+    density: 0.55,
+    fillStrategy: 'fill',
+    fillPref: 'mono',
+  })
+  const kickTemplate = kickFactory(32, 8)
+  generator.constructNotes(kickTemplate)
+  generator.feedOutlet(kickOut)
+  kickOut.loopSequence(2).onEnded(({ repeatLoop }) => {
+    generator.resetNotes(kickTemplate)
+    repeatLoop()
   })
 
-  fade(
-    kickCh.id,
-    '32m',
-    {
-      rate: 0.3,
-      duration: '16m',
-      volume: -16,
-    },
-    {
-      rate: 0.3,
-      duration: '8m',
-      volume: -40,
-    },
-  )
+  mgnr.registerTimeEvents({
+    repeat: [
+      {
+        interval: '32m',
+        handler: () => {
+          if (fireByRate(0.3)) {
+            kickCh.dynamicVolumeFade(kickCh.volumeRangeDiff, '16m')
+          }
+          if (fireByRate(0.3)) {
+            kickCh.dynamicVolumeFade(-kickCh.volumeRangeDiff, '8m')
+          }
+        },
+      },
+    ],
+  })
+  return kickCh
 }

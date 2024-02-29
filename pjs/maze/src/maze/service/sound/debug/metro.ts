@@ -1,18 +1,16 @@
-import Logger from "js-logger"
-import { RegisterTimeEvents } from "mgnr/src//externals/tone/commands"
-import { Transport } from "tone"
+import Logger from 'js-logger'
+import { registerTimeEvents } from 'mgnr-tone/src'
+import { Transport } from 'tone'
 
 export const metro = (interval = '1m') => {
-  RegisterTimeEvents.pub({
-    events: {
-      repeat: [
-        {
-          interval,
-          handler: () => {
-            Logger.info(Transport.position)
-          },
+  registerTimeEvents({
+    repeat: [
+      {
+        interval,
+        handler: () => {
+          Logger.info(Transport.position)
         },
-      ],
-    },
+      },
+    ],
   })
 }

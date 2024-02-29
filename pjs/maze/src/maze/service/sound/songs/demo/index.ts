@@ -1,28 +1,24 @@
-import { Musician } from 'mgnr/src/Musician'
-import * as TC from 'mgnr/src/externals/tone/commands'
-import * as E from 'mgnr/src/core/events'
-import { Scale } from 'mgnr/src/generator/Scale'
-import {
-  nthDegreeTone,
-  pickRandomPitchName,
-} from 'mgnr/src/generator/utils'
-import { random, randomIntBetween } from 'mgnr/src/utils/calc'
+import { Scale } from 'mgnr-core/src'
+import { nthDegreeTone, pickRandomPitchName } from 'mgnr-core/src/generator/utils'
+import * as mgnr from 'mgnr-tone/src'
+import { registerTimeEvents } from 'mgnr-tone/src'
+import { Transport } from 'tone'
+import { fireByRate, randomIntInclusiveBetween } from 'utils'
 import { metro } from '../../debug/metro'
 import { setupKick } from './inst/kick'
 import { setupPadCh } from './inst/pad'
-import { createFilteredDelaySend } from './mix/send'
 import { setupSynCh } from './inst/syn'
+import { createFilteredDelaySend } from './mix/send'
 
 /**
  * demo song for beta release
  */
 export const demo = () => {
-  //
-  const bpm = randomIntBetween(96, 112)
-  Musician.init('tone', { bpm })
+  Transport.bpm.value = randomIntInclusiveBetween(96, 112)
   metro()
 
   const key = pickRandomPitchName()
+  
   const scale = new Scale({
     key: key,
     pref: 'omit46',
@@ -41,40 +37,30 @@ export const demo = () => {
     },
   })
 
-  const delaySend = createFilteredDelaySend()
+  const mixer = mgnr.getMixer()
+  const delaySend = mixer.createSendChannel(createFilteredDelaySend())
 
-  setupKick(delaySend)
+  const kickCh = setupKick()
+  mixer.connect(kickCh, delaySend)
 
-  setupSynCh(scale2, delaySend)
+  const padCh = setupPadCh(scale, )
+  mixer.connect(padCh, delaySend, 2)
 
-  setupPadCh(scale, delaySend)
+  const synCh = setupSynCh(scale2)
+  mixer.connect(synCh, delaySend, 1.4)
 
-  TC.RegisterTimeEvents.pub({
-    events: {
-      repeat: [
-        {
-          start: '16:0:0',
-          interval: '16m',
-          handler: () => {
-            if (random(0.2)) return
-            const key = nthDegreeTone(scale.key, '6')
-            E.ScaleModulationRequired.pub({
-              scale,
-              next: {
-                key,
-              },
-              stages: 4,
-            })
-            E.ScaleModulationRequired.pub({
-              scale: scale2,
-              next: {
-                key,
-              },
-              stages: 4,
-            })
-          },
+  registerTimeEvents({
+    repeat: [
+      {
+        start: '16:0:0',
+        interval: '16m',
+        handler: () => {
+          if (fireByRate(0.2)) return
+          const key = nthDegreeTone(scale.key, '6')
+          scale.modulate({ key }, 4)
+          scale2.modulate({ key }, 4)
         },
-      ],
-    },
+      },
+    ],
   })
 }
