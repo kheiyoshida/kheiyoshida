@@ -1,12 +1,8 @@
-import { RenderGrid } from 'src/maze/service/render/compose/renderSpec'
-import { DrawSpec } from '../draw/patterns/factory'
+import { RenderGrid } from '../../../service/render/compose/renderSpec'
+import { DrawSpec } from '../draw/types'
 import { Frame } from '../frame'
 import { extractLayer } from '../frame/layer'
-import {
-  DrawEntity,
-  DrawEntityGrid,
-  DrawEntityMethods,
-} from './entity/drawEntity'
+import { DrawEntity, DrawEntityGrid, DrawEntityMethods } from './entity/drawEntity'
 
 /**
  * turn entity grid into an array of draw spec
@@ -20,9 +16,7 @@ export const finalizeDrawSpec = <DE extends DrawEntity>(
     .map((layer, li) =>
       layer
         ? layer
-            .map((e, pos) =>
-              e ? methods[e](extractLayer(frames, li), pos, li) : null
-            )
+            .map((e, pos) => (e ? methods[e](extractLayer(frames, li), pos, li) : null))
             .filter((unit): unit is DrawSpec => unit !== null)
         : null
     )
@@ -31,17 +25,12 @@ export const finalizeDrawSpec = <DE extends DrawEntity>(
 /**
  * final function that service layer can use to generate draw specs
  */
-export type DrawSpecFinalizer = (
-  grid: RenderGrid,
-  frames: Frame[]
-) => DrawSpec[][]
+export type DrawSpecFinalizer = (grid: RenderGrid, frames: Frame[]) => DrawSpec[][]
 
 /**
  * render grid -> draw entity grid
  */
-type GenerateEntityGrid<DE extends DrawEntity> = (
-  grid: RenderGrid
-) => DrawEntityGrid<DE>
+type GenerateEntityGrid<DE extends DrawEntity> = (grid: RenderGrid) => DrawEntityGrid<DE>
 
 /**
  * generate finalizer using

@@ -1,8 +1,4 @@
-import {
-  RenderGrid,
-  RenderPattern,
-  RenderPosition,
-} from 'src/maze/service/render/compose/renderSpec'
+import { RenderGrid, RenderPattern, RenderPosition } from '../../../../../service/render/compose/renderSpec'
 import { DrawEntityGrid, LAST_LAYER_INDEX } from '../drawEntity'
 import { checkCenterFront } from '../utils'
 import { DrawEntities } from './entities'

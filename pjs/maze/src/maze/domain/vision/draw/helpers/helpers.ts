@@ -1,5 +1,5 @@
 import { randomFloatBetween as randomBetween, randomIntBetween } from 'utils'
-import { toFloatPercent } from 'src/maze/utils'
+import { toFloatPercent } from 'utils'
 import { DrawPath, DrawPoint } from '../types'
 
 const getDiff = (p1: DrawPoint, p2: DrawPoint): [number, number] => [

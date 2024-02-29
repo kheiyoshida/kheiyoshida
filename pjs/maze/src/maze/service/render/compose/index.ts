@@ -1,6 +1,6 @@
-import { Node } from 'src/maze/domain/matrix/node'
-import { Direction } from 'src/maze/domain/maze/direction'
-import { pipe } from 'src/maze/utils'
+import { Node } from '../../../domain/matrix/node'
+import { Direction } from '../../../domain/maze/direction'
+import { pipe } from 'utils'
 import { toNodeSpec } from './nodeSpec'
 import { RenderGrid, convertToRenderGrid } from './renderSpec'
 

@@ -1,5 +1,5 @@
-import { MazeStore, store } from 'src/maze/store'
-import { toFloatPercent } from 'src/maze/utils'
+import { toFloatPercent } from 'utils'
+import { MazeStore, store } from '../../store'
 
 const MAX_STATUS_VALUE = 100
 const MIN_STATUS_VALUE = 0
@@ -30,12 +30,7 @@ export const getStats = (): Status => ({
 /**
  * finalize/constrains next value
  */
-export const nextStat = (
-  current: number,
-  amount: number,
-  max: number,
-  min: number
-): number => {
+export const nextStat = (current: number, amount: number, max: number, min: number): number => {
   const next = current + amount
   if (next >= max) return max
   else if (next <= min) return min
@@ -47,11 +42,7 @@ export const nextStat = (
  * returns false when it reaches the limit
  */
 const manipStat =
-  (
-    field: StatusField,
-    max = MAX_STATUS_VALUE,
-    min = MIN_STATUS_VALUE
-  ): StatsManipFn =>
+  (field: StatusField, max = MAX_STATUS_VALUE, min = MIN_STATUS_VALUE): StatsManipFn =>
   (amount) => {
     const next = nextStat(store.read(field), amount, max, min)
     store.update(field, next)
@@ -102,5 +93,4 @@ export const floorToThreshold = (floor: number): [number, number] => {
   return [90, 50]
 }
 
-export const getSpeed = () =>
-  1 / toFloatPercent(Math.min(100, 30 + store.read('stamina')))
+export const getSpeed = () => 1 / toFloatPercent(Math.min(100, 30 + store.read('stamina')))

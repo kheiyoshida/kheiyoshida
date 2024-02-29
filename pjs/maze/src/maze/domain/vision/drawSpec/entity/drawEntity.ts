@@ -1,27 +1,18 @@
-import {
-  RenderPosition,
-} from 'src/maze/service/render/compose/renderSpec'
+import { RenderPosition } from '../../../../service/render/compose/renderSpec'
 import { DrawSpec } from '../../draw/types'
 import { Layer } from '../../frame/layer'
 import { DrawPathEmitter } from '../unit/pathEmitters'
-import {
-  ConditionalDrawSpecEmitter,
-  DrawSpecEmitter,
-} from '../unit/specEmitter'
+import { ConditionalDrawSpecEmitter, DrawSpecEmitter } from '../unit/specEmitter'
 
 export type DrawEntity = string
 
 export type DrawEntityGrid<
   Patterns extends DrawEntity,
   Entity = Patterns | null,
-  Layer = Entity[] | null
+  Layer = Entity[] | null,
 > = Layer[]
 
-export type DrawEntityParser = (
-  l: Layer,
-  p: RenderPosition,
-  li: number
-) => DrawSpec
+export type DrawEntityParser = (l: Layer, p: RenderPosition, li: number) => DrawSpec
 
 export type DrawEntityMethods<K extends string> = {
   [k in K]: DrawEntityParser
@@ -44,10 +35,7 @@ export const aggregate =
  * make a DrawEntityParser from a collection of `PathEmitter`s.
  */
 export const makeParser =
-  (
-    pathEmitters: DrawPathEmitter[],
-    specEmitters: DrawSpecEmitter[] = []
-  ): DrawEntityParser =>
+  (pathEmitters: DrawPathEmitter[], specEmitters: DrawSpecEmitter[] = []): DrawEntityParser =>
   (layer: Layer, position: RenderPosition, layerIndex: number) =>
     specEmitters
       .concat(aggregate(position, layerIndex, pathEmitters))
@@ -60,6 +48,3 @@ export const chooseParser =
   (conditionalEmitter: ConditionalDrawSpecEmitter): DrawEntityParser =>
   (layer: Layer, position: RenderPosition, layerIndex: number) =>
     conditionalEmitter(position, layerIndex)(layer)
-
-
-

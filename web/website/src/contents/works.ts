@@ -45,13 +45,13 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
     thumbnail: { images: makePathsWithLink(regrets.title, [regrets.thumbnail]) },
     contents: regrets.sketch,
   },
-  // {
-  //   title: maze.title,
-  //   date: maze.date,
-  //   contents: maze.sketch,
-  //   thumbnail: {images: makePathsWithLink(maze.title, [...maze.images])},
-  //   caption: maze.caption.join(`\n`),
-  // },
+  {
+    title: maze.title,
+    date: maze.date,
+    contents: maze.sketch,
+    thumbnail: {images: makePathsWithLink(maze.title, [...maze.images])},
+    caption: maze.caption.join(`\n`),
+  },
   {
     title: medwEP.title,
     date: medwEP.date,

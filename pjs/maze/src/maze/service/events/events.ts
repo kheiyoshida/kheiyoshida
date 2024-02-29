@@ -1,8 +1,8 @@
-import { STAND_INTERVAL_MS } from 'src/maze/config/constants'
-import { store } from 'src/maze/store'
+import { STAND_INTERVAL_MS } from '../../config/constants'
 import * as mapper from '../../domain/maze/mapper'
 import * as maze from '../../domain/maze/maze'
 import { updateStats } from '../../domain/stats'
+import { store } from '../../store'
 import {
   renderCurrentView,
   renderGo,
@@ -72,10 +72,5 @@ export const goDownStairs: EventHandler = async () => {
 }
 
 export const openMap = () => {
-  renderMap(
-    mapper.query.grid,
-    maze.query.current,
-    maze.query.direction,
-    maze.query.floor
-  )
+  renderMap(mapper.query.grid, maze.query.current, maze.query.direction, maze.query.floor)
 }

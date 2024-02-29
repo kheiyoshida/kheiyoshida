@@ -1,4 +1,4 @@
-import { RenderGrid } from 'src/maze/service/render/compose/renderSpec'
+import { RenderGrid } from '../../../service/render/compose/renderSpec'
 import { generateDrawEntityGrid } from './grid'
 
 describe(`floor grid generation`, () => {

@@ -1,4 +1,4 @@
-import { Position } from 'src/maze/utils/position'
+import { Position } from '../../utils/position'
 import { Conf } from '../../../config'
 import { Frame } from '.'
 import {

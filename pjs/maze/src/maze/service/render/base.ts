@@ -1,20 +1,14 @@
-import { getSpeed } from 'src/maze/domain/stats'
-import { debugStats } from 'src/maze/domain/stats/debug'
-import { Vision, makeVision } from 'src/maze/domain/vision'
-import { screenPaint } from 'src/maze/domain/vision/draw/screen'
-import { Frame } from 'src/maze/domain/vision/frame'
-import { debugFrames } from 'src/maze/domain/vision/frame/debug'
 import * as maze from '../../domain/maze/maze'
+import { getSpeed } from '../../domain/stats'
+import { Vision, makeVision } from '../../domain/vision'
+import { screenPaint } from '../../domain/vision/draw/screen'
+import { Frame } from '../../domain/vision/frame'
 import { setIntervalEvent } from '../timer'
 import { composeRender } from './compose'
 import { RenderGrid } from './compose/renderSpec'
 import * as RenderQueue from './queue'
 
-export type RenderFunc = (
-  grid: RenderGrid,
-  vision: Vision,
-  speed: number
-) => Promise<void> | void
+export type RenderFunc = (grid: RenderGrid, vision: Vision, speed: number) => Promise<void> | void
 
 /**
  * inject domain dependencies

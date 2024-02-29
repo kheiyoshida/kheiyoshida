@@ -24,7 +24,7 @@ import {
   PathDrawerFactory,
   SpecDrawerFactory,
 } from './types'
-import { toFloatPercent } from 'src/maze/utils'
+import { toFloatPercent } from 'utils'
 
 /**
  * compose draw components.

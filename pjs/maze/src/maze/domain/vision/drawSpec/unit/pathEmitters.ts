@@ -1,4 +1,4 @@
-import { RenderPosition } from 'src/maze/service/render/compose/renderSpec'
+import { RenderPosition } from '../../../../service/render/compose/renderSpec'
 import { DrawPath } from '../../draw/patterns/factory'
 import { Layer } from '../../frame/layer'
 import { omitLength } from './modulators'

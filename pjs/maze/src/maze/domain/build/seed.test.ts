@@ -1,5 +1,5 @@
 import * as utils from 'utils'
-import { Node } from 'src/maze/domain/matrix/node'
+import { Node } from '../../domain/matrix/node'
 import { countNodes } from '../matrix'
 import { initMatrix, seedNodes } from './seed'
 

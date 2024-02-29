@@ -1,6 +1,6 @@
 import { pointLine, pushPop } from 'p5utils/src/render'
 import { transColor } from 'p5utils/src/render'
-import { Conf } from 'src/maze/config'
+import { Conf } from '../../../../config'
 import { getPalette } from '../../color/palette'
 import { moveLine, movedPath } from '../helpers/helpers'
 import {

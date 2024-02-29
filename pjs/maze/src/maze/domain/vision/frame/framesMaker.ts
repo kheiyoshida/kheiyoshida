@@ -1,4 +1,4 @@
-import { pipe } from 'src/maze/utils'
+import { pipe } from 'utils'
 import { Frame } from '.'
 import { Conf } from '../../../config'
 import { distortFrame, narrowFrame, upFrame } from './altFrame'
@@ -10,27 +10,18 @@ export type FramesMaker = (metaMagnify?: number) => Frame[]
 
 const inject =
   (
-    makeFrames: (
-      w: number,
-      h: number,
-      rect: [number, number],
-      fi: number
-    ) => Frame,
+    makeFrames: (w: number, h: number, rect: [number, number], fi: number) => Frame,
     magRates = DEFAULT_MAGNIFY_RATES,
     w = Conf.ww,
     h = Conf.wh
   ) =>
   (metaMagnify = 1) =>
-    magRates.map((rate, fi) =>
-      makeFrames(w, h, rectWH(metaMagnify, rate, w, h), fi)
-    )
+    magRates.map((rate, fi) => makeFrames(w, h, rectWH(metaMagnify, rate, w, h), fi))
 
 export const frames: FramesMaker = inject(createFrame)
 
 export const distorted = (distortion = 0.03): FramesMaker =>
-  inject((w, h, rect) =>
-    pipe(createFrame(w, h, rect), distortFrame(distortion, rect))
-  )
+  inject((w, h, rect) => pipe(createFrame(w, h, rect), distortFrame(distortion, rect)))
 
 export const distortedNarrow = (dis = 0.03, narrow = 0): FramesMaker =>
   inject((w, h, rect) =>
@@ -41,9 +32,7 @@ export const high = (up = 0.3): FramesMaker =>
   inject((w, h, rect) => pipe(createFrame(w, h, rect), upFrame(up, rect)))
 
 export const highDistorted = (dis = 0.03, up = 0.3): FramesMaker =>
-  inject((w, h, rect) =>
-    pipe(createFrame(w, h, rect), distortFrame(dis, rect), upFrame(up, rect))
-  )
+  inject((w, h, rect) => pipe(createFrame(w, h, rect), distortFrame(dis, rect), upFrame(up, rect)))
 
 export const highDistortedNarrow = (
   dis: number,
@@ -59,29 +48,19 @@ export const highDistortedNarrow = (
         upFrame(up, rect),
         distortFrame(dis, rect)
       ),
-    narrowPaths(narrow, undefined, ),
-    Conf.ww * Math.max(0.5, 1 - narrow / 2),
+    narrowPaths(narrow, undefined),
+    Conf.ww * Math.max(0.5, 1 - narrow / 2)
   )
 
 export const highRoof: FramesMaker = inject(createRoofTopFrame)
 
 export const highRoofDistorted = (dis = 0.03): FramesMaker =>
-  inject((w, h, rect) =>
-    pipe(createRoofTopFrame(w, h, rect), distortFrame(dis, rect))
-  )
+  inject((w, h, rect) => pipe(createRoofTopFrame(w, h, rect), distortFrame(dis, rect)))
 
-export const highRoofDistortedNarrow = (
-  dis: number,
-  narrow: number,
-  long: number
-): FramesMaker =>
+export const highRoofDistortedNarrow = (dis: number, narrow: number, long: number): FramesMaker =>
   inject(
     (w, h, rect) =>
-      pipe(
-        createRoofTopFrame(w, h, rect),
-        narrowFrame(narrow),
-        distortFrame(dis, rect)
-      ),
+      pipe(createRoofTopFrame(w, h, rect), narrowFrame(narrow), distortFrame(dis, rect)),
     narrowPaths(narrow, undefined, longPath(long)),
     Conf.ww * Math.max(0.5, 1 - narrow / 2)
   )

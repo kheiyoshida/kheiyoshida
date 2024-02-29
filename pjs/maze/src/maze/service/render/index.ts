@@ -1,18 +1,9 @@
 import { transColor } from 'p5utils/src/render'
-import {
-  changePaletteColor,
-  getPalette,
-  setPalette,
-} from 'src/maze/domain/vision/color/palette'
-import { translateFrame } from 'src/maze/domain/vision/frame/altFrame'
-import { DEFAULT_MAGNIFY_RATES } from 'src/maze/domain/vision/frame/magnify'
+import { DEFAULT_MAGNIFY_RATES } from '../../domain/vision/frame/magnify'
 import { Conf } from '../../config'
-import {
-  genRender,
-  inject,
-  intervalRender,
-  reserveIntervalRender,
-} from './base'
+import { changePaletteColor, getPalette, setPalette } from '../../domain/vision/color/palette'
+import { translateFrame } from '../../domain/vision/frame/altFrame'
+import { genRender, inject, intervalRender, reserveIntervalRender } from './base'
 import { corridorToNextFloor } from './others/scenes'
 import * as RenderQueue from './queue'
 
@@ -49,10 +40,7 @@ const TURN_ADJUST_VALUES = [
 
 export const renderTurn = (d: 'r' | 'l') =>
   inject((renderSpecs, vision, speed) => {
-    const slide = (trans: number): [number, number] => [
-      (d === 'r' ? -1 : 1) * trans * Conf.ww,
-      0,
-    ]
+    const slide = (trans: number): [number, number] => [(d === 'r' ? -1 : 1) * trans * Conf.ww, 0]
     intervalRender(
       speed * Conf.frameInterval,
       genRender(renderSpecs, vision),
@@ -75,9 +63,7 @@ export const renderGoDownstairs = inject((renderSpecs, vision, speed) => {
   reserveIntervalRender(
     speed * Conf.frameInterval * 3,
     (f, i) => {
-      setPalette(
-        changePaletteColor('stroke', transColor(originalStroke, -i * 25))
-      )
+      setPalette(changePaletteColor('stroke', transColor(originalStroke, -i * 25)))
       ren(f)
       if (i >= magnifyDownStairs.length - 1) {
         setPalette(changePaletteColor('stroke', originalStroke))
@@ -91,9 +77,7 @@ export const renderGoDownstairs = inject((renderSpecs, vision, speed) => {
         .map((f) =>
           translateFrame([
             0,
-            i % 2 === 0
-              ? -wh * hd * r * 1.2 - fixed * 2
-              : -wh * hd * r * 1.2 - fixed * 1.8,
+            i % 2 === 0 ? -wh * hd * r * 1.2 - fixed * 2 : -wh * hd * r * 1.2 - fixed * 1.8,
           ])(f)
         )
     })

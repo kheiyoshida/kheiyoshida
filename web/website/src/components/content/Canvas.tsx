@@ -22,7 +22,7 @@ const getSketchComponent = (sketch: Sketch) => {
     case Sketch.forest:
       return dynamic(() => import('sketch/src/projects/mgnr-demo'), { ssr: false })
     case Sketch.maze:
-      throw Error(`not implemened`)
+      return dynamic(() => import('maze/src/maze'), { ssr: false })
     case Sketch.regrets:
       return dynamic(() => import('sketch/src/projects/regrets'), { ssr: false })
     case Sketch.tp4:

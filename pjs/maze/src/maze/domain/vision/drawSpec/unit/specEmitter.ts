@@ -1,5 +1,5 @@
-import { RenderPosition } from 'src/maze/service/render/compose/renderSpec'
-import { DrawSpec } from '../../draw/patterns/factory'
+import { RenderPosition } from '../../../../service/render/compose/renderSpec'
+import { DrawSpec } from '../../draw/types'
 import { Layer } from '../../frame/layer'
 import { assumeSecondFrame } from '../../frame/altFrame'
 import { proceedingLineGround } from './pathEmitters'

@@ -1,4 +1,4 @@
-import { MazeStore, store } from 'src/maze/store'
+import { MazeStore, store } from '../../store'
 import { StatusField } from '../stats'
 import { ApplyColors } from './color'
 import { DrawSpec } from './draw/types'

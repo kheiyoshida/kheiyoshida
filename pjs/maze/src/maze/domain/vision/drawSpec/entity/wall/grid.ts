@@ -2,19 +2,15 @@ import {
   RenderGrid,
   RenderPattern,
   RenderPosition,
-} from 'src/maze/service/render/compose/renderSpec'
+} from '../../../../../service/render/compose/renderSpec'
 import { DrawEntityGrid, LAST_LAYER_INDEX } from '../drawEntity'
 import { checkCenterFront, findPositionByEntity, removeEntity } from '../utils'
 import { DrawEntities } from './entities'
 
-export const generateDrawEntityGrid = (
-  grid: RenderGrid
-): DrawEntityGrid<DrawEntities> =>
+export const generateDrawEntityGrid = (grid: RenderGrid): DrawEntityGrid<DrawEntities> =>
   cancelAroundStair(_generateDrawEntityGrid(grid))
 
-export const _generateDrawEntityGrid = (
-  grid: RenderGrid
-): DrawEntityGrid<DrawEntities> =>
+export const _generateDrawEntityGrid = (grid: RenderGrid): DrawEntityGrid<DrawEntities> =>
   grid.map((layer, li) =>
     layer
       ? layer.map((render, position) =>
@@ -22,11 +18,11 @@ export const _generateDrawEntityGrid = (
             ? render === RenderPattern.STAIR
               ? 'stair'
               : render === RenderPattern.FILL
-              ? 'wall-hori'
-              : null
+                ? 'wall-hori'
+                : null
             : render === RenderPattern.FILL
-            ? determineWallType(checkCenterFront(grid, [li, position]))
-            : forefrontSideFloor(li)
+              ? determineWallType(checkCenterFront(grid, [li, position]))
+              : forefrontSideFloor(li)
         )
       : null
   )
@@ -34,10 +30,7 @@ export const _generateDrawEntityGrid = (
 const forefrontSideFloor = (li: number): DrawEntities | null =>
   li === LAST_LAYER_INDEX ? 'wall-hori-extend' : null
 
-const determineWallType = ([center, front]: [
-  boolean,
-  boolean
-]): DrawEntities | null => {
+const determineWallType = ([center, front]: [boolean, boolean]): DrawEntities | null => {
   if (center && front) return null
   else if (center && !front) return 'wall-hori'
   else if (!center && front) return 'wall-vert'

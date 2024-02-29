@@ -1,9 +1,5 @@
-import { Conf } from 'src/maze/config'
-import {
-  distortedMidPoints,
-  distributedPath,
-  movedPath,
-} from './helpers/helpers'
+import { Conf } from '../../../config'
+import { distortedMidPoints, distributedPath, movedPath } from './helpers/helpers'
 import { pathDrawerFactory, specDrawerFactory } from './patterns/factory'
 import { alternatePath, omittedDistortedPath } from './patterns/omit'
 import { SpecDrawer } from './types'
@@ -13,9 +9,7 @@ export const omittedBlurredSpec =
   (spec) => {
     spec.forEach((path) => {
       const center: [number, number] = [Conf.ww / 2, Conf.wh / 2]
-      distributedPath(movedPath(blurRate, center)(path), omitPercent).forEach(
-        alternatePath
-      )
+      distributedPath(movedPath(blurRate, center)(path), omitPercent).forEach(alternatePath)
     })
   }
 
@@ -45,8 +39,5 @@ export const blurredDistortedSpec =
     })
   }
 
-export const omittedDistortedSpec = (
-  omitPercent: number,
-  distortion: number
-): SpecDrawer =>
+export const omittedDistortedSpec = (omitPercent: number, distortion: number): SpecDrawer =>
   specDrawerFactory(omittedDistortedPath(omitPercent, distortion))

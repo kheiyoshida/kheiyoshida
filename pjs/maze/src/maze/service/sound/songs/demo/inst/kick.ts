@@ -1,6 +1,6 @@
 import * as mgnr from 'mgnr-tone/src'
 import { InstChConf } from 'mgnr-tone/src/mixer/Channel'
-import { kickFactory } from 'src/maze/service/sound/notes/kick'
+import { kickFactory } from '../../../../../service/sound/notes/kick'
 import * as Tone from 'tone'
 import { fireByRate } from 'utils'
 

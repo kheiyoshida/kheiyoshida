@@ -1,4 +1,3 @@
-import { RenderPattern } from 'src/maze/service/render/compose/renderSpec'
 import { DrawEntityGrid } from './drawEntity'
 import { findPositionByEntity, removeEntity } from './utils'
 import { DrawEntities } from './wall/entities'
@@ -22,9 +21,7 @@ describe(`util methods`, () => {
     ['edge-wall', null, null],
   ]
   const factory = () =>
-    _entityGrid.map((l) =>
-      l ? l.slice() : null
-    ) as DrawEntityGrid<DrawEntities>
+    _entityGrid.map((l) => (l ? l.slice() : null)) as DrawEntityGrid<DrawEntities>
 
   it(`can find position by entity`, () => {
     const grid = factory()

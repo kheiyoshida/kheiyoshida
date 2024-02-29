@@ -1,4 +1,4 @@
-import { Position } from 'src/maze/utils/position'
+import { Position } from '../../utils/position'
 import { Matrix } from '.'
 import { Node } from './node'
 
@@ -18,10 +18,7 @@ export const iteratePosition = (
  * iterate each node in matrix.
  * @param cb return true when done
  */
-export const iterateEachNode = (
-  matrix: Matrix,
-  cb: (matrix: Matrix, node: Node) => void
-) => {
+export const iterateEachNode = (matrix: Matrix, cb: (matrix: Matrix, node: Node) => void) => {
   matrix.forEach((row) =>
     row.forEach((item) => {
       if (item) cb(matrix, item)
@@ -46,29 +43,20 @@ export const cancellableIterateEachNode = (
 /**
  * iterate through matrix items and collect data array
  */
-export const mapMatrix = <T>(
-  matrix: Matrix,
-  cb: (item: Node | null) => T
-): T[] => matrix.flatMap((row) => row.map(cb))
+export const mapMatrix = <T>(matrix: Matrix, cb: (item: Node | null) => T): T[] =>
+  matrix.flatMap((row) => row.map(cb))
 
 /**
  * iterate through matrix nodes and collect data array
  */
 export const mapNodes = <T>(matrix: Matrix, cb: (node: Node) => T): T[] =>
-  matrix.flatMap((row) =>
-    row.filter((item): item is Node => item !== null).map(cb)
-  )
+  matrix.flatMap((row) => row.filter((item): item is Node => item !== null).map(cb))
 
 /**
  * filter nodes in matrix and map
  */
-export const filterNodes = (
-  matrix: Matrix,
-  p: (node: Node) => boolean
-): Node[] =>
-  matrix.flatMap((row) =>
-    row.filter((node): node is Node => node !== null && p(node))
-  )
+export const filterNodes = (matrix: Matrix, p: (node: Node) => boolean): Node[] =>
+  matrix.flatMap((row) => row.filter((node): node is Node => node !== null && p(node)))
 
 /**
  * iterate thorough matrix and fold values

@@ -1,4 +1,4 @@
-import { Node } from 'src/maze/domain/matrix/node'
+import { Node } from '../../domain/matrix/node'
 import { Matrix } from '../matrix'
 import { iterateEachNode } from '../matrix/iterate'
 import { seekPath } from '../matrix/path'

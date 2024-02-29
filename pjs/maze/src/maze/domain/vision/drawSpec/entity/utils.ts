@@ -2,15 +2,10 @@ import {
   RenderGrid,
   RenderPattern,
   RenderPosition,
-} from 'src/maze/service/render/compose/renderSpec'
-import { Position } from 'src/maze/utils/position'
-import {
-  DrawEntity,
-  DrawEntityGrid,
-  FIRST_LAYER_INDEX,
-  LAST_LAYER_INDEX,
-} from './drawEntity'
-import { toSpliced } from 'src/maze/utils'
+} from '../../../../service/render/compose/renderSpec'
+import { toSpliced } from '../../../../utils'
+import { Position } from '../../../../utils/position'
+import { DrawEntity, DrawEntityGrid, FIRST_LAYER_INDEX, LAST_LAYER_INDEX } from './drawEntity'
 
 /**
  * find layer index of the first appearance of specified entity
@@ -51,10 +46,7 @@ export const removeEntity = <D extends DrawEntity>(
 export const getGridItem =
   (grid: RenderGrid) =>
   ([i, j]: Position): RenderPattern | null =>
-    i <= LAST_LAYER_INDEX &&
-    i >= FIRST_LAYER_INDEX &&
-    grid[i] !== null &&
-    grid[i]![j] !== null
+    i <= LAST_LAYER_INDEX && i >= FIRST_LAYER_INDEX && grid[i] !== null && grid[i]![j] !== null
       ? grid[i]![j]
       : null
 
@@ -80,7 +72,9 @@ export const checkAroundCenter = (
 ): [left: boolean, right: boolean, center: boolean] => [
   get([i, RenderPosition.LEFT]) === RenderPattern.FLOOR,
   get([i, RenderPosition.RIGHT]) === RenderPattern.FLOOR,
-  compareMulti([RenderPattern.FLOOR, RenderPattern.STAIR, null])(get([i - 1, RenderPosition.CENTER])),
+  compareMulti([RenderPattern.FLOOR, RenderPattern.STAIR, null])(
+    get([i - 1, RenderPosition.CENTER])
+  ),
 ]
 
 /**

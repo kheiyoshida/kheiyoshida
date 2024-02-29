@@ -1,4 +1,4 @@
-import { Conf } from 'src/maze/config'
+import { Conf } from '../../../config'
 import { Frame } from '.'
 import { getRandomMod } from '../../../../lib/random'
 import { DrawPoint } from '../draw/patterns/factory'
