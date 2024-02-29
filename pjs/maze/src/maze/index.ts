@@ -1,7 +1,6 @@
 import { P5Canvas } from '../lib/p5canvas'
 import { Conf } from './config'
 import { bindControl } from './control'
-import { renderHelp } from './control/gui'
 import { applyPalette, getPalette } from './domain/vision/color/palette'
 import { toneStart } from './service/sound'
 import { demo } from './service/sound/songs/demo'
@@ -13,9 +12,6 @@ const setup = () => {
   p.createCanvas(Conf.ww, Conf.wh)
   applyPalette(getPalette())
   p.noLoop()
-  p.touchStarted = () => false
-  p.touchEnded = () => false
-  p.touchMoved = () => false
   p.textSize(32)
 
   const start = () => {
@@ -35,11 +31,9 @@ const setup = () => {
 
 const setupMaze = () => {
   bindControl()
-  renderHelp(Conf.ww, Conf.wh)
 }
 
 export default P5Canvas({
   setup,
   draw: () => undefined,
-}
-)
+})

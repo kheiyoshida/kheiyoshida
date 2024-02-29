@@ -29,29 +29,3 @@ export const renderGUI = (ww: number, wh:number) => {
     map, up, right, left
   }
 }
-
-export const renderHelp = (ww: number, wh: number) => {
-  const base = ww < 1000 ? wh * 0.04 : wh * 0.03
-  const help = btnFac(base)('ⓘ', base, 1.5 * base)
-  const render = () => {
-    pushPop(() => {
-      p.textSize(base/2)
-      p.fill(200)
-      p.text(
-        `
-        UP: MOVE\n
-        LEFT/RIGHT: TURN\n
-        ENTER/M/DOWN: OPEN MAP\n
-        PAGE RELOAD: REGENERATE
-        `,
-        0,
-        base
-      )
-    })
-  }
-  if (ww < 1000) {
-    help.touchStarted(render)
-  } else {
-    help.mousePressed(render)
-  }
-}
