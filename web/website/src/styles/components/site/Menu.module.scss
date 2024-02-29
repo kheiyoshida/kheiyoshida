@@ -8,55 +8,63 @@
   }
 }
 
-.spmenu {
-  @media screen and (min-width: vars.$sp-width) {
-    display: none;
-  }
-  position: fixed;
+@mixin topLeft {
   top: vars.$space;
-  margin-left: vars.$space;
+  left: vars.$space;
+}
+
+.spmenu {
   z-index: 100;
+  position: fixed;
+  @include topLeft;
   cursor: pointer;
 }
 
+.minimized {
+  line-height: 100%;
+  @media screen and (min-width: vars.$sp-width) {
+    font-size: vars.$txt-big;
+  }
+}
 
 .menu {
   width: 100%;
+  $mag: 1.5;
+  position: absolute;
+  @include topLeft;
 
   &__item {
     &__lv1 {
       @include item;
-      font-size: vars.$txt-big;
+      font-size: $mag * vars.$txt-big;
     }
     &__lv2 {
       @include item;
-      font-size: 1rem;
+      font-size: $mag * 1rem;
       margin-left: vars.$pd2;
     }
     &__lv3 {
       @include item;
-      font-size: vars.$txt-small;
+      font-size: $mag * vars.$txt-small;
       display: block;
       margin-left: 2 * vars.$pd2;
     }
   }
 
   @media screen and (max-width: vars.$sp-width) {
-    line-height: 330%;
+    line-height: 1.25 * vars.$line-height;
     position: absolute;
-    top: vars.$space;
-    left: vars.$space;
-    $sp-reso: 1.5;
+    @include topLeft;
 
     &__item {
       &__lv1 {
-        font-size: $sp-reso * vars.$txt-big;
+        font-size: $mag * vars.$txt-big;
       }
       &__lv2 {
-        font-size: $sp-reso * 1rem;
+        font-size: $mag * 1rem;
       }
       &__lv3 {
-        font-size: $sp-reso * vars.$txt-small;
+        font-size: $mag * vars.$txt-small;
       }
     }
   }

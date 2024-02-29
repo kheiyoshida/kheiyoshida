@@ -24,7 +24,7 @@ body {
   touch-action: manipulation;
 
   letter-spacing: 0.035rem;
-  line-height: 220%;
+  line-height: vars.$line-height;
   text-align: left;
   color: vars.$text-color;
   background-color: vars.$bg-color;
@@ -48,10 +48,6 @@ canvas {
 .container {
   width: 100%;
   padding: vars.$space;
-  &__menu {
-    position: fixed;
-    z-index: 100;
-  }
   &__body {
     width: min(vars.$max-width, 100%);
     margin: 0 auto;
@@ -60,10 +56,6 @@ canvas {
 
   @media screen and (max-width: vars.$sp-width) {
     margin-top: 2 * vars.$space + vars.$txt-small; // menu text + margin around that
-
-    &__menu {
-      display: none;
-    }
     &__body {
       width: 100%;
       margin: 0;

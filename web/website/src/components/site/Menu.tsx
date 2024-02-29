@@ -1,58 +1,67 @@
-import { useRouteChange } from '@/lib/hooks'
 import styles from '@/styles/components/site/Menu.module.scss'
-import { useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 import { Slug } from '../../constants'
+import { Links } from '../../contents/links'
 import { ProjectEntities } from '../../contents/projects'
 import { Modal } from './Modal'
-import { Links } from '../../contents/links'
 
-export const SpMenu = () => {
-  const [isOpen, setOpen] = useState(false)
-  const open = () => setOpen(true)
-  const close = () => setOpen(false)
-  useRouteChange(close)
+type Menu2Items = 'projects' | 'links' | 'contact'
 
+const useMenu = () => {
+  const [isOpenLv1, setOpen1] = useState(false)
+  const [isOpenLv2, setOpen2] = useState<Menu2Items[]>(['projects'])
+
+  const toggleLv1 = () => setOpen1((open1) => !open1)
+
+  const toggleLv2 = (item: Menu2Items) => {
+    if (isOpenLv2.includes(item)) {
+      setOpen2([...isOpenLv2].filter((i) => i !== item))
+    } else {
+      setOpen2([...isOpenLv2, item])
+    }
+  }
+
+  return {
+    isOpenLv1,
+    isOpenLv2,
+    toggleLv1,
+    toggleLv2,
+  }
+}
+
+const MenuContext = createContext({} as ReturnType<typeof useMenu>)
+
+export const Menu = () => {
+  const menu = useMenu()
   return (
-    <>
-      {!isOpen ? (
-        <div className={styles.spmenu} onClick={open}>
-          kheiyoshida
-        </div>
-      ) : (
-        <Modal close={close}>
-          <Menu />
-        </Modal>
-      )}
-    </>
+    <MenuContext.Provider value={menu}>
+      <div className={styles.spmenu}>
+        {menu.isOpenLv1 ? (
+          <Modal close={() => undefined}>
+            <MenuLv1 />
+          </Modal>
+        ) : (
+          <div onClick={menu.toggleLv1} className={styles.minimized}>kheiyoshida</div>
+        )}
+      </div>
+    </MenuContext.Provider>
   )
 }
 
-export const Menu = () => {
-  const [open, setOpen] = useState(true)
-  const toggle = () => setOpen((open) => !open)
-
+export const MenuLv1 = () => {
+  const { toggleLv1 } = useContext(MenuContext)
   return (
     <div className={styles.menu}>
-      <div onClick={toggle} className={styles.menu__item__lv1}>
+      <div onClick={toggleLv1} className={styles.menu__item__lv1}>
         kheiyoshida
       </div>
-      {open ? <Menu2 /> : null}
+      <MenuLv2 />
     </div>
   )
 }
 
-type Menu2Items = 'projects' | 'links' | 'contact'
-
-const Menu2 = () => {
-  const [opened, setOpened] = useState<Menu2Items[]>([])
-  const toggleItem = (item: Menu2Items) => {
-    if (opened.includes(item)) {
-      setOpened([...opened].filter((i) => i !== item))
-    } else {
-      setOpened([...opened, item])
-    }
-  }
-
+const MenuLv2 = () => {
+  const { isOpenLv2: opened, toggleLv2: toggleItem } = useContext(MenuContext)
   return (
     <>
       <a href={'/'} className={styles.menu__item__lv2}>

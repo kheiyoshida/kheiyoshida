@@ -1,4 +1,4 @@
-import { Menu, SpMenu } from '@/components/site/Menu'
+import { MenuLv1, Menu } from '@/components/site/Menu'
 import '@/styles/globals.scss'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
@@ -13,12 +13,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <SpMenu />
+      <Menu />
 
       <div className="container">
-        <div className="container__menu">
-          <Menu />
-        </div>
         <div className="container__body">
           <Component {...pageProps} />
         </div>
