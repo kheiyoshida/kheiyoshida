@@ -1,6 +1,7 @@
 import { RGBA, RGBAIndexes, RGBAMatrix } from '../../data/matrix/types'
 import { leftTopIze } from './position'
 import { MediaSize, PixelPosition } from './types'
+import { makePixelIndexGetter } from './utils'
 
 export const iteratePixels = (
   mediaSize: MediaSize,
@@ -8,9 +9,7 @@ export const iteratePixels = (
 ) => {
   for (let y = 0; y < mediaSize.height; y++) {
     for (let x = 0; x < mediaSize.width; x++) {
-      const i = y * mediaSize.width + x
-      const pos = i * 4
-      const rgbaIndexes: RGBA = [pos, pos + 1, pos + 2, pos + 3]
+      const rgbaIndexes = makePixelIndexGetter(mediaSize.width)(x,y)
       iterate(rgbaIndexes, x, y)
     }
   }
