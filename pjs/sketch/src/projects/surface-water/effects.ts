@@ -35,12 +35,14 @@ export function blur() {
     const [sx, sy] = shifted
 
     if (p.pixels[ri] > DefaultGrayValue) {
-      // const update: RGBA = mapGrayValue(DrawGrayValue - 10)
-      const original = getPixelValues(p.pixels, [ri, gi, bi, ai]).map(
-        (v) => v - randomIntInclusiveBetween(0, 100)
-      ) as RGBA
+      const original = getPixelValues(p.pixels, [ri, gi, bi, ai])
+      const update = original.map((v) => clamp(v + randomIntInAsymmetricRange(100), 180, 230)) as RGBA
+      update[3] = update[0] + randomIntInAsymmetricRange(100)
 
-      // buffer.update(sx, sy, original)
+      if (update[0] > 220) {
+        buffer.update(sx, sy, original)
+      }
+
       // const erase: RGBA = mapGrayValue(DefaultGrayValue)
       // bulkUpdatePixelValues(p.pixels, [ri, gi, bi, ai], erase)
     }
@@ -55,7 +57,9 @@ export function blur() {
 
 export function addNoise() {
   let on = true
-  const randomize = (value: number) => clamp(value + randomIntInAsymmetricRange(NoiseLevel), 0, 255)
+  const randomize = (value: number) => {
+    return clamp(value - 60 + randomIntInclusiveBetween(0, NoiseLevel), 0, 255)
+  }
   iteratePixels(CanvasMediaSize, (rgbaIndexes) => {
     on = fireByRate(NoiseSwitchRate) ? on : !on
     if (on) return

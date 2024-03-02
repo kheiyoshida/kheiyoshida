@@ -38,7 +38,7 @@ export const create3DSnapshotFromData = (dataArray: number[]): DataSnapshot => {
       const thetaVal = data * 180
       const phiVal = p.frameCount + phi
       const dynamics = Math.abs(data - 0.5)
-      if (dynamics > 0.05 && dynamics < 0.4) {
+      if (dynamics > 0.01 && dynamics < 0.3) {
         snapshot.push(vectorFromDegreeAngles(thetaVal, phiVal, 1))
       }
     },
