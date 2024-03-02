@@ -1,8 +1,12 @@
 import { RGBA } from 'p5utils/src/data/matrix'
 import { iteratePixels } from 'p5utils/src/media/pixel/pixels'
 import { createUpdateBuffer } from 'p5utils/src/media/pixel/updateBuffer'
-import { bulkUpdatePixelValues, makePixelPositionShift } from 'p5utils/src/media/pixel/utils'
-import { clamp, fireByRate, randomIntInAsymmetricRange } from 'utils'
+import {
+  bulkUpdatePixelValues,
+  getPixelValues,
+  makePixelPositionShift,
+} from 'p5utils/src/media/pixel/utils'
+import { clamp, fireByRate, randomIntInAsymmetricRange, randomIntInclusiveBetween } from 'utils'
 import {
   CanvasMediaSize,
   DefaultGrayValue,
@@ -30,11 +34,15 @@ export function blur() {
     if (!shifted) return
     const [sx, sy] = shifted
 
-    if (p.pixels[ri] < DefaultGrayValue - 10) {
-      const update: RGBA = mapGrayValue(DrawGrayValue)
-      buffer.update(sx, sy, update)
-      const erase: RGBA = mapGrayValue(DefaultGrayValue)
-      bulkUpdatePixelValues(p.pixels, [ri, gi, bi, ai], erase)
+    if (p.pixels[ri] > DefaultGrayValue) {
+      // const update: RGBA = mapGrayValue(DrawGrayValue - 10)
+      const original = getPixelValues(p.pixels, [ri, gi, bi, ai]).map(
+        (v) => v - randomIntInclusiveBetween(0, 100)
+      ) as RGBA
+
+      // buffer.update(sx, sy, original)
+      // const erase: RGBA = mapGrayValue(DefaultGrayValue)
+      // bulkUpdatePixelValues(p.pixels, [ri, gi, bi, ai], erase)
     }
   })
   iteratePixels(CanvasMediaSize, (rgbaIndexes, x, y) => {

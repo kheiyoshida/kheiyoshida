@@ -2,7 +2,7 @@ import p5 from 'p5'
 import { vectorFromDegreeAngles } from 'p5utils/src/3d'
 import { drawAtVectorPosition, drawLineBetweenVectors, mapToSphere } from 'p5utils/src/render'
 import { loop } from 'utils'
-import { BaseRadius, DrawGrayValue, MaximumSnapshots } from './config'
+import { BaseRadius, CanvasSize, DrawGrayValue, MaximumSnapshots } from './config'
 
 type DataSnapshot = p5.Vector[]
 
@@ -47,10 +47,17 @@ export const create3DSnapshotFromData = (dataArray: number[]): DataSnapshot => {
   return snapshot
 }
 
+const center = new p5.Vector(0, -CanvasSize / 80, 0)
+
 export const draw3Dsnapshots = (snapshots: DataSnapshot[]) => {
   snapshots.forEach((snapshot, i) => {
     p.stroke(DrawGrayValue, 250 * Math.sin((Math.PI * i) / MaximumSnapshots))
-    const finalVectors = snapshot.map((vector) => vector.copy().mult(BaseRadius * i))
+    const finalVectors = snapshot.map((vector) =>
+      vector
+        .copy()
+        .mult(BaseRadius * i)
+        .add(center)
+    )
     draw(finalVectors)
   })
 }

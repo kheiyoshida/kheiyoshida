@@ -3,11 +3,19 @@ import { CanvasSize, DefaultGrayValue, DrawGrayValue, DrawIndicateValue } from '
 import { addNoise, blur } from './effects'
 import { drawSoundShape } from './shape'
 import { analyser, soundSource } from './sound'
+import image from '../../assets/img/suface-water/surface-water.png'
+import p5 from 'p5'
+
+let img: p5.Image
+const preload = () => {
+  img = p.loadImage(image)
+}
+
+const renderSound = false
 
 const setup = () => {
-  p.createCanvas(CanvasSize, CanvasSize, p.WEBGL)
+  p.createCanvas(CanvasSize, CanvasSize, renderSound ? p.WEBGL : p.P2D)
   p.textureMode(p.NORMAL)
-  // p.noLoop()
   p.pixelDensity(1)
   p.stroke(DrawIndicateValue, 255)
   p.background(DefaultGrayValue)
@@ -15,17 +23,25 @@ const setup = () => {
   p.frameRate(37)
   p.noFill()
 
-  // p.saveCanvas('render', 'jpg')
-  soundSource.play()
+  if(renderSound) {
+    soundSource.play()
+  } else {
+    p.noLoop()
+    p.image(img, 0, 0, CanvasSize, CanvasSize) 
+    applyPixelEffects()
+  }
 }
 
 const draw = () => {
-  renderSoundWave()
-  // applyPixelEffects()
+  if (renderSound) {
+    renderSoundWave()
+  }
 }
 
 const applyPixelEffects = () => {
   p.loadPixels()
+  blur()
+  blur()
   blur()
   addNoise()
   p.updatePixels()
@@ -45,6 +61,7 @@ const paintScreen = () => {
 }
 
 export default P5Canvas({
+  preload,
   setup,
   draw,
 })
