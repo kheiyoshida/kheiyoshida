@@ -1,6 +1,5 @@
-import { RGBA, RGBAIndexes, RGBAMatrix } from '../../data/matrix'
-import { iteratePixels } from './pixels'
-import { MediaSize, PixelPosition, PixelPositionArray } from './types'
+import { RGBA, RGBAIndexes } from '../../data/matrix'
+import { MediaSize, PixelPositionArray } from './types'
 
 export const makePixelIndexGetter =
   (mediaWidth: number) =>
@@ -23,4 +22,14 @@ export const makePixelPositionShift =
 
 export const getPixelValues = (pixels: Uint8Array | number[], rgbaIndexes: RGBAIndexes): RGBA => {
   return rgbaIndexes.map((i) => pixels[i]) as RGBA
+}
+
+export const bulkUpdatePixelValues = (
+  pixels: number[],
+  rgbaIndexes: RGBAIndexes,
+  rgbaValues: RGBA
+): void => {
+  rgbaIndexes.forEach((idxValue, i) => {
+    pixels[idxValue] = rgbaValues[i]
+  })
 }

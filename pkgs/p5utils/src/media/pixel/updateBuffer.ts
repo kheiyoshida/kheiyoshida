@@ -6,7 +6,6 @@ export const createUpdateBufferArray = (mediaSize: MediaSize): PixelUpdateBuffer
   return [...Array(mediaSize.height)].map(() => new Array(mediaSize.width).fill(undefined))
 }
 
-type PixelUpdateBuffer = ReturnType<typeof createUpdateBuffer>
 export const createUpdateBuffer = (mediaSize: MediaSize) => {
   const data = createUpdateBufferArray(mediaSize)
   return {
@@ -14,7 +13,5 @@ export const createUpdateBuffer = (mediaSize: MediaSize) => {
     update: (x: number, y: number, value: RGBA) => {
       data[y][x] = value
     },
-    // iterate: (iterator: Parameters<typeof iteratePixels>[1]) => iteratePixels(mediaSize, () => {
-    // })
   }
 }
