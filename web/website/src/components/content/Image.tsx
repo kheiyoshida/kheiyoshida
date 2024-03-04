@@ -21,7 +21,7 @@ export const Images = ({ imageInfo }: { imageInfo: ImageInfo }) => {
   )
 }
 
-const FlexibleImage = ({
+export const FlexibleImage = ({
   path,
   margin,
   link,
