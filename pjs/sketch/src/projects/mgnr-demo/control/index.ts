@@ -1,7 +1,7 @@
 import {
   detectPosition,
   makeDetectKeys,
-  makeDoubleTapPreventer,
+  makeDoubleTapBlocker,
   makeSwipeTracker,
 } from 'p5utils/src/control'
 import { MOBILE_WIDTH, SwipeOneEquivalent } from '../constants'
@@ -22,13 +22,13 @@ export const bindControl = (camera: CameraStore): void => {
 const swipeTracker = makeSwipeTracker(SwipeOneEquivalent)
 
 const bindDeviceTouchEvents = (cameraStore: CameraStore): void => {
-  const doubleTapPreventer = makeDoubleTapPreventer()
+  const doubleTapBlocker = makeDoubleTapBlocker()
   p.touchStarted = () => {
-    if (doubleTapPreventer.isSecondTapEvent()) return
+    if (doubleTapBlocker.isNowSecondTap()) return
     swipeTracker.startSwipe(detectPosition())
   }
   p.touchEnded = () => {
-    if (doubleTapPreventer.isSecondTapEvent()) return
+    if (doubleTapBlocker.isNowSecondTap()) return
     const delta = swipeTracker.getNormalizedValues(detectPosition())
     const wasBriefTap = Math.abs(delta.x) < 0.1 && Math.abs(delta.y) < 0.1
     if (wasBriefTap) {

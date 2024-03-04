@@ -1,12 +1,13 @@
-export const makeDoubleTapPreventer = () => {
-  let lastTapped: Date = new Date()
+export const makeDoubleTapBlocker = (blockMs = 10) => {
+  let lastTappedTime: Date | undefined
   return {
-    isSecondTapEvent: () => {
+    isNowSecondTap: (): boolean => {
       const now = new Date()
-      if (timeDelta(lastTapped, now) < 10) {
+      if (lastTappedTime && timeDelta(lastTappedTime, now) < blockMs) {
         return true
       }
-      lastTapped = now
+      lastTappedTime = now
+      return false
     },
   }
 }
