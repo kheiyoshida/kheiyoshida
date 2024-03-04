@@ -5,7 +5,7 @@ import { Links } from '../../contents/links'
 import { ProjectEntities } from '../../contents/projects'
 import { Modal } from './Modal'
 
-type Menu2Items = 'projects' | 'links' | 'contact'
+type Menu2Items = 'projects' | 'links' | 'about'
 
 const useMenu = () => {
   const [isOpenLv1, setOpen1] = useState(false)
@@ -91,12 +91,9 @@ const MenuLv2 = () => {
             </a>
           ))
         : null}
-      <div onClick={() => toggleItem('contact')} className={styles.menu__item__lv2}>
-        Contact
+      <div onClick={() => toggleItem('about')} className={styles.menu__item__lv2}>
+        <a href={`${Slug.about}`}>About</a>
       </div>
-      {opened.includes('contact') ? (
-        <div className={styles.menu__item__lv3}>kheiyoshida@gmail.com</div>
-      ) : null}
     </>
   )
 }
