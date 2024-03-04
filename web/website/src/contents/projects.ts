@@ -1,13 +1,29 @@
 import { ProjectPageInfo, WithoutId } from '../types'
 import { ContentData, insertSlug, worksLink } from './data'
 
-const { wasted, shinjuku, forest, tp4, maze, medwEP } = ContentData
+const { wasted, shinjuku, forest, tp4, maze, medwEP, surfaceWater } = ContentData
 
 const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
   {
-    title: 'Surface Water',
-    date: '2024',
+    title: surfaceWater.title,
+    date: surfaceWater.date,
     contents: [
+      {
+        image: {
+          images: [
+            {
+              path: surfaceWater.thumbnail,
+            },
+          ],
+          layout: 'row',
+        },
+      },
+      {
+        text: `${surfaceWater.message.join(' ')}`,
+      },
+      {
+        text: surfaceWater.trackList.map((t, i) => `${i + 1}. ${t}`).join(`\n`),
+      },
       {
         image: {
           images: [
@@ -18,14 +34,10 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
             {
               path: shinjuku.thumbnail,
               link: worksLink(shinjuku.title),
-            },
-          ],
-          layout: 'grid',
-        },
-      },
-      {
-        text: `Coming soon`,
-      },
+            }
+          ]
+        }
+      }
     ],
   },
   {
@@ -89,8 +101,8 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
         },
       },
       {
-        text: medwEP.caption
-      }
+        text: medwEP.caption,
+      },
     ],
   },
 ]

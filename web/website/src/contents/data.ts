@@ -21,6 +21,27 @@ export enum Sketch {
 }
 
 export const ContentData = {
+  surfaceWater: {
+    title: 'Surface Water',
+    date: '2024',
+    thumbnail: resolveImagekitPath('works', 'surface-water', 'surface-water.png'),
+    trackList: [
+      'profit',
+      'shinjuku',
+      'wasted',
+      '018th',
+      'regrets',
+      'platonic',
+      'divec'
+    ],
+    message: [
+      `I am releasing an album "Surface Water" in Spring 2024.`,
+      `It will consist of 7 music works I've developed in the past 3 years.`,
+    ],
+    detail: [
+      
+    ]
+  },
   wasted: {
     title: 'wasted',
     date: '2024',
