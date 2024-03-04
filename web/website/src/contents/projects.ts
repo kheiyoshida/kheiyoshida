@@ -19,10 +19,10 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
         },
       },
       {
-        text: `${surfaceWater.message.join(' ')}`,
-      },
-      {
-        text: surfaceWater.trackList.map((t, i) => `${i + 1}. ${t}`).join(`\n`),
+        text: [
+          surfaceWater.message.join(' '),
+          surfaceWater.trackList.map((t, i) => `${i + 1}. ${t}`).join(`\n`),
+        ].join(`\n`),
       },
       {
         image: {
@@ -34,10 +34,10 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
             {
               path: shinjuku.thumbnail,
               link: worksLink(shinjuku.title),
-            }
-          ]
-        }
-      }
+            },
+          ],
+        },
+      },
     ],
   },
   {
@@ -55,9 +55,7 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
           layout: 'row',
         },
       },
-      {
-        text: forest.caption,
-      },
+      ...forest.caption.map((text) => ({ text })),
     ],
   },
   {
@@ -69,9 +67,7 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
           images: maze.images.map((img) => ({ path: img, link: worksLink(maze.title) })),
         },
       },
-      {
-        text: maze.caption.join('\n'),
-      },
+      ...maze.caption.map(text => ({text})),
     ],
   },
   {

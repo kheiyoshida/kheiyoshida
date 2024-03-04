@@ -27,7 +27,7 @@ export const ContentBlock = (props: WorkPageProps | ProjectPageProps) => {
     <PagePropsContext.Provider value={props}>
       <div className={styles.work}>
         <ContentTitle />
-        <div>{buildBody(props.content)}</div>
+        <div className={styles.work__body}>{buildBody(props.content)}</div>
         <ContentFooter />
       </div>
     </PagePropsContext.Provider>
@@ -37,7 +37,6 @@ export const ContentBlock = (props: WorkPageProps | ProjectPageProps) => {
 const ContentTitle = () => {
   const { type } = useContext(PageTypeContext)
   const { content } = useContext(PagePropsContext)
-  return null
   if (type !== 'project') return null
   return (
     <div className={styles.work__title}>

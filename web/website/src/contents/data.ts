@@ -25,22 +25,12 @@ export const ContentData = {
     title: 'Surface Water',
     date: '2024',
     thumbnail: resolveImagekitPath('works', 'surface-water', 'surface-water.png'),
-    trackList: [
-      'profit',
-      'shinjuku',
-      'wasted',
-      '018th',
-      'regrets',
-      'platonic',
-      'divec'
-    ],
+    trackList: ['profit', 'shinjuku', 'wasted', '018th', 'regrets', 'platonic', 'divec'],
     message: [
       `I am releasing an album "Surface Water" in Spring 2024.`,
       `It will consist of 7 music works I've developed in the past 3 years.`,
     ],
-    detail: [
-      
-    ]
+    detail: [],
   },
   wasted: {
     title: 'wasted',
@@ -57,23 +47,26 @@ export const ContentData = {
     youtube:
       '<iframe width="560" height="315" src="https://www.youtube.com/embed/lqn06t1xFOE?si=3C_m7jlGAPoFHtok" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>',
     youtubeLink: `https://www.youtube.com/watch?v=lqn06t1xFOE`,
-    caption: `
-    Every time you walk through the crowd in a city, you walk past the shadows of them. Sometimes you don't even realize they all have their names. They are the anonymous shadows, and so are you to them. Every time I walk through the Shinjuku station, which is one of the busiest with millions of people every day, I find myself blurred. So I shot tens of videos in the city, then I treated them as indifferent figures and turned them into this work.
-
-    <br /> * If you have any issues with rendering of the work, you can also watch on <a href="https://www.youtube.com/watch?v=lqn06t1xFOE">YouTube</a>
-    `,
+    caption: [
+      `Every time you walk through the crowd in a city, you walk past the shadows of them.`,
+      `Sometimes you don't even realize they all have their names.`,
+      `They are the anonymous shadows, and so are you to them.`,
+      `Every time I walk through the Shinjuku station, which is one of the busiest with millions of people every day, I find myself blurred.`,
+      ` So I shot tens of videos in the city, then I treated them as indifferent figures and turned them into this work.`,
+      `* If you have any issues with rendering of the work, you can also watch on <a href="https://www.youtube.com/watch?v=lqn06t1xFOE">YouTube</a>`,
+    ],
     thumbnail: thumbnailPath('shinjuku.gif'),
   },
   forest: {
     title: 'forest',
     date: '2024',
     sketch: Sketch.forest,
-    caption: `
-    This is the playground for my in-development music project "mgnr", a library to programmatically generate music. 
-    As you play the demo, you will hear a variety of auto-generated patterns. 
-    The music generation is also based on your play style. 
-    Try to go through the weird forest, or stand still in the darkness. 
-    `,
+    caption: [
+      `This is the playground for my in-development music project "mgnr", a library to programmatically generate music.`,
+      `As you play the demo, you will hear a variety of auto-generated patterns.`,
+      `The music generation is also based on your play style.`,
+      `Try to go through the weird forest, or stand still in the darkness.`,
+    ],
     thumbnail: thumbnailPath('forest.gif'),
   },
   tp4: {

@@ -42,14 +42,14 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
     date: shinjuku.date,
     thumbnail: { images: makePathsWithLink(shinjuku.title, [shinjuku.thumbnail]) },
     contents: shinjuku.sketch,
-    caption: shinjuku.caption,
+    caption: shinjuku.caption.join(' '),
   },
   {
     title: forest.title,
     date: forest.date,
     thumbnail: { images: makePathsWithLink(forest.title, [forest.thumbnail]) },
     contents: forest.sketch,
-    caption: forest.caption.concat(''),
+    caption: forest.caption.join(''),
   },
   {
     title: tp4.title,
@@ -58,18 +58,18 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
     contents: tp4.sketch,
     caption: tp4.caption,
   },
-  {
-    title: regrets.title,
-    date: regrets.date,
-    thumbnail: { images: makePathsWithLink(regrets.title, [regrets.thumbnail]) },
-    contents: regrets.sketch,
-  },
+  // {
+  //   title: regrets.title,
+  //   date: regrets.date,
+  //   thumbnail: { images: makePathsWithLink(regrets.title, [regrets.thumbnail]) },
+  //   contents: regrets.sketch,
+  // },
   {
     title: maze.title,
     date: maze.date,
     contents: maze.sketch,
     thumbnail: { images: makePathsWithLink(maze.title, [...maze.images]) },
-    caption: maze.caption.join(`\n`),
+    caption: maze.caption.join(` `),
   },
   {
     title: medwEP.title,

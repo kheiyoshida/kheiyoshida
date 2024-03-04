@@ -13,7 +13,7 @@ export const Images = ({ imageInfo }: { imageInfo: ImageInfo }) => {
         <FlexibleImage
           key={`${retrieveImgAlt(path)}`}
           path={path}
-          margin={type === 'work'}
+          margin={type === 'work' || type === 'project'}
           link={link}
         />
       ))}
@@ -33,7 +33,7 @@ export const FlexibleImage = ({
   const [ratio, setRatio] = useState<string>()
   return (
     <div
-      className={`${styles.images__item} ${margin ? styles.images__item__margin : ''}`}
+      className={styles.images__item}
       style={ratio ? { aspectRatio: ratio } : {}}
     >
       {link ? <a href={link} className={styles.images__item__link} /> : null}
