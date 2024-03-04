@@ -20,15 +20,19 @@ export const loadVideoSourceList = (sourceList: VideoSourceList): p5VideoElement
   return videoElements
 }
 
-export const waitForVideosToLoad = async (videoElements: p5VideoElement[]) => {
+export const waitForVideosToLoad = async (
+  videoElements: p5VideoElement[],
+  waitSeconds = 10,
+  checkEveryMs = 20
+) => {
   let check = 0
-  while (check < 100) {
+  while (check < (waitSeconds * 1000) / checkEveryMs) {
     check++
     if (videoElements.every((v) => v.width !== 300)) {
       return true
     } else {
-      await delay(20)
+      await delay(checkEveryMs)
     }
   }
-  throw Error(`videos couldn't be loaded within 10 secs`)
+  throw Error(`videos couldn't be loaded within ${waitSeconds} secs`)
 }
