@@ -18,6 +18,7 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
           layout: 'row',
         },
       },
+      
       {
         text: [
           surfaceWater.message.join(' '),
@@ -55,6 +56,9 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
           layout: 'row',
         },
       },
+      {
+        text: `<a href="${worksLink(forest.title)}">Click here to play</a>`
+      },
       ...forest.caption.map((text) => ({ text })),
     ],
   },
@@ -66,6 +70,9 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
         image: {
           images: maze.images.map((img) => ({ path: img, link: worksLink(maze.title) })),
         },
+      },
+      {
+        text: `<a href="${worksLink(maze.title)}">Click here to play</a>`
       },
       ...maze.caption.map(text => ({text})),
     ],
