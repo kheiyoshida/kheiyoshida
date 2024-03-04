@@ -44,3 +44,4 @@ export const RoomVarMaxDelta = 10
 export const SwipeOneEquivalent = 500
 export const SwipeMoveThreshold = 20 / SwipeOneEquivalent
 export const SightAngleWidth = 160
+export const MouseControlThreshold = 0.02

@@ -1,5 +1,5 @@
 import { TouchOrMousePosition, makeSwipeTracker, normalizeInputValues } from 'p5utils/src/control'
-import { SwipeMoveThreshold } from '../constants'
+import { MouseControlThreshold, SwipeMoveThreshold } from '../constants'
 import { MoveDirection } from '../types'
 import { ControlIntention } from './types'
 
@@ -48,8 +48,12 @@ export const translateMouseIntention = (
   position: TouchOrMousePosition,
   center = { x: window.innerWidth / 2, y: window.innerHeight / 2 }
 ): ControlIntention => {
+  const normalized = normalizeInputValues(position, center, 1200)
   return {
-    turn: normalizeInputValues(position, center, 1200),
+    turn: {
+      x: Math.abs(normalized.x) > MouseControlThreshold ? normalized.x : 0,
+      y: normalized.y
+    }
   }
 }
 
