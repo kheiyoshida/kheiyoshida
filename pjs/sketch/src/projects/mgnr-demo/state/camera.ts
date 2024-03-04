@@ -3,7 +3,7 @@ import { makeSpeedConsumer } from 'p5utils/src/3d/phyisics'
 import { createCamera } from 'p5utils/src/camera'
 import { Camera } from 'p5utils/src/camera/types'
 import { LazyInit, ReducerMap, makeStoreV2 } from 'utils'
-import { DefaultSpeed, ZeroSpeed } from '../constants'
+import { DefaultSpeed, DegreesPerLookAngle, ZeroSpeed } from '../constants'
 import { MoveDirection } from '../types'
 
 type CameraState = {
@@ -40,9 +40,7 @@ const reducers = {
       s.camera.turn({ theta: -s.look.theta, phi: 0 })
     } else {
       s.mode = 'look'
-      const { theta, phi } = s.camera.forwardDir
-      const lookCenter = vectorFromDegreeAngles(theta, phi, 100).add(s.camera.position)
-      s.lookCenter = lookCenter.array() as Position3D
+      s.lookCenter = calculateLookCenter(s.camera)
     }
   },
   updateMove: (s) => (dirs: CameraState['dirs']) => {
@@ -57,15 +55,15 @@ const reducers = {
   },
   updateTurn: (s) => (relativeAngles: SphericalAngles) => {
     if (s.mode === 'move') {
-      s.camera.turn({ ...relativeAngles, theta: 0 })
-    } else {
-      s.look = multAngles(relativeAngles, 30)
+      s.camera.turn({ phi: relativeAngles.phi, theta: 0 })
+    } else { // look
+      s.look = multAngles(relativeAngles, DegreesPerLookAngle)
       s.camera.turnWithFocus(s.look, s.lookCenter)
       s.camera.keepFocus()
     }
   },
   move: (s) => () => {
-    if (s.speed === 1 || s.mode !== 'move') return
+    if (s.speed === ZeroSpeed || s.mode !== 'move') return
     if (s.dirs === null) {
       s.speed = consumeSpeed(s.speed)
     }
@@ -73,6 +71,12 @@ const reducers = {
     s.camera.move()
   },
 } satisfies ReducerMap<CameraState>
+
+const calculateLookCenter = (camera: Camera): Position3D => {
+  const { theta, phi } = camera.forwardDir
+  const lookCenter = vectorFromDegreeAngles(theta, phi, 100).add(camera.position)
+  return lookCenter.array() as Position3D
+}
 
 const consumeSpeed = makeSpeedConsumer(ZeroSpeed, (s) => (s * 7) / 8)
 

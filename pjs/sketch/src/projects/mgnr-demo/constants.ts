@@ -12,6 +12,7 @@ export const GroundY = 100
 // camera
 export const ZeroSpeed = 1
 export const DefaultSpeed = 15
+export const DegreesPerLookAngle = 30
 
 // thresholds
 export const eventThresholdSeconds = 2.5
