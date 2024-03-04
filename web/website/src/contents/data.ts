@@ -25,7 +25,7 @@ export const ContentData = {
     title: 'wasted',
     date: '2024',
     sketch: Sketch.wasted,
-    thumbnail: thumbnailPath('wasted.png'),
+    thumbnail: thumbnailPath('wasted.gif'),
   },
   shinjuku: {
     title: 'shinjuku',
@@ -41,7 +41,7 @@ export const ContentData = {
 
     <br /> * If you have any issues with rendering of the work, you can also watch on <a href="https://www.youtube.com/watch?v=lqn06t1xFOE">YouTube</a>
     `,
-    thumbnail: thumbnailPath('shinjuku.png'),
+    thumbnail: thumbnailPath('shinjuku.gif'),
   },
   forest: {
     title: 'forest',
@@ -53,13 +53,13 @@ export const ContentData = {
     The music generation is also based on your play style. 
     Try to go through the weird forest, or stand still in the darkness. 
     `,
-    thumbnail: thumbnailPath('forest.png'),
+    thumbnail: thumbnailPath('forest.gif'),
   },
   tp4: {
     title: 'tp4',
     date: '2023',
     sketch: Sketch.tp4,
-    thumbnail: thumbnailPath('tp4.png'),
+    thumbnail: thumbnailPath('tp4.gif'),
     caption: `
     I felt like dancing, so I made a graph network dance.Each node has its frequency to dance to (like you react to a kick), and significant sound makes it produce child nodes. (Audio data is FFT-analyzed via WebAudio API)
     The song's taken from the EP I released last year: <a href="https://kheiyoshida.bandcamp.com/album/medw">https://kheiyoshida.bandcamp.com/album/medw</a>`,
@@ -83,7 +83,7 @@ export const ContentData = {
       'There’s no objective in this game. But I hope you’ll find a story that can’t be interpreted into words.',
       'On every major release, I will put seeds of stories into this game.  ',
     ],
-    images: [thumbnailPath('maze.png'), thumbnailPath('maze2.png')],
+    images: [thumbnailPath('maze.gif')],
   },
   medwEP: {
     title: 'medw e.p.',
