@@ -92,7 +92,7 @@ const MenuLv2 = () => {
           ))
         : null}
       <div onClick={() => toggleItem('about')} className={styles.menu__item__lv2}>
-        <a href={`${Slug.about}`}>About</a>
+        <a href={`/${Slug.about}`}>About</a>
       </div>
     </>
   )
