@@ -1,4 +1,9 @@
-import { detectPosition, makeDetectKeys, makeSwipeTracker } from 'p5utils/src/control'
+import {
+  detectPosition,
+  makeDetectKeys,
+  makeDoubleTapPreventer,
+  makeSwipeTracker,
+} from 'p5utils/src/control'
 import { MOBILE_WIDTH, SwipeOneEquivalent } from '../constants'
 import { CameraStore } from '../state/camera'
 import { resolveIntention } from './resolve'
@@ -17,10 +22,13 @@ export const bindControl = (camera: CameraStore): void => {
 const swipeTracker = makeSwipeTracker(SwipeOneEquivalent)
 
 const bindDeviceTouchEvents = (cameraStore: CameraStore): void => {
+  const doubleTapPreventer = makeDoubleTapPreventer()
   p.touchStarted = () => {
+    if (doubleTapPreventer.isSecondTapEvent()) return
     swipeTracker.startSwipe(detectPosition())
   }
   p.touchEnded = () => {
+    if (doubleTapPreventer.isSecondTapEvent()) return
     const delta = swipeTracker.getNormalizedValues(detectPosition())
     const wasBriefTap = Math.abs(delta.x) < 0.1 && Math.abs(delta.y) < 0.1
     if (wasBriefTap) {
@@ -35,7 +43,16 @@ const bindDeviceTouchEvents = (cameraStore: CameraStore): void => {
 
 let detectKeys: ReturnType<typeof makeDetectKeys>
 const bindMouseKeyControlEvents = (cameraStore: CameraStore): void => {
-  detectKeys = makeDetectKeys([p.UP_ARROW, p.DOWN_ARROW, p.RIGHT_ARROW, p.LEFT_ARROW, 87, 65, 83, 68])
+  detectKeys = makeDetectKeys([
+    p.UP_ARROW,
+    p.DOWN_ARROW,
+    p.RIGHT_ARROW,
+    p.LEFT_ARROW,
+    87,
+    65,
+    83,
+    68,
+  ])
   p.mouseClicked = () => {
     cameraStore.toggleMode()
   }

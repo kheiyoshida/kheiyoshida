@@ -56,7 +56,7 @@ const reducers = {
   updateTurn: (s) => (relativeAngles: SphericalAngles) => {
     if (s.mode === 'move') {
       s.camera.turn({ phi: relativeAngles.phi, theta: 0 })
-    } else { // look
+    } else {
       s.look = multAngles(relativeAngles, DegreesPerLookAngle)
       s.camera.turnWithFocus(s.look, s.lookCenter)
       s.camera.keepFocus()
