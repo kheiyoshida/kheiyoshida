@@ -1,19 +1,18 @@
 import styles from '@/styles/components/content/Work.module.scss'
+import { createContext, useContext } from 'react'
 import { Slug } from '../../constants'
+import { PageTypeContext } from '../../lib/context'
 import { ContentPageInfo, ProjectPageInfo, WorkPageInfo } from '../../types'
 import { Canvas } from './Canvas'
 import { Embed } from './Embeds'
+import { FooterInfo } from './Footer'
 import { Images } from './Image'
 import { Text } from './Text'
-import { FooterInfo } from './Footer'
-import { createContext, useContext } from 'react'
-import { PageTypeContext } from '../../lib/context'
 
 interface PagePropsBase<P extends ContentPageInfo> {
   content: P
   prev?: string | null
   next?: string | null
-  slug: Slug
 }
 
 export type WorkPageProps = PagePropsBase<WorkPageInfo>
@@ -39,9 +38,7 @@ const ContentTitle = () => {
   const { content } = useContext(PagePropsContext)
   if (type !== 'project') return null
   return (
-    <div className={styles.work__title}>
-      {`${content.title.toUpperCase()} (${content.date})`}
-    </div>
+    <div className={styles.work__title}>{`${content.title} (${content.date})`}</div>
   )
 }
 

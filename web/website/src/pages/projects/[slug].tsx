@@ -1,18 +1,14 @@
-import { ContentBlock, ProjectPageProps, WorkPageProps } from '@/components/content/Work'
+import { ContentBlock, ProjectPageProps } from '@/components/content/Work'
 import { PageTypeContext } from '@/lib/context'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { ParsedUrlQuery } from 'querystring'
 import { ProjectEntities } from '../../contents/projects'
-import { Slug } from '../../constants'
 
 export default function Work(props: ProjectPageProps) {
   return (
-    <>
-      {/* SEO meta needed */}
-      <PageTypeContext.Provider value={{ type: 'project' }}>
-        <ContentBlock {...props} />
-      </PageTypeContext.Provider>
-    </>
+    <PageTypeContext.Provider value={{ type: 'project' }}>
+      <ContentBlock {...props} />
+    </PageTypeContext.Provider>
   )
 }
 
@@ -44,7 +40,6 @@ export const getStaticProps: GetStaticProps<ProjectPageProps> = (ctx) => {
       content,
       prev: prev ? prev.id : null,
       next: next ? next.id : null,
-      slug: Slug.projects,
     },
     revalidate: 1,
   }

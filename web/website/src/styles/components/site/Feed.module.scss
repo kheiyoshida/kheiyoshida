@@ -4,9 +4,6 @@
 .feed {
   &__item {
     margin-bottom: 4 * vars.$space;
-    // @media screen and (max-width: vars.$sp-width) {
-    //   margin-bottom: 70vw;
-    // }
     > a {
       @include style.btn;
     }

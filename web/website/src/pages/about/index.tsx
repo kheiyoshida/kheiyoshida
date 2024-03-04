@@ -5,7 +5,9 @@ import { Links } from '../../contents/links'
 export const About = () => {
   return (
     <div>
-      <FlexibleImage path={AboutContent.photo} margin={false} />
+      <div style={{width: `min(100%, 400px)`}}>
+        <FlexibleImage path={AboutContent.photo} />
+      </div>
       <div>{AboutContent.introduction.join(' ')}</div>
       <br />
       <div>

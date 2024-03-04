@@ -7,7 +7,7 @@ export type WithoutId<C extends ContentPageInfo> = OnePartial<C, 'id'>
 export type ContentPageInfo = {
   id: string
   title: string
-  date: string // YYMMDD
+  date: string
 }
 export type ProjectPageInfo = ContentPageInfo & {
   contents: PageContent[]

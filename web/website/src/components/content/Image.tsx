@@ -1,41 +1,23 @@
-import { PageTypeContext } from '@/lib/context'
 import { retrieveImgAlt } from '@/lib/image'
 import styles from '@/styles/components/content/Image.module.scss'
 import Image from 'next/image'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { ImageInfo } from '../../types'
 
 export const Images = ({ imageInfo }: { imageInfo: ImageInfo }) => {
-  const { type } = useContext(PageTypeContext)
   return (
     <div className={imageInfo.layout === 'grid' ? styles.images__grid : styles.images__row}>
       {imageInfo.images.map(({ path, link }) => (
-        <FlexibleImage
-          key={`${retrieveImgAlt(path)}`}
-          path={path}
-          margin={type === 'work' || type === 'project'}
-          link={link}
-        />
+        <FlexibleImage key={`${retrieveImgAlt(path)}`} path={path} link={link} />
       ))}
     </div>
   )
 }
 
-export const FlexibleImage = ({
-  path,
-  margin,
-  link,
-}: {
-  path: string
-  margin: boolean
-  link?: string
-}) => {
+export const FlexibleImage = ({ path, link }: { path: string; link?: string }) => {
   const [ratio, setRatio] = useState<string>()
   return (
-    <div
-      className={styles.images__item}
-      style={ratio ? { aspectRatio: ratio } : {}}
-    >
+    <div className={styles.images__item} style={ratio ? { aspectRatio: ratio } : {}}>
       {link ? <a href={link} className={styles.images__item__link} /> : null}
       <Image
         className={styles.images__item__img}

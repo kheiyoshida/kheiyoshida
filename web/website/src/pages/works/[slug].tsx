@@ -3,16 +3,12 @@ import { PageTypeContext } from '@/lib/context'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { ParsedUrlQuery } from 'querystring'
 import { WorkEntities } from '../../contents/works'
-import { Slug } from '../../constants'
 
 export default function Work(props: WorkPageProps) {
   return (
-    <>
-      {/* SEO meta needed */}
-      <PageTypeContext.Provider value={{ type: 'work' }}>
-        <ContentBlock {...props} />
-      </PageTypeContext.Provider>
-    </>
+    <PageTypeContext.Provider value={{ type: 'work' }}>
+      <ContentBlock {...props} />
+    </PageTypeContext.Provider>
   )
 }
 
@@ -44,7 +40,6 @@ export const getStaticProps: GetStaticProps<WorkPageProps> = (ctx) => {
       content,
       prev: prev ? prev.id : null,
       next: next ? next.id : null,
-      slug: Slug.works
     },
     revalidate: 1,
   }

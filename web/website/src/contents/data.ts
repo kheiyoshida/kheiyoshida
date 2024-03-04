@@ -30,7 +30,6 @@ export const ContentData = {
       `I am releasing an album "Surface Water" in Spring 2024.`,
       `It will consist of 7 music works I've developed in the past 3 years.`,
     ],
-    detail: [],
   },
   wasted: {
     title: 'wasted',
