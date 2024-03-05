@@ -3,6 +3,7 @@ import styles from '@/styles/components/content/Image.module.scss'
 import Image from 'next/image'
 import { useState } from 'react'
 import { ImageInfo } from '../../types'
+import { MaxContentWidth } from '../../constants'
 
 export const Images = ({ imageInfo }: { imageInfo: ImageInfo }) => {
   return (
@@ -29,6 +30,7 @@ export const FlexibleImage = ({ path, link }: { path: string; link?: string }) =
           const h = e.currentTarget.naturalHeight
           setRatio(`${w}/${h}`)
         }}
+        sizes={`(max-width: ${MaxContentWidth}px) 100vw, ${MaxContentWidth}px`}
       />
     </div>
   )
