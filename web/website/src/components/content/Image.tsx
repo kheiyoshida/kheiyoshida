@@ -18,7 +18,10 @@ export const Images = ({ imageInfo }: { imageInfo: ImageInfo }) => {
 export const FlexibleImage = ({ path, link }: { path: string; link?: string }) => {
   const [ratio, setRatio] = useState<string>()
   return (
-    <div className={styles.images__item} style={ratio ? { aspectRatio: ratio } : {}}>
+    <div
+      className={styles.images__item}
+      style={ratio ? { aspectRatio: ratio } : { aspectRatio: 4 / 3 }}
+    >
       {link ? <a href={link} className={styles.images__item__link} /> : null}
       <Image
         className={styles.images__item__img}
