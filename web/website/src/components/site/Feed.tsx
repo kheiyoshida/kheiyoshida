@@ -6,7 +6,7 @@ export const Feed = ({ works }: { works: WorkPageInfo[] }) => {
   return (
     <div className={styles.feed}>
       {works.map((w) => (
-        <div key={`feed-${w.date}`} className={styles.feed__item}>
+        <div key={`feed-${w.id}`} className={styles.feed__item}>
           <FeedContentBlock work={w} />
         </div>
       ))}
