@@ -37,6 +37,7 @@ export const ContentData = {
     sketch: Sketch.wasted,
     thumbnail: thumbnailPath('wasted.gif'),
     placeholder: thumbnailPath('wasted.png'),
+    caption: ``
   },
   shinjuku: {
     title: 'shinjuku',
@@ -67,15 +68,17 @@ export const ContentData = {
       `This forest is where the music is also the one who listens. As you play the game, the music pattern changes based on your actions.`,
     ],
     caution: [
-      `* If you're in an In-app browsers (Instagram's etc), open the link in an external browser.`
+      `* If you're in an In-app browsers (Instagram's etc), open the link in an external browser.`,
     ],
     comments: [
       `I implemented this interactive project as an ambient video game that tries to provide you with a place where you will be the only character in the narrative, yet you still have a subtle sense of being seen, heard, or judged.`,
-      `This is initially developed as a playground for my in-development music project "mgnr", a library to programmatically generate music.`
+      `This is initially developed as a playground for my in-development music project "mgnr", a library to programmatically generate music.`,
     ],
     thumbnail: thumbnailPath('forest.gif'),
     placeholder: thumbnailPath('forest.png'),
-    screenshots: [...Array(8)].map((_,i) => resolveImagekitPath('works', 'forest', `forest${i+1}.png`))
+    screenshots: [...Array(8)].map((_, i) =>
+      resolveImagekitPath('works', 'forest', `forest${i + 1}.png`)
+    ),
   },
   tp4: {
     title: 'tp4',
@@ -83,9 +86,10 @@ export const ContentData = {
     sketch: Sketch.tp4,
     thumbnail: thumbnailPath('tp4.gif'),
     placeholder: thumbnailPath('tp4.png'),
-    caption: `
-    I felt like dancing, so I made a graph network dance.Each node has its frequency to dance to (like you react to a kick), and significant sound makes it produce child nodes. (Audio data is FFT-analyzed via WebAudio API)
-    The song's taken from the EP I released last year: <a href="https://kheiyoshida.bandcamp.com/album/medw">https://kheiyoshida.bandcamp.com/album/medw</a>`,
+    caption: [
+      `I felt like dancing, so I made a graph network dance.Each node has its frequency to dance to (like you react to a kick), and significant sound makes it produce child nodes. (Audio data is FFT-analyzed via WebAudio API)`,
+      `The song's taken from the EP I released last year: <a href="https://kheiyoshida.bandcamp.com/album/medw">https://kheiyoshida.bandcamp.com/album/medw</a>`,
+    ],
   },
   regrets: {
     title: 'regrets',

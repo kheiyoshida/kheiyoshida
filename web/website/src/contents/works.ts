@@ -43,6 +43,7 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
       images: makePathsWithLink(wasted.title, [wasted.thumbnail], wasted.placeholder),
     },
     contents: wasted.sketch,
+    caption: wasted.caption
   },
   {
     title: shinjuku.title,
@@ -57,7 +58,7 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
     date: tp4.date,
     thumbnail: { images: makePathsWithLink(tp4.title, [tp4.thumbnail], tp4.placeholder) },
     contents: tp4.sketch,
-    caption: tp4.caption,
+    caption: tp4.caption.join(` `),
   },
   {
     title: maze.title,
