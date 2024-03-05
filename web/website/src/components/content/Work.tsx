@@ -8,6 +8,7 @@ import { Embed } from './Embeds'
 import { FooterInfo } from './Footer'
 import { Images } from './Image'
 import { Text } from './Text'
+import { useSPALink } from '../../lib/route'
 
 interface PagePropsBase<P extends ContentPageInfo> {
   content: P
@@ -37,9 +38,7 @@ const ContentTitle = () => {
   const { type } = useContext(PageTypeContext)
   const { content } = useContext(PagePropsContext)
   if (type !== 'project') return null
-  return (
-    <div className={styles.work__title}>{`${content.title} (${content.date})`}</div>
-  )
+  return <div className={styles.work__title}>{`${content.title} (${content.date})`}</div>
 }
 
 const buildBody = (work: WorkPageInfo | ProjectPageInfo) => {
@@ -63,10 +62,23 @@ const ContentFooter = () => {
 
 const ProjectPaginate = () => {
   const { prev, next } = useContext(PagePropsContext)
+  const handleClickLink = useSPALink()
   return (
     <div className={styles.work__paginate}>
-      {prev ? <a href={`/${Slug.projects}/${prev}`}>⇦</a> : <span />}
-      {next ? <a href={`/${Slug.projects}/${next}`}>⇨</a> : <span />}
+      {prev ? (
+        <a href={`/${Slug.projects}/${prev}`} onClick={handleClickLink}>
+          ⇦
+        </a>
+      ) : (
+        <span />
+      )}
+      {next ? (
+        <a href={`/${Slug.projects}/${next}`} onClick={handleClickLink}>
+          ⇨
+        </a>
+      ) : (
+        <span />
+      )}
     </div>
   )
 }

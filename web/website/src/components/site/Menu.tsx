@@ -3,6 +3,7 @@ import { createContext, useContext, useState } from 'react'
 import { Slug } from '../../constants'
 import { Links } from '../../contents/links'
 import { ProjectEntities } from '../../contents/projects'
+import { useSPALink } from '../../lib/route'
 import { Modal } from './Modal'
 
 type Menu2Items = 'projects' | 'links' | 'about'
@@ -33,6 +34,7 @@ const MenuContext = createContext({} as ReturnType<typeof useMenu>)
 
 export const Menu = () => {
   const menu = useMenu()
+
   return (
     <MenuContext.Provider value={menu}>
       <div className={styles.spmenu}>
@@ -41,7 +43,9 @@ export const Menu = () => {
             <MenuLv1 />
           </Modal>
         ) : (
-          <div onClick={menu.toggleLv1} className={styles.minimized}>kheiyoshida</div>
+          <div onClick={menu.toggleLv1} className={styles.minimized}>
+            kheiyoshida
+          </div>
         )}
       </div>
     </MenuContext.Provider>
@@ -61,10 +65,11 @@ export const MenuLv1 = () => {
 }
 
 const MenuLv2 = () => {
-  const { isOpenLv2: opened, toggleLv2: toggleItem } = useContext(MenuContext)
+  const { isOpenLv2: opened, toggleLv2: toggleItem, toggleLv1 } = useContext(MenuContext)
+  const handleClickLink = useSPALink(toggleLv1)
   return (
     <>
-      <a href={'/'} className={styles.menu__item__lv2}>
+      <a href={'/'} className={styles.menu__item__lv2} onClick={handleClickLink}>
         ~
       </a>
       <div onClick={() => toggleItem('projects')} className={styles.menu__item__lv2}>
@@ -76,6 +81,7 @@ const MenuLv2 = () => {
               className={styles.menu__item__lv3}
               href={`/${Slug.projects}/${pj.id}`}
               key={`entry-${pj.id}`}
+              onClick={handleClickLink}
             >
               {pj.title.toUpperCase()}
             </a>
@@ -92,7 +98,9 @@ const MenuLv2 = () => {
           ))
         : null}
       <div onClick={() => toggleItem('about')} className={styles.menu__item__lv2}>
-        <a href={`/${Slug.about}`}>About</a>
+        <a href={`/${Slug.about}`} onClick={handleClickLink}>
+          About
+        </a>
       </div>
     </>
   )
