@@ -71,7 +71,7 @@ export const ContentData = {
       `* If you're in an In-app browsers (Instagram's etc), open the link in an external browser.`,
     ],
     comments: [
-      `I implemented this interactive project as an ambient video game that tries to provide you with a place where you will be the only character in the narrative, yet you still have a subtle sense of being seen, heard, or judged.`,
+      `I implemented this interactive project as an ambient video game that tries to provide a place where you will be the only character in the narrative, yet you still have a subtle sense of being seen, heard, or judged.`,
       `This is initially developed as a playground for my in-development music project "mgnr", a library to programmatically generate music.`,
     ],
     thumbnail: thumbnailPath('forest.gif'),
