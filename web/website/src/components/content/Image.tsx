@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { MaxContentWidth } from '../../constants'
 import { ImageInfo, ImgData } from '../../types'
+import { Loading } from '../site/Loading'
 
 export const Images = ({ imageInfo }: { imageInfo: ImageInfo }) => {
   return (
@@ -40,7 +41,7 @@ export const FlexibleImage = ({ path, link, placeholderPath }: ImgData) => {
         }}
         sizes={`(max-width: ${MaxContentWidth}px) 100vw, ${MaxContentWidth}px`}
       />
-      {placeholderPath && imgLoaded === false ? (
+      {imgLoaded === false ? (
         <Placeholder placeholderPath={placeholderPath} setRatio={setLoadedImageAspectRatio} />
       ) : null}
     </div>
@@ -51,19 +52,27 @@ const Placeholder = ({
   placeholderPath,
   setRatio,
 }: {
-  placeholderPath: string
+  placeholderPath: string | null | undefined
   setRatio: (e: React.SyntheticEvent<HTMLImageElement>) => void
 }) => {
+  const [phLoaded, setPHLoaded] = useState(false)
+
   return (
-    <Image
-      className={styles.images__item__img}
-      src={placeholderPath}
-      alt={retrieveImgAlt(placeholderPath)}
-      fill
-      onLoad={(e) => {
-        setRatio(e)
-      }}
-      sizes={`(max-width: ${MaxContentWidth}px) 100vw, ${MaxContentWidth}px`}
-    />
+    <>
+      {placeholderPath ? (
+        <Image
+          className={styles.images__item__img}
+          src={placeholderPath}
+          alt={retrieveImgAlt(placeholderPath)}
+          fill
+          onLoad={(e) => {
+            setRatio(e)
+            setPHLoaded(true)
+          }}
+          sizes={`(max-width: ${MaxContentWidth}px) 100vw, ${MaxContentWidth}px`}
+        />
+      ) : null}
+      {!phLoaded ? <Loading /> : null}
+    </>
   )
 }
