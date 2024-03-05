@@ -63,13 +63,19 @@ export const ContentData = {
     date: '2024',
     sketch: Sketch.forest,
     caption: [
-      `This is the playground for my in-development music project "mgnr", a library to programmatically generate music.`,
-      `As you play the demo, you will hear a variety of auto-generated patterns.`,
-      `The music generation is also based on your play style.`,
-      `Try to go through the weird forest, or stand still in the darkness.`,
+      `Walk through your virtual forest that never ends.`,
+      `This forest is where the music is also the one who listens. As you play the game, the music pattern changes based on your actions.`,
+    ],
+    caution: [
+      `* If you're in an In-app browsers (Instagram's etc), open the link in an external browser.`
+    ],
+    comments: [
+      `I implemented this interactive project as an ambient video game that tries to provide you with a place where you will be the only character in the narrative, yet you still have a subtle sense of being seen, heard, or judged.`,
+      `This is initially developed as a playground for my in-development music project "mgnr", a library to programmatically generate music.`
     ],
     thumbnail: thumbnailPath('forest.gif'),
     placeholder: thumbnailPath('forest.png'),
+    screenshots: [...Array(8)].map((_,i) => resolveImagekitPath('works', 'forest', `forest${i+1}.png`))
   },
   tp4: {
     title: 'tp4',

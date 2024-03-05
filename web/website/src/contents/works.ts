@@ -30,6 +30,13 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
     ],
   },
   {
+    title: forest.title,
+    date: forest.date,
+    thumbnail: { images: makePathsWithLink(forest.title, [forest.thumbnail], forest.placeholder) },
+    contents: forest.sketch,
+    caption: forest.caption.join('') + `\n` + forest.caution[0],
+  },
+  {
     title: wasted.title,
     date: wasted.date,
     thumbnail: {
@@ -44,13 +51,7 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
     contents: shinjuku.sketch,
     caption: shinjuku.caption.join(' '),
   },
-  {
-    title: forest.title,
-    date: forest.date,
-    thumbnail: { images: makePathsWithLink(forest.title, [forest.thumbnail], forest.placeholder) },
-    contents: forest.sketch,
-    caption: forest.caption.join(''),
-  },
+  
   {
     title: tp4.title,
     date: tp4.date,
