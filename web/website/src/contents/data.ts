@@ -36,6 +36,7 @@ export const ContentData = {
     date: '2024',
     sketch: Sketch.wasted,
     thumbnail: thumbnailPath('wasted.gif'),
+    placeholder: thumbnailPath('wasted.png'),
   },
   shinjuku: {
     title: 'shinjuku',

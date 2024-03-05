@@ -26,12 +26,13 @@ export type PageContent = {
 
 export type ImageInfo = {
   images: ImgData[]
-  layout?: ImageLayout
+  layout?: ImageLayout|null
 }
 
 export type ImgData = {
   path: string
-  link?: string
+  link?: string|null
+  placeholderPath?: string|null
 }
 
 export type ImageLayout = 'row' | 'grid'

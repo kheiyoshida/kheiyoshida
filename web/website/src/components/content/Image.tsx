@@ -2,21 +2,27 @@ import { retrieveImgAlt } from '@/lib/image'
 import styles from '@/styles/components/content/Image.module.scss'
 import Image from 'next/image'
 import { useState } from 'react'
-import { ImageInfo } from '../../types'
 import { MaxContentWidth } from '../../constants'
+import { ImageInfo, ImgData } from '../../types'
 
 export const Images = ({ imageInfo }: { imageInfo: ImageInfo }) => {
   return (
     <div className={imageInfo.layout === 'grid' ? styles.images__grid : styles.images__row}>
-      {imageInfo.images.map(({ path, link }) => (
-        <FlexibleImage key={`${retrieveImgAlt(path)}`} path={path} link={link} />
+      {imageInfo.images.map((imgData) => (
+        <FlexibleImage key={`${retrieveImgAlt(imgData.path)}`} {...imgData} />
       ))}
     </div>
   )
 }
 
-export const FlexibleImage = ({ path, link }: { path: string; link?: string }) => {
+export const FlexibleImage = ({ path, link, placeholderPath }: ImgData) => {
   const [ratio, setRatio] = useState<string>()
+  const [imgLoaded, setLoaded] = useState(false)
+  const setLoadedImageAspectRatio = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const w = e.currentTarget.naturalWidth
+    const h = e.currentTarget.naturalHeight
+    setRatio(`${w}/${h}`)
+  }
   return (
     <div
       className={styles.images__item}
@@ -29,12 +35,35 @@ export const FlexibleImage = ({ path, link }: { path: string; link?: string }) =
         alt={retrieveImgAlt(path)}
         fill
         onLoad={(e) => {
-          const w = e.currentTarget.naturalWidth
-          const h = e.currentTarget.naturalHeight
-          setRatio(`${w}/${h}`)
+          setLoadedImageAspectRatio(e)
+          setLoaded(true)
         }}
         sizes={`(max-width: ${MaxContentWidth}px) 100vw, ${MaxContentWidth}px`}
       />
+      {placeholderPath && imgLoaded === false ? (
+        <Placeholder placeholderPath={placeholderPath} setRatio={setLoadedImageAspectRatio} />
+      ) : null}
     </div>
+  )
+}
+
+const Placeholder = ({
+  placeholderPath,
+  setRatio,
+}: {
+  placeholderPath: string
+  setRatio: (e: React.SyntheticEvent<HTMLImageElement>) => void
+}) => {
+  return (
+    <Image
+      className={styles.images__item__img}
+      src={placeholderPath}
+      alt={retrieveImgAlt(placeholderPath)}
+      fill
+      onLoad={(e) => {
+        setRatio(e)
+      }}
+      sizes={`(max-width: ${MaxContentWidth}px) 100vw, ${MaxContentWidth}px`}
+    />
   )
 }
