@@ -1,5 +1,5 @@
 import { fireByRate as random, randomFloatBetween as randomBetween, randomIntBetween } from 'utils'
-import { BuildParams } from '.'
+import { BuildMatrixParams } from '../../store/entities/matrix'
 
 export const INITIAL_FLOOR_SIZE = 6
 const MAX_FLOOR_SIZE = 13
@@ -64,7 +64,7 @@ const MAX_FILL_RATE = 0.88
 /**
  * provide paramters using state values
  */
-export const paramBuild = (floor: number): BuildParams => {
+export const paramBuild = (floor: number): BuildMatrixParams => {
   const size = floorSize(floor)
   const fill = Math.min(MAX_FILL_RATE, fillRate(floor))
   const conn = connRate(floor)
@@ -74,6 +74,6 @@ export const paramBuild = (floor: number): BuildParams => {
 /**
  * adjust params when build fails to make complete maze
  */
-export const adjustParams = ([size, fill, conn]: BuildParams): BuildParams => {
+export const adjustParams = ([size, fill, conn]: BuildMatrixParams): BuildMatrixParams => {
   return [size + 1, fill * 1.05, conn]
 }
