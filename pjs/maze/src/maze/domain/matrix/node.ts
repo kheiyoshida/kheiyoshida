@@ -11,7 +11,10 @@ export class Node {
     return this._edges
   }
 
-  constructor(public pos: Position, edges?: { [k in Direction]?: boolean }) {
+  constructor(
+    public pos: Position,
+    edges?: { [k in Direction]?: boolean }
+  ) {
     this._edges = {
       n: edges?.n || false,
       e: edges?.e || false,
@@ -54,12 +57,8 @@ export class Node {
   }
 
   public distance(other: Node) {
-    if (this === other)
-      throw Error(`distance should be compared with another node`)
-    return (
-      Math.abs(other.pos[0] - this.pos[0]) +
-      Math.abs(other.pos[1] - this.pos[1])
-    )
+    if (this === other) throw Error(`distance should be compared with another node`)
+    return Math.abs(other.pos[0] - this.pos[0]) + Math.abs(other.pos[1] - this.pos[1])
   }
 
   public isAdjacent(another: Node): boolean {

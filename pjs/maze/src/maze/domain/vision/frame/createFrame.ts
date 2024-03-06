@@ -1,11 +1,7 @@
 import { Frame } from '.'
 import { adjustFramePosition } from './helpers'
 
-export type CreateFrame = (
-  w: number,
-  h: number,
-  [rectWidth, rectHeight]: [number, number]
-) => Frame
+export type CreateFrame = (w: number, h: number, [rectWidth, rectHeight]: [number, number]) => Frame
 
 /**
  * detemine frame's corners

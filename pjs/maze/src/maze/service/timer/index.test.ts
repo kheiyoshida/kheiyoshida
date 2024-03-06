@@ -1,4 +1,4 @@
-import { clearTimer, setIntervalEvent, setTimer } from "."
+import { clearTimer, setIntervalEvent, setTimer } from '.'
 
 describe(`global timer`, () => {
   beforeAll(() => {

@@ -25,14 +25,9 @@ export const maybeConcat = <T>(...args: (T[] | undefined)[]): T[] | undefined =>
     ? [...args].filter((a): a is T[] => a !== undefined).flatMap((a) => a)
     : undefined
 
-export const combination = <T>(
-  valueTuple: [T, T],
-  compareTuple: [T, T]
-): boolean => {
-  if (valueTuple[0] === compareTuple[0] && valueTuple[1] === compareTuple[1])
-    return true
-  if (valueTuple[0] === compareTuple[1] && valueTuple[1] === compareTuple[0])
-    return true
+export const combination = <T>(valueTuple: [T, T], compareTuple: [T, T]): boolean => {
+  if (valueTuple[0] === compareTuple[0] && valueTuple[1] === compareTuple[1]) return true
+  if (valueTuple[0] === compareTuple[1] && valueTuple[1] === compareTuple[0]) return true
   return false
 }
 
@@ -57,11 +52,7 @@ export const lazyObjectGet = <T extends Object>(obj: T): Required<T> =>
 
 export function pipe<A>(value: A): A
 export function pipe<A, B>(value: A, fn1: (input: A) => B): B
-export function pipe<A, B, C>(
-  value: A,
-  fn1: (input: A) => B,
-  fn2: (input: B) => C
-): C
+export function pipe<A, B, C>(value: A, fn1: (input: A) => B, fn2: (input: B) => C): C
 export function pipe<A, B, C, D>(
   value: A,
   fn1: (input: A) => B,
@@ -100,10 +91,7 @@ export const deepCopy = <O extends Object>(obj: O) => {
 /**
  * returns spliced array
  */
-export const toSpliced = <T>(
-  arr: T[],
-  ...args: Parameters<typeof Array.prototype.splice>
-) => {
+export const toSpliced = <T>(arr: T[], ...args: Parameters<typeof Array.prototype.splice>) => {
   arr.splice(...args)
   return arr
 }

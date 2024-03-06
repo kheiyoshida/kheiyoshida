@@ -1,8 +1,8 @@
-import { pushPop } from "p5utils/src/render"
-import { getStats } from "."
+import { pushPop } from 'p5utils/src/render'
+import { getStats } from '.'
 
 export const debugStats = () => {
-  const {sanity, stamina} = getStats()
+  const { sanity, stamina } = getStats()
   pushPop(() => {
     p.textSize(32)
     p.stroke(100, 0, 200)

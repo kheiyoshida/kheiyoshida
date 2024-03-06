@@ -3,7 +3,7 @@ import { PathSpec, TerrainPattern } from './nodeSpec'
 export enum RenderPosition {
   LEFT,
   CENTER,
-  RIGHT
+  RIGHT,
 }
 
 export enum RenderPattern {
@@ -20,7 +20,7 @@ export type RenderGrid = [
   RenderLayer,
   RenderLayer,
   RenderLayer,
-  RenderLayer
+  RenderLayer,
 ]
 
 /**

@@ -12,14 +12,8 @@ import { Node } from './node'
 /**
  * BFS using position as arguments
  */
-export const seekPathByPosition = (
-  matrix: Matrix,
-  current: Position,
-  dest: Position
-): Node[] => {
-  const [startNode, destNode] = [current, dest].map((pos) =>
-    getPositionNode(matrix, pos)
-  )
+export const seekPathByPosition = (matrix: Matrix, current: Position, dest: Position): Node[] => {
+  const [startNode, destNode] = [current, dest].map((pos) => getPositionNode(matrix, pos))
   return seekPath(matrix, startNode, destNode)
 }
 
@@ -49,11 +43,7 @@ export const seekPath = (matrix: Matrix, start: Node, dest: Node): Node[] => {
 /**
  * connect adjacent nodes.
  */
-export const connectNodes = (
-  node: Node,
-  adjacent: Node,
-  direction?: Direction
-): void => {
+export const connectNodes = (node: Node, adjacent: Node, direction?: Direction): void => {
   if (!node.isAdjacent(adjacent)) throw Error(`can only connect adjacent nodes`)
   const dir = direction || node.direction(adjacent)
   node.set({ [dir]: true })
@@ -64,11 +54,7 @@ export const connectNodes = (
  * make a shortest path from a node to another,
  * connecting and putting nodes recursively
  */
-export const makeShortestPath = (
-  matrix: Matrix,
-  from: Node,
-  to: Node
-): void => {
+export const makeShortestPath = (matrix: Matrix, from: Node, to: Node): void => {
   const dir = from.direction(to)
   const adjPos = adjacentPosition(dir, from.pos, matrix.length)!
   const adjNode = requireNodeAtPosition(matrix, adjPos)

@@ -1,4 +1,4 @@
-import { fireByRate as random } from "utils"
+import { fireByRate as random } from 'utils'
 import { Matrix, getAllAdjacentNodes } from '../matrix'
 import { iterateEachNode } from '../matrix/iterate'
 import { connectNodes, makeShortestPath } from '../matrix/path'
@@ -71,7 +71,7 @@ const randomConnect = (matrix: Matrix, connRate: number) => {
       if (n1 !== n2) {
         if (random(connRate) && n1.distance(n2) === 1) {
           connectNodes(n1, n2)
-        } else if (random(0.01) && n1.distance(n2) <= 3){
+        } else if (random(0.01) && n1.distance(n2) <= 3) {
           makeShortestPath(matrix, n1, n2)
         }
       }

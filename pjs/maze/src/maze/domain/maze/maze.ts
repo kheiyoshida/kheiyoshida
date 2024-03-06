@@ -7,9 +7,7 @@ import { getMatrixItem } from '../matrix'
 import { Node } from '../matrix/node'
 
 export const generateMaze = () => {
-  const { matrix, initialPos, initialDir, stairPos } = build(
-    store.read('floor')
-  )
+  const { matrix, initialPos, initialDir, stairPos } = build(store.read('floor'))
   store.batchUpdate({
     matrix,
     current: initialPos as Position,
@@ -41,10 +39,7 @@ export const query = {
     return this.currentNode.edges[this.direction]
   },
   get reachedStair() {
-    return (
-      this.current[0] === this.stairPos[0] &&
-      this.current[1] === this.stairPos[1]
-    )
+    return this.current[0] === this.stairPos[0] && this.current[1] === this.stairPos[1]
   },
 }
 

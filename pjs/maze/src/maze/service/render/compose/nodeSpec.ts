@@ -31,7 +31,7 @@ export type NodeSpec = {
 }
 
 /**
- * representation for the available position in path. 
+ * representation for the available position in path.
  * it can be null if the node doesn't exist or not approachable
  */
 export type PathNode = NodeSpec | null
@@ -45,8 +45,7 @@ export type PathSpec = [PathNode, PathNode, PathNode]
 /**
  * detect path pattern
  */
-const detectPattern = (reachable: boolean): TerrainPattern =>
-  reachable ? 'corridor' : 'wall'
+const detectPattern = (reachable: boolean): TerrainPattern => (reachable ? 'corridor' : 'wall')
 
 /**
  * get terrain

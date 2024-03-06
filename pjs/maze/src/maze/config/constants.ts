@@ -1,4 +1,3 @@
-
 export const FRAME_INTERVAL = 1000 / 24
 
 /**

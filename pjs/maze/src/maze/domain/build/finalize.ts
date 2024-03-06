@@ -16,10 +16,7 @@ export const initial = (matrix: Matrix) => {
   const initialNode = randomItem(corridors)
   return {
     initialPos: initialNode.pos,
-    initialDir: compass(
-      random(0.5) ? 'r' : 'l',
-      initialNode.corridorDirection!
-    ),
+    initialDir: compass(random(0.5) ? 'r' : 'l', initialNode.corridorDirection!),
   }
 }
 

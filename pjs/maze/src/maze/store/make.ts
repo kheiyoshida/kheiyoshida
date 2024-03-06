@@ -1,8 +1,6 @@
-import { deepCopy } from "../utils"
+import { deepCopy } from '../utils'
 
-export type StateManager<T extends Object> = ReturnType<
-  ReturnType<typeof makeStore<T>>
->
+export type StateManager<T extends Object> = ReturnType<ReturnType<typeof makeStore<T>>>
 
 export const makeStore = <T extends Object>() => {
   let data: Readonly<T>
@@ -22,7 +20,7 @@ export const makeStore = <T extends Object>() => {
      * update field of state using old value. It will renew the whole state object
      */
     const update = <K extends keyof T>(key: K, val: ((v: T[K]) => T[K]) | T[K]) => {
-      if(val instanceof Function) {
+      if (val instanceof Function) {
         _update(key, val(data[key]))
       } else {
         _update(key, val)

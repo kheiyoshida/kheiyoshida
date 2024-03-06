@@ -66,10 +66,7 @@ describe(`toNodeSpec`, () => {
     ])
   })
   it(`should fill with null if front node isn't approachable`, () => {
-    const path: Node[] = [
-      new Node([3, 0], { n: true, e: true }),
-      new Node([2, 0], { n: true }),
-    ]
+    const path: Node[] = [new Node([3, 0], { n: true, e: true }), new Node([2, 0], { n: true })]
     expect(toNodeSpec('n')(path)).toMatchObject([
       null,
       {
@@ -88,6 +85,6 @@ describe(`toNodeSpec`, () => {
           right: 'corridor',
         },
       },
-    ])    
+    ])
   })
 })

@@ -5,8 +5,7 @@ type GetCoefficient = (floor: number) => number
 
 type GetParam = (state: ListenableState) => (threshold?: number) => number
 
-const getCoefficientVisibility: GetCoefficient = (floor) =>
-  100 - Math.min(floor, 15) * 10
+const getCoefficientVisibility: GetCoefficient = (floor) => 100 - Math.min(floor, 15) * 10
 
 export const getVisibility: GetParam =
   ({ floor, stamina }) =>

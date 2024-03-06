@@ -14,10 +14,7 @@ export const countNodes = (matrix: Matrix): number =>
 /**
  * get a matrix item in position. position can be invalid (i.e. out of range)
  */
-export const getMatrixItem = (
-  matrix: Matrix,
-  position: Position
-): Node | null => {
+export const getMatrixItem = (matrix: Matrix, position: Position): Node | null => {
   const validPos = validatePosition(position, { min: 0, max: matrix.length })
   if (!validPos) return null
   return matrix[validPos[0]][validPos[1]]
@@ -28,8 +25,7 @@ export const getMatrixItem = (
  */
 export const getPositionNode = (matrix: Matrix, position: Position): Node => {
   const n = getMatrixItem(matrix, position)
-  if (n === null)
-    throw Error(`null returned, not Node (at ${position.toString()})`)
+  if (n === null) throw Error(`null returned, not Node (at ${position.toString()})`)
   return n
 }
 
@@ -37,11 +33,7 @@ export const getPositionNode = (matrix: Matrix, position: Position): Node => {
  * get adjacent position in provided direction.
  * it can be null if the adjacent position is out of matrix
  */
-export const adjacentPosition = (
-  d: Direction,
-  p: Position,
-  matrixSize: number
-): Position | null =>
+export const adjacentPosition = (d: Direction, p: Position, matrixSize: number): Position | null =>
   validatePosition(adjacentInDirection(d, p), {
     min: 0,
     max: matrixSize - 1,
@@ -51,11 +43,7 @@ export const adjacentPosition = (
  * get the adjacent item.
  * note that returned value can be null
  */
-export const getAdjacentItem = (
-  matrix: Matrix,
-  nodePos: Position,
-  d: Direction
-): Node | null => {
+export const getAdjacentItem = (matrix: Matrix, nodePos: Position, d: Direction): Node | null => {
   const pos = adjacentPosition(d, nodePos, matrix.length)
   return pos ? getMatrixItem(matrix, pos) : null
 }
@@ -80,10 +68,8 @@ export const putNode = (matrix: Matrix, position: Position): Node => {
 /**
  * look up an item at position, put node if empty
  */
-export const requireNodeAtPosition = (
-  matrix: Matrix,
-  position: Position
-): Node => getMatrixItem(matrix, position) || putNode(matrix, position)
+export const requireNodeAtPosition = (matrix: Matrix, position: Position): Node =>
+  getMatrixItem(matrix, position) || putNode(matrix, position)
 
 /**
  * get corridor nodes with two edges faced in the opposite

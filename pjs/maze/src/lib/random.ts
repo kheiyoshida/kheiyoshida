@@ -1,4 +1,4 @@
-import { makeWeightedRandomPicker } from "utils"
+import { makeWeightedRandomPicker } from 'utils'
 
 export function random(rate: number) {
   if (rate > 1 || rate < 0) {
@@ -19,8 +19,7 @@ export const randomIntBetween = (min: number, max: number) => {
   return Math.floor(randomBetween(min, max))
 }
 
-export const randomItem = <T>(list: T[]): T =>
-  list[randomIntBetween(0, list.length)]
+export const randomItem = <T>(list: T[]): T => list[randomIntBetween(0, list.length)]
 
 /**
  * get ranodm modulation value

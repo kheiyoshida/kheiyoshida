@@ -1,8 +1,5 @@
 import { PathSpec } from './nodeSpec'
-import {
-  RenderGrid,
-  convertToRenderGrid
-} from './renderSpec'
+import { RenderGrid, convertToRenderGrid } from './renderSpec'
 
 describe(`conversion to render specs`, () => {
   it(`should convert to render specs`, () => {
@@ -32,14 +29,7 @@ describe(`conversion to render specs`, () => {
         },
       },
     ]
-    const expectResult: RenderGrid = [
-      null,
-      null,
-      [1, 1, 1],
-      [0, 0, 1],
-      [1, 0, 1],
-      [1, 0, 0],
-    ]
+    const expectResult: RenderGrid = [null, null, [1, 1, 1], [0, 0, 1], [1, 0, 1], [1, 0, 0]]
     expect(convertToRenderGrid(specs)).toMatchObject(expectResult)
   })
 
@@ -60,17 +50,9 @@ describe(`conversion to render specs`, () => {
           front: 'corridor',
           right: 'wall',
         },
-        
       },
     ]
-    const expectResult: RenderGrid = [
-      null,
-      null,
-      [1, 1, 1],
-      [1, 2, 1],
-      [1, 0, 1],
-      [0, 0, 1],
-    ]
+    const expectResult: RenderGrid = [null, null, [1, 1, 1], [1, 2, 1], [1, 0, 1], [0, 0, 1]]
     expect(convertToRenderGrid(specs)).toMatchObject(expectResult)
   })
 })

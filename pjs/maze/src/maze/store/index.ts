@@ -27,7 +27,7 @@ const initialState: MazeStore = {
   mapOpen: false,
   sanity: 100,
   stamina: 100,
-  acceptCommand: true
+  acceptCommand: true,
 }
 
 const makeMazeStore = makeStore<MazeStore>()

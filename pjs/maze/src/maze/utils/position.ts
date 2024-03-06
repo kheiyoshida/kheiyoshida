@@ -1,4 +1,3 @@
-
 /**
  * 2 numbers tuple.
  * used for grid/matrix position, and coords of the screen
@@ -22,7 +21,7 @@ export const validatePosition = (
     min?: number
     max?: number
   }
-): Position|null => {
+): Position | null => {
   if (min !== undefined && (v1 < min || v2 < min)) return null
   if (max !== undefined && (v1 > max || v2 > max)) return null
   return [v1, v2]

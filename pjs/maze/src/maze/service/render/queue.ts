@@ -1,4 +1,4 @@
-import { Conf } from "../../../maze/config"
+import { Conf } from '../../../maze/config'
 
 type RenderFn = () => void
 type RenderQueue = RenderFn[]

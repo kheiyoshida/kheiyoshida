@@ -7,11 +7,5 @@ import { RenderGrid, convertToRenderGrid } from './renderSpec'
 /**
  * compose draw specs
  */
-export const composeRender = (
-  path: Node[],
-  direction: Direction,
-): RenderGrid =>
-  pipe(
-    toNodeSpec(direction)(path),
-    convertToRenderGrid,
-  )
+export const composeRender = (path: Node[], direction: Direction): RenderGrid =>
+  pipe(toNodeSpec(direction)(path), convertToRenderGrid)

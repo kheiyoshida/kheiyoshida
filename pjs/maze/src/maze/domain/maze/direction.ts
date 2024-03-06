@@ -19,10 +19,7 @@ export const compass = (d: 'r' | 'l' | 'o', currentDirection: Direction) => {
 /**
  * @returns positional diff for the specified direction
  */
-export const positionalDirection = (
-  direction: Direction,
-  distance = 1
-): Position => {
+export const positionalDirection = (direction: Direction, distance = 1): Position => {
   switch (direction) {
     case 'n':
       return [-distance, 0]

@@ -1,4 +1,4 @@
-import { nextStat } from "."
+import { nextStat } from '.'
 
 describe(`status manipulation`, () => {
   it(`should limit the range of status value`, () => {
@@ -16,4 +16,4 @@ describe(`status manipulation`, () => {
     expect(nextStat(1, -1, 100, 0)).toBe(0)
     expect(nextStat(0, -1, 100, 0)).toBe(0)
   })
-}) 
+})

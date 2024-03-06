@@ -26,9 +26,9 @@ export type LayerDrawerFactory = (specDrawer?: SpecDrawer) => LayerDrawer
 export type GridDrawerFactory = (layerDrawer?: LayerDrawer) => GridDrawer
 
 export type DrawParams = {
-  visibility: number,
-  omitPercent: number,
-  farAlpha: number,
-  blurRate: number,
+  visibility: number
+  omitPercent: number
+  farAlpha: number
+  blurRate: number
   distortion: number
 }

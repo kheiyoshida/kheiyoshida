@@ -13,11 +13,11 @@ export const query = {
   },
   get mapOpen() {
     return store.read('mapOpen')
-  }
+  },
 }
 
 export const toggleMap = () => {
-  store.update('mapOpen', v => !v)
+  store.update('mapOpen', (v) => !v)
 }
 
 export const reset = () => {
@@ -40,9 +40,7 @@ export const track = ({ from, dest }: { from: number[]; dest: number[] }) => {
 
 const buildGrid = (matrix: Matrix, matrixSize = matrix.length): Grid => {
   const gridSize = 2 * matrixSize - 1
-  const grid: Grid = Array.from(Array(gridSize), () =>
-    new Array(gridSize).fill(null)
-  )
+  const grid: Grid = Array.from(Array(gridSize), () => new Array(gridSize).fill(null))
 
   for (let i = 0; i < matrixSize; i++) {
     for (let j = 0; j < matrixSize; j++) {

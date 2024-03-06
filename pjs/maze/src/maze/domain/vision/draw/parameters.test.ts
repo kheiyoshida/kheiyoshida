@@ -1,11 +1,5 @@
 import { ListenableState } from '..'
-import {
-  getAlpha,
-  getBlurRate,
-  getDistortion,
-  getOmitPercent,
-  getVisibility,
-} from './parameters'
+import { getAlpha, getBlurRate, getDistortion, getOmitPercent, getVisibility } from './parameters'
 
 describe(`getParams`, () => {
   const baseState: ListenableState = {

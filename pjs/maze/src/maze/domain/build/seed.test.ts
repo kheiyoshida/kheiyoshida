@@ -5,7 +5,7 @@ import { initMatrix, seedNodes } from './seed'
 
 jest.mock('utils', () => ({
   __esModule: true,
-  ...jest.requireActual('utils')
+  ...jest.requireActual('utils'),
 }))
 
 afterEach(() => {

@@ -40,9 +40,7 @@ const originalMatrix: Matrix = [
 ]
 
 const matrixFaxtory = () =>
-  originalMatrix.map((row) =>
-    row.map((n) => (n ? new Node(n.pos, n.edges) : null))
-  )
+  originalMatrix.map((row) => row.map((n) => (n ? new Node(n.pos, n.edges) : null)))
 
 it(`countNodes`, () => {
   const matrix = matrixFaxtory()

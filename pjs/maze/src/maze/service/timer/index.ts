@@ -21,10 +21,7 @@ export const clearTimer = (key: TimerKey) => {
   Timers[key] = undefined
 }
 
-export const setTimer = (
-  key: TimerKey,
-  ...args: Parameters<typeof setTimeout>
-) => {
+export const setTimer = (key: TimerKey, ...args: Parameters<typeof setTimeout>) => {
   clearTimer(key)
   Timers[key] = setTimeout(...args)
 }
@@ -32,10 +29,7 @@ export const setTimer = (
 /**
  * set interval event that fires after the initial interval
  */
-export const setIntervalEvent = (
-  key: TimerKey,
-  ...args: Parameters<typeof setInterval>
-) => {
+export const setIntervalEvent = (key: TimerKey, ...args: Parameters<typeof setInterval>) => {
   clearTimer(key)
   Timers[key] = setInterval(...args)
 }

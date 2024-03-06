@@ -10,11 +10,7 @@ import {
 } from './patterns/factory'
 import { omittedLayer, omittedSpec } from './patterns/omit'
 import { transLayer } from './patterns/trans'
-import {
-  blurredDistortedSpec,
-  omittedBlurredDistortedSpec,
-  omittedDistortedSpec,
-} from './specs'
+import { blurredDistortedSpec, omittedBlurredDistortedSpec, omittedDistortedSpec } from './specs'
 import {
   DrawParams,
   GridDrawer,
@@ -37,11 +33,7 @@ export const compose =
     line: LineDrawer = pointLine
   ): GridDrawer =>
   (grid) =>
-    grid
-      .reverse()
-      .forEach(
-        (layer, li) => li <= 3 && layerFac(specFac(pathFac(line)))(layer, li)
-      )
+    grid.reverse().forEach((layer, li) => li <= 3 && layerFac(specFac(pathFac(line)))(layer, li))
 
 /**
  * drawer without any effects.
@@ -49,16 +41,11 @@ export const compose =
  */
 export const plainDrawer: GridDrawer = compose()
 
-export const blurredTransLayer = (
-  visible: number,
-  fog: number,
-  blurRate: number
-): LayerDrawer => withBlurred(blurRate)(defaultLayerFactory(visible, fog))
+export const blurredTransLayer = (visible: number, fog: number, blurRate: number): LayerDrawer =>
+  withBlurred(blurRate)(defaultLayerFactory(visible, fog))
 
 export const calcOmit = (percent: number, layerIndex: number) =>
-  percent === 0
-    ? 0
-    : Math.min(90, Math.floor(percent + (percent / 10) * (layerIndex || 1)))
+  percent === 0 ? 0 : Math.min(90, Math.floor(percent + (percent / 10) * (layerIndex || 1)))
 
 const foggyLayer =
   (visible: number, fog: number): LayerDrawer =>
@@ -88,15 +75,10 @@ export const allInOneDrawer = ({
       const blurAlpha = farAlpha * toFloatPercent(200 - blurRate)
       if (omit === 0) {
         transLayer(farAlpha)(distortedSpec(distortion))(layer, li)
-        transLayer(blurAlpha)(blurredDistortedSpec(blurRate, distortion))(
-          layer,
-          li
-        )
+        transLayer(blurAlpha)(blurredDistortedSpec(blurRate, distortion))(layer, li)
       } else {
         transLayer(farAlpha)(omittedDistortedSpec(omit, distortion))(layer, li)
-        transLayer(blurAlpha)(
-          omittedBlurredDistortedSpec(omit, blurRate, distortion)
-        )(layer, li)
+        transLayer(blurAlpha)(omittedBlurredDistortedSpec(omit, blurRate, distortion))(layer, li)
       }
     }
   })
