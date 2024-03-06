@@ -5,6 +5,7 @@ import { Grid, buildGrid } from '../domain/maze/mapper'
 import { Position } from '../utils/position'
 import { makeStatusStore } from './status'
 import { BuildMatrixParams, buildMatrix } from './entities/matrix'
+import { Node } from './entities/matrix/node'
 
 export type MazeState = {
   matrix: Matrix
@@ -39,11 +40,9 @@ const reducers = {
   updateMap: (s) => (newMap: Grid) => {
     s.grid = newMap
   },
+  // maze
   renewMatrix: (s) => (params: BuildMatrixParams) => {
-    s.matrix = buildMatrix(...params)
-  },
-  updateMatrix: (s) => (newMatrix: Matrix) => {
-    s.matrix = newMatrix
+    s.matrix = buildMatrix(params)
   },
   updateCurrent: (s) => (current: Position) => {
     s.current = current
@@ -51,8 +50,9 @@ const reducers = {
   updateDirection: (s) => (direction: Direction) => {
     s.direction = direction
   },
-  updateStairPos: (s) => (stairPos: Position) => {
-    s.stairPos = stairPos
+  setStair: (s) => (stairNode: Node) => {
+    stairNode.setStair()
+    s.stairPos = stairNode.pos
   },
   incrementFloor: (s) => () => {
     s.floor += 1

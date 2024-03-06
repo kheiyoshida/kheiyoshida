@@ -1,6 +1,5 @@
 import { fireByRate, randomItemFromArray } from 'utils'
 import { store } from '../../store'
-import { BuildMatrixParams, buildMatrix } from '../../store/entities/matrix'
 import {
   Matrix,
   getCorridorNodes,
@@ -11,34 +10,17 @@ import { Node } from '../../store/entities/matrix/node'
 import { Position, reducePosition } from '../../utils/position'
 import { resetDeadEndItems } from './deadend'
 import { compass, positionalDirection } from './direction'
-import { adjustParams, paramBuild } from './params'
+import { paramBuild } from './params'
 
 export const generateMaze = () => {
   const params = paramBuild(store.current.floor)
-  const matrix = buildMaze(params)
-  const { stairNode, initialNode, initialDirection} = retrieveInitialPositions(matrix)
-  store.updateMatrix(matrix)
+  store.renewMatrix(params)
+  const { stairNode, initialNode, initialDirection } = retrieveInitialPositions(
+    store.current.matrix
+  )
   store.updateCurrent(initialNode.pos as Position)
   store.updateDirection(initialDirection)
-  stairNode.setStair()
-  store.updateStairPos(stairNode.pos)
-}
-
-export const buildMaze = (params: BuildMatrixParams, retry = 0): Matrix => {
-  const matrix = buildMatrix(...params)
-  if (isValidMatrix(matrix)) return matrix
-  if(retry > 20) {
-    throw Error(`could not build valid matrix`)
-  }
-  return buildMaze(adjustParams(params), retry + 1)
-}
-
-const isValidMatrix = (matrix: Matrix) => {
-  const deadEnds = getDeadendNodes(matrix)
-  if (!deadEnds.length) return false
-  const corridorNodes = getCorridorNodes(matrix)
-  if (!corridorNodes.length) return false
-  return true
+  store.setStair(stairNode)
 }
 
 const retrieveInitialPositions = (matrix: Matrix) => {

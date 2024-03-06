@@ -71,9 +71,3 @@ export const paramBuild = (floor: number): BuildMatrixParams => {
   return [size, fill, conn]
 }
 
-/**
- * adjust params when build fails to make complete maze
- */
-export const adjustParams = ([size, fill, conn]: BuildMatrixParams): BuildMatrixParams => {
-  return [size + 1, fill * 1.05, conn]
-}
