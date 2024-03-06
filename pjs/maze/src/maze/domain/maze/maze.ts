@@ -1,13 +1,13 @@
 import { store } from '../../store'
 import { Position, reducePosition } from '../../utils/position'
-import { build } from '../build'
+import { buildMaze } from '../build'
 import { getMatrixItem } from '../matrix'
 import { Node } from '../matrix/node'
 import { resetDeadEndItems } from './deadend'
 import { compass, positionalDirection } from './direction'
 
 export const generateMaze = () => {
-  const { matrix, initialPos, initialDir, stairPos } = build(store.current.floor)
+  const { matrix, initialPos, initialDir, stairPos } = buildMaze(store.current.floor)
 
   store.updateMatrix(matrix)
   store.updateCurrent(initialPos as Position)

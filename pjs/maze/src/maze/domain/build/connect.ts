@@ -6,9 +6,15 @@ import { Node } from '../matrix/node'
 
 type NodeCluster = Set<Node>
 
+export const connect = (matrix: Matrix, connRate: number): Matrix => {
+  const clusters = clusterizeNodes(matrix, connRate)
+  connectClusters(matrix, clusters)
+  randomConnect(matrix, connRate)
+  return matrix
+}
+
 /**
  * connect nodes within adjacent nodes (=cluster)
- * @returns a list of clusters
  */
 const clusterizeNodes = (matrix: Matrix, connRate: number): NodeCluster[] => {
   const clusters: NodeCluster[] = []
@@ -77,11 +83,4 @@ const randomConnect = (matrix: Matrix, connRate: number) => {
       }
     })
   })
-}
-
-export const connect = (matrix: Matrix, connRate: number): Matrix => {
-  const clusters = clusterizeNodes(matrix, connRate)
-  connectClusters(matrix, clusters)
-  randomConnect(matrix, connRate)
-  return matrix
 }
