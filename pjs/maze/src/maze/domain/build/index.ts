@@ -1,9 +1,8 @@
+import { BuildMatrixParams, buildMatrix } from '../matrix'
+import { Matrix } from '../matrix/matrix'
 import { Direction } from '../maze/direction'
-import { Matrix } from '../matrix'
-import { connect } from './connect'
 import { BuildError, finalize } from './finalize'
 import { adjustParams, paramBuild } from './params'
-import { initializeEmptyMatrix, seedNodes } from './seed'
 
 export type FinalMaze = {
   initialDir: Direction
@@ -12,7 +11,7 @@ export type FinalMaze = {
   stairPos: number[]
 }
 
-export type BuildParams = Parameters<typeof buildMatrix>
+export type BuildParams = BuildMatrixParams
 
 export const buildMaze = (floor: number): FinalMaze => {
   const params = paramBuild(floor)
@@ -31,17 +30,3 @@ export const _buildMaze = (params: BuildParams, retry = 0): FinalMaze => {
   }
 }
 
-/**
- * build matrix using parameters to adjust
- *
- * @param size size of matrix
- * @param fillRate rate that detemines each cell should be filled with node
- * @param connRate rate that detemines if adjacent nodes connects to each other
- * @returns matrix array
- */
-export const buildMatrix = (size: number, fillRate: number, connRate: number): Matrix => {
-  const matrix = initializeEmptyMatrix(size)
-  seedNodes(matrix, fillRate)
-  connect(matrix, connRate)
-  return matrix
-}

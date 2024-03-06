@@ -1,7 +1,7 @@
-import { Node } from '../../domain/matrix/node'
-import { Matrix } from '../matrix'
-import { iterateEachNode } from '../matrix/iterate'
-import { seekPath } from '../matrix/path'
+import { Node } from './node'
+import { Matrix } from './matrix'
+import { iterateEachNode } from './iterate'
+import { seekPath } from './path'
 import { connect } from './connect'
 
 describe(`connect`, () => {

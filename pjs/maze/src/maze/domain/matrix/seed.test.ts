@@ -1,6 +1,6 @@
 import * as utils from 'utils'
-import { Node } from '../../domain/matrix/node'
-import { countNodes } from '../matrix'
+import { Node } from './node'
+import { countMatrixNodes } from './matrix'
 import { initializeEmptyMatrix, seedNodes } from './seed'
 
 jest.mock('utils', () => ({
@@ -51,6 +51,6 @@ describe(`${seedNodes.name}`, () => {
     const matrix = initializeEmptyMatrix(3)
     const result = seedNodes(matrix, 0)
     expect(spyFireByRate).not.toHaveBeenLastCalledWith(0)
-    expect(countNodes(result)).toBeGreaterThanOrEqual(2)
+    expect(countMatrixNodes(result)).toBeGreaterThanOrEqual(2)
   })
 })

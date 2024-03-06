@@ -4,7 +4,7 @@ import {
   getAllAdjacentNodes,
   getPositionNode,
   requireNodeAtPosition,
-} from '.'
+} from './matrix'
 import { Position } from '../../utils/position'
 import { Direction, compass } from '../maze/direction'
 import { Node } from './node'

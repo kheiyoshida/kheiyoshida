@@ -1,7 +1,7 @@
 import { store } from '../../store'
 import { Position, reducePosition } from '../../utils/position'
 import { buildMaze } from '../build'
-import { getMatrixItem } from '../matrix'
+import { getMatrixItem } from '../matrix/matrix'
 import { Node } from '../matrix/node'
 import { resetDeadEndItems } from './deadend'
 import { compass, positionalDirection } from './direction'

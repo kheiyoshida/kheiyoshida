@@ -2,7 +2,7 @@ import { fireByRate as random, randomItemFromArray as randomItem } from 'utils'
 import { FinalMaze } from '.'
 import { Position } from '../../utils/position'
 import { compass } from '../maze/direction'
-import { Matrix, getCorridorNodes, getDeadendNodes } from '../matrix'
+import { Matrix, getCorridorNodes, getDeadendNodes } from '../matrix/matrix'
 
 export const finalize = (matrix: Matrix): FinalMaze => ({
   matrix,

@@ -1,6 +1,6 @@
 import { fireByRate } from 'utils'
-import { Matrix, countNodes, putNode } from '../matrix'
-import { iteratePosition } from '../matrix/iterate'
+import { Matrix, countMatrixNodes, putNode } from './matrix'
+import { iteratePosition } from './iterate'
 
 export const initializeEmptyMatrix = (size: number): Matrix =>
   Array.from(Array(size), () => new Array(size).fill(null))
@@ -10,7 +10,7 @@ export const seedNodes = (matrix: Matrix, fillRate: number, maxNodes = 100, r = 
   if (r > 50) {
     throw Error(`matrix couldn't be filled enough. consider setting higher fillRate`)
   }
-  if (countNodes(resultMatrix) <= 2) {
+  if (countMatrixNodes(resultMatrix) <= 2) {
     return seedNodes(matrix, fillRate + 0.05, maxNodes, r + 1)
   }
   return resultMatrix

@@ -4,10 +4,6 @@ import { BuildParams } from '.'
 export const INITIAL_FLOOR_SIZE = 6
 const MAX_FLOOR_SIZE = 13
 
-/**
- * the deeper the player goes down, the floor must be larger.
- * but let's just keep it decently sized
- */
 export const floorSize = (floor: number): number => {
   if (INITIAL_FLOOR_SIZE + floor < MAX_FLOOR_SIZE) {
     return randomIntBetween(INITIAL_FLOOR_SIZE, INITIAL_FLOOR_SIZE + floor)

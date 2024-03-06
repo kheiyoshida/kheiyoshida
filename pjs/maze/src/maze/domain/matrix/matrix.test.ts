@@ -1,4 +1,4 @@
-import { Matrix, countNodes, getAllAdjacentNodes } from '.'
+import { Matrix, countMatrixNodes, getAllAdjacentNodes } from './matrix'
 import { seekPathByPosition } from './path'
 import { Node } from './node'
 
@@ -44,7 +44,7 @@ const matrixFaxtory = () =>
 
 it(`countNodes`, () => {
   const matrix = matrixFaxtory()
-  expect(countNodes(matrix)).toBe(13)
+  expect(countMatrixNodes(matrix)).toBe(13)
 })
 
 it(`seekPath`, () => {

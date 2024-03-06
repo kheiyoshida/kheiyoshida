@@ -1,5 +1,5 @@
 import { Position } from '../../utils/position'
-import { Matrix } from '.'
+import { Matrix } from './matrix'
 import { Node } from './node'
 
 /**
