@@ -3,7 +3,7 @@ import { Matrix } from '../domain/matrix'
 import { Direction } from '../domain/maze/direction'
 import { Grid, buildGrid } from '../domain/maze/mapper'
 import { Position } from '../utils/position'
-import { StatusField } from '../domain/stats'
+import { makeStatusStore } from './status'
 
 export type MazeState = {
   matrix: Matrix
@@ -13,8 +13,6 @@ export type MazeState = {
   direction: Direction
   grid: Grid
   mapOpen: boolean
-  sanity: number
-  stamina: number
   acceptCommand: boolean
 }
 
@@ -26,47 +24,43 @@ const initialState: MazeState = {
   direction: 'n',
   grid: [],
   mapOpen: false,
-  sanity: 100,
-  stamina: 100,
   acceptCommand: true,
 }
 
 const reducers = {
   // map
-  toggleMap: s => ()  => {
+  toggleMap: (s) => () => {
     s.mapOpen = !s.mapOpen
   },
-  resetMap: s => (currentMatrix: Matrix) => {
+  resetMap: (s) => (currentMatrix: Matrix) => {
     s.grid = buildGrid(currentMatrix)
   },
-  updateMap: s => (newMap: Grid) => {
+  updateMap: (s) => (newMap: Grid) => {
     s.grid = newMap
   },
   // matrix
-  updateMatrix: s => (newMatrix: Matrix) => {
+  updateMatrix: (s) => (newMatrix: Matrix) => {
     s.matrix = newMatrix
   },
-  updateCurrent: s => (current: Position) => {
+  updateCurrent: (s) => (current: Position) => {
     s.current = current
   },
-  updateDirection: s => (direction: Direction) => {
+  updateDirection: (s) => (direction: Direction) => {
     s.direction = direction
   },
-  updateStairPos: s => (stairPos: Position) => {
+  updateStairPos: (s) => (stairPos: Position) => {
     s.stairPos = stairPos
   },
-  incrementFloor: s => () => {
-    s.floor+= 1
+  incrementFloor: (s) => () => {
+    s.floor += 1
   },
-  // status 
-  updateStatus: s => (field: StatusField, value: number) => {
-    s[field] = value
-  },
+
   // render
-  updateAcceptCommand: s => (acceptCommand: boolean) => {
+  updateAcceptCommand: (s) => (acceptCommand: boolean) => {
     s.acceptCommand = acceptCommand
-  }
+  },
 } satisfies ReducerMap<MazeState>
 
 const makeMazeStore = () => makeStoreV2<MazeState>(initialState)(reducers)
 export const store = makeMazeStore()
+export const statusStore = makeStatusStore()

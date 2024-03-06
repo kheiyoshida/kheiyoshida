@@ -1,5 +1,5 @@
-import { MazeState, store } from '../../store'
-import { StatusField } from '../stats'
+import { MazeState, statusStore, store } from '../../store'
+import { StatusState } from '../../store/status'
 import { ApplyColors } from './color'
 import { DrawSpec } from './draw/types'
 import { DrawSpecFinalizer } from './drawSpec/finalize'
@@ -20,7 +20,7 @@ export type Vision = {
 /**
  * state fields consumed by vision
  */
-export type ListenableState = Pick<MazeState, 'floor' | StatusField>
+export type ListenableState = Pick<MazeState, 'floor'> & StatusState
 
 /**
  * finalize & provide vision, consuming current listenable state values
@@ -32,4 +32,8 @@ const visionProvider = (state: ListenableState): Vision =>
  * make vision based on the current state
  * @returns vision
  */
-export const makeVision = () => visionProvider(store.current)
+export const makeVision = () =>
+  visionProvider({
+    ...statusStore.current,
+    floor: store.current.floor,
+  })

@@ -1,61 +1,13 @@
 import { toFloatPercent } from 'utils'
-import { MazeState, store } from '../../store'
+import { statusStore } from '../../store'
 
-const MAX_STATUS_VALUE = 100
-const MIN_STATUS_VALUE = 0
+export const getStats = () => statusStore.current
 
-/**
- * status state in store
- */
-export type StatusField = Extract<'stamina' | 'sanity', keyof MazeState>
+export const manipSanity = (delta: number) => statusStore.addStatusValue('sanity', delta)
+export const manipStamina = (delta: number) => statusStore.addStatusValue('stamina', delta)
 
-/**
- * status object
- */
-type Status = { [k in StatusField]: MazeState[k] }
-
-/**
- * functions to manipulate statuses
- */
-export type StatsManipFn = (amount: number) => void
-
-/**
- * get current status
- */
-export const getStats = (): Status => ({
-  sanity: store.current.sanity,
-  stamina: store.current.stamina,
-})
-
-export const nextStat = (current: number, amount: number, max: number, min: number): number => {
-  const next = current + amount
-  if (next >= max) return max
-  else if (next <= min) return min
-  else return next
-}
-
-/**
- * generate function to manipulate status state
- * returns false when it reaches the limit
- */
-const manipStat =
-  (field: StatusField, max = MAX_STATUS_VALUE, min = MIN_STATUS_VALUE): StatsManipFn =>
-  (amount) => {
-    const next = nextStat(store.current[field], amount, max, min)
-    store.updateStatus(field, next)
-  }
-
-export const manipSanity = manipStat('sanity')
-export const manipStamina = manipStat('stamina')
-
-/**
- * event patterns for status update
- */
 type StatsUpdatePattern = 'walk' | 'stand' | 'turn' | 'downstairs' | 'constant'
 
-/**
- * renew status
- */
 export const updateStats = (pattern: StatsUpdatePattern) => {
   if (pattern === 'walk') {
     manipSanity(1)
@@ -81,4 +33,4 @@ export const floorToThreshold = (floor: number): [number, number] => {
   return [90, 50]
 }
 
-export const getSpeed = () => 1 / toFloatPercent(Math.min(100, 30 + store.current.stamina))
+export const getSpeed = () => 1 / toFloatPercent(Math.min(100, 30 + statusStore.current.stamina))
