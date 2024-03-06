@@ -61,14 +61,14 @@ export const turnEvent = (dir: 'r' | 'l') => () => {
 }
 
 export const goDownStairs: EventHandler = () => {
-  store.update('acceptCommand', false)
+  store.updateAcceptCommand(false)
   renderGoDownstairs()
   maze.goDownStairs()
   mapper.reset()
   updateStats('downstairs')
   renderProceedToNextFloor()
   renderCurrentView()
-  RenderQueue.wait(() => store.update('acceptCommand', true))
+  RenderQueue.wait(() => store.updateAcceptCommand(true))
 }
 
 export const openMap = () => {

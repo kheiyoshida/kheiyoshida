@@ -1,10 +1,11 @@
-import { Direction } from '../domain/maze/direction'
-import { Grid } from '../domain/maze/mapper'
+import { ReducerMap, makeStoreV2 } from 'utils'
 import { Matrix } from '../domain/matrix'
+import { Direction } from '../domain/maze/direction'
+import { Grid, buildGrid } from '../domain/maze/mapper'
 import { Position } from '../utils/position'
-import { StateManager, makeStore } from './make'
+import { StatusField } from '../domain/stats'
 
-export type MazeStore = {
+export type MazeState = {
   matrix: Matrix
   floor: number
   current: Position
@@ -17,7 +18,7 @@ export type MazeStore = {
   acceptCommand: boolean
 }
 
-const initialState: MazeStore = {
+const initialState: MazeState = {
   floor: 1,
   matrix: [],
   current: [0, 0],
@@ -30,6 +31,42 @@ const initialState: MazeStore = {
   acceptCommand: true,
 }
 
-const makeMazeStore = makeStore<MazeStore>()
+const reducers = {
+  // map
+  toggleMap: s => ()  => {
+    s.mapOpen = !s.mapOpen
+  },
+  resetMap: s => (currentMatrix: Matrix) => {
+    s.grid = buildGrid(currentMatrix)
+  },
+  updateMap: s => (newMap: Grid) => {
+    s.grid = newMap
+  },
+  // matrix
+  updateMatrix: s => (newMatrix: Matrix) => {
+    s.matrix = newMatrix
+  },
+  updateCurrent: s => (current: Position) => {
+    s.current = current
+  },
+  updateDirection: s => (direction: Direction) => {
+    s.direction = direction
+  },
+  updateStairPos: s => (stairPos: Position) => {
+    s.stairPos = stairPos
+  },
+  incrementFloor: s => () => {
+    s.floor+= 1
+  },
+  // status 
+  updateStatus: s => (field: StatusField, value: number) => {
+    s[field] = value
+  },
+  // render
+  updateAcceptCommand: s => (acceptCommand: boolean) => {
+    s.acceptCommand = acceptCommand
+  }
+} satisfies ReducerMap<MazeState>
 
-export const store: StateManager<MazeStore> = makeMazeStore(initialState)
+const makeMazeStore = () => makeStoreV2<MazeState>(initialState)(reducers)
+export const store = makeMazeStore()

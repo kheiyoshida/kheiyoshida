@@ -1,36 +1,35 @@
 import { store } from '../../store'
-import { Position, reducePosition, validatePosition } from '../../utils/position'
+import { Position, reducePosition } from '../../utils/position'
 import { build } from '../build'
-import { resetDeadEndItems } from './deadend'
-import { compass, positionalDirection } from './direction'
 import { getMatrixItem } from '../matrix'
 import { Node } from '../matrix/node'
+import { resetDeadEndItems } from './deadend'
+import { compass, positionalDirection } from './direction'
 
 export const generateMaze = () => {
-  const { matrix, initialPos, initialDir, stairPos } = build(store.read('floor'))
-  store.batchUpdate({
-    matrix,
-    current: initialPos as Position,
-    direction: initialDir,
-    stairPos,
-  })
+  const { matrix, initialPos, initialDir, stairPos } = build(store.current.floor)
+
+  store.updateMatrix(matrix)
+  store.updateCurrent(initialPos as Position)
+  store.updateDirection(initialDir)
+  store.updateStairPos(stairPos as Position)
 }
 
 export const query = {
   get matrix() {
-    return store.read('matrix')
+    return store.current.matrix
   },
   get floor() {
-    return store.read('floor')
+    return store.current.floor
   },
   get current() {
-    return store.read('current')
+    return store.current.current
   },
   get stairPos() {
-    return store.read('stairPos')
+    return store.current.stairPos
   },
   get direction() {
-    return store.read('direction')
+    return store.current.direction
   },
   get currentNode() {
     return this.matrix[this.current[0]][this.current[1]]!
@@ -44,7 +43,7 @@ export const query = {
 }
 
 export const goDownStairs = () => {
-  store.update('floor', (f) => f + 1)
+  store.incrementFloor()
   generateMaze()
   resetDeadEndItems()
 }
@@ -52,13 +51,13 @@ export const goDownStairs = () => {
 export const navigate = () => {
   if (query.canProceed) {
     const from = query.current
-    store.update('current', getFrontLoc())
+    store.updateCurrent(getFrontLoc())
     return { from, dest: query.current }
   }
 }
 
 export const turn = (d: 'r' | 'l') => {
-  store.update('direction', compass(d, query.direction))
+  store.updateDirection(compass(d, query.direction))
 }
 
 export const getFrontLoc = (dist = 1): Position => {

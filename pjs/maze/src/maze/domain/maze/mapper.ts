@@ -9,23 +9,23 @@ export type Grid = Array<Array<Cell | null>>
 
 export const query = {
   get grid() {
-    return store.read('grid')
+    return store.current.grid
   },
   get mapOpen() {
-    return store.read('mapOpen')
+    return store.current.mapOpen
   },
 }
 
 export const toggleMap = () => {
-  store.update('mapOpen', (v) => !v)
+  store.toggleMap()
 }
 
 export const reset = () => {
-  store.update('grid', buildGrid(store.read('matrix')))
+  store.resetMap(store.current.matrix)
 }
 
 export const track = ({ from, dest }: { from: number[]; dest: number[] }) => {
-  const grid = store.read('grid').slice()
+  const grid = store.current.grid.slice()
   const [gi, gj] = [dest[0] * 2, dest[1] * 2]
   grid[gi][gj]!.visited = true
   if (from[0] !== dest[0]) {
@@ -35,10 +35,10 @@ export const track = ({ from, dest }: { from: number[]; dest: number[] }) => {
     const j = from[1] + dest[1]
     grid[gi][j]!.visited = true
   }
-  store.update('grid', grid)
+  store.updateMap(grid)
 }
 
-const buildGrid = (matrix: Matrix, matrixSize = matrix.length): Grid => {
+export const buildGrid = (matrix: Matrix, matrixSize = matrix.length): Grid => {
   const gridSize = 2 * matrixSize - 1
   const grid: Grid = Array.from(Array(gridSize), () => new Array(gridSize).fill(null))
 

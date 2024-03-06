@@ -1,4 +1,4 @@
-import { MazeStore, store } from '../../store'
+import { MazeState, store } from '../../store'
 import { StatusField } from '../stats'
 import { ApplyColors } from './color'
 import { DrawSpec } from './draw/types'
@@ -20,7 +20,7 @@ export type Vision = {
 /**
  * state fields consumed by vision
  */
-export type ListenableState = Pick<MazeStore, 'floor' | StatusField>
+export type ListenableState = Pick<MazeState, 'floor' | StatusField>
 
 /**
  * finalize & provide vision, consuming current listenable state values
@@ -32,4 +32,4 @@ const visionProvider = (state: ListenableState): Vision =>
  * make vision based on the current state
  * @returns vision
  */
-export const makeVision = () => visionProvider(store.read())
+export const makeVision = () => visionProvider(store.current)

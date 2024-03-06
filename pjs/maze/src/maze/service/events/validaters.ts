@@ -5,7 +5,7 @@ import { store } from '../../store'
 
 export type CommandValidator = () => boolean
 
-export const isAccepting: CommandValidator = () => store.read('acceptCommand')
+export const isAccepting: CommandValidator = () => store.current.acceptCommand
 
 export const canGo: CommandValidator = () => maze.query.canProceed && getStats().stamina !== 0
 

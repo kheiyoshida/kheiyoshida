@@ -1,5 +1,5 @@
 import { toFloatPercent } from 'utils'
-import { MazeStore, store } from '../../store'
+import { MazeState, store } from '../../store'
 
 const MAX_STATUS_VALUE = 100
 const MIN_STATUS_VALUE = 0
@@ -7,12 +7,12 @@ const MIN_STATUS_VALUE = 0
 /**
  * status state in store
  */
-export type StatusField = Extract<'stamina' | 'sanity', keyof MazeStore>
+export type StatusField = Extract<'stamina' | 'sanity', keyof MazeState>
 
 /**
  * status object
  */
-type Status = { [k in StatusField]: MazeStore[k] }
+type Status = { [k in StatusField]: MazeState[k] }
 
 /**
  * functions to manipulate statuses
@@ -23,13 +23,10 @@ export type StatsManipFn = (amount: number) => void
  * get current status
  */
 export const getStats = (): Status => ({
-  sanity: store.read('sanity'),
-  stamina: store.read('stamina'),
+  sanity: store.current.sanity,
+  stamina: store.current.stamina,
 })
 
-/**
- * finalize/constrains next value
- */
 export const nextStat = (current: number, amount: number, max: number, min: number): number => {
   const next = current + amount
   if (next >= max) return max
@@ -44,20 +41,11 @@ export const nextStat = (current: number, amount: number, max: number, min: numb
 const manipStat =
   (field: StatusField, max = MAX_STATUS_VALUE, min = MIN_STATUS_VALUE): StatsManipFn =>
   (amount) => {
-    const next = nextStat(store.read(field), amount, max, min)
-    store.update(field, next)
+    const next = nextStat(store.current[field], amount, max, min)
+    store.updateStatus(field, next)
   }
 
-/**
- * manipulate(add/subtract) sanity.
- * provide +/- int value
- */
 export const manipSanity = manipStat('sanity')
-
-/**
- * manipulate(add/subtract) stamina.
- * provide +/- int value
- */
 export const manipStamina = manipStat('stamina')
 
 /**
@@ -93,4 +81,4 @@ export const floorToThreshold = (floor: number): [number, number] => {
   return [90, 50]
 }
 
-export const getSpeed = () => 1 / toFloatPercent(Math.min(100, 30 + store.read('stamina')))
+export const getSpeed = () => 1 / toFloatPercent(Math.min(100, 30 + store.current.stamina))
