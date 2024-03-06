@@ -1,5 +1,5 @@
 import { ReducerMap, makeStoreV2 } from 'utils'
-import { Matrix } from '../domain/matrix/matrix'
+import { Matrix } from './entities/matrix/matrix'
 import { Direction } from '../domain/maze/direction'
 import { Grid, buildGrid } from '../domain/maze/mapper'
 import { Position } from '../utils/position'

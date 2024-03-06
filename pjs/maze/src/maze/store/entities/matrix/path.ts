@@ -5,8 +5,8 @@ import {
   getPositionNode,
   requireNodeAtPosition,
 } from './matrix'
-import { Position } from '../../utils/position'
-import { Direction, compass } from '../maze/direction'
+import { Position } from '../../../utils/position'
+import { Direction, compass } from '../../../domain/maze/direction'
 import { Node } from './node'
 
 /**

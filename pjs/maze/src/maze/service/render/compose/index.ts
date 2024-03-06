@@ -1,4 +1,4 @@
-import { Node } from '../../../domain/matrix/node'
+import { Node } from '../../../store/entities/matrix/node'
 import { Direction } from '../../../domain/maze/direction'
 import { pipe } from 'utils'
 import { toNodeSpec } from './nodeSpec'

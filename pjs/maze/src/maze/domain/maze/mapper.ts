@@ -1,5 +1,5 @@
 import { store } from '../../store'
-import { Matrix } from '../matrix/matrix'
+import { Matrix } from '../../store/entities/matrix/matrix'
 
 type Cell = {
   visited: boolean

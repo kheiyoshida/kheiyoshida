@@ -1,5 +1,5 @@
-import { BuildMatrixParams, buildMatrix } from '../matrix'
-import { Matrix } from '../matrix/matrix'
+import { BuildMatrixParams, buildMatrix } from '../../store/entities/matrix'
+import { Matrix } from '../../store/entities/matrix/matrix'
 import { Direction } from '../maze/direction'
 import { BuildError, finalize } from './finalize'
 import { adjustParams, paramBuild } from './params'

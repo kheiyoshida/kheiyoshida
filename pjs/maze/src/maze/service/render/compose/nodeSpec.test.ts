@@ -1,4 +1,4 @@
-import { Node } from '../../../domain/matrix/node'
+import { Node } from '../../../store/entities/matrix/node'
 import { _toNodeSpec, toNodeSpec } from './nodeSpec'
 
 describe(`toNodeSpec`, () => {

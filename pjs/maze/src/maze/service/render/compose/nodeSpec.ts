@@ -1,5 +1,5 @@
 import { Direction, compass } from '../../../domain/maze/direction'
-import { Node } from '../../../domain/matrix/node'
+import { Node } from '../../../store/entities/matrix/node'
 
 /**
  * player's perspective
