@@ -1,16 +1,9 @@
-import { RenderGrid } from '../../../service/render/compose/renderSpec'
+import { RenderGrid } from '../../../../../service/render/compose/renderSpec'
 import { generateDrawEntityGrid } from './grid'
 
 describe(`floor grid generation`, () => {
   it(`should generate entity grid based on the "cliff" edges in the terrain`, () => {
-    const grid: RenderGrid = [
-      null,
-      null,
-      [1, 1, 1],
-      [0, 0, 1],
-      [1, 0, 1],
-      [1, 0, 0],
-    ]
+    const grid: RenderGrid = [null, null, [1, 1, 1], [0, 0, 1], [1, 0, 1], [1, 0, 0]]
     expect(generateDrawEntityGrid(grid)).toMatchObject([
       null,
       null,

@@ -1,11 +1,7 @@
-import { Position } from '../../utils/position'
+import { Position } from '../../../utils/position'
 import { Conf } from '../../../config'
 import { Frame } from '.'
-import {
-  liftUpFramePosition,
-  frameWidthAndHeight,
-  distortFramePosition,
-} from './helpers'
+import { liftUpFramePosition, frameWidthAndHeight, distortFramePosition } from './helpers'
 
 export type AltFrame = (frame: Frame) => Frame
 

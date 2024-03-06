@@ -37,8 +37,5 @@ export const setIntervalEvent = (
   ...args: Parameters<typeof setInterval>
 ) => {
   clearTimer(key)
-  // Timers[key] = setTimeout(() => {
-  //   Timers[key] = setInterval(...args)
-  // }, args[1])
   Timers[key] = setInterval(...args)
 }

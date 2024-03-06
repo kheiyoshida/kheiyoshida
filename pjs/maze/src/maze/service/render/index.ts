@@ -3,15 +3,15 @@ import { DEFAULT_MAGNIFY_RATES } from '../../domain/vision/frame/magnify'
 import { Conf } from '../../config'
 import { changePaletteColor, getPalette, setPalette } from '../../domain/vision/color/palette'
 import { translateFrame } from '../../domain/vision/frame/altFrame'
-import { genRender, inject, intervalRender, reserveIntervalRender } from './base'
+import { genRenderFn, injectDomainDeps, intervalRender, reserveIntervalRender } from './base'
 import { corridorToNextFloor } from './others/scenes'
 import * as RenderQueue from './queue'
 
 /**
  * render current view
  */
-export const renderCurrentView = inject((renderSpecs, vision) => {
-  RenderQueue.push(() => genRender(renderSpecs, vision)(vision.frames(1)))
+export const renderCurrentView = injectDomainDeps((renderSpecs, vision) => {
+  RenderQueue.push(() => genRenderFn(renderSpecs, vision)(vision.frames(1)))
   RenderQueue.consume()
 })
 
@@ -20,10 +20,10 @@ const goMoveMagnifySeq = [1.05, 1.1, 1.24, 1.33, 1.5, 1.65, 1.8, 1.95]
 /**
  * render going forward movement
  */
-export const renderGo = inject((renderSpecs, vision, speed) => {
+export const renderGo = injectDomainDeps((renderSpecs, vision, speed) => {
   intervalRender(
     speed * Conf.frameInterval,
-    genRender(renderSpecs, vision),
+    genRenderFn(renderSpecs, vision),
     goMoveMagnifySeq.map(vision.frames)
   )
 })
@@ -39,11 +39,11 @@ const TURN_ADJUST_VALUES = [
 ] as const
 
 export const renderTurn = (d: 'r' | 'l') =>
-  inject((renderSpecs, vision, speed) => {
+  injectDomainDeps((renderSpecs, vision, speed) => {
     const slide = (trans: number): [number, number] => [(d === 'r' ? -1 : 1) * trans * Conf.ww, 0]
     intervalRender(
       speed * Conf.frameInterval,
-      genRender(renderSpecs, vision),
+      genRenderFn(renderSpecs, vision),
       TURN_ADJUST_VALUES.map(([mag, trans]) =>
         vision.frames(mag).map((f) => translateFrame(slide(trans))(f))
       )
@@ -56,9 +56,9 @@ const magnifyDownStairs = Array(12)
   .map((_, i) => secondMag / i)
   .reverse()
 
-export const renderGoDownstairs = inject((renderSpecs, vision, speed) => {
+export const renderGoDownstairs = injectDomainDeps((renderSpecs, vision, speed) => {
   const wh = Conf.wh
-  const ren = genRender(renderSpecs, vision)
+  const ren = genRenderFn(renderSpecs, vision)
   const originalStroke = getPalette().stroke
   reserveIntervalRender(
     speed * Conf.frameInterval * 3,
@@ -84,10 +84,10 @@ export const renderGoDownstairs = inject((renderSpecs, vision, speed) => {
   )
 })
 
-export const renderProceedToNextFloor = inject((_, vision, speed) => {
+export const renderProceedToNextFloor = injectDomainDeps((_, vision, speed) => {
   reserveIntervalRender(
     speed * Conf.frameInterval * 2,
-    genRender(corridorToNextFloor, vision),
+    genRenderFn(corridorToNextFloor, vision),
     goMoveMagnifySeq.slice(6).map(vision.frames)
   )
 })

@@ -2,6 +2,7 @@ import { P5Canvas } from '../lib/p5canvas'
 import { Conf } from './config'
 import { bindControl } from './control'
 import { applyPalette, getPalette } from './domain/vision/color/palette'
+import { initialize } from './service/events/events'
 import { toneStart } from './service/sound'
 import { demo } from './service/sound/songs/demo'
 import { renderStartPage } from './start'
@@ -18,7 +19,8 @@ const setup = () => {
     if (!started) {
       started = true
       demo()
-      setupMaze()
+      initialize()
+      bindControl()
     }
     toneStart()
   }
@@ -27,10 +29,6 @@ const setup = () => {
 
   p.mouseClicked = start
   p.touchStarted = start
-}
-
-const setupMaze = () => {
-  bindControl()
 }
 
 export default P5Canvas({

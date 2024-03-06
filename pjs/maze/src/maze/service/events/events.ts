@@ -19,12 +19,12 @@ export type EventHandler = () => void
 export const initialize: EventHandler = () => {
   maze.generateMaze()
   mapper.reset()
-  constant()
-  idle()
+  registerConcurrentConstantEvent()
+  registerConcurrentStandEvent()
   renderCurrentView()
 }
 
-export const constant: EventHandler = () => {
+export const registerConcurrentConstantEvent: EventHandler = () => {
   setIntervalEvent(
     'constant',
     () => {
@@ -34,7 +34,7 @@ export const constant: EventHandler = () => {
   )
 }
 
-export const idle: EventHandler = () => {
+export const registerConcurrentStandEvent: EventHandler = () => {
   setIntervalEvent(
     'stand',
     () => {
@@ -53,14 +53,14 @@ export const goEvent: EventHandler = () => {
   renderCurrentView()
 }
 
-export const turnEvent = (dir: 'r' | 'l') => async () => {
+export const turnEvent = (dir: 'r' | 'l') => () => {
   renderTurn(dir)()
   maze.turn(dir)
   updateStats('turn')
   renderCurrentView()
 }
 
-export const goDownStairs: EventHandler = async () => {
+export const goDownStairs: EventHandler = () => {
   store.update('acceptCommand', false)
   renderGoDownstairs()
   maze.goDownStairs()

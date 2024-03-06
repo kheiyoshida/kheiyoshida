@@ -10,10 +10,7 @@ import * as RenderQueue from './queue'
 
 export type RenderFunc = (grid: RenderGrid, vision: Vision, speed: number) => Promise<void> | void
 
-/**
- * inject domain dependencies
- */
-export const inject =
+export const injectDomainDeps =
   (renderFn: RenderFunc) =>
   async (
     vision = makeVision(),
@@ -24,10 +21,7 @@ export const inject =
     await renderFn(renderSpecs, vision, speed)
   }
 
-/**
- * generate render function
- */
-export const genRender =
+export const genRenderFn =
   (grid: RenderGrid, { finalize, draw }: Vision) =>
   (frames: Frame[]) => {
     screenPaint()

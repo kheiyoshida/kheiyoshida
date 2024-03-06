@@ -1,6 +1,6 @@
 import * as mapper from '../../domain/maze/mapper'
 import { clearTimer } from '../timer'
-import { goDownStairs, goEvent, idle, openMap, turnEvent } from './events'
+import { goDownStairs, goEvent, registerConcurrentStandEvent, openMap, turnEvent } from './events'
 import * as validaters from './validaters'
 
 export type CommandHandler = () => void
@@ -12,7 +12,7 @@ export const go: CommandHandler = () => {
     if (validaters.shouldGoDownstairs()) {
       goDownStairs()
     } else {
-      idle()
+      registerConcurrentStandEvent()
     }
   }
 }
@@ -31,7 +31,7 @@ export const callMap: CommandHandler = async () => {
     clearTimer('stand')
     openMap()
   } else {
-    idle()
+    registerConcurrentStandEvent()
   }
   mapper.toggleMap()
 }

@@ -1,12 +1,10 @@
 import { Conf } from '../config'
 import * as events from '../service/events/commands'
-import * as goEvent from '../service/events/events'
 import { renderGUI } from './gui'
 
 const CONTROL_WW_THRESHOLD = 1000
 
 export const bindControl = () => {
-  goEvent.initialize()
   if (Conf.ww < CONTROL_WW_THRESHOLD) smallScreen()
   else wideScreen()
 }
