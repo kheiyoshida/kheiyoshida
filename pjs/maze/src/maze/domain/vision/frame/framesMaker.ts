@@ -1,5 +1,5 @@
 import { pipe } from 'utils'
-import { Frame } from '.'
+import { Frame, FrameMakerParams } from '.'
 import { Conf } from '../../../config'
 import { distortFrame, narrowFrame, upFrame } from './altFrame'
 import { createFrame, createRoofTopFrame } from './createFrame'
@@ -34,19 +34,14 @@ export const high = (up = 0.3): FramesMaker =>
 export const highDistorted = (dis = 0.03, up = 0.3): FramesMaker =>
   inject((w, h, rect) => pipe(createFrame(w, h, rect), distortFrame(dis, rect), upFrame(up, rect)))
 
-export const highDistortedNarrow = (
-  dis: number,
-  up: number,
-  narrow: number,
-  long: number
-): FramesMaker =>
+export const highDistortedNarrow = ({ dist, up, narrow }: FrameMakerParams): FramesMaker =>
   inject(
-    (w, h, rect, fi) =>
+    (w, h, rect) =>
       pipe(
         createFrame(w, h, rect),
         narrowFrame(narrow),
         upFrame(up, rect),
-        distortFrame(dis, rect)
+        distortFrame(dist, rect)
       ),
     narrowPaths(narrow, undefined),
     Conf.ww * Math.max(0.5, 1 - narrow / 2)
@@ -57,10 +52,10 @@ export const highRoof: FramesMaker = inject(createRoofTopFrame)
 export const highRoofDistorted = (dis = 0.03): FramesMaker =>
   inject((w, h, rect) => pipe(createRoofTopFrame(w, h, rect), distortFrame(dis, rect)))
 
-export const highRoofDistortedNarrow = (dis: number, narrow: number, long: number): FramesMaker =>
+export const highRoofDistortedNarrow = ({ dist, narrow, long }: FrameMakerParams): FramesMaker =>
   inject(
     (w, h, rect) =>
-      pipe(createRoofTopFrame(w, h, rect), narrowFrame(narrow), distortFrame(dis, rect)),
+      pipe(createRoofTopFrame(w, h, rect), narrowFrame(narrow), distortFrame(dist, rect)),
     narrowPaths(narrow, undefined, longPath(long)),
     Conf.ww * Math.max(0.5, 1 - narrow / 2)
   )
