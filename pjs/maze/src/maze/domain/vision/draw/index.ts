@@ -1,11 +1,11 @@
 import { ListenableState } from '..'
 import { allInOneDrawer } from './drawers'
-import { getParams } from './parameters'
+import { getDrawParams } from './parameters'
 import { GridDrawer } from './types'
 
 type DrawProvider = (state: ListenableState) => GridDrawer
 
 export const normalDraw: DrawProvider = (state: ListenableState) => {
-  const params = getParams(state)
+  const params = getDrawParams(state)
   return allInOneDrawer(params)
 }

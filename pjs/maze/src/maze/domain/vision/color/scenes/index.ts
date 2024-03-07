@@ -27,4 +27,4 @@ export type ManipFn<S extends Scene> = (
 
 export type ManipMap<S extends Scene> = { [k in ScenePattern<S>]: ManipFn<S> }
 
-export type ColorIntention<S extends Scene> = [scene: S, params: ScenePatternParams<S>]
+export type ColorIntention<S extends Scene = Scene> = [scene: S, params: ScenePatternParams<S>]

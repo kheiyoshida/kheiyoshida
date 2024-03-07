@@ -40,7 +40,7 @@ export const getDistortion: GetParam =
   (coefficient = getDistortionCoefficient(floor)) =>
     Math.max(0, Math.min(100, 30 + coefficient - sanity))
 
-export const getParams = (state: ListenableState): DrawParams => {
+export const getDrawParams = (state: ListenableState): DrawParams => {
   return {
     visibility: getVisibility(state)(),
     farAlpha: getAlpha(state)(),

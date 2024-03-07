@@ -1,16 +1,20 @@
 import { ListenableState } from '.'
 import { createRandomSelect } from '../../../lib/random'
 
-export type VisionStrategy = 'normal' | 'highWall' | 'floor'
+export enum VisionStrategy {
+  normal = 'normal',
+  highWall = 'highWall',
+  floor = 'floor',
+}
 
 export const chooseStrategy = ({ floor }: ListenableState): VisionStrategy => {
   return defaultSelector(floor)
 }
 
 const floorStrategyMap: { [floor: number]: VisionStrategy } = {
-  1: 'normal',
-  2: 'normal',
-  3: 'normal',
+  1: VisionStrategy.normal,
+  2: VisionStrategy.normal,
+  3: VisionStrategy.normal,
 }
 
 const includeFloorSelect =
@@ -25,8 +29,8 @@ const includeFloorSelect =
 
 const defaultSelector = includeFloorSelect(
   createRandomSelect<VisionStrategy>([
-    [70, 'normal'],
-    [30, 'floor'],
-    [30, 'highWall'],
+    [70, VisionStrategy.normal],
+    [30, VisionStrategy.floor],
+    [30, VisionStrategy.highWall],
   ])
 )

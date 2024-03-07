@@ -27,7 +27,7 @@ export const normalSceneProvider: ScneProvider = (state) => {
   return resolveColorIntention(intention)
 }
 
-const domainColorLogic = (state: ListenableState) => {
+export const domainColorLogic = (state: ListenableState) => {
   const [mid, low] = floorToThreshold(state.floor)
   if (state.sanity >= mid)
     return [Scene.Normal, parameterizeNormalScene(state)] as ColorIntention<Scene.Normal>
@@ -36,7 +36,7 @@ const domainColorLogic = (state: ListenableState) => {
   else return [Scene.Effect, parameterizeEffectScene(state)] as ColorIntention<Scene.Effect>
 }
 
-const resolveColorIntention = <S extends Scene>([
+export const resolveColorIntention = <S extends Scene>([
   scene,
   params,
 ]: ColorIntention<S>): ApplyColors => {

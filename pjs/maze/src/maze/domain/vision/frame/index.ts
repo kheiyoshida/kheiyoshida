@@ -1,5 +1,6 @@
 import { ListenableState } from '..'
 import { DrawPoint } from '../draw/types'
+import { VisionStrategy } from '../strategy'
 import { FramesMaker, highDistortedNarrow, highRoofDistortedNarrow } from './framesMaker'
 
 export type Frame = {
@@ -26,7 +27,7 @@ export type FrameMakerParams = {
   long: number
 }
 
-const calcFrameProviderParams = ({ sanity, stamina }: ListenableState) => {
+export const calcFrameProviderParams = ({ sanity, stamina }: ListenableState) => {
   return {
     dist: dist(sanity),
     up: up(stamina),
@@ -35,12 +36,9 @@ const calcFrameProviderParams = ({ sanity, stamina }: ListenableState) => {
   }
 }
 
-export const normalFrameProvider: FrameProvider = (state) => {
-  const params = calcFrameProviderParams(state)
-  return highDistortedNarrow(params)
-}
-
-export const highWallFrameProvider: FrameProvider = (state) => {
-  const params = calcFrameProviderParams(state)
-  return highRoofDistortedNarrow(params)
+export const consumeFrameMakerParams = (strategy: VisionStrategy ,params: FrameMakerParams) => {
+  if (strategy === VisionStrategy.normal) return highDistortedNarrow(params)
+  if (strategy === VisionStrategy.floor) return highDistortedNarrow(params)
+  if (strategy === VisionStrategy.highWall) return highRoofDistortedNarrow(params)
+  throw Error()
 }
