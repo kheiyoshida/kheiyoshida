@@ -5,9 +5,6 @@ import * as finalizer from './drawSpec'
 import { highWallFrameProvider, normalFrameProvider } from './frame'
 import { VisionStrategy } from './strategy'
 
-/**
- * consume state and return side effects the situatation requires
- */
 export type VisionProvider = (state: ListenableState) => Vision
 
 const normalVision: VisionProvider = (state: ListenableState) => ({
@@ -31,10 +28,7 @@ const highWallVision: VisionProvider = (state: ListenableState) => ({
   renewColors: normalSceneProvider(state),
 })
 
-/**
- * map for patterns of vision providers
- */
-export const visionProviders: { [s in VisionStrategy]: VisionProvider } = {
+export const VisionProviderMap: { [s in VisionStrategy]: VisionProvider } = {
   normal: normalVision,
   floor: floorlVision,
   highWall: highWallVision,

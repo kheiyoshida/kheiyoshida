@@ -1,6 +1,6 @@
 import * as maze from '../../domain/maze/maze'
 import { getSpeed } from '../../domain/stats'
-import { Vision, makeVision } from '../../domain/vision'
+import { Vision, getVisionFromCurrentState } from '../../domain/vision'
 import { screenPaint } from '../../domain/vision/draw/screen'
 import { Frame } from '../../domain/vision/frame'
 import { setIntervalEvent } from '../timer'
@@ -13,7 +13,7 @@ export type RenderFunc = (grid: RenderGrid, vision: Vision, speed: number) => Pr
 export const injectDomainDeps =
   (renderFn: RenderFunc) =>
   async (
-    vision = makeVision(),
+    vision = getVisionFromCurrentState(),
     renderSpecs = composeRender(maze.getPath(), maze.query.direction),
     speed = getSpeed()
   ) => {

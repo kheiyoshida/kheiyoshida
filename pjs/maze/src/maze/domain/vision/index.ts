@@ -4,12 +4,9 @@ import { ApplyColors } from './color'
 import { DrawSpec } from './draw/types'
 import { DrawSpecFinalizer } from './drawSpec/finalize'
 import { FramesMaker } from './frame/framesMaker'
-import { visionProviders } from './provider'
+import { VisionProviderMap } from './provider'
 import { chooseStrategy } from './strategy'
 
-/**
- * collection of methods to represent the current state
- */
 export type Vision = {
   frames: FramesMaker
   draw: (specs: DrawSpec[][]) => void
@@ -17,23 +14,16 @@ export type Vision = {
   renewColors: ApplyColors
 }
 
-/**
- * state fields consumed by vision
- */
 export type ListenableState = Pick<MazeState, 'floor'> & StatusState
 
-/**
- * finalize & provide vision, consuming current listenable state values
- */
-const visionProvider = (state: ListenableState): Vision =>
-  visionProviders[chooseStrategy(state)](state)
-
-/**
- * make vision based on the current state
- * @returns vision
- */
-export const makeVision = () =>
-  visionProvider({
+export const getVisionFromCurrentState = () =>
+  getVision({
     ...statusStore.current,
     floor: store.current.floor,
   })
+
+const getVision = (state: ListenableState): Vision => {
+  const strategy = chooseStrategy(state)
+  const visionProvider = VisionProviderMap[strategy]
+  return visionProvider(state)
+}
