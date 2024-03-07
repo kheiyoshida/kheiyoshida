@@ -43,15 +43,3 @@ export type ManipFn<P extends ScenePattern> = (
  */
 export type ManipMap<P extends ScenePattern> = { [k in P]: ManipFn<P> }
 
-/**
- * finalize scene as a function to be picked by client
- */
-export const bundleScene =
-  <P extends ScenePattern>(
-    parameterize: ParameterizeState<P>,
-    map: ManipMap<P>
-  ): Scene =>
-  (palette, state) => {
-    const params = parameterize(state)
-    return map[params[0]](palette, params)
-  }

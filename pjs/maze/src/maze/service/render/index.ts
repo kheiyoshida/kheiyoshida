@@ -7,23 +7,17 @@ import { genRenderFn, injectDomainDeps, intervalRender, reserveIntervalRender } 
 import { corridorToNextFloor } from './others/scenes'
 import * as RenderQueue from './queue'
 
-/**
- * render current view
- */
-export const renderCurrentView = injectDomainDeps((renderSpecs, vision) => {
-  RenderQueue.push(() => genRenderFn(renderSpecs, vision)(vision.frames(1)))
+export const renderCurrentView = injectDomainDeps((renderGrid, vision) => {
+  RenderQueue.push(() => genRenderFn(renderGrid, vision)(vision.frames(1)))
   RenderQueue.consume()
 })
 
 const goMoveMagnifySeq = [1.05, 1.1, 1.24, 1.33, 1.5, 1.65, 1.8, 1.95]
 
-/**
- * render going forward movement
- */
-export const renderGo = injectDomainDeps((renderSpecs, vision, speed) => {
+export const renderGo = injectDomainDeps((renderGrid, vision, speed) => {
   intervalRender(
     speed * Conf.frameInterval,
-    genRenderFn(renderSpecs, vision),
+    genRenderFn(renderGrid, vision),
     goMoveMagnifySeq.map(vision.frames)
   )
 })
@@ -39,11 +33,11 @@ const TURN_ADJUST_VALUES = [
 ] as const
 
 export const renderTurn = (d: 'r' | 'l') =>
-  injectDomainDeps((renderSpecs, vision, speed) => {
+  injectDomainDeps((renderGrid, vision, speed) => {
     const slide = (trans: number): [number, number] => [(d === 'r' ? -1 : 1) * trans * Conf.ww, 0]
     intervalRender(
       speed * Conf.frameInterval,
-      genRenderFn(renderSpecs, vision),
+      genRenderFn(renderGrid, vision),
       TURN_ADJUST_VALUES.map(([mag, trans]) =>
         vision.frames(mag).map((f) => translateFrame(slide(trans))(f))
       )
@@ -56,9 +50,9 @@ const magnifyDownStairs = Array(12)
   .map((_, i) => secondMag / i)
   .reverse()
 
-export const renderGoDownstairs = injectDomainDeps((renderSpecs, vision, speed) => {
+export const renderGoDownstairs = injectDomainDeps((renderGrid, vision, speed) => {
   const wh = Conf.wh
-  const ren = genRenderFn(renderSpecs, vision)
+  const ren = genRenderFn(renderGrid, vision)
   const originalStroke = getPalette().stroke
   reserveIntervalRender(
     speed * Conf.frameInterval * 3,

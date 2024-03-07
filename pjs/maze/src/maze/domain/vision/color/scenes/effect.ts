@@ -1,33 +1,23 @@
-import { randomColorVector } from 'p5utils/src/render'
-import { ManipMap, ParameterizeState, bundleScene } from '.'
+import { ParameterizeState } from '.'
 import { createRandomSelect } from '../../../../../lib/random'
-import { getPalette } from '../palette'
-import {
-  defaultPalette,
-  flipPalette,
-  movePalette,
-  randomizePalette,
-  returnTo,
-  transFill,
-} from '../palette/factories'
 
-type EffectPatterns = 'default' | 'stay' | 'return' | 'gradation' | 'reverse' | 'random' | 'trans'
+export type EffectSceneColorPatterns = 'default' | 'stay' | 'return' | 'gradation' | 'reverse' | 'random' | 'trans'
 
-const selectA = createRandomSelect<EffectPatterns>([
+const selectA = createRandomSelect<EffectSceneColorPatterns>([
   [20, 'stay'],
   [10, 'gradation'],
   [20, 'return'],
   [30, 'trans'],
 ])
 
-const selectB = createRandomSelect<EffectPatterns>([
+const selectB = createRandomSelect<EffectSceneColorPatterns>([
   [20, 'stay'],
   [10, 'gradation'],
   [20, 'return'],
   [30, 'trans'],
 ])
 
-const selectC = createRandomSelect<EffectPatterns>([
+const selectC = createRandomSelect<EffectSceneColorPatterns>([
   [30, 'stay'],
   [20, 'gradation'],
   [30, 'return'],
@@ -36,7 +26,7 @@ const selectC = createRandomSelect<EffectPatterns>([
   [20, 'trans'],
 ])
 
-const selectD = createRandomSelect<EffectPatterns>([
+const selectD = createRandomSelect<EffectSceneColorPatterns>([
   [20, 'stay'],
   [20, 'gradation'],
   [35, 'return'],
@@ -45,7 +35,7 @@ const selectD = createRandomSelect<EffectPatterns>([
   [20, 'trans'],
 ])
 
-const parameterize: ParameterizeState<EffectPatterns> = ({ floor, sanity }) => {
+export const parameterizeEffectScene: ParameterizeState<EffectSceneColorPatterns> = ({ floor, sanity }) => {
   const pattern =
     sanity > 5 ? (floor < 10 ? selectA() : selectB()) : floor < 10 ? selectC() : selectD()
   if (pattern === 'gradation') return [pattern, 1, Math.min(30, (100 - sanity) / 3)]
@@ -54,14 +44,3 @@ const parameterize: ParameterizeState<EffectPatterns> = ({ floor, sanity }) => {
   return [pattern]
 }
 
-const map: ManipMap<EffectPatterns> = {
-  default: defaultPalette,
-  stay: getPalette,
-  gradation: (palette, params) => movePalette(randomColorVector([params[1], params[2]]))(palette),
-  return: (palette, params) => returnTo(defaultPalette(), params[1])(palette),
-  reverse: flipPalette,
-  random: randomizePalette,
-  trans: (palette, params) => transFill(params[1], params[2])(palette),
-}
-
-export const effect = bundleScene(parameterize, map)
