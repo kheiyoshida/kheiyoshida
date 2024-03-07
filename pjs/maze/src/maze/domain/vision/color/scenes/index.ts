@@ -28,11 +28,6 @@ export type ParameterizeState<P extends ScenePattern> = (
   state: ListenableState
 ) => SceneParams<P>
 
-/**
- * manipulate current palette
- * using different palette methods
- * and params derived from state
- */
 export type ManipFn<P extends ScenePattern> = (
   palette: ColorPalette,
   params: SceneParams<P>

@@ -1,36 +1,31 @@
 import { ListenableState } from '..'
 import { floorToThreshold } from '../../stats'
 import { effectSceneManipMap, normalSceneManipMap } from './manipMaps'
-import { applyPalette, getPalette, setPalette } from './palette'
-import { ManipMap, ParameterizeState, Scene, ScenePattern } from './scenes'
+import { ColorPalette, applyPalette, getPalette, setPalette } from './palette'
+import { ManipMap, SceneParams, ScenePattern } from './scenes'
 import { parameterizeNormalScene } from './scenes/default'
 import { parameterizeEffectScene } from './scenes/effect'
 
 export type ApplyColors = () => void
 
-const makeApplySceneColors =
-  (scene: Scene, state: ListenableState): ApplyColors =>
+export const bundleScene =
+  <P extends ScenePattern>(
+    params: SceneParams<P>,
+    map: ManipMap<P>,
+    palette: ColorPalette = getPalette()
+  ): ApplyColors =>
   () => {
-    const palette = getPalette()
-    const newPalette = scene(palette, state)
+    const newPalette = map[params[0]](palette, params)
     setPalette(newPalette)
     applyPalette(newPalette)
   }
 
-export const bundleScene =
-  <P extends ScenePattern>(parameterize: ParameterizeState<P>, map: ManipMap<P>): Scene =>
-  (palette, state) => {
-    const params = parameterize(state)
-    return map[params[0]](palette, params)
-  }
-
 export type ScneProvider = (state: ListenableState) => ApplyColors
 
-export const normalSceneProvider: ScneProvider = (state): ApplyColors => {
+export const normalSceneProvider: ScneProvider = (state) => {
   const [mid, low] = floorToThreshold(state.floor)
-  if (state.sanity >= mid)
-    return makeApplySceneColors(bundleScene(parameterizeNormalScene, normalSceneManipMap), state)
+  if (state.sanity >= mid) return bundleScene(parameterizeNormalScene(state), normalSceneManipMap)
   else if (state.sanity >= low)
-    return makeApplySceneColors(bundleScene(parameterizeEffectScene, effectSceneManipMap), state)
-  else return makeApplySceneColors(bundleScene(parameterizeEffectScene, effectSceneManipMap), state)
+    return bundleScene(parameterizeEffectScene(state), effectSceneManipMap)
+  else return bundleScene(parameterizeEffectScene(state), effectSceneManipMap)
 }
