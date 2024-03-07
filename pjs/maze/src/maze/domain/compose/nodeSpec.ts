@@ -1,5 +1,5 @@
-import { Direction, compass } from '../../../domain/maze/direction'
-import { Node } from '../../../store/entities/matrix/node'
+import { Direction, compass } from '../maze/direction'
+import { Node } from '../../store/entities/matrix/node'
 
 export type PathSpec = [PathNode, PathNode, PathNode]
 export type PathNode = NodeSpec | null

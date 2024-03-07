@@ -1,4 +1,4 @@
-import { RenderPosition } from '../../../compose/renderSpec'
+import { RenderPosition } from '../../../../../domain/compose/renderSpec'
 import { DrawSpec } from '../../draw/types'
 import { Layer } from '../../frame/layer'
 import { DrawPathEmitter } from '../unit/pathEmitters'

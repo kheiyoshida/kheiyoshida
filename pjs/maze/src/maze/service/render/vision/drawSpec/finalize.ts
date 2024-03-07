@@ -1,4 +1,4 @@
-import { RenderGrid } from '../../compose/renderSpec'
+import { RenderGrid } from '../../../../domain/compose/renderSpec'
 import { DrawSpec } from '../draw/types'
 import { Frame } from '../frame'
 import { extractLayer } from '../frame/layer'

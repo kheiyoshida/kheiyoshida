@@ -2,7 +2,7 @@ import {
   RenderGrid,
   RenderPattern,
   RenderPosition,
-} from '../../../../compose/renderSpec'
+} from '../../../../../../domain/compose/renderSpec'
 import { DrawEntityGrid, LAST_LAYER_INDEX } from '../drawEntity'
 import { checkCenterFront, findPositionByEntity, removeEntity } from '../utils'
 import { DrawEntities } from './entities'

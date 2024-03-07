@@ -2,7 +2,7 @@ import {
   RenderGrid,
   RenderPattern,
   RenderPosition,
-} from '../../../compose/renderSpec'
+} from '../../../../../domain/compose/renderSpec'
 import { toSpliced } from '../../../../../utils'
 import { Position } from '../../../../../utils/position'
 import { DrawEntity, DrawEntityGrid, FIRST_LAYER_INDEX, LAST_LAYER_INDEX } from './drawEntity'

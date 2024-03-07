@@ -1,4 +1,4 @@
-import { RenderGrid, RenderPattern, RenderPosition } from '../../../../compose/renderSpec'
+import { RenderGrid, RenderPattern, RenderPosition } from '../../../../../../domain/compose/renderSpec'
 import { DrawEntityGrid, LAST_LAYER_INDEX } from '../drawEntity'
 import { checkAroundCenter } from '../utils'
 import { DrawEntities } from './entities'

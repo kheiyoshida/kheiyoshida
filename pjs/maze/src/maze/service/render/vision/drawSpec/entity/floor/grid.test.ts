@@ -1,4 +1,4 @@
-import { RenderGrid } from '../../../../compose/renderSpec'
+import { RenderGrid } from '../../../../../../domain/compose/renderSpec'
 import { generateDrawEntityGrid } from './grid'
 
 describe(`floor grid generation`, () => {

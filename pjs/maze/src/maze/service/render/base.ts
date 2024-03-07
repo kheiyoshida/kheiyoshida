@@ -1,12 +1,11 @@
-import * as maze from '../../domain/maze/maze'
+import { getRenderGridFromCurrentState } from '../../domain/compose'
+import { RenderGrid } from '../../domain/compose/renderSpec'
 import { getRenderingSpeed } from '../../domain/stats'
-import { screenPaint } from './vision/draw/screen'
-import { Frame } from './vision/frame'
 import { setIntervalEvent } from '../timer'
-import { composeRenderGrid } from './compose'
-import { RenderGrid } from './compose/renderSpec'
 import * as RenderQueue from './queue'
 import { Vision, getVisionFromCurrentState } from './vision'
+import { screenPaint } from './vision/draw/screen'
+import { Frame } from './vision/frame'
 
 export type RenderFunc = (grid: RenderGrid, vision: Vision, speed: number) => Promise<void> | void
 
@@ -14,7 +13,7 @@ export const injectDomainDeps =
   (renderFn: RenderFunc) =>
   async (
     vision = getVisionFromCurrentState(),
-    renderGrid = composeRenderGrid(maze.getPath(), maze.query.direction),
+    renderGrid = getRenderGridFromCurrentState(),
     speed = getRenderingSpeed()
   ) => {
     vision.renewColors()

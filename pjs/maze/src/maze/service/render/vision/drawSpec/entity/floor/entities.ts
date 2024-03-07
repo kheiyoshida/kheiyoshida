@@ -1,4 +1,4 @@
-import { RenderPosition } from '../../../../compose/renderSpec'
+import { RenderPosition } from '../../../../../../domain/compose/renderSpec'
 import {
   fixed,
   horizontalLineGroundBack,
