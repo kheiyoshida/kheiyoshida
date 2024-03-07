@@ -1,25 +1,25 @@
 import { Node } from '../../../store/entities/matrix/node'
-import { _toNodeSpec, toNodeSpec } from './nodeSpec'
+import { toNodeSpec, toPathSpec } from './nodeSpec'
 
 describe(`toNodeSpec`, () => {
   it(`should emit rendeirng spec based on direction`, () => {
     const node = new Node([0, 0], { n: true })
-    expect(_toNodeSpec('n')(node).terrain).toMatchObject({
+    expect(toNodeSpec('n')(node).terrain).toMatchObject({
       left: 'wall',
       right: 'wall',
       front: 'corridor',
     })
-    expect(_toNodeSpec('e')(node).terrain).toMatchObject({
+    expect(toNodeSpec('e')(node).terrain).toMatchObject({
       left: 'corridor',
       right: 'wall',
       front: 'wall',
     })
-    expect(_toNodeSpec('s')(node).terrain).toMatchObject({
+    expect(toNodeSpec('s')(node).terrain).toMatchObject({
       left: 'wall',
       right: 'wall',
       front: 'wall',
     })
-    expect(_toNodeSpec('w')(node).terrain).toMatchObject({
+    expect(toNodeSpec('w')(node).terrain).toMatchObject({
       left: 'wall',
       right: 'corridor',
       front: 'wall',
@@ -29,7 +29,7 @@ describe(`toNodeSpec`, () => {
   it(`should include stair flag if node is on the stair`, () => {
     const node = new Node([0, 0], { n: true })
     node.setStair()
-    expect(_toNodeSpec('n')(node).stair).toBe(true)
+    expect(toNodeSpec('n')(node).stair).toBe(true)
   })
 
   it(`should convert node path to PathSpec`, () => {
@@ -38,7 +38,7 @@ describe(`toNodeSpec`, () => {
       new Node([2, 0], { n: true }),
       new Node([1, 0], { n: true }),
     ]
-    expect(toNodeSpec('n')(path)).toMatchObject([
+    expect(toPathSpec('n')(path)).toMatchObject([
       {
         stair: false,
         terrain: {
@@ -67,7 +67,7 @@ describe(`toNodeSpec`, () => {
   })
   it(`should fill with null if front node isn't approachable`, () => {
     const path: Node[] = [new Node([3, 0], { n: true, e: true }), new Node([2, 0], { n: true })]
-    expect(toNodeSpec('n')(path)).toMatchObject([
+    expect(toPathSpec('n')(path)).toMatchObject([
       null,
       {
         stair: false,

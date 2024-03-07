@@ -1,4 +1,15 @@
-import { PathSpec, TerrainPattern } from './nodeSpec'
+import { NodeSpec, PathSpec, TerrainPattern } from './nodeSpec'
+
+export type RenderGrid = [
+  RenderLayer,
+  RenderLayer,
+  RenderLayer,
+  RenderLayer,
+  RenderLayer,
+  RenderLayer,
+]
+
+type RenderLayer = [left: RenderPattern, center: RenderPattern, right: RenderPattern] | null
 
 export enum RenderPosition {
   LEFT,
@@ -12,28 +23,19 @@ export enum RenderPattern {
   STAIR = 2,
 }
 
-type RenderLayer = [RenderPattern, RenderPattern, RenderPattern] | null
-
-export type RenderGrid = [
-  RenderLayer,
-  RenderLayer,
-  RenderLayer,
-  RenderLayer,
-  RenderLayer,
-  RenderLayer,
-]
-
-/**
- * convert node specs into render specs
- */
 export const convertToRenderGrid = (path: PathSpec): RenderGrid =>
-  path.flatMap((ns) =>
-    ns
-      ? [
-          [1, pt(ns.terrain.front), 1],
-          [pt(ns.terrain.left), ns.stair ? 2 : 0, pt(ns.terrain.right)],
-        ]
-      : [null, null]
+  path.flatMap((nodeSpec) =>
+    nodeSpec ? convertToRenderLayer(nodeSpec) : [null, null]
   ) as RenderGrid
 
-export const pt = (tp: TerrainPattern) => (tp === 'corridor' ? 0 : 1)
+const convertToRenderLayer = (nodeSpec: NodeSpec): RenderLayer[] => [
+  [RenderPattern.FILL, detectPattern(nodeSpec.terrain.front), RenderPattern.FILL],
+  [
+    detectPattern(nodeSpec.terrain.left),
+    nodeSpec.stair ? RenderPattern.STAIR : RenderPattern.FLOOR,
+    detectPattern(nodeSpec.terrain.right),
+  ],
+]
+
+export const detectPattern = (tp: TerrainPattern) =>
+  tp === 'corridor' ? RenderPattern.FLOOR : RenderPattern.FILL

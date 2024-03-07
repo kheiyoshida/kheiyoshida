@@ -3,7 +3,7 @@ import { getRenderingSpeed } from '../../domain/stats'
 import { screenPaint } from './vision/draw/screen'
 import { Frame } from './vision/frame'
 import { setIntervalEvent } from '../timer'
-import { composeRender } from './compose'
+import { composeRenderGrid } from './compose'
 import { RenderGrid } from './compose/renderSpec'
 import * as RenderQueue from './queue'
 import { Vision, getVisionFromCurrentState } from './vision'
@@ -14,7 +14,7 @@ export const injectDomainDeps =
   (renderFn: RenderFunc) =>
   async (
     vision = getVisionFromCurrentState(),
-    renderGrid = composeRender(maze.getPath(), maze.query.direction),
+    renderGrid = composeRenderGrid(maze.getPath(), maze.query.direction),
     speed = getRenderingSpeed()
   ) => {
     vision.renewColors()
