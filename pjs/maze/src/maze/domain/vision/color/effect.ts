@@ -1,21 +1,21 @@
-import { EffectSceneColorPatterns, ParameterizeState, Scene } from './types'
-import { createRandomSelect } from '../../../../../lib/random'
+import { createRandomSelect } from '../../../../lib/random'
+import { ParameterizeState, Scene, ScenePattern } from './types'
 
-const selectA = createRandomSelect<EffectSceneColorPatterns>([
+const selectA = createRandomSelect<ScenePattern<Scene.Effect>>([
   [20, 'stay'],
   [10, 'gradation'],
   [20, 'return'],
   [30, 'trans'],
 ])
 
-const selectB = createRandomSelect<EffectSceneColorPatterns>([
+const selectB = createRandomSelect<ScenePattern<Scene.Effect>>([
   [20, 'stay'],
   [10, 'gradation'],
   [20, 'return'],
   [30, 'trans'],
 ])
 
-const selectC = createRandomSelect<EffectSceneColorPatterns>([
+const selectC = createRandomSelect<ScenePattern<Scene.Effect>>([
   [30, 'stay'],
   [20, 'gradation'],
   [30, 'return'],
@@ -24,7 +24,7 @@ const selectC = createRandomSelect<EffectSceneColorPatterns>([
   [20, 'trans'],
 ])
 
-const selectD = createRandomSelect<EffectSceneColorPatterns>([
+const selectD = createRandomSelect<ScenePattern<Scene.Effect>>([
   [20, 'stay'],
   [20, 'gradation'],
   [35, 'return'],

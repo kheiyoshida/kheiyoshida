@@ -7,14 +7,6 @@ export type FrameMakerParams = {
   long: number
 }
 
-const dist = (sanity: number) => (100 - sanity) * 0.0005
-
-const narrow = (sanity: number, stamina: number) => (200 - sanity - stamina) * 0.005
-
-const up = (stamina: number) => (100 - stamina) * 0.01
-
-const long = (stamina: number) => (100 - stamina) * 0.01
-
 export const calcFrameProviderParams = ({ sanity, stamina }: ListenableState): FrameMakerParams => {
   return {
     dist: dist(sanity),
@@ -23,3 +15,11 @@ export const calcFrameProviderParams = ({ sanity, stamina }: ListenableState): F
     narrow: narrow(sanity, stamina),
   }
 }
+
+const dist = (sanity: number) => (100 - sanity) * 0.0005
+
+const narrow = (sanity: number, stamina: number) => (200 - sanity - stamina) * 0.005
+
+const up = (stamina: number) => (100 - stamina) * 0.01
+
+const long = (stamina: number) => (100 - stamina) * 0.01

@@ -1,13 +1,14 @@
 import { ListenableState } from '../../../../domain/vision'
-import { ColorIntention, ManipMap, Scene, ScenePatternParams } from '../../../../domain/vision/colorLogic/scenes/types'
+import { ColorIntention, Scene, ScenePatternParams } from '../../../../domain/vision/color/types'
 import { effectSceneManipMap, normalSceneManipMap } from './manipMaps'
 import { ColorPalette, applyPalette, getPalette, setPalette } from './palette'
+import { ColorManipFnMap } from './types'
 
 export type ApplyColors = () => void
 
 export const bundleScene =
   <S extends Scene>(
-    map: ManipMap<S>,
+    map: ColorManipFnMap<S>,
     params: ScenePatternParams<S>,
     palette: ColorPalette = getPalette()
   ): ApplyColors =>

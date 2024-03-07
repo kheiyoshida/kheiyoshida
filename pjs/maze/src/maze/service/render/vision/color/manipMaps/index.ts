@@ -1,4 +1,5 @@
 import { randomColorVector } from 'p5utils/src/render'
+import { Scene } from '../../../../../domain/vision/color/types'
 import { getPalette } from '../palette'
 import {
   defaultPalette,
@@ -8,16 +9,16 @@ import {
   returnTo,
   transFill,
 } from '../palette/factories'
-import { ManipMap, Scene } from '../../../../../domain/vision/colorLogic/scenes/types'
+import { ColorManipFnMap } from '../types'
 
-export const normalSceneManipMap: ManipMap<Scene.Normal> = {
+export const normalSceneManipMap: ColorManipFnMap<Scene.Normal> = {
   default: defaultPalette,
   stay: getPalette,
   gradation: (palette, params) => movePalette(randomColorVector([params[1], params[2]]))(palette),
   return: (palette, params) => returnTo(defaultPalette(), params[1])(palette),
 }
 
-export const effectSceneManipMap: ManipMap<Scene.Effect> = {
+export const effectSceneManipMap: ColorManipFnMap<Scene.Effect> = {
   default: defaultPalette,
   stay: getPalette,
   gradation: (palette, params) => movePalette(randomColorVector([params[1], params[2]]))(palette),

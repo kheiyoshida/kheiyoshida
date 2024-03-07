@@ -1,7 +1,7 @@
 import { pushPop } from 'p5utils/src/render'
 import { Conf } from '../../../config'
 import { Direction, NESW } from '../../../domain/maze/direction'
-import { Grid } from '../../../domain/maze/mapper'
+import { Grid } from '../../../store/entities/map'
 
 export const renderMap = (grid: Grid, current: number[], direction: Direction, floor: number) => {
   const [ci, cj] = [current[0] * 2, current[1] * 2]
