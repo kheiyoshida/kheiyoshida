@@ -1,7 +1,7 @@
 import { P5Canvas } from '../lib/p5canvas'
 import { Conf } from './config'
 import { bindControl } from './control'
-import { applyPalette, getPalette } from './domain/vision/color/palette'
+import { applyPalette, getPalette } from './service/render/vision/color/palette'
 import { initialize } from './service/events/events'
 import { toneStart } from './service/sound'
 import { demo } from './service/sound/songs/demo'

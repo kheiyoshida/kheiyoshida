@@ -1,12 +1,12 @@
 import * as maze from '../../domain/maze/maze'
 import { getRenderingSpeed } from '../../domain/stats'
-import { Vision, getVisionFromCurrentState } from '../../domain/vision'
-import { screenPaint } from '../../domain/vision/draw/screen'
-import { Frame } from '../../domain/vision/frame'
+import { screenPaint } from './vision/draw/screen'
+import { Frame } from './vision/frame'
 import { setIntervalEvent } from '../timer'
 import { composeRender } from './compose'
 import { RenderGrid } from './compose/renderSpec'
 import * as RenderQueue from './queue'
+import { Vision, getVisionFromCurrentState } from './vision'
 
 export type RenderFunc = (grid: RenderGrid, vision: Vision, speed: number) => Promise<void> | void
 
