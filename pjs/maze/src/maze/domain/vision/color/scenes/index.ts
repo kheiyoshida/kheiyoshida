@@ -1,40 +1,30 @@
 import { ListenableState } from '../..'
 import { ColorPalette } from '../palette'
 
-/**
- * function to be provided to the client
- *
- * consumed with `SceneParams` to obtain new `ColorPalette` for the scene
- */
-export type Scene = (
-  palette: ColorPalette,
+export enum Scene {
+  Normal = 'normal',
+  Effect = 'effect' 
+}
+
+type DefaultPatterns = 'default' | 'stay' | 'return' | 'gradation'
+type EffectPatterns = 'default' | 'stay' | 'return' | 'gradation' | 'reverse' | 'random' | 'trans'
+
+export type ScenePattern<S extends Scene> = S extends Scene.Normal ? DefaultPatterns : EffectPatterns
+
+export type DefaultSceneColorPatterns = ScenePattern<Scene.Normal>
+export type EffectSceneColorPatterns = ScenePattern<Scene.Effect>
+
+export type ScenePatternParams<S extends Scene> = [pattern: ScenePattern<S>, ...args: any[]]
+
+export type ParameterizeState<S extends Scene> = (
   state: ListenableState
+) => ScenePatternParams<S>
+
+export type ManipFn<S extends Scene> = (
+  palette: ColorPalette,
+  params: ScenePatternParams<S>
 ) => ColorPalette
 
-/**
- * string key to select manipulation pattern
- */
-export type ScenePattern = string
+export type ManipMap<S extends Scene> = { [k in ScenePattern<S>]: ManipFn<S> }
 
-/**
- * params to be passed to `ManipFn`
- */
-export type SceneParams<P extends ScenePattern> = [pattern: P, ...args: any[]]
-
-/**
- * fn to convert state into consumable `SceneParams`
- */
-export type ParameterizeState<P extends ScenePattern> = (
-  state: ListenableState
-) => SceneParams<P>
-
-export type ManipFn<P extends ScenePattern> = (
-  palette: ColorPalette,
-  params: SceneParams<P>
-) => ColorPalette
-
-/**
- * map for differnt manipulation functions
- */
-export type ManipMap<P extends ScenePattern> = { [k in P]: ManipFn<P> }
-
+export type ColorIntention<S extends Scene> = [scene: S, params: ScenePatternParams<S>]

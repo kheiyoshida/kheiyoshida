@@ -1,7 +1,5 @@
-import { ParameterizeState } from '.'
+import { EffectSceneColorPatterns, ParameterizeState, Scene } from '.'
 import { createRandomSelect } from '../../../../../lib/random'
-
-export type EffectSceneColorPatterns = 'default' | 'stay' | 'return' | 'gradation' | 'reverse' | 'random' | 'trans'
 
 const selectA = createRandomSelect<EffectSceneColorPatterns>([
   [20, 'stay'],
@@ -35,7 +33,10 @@ const selectD = createRandomSelect<EffectSceneColorPatterns>([
   [20, 'trans'],
 ])
 
-export const parameterizeEffectScene: ParameterizeState<EffectSceneColorPatterns> = ({ floor, sanity }) => {
+export const parameterizeEffectScene: ParameterizeState<Scene.Effect> = ({
+  floor,
+  sanity,
+}) => {
   const pattern =
     sanity > 5 ? (floor < 10 ? selectA() : selectB()) : floor < 10 ? selectC() : selectD()
   if (pattern === 'gradation') return [pattern, 1, Math.min(30, (100 - sanity) / 3)]
@@ -43,4 +44,3 @@ export const parameterizeEffectScene: ParameterizeState<EffectSceneColorPatterns
   else if (pattern === 'trans') return [pattern, (sanity - 50) / 5, 100 + sanity]
   return [pattern]
 }
-

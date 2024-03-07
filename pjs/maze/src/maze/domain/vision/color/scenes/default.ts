@@ -1,8 +1,6 @@
 import { clamp } from 'utils'
-import { ParameterizeState } from '.'
+import { DefaultSceneColorPatterns, ParameterizeState, Scene } from '.'
 import { createRandomSelect } from '../../../../../lib/random'
-
-export type DefaultSceneColorPatterns = 'default' | 'stay' | 'return' | 'gradation'
 
 const selectA = createRandomSelect<DefaultSceneColorPatterns>([
   [80, 'default'],
@@ -18,7 +16,10 @@ const selectB = createRandomSelect<DefaultSceneColorPatterns>([
   [7.5, 'return'],
 ])
 
-export const parameterizeNormalScene: ParameterizeState<DefaultSceneColorPatterns> = ({ floor, sanity }) => {
+export const parameterizeNormalScene: ParameterizeState<Scene.Normal> = ({
+  floor,
+  sanity,
+}) => {
   const pattern = floor < 10 ? selectA() : selectB()
   if (pattern === 'gradation') return [pattern, 1, clamp(100 - sanity, 0, 50)]
   else if (pattern === 'return') return [pattern, clamp(sanity, 0, 50) / 100]
