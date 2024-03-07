@@ -1,11 +1,11 @@
 import { ReducerMap, makeStoreV2 } from 'utils'
 import { Matrix } from './entities/matrix/matrix'
 import { Direction } from '../domain/maze/direction'
-import { Grid, buildGrid } from '../domain/maze/mapper'
 import { Position } from '../utils/position'
 import { makeStatusStore } from './status'
 import { BuildMatrixParams, buildMatrix } from './entities/matrix'
 import { Node } from './entities/matrix/node'
+import { Grid, _track, buildGrid } from './entities/map'
 
 export type MazeState = {
   matrix: Matrix
@@ -34,8 +34,13 @@ const reducers = {
   toggleMap: (s) => () => {
     s.mapOpen = !s.mapOpen
   },
-  resetMap: (s) => (currentMatrix: Matrix) => {
-    s.grid = buildGrid(currentMatrix)
+  resetMap: (s) => () => {
+    s.grid = buildGrid(s.matrix)
+  },
+  trackMap: (s) => (from: Position, to: Position) => {
+    const oldGrid = s.grid.slice()
+    const newGrid = _track(oldGrid, from, to)
+    store.updateMap(newGrid)
   },
   updateMap: (s) => (newMap: Grid) => {
     s.grid = newMap
