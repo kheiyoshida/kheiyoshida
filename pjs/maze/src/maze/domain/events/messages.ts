@@ -1,4 +1,4 @@
-import { VisionIntention } from "../vision";
+import { VisionIntention, getVisionIntentionFromCurrentState } from '../vision'
 
 export enum RenderSignal {
   CurrentView = 'CurrentView',
@@ -11,9 +11,27 @@ export enum RenderSignal {
   CloseMap = 'CloseMap',
 }
 
-export type RenderMessage = [
-  signal: RenderSignal,
-  slice: VisionIntention
-]
+export type RenderMessage = [signal: RenderSignal, slice: VisionIntention]
 
-export const MessageQueue: RenderMessage[] = []
+const createMessageQueue = () => {
+  const MessageQueue: RenderMessage[] = []
+  const push = (signal: RenderSignal) => {
+    MessageQueue.push([signal, getVisionIntentionFromCurrentState()])
+  }
+  const _consume = (): RenderMessage => {
+    const message = MessageQueue.shift()
+    if (message) return message
+    throw Error(`message queue is empty`)
+  }
+  const consume = (cb: (message: RenderMessage) => void) => {
+    while (MessageQueue.length) {
+      cb(_consume())
+    }
+  }
+  return {
+    push,
+    consume,
+  }
+}
+
+export const MessageQueue = createMessageQueue()
