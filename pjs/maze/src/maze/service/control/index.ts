@@ -1,5 +1,5 @@
 import { Conf } from '../../config'
-import * as events from '../events/commands'
+import * as commands from './commands'
 import { renderGUI } from './gui'
 
 const CONTROL_WW_THRESHOLD = 1000
@@ -11,26 +11,26 @@ export const bindControl = () => {
 
 const smallScreen = () => {
   const { map, up, right, left } = renderGUI(Conf.ww, Conf.wh)
-  map.touchStarted(events.callMap)
-  up.touchStarted(events.go)
-  right.touchStarted(events.turnRight)
-  left.touchStarted(events.turnLeft)
+  map.touchStarted(commands.callMap)
+  up.touchStarted(commands.go)
+  right.touchStarted(commands.turnRight)
+  left.touchStarted(commands.turnLeft)
 }
 
 const wideScreen = () => {
   const keyCodeMap = {
-    [p.UP_ARROW]: events.go,
-    [p.RIGHT_ARROW]: events.turnRight,
-    [p.LEFT_ARROW]: events.turnLeft,
-    [p.DOWN_ARROW]: events.callMap,
-    [p.ENTER]: events.callMap,
+    [p.UP_ARROW]: commands.go,
+    [p.RIGHT_ARROW]: commands.turnRight,
+    [p.LEFT_ARROW]: commands.turnLeft,
+    [p.DOWN_ARROW]: commands.callMap,
+    [p.ENTER]: commands.callMap,
   } as const
   const keyMap = {
-    m: events.callMap,
-    w: events.go,
-    a: events.turnLeft,
-    s: events.callMap,
-    d: events.turnRight,
+    m: commands.callMap,
+    w: commands.go,
+    a: commands.turnLeft,
+    s: commands.callMap,
+    d: commands.turnRight,
   } as const
   p.keyPressed = () => {
     if (p.keyCode in keyCodeMap) {

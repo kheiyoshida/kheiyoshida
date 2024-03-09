@@ -1,9 +1,9 @@
 import { pushPop } from 'p5utils/src/render'
 import { Conf } from '../../../config'
-import { Direction, NESW } from '../../../domain/maze/direction'
-import { Grid } from '../../../store/entities/map'
+import { NESW } from '../../../domain/maze/direction'
+import { Vision } from '../vision'
 
-export const renderMap = (grid: Grid, current: number[], direction: Direction, floor: number) => {
+export const renderMap = ({ map: { grid, current, direction, floor } }: Vision) => () => {
   const [ci, cj] = [current[0] * 2, current[1] * 2]
 
   const d = NESW.indexOf(direction)

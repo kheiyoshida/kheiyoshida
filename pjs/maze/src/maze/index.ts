@@ -2,10 +2,11 @@ import { P5Canvas } from '../lib/p5canvas'
 import { Conf } from './config'
 import { bindControl } from './service/control'
 import { applyPalette, getPalette } from './service/render/vision/color/palette'
-import { initialize } from './service/events/commands'
+import { initialize } from './domain/events/commands'
 import { toneStart } from './service/sound'
 import { demo } from './service/sound/songs/demo'
 import { renderStartPage } from './start'
+import { setupConstantConsumers } from './service/render/consumer'
 
 let started = false
 
@@ -20,6 +21,7 @@ const setup = () => {
       started = true
       demo()
       initialize()
+      setupConstantConsumers()
       bindControl()
     }
     toneStart()

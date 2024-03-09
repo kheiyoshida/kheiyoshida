@@ -1,4 +1,4 @@
-import { VisionIntention } from "../../domain/vision";
+import { VisionIntention } from "../vision";
 
 export enum RenderSignal {
   CurrentView = 'CurrentView',

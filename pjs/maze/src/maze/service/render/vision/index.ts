@@ -1,4 +1,5 @@
 import { RenderGrid } from "../../../domain/compose/renderSpec"
+import { MapInfo } from "../../../domain/maze/mapper"
 import { VisionIntention, getVisionIntentionFromCurrentState } from "../../../domain/vision"
 import { ApplyColors, resolveColorIntention } from "./color"
 import { allInOneDrawer } from "./draw/drawers"
@@ -15,6 +16,7 @@ export type Vision = {
   renewColors: ApplyColors
   renderGrid: RenderGrid,
   speed: number
+  map: MapInfo
 }
 
 export const getVisionFromCurrentState = (): Vision => {
@@ -29,6 +31,7 @@ export const consumeVisionIntention = ({
   colorIntention,
   renderGrid,
   speed,
+  map
 }: VisionIntention): Vision => {
   return {
     makeFrames: consumeFrameMakerParams(strategy, framesMakerParams),
@@ -36,6 +39,6 @@ export const consumeVisionIntention = ({
     finalize: FinalizerMap[strategy],
     renewColors: resolveColorIntention(colorIntention),
     renderGrid,
-    speed
+    speed,map
   }
 }

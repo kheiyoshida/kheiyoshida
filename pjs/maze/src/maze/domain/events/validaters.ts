@@ -1,6 +1,6 @@
-import * as mapper from '../../domain/maze/mapper'
-import * as maze from '../../domain/maze/maze'
-import { getStats } from '../../domain/stats'
+import * as mapper from '../maze/mapper'
+import * as maze from '../maze/maze'
+import { getStats } from '../stats'
 import { store } from '../../store'
 
 export type CommandValidator = () => boolean
