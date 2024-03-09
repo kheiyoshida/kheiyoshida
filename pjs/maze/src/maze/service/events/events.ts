@@ -68,7 +68,7 @@ export const goDownStairs: EventHandler = () => {
   updateStats('downstairs')
   renderProceedToNextFloor()
   renderCurrentView()
-  RenderQueue.wait(() => store.updateAcceptCommand(true))
+  RenderQueue.waitUntilQueueGetsEmpty(() => store.updateAcceptCommand(true))
 }
 
 export const openMap = () => {

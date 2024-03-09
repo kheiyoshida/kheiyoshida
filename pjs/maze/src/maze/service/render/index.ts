@@ -5,7 +5,7 @@ import { changePaletteColor, getPalette, setPalette } from './vision/color/palet
 import { translateFrame } from './vision/frame/altFrame'
 import { genRenderFn, injectDomainDeps, intervalRender, reserveIntervalRender } from './base'
 import { corridorToNextFloor } from './others/scenes'
-import * as RenderQueue from './queue'
+import { RenderQueue } from './queue'
 
 export const renderCurrentView = injectDomainDeps((renderGrid, vision) => {
   RenderQueue.push(() => genRenderFn(renderGrid, vision)(vision.frames(1)))
