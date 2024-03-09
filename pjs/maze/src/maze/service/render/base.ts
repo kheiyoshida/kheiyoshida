@@ -1,26 +1,13 @@
-import { getRenderGridFromCurrentState } from '../../domain/compose'
 import { RenderGrid } from '../../domain/compose/renderSpec'
-import { getRenderingSpeed } from '../../domain/stats'
 import { setIntervalEvent } from '../timer'
-import { RenderQueue } from './queue'
-import { Vision, getVisionFromCurrentState } from './vision'
+import { RenderFn, RenderQueue } from './queue'
+import { Vision } from './vision'
 import { screenPaint } from './vision/draw/screen'
 import { Frame } from './vision/frame'
 
 export type RenderFunc = (grid: RenderGrid, vision: Vision, speed: number) => Promise<void> | void
 
-export const injectDomainDeps =
-  (renderFn: RenderFunc) =>
-  async (
-    vision = getVisionFromCurrentState(),
-    renderGrid = getRenderGridFromCurrentState(),
-    speed = getRenderingSpeed()
-  ) => {
-    vision.renewColors()
-    await renderFn(renderGrid, vision, speed)
-  }
-
-export const genRenderFn =
+export const makeRenderFn =
   (grid: RenderGrid, { finalize, draw }: Vision) =>
   (frames: Frame[]) => {
     screenPaint()
@@ -28,21 +15,18 @@ export const genRenderFn =
     draw(drawSpecs)
   }
 
-export const intervalRender = (
-  interval: number,
-  ren: (frame: Frame[], i: number) => void,
-  framesSequence: Frame[][]
-): void => {
-  RenderQueue.update(framesSequence.map((f, i) => () => ren(f, i)))
+export const compileRenderFnSequence = (
+  framesSequence: Frame[][],
+  renderFn: (frame: Frame[], frameIndex: number) => void
+) => framesSequence.map((f, i) => () => renderFn(f, i))
+
+export const registerIntervalRenderSequence = (interval: number, renderFns: RenderFn[]) => {
+  RenderQueue.update(renderFns)
   RenderQueue.consume()
   setIntervalEvent('render', RenderQueue.consume, interval)
 }
 
-export const reserveIntervalRender = (
-  interval: number,
-  ren: (frame: Frame[], i: number) => void,
-  framesSequence: Frame[][]
-): void => {
-  framesSequence.map((f, i) => () => ren(f, i)).forEach(RenderQueue.push)
+export const reserveIntervalRender = (interval: number, renderFns: RenderFn[]) => {
+  renderFns.forEach(RenderQueue.push)
   setIntervalEvent('render', RenderQueue.consume, interval)
 }

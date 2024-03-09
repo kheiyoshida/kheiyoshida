@@ -1,12 +1,12 @@
 import { Conf } from '../../../maze/config'
 
-type RenderFn = () => void
-type RenderQueue = RenderFn[]
+export type RenderFn = () => void
+export type RenderFnQueue = RenderFn[]
 
 const makeRenderQueue = () => {
-  let queue: RenderQueue = []
+  let queue: RenderFnQueue = []
   let blocked = false
-  const consume= () => {
+  const consume = () => {
     const fn = queue.shift()
     if (fn) {
       fn()
@@ -18,7 +18,7 @@ const makeRenderQueue = () => {
     }
   }
   const push = (fn: RenderFn) => queue.push(fn)
-  const update= (q: RenderQueue) => {
+  const update = (q: RenderFnQueue) => {
     queue = q
   }
   const waitUntilQueueGetsEmpty = (onQueueCleared: () => void) => {
