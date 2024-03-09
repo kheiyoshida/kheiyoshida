@@ -4,15 +4,12 @@ import { Frame } from '../frame'
 import { extractLayer } from '../frame/layer'
 import { DrawEntity, DrawEntityGrid, DrawEntityMethods } from './entity/drawEntity'
 
-/**
- * turn entity grid into an array of draw spec
- */
 export const finalizeDrawSpec = <DE extends DrawEntity>(
   methods: DrawEntityMethods<DE>,
-  grid: DrawEntityGrid<DE>,
+  entityGrid: DrawEntityGrid<DE>,
   frames: Frame[]
 ): DrawSpec[][] =>
-  grid
+  entityGrid
     .map((layer, li) =>
       layer
         ? layer
@@ -22,23 +19,14 @@ export const finalizeDrawSpec = <DE extends DrawEntity>(
     )
     .filter((unit): unit is DrawSpec[] => unit !== null)
 
-/**
- * final function that service layer can use to generate draw specs
- */
-export type DrawSpecFinalizer = (grid: RenderGrid, frames: Frame[]) => DrawSpec[][]
+type ConvertToDrawEntityGrid<DE extends DrawEntity> = (grid: RenderGrid) => DrawEntityGrid<DE>
 
-/**
- * render grid -> draw entity grid
- */
-type GenerateEntityGrid<DE extends DrawEntity> = (grid: RenderGrid) => DrawEntityGrid<DE>
+export type FinalizeDrawSpecs = (grid: RenderGrid, frames: Frame[]) => DrawSpec[][]
 
-/**
- * generate finalizer using
- */
 export const generateFinalizer =
   <DE extends DrawEntity>(
     methods: DrawEntityMethods<DE>,
-    genGrid: GenerateEntityGrid<DE>
-  ): DrawSpecFinalizer =>
-  (grid: RenderGrid, frames: Frame[]) =>
-    finalizeDrawSpec(methods, genGrid(grid), frames)
+    convertGrid: ConvertToDrawEntityGrid<DE>
+  ): FinalizeDrawSpecs =>
+  (renderGrid: RenderGrid, frames: Frame[]) =>
+    finalizeDrawSpec(methods, convertGrid(renderGrid), frames)
