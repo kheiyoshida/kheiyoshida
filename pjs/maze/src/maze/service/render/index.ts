@@ -13,10 +13,12 @@ import {
 } from './movement'
 import { corridorToNextFloor } from './others/scenes'
 import { RenderQueue } from './queue'
-import { getVisionFromCurrentState } from './vision'
+import { Vision } from './vision'
 import { changePaletteColor, getPalette, setPalette } from './vision/color/palette'
 
-export const renderCurrentView = (vision = getVisionFromCurrentState()) => {
+export type MakeRender = (vision: Vision) => () => void
+
+export const renderCurrentView = (vision: Vision) => () => {
   const renderFn = makeRenderFn(vision.renderGrid, vision)
   const framesSequence = vision.makeFrames()
   const [renderFns] = compileRenderFnSequence([framesSequence], renderFn)
@@ -24,7 +26,7 @@ export const renderCurrentView = (vision = getVisionFromCurrentState()) => {
   RenderQueue.consume()
 }
 
-export const renderGo = (vision = getVisionFromCurrentState()) => {
+export const renderGo = (vision: Vision) => () => {
   vision.renewColors()
   const interval = vision.speed * Conf.frameInterval
   const framesSequence = calcGoMovementFrames(vision.makeFrames)
@@ -33,7 +35,7 @@ export const renderGo = (vision = getVisionFromCurrentState()) => {
   registerIntervalRenderSequence(interval, renderFns)
 }
 
-export const renderTurn = (d: 'r' | 'l', vision = getVisionFromCurrentState()) => {
+export const renderTurn = (d: 'r' | 'l') => (vision: Vision) => () => {
   const interval = vision.speed * Conf.frameInterval
   const renderFnMaker = makeRenderFn(vision.renderGrid, vision)
   const framesSequence = calcTurnMovementFrames(d, vision.makeFrames)
@@ -41,7 +43,10 @@ export const renderTurn = (d: 'r' | 'l', vision = getVisionFromCurrentState()) =
   registerIntervalRenderSequence(interval, renderFns)
 }
 
-export const renderGoDownstairs = (vision = getVisionFromCurrentState()) => {
+export const renderTurnRight = renderTurn('r')
+export const renderTurnLeft = renderTurn('l')
+
+export const renderGoDownstairs = (vision: Vision) => () => {
   const ren = makeRenderFn(vision.renderGrid, vision)
   const originalStroke = getPalette().stroke
   const interval = vision.speed * Conf.frameInterval * 3
@@ -56,7 +61,7 @@ export const renderGoDownstairs = (vision = getVisionFromCurrentState()) => {
   reserveIntervalRender(interval, renderFns)
 }
 
-export const renderProceedToNextFloor = (vision = getVisionFromCurrentState()) => {
+export const renderProceedToNextFloor = (vision: Vision) => () => {
   const interval = vision.speed * Conf.frameInterval * 2
   const renderFn = makeRenderFn(corridorToNextFloor, vision)
   const framesSequence = calcGoMovementFrames(vision.makeFrames).slice(6)

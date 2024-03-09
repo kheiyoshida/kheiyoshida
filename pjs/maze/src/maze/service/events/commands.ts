@@ -24,7 +24,7 @@ export const go: CommandHandler = () => {
   if (validaters.canGo()) {
     // render
     const messageQueue: (() => void)[] = []
-    renderGo(getVisionFromCurrentState())
+    messageQueue.push(renderGo(getVisionFromCurrentState()))
     
     // domain
     const res = maze.navigate()
@@ -32,16 +32,16 @@ export const go: CommandHandler = () => {
     updateStats('walk')
     
     // render
-    renderCurrentView(getVisionFromCurrentState())
-    
+    messageQueue.push(renderCurrentView(getVisionFromCurrentState()))
+
+    messageQueue.forEach(f => f())
 
     if (validaters.shouldGoDownstairs()) {
       // domain
       store.updateAcceptCommand(false)
 
       // render
-      
-      renderGoDownstairs()
+      messageQueue.push(renderGoDownstairs(getVisionFromCurrentState()))
 
       // domain
       maze.goDownStairs()
@@ -49,11 +49,14 @@ export const go: CommandHandler = () => {
       updateStats('downstairs')
 
       // render
-      renderProceedToNextFloor()
-      renderCurrentView()
+      messageQueue.push(renderProceedToNextFloor(getVisionFromCurrentState()))
+      messageQueue.push(renderCurrentView(getVisionFromCurrentState()))
 
       // domain?
       RenderQueue.waitUntilQueueGetsEmpty(() => store.updateAcceptCommand(true))
+
+      // exec
+      
     } else {
       // render
       registerRecurringRender()
@@ -63,10 +66,11 @@ export const go: CommandHandler = () => {
 
 const turn = (dir: 'r' | 'l') => () => {
   if (!validaters.isAccepting()) return
-  renderTurn(dir)
+  const ren = renderTurn(dir)
+  ren(getVisionFromCurrentState())()
   maze.turn(dir)
   updateStats('turn')
-  renderCurrentView()
+  renderCurrentView(getVisionFromCurrentState())()
 }
 export const turnRight: CommandHandler = turn('r')
 export const turnLeft: CommandHandler = turn('l')
@@ -85,9 +89,9 @@ export const callMap: CommandHandler = () => {
 export const initialize: EventHandler = () => {
   maze.generateMaze()
   mapper.reset()
-  registerConcurrentConstantEvent()
-  registerRecurringRender()
-  renderCurrentView()
+  // registerConcurrentConstantEvent()
+  // registerRecurringRender()
+  // renderCurrentView(getVisionFromCurrentState())()
 }
 
 export const registerConcurrentConstantEvent: EventHandler = () => {
@@ -104,7 +108,7 @@ export const registerRecurringRender: EventHandler = () => {
   setIntervalEvent(
     'stand',
     () => {
-      renderCurrentView()
+      renderCurrentView(getVisionFromCurrentState())()
       updateStats('stand')
     },
     STAND_INTERVAL_MS
