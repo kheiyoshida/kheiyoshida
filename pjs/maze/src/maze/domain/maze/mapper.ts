@@ -1,13 +1,7 @@
 import { Position } from 'utils'
 import { store } from '../../store'
 
-
-
-export const toggleMap = () => {
-  store.toggleMap()
-}
-
-export const reset = () => {
+export const resetMap = () => {
   store.resetMap()
 }
 

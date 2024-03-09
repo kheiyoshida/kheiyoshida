@@ -7,10 +7,7 @@ import {
   renderTurn,
 } from '.'
 import { STAND_INTERVAL_MS } from '../../config/constants'
-import {
-  recurringConstantEventHandler,
-  recurringStandEventHandler,
-} from '../../domain/events/commands'
+import { recurringConstantEvent, recurringStandEvent } from '../../domain/events/events'
 import { MessageQueue, RenderSignal } from '../../domain/events/messages'
 import { setIntervalEvent } from '../timer'
 import { renderMap } from './others/map'
@@ -44,7 +41,7 @@ const registerConcurrentConstantEvent = () => {
   setIntervalEvent(
     'constant',
     () => {
-      recurringConstantEventHandler()
+      recurringConstantEvent()
       consumeMessageQueue()
     },
     STAND_INTERVAL_MS * 2
@@ -55,7 +52,7 @@ const registerRecurringRender = () => {
   setIntervalEvent(
     'stand',
     () => {
-      recurringStandEventHandler()
+      recurringStandEvent()
       consumeMessageQueue()
     },
     STAND_INTERVAL_MS

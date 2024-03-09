@@ -31,8 +31,11 @@ const initialState: MazeState = {
 
 const reducers = {
   // map
-  toggleMap: (s) => () => {
-    s.mapOpen = !s.mapOpen
+  openMap: (s) => () => {
+    s.mapOpen = true
+  },
+  closeMap: (s) => () => {
+    s.mapOpen = false
   },
   resetMap: (s) => () => {
     s.grid = buildGrid(s.matrix)

@@ -1,10 +1,10 @@
-import { initialize } from "../domain/events/commands"
-import { bindControl } from "./control"
-import { setupConstantConsumers } from "./render/consumer"
-import { demo } from "./sound/songs/demo"
+import { initializeEvent } from '../domain/events/events'
+import { bindControl } from './control'
+import { setupConstantConsumers } from './render/consumer'
+import { demo } from './sound/songs/demo'
 
 export const initializeServices = () => {
-  initialize()
+  initializeEvent()
   setupConstantConsumers()
   bindControl()
   demo()
