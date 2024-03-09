@@ -1,14 +1,13 @@
-import * as mapper from '../maze/mapper'
+import { store } from '../../store'
 import * as maze from '../maze/maze'
 import { getStats } from '../stats'
-import { store } from '../../store'
 
-export type CommandValidator = () => boolean
+type Validator = () => boolean
 
-export const isAccepting: CommandValidator = () => store.current.acceptCommand
+export const isAccepting: Validator = () => store.current.acceptCommand
 
-export const canGo: CommandValidator = () => maze.query.canProceed && getStats().stamina !== 0
+export const canGo: Validator = () => maze.query.canProceed && getStats().stamina !== 0
 
-export const shouldGoDownstairs: CommandValidator = () => maze.query.reachedStair
+export const shouldGoDownstairs: Validator = () => maze.query.reachedStair
 
-export const canOpenMap = () => !mapper.query.mapOpen
+export const canOpenMap: Validator = () => !store.current.mapOpen

@@ -24,13 +24,11 @@ export const updateStats = (pattern: StatsUpdatePattern) => {
   }
 }
 
-/**
- * get thresholds to trigger sanity/stamin low effects
- */
 export const floorToThreshold = (floor: number): [number, number] => {
   if (floor < 8) return [70, 30]
   if (floor < 16) return [80, 40]
   return [90, 50]
 }
 
-export const getRenderingSpeedFromCurrentState = () => 1 / toFloatPercent(Math.min(100, 30 + statusStore.current.stamina))
+export const getRenderingSpeedFromCurrentState = () =>
+  1 / toFloatPercent(Math.min(100, 30 + statusStore.current.stamina))

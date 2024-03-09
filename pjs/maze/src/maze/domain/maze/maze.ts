@@ -33,29 +33,14 @@ const retrieveInitialPositions = (matrix: Matrix) => {
 }
 
 export const query = {
-  get matrix() {
-    return store.current.matrix
-  },
-  get floor() {
-    return store.current.floor
-  },
-  get current() {
-    return store.current.current
-  },
-  get stairPos() {
-    return store.current.stairPos
-  },
-  get direction() {
-    return store.current.direction
-  },
   get currentNode() {
-    return this.matrix[this.current[0]][this.current[1]]!
+    return store.current.matrix[store.current.current[0]][store.current.current[1]]!
   },
   get canProceed() {
-    return this.currentNode.edges[this.direction]
+    return this.currentNode.edges[store.current.direction]
   },
   get reachedStair() {
-    return this.current[0] === this.stairPos[0] && this.current[1] === this.stairPos[1]
+    return store.current.current[0] === store.current.stairPos[0] && store.current.current[1] === store.current.stairPos[1]
   },
 }
 
@@ -67,31 +52,31 @@ export const goDownStairs = () => {
 
 export const navigate = () => {
   if (query.canProceed) {
-    const from = query.current
+    const from = store.current.current
     store.updateCurrent(getFrontLoc())
-    return { from, dest: query.current }
+    return { from, dest: store.current.current }
   }
 }
 
 export const turn = (d: 'r' | 'l') => {
-  store.updateDirection(compass(d, query.direction))
+  store.updateDirection(compass(d, store.current.direction))
 }
 
 export const getFrontLoc = (dist = 1): Position => {
-  const current = query.current
-  return reducePosition(current, positionalDirection(query.direction, dist))
+  const current = store.current.current
+  return reducePosition(current, positionalDirection(store.current.direction, dist))
 }
 
 export const getFrontNode = ({ dist }: { dist: number } = { dist: 1 }) => {
   const front = getFrontLoc(dist)
-  return getMatrixItem(query.matrix, front)
+  return getMatrixItem(store.current.matrix, front)
 }
 
 export const getPath = (i = 0): Node[] => {
   if (i > 2) return []
   const node = i === 0 ? query.currentNode : getFrontNode({ dist: i })
   if (node) {
-    if (node.edges[query.direction]) return [node].concat(getPath(i + 1))
+    if (node.edges[store.current.direction]) return [node].concat(getPath(i + 1))
     else return [node]
   }
   return []

@@ -1,12 +1,13 @@
+import { pipe } from 'utils'
 import { Node } from '../../store/entities/matrix/node'
 import { Direction } from '../maze/direction'
-import { pipe } from 'utils'
 import { toPathSpec } from './nodeSpec'
 import { RenderGrid, convertToRenderGrid } from './renderSpec'
-import * as maze from '../../domain/maze/maze'
+import { store } from '../../store'
+import { getPath } from '../maze/maze'
 
 export const getRenderGridFromCurrentState = () => {
-  return composeRenderGrid(maze.getPath(), maze.query.direction)
+  return composeRenderGrid(getPath(), store.current.direction)
 }
 
 export const composeRenderGrid = (path: Node[], direction: Direction): RenderGrid =>
