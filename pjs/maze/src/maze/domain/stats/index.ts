@@ -33,4 +33,4 @@ export const floorToThreshold = (floor: number): [number, number] => {
   return [90, 50]
 }
 
-export const getRenderingSpeed = () => 1 / toFloatPercent(Math.min(100, 30 + statusStore.current.stamina))
+export const getRenderingSpeedFromCurrentState = () => 1 / toFloatPercent(Math.min(100, 30 + statusStore.current.stamina))

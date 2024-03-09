@@ -1,3 +1,4 @@
+import { RenderGrid } from "../../../domain/compose/renderSpec"
 import { VisionIntention, getVisionIntentionFromCurrentState } from "../../../domain/vision"
 import { ApplyColors, resolveColorIntention } from "./color"
 import { allInOneDrawer } from "./draw/drawers"
@@ -12,6 +13,8 @@ export type Vision = {
   draw: (specs: DrawSpec[][]) => void
   finalize: DrawSpecFinalizer
   renewColors: ApplyColors
+  renderGrid: RenderGrid,
+  speed: number
 }
 
 export const getVisionFromCurrentState = (): Vision => {
@@ -24,11 +27,15 @@ export const consumeVisionIntention = ({
   framesMakerParams,
   drawParams,
   colorIntention,
+  renderGrid,
+  speed,
 }: VisionIntention): Vision => {
   return {
     makeFrames: consumeFrameMakerParams(strategy, framesMakerParams),
     draw: allInOneDrawer(drawParams),
     finalize: FinalizerMap[strategy],
     renewColors: resolveColorIntention(colorIntention),
+    renderGrid,
+    speed
   }
 }

@@ -1,5 +1,8 @@
 import { MazeState, statusStore, store } from '../../store'
 import { StatusState } from '../../store/status'
+import { getRenderGridFromCurrentState } from '../compose'
+import { RenderGrid } from '../compose/renderSpec'
+import { getRenderingSpeedFromCurrentState } from '../stats'
 import { domainColorLogic } from './color'
 import { ColorIntention } from './color/types'
 import { DrawParams, getDrawParams } from './drawParams'
@@ -10,7 +13,9 @@ export type VisionIntention = {
   strategy: VisionStrategy
   framesMakerParams: FrameMakerParams
   drawParams: DrawParams
-  colorIntention: ColorIntention
+  colorIntention: ColorIntention,
+  renderGrid: RenderGrid
+  speed: number
 }
 
 export type ListenableState = Pick<MazeState, 'floor'> & StatusState
@@ -26,5 +31,7 @@ export const getVisionIntentionFromCurrentState = (): VisionIntention => {
     framesMakerParams: calcFrameProviderParams(state),
     drawParams: getDrawParams(state),
     colorIntention: domainColorLogic(state),
+    renderGrid: getRenderGridFromCurrentState(),
+    speed: getRenderingSpeedFromCurrentState()
   }
 }
