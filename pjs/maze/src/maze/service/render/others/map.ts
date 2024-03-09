@@ -1,65 +1,73 @@
 import { pushPop } from 'p5utils/src/render'
+import { loop2D } from 'utils'
 import { Conf } from '../../../config'
 import { NESW } from '../../../domain/maze/direction'
 import { Vision } from '../vision'
 
-export const renderMap = ({ map: { grid, current, direction, floor } }: Vision) => () => {
-  const [ci, cj] = [current[0] * 2, current[1] * 2]
+export const renderMap =
+  ({ map: { grid, current, direction, floor } }: Vision) =>
+  () => {
+    const [currentI, currentJ] = [current[0] * 2, current[1] * 2]
+    const playerDir = NESW.indexOf(direction)
 
-  const d = NESW.indexOf(direction)
+    // determine position
+    const mapSize = Math.min(Conf.ww, Conf.wh) * Conf.mapSizing
+    const mapPosition = [(Conf.ww - mapSize) / 2, (Conf.wh - mapSize) / 2]
 
-  // determine position
-  const max = Math.min(Conf.ww, Conf.wh) * Conf.mapSizing
-  const pos = [(Conf.ww - max) / 2, (Conf.wh - max) / 2]
+    // show floor on the left top
+    p.text(`B${floor}F`, mapPosition[0], mapPosition[1])
 
-  // show floor on the left top of the map
-  p.text(`B${floor}F`, pos[0], pos[1])
+    // background
+    p.rect(mapPosition[0], mapPosition[1], mapSize)
 
-  // calc sizings
-  const gridL = grid.length
-  const k = 1.44
-  const nodeSize = (2 * max) / ((1 + k) * gridL + (1 - k))
-  const edgeSize = k * nodeSize
-  const sizeAvg = (nodeSize + edgeSize) / 2
+    // calc sizings
+    const gridLength = grid.length
+    const { sizeAvg, nodeSize, edgeSize } = calcMapSizings(mapSize, gridLength)
 
-  const drawGrid = (posX: number, posY: number, w: number, h: number) => {
-    p.rect(pos[0] + posX, pos[1] + posY, w, h)
-  }
+    const drawGrid = (posX: number, posY: number, w: number, h: number) => {
+      p.rect(mapPosition[0] + posX, mapPosition[1] + posY, w, h)
+    }
 
-  p.rect(pos[0], pos[1], max)
-  p.push()
-  p.noStroke()
+    p.push()
+    p.noStroke()
+    p.fill(100, 200)
 
-  for (let i = 0; i < gridL; i++) {
-    for (let j = 0; j < gridL; j++) {
+    // map
+    loop2D(gridLength, (i, j) => {
       const cell = grid[i][j]
-      if (cell && cell.visited) {
-        // if (cell && cell.visited) {
-        p.fill(100, 200)
-        const [ie, je] = [i % 2 === 0, j % 2 === 0]
-        // node
-        if (ie && je) {
-          drawGrid(sizeAvg * j, sizeAvg * i, nodeSize, nodeSize)
-          // current position
-          if (ci === i && cj === j) {
-            pushPop(() => {
-              p.fill(255)
-              p.translate(pos[0] + sizeAvg * j + nodeSize / 2, pos[1] + sizeAvg * i + nodeSize / 2)
-              p.rotate(d * p.HALF_PI)
-              p.triangle(0, -nodeSize / 2, nodeSize / 2, nodeSize / 2, -nodeSize / 2, nodeSize / 2)
-            })
-          }
-        }
-        // edge
-        else {
-          if (!je) {
-            drawGrid(sizeAvg * (j - 1) + nodeSize, sizeAvg * i, edgeSize, nodeSize)
-          } else {
-            drawGrid(sizeAvg * j, sizeAvg * (i - 1) + nodeSize, nodeSize, edgeSize)
-          }
+      if (!cell) return
+      const [iEven, jEven] = [i % 2 === 0, j % 2 === 0]
+      // node
+      if (iEven && jEven) {
+        drawGrid(sizeAvg * j, sizeAvg * i, nodeSize, nodeSize)
+      }
+      // edge
+      else {
+        if (!jEven) {
+          drawGrid(sizeAvg * (j - 1) + nodeSize, sizeAvg * i, edgeSize, nodeSize)
+        } else {
+          drawGrid(sizeAvg * j, sizeAvg * (i - 1) + nodeSize, nodeSize, edgeSize)
         }
       }
-    }
+    })
+    p.pop()
+
+    // current position
+    pushPop(() => {
+      p.fill(255)
+      p.translate(
+        mapPosition[0] + sizeAvg * currentJ + nodeSize / 2,
+        mapPosition[1] + sizeAvg * currentI + nodeSize / 2
+      )
+      p.rotate(playerDir * p.HALF_PI)
+      p.triangle(0, -nodeSize / 2, nodeSize / 2, nodeSize / 2, -nodeSize / 2, nodeSize / 2)
+    })
   }
-  p.pop()
+
+export function calcMapSizings(mapSize: number, gridLength: number) {
+  const sizeRatio = 1.44
+  const nodeSize = (2 * mapSize) / ((1 + sizeRatio) * gridLength + (1 - sizeRatio))
+  const edgeSize = sizeRatio * nodeSize
+  const sizeAvg = (nodeSize + edgeSize) / 2
+  return { sizeAvg, nodeSize, edgeSize }
 }
