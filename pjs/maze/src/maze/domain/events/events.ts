@@ -7,6 +7,7 @@ import { MessageQueue, RenderSignal } from './messages'
 export const initializeEvent = () => {
   maze.generateMaze()
   mapper.resetMap()
+  MessageQueue.push(RenderSignal.CurrentView)
 }
 
 export const recurringConstantEvent = () => {
