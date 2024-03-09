@@ -64,9 +64,11 @@ export const renderMap =
     })
   }
 
-export function calcMapSizings(mapSize: number, gridLength: number) {
-  const sizeRatio = 1.44
-  const nodeSize = (2 * mapSize) / ((1 + sizeRatio) * gridLength + (1 - sizeRatio))
+export function calcMapSizings(mapSize: number, gridLength: number, sizeRatio = 1.44) {
+  // if nodes are 6, edges are 5 in total. 
+  // total number of unit (the rendered size of node) is:
+  const totalUnitNum = (1 + sizeRatio) * gridLength - (sizeRatio - 1)
+  const nodeSize = (2 * mapSize) / totalUnitNum
   const edgeSize = sizeRatio * nodeSize
   const sizeAvg = (nodeSize + edgeSize) / 2
   return { sizeAvg, nodeSize, edgeSize }
