@@ -21,7 +21,6 @@ export const ConsumeMessageMap: Record<RenderSignal, MakeRender> = {
   [RenderSignal.GoDownStairs]: renderGoDownstairs,
   [RenderSignal.ProceedToNextFloor]: renderProceedToNextFloor,
   [RenderSignal.OpenMap]: renderMap,
-  [RenderSignal.CloseMap]: renderCurrentView,
 }
 
 export const consumeMessageQueue = () => {
