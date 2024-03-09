@@ -1,5 +1,3 @@
-import { pushPop } from 'p5utils/src/render'
-
 const btnFac = (base: number) => (text: string, x: number, y: number) => {
   const btn = p.createDiv(text)
   btn.style('color', 'rgba(255,255,255,0.4)')

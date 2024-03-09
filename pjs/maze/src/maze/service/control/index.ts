@@ -1,5 +1,5 @@
-import { Conf } from '../config'
-import * as events from '../service/events/commands'
+import { Conf } from '../../config'
+import * as events from '../events/commands'
 import { renderGUI } from './gui'
 
 const CONTROL_WW_THRESHOLD = 1000
