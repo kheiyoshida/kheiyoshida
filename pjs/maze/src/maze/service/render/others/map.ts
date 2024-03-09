@@ -1,71 +1,75 @@
-import { pushPop } from 'p5utils/src/render'
-import { loop2D } from 'utils'
+import p5 from 'p5'
+import { Position, loop2D } from 'utils'
 import { Conf } from '../../../config'
 import { NESW } from '../../../domain/maze/direction'
+import { MapInfo } from '../../../domain/maze/mapper'
 import { Vision } from '../vision'
+import { getPalette } from '../vision/color/palette'
 
 export const renderMap =
-  ({ map: { grid, current, direction, floor } }: Vision) =>
+  ({ map }: Vision) =>
   () => {
-    const [currentI, currentJ] = [current[0] * 2, current[1] * 2]
-    const playerDir = NESW.indexOf(direction)
-
-    // determine position
     const mapSize = Math.min(Conf.ww, Conf.wh) * Conf.mapSizing
-    const mapPosition = [(Conf.ww - mapSize) / 2, (Conf.wh - mapSize) / 2]
-
-    // show floor on the left top
-    p.text(`B${floor}F`, mapPosition[0], mapPosition[1])
-
-    // background
-    p.rect(mapPosition[0], mapPosition[1], mapSize)
-
-    // calc sizings
-    const gridLength = grid.length
-    const { sizeAvg, nodeSize, edgeSize } = calcMapSizings(mapSize, gridLength)
-
-    const drawGrid = (posX: number, posY: number, w: number, h: number) => {
-      p.rect(mapPosition[0] + posX, mapPosition[1] + posY, w, h)
-    }
-
-    p.push()
-    p.noStroke()
-    p.fill(100, 200)
-
-    // map
-    loop2D(gridLength, (i, j) => {
-      const cell = grid[i][j]
-      if (!cell) return
-      const [iEven, jEven] = [i % 2 === 0, j % 2 === 0]
-      // node
-      if (iEven && jEven) {
-        drawGrid(sizeAvg * j, sizeAvg * i, nodeSize, nodeSize)
-      }
-      // edge
-      else {
-        if (!jEven) {
-          drawGrid(sizeAvg * (j - 1) + nodeSize, sizeAvg * i, edgeSize, nodeSize)
-        } else {
-          drawGrid(sizeAvg * j, sizeAvg * (i - 1) + nodeSize, nodeSize, edgeSize)
-        }
-      }
-    })
-    p.pop()
-
-    // current position
-    pushPop(() => {
-      p.fill(255)
-      p.translate(
-        mapPosition[0] + sizeAvg * currentJ + nodeSize / 2,
-        mapPosition[1] + sizeAvg * currentI + nodeSize / 2
-      )
-      p.rotate(playerDir * p.HALF_PI)
-      p.triangle(0, -nodeSize / 2, nodeSize / 2, nodeSize / 2, -nodeSize / 2, nodeSize / 2)
-    })
+    const mapPosition: Position = [(Conf.ww - mapSize) / 2, (Conf.wh - mapSize) / 2]
+    renderFloor(mapPosition, map.floor)
+    const pg = p.createGraphics(mapSize, mapSize)
+    drawMap(pg, map)
+    p.image(pg, ...mapPosition)
   }
 
+const renderFloor = (position: Position, floor: number) => {
+  p.text(`B${floor}F`, ...position)
+}
+
+export const drawMap = (pg: p5.Graphics, { grid, current, direction }: MapInfo) => {
+  const playerDir = NESW.indexOf(direction)
+  const mapSize = pg.width
+
+  const palette = getPalette()
+  pg.fill(palette.fill)
+  pg.stroke(palette.stroke)
+  pg.rect(0, 0, mapSize, mapSize)
+
+  // calc sizings
+  const gridLength = grid.length
+  const { sizeAvg, nodeSize, edgeSize } = calcMapSizings(mapSize, gridLength)
+
+  pg.push()
+  pg.noStroke()
+  pg.fill(100, 200)
+
+  // map
+  loop2D(gridLength, (i, j) => {
+    const cell = grid[i][j]
+    if (!cell || !cell.visited) return
+    const [iEven, jEven] = [i % 2 === 0, j % 2 === 0]
+    // node
+    if (iEven && jEven) {
+      pg.rect(sizeAvg * j, sizeAvg * i, nodeSize, nodeSize)
+    }
+    // edge
+    else {
+      if (!jEven) {
+        pg.rect(sizeAvg * (j - 1) + nodeSize, sizeAvg * i, edgeSize, nodeSize)
+      } else {
+        pg.rect(sizeAvg * j, sizeAvg * (i - 1) + nodeSize, nodeSize, edgeSize)
+      }
+    }
+  })
+  pg.pop()
+
+  // current position
+  const [currentI, currentJ] = [current[0] * 2, current[1] * 2]
+  pg.push()
+  pg.fill(255)
+  pg.translate(sizeAvg * currentJ + nodeSize / 2, sizeAvg * currentI + nodeSize / 2)
+  pg.rotate(playerDir * pg.HALF_PI)
+  pg.triangle(0, -nodeSize / 2, nodeSize / 2, nodeSize / 2, -nodeSize / 2, nodeSize / 2)
+  pg.pop()
+}
+
 export function calcMapSizings(mapSize: number, gridLength: number, sizeRatio = 1.44) {
-  // if nodes are 6, edges are 5 in total. 
+  // if nodes are 6, edges are 5 in total.
   // total number of unit (the rendered size of node) is:
   const totalUnitNum = (1 + sizeRatio) * gridLength - (sizeRatio - 1)
   const nodeSize = (2 * mapSize) / totalUnitNum
