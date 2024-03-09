@@ -2,7 +2,7 @@ import { ListenableState } from '../../../../domain/vision'
 import { DrawPoint } from '../draw/types'
 import { FrameMakerParams } from '../../../../domain/vision/frameMake'
 import { VisionStrategy } from '../../../../domain/vision/strategy'
-import { FramesMaker, highDistortedNarrow, highRoofDistortedNarrow } from './framesMaker'
+import { MakeFrames, highDistortedNarrow, highRoofDistortedNarrow } from './framesMaker'
 
 export type Frame = {
   tl: DrawPoint
@@ -11,7 +11,7 @@ export type Frame = {
   br: DrawPoint
 }
 
-export type FrameProvider = (state: ListenableState) => FramesMaker
+export type FrameProvider = (state: ListenableState) => MakeFrames
 
 export const consumeFrameMakerParams = (strategy: VisionStrategy, params: FrameMakerParams) => {
   if (strategy === VisionStrategy.normal) return highDistortedNarrow(params)

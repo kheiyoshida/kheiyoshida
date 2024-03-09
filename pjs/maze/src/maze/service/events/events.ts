@@ -8,7 +8,7 @@ import {
   renderGo,
   renderGoDownstairs,
   renderProceedToNextFloor,
-  makeRenderTurn,
+  renderTurn,
 } from '../render'
 import { renderMap } from '../render/others/map'
 import { RenderQueue } from '../render/queue'
@@ -54,7 +54,7 @@ export const goEvent: EventHandler = () => {
 }
 
 export const turnEvent = (dir: 'r' | 'l') => () => {
-  makeRenderTurn(dir)()
+  renderTurn(dir)
   maze.turn(dir)
   updateStats('turn')
   renderCurrentView()

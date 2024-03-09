@@ -5,10 +5,10 @@ import { DrawSpec } from "./draw/types"
 import { FinalizerMap } from "./drawSpec"
 import { DrawSpecFinalizer } from "./drawSpec/finalize"
 import { consumeFrameMakerParams } from "./frame"
-import { FramesMaker } from "./frame/framesMaker"
+import { MakeFrames } from "./frame/framesMaker"
 
 export type Vision = {
-  frames: FramesMaker
+  makeFrames: MakeFrames
   draw: (specs: DrawSpec[][]) => void
   finalize: DrawSpecFinalizer
   renewColors: ApplyColors
@@ -26,7 +26,7 @@ export const consumeVisionIntention = ({
   colorIntention,
 }: VisionIntention): Vision => {
   return {
-    frames: consumeFrameMakerParams(strategy, framesMakerParams),
+    makeFrames: consumeFrameMakerParams(strategy, framesMakerParams),
     draw: allInOneDrawer(drawParams),
     finalize: FinalizerMap[strategy],
     renewColors: resolveColorIntention(colorIntention),
