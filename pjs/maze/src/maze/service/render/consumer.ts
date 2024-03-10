@@ -6,7 +6,7 @@ import { recurringConstantEvent, recurringStandEvent } from '../../domain/events
 import { MessageQueue, RenderSignal } from '../../domain/events/messages'
 import { setIntervalEvent } from '../timer'
 import { renderMap } from './others/map'
-import { renderCurrentView3d, renderGo3d, renderTurn3d } from './render3d'
+import { renderCurrentView3d, renderGo3d, renderGoDownstairs3d, renderProceedToNextFloor3d, renderTurn3d } from './render3d'
 import { consumeVisionIntention } from './vision'
 
 export const ConsumeMessageMap: Record<RenderSignal, MakeRender> = {
@@ -14,8 +14,8 @@ export const ConsumeMessageMap: Record<RenderSignal, MakeRender> = {
   [RenderSignal.Go]: renderGo3d,
   [RenderSignal.TurnRight]: renderTurn3d('r'),
   [RenderSignal.TurnLeft]: renderTurn3d('l'),
-  [RenderSignal.GoDownStairs]: renderCurrentView3d,
-  [RenderSignal.ProceedToNextFloor]: renderCurrentView3d,
+  [RenderSignal.GoDownStairs]: renderGoDownstairs3d,
+  [RenderSignal.ProceedToNextFloor]: renderProceedToNextFloor3d,
   [RenderSignal.OpenMap]: renderMap,
 }
 

@@ -1,12 +1,13 @@
 import { drawAtPosition3D } from 'p5utils/src/render'
 import { Conf } from '../../../config'
 import { RenderGrid } from '../../../domain/compose/renderSpec'
-import { registerIntervalRenderSequence } from '../base'
+import { registerIntervalRenderSequence, reserveIntervalRender } from '../base'
 import { RenderQueue } from '../queue'
 import { Vision } from '../vision'
 import { getPalette } from '../vision/color/palette'
-import { GoMoveMagValues, TurnMoveLRDeltaValues, cameraReset, moveCamera } from './camera'
+import { DownstairsValues, GoMoveMagValues, TurnMoveLRDeltaValues, cameraReset, moveCamera } from './camera'
 import { convertRenderGridIntoCoordinates } from './position'
+import { corridorToNextFloor } from '../others/scenes'
 
 export const renderCurrentView3d =
   ({ renderGrid }: Vision) =>
@@ -25,6 +26,7 @@ export const renderCurrentTerrain = (renderGrid: RenderGrid) => {
   coordinates.forEach((position3d) => {
     drawAtPosition3D(position3d, () => {
       p.fill(100)
+      p.noStroke()
       p.box(1000)
     })
   })
@@ -54,4 +56,22 @@ export const renderTurn3d = (d: 'r' | 'l') => ({renderGrid, speed}: Vision) => (
     renderCurrentTerrain(renderGrid)
   })
   registerIntervalRenderSequence(interval, renderFns)
+}
+
+export const renderGoDownstairs3d = ({renderGrid, speed}: Vision) => () => {
+  const interval = speed * Conf.frameInterval * 3 
+  const renderFns = DownstairsValues.map((values) => () => {
+    moveCamera(...values)
+    renderCurrentTerrain(renderGrid)
+  })
+  reserveIntervalRender(interval, renderFns)
+}
+
+export const renderProceedToNextFloor3d = (vision: Vision) => () => {
+  const interval = vision.speed * Conf.frameInterval * 2
+  const renderFns = GoMoveMagValues.slice(6).map((val) => () => {
+    moveCamera(val)
+    renderCurrentTerrain(corridorToNextFloor)
+  })
+  reserveIntervalRender(interval, renderFns)
 }

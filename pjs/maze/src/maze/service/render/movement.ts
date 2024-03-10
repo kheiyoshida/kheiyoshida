@@ -38,7 +38,9 @@ export const calcDownStairsMovementFrames = (makeFrames: MakeFrames) => {
     return makeFrames(r * 1.05).map((f) =>
       translateFrame([
         0,
-        i % 2 === 0 ? -wh * hd * r * 1.2 - fixed * 2 : -wh * hd * r * 1.2 - fixed * 1.8,
+        i % 2 === 0
+          ? -wh * hd * r * 1.2 - fixed * 2 //
+          : -wh * hd * r * 1.2 - fixed * 1.8, //
       ])(f)
     )
   })
