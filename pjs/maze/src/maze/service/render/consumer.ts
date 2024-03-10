@@ -11,10 +11,11 @@ import { recurringConstantEvent, recurringStandEvent } from '../../domain/events
 import { MessageQueue, RenderSignal } from '../../domain/events/messages'
 import { setIntervalEvent } from '../timer'
 import { renderMap } from './others/map'
+import { renderCurrentView3d } from './render3d'
 import { consumeVisionIntention } from './vision'
 
 export const ConsumeMessageMap: Record<RenderSignal, MakeRender> = {
-  [RenderSignal.CurrentView]: renderCurrentView,
+  [RenderSignal.CurrentView]: renderCurrentView3d,
   [RenderSignal.Go]: renderGo,
   [RenderSignal.TurnRight]: renderTurn('r'),
   [RenderSignal.TurnLeft]: renderTurn('l'),

@@ -9,12 +9,22 @@ export type RenderGrid = [
   RenderLayer,
 ]
 
-type RenderLayer = [left: RenderPattern, center: RenderPattern, right: RenderPattern] | null
+export type RenderLayer = ConcreteRenderLayer | null
+export type ConcreteRenderLayer = [left: RenderPattern, center: RenderPattern, right: RenderPattern]
+
+type TupleIndices<T extends readonly any[]> = Extract<
+  keyof T,
+  `${number}`
+> extends `${infer N extends number}`
+  ? N
+  : never
+
+export type RenderLayerIndex = TupleIndices<RenderGrid>
 
 export enum RenderPosition {
-  LEFT,
-  CENTER,
-  RIGHT,
+  LEFT = 0,
+  CENTER = 1,
+  RIGHT = 2,
 }
 
 export enum RenderPattern {

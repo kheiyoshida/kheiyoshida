@@ -27,7 +27,6 @@ export const renderCurrentView = (vision: Vision) => () => {
 }
 
 export const renderGo = (vision: Vision) => () => {
-  vision.renewColors()
   const interval = vision.speed * Conf.frameInterval
   const framesSequence = calcGoMovementFrames(vision.makeFrames)
   const renderFnMaker = makeRenderFn(vision.renderGrid, vision)

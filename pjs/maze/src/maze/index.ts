@@ -11,7 +11,7 @@ const VERSION = pjson.version
 let started = false
 
 const setup = () => {
-  p.createCanvas(Conf.ww, Conf.wh)
+  p.createCanvas(Conf.ww, Conf.wh, p.WEBGL)
   applyPalette(getPalette())
   p.noLoop()
   p.textSize(32)
