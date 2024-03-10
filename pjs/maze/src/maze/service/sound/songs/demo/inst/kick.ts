@@ -13,7 +13,7 @@ const createKickCh = () => {
       new Tone.Filter({ frequency: 200, type: 'lowpass' }),
       new Tone.Compressor(-10, 1.5).set({ attack: 0.8, release: 0.1 }),
     ],
-    initialVolume: -80,
+    initialVolume: -40,
     volumeRange: {
       max: -16,
       min: -40,
@@ -41,7 +41,7 @@ export const setupKick = () => {
     generator.resetNotes(kickTemplate)
     repeatLoop()
   })
-
+  kickCh.mute('on')
   mgnr.registerTimeEvents({
     repeat: [
       {
