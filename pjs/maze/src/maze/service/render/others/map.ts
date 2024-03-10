@@ -10,23 +10,20 @@ export const renderMap =
   ({ map }: Vision) =>
   () => {
     const mapSize = Math.min(Conf.ww, Conf.wh) * Conf.mapSizing
-    const mapPosition: Position = [(Conf.ww - mapSize) / 2, (Conf.wh - mapSize) / 2]
-    renderFloor(mapPosition, map.floor)
-    const pg = p.createGraphics(mapSize, mapSize)
+    const mapPosition: Position = [-mapSize / 2, -mapSize / 2]
+    const pg = p.createGraphics(mapSize + 100, mapSize)
     drawMap(pg, map)
+    pg.textSize(32)
+    pg.text(`B${map.floor}F`, mapSize + 8, 32)
     p.image(pg, ...mapPosition)
   }
 
-const renderFloor = (position: Position, floor: number) => {
-  p.text(`B${floor}F`, ...position)
-}
-
 export const drawMap = (pg: p5.Graphics, { grid, current, direction }: MapInfo) => {
   const playerDir = NESW.indexOf(direction)
-  const mapSize = pg.width
+  const mapSize = pg.height
 
   const palette = getPalette()
-  pg.fill(palette.fill)
+  pg.fill(0, 200)
   pg.stroke(palette.stroke)
   pg.rect(0, 0, mapSize, mapSize)
 

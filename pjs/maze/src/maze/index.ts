@@ -21,7 +21,7 @@ const setup = () => {
       started = true
       initializeServices()
     }
-    // toneStart()
+    toneStart()
   }
 
   renderStartPage(VERSION)
