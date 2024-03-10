@@ -5,7 +5,7 @@ import { registerIntervalRenderSequence } from '../base'
 import { RenderQueue } from '../queue'
 import { Vision } from '../vision'
 import { getPalette } from '../vision/color/palette'
-import { GoMoveMagValues, cameraReset, moveCamera } from './camera'
+import { GoMoveMagValues, TurnMoveLRDeltaValues, cameraReset, moveCamera } from './camera'
 import { convertRenderGridIntoCoordinates } from './position'
 
 export const renderCurrentView3d =
@@ -40,3 +40,12 @@ export const renderGo3d =
     })
     registerIntervalRenderSequence(interval, renderFns)
   }
+
+export const renderTurn3d = (d: 'r' | 'l') => ({renderGrid, speed}: Vision) => () => {
+  const interval = speed * Conf.frameInterval
+  const renderFns = TurnMoveLRDeltaValues.map((val) => () => {
+    moveCamera(0, d === 'r' ? val : -val)
+    renderCurrentTerrain(renderGrid)
+  })
+  registerIntervalRenderSequence(interval, renderFns)
+}
