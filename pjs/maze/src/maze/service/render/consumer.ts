@@ -1,10 +1,5 @@
 import {
-  MakeRender,
-  renderCurrentView,
-  renderGo,
-  renderGoDownstairs,
-  renderProceedToNextFloor,
-  renderTurn,
+  MakeRender
 } from '.'
 import { STAND_INTERVAL_MS } from '../../config/constants'
 import { recurringConstantEvent, recurringStandEvent } from '../../domain/events/events'
