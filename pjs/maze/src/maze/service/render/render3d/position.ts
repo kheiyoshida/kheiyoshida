@@ -20,6 +20,17 @@ export const convertRenderGridIntoCoordinates = (renderGrid: RenderGrid): [Posit
       }
     })
   })
+  renderGrid.forEach((layer, layerIndex) => {
+    if (!layer) return
+    layer.forEach((pattern, position) => {
+      coordinates.push([
+        positionToXValue(position), 1000, indexToZValue(layerIndex as RenderLayerIndex)
+      ])
+      coordinates.push([
+        positionToXValue(position), -1000, indexToZValue(layerIndex as RenderLayerIndex)
+      ])
+    })
+  })
   return [coordinates, stair]
 }
 

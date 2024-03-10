@@ -15,6 +15,8 @@ const setup = () => {
   applyPalette(getPalette())
   p.noLoop()
   p.textSize(32)
+  p.angleMode(p.DEGREES)
+  p.perspective(60, p.width / p.height, 0.1, 2800)
 
   const start = () => {
     if (!started) {
