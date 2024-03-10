@@ -52,10 +52,10 @@ export const renderCurrentTerrain = (renderGrid: RenderGrid) => {
   p.background(getPalette().fill)
   p.pointLight(100, 100, 100, 0, 0, 0)
   p.ambientLight(20, 20, 20, 200)
-  p.texture(randomTexture())
+  // p.texture(randomTexture())
   coordinates.forEach((position3d) => {
     drawAtPosition3D(position3d, () => {
-      // p.fill(100)
+      p.fill(20)
       p.noStroke()
       p.box(1000)
     })
