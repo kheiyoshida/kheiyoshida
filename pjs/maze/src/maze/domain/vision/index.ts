@@ -33,8 +33,8 @@ export const getVisionIntentionFromCurrentState = (): VisionIntention => {
     framesMakerParams: calcFrameProviderParams(state),
     drawParams: getDrawParams(state),
     colorIntention: domainColorLogic(state),
-    // renderGrid: getRenderGridFromCurrentState(),
-    renderGrid: [null, null, [1, 1, 1], [0, 0, 1], [1, 0, 1], [1, 0, 0]],
+    renderGrid: getRenderGridFromCurrentState(),
+    // renderGrid: [null, null, [1, 1, 1], [0, 0, 1], [1, 0, 1], [1, 0, 0]],
     speed: getRenderingSpeedFromCurrentState(),
     map: getMapInfoFromCurrentState()
   }

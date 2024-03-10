@@ -16,11 +16,11 @@ import { consumeVisionIntention } from './vision'
 
 export const ConsumeMessageMap: Record<RenderSignal, MakeRender> = {
   [RenderSignal.CurrentView]: renderCurrentView3d,
-  [RenderSignal.Go]: renderGo,
-  [RenderSignal.TurnRight]: renderTurn('r'),
-  [RenderSignal.TurnLeft]: renderTurn('l'),
-  [RenderSignal.GoDownStairs]: renderGoDownstairs,
-  [RenderSignal.ProceedToNextFloor]: renderProceedToNextFloor,
+  [RenderSignal.Go]: renderCurrentView3d,
+  [RenderSignal.TurnRight]: renderCurrentView3d,
+  [RenderSignal.TurnLeft]: renderCurrentView3d,
+  [RenderSignal.GoDownStairs]: renderCurrentView3d,
+  [RenderSignal.ProceedToNextFloor]: renderCurrentView3d,
   [RenderSignal.OpenMap]: renderMap,
 }
 

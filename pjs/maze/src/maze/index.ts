@@ -24,7 +24,7 @@ const setup = () => {
     toneStart()
   }
 
-  renderStartPage(VERSION)
+  // renderStartPage(VERSION)
 
   p.mouseClicked = start
   p.touchStarted = start
