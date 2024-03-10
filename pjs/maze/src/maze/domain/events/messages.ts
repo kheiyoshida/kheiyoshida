@@ -23,6 +23,7 @@ const createMessageQueue = () => {
     throw Error(`message queue is empty`)
   }
   const consume = (cb: (message: RenderMessage) => void) => {
+    console.log(MessageQueue.map(q => q[0]))
     while (MessageQueue.length) {
       cb(_consume())
     }
