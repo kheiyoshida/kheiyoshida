@@ -20,7 +20,7 @@ export const renderCurrentView3d =
   }
 
 export const renderCurrentTerrain = (renderGrid: RenderGrid) => {
-  const coordinates = convertRenderGridIntoCoordinates(renderGrid)
+  const [coordinates, stair] = convertRenderGridIntoCoordinates(renderGrid)
   p.background(getPalette().fill)
   coordinates.forEach((position3d) => {
     drawAtPosition3D(position3d, () => {
@@ -28,6 +28,12 @@ export const renderCurrentTerrain = (renderGrid: RenderGrid) => {
       p.box(1000)
     })
   })
+  if (stair) {
+    drawAtPosition3D(stair, () => {
+      p.fill('red')
+      p.box(500)
+    })
+  }
 }
 
 export const renderGo3d =

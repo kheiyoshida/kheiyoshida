@@ -6,17 +6,21 @@ import {
   RenderPosition,
 } from '../../../domain/compose/renderSpec'
 
-export const convertRenderGridIntoCoordinates = (renderGrid: RenderGrid): Position3D[] => {
+export const convertRenderGridIntoCoordinates = (renderGrid: RenderGrid): [Position3D[] , Position3D | undefined]=> {
   const coordinates: Position3D[] = []
+  let stair: Position3D | undefined
   renderGrid.forEach((layer, layerIndex) => {
     if (!layer) return
     layer.forEach((pattern, position) => {
       if (pattern === RenderPattern.FILL) {
         coordinates.push(indexToCoordinates(layerIndex as RenderLayerIndex, position))
       }
+      if (pattern === RenderPattern.STAIR) {
+        stair = indexToCoordinates(layerIndex as RenderLayerIndex, position)
+      }
     })
   })
-  return coordinates
+  return [coordinates, stair]
 }
 
 export const indexToCoordinates = (
