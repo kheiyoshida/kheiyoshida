@@ -27,6 +27,7 @@ export type PageContent = {
 export type ImageInfo = {
   images: ImgData[]
   layout?: ImageLayout|null
+  priority?: boolean
 }
 
 export type ImgData = {

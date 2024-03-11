@@ -5,15 +5,11 @@ import { Images } from '../content/Image'
 export const Feed = ({ works }: { works: WorkPageInfo[] }) => {
   return (
     <div className={styles.feed}>
-      {works.map((w) => (
+      {works.map((w, i) => (
         <div key={`feed-${w.id}`} className={styles.feed__item}>
-          <FeedContentBlock work={w} />
+          <Images imageInfo={{ ...w.thumbnail, priority: i < 3 }} />
         </div>
       ))}
     </div>
   )
-}
-
-export const FeedContentBlock = ({ work }: { work: WorkPageInfo }) => {
-  return <Images imageInfo={work.thumbnail} />
 }
