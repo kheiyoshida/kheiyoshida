@@ -1,4 +1,4 @@
-import { retrieveImgAlt } from '@/lib/image'
+import { imageKitLoader, retrieveImgAlt } from '@/lib/image'
 import styles from '@/styles/components/content/Image.module.scss'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -35,6 +35,7 @@ export const FlexibleImage = ({ path, link, placeholderPath }: ImgData) => {
         src={path}
         alt={retrieveImgAlt(path)}
         fill
+        loader={imageKitLoader}
         onLoad={(e) => {
           setLoadedImageAspectRatio(e)
           setLoaded(true)
@@ -65,6 +66,7 @@ const Placeholder = ({
           src={placeholderPath}
           alt={retrieveImgAlt(placeholderPath)}
           fill
+          loader={imageKitLoader}
           onLoad={(e) => {
             setRatio(e)
             setPHLoaded(true)
