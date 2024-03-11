@@ -1,7 +1,7 @@
 import { imageKitLoader, retrieveImgAlt } from '@/lib/image'
 import styles from '@/styles/components/content/Image.module.scss'
 import Image from 'next/image'
-import { useState } from 'react'
+import { SyntheticEvent, useState } from 'react'
 import { MaxContentWidth } from '../../constants'
 import { ImageInfo, ImgData } from '../../types'
 import { Loading } from '../site/Loading'
@@ -30,17 +30,12 @@ export const FlexibleImage = ({ path, link, placeholderPath }: ImgData) => {
       style={ratio ? { aspectRatio: ratio } : { aspectRatio: 4 / 3 }}
     >
       {link ? <a href={link} className={styles.images__item__link} /> : null}
-      <Image
-        className={styles.images__item__img}
-        src={path}
-        alt={retrieveImgAlt(path)}
-        fill
-        loader={imageKitLoader}
+      <CustomImage
+        path={path}
         onLoad={(e) => {
           setLoadedImageAspectRatio(e)
           setLoaded(true)
         }}
-        sizes={`(max-width: ${MaxContentWidth}px) 100vw, ${MaxContentWidth}px`}
       />
       {imgLoaded === false ? (
         <Placeholder placeholderPath={placeholderPath} setRatio={setLoadedImageAspectRatio} />
@@ -57,24 +52,38 @@ const Placeholder = ({
   setRatio: (e: React.SyntheticEvent<HTMLImageElement>) => void
 }) => {
   const [phLoaded, setPHLoaded] = useState(false)
-
   return (
     <>
       {placeholderPath ? (
-        <Image
-          className={styles.images__item__img}
-          src={placeholderPath}
-          alt={retrieveImgAlt(placeholderPath)}
-          fill
-          loader={imageKitLoader}
+        <CustomImage
+          path={placeholderPath}
           onLoad={(e) => {
             setRatio(e)
             setPHLoaded(true)
           }}
-          sizes={`(max-width: ${MaxContentWidth}px) 100vw, ${MaxContentWidth}px`}
         />
       ) : null}
       {!phLoaded ? <Loading /> : null}
     </>
+  )
+}
+
+const CustomImage = ({
+  path,
+  onLoad,
+}: {
+  path: string
+  onLoad: (e: SyntheticEvent<HTMLImageElement, Event>) => void
+}) => {
+  return (
+    <Image
+      className={styles.images__item__img}
+      src={path}
+      alt={retrieveImgAlt(path)}
+      fill
+      loader={imageKitLoader}
+      onLoad={onLoad}
+      sizes={`(max-width: ${MaxContentWidth}px) 100vw, ${MaxContentWidth}px`}
+    />
   )
 }
