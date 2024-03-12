@@ -1,19 +1,19 @@
 import p5 from 'p5'
 import { applyMonochromeFilter, applyRandomSwap } from 'p5utils/src/media/image'
 import { loop, pipe } from 'utils'
+import image from '../../assets/img/suface-water/p1.png'
 import { P5Canvas } from '../../lib/p5canvas'
-import { CanvasSize, DefaultGrayValue, DrawGrayValue, DrawIndicateValue } from './config'
+import { CanvasSize, DefaultGrayValue, DrawIndicateValue } from './config'
 import { addNoise, blur } from './effects'
 import { drawSoundShape } from './shape'
 import { analyser, soundSource } from './sound'
-import image from '../../assets/img/suface-water/p1.png'
 
 let img: p5.Image
 const preload = () => {
   img = p.loadImage(image)
 }
 
-const renderSound = false
+const renderSound = true
 
 const setup = () => {
   p.createCanvas(CanvasSize, CanvasSize, renderSound ? p.WEBGL : p.P2D)
@@ -40,9 +40,10 @@ const setup = () => {
 
 const draw = () => {
   if (renderSound) {
+    p.camera(0, 0, 1800 + Math.sin(p.millis() * 0.0001) * 1000);
+    p.rotateY(360 * Math.cos(p.millis() * 0.0001))
     renderSoundWave()
   }
-  
 }
 
 const applyImageEffects = (img: p5.Image) => {
@@ -59,8 +60,6 @@ const applyPixelEffects = () => {
 
 const renderSoundWave = () => {
   paintScreen()
-
-  p.stroke(DrawGrayValue, 200)
   p.rotateX(-10)
   drawSoundShape(analyser.analyze())
 }
@@ -68,8 +67,9 @@ const renderSoundWave = () => {
 const paintScreen = () => {
 
   p.noStroke()
-  p.fill(DefaultGrayValue, 250)
-  p.plane(CanvasSize, CanvasSize)
+  // p.fill(DefaultGrayValue, 250)
+  p.background(DefaultGrayValue, 250)
+  // p.plane(CanvasSize, CanvasSize)
 }
 
 export default P5Canvas({

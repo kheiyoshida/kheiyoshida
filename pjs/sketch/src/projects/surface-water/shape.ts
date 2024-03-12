@@ -1,6 +1,6 @@
 import p5 from 'p5'
 import { vectorFromDegreeAngles } from 'p5utils/src/3d'
-import { drawAtVectorPosition, drawLineBetweenVectors, mapToSphere } from 'p5utils/src/render'
+import { drawLineBetweenVectors, mapToSphere, shakyLineBetweenVectors3D } from 'p5utils/src/render'
 import { loop } from 'utils'
 import { BaseRadius, CanvasSize, DrawGrayValue, MaximumSnapshots } from './config'
 
@@ -51,7 +51,7 @@ const center = new p5.Vector(0, -CanvasSize / 80, 0)
 
 export const draw3Dsnapshots = (snapshots: DataSnapshot[]) => {
   snapshots.forEach((snapshot, i) => {
-    p.stroke(DrawGrayValue, 250 * Math.sin((Math.PI * i) / MaximumSnapshots))
+    p.stroke(DrawGrayValue, 230 * Math.cos((i * Math.PI / 2) / MaximumSnapshots))
     const finalVectors = snapshot.map((vector) =>
       vector
         .copy()
@@ -65,6 +65,7 @@ export const draw3Dsnapshots = (snapshots: DataSnapshot[]) => {
 const draw = (vectors: p5.Vector[]) => {
   loop(vectors.length, (i) => {
     if (vectors.length === i + 1) return
+    shakyLineBetweenVectors3D(vectors[i], vectors[i + 1] || vectors[0], 2)
     drawLineBetweenVectors(vectors[i], vectors[i + 1] || vectors[0])
   })
 }
