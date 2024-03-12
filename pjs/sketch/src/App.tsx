@@ -9,6 +9,7 @@ import Spiders from './projects/spiders'
 import Tp4 from './projects/tp4'
 import Wasted_revisited from './projects/wasted_revisited'
 import Wasted from './projects/wasted'
+import SurfaceWater from './projects/surface-water'
 
 const Projects = {
   rebirth: <Rebirth />,
@@ -20,7 +21,8 @@ const Projects = {
   spiders: <Spiders />,
   tp4: <Tp4 />,
   wasted_revisited: <Wasted_revisited />,
-  wasted: <Wasted />
+  wasted: <Wasted />,
+  'suface-water': <SurfaceWater />
 } as const
 
 export default () => {
