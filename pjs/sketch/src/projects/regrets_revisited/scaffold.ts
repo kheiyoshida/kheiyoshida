@@ -1,6 +1,6 @@
 import p5 from 'p5'
 import { vectorFromDegreeAngles } from 'p5utils/src/3d'
-import { IntRange, ReducerMap, makeStoreV2 } from 'utils'
+import { IntRange, ReducerMap, clamp, makeStoreV2 } from 'utils'
 import {
   InitialShrinkLevel,
   MaxShrinkLevel,
@@ -16,24 +16,24 @@ export type ScaffoldCoordinateInfo = {
 }
 
 export type ScaffoldState = {
-  shrinkLevel: number
+  shrinkLevel: number[]
 }
 
 const init: ScaffoldState = {
-  shrinkLevel: InitialShrinkLevel,
+  shrinkLevel: [...Array(TotalScaffoldLayers)].map(() => InitialShrinkLevel),
 }
 
 const reducers = {
-  updateShrinkLevel: (s) => (value: number) => {
-    if (value < 0 || value > MaxShrinkLevel) return
-    s.shrinkLevel = value
+  updateShrinkLevel: (s) => (layerIndex: number, value: number) => {
+    if (!s.shrinkLevel[layerIndex]) return
+    s.shrinkLevel[layerIndex] = clamp(value, 1, MaxShrinkLevel)
   },
   calculateScaffoldPosition:
     (s) =>
     ({ layer, x, y }: ScaffoldCoordinateInfo): p5.Vector => {
       const theta = 180 * (y / (TotalScaffoldLayerY - 1))
       const phi = 360 * (x / (TotalScaffoldLayerX - 1))
-      const distanceFromCenter = layer * s.shrinkLevel
+      const distanceFromCenter = layer * s.shrinkLevel[layer]
       return vectorFromDegreeAngles(theta, phi, distanceFromCenter)
     },
 } satisfies ReducerMap<ScaffoldState>
