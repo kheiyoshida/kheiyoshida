@@ -1,5 +1,5 @@
 import { drawAtVectorPosition } from 'p5utils/src/render'
-import { loop3D } from 'utils'
+import { fireByRate, loop3D, randomIntInclusiveBetween } from 'utils'
 import { P5Canvas } from '../../lib/p5canvas'
 import { ScaffoldCoordinateInfo, scaffoldStore } from './scaffold'
 import { sketchStore } from './sketch'
@@ -13,7 +13,11 @@ const setup = () => {
 
 const draw = () => {
   sketchStore.paintBackGround()
+  p.orbitControl()
 
+  if (fireByRate(0.2)) {
+    scaffoldStore.updateShrinkLevel(randomIntInclusiveBetween(10, 150))
+  }
   loop3D(10, (x, y, layer) => {
     const v = scaffoldStore.calculateScaffoldPosition({ x, y, layer } as ScaffoldCoordinateInfo)
     drawAtVectorPosition(v, () => {
