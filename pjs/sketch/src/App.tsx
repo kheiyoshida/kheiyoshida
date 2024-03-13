@@ -10,6 +10,7 @@ import Tp4 from './projects/tp4'
 import Wasted_revisited from './projects/wasted_revisited'
 import Wasted from './projects/wasted'
 import SurfaceWater from './projects/surface-water'
+import Regrets_revisited from './projects/regrets_revisited'
 
 const Projects = {
   rebirth: <Rebirth />,
@@ -17,6 +18,7 @@ const Projects = {
   gen: <Gen />,
   forest: <Forest />,
   regrets: <Regrets />,
+  'regrets_revisited': <Regrets_revisited />,
   shinjuku: <Shinjuku />,
   spiders: <Spiders />,
   tp4: <Tp4 />,
