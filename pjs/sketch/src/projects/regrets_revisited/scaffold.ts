@@ -17,10 +17,12 @@ export type ScaffoldCoordinate = {
 
 export type ScaffoldState = {
   shrinkLevel: number[]
+  distortLevel: number[]
 }
 
 const init: ScaffoldState = {
-  shrinkLevel: [...Array(TotalScaffoldLayers)].map(() => InitialShrinkLevel),
+  shrinkLevel: Array(TotalScaffoldLayers).fill(InitialShrinkLevel),
+  distortLevel: Array(TotalScaffoldLayers).fill(0),
 }
 
 const reducers = {
@@ -28,13 +30,18 @@ const reducers = {
     if (!s.shrinkLevel[layerIndex]) return
     s.shrinkLevel[layerIndex] = clamp(value, 1, ScaffoldLayerDistance)
   },
+  updateDistortLevel: (s) => (layerIndex: number, value: number) => {
+    if (s.distortLevel[layerIndex] === undefined) return
+    s.distortLevel[layerIndex] = clamp(value, -1, 1)
+  },
   calculateScaffoldPosition:
     (s) =>
     ({ layer, x, y }: ScaffoldCoordinate): p5.Vector => {
       validateScaffoldLayer({ layer, x, y })
-      const theta = 180 * (y / (TotalScaffoldLayerY - 1))
-      const phi = 360 * (x / (TotalScaffoldLayerX - 1))
-      const distanceFromCenter = layer * ScaffoldLayerDistance + layer * s.shrinkLevel[layer]
+      const distortion = 30 * s.distortLevel[layer]
+      const theta = 180 * (y / (TotalScaffoldLayerY - 1)) + distortion
+      const phi = 360 * (x / (TotalScaffoldLayerX - 1)) + distortion
+      const distanceFromCenter = layer * ScaffoldLayerDistance + ScaffoldLayerDistance * s.shrinkLevel[layer]
       return vectorFromDegreeAngles(theta, phi, distanceFromCenter)
     },
 } satisfies ReducerMap<ScaffoldState>

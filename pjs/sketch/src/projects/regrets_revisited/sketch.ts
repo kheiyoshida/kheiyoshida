@@ -3,23 +3,20 @@ import { LazyInit, ReducerMap, makeStoreV2 } from 'utils'
 
 export type SketchState = {
   fill: p5.Color
-  stroke: p5.Color
 }
 
 const init: LazyInit<SketchState> = () => {
-  const fill = p.color(50)
-  const stroke = p.color(255)
+  const fill = p.color(30, 200)
   p.fill(fill)
   p.noStroke()
   return {
     fill,
-    stroke,
   }
 }
 
 const reducers = {
   paintBackGround: (s) => () => {
-    p.background(s.fill)
+    p.background(140)
   },
 } satisfies ReducerMap<SketchState>
 

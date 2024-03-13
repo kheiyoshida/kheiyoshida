@@ -1,10 +1,10 @@
 import { FFTSize } from "p5utils/src/media/audio/types"
 
-export const TotalScaffoldLayers = 10
-export const TotalScaffoldLayerX = 10
-export const TotalScaffoldLayerY = 10
+export const TotalScaffoldLayers = 20
+export const TotalScaffoldLayerX = 6
+export const TotalScaffoldLayerY = 6
 
-export const ScaffoldLayerDistance = 200
-export const InitialShrinkLevel = 100
+export const ScaffoldLayerDistance = 100
+export const InitialShrinkLevel = 500
 
-export const fftSize:FFTSize = 32
+export const fftSize:FFTSize = 64
