@@ -38,6 +38,18 @@ const reducers = {
     ]
     s.models.push(spec)
   },
+  replaceModel: (s) => (index: number) => {
+    const oldModel = s.models[index]
+    const layer = oldModel.map((c) => c.layer).sort((a, b) => a - b)[0]
+    const newSeed = createSeed(layer)
+    const newSpec: ModelSpec = [
+      newSeed,
+      getAnotherCoordinate(newSeed),
+      getAnotherCoordinate(newSeed),
+      getAnotherCoordinate(newSeed),
+    ]
+    s.models.splice(index, 1, newSpec)
+  },
 } satisfies ReducerMap<ModelState>
 
 const createSeed = (layer?: ScaffoldCoordinate['layer']): ScaffoldCoordinate => {
@@ -58,7 +70,7 @@ const getAnotherCoordinate = (
   coordinateRange = 2
 ): ScaffoldCoordinate => {
   return {
-    layer: clamp(seed.layer + randomIntInclusiveBetween(1, layerRange), 0, TotalScaffoldLayers-1),
+    layer: clamp(seed.layer + randomIntInclusiveBetween(1, layerRange), 0, TotalScaffoldLayers - 1),
     x: rangeCycleX(seed.x + randomIntInAsymmetricRange(coordinateRange)),
     y: rangeCycleY(seed.y + randomIntInAsymmetricRange(coordinateRange)),
   }

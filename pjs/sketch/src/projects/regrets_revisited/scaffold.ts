@@ -41,7 +41,7 @@ const reducers = {
       const distortion = 30 * s.distortLevel[layer]
       const theta = 180 * (y / (TotalScaffoldLayerY - 1)) + distortion
       const phi = 360 * (x / (TotalScaffoldLayerX - 1)) + distortion
-      const distanceFromCenter = layer * ScaffoldLayerDistance + ScaffoldLayerDistance * s.shrinkLevel[layer]
+      const distanceFromCenter = layer * ScaffoldLayerDistance * s.shrinkLevel[layer]
       return vectorFromDegreeAngles(theta, phi, distanceFromCenter)
     },
 } satisfies ReducerMap<ScaffoldState>

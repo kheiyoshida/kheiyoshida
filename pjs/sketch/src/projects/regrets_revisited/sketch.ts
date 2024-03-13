@@ -1,5 +1,6 @@
 import p5 from 'p5'
 import { LazyInit, ReducerMap, makeStoreV2 } from 'utils'
+import { BackgroundGray } from './constants'
 
 export type SketchState = {
   fill: p5.Color
@@ -16,7 +17,7 @@ const init: LazyInit<SketchState> = () => {
 
 const reducers = {
   paintBackGround: (s) => () => {
-    p.background(140)
+    p.background(BackgroundGray)
   },
 } satisfies ReducerMap<SketchState>
 

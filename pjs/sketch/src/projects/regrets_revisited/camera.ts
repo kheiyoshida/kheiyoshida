@@ -51,7 +51,7 @@ export const reducers = {
 const circularMove = makeCircularMove([30, 150])
 
 const dist = makePingpongNumberStore(
-  () => randomFloatBetween(0, 20),
+  () => randomFloatBetween(0, (CameraDistance[1] - CameraDistance[0]) / 1000),
   ...(CameraDistance as [number, number, number])
 )
 
