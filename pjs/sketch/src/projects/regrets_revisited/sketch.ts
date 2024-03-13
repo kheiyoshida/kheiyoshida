@@ -7,10 +7,10 @@ export type SketchState = {
 }
 
 const init: LazyInit<SketchState> = () => {
-  const fill = p.color(100)
+  const fill = p.color(50)
   const stroke = p.color(255)
   p.fill(fill)
-  p.stroke(stroke)
+  p.noStroke()
   return {
     fill,
     stroke,

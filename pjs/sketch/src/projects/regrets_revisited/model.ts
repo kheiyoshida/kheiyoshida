@@ -1,5 +1,6 @@
 import {
   ReducerMap,
+  clamp,
   makeStoreV2,
   randomIntInAsymmetricRange,
   randomIntInclusiveBetween,
@@ -27,8 +28,8 @@ const init: ModelState = {
 }
 
 const reducers = {
-  addModel: (s) => () => {
-    const seed = createSeed()
+  addModel: (s) => (layerIndex?: number) => {
+    const seed = createSeed(layerIndex)
     const spec: ModelSpec = [
       seed,
       getAnotherCoordinate(seed),
@@ -41,7 +42,7 @@ const reducers = {
 
 const createSeed = (layer?: ScaffoldCoordinate['layer']): ScaffoldCoordinate => {
   const seed = {
-    layer: layer || randomIntInclusiveBetween(1, 6),
+    layer: layer || randomIntInclusiveBetween(0, 8),
     x: randomIntInclusiveBetween(0, TotalScaffoldLayerX),
     y: randomIntInclusiveBetween(0, TotalScaffoldLayerY),
   }
@@ -53,11 +54,11 @@ const rangeCycleY = makeCycle(TotalScaffoldLayerY)
 
 const getAnotherCoordinate = (
   seed: ScaffoldCoordinate,
-  layerRange = 3,
-  coordinateRange = 3
+  layerRange = 5,
+  coordinateRange = 2
 ): ScaffoldCoordinate => {
   return {
-    layer: seed.layer + randomIntInclusiveBetween(1, layerRange),
+    layer: seed.layer + clamp(randomIntInclusiveBetween(1, layerRange), 1, 3),
     x: rangeCycleX(seed.x + randomIntInAsymmetricRange(coordinateRange)),
     y: rangeCycleY(seed.y + randomIntInAsymmetricRange(coordinateRange)),
   }
