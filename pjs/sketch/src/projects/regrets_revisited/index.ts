@@ -29,6 +29,7 @@ const setup = () => {
   loop(8, (i) => {
     modelStore.addModel(i)
   })
+  console.log(modelStore.current.models)
 
   img = p.createImage(10, 10)
   updateImg()
@@ -48,7 +49,7 @@ const draw = () => {
   // updateImg()
   // p.texture(img)
 
-  p.camera(0, 0, 1800 + Math.sin(p.millis() * 0.0001) * 1000)
+  p.camera(0, 0, 2800 + Math.sin(p.millis() * 0.0001) * 1000)
   p.rotateY(360 * Math.cos(p.millis() * 0.0001))
   // p.lights()
   p.pointLight(255, 255, 255, 0, 0, 0)
@@ -62,7 +63,7 @@ const draw = () => {
   })
 
   modelStore.current.models.forEach((modelSpec, index) => {
-    if (!render.includes(index)) return
+    // if (!render.includes(index)) return
     const model = modelSpec.map(scaffoldStore.calculateScaffoldPosition) as Model
     try {
       const geo = finalizeGeometry(model)

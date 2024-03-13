@@ -6,7 +6,7 @@ import {
   randomIntInclusiveBetween,
 } from 'utils'
 import { ScaffoldCoordinate } from './scaffold'
-import { TotalScaffoldLayerX, TotalScaffoldLayerY } from './constants'
+import { TotalScaffoldLayerX, TotalScaffoldLayerY, TotalScaffoldLayers } from './constants'
 import { makeCycle } from './utils'
 import type { Vector } from 'p5'
 
@@ -43,8 +43,8 @@ const reducers = {
 const createSeed = (layer?: ScaffoldCoordinate['layer']): ScaffoldCoordinate => {
   const seed = {
     layer: layer || randomIntInclusiveBetween(0, 8),
-    x: randomIntInclusiveBetween(0, TotalScaffoldLayerX),
-    y: randomIntInclusiveBetween(0, TotalScaffoldLayerY),
+    x: randomIntInclusiveBetween(0, TotalScaffoldLayerX - 1),
+    y: randomIntInclusiveBetween(0, TotalScaffoldLayerY - 1),
   }
   return seed
 }
@@ -58,7 +58,7 @@ const getAnotherCoordinate = (
   coordinateRange = 2
 ): ScaffoldCoordinate => {
   return {
-    layer: seed.layer + clamp(randomIntInclusiveBetween(1, layerRange), 1, 3),
+    layer: clamp(seed.layer + randomIntInclusiveBetween(1, layerRange), 0, TotalScaffoldLayers-1),
     x: rangeCycleX(seed.x + randomIntInAsymmetricRange(coordinateRange)),
     y: rangeCycleY(seed.y + randomIntInAsymmetricRange(coordinateRange)),
   }

@@ -31,11 +31,18 @@ const reducers = {
   calculateScaffoldPosition:
     (s) =>
     ({ layer, x, y }: ScaffoldCoordinate): p5.Vector => {
+      validateScaffoldLayer({ layer, x, y })
       const theta = 180 * (y / (TotalScaffoldLayerY - 1))
       const phi = 360 * (x / (TotalScaffoldLayerX - 1))
       const distanceFromCenter = layer * ScaffoldLayerDistance + layer * s.shrinkLevel[layer]
       return vectorFromDegreeAngles(theta, phi, distanceFromCenter)
     },
 } satisfies ReducerMap<ScaffoldState>
+
+const validateScaffoldLayer = ({ layer, x, y }: ScaffoldCoordinate) => {
+  if (x >= TotalScaffoldLayerX || y >= TotalScaffoldLayerY || layer >= TotalScaffoldLayers) {
+    throw Error(`invalid coordinate: ${JSON.stringify({ layer, x, y })}`)
+  }
+}
 
 export const scaffoldStore = makeStoreV2<ScaffoldState>(init)(reducers)
