@@ -8,3 +8,7 @@ export const ScaffoldLayerDistance = 100
 export const InitialShrinkLevel = 500
 
 export const fftSize:FFTSize = 64
+
+export const CameraDefaultMoveSpeed = 10
+const MOBILE_WIDTH = 800
+  export const CameraDistance = window.innerWidth > MOBILE_WIDTH ? [2000, 6000, 4000] : [4000, 8000, 6000]

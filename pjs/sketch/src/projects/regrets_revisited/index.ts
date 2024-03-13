@@ -1,13 +1,15 @@
 import p5 from 'p5'
-import { randomizeImagePixels, updateImagePixels } from 'p5utils/src/media/image'
-import { fireByRate, loop } from 'utils'
+import { updateImagePixels } from 'p5utils/src/media/image'
+import { fireByRate, loop, randomFloatBetween } from 'utils'
 import { P5Canvas } from '../../lib/p5canvas'
-import { ScaffoldLayerDistance, TotalScaffoldLayers, fftSize } from './constants'
+import { TotalScaffoldLayers, fftSize } from './constants'
 import { finalizeGeometry } from './helpers'
 import { Model, modelStore } from './model'
 import { scaffoldStore } from './scaffold'
 import { sketchStore } from './sketch'
 import { bindPlayEvent, soundAnalyzer } from './sound'
+import { cameraStore, makeCameraStore } from './camera'
+import { pushPop } from 'p5utils/src/render'
 
 const setup = () => {
   p.createCanvas(window.innerWidth, window.innerHeight, p.WEBGL)
@@ -16,6 +18,7 @@ const setup = () => {
 
   sketchStore.lazyInit()
   sketchStore.paintBackGround()
+  cameraStore.lazyInit()
 
   const start = bindPlayEvent()
   p.mouseClicked = start
@@ -42,14 +45,12 @@ const updateImg = (rate: number) => {
 }
 
 const draw = () => {
-  sketchStore.paintBackGround()
+  cameraStore.updateMove({
+    theta: randomFloatBetween(-0.01, 0.01),
+    phi: randomFloatBetween(-0.02, 0.02),
+  })
 
-  p.camera(0, 0, 3000 + Math.sin(p.millis() * 0.0003) * 1000)
-  p.rotateY(360 * Math.cos(p.millis() * 0.0001))
-  p.rotateX(360 * Math.sin(p.millis() * 0.0003))
-
-  p.pointLight(0,0,0, 0, 0, 0)
-
+  // update data
   let d = 0
   const render: number[] = []
   soundAnalyzer.analyze().forEach((data, index) => {
@@ -61,6 +62,12 @@ const draw = () => {
     d += data
   })
 
+  // render
+  cameraStore.moveCamera()
+  p.rotateY(360 * Math.cos(p.millis() * 0.0001))
+  p.rotateX(360 * Math.sin(p.millis() * 0.0003))
+  sketchStore.paintBackGround()
+  p.pointLight(100, 100, 100, 0, 0, 0)
   updateImg(d / soundAnalyzer.bufferLength)
   p.texture(img)
   modelStore.current.models.forEach((modelSpec, index) => {
