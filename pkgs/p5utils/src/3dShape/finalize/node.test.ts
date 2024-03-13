@@ -30,7 +30,7 @@ describe(`${finalizeNodeSurfaces.name}`, () => {
 
 test(`${extractNodeSurfaceVertices.name}`, () => {
   const { vertices, node } = prepare()
-  const surfaces = extractNodeSurfaceVertices(node)
+  const surfaces = extractNodeSurfaceVertices(node.vertices)
   expect(surfaces[0][0]).toMatchObject([vertices[1], vertices[2], vertices[3]])
   expect(surfaces[0][1]).toMatchObject(vertices[0])
 })

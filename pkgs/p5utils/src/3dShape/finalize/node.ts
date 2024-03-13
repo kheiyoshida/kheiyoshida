@@ -3,15 +3,15 @@ import { finalizeSurface } from './surface'
 
 export const finalizeNodeSurfaces = (node: ShapeNode) => {
   if (node.vertices.length !== 4) throw Error(`node must have 4 vertices`)
-  const surfaces = extractNodeSurfaceVertices(node)
+  const surfaces = extractNodeSurfaceVertices(node.vertices)
   surfaces.forEach((s) => finalizeSurface(...s))
 }
 
 export const extractNodeSurfaceVertices = (
-  node: ShapeNode
+  vertices: ShapeNode['vertices']
 ): [surfaceVertices: ShapeVertex[], theOther: ShapeVertex][] => {
   return [0, 1, 2, 3].map((surfaceNumber) => [
-    node.vertices.filter((_, i) => i !== surfaceNumber),
-    node.vertices[surfaceNumber],
+    vertices.filter((_, i) => i !== surfaceNumber),
+    vertices[surfaceNumber],
   ])
 }

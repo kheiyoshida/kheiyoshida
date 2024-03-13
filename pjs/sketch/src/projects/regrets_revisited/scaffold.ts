@@ -9,10 +9,10 @@ import {
   TotalScaffoldLayers,
 } from './constants'
 
-export type ScaffoldCoordinateInfo = {
-  layer: IntRange<1, typeof TotalScaffoldLayers>
-  x: IntRange<0, typeof TotalScaffoldLayerX>
-  y: IntRange<0, typeof TotalScaffoldLayerY>
+export type ScaffoldCoordinate = {
+  layer: number
+  x: number
+  y: number
 }
 
 export type ScaffoldState = {
@@ -30,7 +30,7 @@ const reducers = {
   },
   calculateScaffoldPosition:
     (s) =>
-    ({ layer, x, y }: ScaffoldCoordinateInfo): p5.Vector => {
+    ({ layer, x, y }: ScaffoldCoordinate): p5.Vector => {
       const theta = 180 * (y / (TotalScaffoldLayerY - 1))
       const phi = 360 * (x / (TotalScaffoldLayerX - 1))
       const distanceFromCenter = layer * s.shrinkLevel[layer]
