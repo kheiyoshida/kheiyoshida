@@ -1,13 +1,17 @@
 import p5 from 'p5'
 import { updateImagePixels } from 'p5utils/src/media/image'
-import { fireByRate, loop, loop3D, randomFloatBetween } from 'utils'
+import { drawAtVectorPosition } from 'p5utils/src/render'
+import { fireByRate, loop, randomFloatBetween, randomIntInclusiveBetween } from 'utils'
 import { P5Canvas } from '../../lib/p5canvas'
+import { cameraStore } from './camera'
 import {
   BackgroundGray,
   DataCutoff,
+  SightLength,
   TotalScaffoldLayerX,
   TotalScaffoldLayerY,
   TotalScaffoldLayers,
+  VisibleAngle,
   fftSize,
 } from './constants'
 import { finalizeGeometry } from './helpers'
@@ -15,15 +19,13 @@ import { Model, modelStore } from './model'
 import { scaffoldStore } from './scaffold'
 import { sketchStore } from './sketch'
 import { bindPlayEvent, soundAnalyzer } from './sound'
-import { cameraStore, makeCameraStore } from './camera'
-import { drawAtPosition3D, drawAtVectorPosition, pushPop } from 'p5utils/src/render'
-import { draw3DGrid } from 'p5utils/src/3d'
 import { makeNormalizeValueInRange } from './utils'
 
 const setup = () => {
   p.createCanvas(window.innerWidth, window.innerHeight, p.WEBGL)
   p.textureMode(p.NORMAL)
   p.angleMode(p.DEGREES)
+  p.perspective(VisibleAngle, p.width / p.height, 10, SightLength)
 
   sketchStore.lazyInit()
   sketchStore.paintBackGround()
@@ -37,19 +39,22 @@ const setup = () => {
     modelStore.addModel(i % TotalScaffoldLayers)
   })
 
-  img = p.createImage(50,50)
+  img = p.createImage(80, 80)
   updateImg(1)
 }
 
 let img: p5.Image
 const updateImg = (rate: number) => {
   img.loadPixels()
+  const coefficient = (1 + Math.sin(p.millis())) / 4
+  const alpha = coefficient * 100
   updateImagePixels(img, ([r, g, b, a]) => {
-    if (fireByRate(rate * 0.05)) {
-      const val = randomFloatBetween(0, rate) * 255
-      return [val + 20, val, val, 255]
+    if (fireByRate(rate * coefficient * 0.2)) {
+      const val = () => randomFloatBetween(0, rate) * 255
+      const v1 = val()
+      return [v1 + randomIntInclusiveBetween(0, 50), v1, v1, randomIntInclusiveBetween(180, 255)]
     }
-    return [0, 0, 0, 0]
+    return [255,255,255, alpha]
   })
   img.updatePixels()
 }
@@ -67,7 +72,7 @@ const draw = () => {
   let d = 0
   const render: number[] = []
   soundAnalyzer.analyze().forEach((data, index) => {
-    scaffoldStore.updateShrinkLevel(index, data)
+    scaffoldStore.updateShrinkLevel(index, normalizeRange(data))
     scaffoldStore.updateDistortLevel(index, (data - 0.5) * 2)
     if (data > DataCutoff) {
       render.push(index)
@@ -79,7 +84,7 @@ const draw = () => {
   cameraStore.moveCamera()
 
   sketchStore.paintBackGround()
-  p.pointLight(0, 0, 0, ...cameraStore.current.camera.position)
+  p.pointLight(0, 0, 0, 0,0,0)
   p.ambientLight(BackgroundGray)
 
   const updateFrame = parseInt(Math.abs(Math.sin(p.millis() * 0.01)).toFixed()) + 2
@@ -101,7 +106,7 @@ const draw = () => {
 
   // update
   modelStore.current.models.forEach((_, i) => {
-    if (!render.includes(i)) {
+    if (render.includes(i) && fireByRate(0.5)) {
       modelStore.replaceModel(i)
     }
   })

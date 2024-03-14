@@ -66,8 +66,8 @@ const rangeCycleY = makeCycle(TotalScaffoldLayerY)
 
 const getAnotherCoordinate = (
   seed: ScaffoldCoordinate,
-  layerRange = 5,
-  coordinateRange = 5
+  layerRange = 3,
+  coordinateRange = 3
 ): ScaffoldCoordinate => {
   return {
     layer: clamp(seed.layer + randomIntInclusiveBetween(1, layerRange), 0, TotalScaffoldLayers - 1),
