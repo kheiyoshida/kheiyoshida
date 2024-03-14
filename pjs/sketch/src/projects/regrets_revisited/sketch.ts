@@ -32,7 +32,7 @@ const reducers = {
   updateSkin: (s) => (rate: number) => {
     s.skin.loadPixels()
     const coefficient = (1 + Math.sin(p.millis())) / 4
-    const alpha = coefficient * 100
+    const alpha = coefficient * 120
     updateImagePixels(s.skin, () => {
       if (fireByRate(rate * coefficient * 0.2)) {
         const val = () => randomFloatBetween(0, rate) * 255

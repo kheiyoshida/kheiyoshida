@@ -57,7 +57,9 @@ const draw = () => {
 
   // render
   cameraStore.moveCamera()
-  sketchStore.paintBackGround()
+  if (p.frameCount % 2 === 0 ) {
+    sketchStore.paintBackGround()
+  }
   p.pointLight(0, 0, 0, 0, 0, 0)
   p.ambientLight(BackgroundGray)
 
@@ -81,6 +83,11 @@ const draw = () => {
   // update
   modelStore.current.models.forEach((_, i) => {
     if (render.includes(i) && fireByRate(0.5)) {
+      if (i < 3) {
+        if (modelStore.current.models[i].every(spec => spec.layer < 5)) {
+          return
+        }
+      }
       modelStore.replaceModel(i)
     }
   })

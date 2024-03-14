@@ -50,8 +50,14 @@ export const reducers = {
 
 const circularMove = makeCircularMove([30, 150])
 
+const positiveSin = (val: number) => (1 + Math.sin(val)) / 2
+
 const dist = makePingpongNumberStore(
-  () => randomFloatBetween(0, (CameraDistance[1] - CameraDistance[0]) / 100),
+  () =>
+    randomFloatBetween(
+      0,
+      (positiveSin(p.millis() * 0.0001) * (CameraDistance[1] - CameraDistance[0])) / 100
+    ),
   ...(CameraDistance as [number, number, number])
 )
 

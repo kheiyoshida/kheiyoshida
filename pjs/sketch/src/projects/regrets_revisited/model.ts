@@ -66,7 +66,7 @@ const rangeCycleY = makeCycle(TotalScaffoldLayerY)
 
 const getAnotherCoordinate = (
   seed: ScaffoldCoordinate,
-  layerRange = 3,
+  layerRange = 2,
   coordinateRange = 3
 ): ScaffoldCoordinate => {
   return {

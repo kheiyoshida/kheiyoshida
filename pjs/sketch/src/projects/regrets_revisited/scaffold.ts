@@ -38,7 +38,7 @@ const reducers = {
     (s) =>
     ({ layer, x, y }: ScaffoldCoordinate): p5.Vector => {
       validateScaffoldLayer({ layer, x, y })
-      const distortion = 30 * s.distortLevel[layer]
+      const distortion = 60 * s.distortLevel[layer]
       const theta = 180 * (y / (TotalScaffoldLayerY - 1)) + distortion
       const phi = 360 * (x / (TotalScaffoldLayerX - 1)) + distortion
       const distanceFromCenter =
