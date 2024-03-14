@@ -16,7 +16,7 @@ const preload = () => {
 const renderSound = true
 
 const setup = () => {
-  p.createCanvas(CanvasSize, CanvasSize, renderSound ? p.WEBGL : p.P2D)
+  p.createCanvas(CanvasSize * 3/4, CanvasSize, renderSound ? p.WEBGL : p.P2D)
   p.textureMode(p.NORMAL)
   p.pixelDensity(1)
   p.stroke(DrawIndicateValue, 255)
@@ -40,7 +40,8 @@ const setup = () => {
 
 const draw = () => {
   if (renderSound) {
-    p.camera(0, 0, 1800 + Math.sin(p.millis() * 0.0001) * 1000);
+    p.camera(0, 0, 1800 + Math.sin(p.millis() * 0.0001) * 1000)
+    p.rotateX(180 * Math.cos(p.millis() * 0.0002))
     p.rotateY(360 * Math.cos(p.millis() * 0.0001))
     renderSoundWave()
   }
@@ -65,7 +66,6 @@ const renderSoundWave = () => {
 }
 
 const paintScreen = () => {
-
   p.noStroke()
   // p.fill(DefaultGrayValue, 250)
   p.background(DefaultGrayValue, 250)

@@ -1,12 +1,12 @@
 import { FFTSize } from 'p5utils/src/media/audio/types'
 import { MediaSize } from 'p5utils/src/media/pixel/types'
 
-export const CanvasSize = 900
+export const CanvasSize = 960
 export const CanvasMediaSize: MediaSize = { width: CanvasSize, height: CanvasSize }
 
-export const DefaultGrayValue = 20
+export const DefaultGrayValue = 45
 export const DrawIndicateValue = 0
-export const DrawGrayValue = 120
+export const DrawGrayValue = 180
 
 export const ShiftRange = 10
 export const ShiftChangeRate = 0.000001 * 1
