@@ -7,7 +7,7 @@ import {
 } from 'utils'
 import { ScaffoldCoordinate } from './scaffold'
 import { TotalScaffoldLayerX, TotalScaffoldLayerY, TotalScaffoldLayers } from './constants'
-import { makeCycle } from './utils'
+import { makeCycle } from 'utils'
 import type { Vector } from 'p5'
 
 export type Model = [Vector, Vector, Vector, Vector]

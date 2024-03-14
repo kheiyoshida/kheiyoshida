@@ -1,12 +1,13 @@
 import p5 from 'p5'
 import { vectorFromDegreeAngles } from 'p5utils/src/3d'
-import { ReducerMap, clamp, makeStoreV2, randomFloatBetween } from 'utils'
+import { ReducerMap, clamp, loop, makeStoreV2 } from 'utils'
 import {
   ScaffoldLayerDistance,
   TotalScaffoldLayerX,
   TotalScaffoldLayerY,
   TotalScaffoldLayers,
 } from './constants'
+import { drawAtVectorPosition } from 'p5utils/src/render'
 
 export type ScaffoldCoordinate = {
   layer: number
@@ -40,9 +41,9 @@ const reducers = {
       const distortion = 30 * s.distortLevel[layer]
       const theta = 180 * (y / (TotalScaffoldLayerY - 1)) + distortion
       const phi = 360 * (x / (TotalScaffoldLayerX - 1)) + distortion
-      const distanceFromCenter = 
-        (layer * ScaffoldLayerDistance / 2) +
-        (layer * ScaffoldLayerDistance / 2) * s.shrinkLevel[layer]
+      const distanceFromCenter =
+        (layer * ScaffoldLayerDistance) / 2 +
+        ((layer * ScaffoldLayerDistance) / 2) * s.shrinkLevel[layer]
       if (distanceFromCenter > 4000) {
         throw Error(`over 4000`)
       }
@@ -54,6 +55,19 @@ const validateScaffoldLayer = ({ layer, x, y }: ScaffoldCoordinate) => {
   if (x >= TotalScaffoldLayerX || y >= TotalScaffoldLayerY || layer >= TotalScaffoldLayers) {
     throw Error(`invalid coordinate: ${JSON.stringify({ layer, x, y })}`)
   }
+}
+
+export const debugScaffold = () => {
+  loop(TotalScaffoldLayers, (layer) => {
+    loop(TotalScaffoldLayerX, (x) => {
+      loop(TotalScaffoldLayerY, (y) => {
+        const v = scaffoldStore.calculateScaffoldPosition({ x, y, layer })
+        drawAtVectorPosition(v, () => {
+          p.sphere(10)
+        })
+      })
+    })
+  })
 }
 
 export const scaffoldStore = makeStoreV2<ScaffoldState>(init)(reducers)

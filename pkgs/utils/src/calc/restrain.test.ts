@@ -1,4 +1,4 @@
-import { makeCycle, makeNormalizeValueInRange } from './utils'
+import { makeCycle, makeNormalizeValueInRange } from './restrain'
 
 test.each([
   [14, 4],
