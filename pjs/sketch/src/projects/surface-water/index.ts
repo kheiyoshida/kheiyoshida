@@ -16,7 +16,7 @@ const preload = () => {
 const renderSound = true
 
 const setup = () => {
-  p.createCanvas(CanvasSize * 3/4, CanvasSize, renderSound ? p.WEBGL : p.P2D)
+  p.createCanvas((CanvasSize * 3) / 4, CanvasSize, renderSound ? p.WEBGL : p.P2D)
   p.textureMode(p.NORMAL)
   p.pixelDensity(1)
   p.stroke(DrawIndicateValue, 255)

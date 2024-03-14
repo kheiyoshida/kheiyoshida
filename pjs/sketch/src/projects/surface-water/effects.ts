@@ -10,13 +10,11 @@ import { clamp, fireByRate, randomIntInAsymmetricRange, randomIntInclusiveBetwee
 import {
   CanvasMediaSize,
   DefaultGrayValue,
-  DrawGrayValue,
   NoiseLevel,
   NoiseSwitchRate,
   ShiftChangeRate,
   ShiftRange,
 } from './config'
-import { mapGrayValue } from './utils'
 
 export function blur() {
   const buffer = createUpdateBuffer(CanvasMediaSize)
@@ -36,7 +34,9 @@ export function blur() {
 
     if (p.pixels[ri] > DefaultGrayValue) {
       const original = getPixelValues(p.pixels, [ri, gi, bi, ai])
-      const update = original.map((v) => clamp(v + randomIntInAsymmetricRange(100), 180, 230)) as RGBA
+      const update = original.map((v) =>
+        clamp(v + randomIntInAsymmetricRange(100), 180, 230)
+      ) as RGBA
       update[3] = update[0] + randomIntInAsymmetricRange(100)
 
       if (update[0] > 220) {
@@ -67,3 +67,5 @@ export function addNoise() {
     bulkUpdatePixelValues(p.pixels, rgbaIndexes, mapGrayValue(v))
   })
 }
+
+const mapGrayValue = (v: number) => [v, v, v, 255] as RGBA

@@ -52,7 +52,7 @@ const center = new p5.Vector(0, -CanvasSize / 80, 0)
 export const draw3Dsnapshots = (snapshots: DataSnapshot[]) => {
   snapshots.forEach((snapshot, i) => {
     if (i < 3) return
-    p.stroke(DrawGrayValue, 230 * Math.cos((i * Math.PI / 2) / MaximumSnapshots))
+    p.stroke(DrawGrayValue, 230 * Math.cos((i * Math.PI) / 2 / MaximumSnapshots))
     const finalVectors = snapshot.map((vector) =>
       vector
         .copy()
