@@ -1,8 +1,7 @@
 import p5 from 'p5'
 import { vectorFromDegreeAngles } from 'p5utils/src/3d'
-import { ReducerMap, clamp, makeStoreV2 } from 'utils'
+import { ReducerMap, clamp, makeStoreV2, randomFloatBetween } from 'utils'
 import {
-  InitialShrinkLevel,
   ScaffoldLayerDistance,
   TotalScaffoldLayerX,
   TotalScaffoldLayerY,
@@ -21,14 +20,14 @@ export type ScaffoldState = {
 }
 
 const init: ScaffoldState = {
-  shrinkLevel: Array(TotalScaffoldLayers).fill(InitialShrinkLevel),
+  shrinkLevel: Array(TotalScaffoldLayers).fill(0),
   distortLevel: Array(TotalScaffoldLayers).fill(0),
 }
 
 const reducers = {
   updateShrinkLevel: (s) => (layerIndex: number, value: number) => {
-    if (!s.shrinkLevel[layerIndex]) return
-    s.shrinkLevel[layerIndex] = clamp(value, 1, ScaffoldLayerDistance)
+    if (s.shrinkLevel[layerIndex] == undefined) return
+    s.shrinkLevel[layerIndex] = clamp(value, 0, 1)
   },
   updateDistortLevel: (s) => (layerIndex: number, value: number) => {
     if (s.distortLevel[layerIndex] === undefined) return
@@ -41,7 +40,10 @@ const reducers = {
       const distortion = 30 * s.distortLevel[layer]
       const theta = 180 * (y / (TotalScaffoldLayerY - 1)) + distortion
       const phi = 360 * (x / (TotalScaffoldLayerX - 1)) + distortion
-      const distanceFromCenter = layer * ScaffoldLayerDistance * s.shrinkLevel[layer]
+      const distanceFromCenter = layer * ScaffoldLayerDistance + ScaffoldLayerDistance * s.shrinkLevel[layer]
+      if (distanceFromCenter > 4000) {
+        throw Error(`over 4000`)
+      }
       return vectorFromDegreeAngles(theta, phi, distanceFromCenter)
     },
 } satisfies ReducerMap<ScaffoldState>

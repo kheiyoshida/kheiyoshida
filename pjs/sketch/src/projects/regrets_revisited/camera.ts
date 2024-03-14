@@ -22,14 +22,14 @@ export type CameraState = {
 export const init: LazyInit<CameraState> = () => {
   const camera = createCamera()
   const initialSpeed = CameraDefaultMoveSpeed
-  camera.setPosition(0, 0, 1000)
+  camera.setPosition(0, 0, 2000)
   camera.setFocus([0, 0, 0])
   camera.setMoveSpeed(initialSpeed)
   camera.setAbsoluteMoveDirection({ theta: 90, phi: 180 })
   return {
     camera,
     speed: initialSpeed,
-    move: { theta: 0.01, phi: 0.02 },
+    move: { theta: 0, phi: 0.02 },
   }
 }
 

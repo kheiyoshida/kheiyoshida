@@ -54,7 +54,7 @@ const reducers = {
 
 const createSeed = (layer?: ScaffoldCoordinate['layer']): ScaffoldCoordinate => {
   const seed = {
-    layer: layer || randomIntInclusiveBetween(0, 8),
+    layer: layer || randomIntInclusiveBetween(0, TotalScaffoldLayers-1),
     x: randomIntInclusiveBetween(0, TotalScaffoldLayerX - 1),
     y: randomIntInclusiveBetween(0, TotalScaffoldLayerY - 1),
   }
@@ -66,8 +66,8 @@ const rangeCycleY = makeCycle(TotalScaffoldLayerY)
 
 const getAnotherCoordinate = (
   seed: ScaffoldCoordinate,
-  layerRange = 2,
-  coordinateRange = 2
+  layerRange = 5,
+  coordinateRange = 5
 ): ScaffoldCoordinate => {
   return {
     layer: clamp(seed.layer + randomIntInclusiveBetween(1, layerRange), 0, TotalScaffoldLayers - 1),

@@ -1,17 +1,24 @@
 import { FFTSize } from 'p5utils/src/media/audio/types'
 
-export const TotalScaffoldLayers = 32
-export const TotalScaffoldLayerX = 6
-export const TotalScaffoldLayerY = 6
-
-export const ScaffoldLayerDistance = 100
-export const InitialShrinkLevel = 500
+const MOBILE_WIDTH = 800
+const SightLength = 8000
 
 export const fftSize: FFTSize = 64
+export const TotalScaffoldLayers = fftSize / 2
+export const TotalScaffoldLayerX = 8
+export const TotalScaffoldLayerY = 12
+
+const MaxScaffoldRadius = SightLength / 2
+export const ScaffoldLayerDistance = MaxScaffoldRadius / TotalScaffoldLayers
+
+export const DataCutoff = 0.4
 
 export const BackgroundGray = 230
 
 export const CameraDefaultMoveSpeed = 10
-const MOBILE_WIDTH = 800
+
+const CameraDistanceDesktop = [MaxScaffoldRadius / 2, MaxScaffoldRadius * 2, MaxScaffoldRadius]
+const CameraDistanceMobile = CameraDistanceDesktop.map((val) => val + 2000)
+
 export const CameraDistance =
-  window.innerWidth > MOBILE_WIDTH ? [2000, 6000, 3000] : [4000, 8000, 6000]
+  window.innerWidth > MOBILE_WIDTH ? CameraDistanceDesktop : CameraDistanceMobile

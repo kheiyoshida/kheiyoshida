@@ -1,15 +1,24 @@
 import p5 from 'p5'
 import { updateImagePixels } from 'p5utils/src/media/image'
-import { fireByRate, loop, randomFloatBetween } from 'utils'
+import { fireByRate, loop, loop3D, randomFloatBetween } from 'utils'
 import { P5Canvas } from '../../lib/p5canvas'
-import { BackgroundGray, TotalScaffoldLayers, fftSize } from './constants'
+import {
+  BackgroundGray,
+  DataCutoff,
+  TotalScaffoldLayerX,
+  TotalScaffoldLayerY,
+  TotalScaffoldLayers,
+  fftSize,
+} from './constants'
 import { finalizeGeometry } from './helpers'
 import { Model, modelStore } from './model'
 import { scaffoldStore } from './scaffold'
 import { sketchStore } from './sketch'
 import { bindPlayEvent, soundAnalyzer } from './sound'
 import { cameraStore, makeCameraStore } from './camera'
-import { pushPop } from 'p5utils/src/render'
+import { drawAtPosition3D, drawAtVectorPosition, pushPop } from 'p5utils/src/render'
+import { draw3DGrid } from 'p5utils/src/3d'
+import { makeNormalizeValueInRange } from './utils'
 
 const setup = () => {
   p.createCanvas(window.innerWidth, window.innerHeight, p.WEBGL)
@@ -28,7 +37,7 @@ const setup = () => {
     modelStore.addModel(i % TotalScaffoldLayers)
   })
 
-  img = p.createImage(20, 20)
+  img = p.createImage(50,50)
   updateImg(1)
 }
 
@@ -45,8 +54,11 @@ const updateImg = (rate: number) => {
   img.updatePixels()
 }
 
+const normalizeRange = makeNormalizeValueInRange(DataCutoff, 1)
+
 const draw = () => {
   cameraStore.updateMove({
+    // theta: 0,
     theta: randomFloatBetween(-0.01, 0.01),
     phi: randomFloatBetween(-0.01, 0.005),
   })
@@ -57,7 +69,7 @@ const draw = () => {
   soundAnalyzer.analyze().forEach((data, index) => {
     scaffoldStore.updateShrinkLevel(index, data)
     scaffoldStore.updateDistortLevel(index, (data - 0.5) * 2)
-    if (data > 0.4) {
+    if (data > DataCutoff) {
       render.push(index)
     }
     d += data
@@ -92,6 +104,19 @@ const draw = () => {
     if (!render.includes(i)) {
       modelStore.replaceModel(i)
     }
+  })
+}
+
+const debugScaffold = () => {
+  loop(TotalScaffoldLayers, (layer) => {
+    loop(TotalScaffoldLayerX, (x) => {
+      loop(TotalScaffoldLayerY, (y) => {
+        const v = scaffoldStore.calculateScaffoldPosition({ x, y, layer })
+        drawAtVectorPosition(v, () => {
+          p.sphere(10)
+        })
+      })
+    })
   })
 }
 
