@@ -1,7 +1,7 @@
-import { drawAtPosition3D } from 'p5utils/src/render'
 import { Conf } from '../../../config'
 import { RenderGrid } from '../../../domain/compose/renderSpec'
 import { registerIntervalRenderSequence, reserveIntervalRender } from '../base'
+import { corridorToNextFloor } from '../others/scenes'
 import { RenderQueue } from '../queue'
 import { Vision } from '../vision'
 import { getPalette } from '../vision/color/palette'
@@ -12,11 +12,10 @@ import {
   cameraReset,
   moveCamera,
 } from './camera'
-import { convertRenderGridIntoCoordinates } from './position'
-import { corridorToNextFloor } from '../others/scenes'
-import { randomizeImagePixels, updateImagePixels } from 'p5utils/src/media/image'
-import p5 from 'p5'
-import { clamp, fireByRate } from 'utils'
+import { convertToModelGrid } from './model'
+import { finalize } from './model/finalize'
+import { convertModelGrid } from './model/modelToGeo'
+import { createScaffold } from './scaffold'
 
 export const renderCurrentView3d =
   ({ renderGrid }: Vision) =>
@@ -29,43 +28,26 @@ export const renderCurrentView3d =
     RenderQueue.consume()
   }
 
-let img: p5.Image
-const randomTexture = () => {
-  if (!img) {
-    img = p.createImage(20, 20)
-  }
-  if (fireByRate(0.3)) return img
-  img.loadPixels()
-  randomizeImagePixels(img, 100)
-  updateImagePixels(img, ([r, g, b, a]) => [
-    clamp(r, 0, 50),
-    clamp(g, 0, 20),
-    clamp(b, 0, 20),
-    230,
-  ])
-  img.updatePixels()
-  return img
+const getGeos = (renderGrid: RenderGrid) => {
+  renderGrid.reverse()
+  const modelGrid = convertToModelGrid(renderGrid)
+  const coords = convertModelGrid(modelGrid, createScaffold())
+  const geos = finalize(coords)
+  return geos
 }
 
 export const renderCurrentTerrain = (renderGrid: RenderGrid) => {
-  const [coordinates, stair] = convertRenderGridIntoCoordinates(renderGrid)
+  const geos = getGeos(renderGrid)
+
   p.background(getPalette().fill)
-  p.pointLight(100, 100, 100, 0, 0, 0) // TODO: should be camera position
-  p.ambientLight(20, 20, 20, 200)
-  p.texture(randomTexture())
-  coordinates.forEach((position3d) => {
-    drawAtPosition3D(position3d, () => {
-      // p.fill(20)
-      p.noStroke()
-      p.box(1000)
-    })
-  })
-  if (stair) {
-    drawAtPosition3D(stair, () => {
-      p.fill(100, 0, 0)
-      p.box(500)
-    })
-  }
+  // p.pointLight(255, 100, 100, 0, 0, 400) // TODO: should be camera position
+  // p.ambientLight(20, 20, 20, 200)
+
+  p.fill(50)
+  p.noStroke()
+  p.stroke(255)
+  
+  geos.forEach((geo) => p.model(geo))
 }
 
 export const renderGo3d =

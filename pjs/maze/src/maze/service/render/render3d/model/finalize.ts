@@ -5,7 +5,7 @@ import { GeometryCoordinates } from '.'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type pExtended = p5 & { beginGeometry: any; endGeometry: any }
 
-export const finalize = (coords: GeometryCoordinates[]) => coords.forEach(finalizeGeometry)
+export const finalize = (coords: GeometryCoordinates[]) => coords.map(finalizeGeometry)
 
 export const finalizeGeometry = (coords: GeometryCoordinates): p5.Geometry => {
   // eslint-disable-next-line no-extra-semi

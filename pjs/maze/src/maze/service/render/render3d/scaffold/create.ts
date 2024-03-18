@@ -1,3 +1,4 @@
+import { randomFloatBetween } from 'utils'
 import {
   Scaffold,
   ScaffoldLayer,
@@ -22,13 +23,13 @@ export const createScaffoldLayer = (layerIndex: number): ScaffoldLayer => {
 }
 
 export const getLayerYValue = (part: keyof ScaffoldLayer): number => {
-  if (part === 'lower') return FixedRenderBoxLength / 2
-  if (part === 'upper') return -FixedRenderBoxLength / 2
+  if (part === 'lower') return FixedRenderBoxLength / 2 * randomFloatBetween(0.9, 1.1)
+  if (part === 'upper') return -FixedRenderBoxLength / 2 * randomFloatBetween(0.8, 1.1)
   throw Error()
 }
 
 export const getLayerZValue = (layerIndex: number) => {
-  return (layerIndex - 0.5) * -FixedRenderBoxLength
+  return (layerIndex - 0.5) * -FixedRenderBoxLength * randomFloatBetween(0.9, 1.1)
 }
 
 export const createScaffoldLayerPart = (y: number, z: number): ScaffoldLayerPart => {
@@ -36,7 +37,7 @@ export const createScaffoldLayerPart = (y: number, z: number): ScaffoldLayerPart
 }
 
 export const getScaffoldXValue = (position: ScaffoldLayerCoordPosition): number => {
-  return XCoefficients[position] * FixedRenderBoxLength
+  return XCoefficients[position] * FixedRenderBoxLength * randomFloatBetween(0.9, 1.1)
 }
 
 const XCoefficients: Record<ScaffoldLayerCoordPosition, number> = {
