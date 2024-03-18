@@ -5,7 +5,7 @@ import { Position3D } from 'p5utils/src/3d/types'
 export type RenderBlockPosition = {
   z: IntRange<0, 6>
   x: RenderSpec.RenderPosition
-  y: never // maybe y in the future
+  y?: never // maybe y in the future
 }
 
 export type RenderBlockCoords = {
