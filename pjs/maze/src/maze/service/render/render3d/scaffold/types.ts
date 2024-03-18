@@ -5,6 +5,7 @@ import { Position3D } from 'p5utils/src/3d/types'
 export type RenderBlockPosition = {
   z: IntRange<0, 6>
   x: RenderSpec.RenderPosition
+  y: never // maybe y in the future
 }
 
 export type RenderBlockCoords = {
@@ -33,16 +34,21 @@ export type RenderBlockLayer = {
  * each RenderBlock should get the concrete value from this
  * currently supports 7 layers (=RenderGrid.length + 1)
  */
-export type ScaffoldCoordinates = ScaffoldCoordLayer[]
+export type Scaffold = ScaffoldLayer[]
 
-export type ScaffoldCoordLayer = {
-  upper: ScaffoldCoordLayerPart
-  lower: ScaffoldCoordLayerPart
+export type ScaffoldLayer = {
+  upper: ScaffoldLayerPart
+  lower: ScaffoldLayerPart
 }
 
-export type ScaffoldCoordLayerPart = { [k in ScaffoldCoordPosition]: Position3D }
+/**
+ * index with `ScaffoldLayerCoordPosition`
+ */
+export type ScaffoldLayerPart = Position3D[]
 
-export enum ScaffoldCoordPosition {
+export const ScaffoldLayerPartLength = 4
+
+export enum ScaffoldLayerCoordPosition {
   LL = 0,
   CL = 1,
   CR = 2,
