@@ -1,3 +1,5 @@
+import { Position3D } from "p5utils/src/3d"
+
 export type ModelGrid = ModelGridLayer[]
 
 export type ModelGridLayer = [CompoundRenderModel, CompoundRenderModel, CompoundRenderModel]
@@ -11,3 +13,5 @@ export enum RenderModel {
   FrontWall = 'FrontWall',
   Stair = 'Stair'
 }
+
+export type GeometryCoordinates = Position3D[]

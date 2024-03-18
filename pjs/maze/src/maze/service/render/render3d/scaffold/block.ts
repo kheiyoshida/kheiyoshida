@@ -10,7 +10,7 @@ import { RenderPosition } from '../../../../domain/compose/renderSpec'
 
 export const makeGetRenderBlock =
   (scaffold: Scaffold) =>
-  ({ x, z }: RenderBlockPosition): RenderBlockCoords => {
+  ({x,z}: RenderBlockPosition): RenderBlockCoords => {
     return {
       front: getBlockLayer(scaffold[z], x),
       rear: getBlockLayer(scaffold[z + 1], x),
