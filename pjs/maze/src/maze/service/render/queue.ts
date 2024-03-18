@@ -34,7 +34,7 @@ const makeRenderQueue = () => {
       }
     }, Conf.frameInterval / 4)
   }
-  return {
+  return { 
     consume,
     push,
     update,

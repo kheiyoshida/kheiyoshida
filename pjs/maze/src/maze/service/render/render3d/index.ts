@@ -36,7 +36,7 @@ const randomTexture = () => {
   }
   if (fireByRate(0.3)) return img
   img.loadPixels()
-  randomizeImagePixels(img, 50)
+  randomizeImagePixels(img, 100)
   updateImagePixels(img, ([r, g, b, a]) => [
     clamp(r, 0, 50),
     clamp(g, 0, 20),
@@ -50,12 +50,12 @@ const randomTexture = () => {
 export const renderCurrentTerrain = (renderGrid: RenderGrid) => {
   const [coordinates, stair] = convertRenderGridIntoCoordinates(renderGrid)
   p.background(getPalette().fill)
-  p.pointLight(100, 100, 100, 0, 0, 0)
+  p.pointLight(100, 100, 100, 0, 0, 0) // TODO: should be camera position
   p.ambientLight(20, 20, 20, 200)
-  // p.texture(randomTexture())
+  p.texture(randomTexture())
   coordinates.forEach((position3d) => {
     drawAtPosition3D(position3d, () => {
-      p.fill(20)
+      // p.fill(20)
       p.noStroke()
       p.box(1000)
     })
