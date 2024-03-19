@@ -24,7 +24,7 @@ const getSketchComponent = (sketch: Sketch) => {
     case Sketch.maze:
       return dynamic(() => import('maze/src/maze'), { ssr: false })
     case Sketch.regrets:
-      return dynamic(() => import('sketch/src/projects/regrets'), { ssr: false })
+      return dynamic(() => import('sketch/src/projects/regrets_revisited'), { ssr: false })
     case Sketch.tp4:
       return dynamic(() => import('sketch/src/projects/tp4'), { ssr: false })
     default:

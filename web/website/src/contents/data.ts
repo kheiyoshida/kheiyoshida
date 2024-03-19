@@ -93,11 +93,10 @@ export const ContentData = {
   },
   regrets: {
     title: 'regrets',
-    date: '2023',
+    date: '2024',
     sketch: Sketch.regrets,
-    soundcloud:
-      '<iframe style="margin-top: 8px;" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1625973738&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>',
-    thumbnail: thumbnailPath('regrets.png'),
+    thumbnail: thumbnailPath('regrets.webp'),
+    placeholder: thumbnailPath('regrets.png')
   },
   maze: {
     title: 'maze',
