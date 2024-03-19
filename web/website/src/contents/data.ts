@@ -27,9 +27,12 @@ export const ContentData = {
     thumbnail: resolveImagekitPath('works', 'surface-water', 'surface-water.png'),
     trackList: ['profit', 'shinjuku', 'wasted', '018th', 'regrets', 'platonic', 'divec'],
     message: [
-      `I am releasing an album "Surface Water" in Spring 2024.`,
-      `It will consist of 7 music works I've developed in the past 3 years.`,
+      `I am releasing an album "Surface Water" this spring.`,
+      `The album will be available on Bandcamp and streaming services.`,
     ],
+    caption: [
+      `Music is an interface. It's the interface to connect to something obscure and vague within yourself, which existence you need a "clue" to assume. Some music helps. It's like the water on the surface, which actually comes from the earth's underground even though all you can see are the waves on the surface. I made that kind of music through the experiments of music-generating programs, layered rhythms, and randomization of sound. I am excited to finally release this collection of works from the past 4 years or so (since when I started those experiments).`,
+    ]
   },
   wasted: {
     title: 'wasted',
@@ -37,7 +40,7 @@ export const ContentData = {
     sketch: Sketch.wasted,
     thumbnail: thumbnailPath('wasted.gif'),
     placeholder: thumbnailPath('wasted.png'),
-    caption: ``
+    caption: ``,
   },
   shinjuku: {
     title: 'shinjuku',
@@ -96,7 +99,7 @@ export const ContentData = {
     date: '2024',
     sketch: Sketch.regrets,
     thumbnail: thumbnailPath('regrets.webp'),
-    placeholder: thumbnailPath('regrets.png')
+    placeholder: thumbnailPath('regrets.png'),
   },
   maze: {
     title: 'maze',

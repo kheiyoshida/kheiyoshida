@@ -1,7 +1,7 @@
 import { ProjectPageInfo, WithoutId } from '../types'
 import { ContentData, insertSlug, worksLink } from './data'
 
-const { wasted, shinjuku, forest, tp4, maze, medwEP, surfaceWater } = ContentData
+const { wasted, shinjuku, forest, tp4, maze, medwEP, surfaceWater, regrets } = ContentData
 
 const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
   {
@@ -18,16 +18,19 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
           layout: 'row',
         },
       },
-
       {
-        text: [
-          surfaceWater.message.join(' '),
-          surfaceWater.trackList.map((t, i) => `${i + 1}. ${t}`).join(`\n`),
-        ].join(`\n`),
+        text: surfaceWater.message[0],
+      },
+      {
+        text: surfaceWater.message[1],
       },
       {
         image: {
           images: [
+            {
+              path: regrets.thumbnail,
+              link: worksLink(regrets.title),
+            },
             {
               path: wasted.thumbnail,
               link: worksLink(wasted.title),
@@ -37,8 +40,12 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
               link: worksLink(shinjuku.title),
             },
           ],
+          layout: 'grid'
         },
       },
+      {
+        text: surfaceWater.caption.join('')
+      }
     ],
   },
   {
