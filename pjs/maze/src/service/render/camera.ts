@@ -1,14 +1,16 @@
-const DefaultZ = 800
+import { CameraLookAhead, CameraZ, FloorLength, PathLength } from '../../config'
+
+const DefaultZ = CameraZ
 export const cameraReset = () => {
-  p.camera(0, 0, DefaultZ, 0, 0, -DefaultZ)
+  p.camera(0, 0, DefaultZ, 0, 0, DefaultZ - CameraLookAhead)
 }
 
-const Size = 1000
+const Size = FloorLength + PathLength
 export const moveCamera = (zDelta: number, turnDelta?: number, upDown?: number) => {
   const finalX = turnDelta ? turnDelta * Size : 0
   const finalZ = DefaultZ + zDelta * -Size
   const finalY = upDown ? upDown * Size : 0
-  p.camera(0, finalY, finalZ, finalX, finalY, -DefaultZ)
+  p.camera(0, finalY, finalZ, finalX, finalY, finalZ - CameraLookAhead)
 }
 
 export const GoMoveMagValues = [0.05, 0.1, 0.24, 0.33, 0.5, 0.65, 0.8, 0.95]

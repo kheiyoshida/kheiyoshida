@@ -7,7 +7,7 @@ import { initializeServices } from './service'
 import { applyPalette, getPalette } from './service/render/color/palette'
 import { renderStartPage } from './service/render/others/start'
 import { toneStart } from './service/sound'
-import { wh, ww } from './config'
+import { FovyValue, wh, ww } from './config'
 
 Logger.useDefaults()
 Logger.setLevel(Logger.WARN)
@@ -22,17 +22,18 @@ let started = false
 
 const setup = () => {
   p.createCanvas(ww, wh, p.WEBGL)
+  p.angleMode(p.DEGREES)
+  p.perspective(FovyValue, ww/wh, 10, 8000)
   applyPalette(getPalette())
   p.noLoop()
   p.textSize(32)
-  p.angleMode(p.DEGREES)
 
   const start = () => {
     if (!started) {
       started = true
       initializeServices()
     }
-    toneStart()
+    // toneStart()
   }
 
   renderStartPage(VERSION)
