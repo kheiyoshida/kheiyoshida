@@ -1,4 +1,4 @@
-import Maze from './maze/index'
+import Maze from './index'
 
 export default () => {
   return <Maze />

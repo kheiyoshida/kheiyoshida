@@ -1,4 +1,4 @@
-import { Position } from '../../../utils/position'
+import { Position } from '../../../lib/utils/position'
 import { Direction } from '../../../domain/maze/direction'
 
 type Edges = {

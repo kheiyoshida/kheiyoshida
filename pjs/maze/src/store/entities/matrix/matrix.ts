@@ -1,4 +1,4 @@
-import { Position, validatePosition } from '../../../utils/position'
+import { Position, validatePosition } from '../../../lib/utils/position'
 import { Direction, adjacentInDirection } from '../../../domain/maze/direction'
 import { Node } from './node'
 import { filterNodes, reduceMatrix } from './iterate'

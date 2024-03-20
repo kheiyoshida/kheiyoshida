@@ -1,7 +1,7 @@
 import { ReducerMap, makeStoreV2 } from 'utils'
 import { Matrix } from './entities/matrix/matrix'
 import { Direction } from '../domain/maze/direction'
-import { Position } from '../utils/position'
+import { Position } from '../lib/utils/position'
 import { makeStatusStore } from './status'
 import { BuildMatrixParams, buildMatrix } from './entities/matrix'
 import { Node } from './entities/matrix/node'

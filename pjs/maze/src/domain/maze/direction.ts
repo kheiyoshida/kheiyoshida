@@ -1,4 +1,4 @@
-import { Position, reducePosition } from '../../utils/position'
+import { Position, reducePosition } from '../../lib/utils/position'
 
 export type Direction = 'n' | 'e' | 's' | 'w'
 
