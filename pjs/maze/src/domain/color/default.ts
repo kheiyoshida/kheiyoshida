@@ -1,5 +1,5 @@
 import { clamp } from 'utils'
-import { createRandomSelect } from '../../lib/random'
+import { makeWeightedRandomPicker as createRandomSelect } from 'utils'
 import { ParameterizeState, Scene, ScenePattern } from './types'
 
 const selectA = createRandomSelect<ScenePattern<Scene.Normal>>([

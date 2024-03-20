@@ -7,7 +7,7 @@ import {
   getMatrixItem,
 } from '../../store/entities/matrix/matrix'
 import { Node } from '../../store/entities/matrix/node'
-import { Position, reducePosition } from '../../lib/utils/position'
+import { Position, reducePosition } from '../../utils/position'
 import { resetDeadEndItems } from './deadend'
 import { compass, positionalDirection } from './direction'
 import { paramBuild } from './params'

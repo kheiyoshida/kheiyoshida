@@ -1,4 +1,4 @@
-import { createRandomSelect } from '../../lib/random'
+import { makeWeightedRandomPicker as createRandomSelect } from 'utils'
 import { ParameterizeState, Scene, ScenePattern } from './types'
 
 const selectA = createRandomSelect<ScenePattern<Scene.Effect>>([
@@ -33,10 +33,7 @@ const selectD = createRandomSelect<ScenePattern<Scene.Effect>>([
   [20, 'trans'],
 ])
 
-export const parameterizeEffectScene: ParameterizeState<Scene.Effect> = ({
-  floor,
-  sanity,
-}) => {
+export const parameterizeEffectScene: ParameterizeState<Scene.Effect> = ({ floor, sanity }) => {
   const pattern =
     sanity > 5 ? (floor < 10 ? selectA() : selectB()) : floor < 10 ? selectC() : selectD()
   if (pattern === 'gradation') return [pattern, 1, Math.min(30, (100 - sanity) / 3)]
