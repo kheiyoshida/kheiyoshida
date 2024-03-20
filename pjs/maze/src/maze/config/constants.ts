@@ -1,4 +1,6 @@
-export const FRAME_INTERVAL = 1000 / 24
+export const FPS = 24
+
+export const FRAME_INTERVAL = 1000 / FPS
 
 /**
  * interval milliseconds for updating status

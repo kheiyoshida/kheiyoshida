@@ -29,7 +29,6 @@ export const renderCurrentView3d =
   }
 
 const getGeos = (renderGrid: RenderGrid) => {
-  renderGrid.reverse()
   const modelGrid = convertToModelGrid(renderGrid)
   const coords = convertModelGrid(modelGrid, createScaffold())
   const geos = finalize(coords)
@@ -40,9 +39,6 @@ export const renderCurrentTerrain = (renderGrid: RenderGrid) => {
   const geos = getGeos(renderGrid)
 
   p.background(getPalette().fill)
-  // p.pointLight(255, 100, 100, 0, 0, 400) // TODO: should be camera position
-  // p.ambientLight(20, 20, 20, 200)
-
   p.fill(50)
   p.noStroke()
   p.stroke(255)

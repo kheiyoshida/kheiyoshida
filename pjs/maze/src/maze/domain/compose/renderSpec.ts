@@ -33,7 +33,9 @@ export enum RenderPattern {
   STAIR = 2,
 }
 
-export const convertToRenderGrid = (path: PathSpec): RenderGrid =>
+export const convertToRenderGrid = (path: PathSpec): RenderGrid => _convertToRenderGrid(path).reverse() as RenderGrid
+
+export const _convertToRenderGrid = (path: PathSpec): RenderGrid =>
   path.flatMap((nodeSpec) =>
     nodeSpec ? convertToRenderLayer(nodeSpec) : [null, null]
   ) as RenderGrid
