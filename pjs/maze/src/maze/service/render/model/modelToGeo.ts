@@ -1,7 +1,7 @@
 import { GeometryCoordinates, ModelGrid, RenderModel, ShapeCoordinates } from '.'
 import { RenderPosition } from '../../../domain/compose/renderSpec'
 import { RenderBlockCoords, Scaffold } from '../scaffold'
-import { makeGetRenderBlock } from '../scaffold/block'
+import { getAltBlock, makeGetRenderBlock } from '../scaffold/block'
 
 export const convertModelGrid = (
   modelGrid: ModelGrid,
@@ -11,12 +11,12 @@ export const convertModelGrid = (
   return modelGrid.flatMap((modelLayer, z) =>
     modelLayer.flatMap((compound, x) => {
       const block = getRenderBlock({ x, z })
-      return compound.map((model) => convertModelToGeometry(model, block, x))
+      return compound.map((model) => convertModelToGeometryCoords(model, block, x))
     })
   )
 }
 
-export const convertModelToGeometry = (
+export const convertModelToGeometryCoords = (
   model: RenderModel,
   renderBlock: RenderBlockCoords,
   side: RenderPosition
@@ -25,8 +25,31 @@ export const convertModelToGeometry = (
   if (model === RenderModel.Floor) return [floor(renderBlock)]
   if (model === RenderModel.FrontWall) return [frontWall(renderBlock)]
   if (model === RenderModel.SideWall) return [sideWall(side)(renderBlock)]
-  if (model === RenderModel.Stair) return [stair(renderBlock)]
+  if (model === RenderModel.Stair) return convertStairModel(renderBlock)
   throw Error()
+}
+
+const convertStairModel = (renderBlock: RenderBlockCoords): GeometryCoordinates => {
+  const oneStairDownBlock = getAltBlock(renderBlock, { y: 1000 })
+  const corridorBlock = getAltBlock(oneStairDownBlock, { z: -1000 })
+  const corridorBlock2 = getAltBlock(corridorBlock, { z: -1000 })
+  const corridorBlock3 = getAltBlock(corridorBlock2, { z: -1000 })
+  return [
+    flatStair(oneStairDownBlock),
+    sideWallOnLeft(oneStairDownBlock),
+    sideWallOnRight(oneStairDownBlock),
+    ...getCorridor(corridorBlock),
+    ...getCorridor(corridorBlock2),
+    ...getCorridor(corridorBlock3)
+  ]
+  function getCorridor (corridorBlock: RenderBlockCoords){
+    return [
+      ceil(corridorBlock),
+      floor(corridorBlock),
+      sideWallOnLeft(corridorBlock),
+      sideWallOnRight(corridorBlock),
+    ]
+  }
 }
 
 type RetrieveCoords = (block: RenderBlockCoords) => ShapeCoordinates
@@ -36,8 +59,10 @@ const frontWall: RetrieveCoords = (b) => [b.front.bl, b.front.br, b.front.tr, b.
 const sideWall =
   (side: RenderPosition): RetrieveCoords =>
   (b) => {
-    if (side === RenderPosition.LEFT) return [b.front.tr, b.rear.tr, b.rear.br, b.front.br]
-    if (side === RenderPosition.RIGHT) return [b.front.tl, b.rear.tl, b.rear.bl, b.front.bl]
-    return [] // TODO: treat this
+    if (side === RenderPosition.LEFT) return sideWallOnRight(b)
+    if (side === RenderPosition.RIGHT) return sideWallOnLeft(b)
+    throw Error(`not expecting this`)
   }
-const stair: RetrieveCoords = (b) => []
+const sideWallOnRight: RetrieveCoords = (b) => [b.front.tr, b.rear.tr, b.rear.br, b.front.br]
+const sideWallOnLeft: RetrieveCoords = (b) => [b.front.tl, b.rear.tl, b.rear.bl, b.front.bl]
+const flatStair: RetrieveCoords = (b) => [b.front.tl, b.front.tr, b.front.br, b.front.bl]

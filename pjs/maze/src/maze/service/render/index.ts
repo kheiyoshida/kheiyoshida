@@ -39,6 +39,7 @@ export const renderCurrentTerrain = (renderGrid: RenderGrid) => {
   const geos = getGeos(renderGrid)
 
   p.background(getPalette().fill)
+  p.fill(50)
   p.stroke(255)
   
   geos.forEach((geo) => p.model(geo))
