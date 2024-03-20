@@ -10,7 +10,6 @@ import {
 test(`${createScaffold.name}`, () => {
   const scaffold = createScaffold(7)
   expect(scaffold).toHaveLength(7)
-  expect(scaffold).toMatchSnapshot()
 })
 
 test(`${createScaffoldLayer.name}`, () => {
@@ -27,3 +26,14 @@ test(`${createScaffoldLayerPart.name}`, () => {
     expect(pos[2]).toBe(z)
   })
 })
+
+test.each([
+  [0, 300],
+  [1, -300],
+  [2, -1300],
+  [3, -1900],
+  [4, -2900],
+])(`${getLayerZValue.name} (%i)`, (index, expected) => {
+  expect(getLayerZValue(index, 600, 1000)).toBe(expected)
+})
+

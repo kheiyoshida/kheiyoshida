@@ -5,11 +5,9 @@ import {
   ScaffoldLayerPart,
   ScaffoldLayerPartLength,
 } from '.'
+import { FloorLength, PathLength, WallHeight } from '../../../config'
 
-export const NumOfScaffoldLayers = 7
-export const FixedRenderBoxLength = 1000
-
-export const createScaffold = (numOfLayers = NumOfScaffoldLayers): Scaffold => {
+export const createScaffold = (numOfLayers = 7): Scaffold => {
   return [...Array(numOfLayers)].map((_, i) => createScaffoldLayer(i))
 }
 
@@ -22,13 +20,20 @@ export const createScaffoldLayer = (layerIndex: number): ScaffoldLayer => {
 }
 
 export const getLayerYValue = (part: keyof ScaffoldLayer): number => {
-  if (part === 'lower') return FixedRenderBoxLength / 2
-  if (part === 'upper') return -FixedRenderBoxLength / 2
+  if (part === 'lower') return WallHeight / 2
+  if (part === 'upper') return -WallHeight / 2
   throw Error()
 }
 
-export const getLayerZValue = (layerIndex: number) => {
-  return (layerIndex - 0.5) * -FixedRenderBoxLength
+export const getLayerZValue = (
+  layerIndex: number,
+  floorLength = FloorLength,
+  pathLength = PathLength
+) => {
+  const halfFloor = 0.5 * floorLength
+  const length =
+    Math.floor(layerIndex / 2) * (floorLength + pathLength) + (layerIndex % 2) * floorLength
+  return halfFloor - length
 }
 
 export const createScaffoldLayerPart = (y: number, z: number): ScaffoldLayerPart => {
@@ -36,12 +41,12 @@ export const createScaffoldLayerPart = (y: number, z: number): ScaffoldLayerPart
 }
 
 export const getScaffoldXValue = (position: ScaffoldLayerCoordPosition): number => {
-  return XCoefficients[position] * FixedRenderBoxLength
+  return XValues[position]
 }
 
-const XCoefficients: Record<ScaffoldLayerCoordPosition, number> = {
-  [ScaffoldLayerCoordPosition.LL]: -1.5,
-  [ScaffoldLayerCoordPosition.CL]: -0.5,
-  [ScaffoldLayerCoordPosition.CR]: 0.5,
-  [ScaffoldLayerCoordPosition.RR]: 1.5,
+const XValues: Record<ScaffoldLayerCoordPosition, number> = {
+  [ScaffoldLayerCoordPosition.LL]: -FloorLength/2 - PathLength,
+  [ScaffoldLayerCoordPosition.CL]: -FloorLength / 2,
+  [ScaffoldLayerCoordPosition.CR]: FloorLength/2,
+  [ScaffoldLayerCoordPosition.RR]: FloorLength/2 + PathLength,
 }
