@@ -1,5 +1,5 @@
 import { ListenableState } from '..'
-import { floorToThreshold } from '../../stats'
+import { floorToThreshold } from '../stats'
 import { parameterizeNormalScene } from './default'
 import { parameterizeEffectScene } from './effect'
 import { ColorIntention, Scene } from './types'

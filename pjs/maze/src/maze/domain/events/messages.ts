@@ -1,4 +1,4 @@
-import { VisionIntention, getVisionIntentionFromCurrentState } from '../vision'
+import { DomainIntention, getVisionIntentionFromCurrentState } from '..'
 
 export enum RenderSignal {
   CurrentView = 'CurrentView',
@@ -10,7 +10,7 @@ export enum RenderSignal {
   OpenMap = 'OpenMap',
 }
 
-export type RenderMessage = [signal: RenderSignal, slice: VisionIntention]
+export type RenderMessage = [signal: RenderSignal, intention: DomainIntention]
 
 const createMessageQueue = () => {
   const MessageQueue: RenderMessage[] = []
@@ -23,7 +23,6 @@ const createMessageQueue = () => {
     throw Error(`message queue is empty`)
   }
   const consume = (cb: (message: RenderMessage) => void) => {
-    // console.log(MessageQueue.map(q => q[0]))
     while (MessageQueue.length) {
       cb(_consume())
     }

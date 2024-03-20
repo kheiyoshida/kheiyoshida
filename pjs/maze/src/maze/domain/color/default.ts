@@ -1,5 +1,5 @@
 import { clamp } from 'utils'
-import { createRandomSelect } from '../../../../lib/random'
+import { createRandomSelect } from '../../../lib/random'
 import { ParameterizeState, Scene, ScenePattern } from './types'
 
 const selectA = createRandomSelect<ScenePattern<Scene.Normal>>([

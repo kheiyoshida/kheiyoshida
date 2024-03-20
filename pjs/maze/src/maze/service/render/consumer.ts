@@ -1,13 +1,18 @@
-import {
-  MakeRender
-} from '.'
 import { STAND_INTERVAL_MS } from '../../config/constants'
 import { recurringConstantEvent, recurringStandEvent } from '../../domain/events/events'
 import { MessageQueue, RenderSignal } from '../../domain/events/messages'
 import { setIntervalEvent } from '../timer'
 import { renderMap } from './others/map'
-import { renderCurrentView3d, renderGo3d, renderGoDownstairs3d, renderProceedToNextFloor3d, renderTurn3d } from './render3d'
-import { consumeVisionIntention } from './vision'
+import {
+  renderCurrentView3d,
+  renderGo3d,
+  renderGoDownstairs3d,
+  renderProceedToNextFloor3d,
+  renderTurn3d,
+} from './render3d'
+import { RenderPack, packVisionIntention } from './vision'
+
+export type MakeRender = (intention: RenderPack) => () => void
 
 export const ConsumeMessageMap: Record<RenderSignal, MakeRender> = {
   [RenderSignal.CurrentView]: renderCurrentView3d,
@@ -20,8 +25,8 @@ export const ConsumeMessageMap: Record<RenderSignal, MakeRender> = {
 }
 
 export const consumeMessageQueue = () => {
-  MessageQueue.consume(([signal, slice]) => {
-    const vision = consumeVisionIntention(slice)
+  MessageQueue.consume(([signal, intention]) => {
+    const vision = packVisionIntention(intention)
     const render = ConsumeMessageMap[signal](vision)
     render()
   })

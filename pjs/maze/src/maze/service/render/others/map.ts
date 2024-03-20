@@ -3,11 +3,11 @@ import { Position, loop2D } from 'utils'
 import { Conf } from '../../../config'
 import { NESW } from '../../../domain/maze/direction'
 import { MapInfo } from '../../../domain/maze/mapper'
-import { Vision } from '../vision'
+import { RenderPack } from '../vision'
 import { getPalette } from '../vision/color/palette'
 
 export const renderMap =
-  ({ map }: Vision) =>
+  ({ map }: RenderPack) =>
   () => {
     const mapSize = Math.min(Conf.ww, Conf.wh) * Conf.mapSizing
     const mapPosition: Position = [-mapSize / 2, -mapSize / 2]

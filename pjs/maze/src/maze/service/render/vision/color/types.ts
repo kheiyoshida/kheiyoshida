@@ -1,4 +1,4 @@
-import { Scene, ScenePattern, ScenePatternParams } from '../../../../domain/vision/color/types'
+import { Scene, ScenePattern, ScenePatternParams } from '../../../../domain/color/types'
 import { ColorPalette } from './palette'
 
 export type ColorManipFn<S extends Scene> = (
