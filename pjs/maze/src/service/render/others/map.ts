@@ -1,15 +1,15 @@
 import p5 from 'p5'
 import { Position, loop2D } from 'utils'
-import { Conf } from '../../../config'
 import { NESW } from '../../../domain/maze/direction'
 import { MapInfo } from '../../../domain/maze/mapper'
 import { RenderPack } from '../pack'
 import { getPalette } from '../color/palette'
+import { mapSizing, wh, ww } from '../../../config'
 
 export const renderMap =
   ({ map }: RenderPack) =>
   () => {
-    const mapSize = Math.min(Conf.ww, Conf.wh) * Conf.mapSizing
+    const mapSize = Math.min(ww, wh) * mapSizing
     const mapPosition: Position = [-mapSize / 2, -mapSize / 2]
     const pg = p.createGraphics(mapSize + 100, mapSize)
     drawMap(pg, map)

@@ -1,11 +1,5 @@
-import { FRAME_INTERVAL } from "./constants"
+export const MobileWidth = 800
+export const mapSizing = window.innerWidth < MobileWidth ? 0.88 : 0.6
 
-const defaultConf = (w = window) => ({
-  ww: w.innerWidth,
-  wh: w.innerHeight,
-  frameInterval: FRAME_INTERVAL,
-  mapSizing: w.innerWidth < 1000 ? 0.88 : 0.6,
-  pictureMagnify: 0.75,
-})
-
-export const Conf = defaultConf()
+export const ww = window.innerWidth
+export const wh = window.innerHeight

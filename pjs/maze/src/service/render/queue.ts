@@ -1,4 +1,4 @@
-import { Conf } from '../../config'
+import { FrameInterval } from '../../config/frame'
 
 export type RenderFn = () => void
 export type RenderFnQueue = RenderFn[]
@@ -32,9 +32,9 @@ const makeRenderQueue = () => {
       } else {
         _wait(onQueueCleared)
       }
-    }, Conf.frameInterval / 4)
+    }, FrameInterval / 4)
   }
-  return { 
+  return {
     consume,
     push,
     update,

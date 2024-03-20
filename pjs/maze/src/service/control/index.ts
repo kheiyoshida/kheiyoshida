@@ -1,16 +1,14 @@
-import { Conf } from '../../config'
+import { MobileWidth, wh, ww } from '../../config'
 import * as commands from './commands'
 import { renderGUI } from './gui'
 
-const CONTROL_WW_THRESHOLD = 1000
-
 export const bindControl = () => {
-  if (Conf.ww < CONTROL_WW_THRESHOLD) smallScreen()
+  if (ww < MobileWidth) smallScreen()
   else wideScreen()
 }
 
 const smallScreen = () => {
-  const { map, up, right, left } = renderGUI(Conf.ww, Conf.wh)
+  const { map, up, right, left } = renderGUI(ww, wh)
   map.touchStarted(commands.callMap)
   up.touchStarted(commands.go)
   right.touchStarted(commands.turnRight)

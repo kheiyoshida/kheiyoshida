@@ -1,4 +1,4 @@
-import { STAND_INTERVAL_MS } from '../../config/constants'
+import { StandIntervalMS } from '../../config/frame'
 import { recurringConstantEvent, recurringStandEvent } from '../../domain/events/events'
 import { MessageQueue, RenderSignal } from '../../domain/events/messages'
 import { setIntervalEvent } from '../timer'
@@ -44,7 +44,7 @@ const registerConcurrentConstantEvent = () => {
       recurringConstantEvent()
       consumeMessageQueue()
     },
-    STAND_INTERVAL_MS * 2
+    StandIntervalMS * 2
   )
 }
 
@@ -55,6 +55,6 @@ const registerRecurringRender = () => {
       recurringStandEvent()
       consumeMessageQueue()
     },
-    STAND_INTERVAL_MS
+    StandIntervalMS
   )
 }
