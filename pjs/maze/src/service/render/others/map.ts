@@ -4,7 +4,8 @@ import { NESW } from '../../../domain/maze/direction'
 import { MapInfo } from '../../../domain/maze/mapper'
 import { RenderPack } from '../pack'
 import { getPalette } from '../color/palette'
-import { mapSizing, wh, ww } from '../../../config'
+import { CameraZ, mapSizing, wh, ww } from '../../../config'
+import { pushPop } from 'p5utils/src/render'
 
 export const renderMap =
   ({ map }: RenderPack) =>
@@ -15,7 +16,12 @@ export const renderMap =
     drawMap(pg, map)
     pg.textSize(32)
     pg.text(`B${map.floor}F`, mapSize + 8, 32)
-    p.image(pg, ...mapPosition)
+
+    p.background(50)
+    pushPop(() => {
+      p.translate(0, 0, -800 + CameraZ)
+      p.image(pg, ...mapPosition)
+    })
   }
 
 export const drawMap = (pg: p5.Graphics, { grid, current, direction }: MapInfo) => {
