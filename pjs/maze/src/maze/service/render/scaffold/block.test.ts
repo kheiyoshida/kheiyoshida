@@ -1,6 +1,7 @@
+import { RenderBlockCoords, RenderBlockLayer } from '.'
 import { RenderPosition } from '../../../domain/compose/renderSpec'
 import { MockScaffold } from './__test__/mock'
-import { getBlockLayer, makeGetRenderBlock } from './block'
+import { getAltBlock, getBlockLayer, makeGetRenderBlock } from './block'
 
 test(`${makeGetRenderBlock.name}`, () => {
   const scaffold = MockScaffold
@@ -27,5 +28,35 @@ test(`${getBlockLayer.name}`, () => {
     tr: [-500, -500, -5500],
     bl: [-1500, 500, -5500],
     br: [-500, 500, -5500],
+  })
+})
+
+test(`${getAltBlock.name}`, () => {
+  const block: RenderBlockCoords = {
+    front: {
+      tl: [-1500, -500, -4500],
+      tr: [-500, -500, -4500],
+      bl: [-1500, 500, -4500],
+      br: [-500, 500, -4500],
+    },
+    rear: {
+      tl: [-1500, -500, -5500],
+      tr: [-500, -500, -5500],
+      bl: [-1500, 500, -5500],
+      br: [-500, 500, -5500],
+    },
+  }
+  const altBlock = getAltBlock(block, { y: 1000, z: -1000 })
+  Object.entries(altBlock.front).forEach(([k, [x, y, z]]) => {
+    const original = block.front[k as keyof RenderBlockLayer]
+    expect(x).toBe(original[0])
+    expect(y).toBe(original[1] + 1000)
+    expect(z).toBe(original[2] - 1000)
+  })
+  Object.entries(altBlock.rear).forEach(([k, [x, y, z]]) => {
+    const original = block.rear[k as keyof RenderBlockLayer]
+    expect(x).toBe(original[0])
+    expect(y).toBe(original[1] + 1000)
+    expect(z).toBe(original[2] - 1000)
   })
 })
