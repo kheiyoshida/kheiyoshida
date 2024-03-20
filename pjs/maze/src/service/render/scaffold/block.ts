@@ -49,6 +49,16 @@ export const getAltBlock = (
   }
 }
 
+export const getAdjacentBlock = (
+  block: RenderBlockCoords,
+  delta: { z: number }
+): RenderBlockCoords => {
+  return {
+    front: {...block.rear},
+    rear: addValueToLBlockLayer(block.rear, delta),
+  }
+}
+
 const addValueToLBlockLayer = (
   layer: RenderBlockLayer,
   delta: { x?: number; y?: number; z?: number }

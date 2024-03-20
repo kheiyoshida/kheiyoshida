@@ -1,7 +1,8 @@
 import { GeometryCoordinates, ModelGrid, RenderModel, ShapeCoordinates } from '.'
+import { FloorLength, PathLength, WallHeight } from '../../../config'
 import { RenderPosition } from '../../../domain/compose/renderSpec'
 import { RenderBlockCoords, Scaffold } from '../scaffold'
-import { getAltBlock, makeGetRenderBlock } from '../scaffold/block'
+import { getAltBlock, getAdjacentBlock, makeGetRenderBlock } from '../scaffold/block'
 
 export const convertModelGrid = (
   modelGrid: ModelGrid,
@@ -31,10 +32,10 @@ export const convertModelToGeometryCoords = (
 }
 
 const convertStairModel = (renderBlock: RenderBlockCoords): GeometryCoordinates => {
-  const oneStairDownBlock = getAltBlock(renderBlock, { y: 1000 })
-  const corridorBlock = getAltBlock(oneStairDownBlock, { z: -1000 })
-  const corridorBlock2 = getAltBlock(corridorBlock, { z: -1000 })
-  const corridorBlock3 = getAltBlock(corridorBlock2, { z: -1000 })
+  const oneStairDownBlock = getAltBlock(renderBlock, { y: WallHeight })
+  const corridorBlock = getAdjacentBlock(oneStairDownBlock, { z: -PathLength })
+  const corridorBlock2 = getAdjacentBlock(corridorBlock, { z: -FloorLength })
+  const corridorBlock3 = getAdjacentBlock(corridorBlock2, { z: -PathLength })
   return [
     flatStair(oneStairDownBlock),
     sideWallOnLeft(oneStairDownBlock),

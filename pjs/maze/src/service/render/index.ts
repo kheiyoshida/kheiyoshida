@@ -72,7 +72,7 @@ export const renderTurn3d =
 export const renderGoDownstairs3d =
   ({ renderGrid, speed }: RenderPack) =>
   () => {
-    const interval = speed * FrameInterval * 3
+    const interval = speed * FrameInterval 
     const renderFns = DownstairsValues.map((values) => () => {
       moveCamera(...values)
       renderCurrentTerrain(renderGrid)
@@ -81,7 +81,7 @@ export const renderGoDownstairs3d =
   }
 
 export const renderProceedToNextFloor3d = (vision: RenderPack) => () => {
-  const interval = vision.speed * FrameInterval * 3
+  const interval = vision.speed * FrameInterval 
   const renderFns = GoMoveMagValues.map((val) => () => {
     moveCamera(val)
     renderCurrentTerrain(corridorToNextFloor)

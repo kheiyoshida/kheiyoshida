@@ -1,4 +1,4 @@
-import { CameraLookAhead, CameraZ, FloorLength, PathLength } from '../../config'
+import { CameraLookAhead, CameraZ, FloorLength, PathLength, WallHeight } from '../../config'
 
 const DefaultZ = CameraZ
 export const cameraReset = () => {
@@ -9,7 +9,7 @@ const Size = FloorLength + PathLength
 export const moveCamera = (zDelta: number, turnDelta?: number, upDown?: number) => {
   const finalX = turnDelta ? turnDelta * Size : 0
   const finalZ = DefaultZ + zDelta * -Size
-  const finalY = upDown ? upDown * Size : 0
+  const finalY = upDown ? upDown * WallHeight : 0
   p.camera(0, finalY, finalZ, finalX, finalY, finalZ - CameraLookAhead)
 }
 
@@ -23,7 +23,7 @@ export const TurnMoveLRDeltaValues = createSinArray(4, 0.15)
 const DownFramesLength = 12
 export const DownstairsValues: Parameters<typeof moveCamera>[] = [...Array(DownFramesLength)].map(
   (_, i) => {
-    const forward = 0.7
+    const forward = 0.3
     const zDelta = (forward * (i + 1)) / DownFramesLength
     const upDown = ((i % 2 === 0 ? 1 : 0.75) * (i + 1)) / DownFramesLength
     return [zDelta, 0, upDown]
