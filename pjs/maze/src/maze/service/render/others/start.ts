@@ -1,5 +1,5 @@
 import { Conf } from '../../../config'
-import { getPalette } from '../vision/color/palette'
+import { getPalette } from '../color/palette'
 
 const em = 32
 

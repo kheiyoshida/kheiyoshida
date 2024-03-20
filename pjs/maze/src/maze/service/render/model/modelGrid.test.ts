@@ -1,4 +1,4 @@
-import { ConcreteRenderLayer, RenderGrid } from '../../../../domain/compose/renderSpec'
+import { ConcreteRenderLayer, RenderGrid } from '../../../domain/compose/renderSpec'
 import { convertToModelGrid, convertToModelGridLayer } from './modelGrid'
 import { RenderModel } from './types'
 

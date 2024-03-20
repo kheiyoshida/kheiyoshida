@@ -1,5 +1,5 @@
 import { Position3D } from 'p5utils/src/3d/types'
-import * as RenderSpec from '../../../../domain/compose/renderSpec'
+import * as RenderSpec from '../../../domain/compose/renderSpec'
 
 export type RenderBlockPosition = {
   z: number

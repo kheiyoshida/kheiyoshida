@@ -1,5 +1,5 @@
 import { randomColorVector } from 'p5utils/src/render'
-import { Scene } from '../../../../../domain/color/types'
+import { Scene } from '../../../../domain/color/types'
 import { getPalette } from '../palette'
 import {
   defaultPalette,

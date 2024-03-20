@@ -1,10 +1,10 @@
-import { Conf } from '../../../config'
-import { RenderGrid } from '../../../domain/compose/renderSpec'
-import { registerIntervalRenderSequence, reserveIntervalRender } from '../base'
-import { corridorToNextFloor } from '../others/scenes'
-import { RenderQueue } from '../queue'
-import { RenderPack } from '../vision'
-import { getPalette } from '../vision/color/palette'
+import { Conf } from '../../config'
+import { RenderGrid } from '../../domain/compose/renderSpec'
+import { registerIntervalRenderSequence, reserveIntervalRender } from './base'
+import { corridorToNextFloor } from './others/scenes'
+import { RenderQueue } from './queue'
+import { RenderPack } from './pack'
+import { getPalette } from './color/palette'
 import {
   DownstairsValues,
   GoMoveMagValues,

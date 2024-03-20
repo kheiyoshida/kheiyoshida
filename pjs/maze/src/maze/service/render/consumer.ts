@@ -9,8 +9,8 @@ import {
   renderGoDownstairs3d,
   renderProceedToNextFloor3d,
   renderTurn3d,
-} from './render3d'
-import { RenderPack, packVisionIntention } from './vision'
+} from '.'
+import { RenderPack, packDomainIntention } from './pack'
 
 export type MakeRender = (intention: RenderPack) => () => void
 
@@ -26,7 +26,7 @@ export const ConsumeMessageMap: Record<RenderSignal, MakeRender> = {
 
 export const consumeMessageQueue = () => {
   MessageQueue.consume(([signal, intention]) => {
-    const vision = packVisionIntention(intention)
+    const vision = packDomainIntention(intention)
     const render = ConsumeMessageMap[signal](vision)
     render()
   })

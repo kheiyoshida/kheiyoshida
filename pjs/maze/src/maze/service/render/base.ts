@@ -1,7 +1,7 @@
 import { RenderGrid } from '../../domain/compose/renderSpec'
 import { setIntervalEvent } from '../timer'
 import { RenderFn, RenderQueue } from './queue'
-import { RenderPack } from './vision'
+import { RenderPack } from './pack'
 
 export type RenderFunc = (
   grid: RenderGrid,

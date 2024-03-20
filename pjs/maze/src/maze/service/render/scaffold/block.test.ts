@@ -1,4 +1,4 @@
-import { RenderPosition } from '../../../../domain/compose/renderSpec'
+import { RenderPosition } from '../../../domain/compose/renderSpec'
 import { MockScaffold } from './__test__/mock'
 import { getBlockLayer, makeGetRenderBlock } from './block'
 

@@ -1,7 +1,7 @@
 import { P5Canvas } from '../lib/p5canvas'
 import { Conf } from './config'
 import { initializeServices } from './service'
-import { applyPalette, getPalette } from './service/render/vision/color/palette'
+import { applyPalette, getPalette } from './service/render/color/palette'
 import { toneStart } from './service/sound'
 import { renderStartPage } from './service/render/others/start'
 import pjson from '../../package.json'

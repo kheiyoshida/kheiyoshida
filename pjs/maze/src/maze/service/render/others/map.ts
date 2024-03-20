@@ -3,8 +3,8 @@ import { Position, loop2D } from 'utils'
 import { Conf } from '../../../config'
 import { NESW } from '../../../domain/maze/direction'
 import { MapInfo } from '../../../domain/maze/mapper'
-import { RenderPack } from '../vision'
-import { getPalette } from '../vision/color/palette'
+import { RenderPack } from '../pack'
+import { getPalette } from '../color/palette'
 
 export const renderMap =
   ({ map }: RenderPack) =>

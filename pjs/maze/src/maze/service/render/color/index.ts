@@ -1,5 +1,5 @@
-import { ListenableState } from '../../../../domain'
-import { ColorIntention, Scene, ScenePatternParams } from '../../../../domain/color/types'
+import { ListenableState } from '../../../domain'
+import { ColorIntention, Scene, ScenePatternParams } from '../../../domain/color/types'
 import { effectSceneManipMap, normalSceneManipMap } from './manipMaps'
 import { ColorPalette, applyPalette, getPalette, setPalette } from './palette'
 import { ColorManipFnMap } from './types'

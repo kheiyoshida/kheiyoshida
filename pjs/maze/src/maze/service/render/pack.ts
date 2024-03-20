@@ -1,6 +1,6 @@
-import { RenderGrid } from '../../../domain/compose/renderSpec'
-import { MapInfo } from '../../../domain/maze/mapper'
-import { DomainIntention } from '../../../domain'
+import { RenderGrid } from '../../domain/compose/renderSpec'
+import { MapInfo } from '../../domain/maze/mapper'
+import { DomainIntention } from '../../domain'
 import { ApplyColors, resolveColorIntention } from './color'
 
 export type RenderPack = {
@@ -10,7 +10,7 @@ export type RenderPack = {
   map: MapInfo
 }
 
-export const packVisionIntention = ({
+export const packDomainIntention = ({
   colorIntention,
   renderGrid,
   speed,

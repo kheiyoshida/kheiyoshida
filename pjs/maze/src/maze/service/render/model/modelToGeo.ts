@@ -1,5 +1,5 @@
 import { GeometryCoordinates, ModelGrid, RenderModel, ShapeCoordinates } from '.'
-import { RenderPosition } from '../../../../domain/compose/renderSpec'
+import { RenderPosition } from '../../../domain/compose/renderSpec'
 import { RenderBlockCoords, Scaffold } from '../scaffold'
 import { makeGetRenderBlock } from '../scaffold/block'
 
