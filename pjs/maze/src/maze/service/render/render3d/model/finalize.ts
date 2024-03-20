@@ -10,11 +10,11 @@ export const finalize = (coords: GeometryCoordinates[]) => coords.map(finalizeGe
 export const finalizeGeometry = (coords: GeometryCoordinates): p5.Geometry => {
   // eslint-disable-next-line no-extra-semi
   ;(p as pExtended).beginGeometry()
-  finalizeSurface(coords)
+  coords.forEach(finalizeShape)
   return (p as pExtended).endGeometry()
 }
 
-export const finalizeSurface = (vertices: Position3D[]): void => {
+export const finalizeShape = (vertices: Position3D[]): void => {
   p.beginShape()
   // TODO: calc normal from the block
   vertices.forEach((vertex) => p.vertex(...vertex))

@@ -1,4 +1,4 @@
-import { GeometryCoordinates, ModelGrid, RenderModel } from '.'
+import { GeometryCoordinates, ModelGrid, RenderModel, ShapeCoordinates } from '.'
 import { RenderPosition } from '../../../../domain/compose/renderSpec'
 import { RenderBlockCoords, Scaffold } from '../scaffold'
 import { makeGetRenderBlock } from '../scaffold/block'
@@ -21,15 +21,15 @@ export const convertModelToGeometry = (
   renderBlock: RenderBlockCoords,
   side: RenderPosition
 ): GeometryCoordinates => {
-  if (model === RenderModel.Ceil) return ceil(renderBlock)
-  if (model === RenderModel.Floor) return floor(renderBlock)
-  if (model === RenderModel.FrontWall) return frontWall(renderBlock)
-  if (model === RenderModel.SideWall) return sideWall(side)(renderBlock)
-  if (model === RenderModel.Stair) return stair(renderBlock)
+  if (model === RenderModel.Ceil) return [ceil(renderBlock)]
+  if (model === RenderModel.Floor) return [floor(renderBlock)]
+  if (model === RenderModel.FrontWall) return [frontWall(renderBlock)]
+  if (model === RenderModel.SideWall) return [sideWall(side)(renderBlock)]
+  if (model === RenderModel.Stair) return [stair(renderBlock)]
   throw Error()
 }
 
-type RetrieveCoords = (block: RenderBlockCoords) => GeometryCoordinates
+type RetrieveCoords = (block: RenderBlockCoords) => ShapeCoordinates
 const ceil: RetrieveCoords = (b) => [b.front.tl, b.front.tr, b.rear.tr, b.rear.tl]
 const floor: RetrieveCoords = (b) => [b.front.bl, b.front.br, b.rear.br, b.rear.bl]
 const frontWall: RetrieveCoords = (b) => [b.front.bl, b.front.br, b.front.tr, b.front.tl]

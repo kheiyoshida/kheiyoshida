@@ -14,4 +14,5 @@ export enum RenderModel {
   Stair = 'Stair'
 }
 
-export type GeometryCoordinates = Position3D[]
+export type ShapeCoordinates = Position3D[]
+export type GeometryCoordinates = ShapeCoordinates[]
