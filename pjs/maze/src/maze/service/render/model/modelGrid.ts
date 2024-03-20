@@ -31,7 +31,7 @@ export const convertToModel = (
 export const convertCenterModel = (pattern: RenderPattern): CompoundRenderModel => {
   if (pattern === RenderPattern.FLOOR) return [RenderModel.Floor, RenderModel.Ceil]
   if (pattern === RenderPattern.FILL) return [RenderModel.FrontWall]
-  if (pattern === RenderPattern.STAIR) return [RenderModel.Stair, RenderModel.Ceil]
+  if (pattern === RenderPattern.STAIR) return [RenderModel.Stair, RenderModel.StairCeil]
   throw Error()
 }
 

@@ -80,8 +80,8 @@ export const renderGoDownstairs3d =
   }
 
 export const renderProceedToNextFloor3d = (vision: RenderPack) => () => {
-  const interval = vision.speed * Conf.frameInterval * 2
-  const renderFns = GoMoveMagValues.slice(6).map((val) => () => {
+  const interval = vision.speed * Conf.frameInterval * 3
+  const renderFns = GoMoveMagValues.map((val) => () => {
     moveCamera(val)
     renderCurrentTerrain(corridorToNextFloor)
   })

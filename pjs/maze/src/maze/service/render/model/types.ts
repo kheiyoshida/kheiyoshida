@@ -12,6 +12,7 @@ export enum RenderModel {
   SideWall = 'SideWall',
   FrontWall = 'FrontWall',
   Stair = 'Stair',
+  StairCeil = 'StairCeil',
 }
 
 export type ShapeCoordinates = Position3D[]

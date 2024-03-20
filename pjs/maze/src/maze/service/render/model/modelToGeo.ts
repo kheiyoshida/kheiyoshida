@@ -25,6 +25,7 @@ export const convertModelToGeometryCoords = (
   if (model === RenderModel.Floor) return [floor(renderBlock)]
   if (model === RenderModel.FrontWall) return [frontWall(renderBlock)]
   if (model === RenderModel.SideWall) return [sideWall(side)(renderBlock)]
+  if (model === RenderModel.StairCeil) return [flatStair(renderBlock)]
   if (model === RenderModel.Stair) return convertStairModel(renderBlock)
   throw Error()
 }
@@ -65,4 +66,4 @@ const sideWall =
   }
 const sideWallOnRight: RetrieveCoords = (b) => [b.front.tr, b.rear.tr, b.rear.br, b.front.br]
 const sideWallOnLeft: RetrieveCoords = (b) => [b.front.tl, b.rear.tl, b.rear.bl, b.front.bl]
-const flatStair: RetrieveCoords = (b) => [b.front.tl, b.front.tr, b.front.br, b.front.bl]
+const flatStair: RetrieveCoords = (b) => [b.front.tl, b.front.tr, b.rear.br, b.rear.bl]

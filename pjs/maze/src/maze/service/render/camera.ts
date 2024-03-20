@@ -21,10 +21,9 @@ export const TurnMoveLRDeltaValues = createSinArray(4, 0.15)
 const DownFramesLength = 12
 export const DownstairsValues: Parameters<typeof moveCamera>[] = [...Array(DownFramesLength)].map(
   (_, i) => {
-    const forward = 1.5
-    const zDelta = forward * (i / DownFramesLength)
-    const constant = 0.1
-    const upDown = (i % 2 === 0 ? 0.5 : 0.3) * i
-    return [zDelta, 0, constant + upDown]
+    const forward = 0.7
+    const zDelta = (forward * (i + 1)) / DownFramesLength
+    const upDown = ((i % 2 === 0 ? 1 : 0.75) * (i + 1)) / DownFramesLength
+    return [zDelta, 0, upDown]
   }
 )
