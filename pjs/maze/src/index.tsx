@@ -2,8 +2,7 @@ import pjson from '../package.json'
 import { FovyValue, wh, ww } from './config'
 import { P5Canvas } from './p5canvas'
 import { initialize3d, initializeServices } from './service'
-import { closeInterfaceLayer } from './service/interface'
-import { Interface } from './service/interface_new'
+import { Interface } from './service/interface'
 import { applyPalette, getPalette } from './service/render/color/palette'
 import { toneStart } from './service/sound'
 
@@ -27,17 +26,14 @@ const start = () => {
   if (started) return
   started = true
   initializeServices()
-  closeInterfaceLayer()
+
   toneStart()
 }
 
-const Maze = P5Canvas(
-  {
-    setup,
-    draw: () => undefined,
-  },
-  'p'
-)
+const Maze = P5Canvas({
+  setup,
+  draw: () => undefined,
+})
 
 export default () => {
   return (

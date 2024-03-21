@@ -1,7 +1,7 @@
 import { StandIntervalMS } from '../config/frame'
 import { recurringConstantEvent, recurringStandEvent } from '../domain/events/events'
 import { MessageQueue, RenderSignal } from '../domain/events/messages'
-import { closeMap, renderMap } from './interface_new/map'
+import { closeMap, renderMap } from './interface/map'
 import {
   renderCurrentView3d,
   renderGo3d,
