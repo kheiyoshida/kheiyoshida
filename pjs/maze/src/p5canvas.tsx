@@ -11,8 +11,6 @@ type P5Context = 'p' | 'p2d'
 type Sketch = {
   setup: () => void
   draw: () => void
-  preload?: () => void
-  windowResized?: () => void
 }
 
 export const P5Canvas = (sketch: Sketch, context: P5Context) => () => {
@@ -39,7 +37,6 @@ const sketchFactory = (s: Sketch, context: P5Context) => (p: p5) => {
   globalThis[context] = p
   p.setup = () => s.setup()
   p.draw = () => s.draw()
-  p.preload = s.preload || (() => undefined)
 }
 
 const styles = (context: P5Context): Record<string, React.CSSProperties> => ({

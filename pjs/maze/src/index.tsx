@@ -31,10 +31,33 @@ const setup = () => {
   p.touchStarted = start
 }
 
-export default P5Canvas(
+const setupInterface = () => {
+  p2d.createCanvas(ww, wh)
+
+  p2d.noLoop()
+}
+
+const Interface = P5Canvas(
+  {
+    setup: setupInterface,
+    draw: () => undefined,
+  },
+  'p2d'
+)
+
+const Maze = P5Canvas(
   {
     setup,
     draw: () => undefined,
   },
   'p'
 )
+
+export default () => {
+  return (
+    <>
+      <Maze />
+      <Interface />
+    </>
+  )
+}
