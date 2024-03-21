@@ -1,11 +1,11 @@
 export const openInterfaceLayer = () => {
-  const canvas = getCanvas()
-  canvas.style.visibility = 'visible'
+  // const canvas = getCanvas()
+  // canvas.style.visibility = 'visible'
 }
 
 export const closeInterfaceLayer = () => {
-  const canvas = getCanvas()
-  canvas.style.visibility = 'hidden'
+  // const canvas = getCanvas()
+  // canvas.style.visibility = 'hidden'
 }
 
 export const clearInterfaceLayer = () => {

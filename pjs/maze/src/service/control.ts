@@ -1,6 +1,6 @@
-import { MobileWidth, wh, ww } from '../config'
+import { MobileWidth, ww } from '../config'
 import * as commands from './commands'
-import { renderGUI } from './interface/gui'
+import { getButtons } from './interface_new/buttons'
 
 export const bindControl = () => {
   if (ww < MobileWidth) smallScreen()
@@ -8,20 +8,21 @@ export const bindControl = () => {
 }
 
 const smallScreen = () => {
-  const { map, up, right, left } = renderGUI(ww, wh)
-  map.touchStarted(commands.callMap)
-  up.touchStarted(commands.go)
-  right.touchStarted(commands.turnRight)
-  left.touchStarted(commands.turnLeft)
+  const { map, up, right, left } = getButtons()
+  map.ontouchstart = commands.callMap
+  up.ontouchstart = commands.go
+  right.ontouchstart = commands.turnRight
+  left.ontouchstart = commands.turnLeft
 }
 
+// TODO: replace with native keyCode events
 const wideScreen = () => {
   const keyCodeMap = {
-    [p2d.UP_ARROW]: commands.go,
-    [p2d.RIGHT_ARROW]: commands.turnRight,
-    [p2d.LEFT_ARROW]: commands.turnLeft,
-    [p2d.DOWN_ARROW]: commands.callMap,
-    [p2d.ENTER]: commands.callMap,
+    [p.UP_ARROW]: commands.go,
+    [p.RIGHT_ARROW]: commands.turnRight,
+    [p.LEFT_ARROW]: commands.turnLeft,
+    [p.DOWN_ARROW]: commands.callMap,
+    [p.ENTER]: commands.callMap,
   } as const
   const keyMap = {
     m: commands.callMap,
@@ -30,12 +31,12 @@ const wideScreen = () => {
     s: commands.callMap,
     d: commands.turnRight,
   } as const
-  p2d.keyPressed = () => {
-    if (p2d.keyCode in keyCodeMap) {
-      keyCodeMap[p2d.keyCode]()
+  p.keyPressed = () => {
+    if (p.keyCode in keyCodeMap) {
+      keyCodeMap[p.keyCode]()
     }
-    if (p2d.key in keyMap) {
-      keyMap[p2d.key as keyof typeof keyMap]()
+    if (p.key in keyMap) {
+      keyMap[p.key as keyof typeof keyMap]()
     }
   }
 }

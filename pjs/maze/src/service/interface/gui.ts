@@ -1,5 +1,5 @@
 const btnFac = (base: number) => (text: string, x: number, y: number) => {
-  const btn = p2d.createDiv(text)
+  const btn = p.createDiv(text)
   btn.style('color', 'rgba(255,255,255,0.4)')
   btn.style('cursor', 'pointer')
   btn.style('letter-spacing', '0')
