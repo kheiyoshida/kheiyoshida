@@ -1,5 +1,11 @@
-import Maze from './index'
+import Maze from './maze'
+import Interface from './interface'
 
 export default () => {
-  return <Maze />
+  return (
+    <>
+      <Maze />
+      <Interface />
+    </>
+  )
 }

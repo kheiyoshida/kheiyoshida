@@ -2,9 +2,11 @@ import p5 from 'p5'
 import { useEffect, useRef, useState } from 'react'
 
 declare global {
-  // eslint-disable-next-line no-var
-  var p: p5
+  var p: p5 // eslint-disable-line
+  var p2d: p5 // eslint-disable-line
 }
+
+type P5Context = 'p' | 'p2d'
 
 type Sketch = {
   setup: () => void
@@ -13,7 +15,7 @@ type Sketch = {
   windowResized?: () => void
 }
 
-export const P5Canvas = (sketch: Sketch) => () => {
+export const P5Canvas = (sketch: Sketch, context: P5Context) => () => {
   const [canvas, setCanvas] = useState<p5>()
   const canvasRef = useRef<HTMLDivElement>(null)
 
@@ -21,7 +23,7 @@ export const P5Canvas = (sketch: Sketch) => () => {
   useEffect(() => {
     if (canvasRef.current && !canvas) {
       if (!mount) {
-        setCanvas(new p5(sketchFactory(sketch), canvasRef.current))
+        setCanvas(new p5(sketchFactory(sketch, context), canvasRef.current))
         mount = true
       }
     }
@@ -30,30 +32,30 @@ export const P5Canvas = (sketch: Sketch) => () => {
     }
   }, [canvasRef])
 
-  return <div style={styles.canvasContainer} ref={canvasRef} />
+  return <div style={styles(context).canvasContainer} ref={canvasRef} />
 }
 
-const sketchFactory = (s: Sketch) => (p: p5) => {
-  globalThis.p = p
+const sketchFactory = (s: Sketch, context: P5Context) => (p: p5) => {
+  globalThis[context] = p
   p.setup = () => s.setup()
   p.draw = () => s.draw()
   p.preload = s.preload || (() => undefined)
 }
 
-const styles: Record<string, React.CSSProperties> = {
+const styles = (context: P5Context): Record<string, React.CSSProperties> => ({
   canvasContainer: {
-    zIndex: 10,
+    zIndex: context === 'p' ? 10 : 11,
     position: 'fixed',
     top: 0,
     left: 0,
     width: '100vw',
     height: '100dvh',
     overflow: 'hidden',
-    backgroundColor: 'black',
+    backgroundColor: context === 'p' ? 'black' : 'transparent',
     margin: '0 auto',
     touchAction: 'manipulation',
     overflowX: 'hidden',
     overflowY: 'hidden',
     overscrollBehavior: 'none',
   },
-}
+})
