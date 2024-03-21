@@ -17,11 +17,11 @@ const smallScreen = () => {
 
 const wideScreen = () => {
   const keyCodeMap = {
-    [p.UP_ARROW]: commands.go,
-    [p.RIGHT_ARROW]: commands.turnRight,
-    [p.LEFT_ARROW]: commands.turnLeft,
-    [p.DOWN_ARROW]: commands.callMap,
-    [p.ENTER]: commands.callMap,
+    [p2d.UP_ARROW]: commands.go,
+    [p2d.RIGHT_ARROW]: commands.turnRight,
+    [p2d.LEFT_ARROW]: commands.turnLeft,
+    [p2d.DOWN_ARROW]: commands.callMap,
+    [p2d.ENTER]: commands.callMap,
   } as const
   const keyMap = {
     m: commands.callMap,
@@ -30,12 +30,12 @@ const wideScreen = () => {
     s: commands.callMap,
     d: commands.turnRight,
   } as const
-  p.keyPressed = () => {
-    if (p.keyCode in keyCodeMap) {
-      keyCodeMap[p.keyCode]()
+  p2d.keyPressed = () => {
+    if (p2d.keyCode in keyCodeMap) {
+      keyCodeMap[p2d.keyCode]()
     }
-    if (p.key in keyMap) {
-      keyMap[p.key as keyof typeof keyMap]()
+    if (p2d.key in keyMap) {
+      keyMap[p2d.key as keyof typeof keyMap]()
     }
   }
 }

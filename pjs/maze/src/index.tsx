@@ -1,13 +1,9 @@
 import pjson from '../package.json'
 import { FovyValue, wh, ww } from './config'
 import { P5Canvas } from './p5canvas'
-import { initializeServices } from './service'
+import { initialize3d, initializeServices } from './service'
 import { applyPalette, getPalette } from './service/render/color/palette'
 import { renderStartPage } from './service/render/others/start'
-
-const VERSION = pjson.version
-
-let started = false
 
 const setup = () => {
   p.createCanvas(ww, wh, p.WEBGL)
@@ -15,35 +11,33 @@ const setup = () => {
   p.perspective(FovyValue, ww / wh, 10, 8000)
   applyPalette(getPalette())
   p.noLoop()
-  p.textSize(32)
-
-  const start = () => {
-    if (!started) {
-      started = true
-      initializeServices()
-    }
-    // toneStart()
-  }
-
-  renderStartPage(VERSION)
-
-  p.mouseClicked = start
-  p.touchStarted = start
+  initialize3d()
 }
 
+const VERSION = pjson.version
+let started = false
 const setupInterface = () => {
   p2d.createCanvas(ww, wh)
-
+  p2d.angleMode(p.DEGREES)
+  p2d.stroke(100)
+  p2d.fill(255, 255)
+  p2d.textSize(32)
   p2d.noLoop()
-}
 
-const Interface = P5Canvas(
-  {
-    setup: setupInterface,
-    draw: () => undefined,
-  },
-  'p2d'
-)
+  renderStartPage(VERSION)
+  const start = () => {
+    if (started) return
+    started = true
+    initializeServices()
+    p2d.loadPixels()
+    p2d.pixels.forEach((_, i) => {
+      p2d.pixels[i] = 0
+    })
+    p2d.updatePixels()
+  }
+  p2d.mouseClicked = start
+  p2d.touchStarted = start
+}
 
 const Maze = P5Canvas(
   {
@@ -51,6 +45,13 @@ const Maze = P5Canvas(
     draw: () => undefined,
   },
   'p'
+)
+const Interface = P5Canvas(
+  {
+    setup: setupInterface,
+    draw: () => undefined,
+  },
+  'p2d'
 )
 
 export default () => {
