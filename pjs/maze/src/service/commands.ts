@@ -1,5 +1,5 @@
-import { consumeMessageQueue } from "../render/consumer"
-import * as handlers from '../../domain/events/commands'
+import { consumeMessageQueue } from "./consumer"
+import * as handlers from '../domain/events/commands'
 
 export const go = () => {
   handlers.go()

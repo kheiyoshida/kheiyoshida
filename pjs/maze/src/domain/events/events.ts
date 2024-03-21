@@ -22,7 +22,9 @@ export const recurringStandEvent = () => {
 }
 
 export const walkEvent = () => {
-  store.closeMap()
+  if (store.current.mapOpen) {
+    closeMapEvent()
+  }
   MessageQueue.push(RenderSignal.Go)
   const res = maze.navigate()
   mapper.track(res!)
@@ -42,7 +44,9 @@ export const goDownstairsEvent = () => {
 }
 
 export const turnEvent = (dir: 'r' | 'l') => {
-  store.closeMap()
+  if (store.current.mapOpen) {
+    closeMapEvent()
+  }
   MessageQueue.push(dir === 'r' ? RenderSignal.TurnRight : RenderSignal.TurnLeft)
   maze.turn(dir)
   updateStats('turn')
@@ -56,5 +60,6 @@ export const openMapEvent = () => {
 
 export const closeMapEvent = () => {
   store.closeMap()
+  MessageQueue.push(RenderSignal.CloseMap)
   MessageQueue.push(RenderSignal.CurrentView)
 }

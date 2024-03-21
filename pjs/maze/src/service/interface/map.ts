@@ -1,23 +1,30 @@
 import p5 from 'p5'
 import { Position, loop2D } from 'utils'
-import { mapSizing, wh, ww } from '../../../config'
-import { NESW } from '../../../domain/maze/direction'
-import { MapInfo } from '../../../domain/maze/mapper'
-import { getPalette } from '../color/palette'
-import { RenderPack } from '../pack'
+import { mapSizing, wh, ww } from '../../config'
+import { NESW } from '../../domain/maze/direction'
+import { MapInfo } from '../../domain/maze/mapper'
+import { getPalette } from '../render/color/palette'
+import { RenderPack } from '../render/pack'
+import { clearInterfaceLayer } from '.'
+
+let pg: p5.Graphics
+
+export const closeMap = () => () => {
+  pg.remove()
+  clearInterfaceLayer()
+}
 
 export const renderMap =
   ({ map }: RenderPack) =>
   () => {
     const mapSize = Math.min(ww, wh) * mapSizing
     const mapPosition: Position = [(ww -mapSize) / 2, (wh-mapSize) / 2]
-    const pg = p.createGraphics(mapSize, mapSize)
+    pg = p.createGraphics(mapSize, mapSize)
     drawMap(pg, map)
+    p2d.background(10, 200)
     p2d.textSize(32)
     p2d.text(`B${map.floor}F`, mapPosition[0] + 48, mapPosition[1] -16)
     p2d.image(pg, ...mapPosition)
-
-    p2d.circle(...mapPosition, 5)
   }
 
 export const drawMap = (pg: p5.Graphics, { grid, current, direction }: MapInfo) => {

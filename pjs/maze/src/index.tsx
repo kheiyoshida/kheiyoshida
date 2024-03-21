@@ -3,7 +3,8 @@ import { FovyValue, wh, ww } from './config'
 import { P5Canvas } from './p5canvas'
 import { initialize3d, initializeServices } from './service'
 import { applyPalette, getPalette } from './service/render/color/palette'
-import { renderStartPage } from './service/render/others/start'
+import { renderStartPage } from './service/interface/start'
+import { clearInterfaceLayer } from './service/interface'
 
 const setup = () => {
   p.createCanvas(ww, wh, p.WEBGL)
@@ -29,11 +30,7 @@ const setupInterface = () => {
     if (started) return
     started = true
     initializeServices()
-    p2d.loadPixels()
-    p2d.pixels.forEach((_, i) => {
-      p2d.pixels[i] = 0
-    })
-    p2d.updatePixels()
+    clearInterfaceLayer()
   }
   p2d.mouseClicked = start
   p2d.touchStarted = start

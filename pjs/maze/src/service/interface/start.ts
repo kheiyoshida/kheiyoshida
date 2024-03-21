@@ -1,5 +1,5 @@
-import { wh, ww } from '../../../config'
-import { getPalette } from '../color/palette'
+import { wh, ww } from '../../config'
+import { getPalette } from '../render/color/palette'
 
 const em = 32
 

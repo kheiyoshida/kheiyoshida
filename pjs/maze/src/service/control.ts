@@ -1,6 +1,6 @@
-import { MobileWidth, wh, ww } from '../../config'
+import { MobileWidth, wh, ww } from '../config'
 import * as commands from './commands'
-import { renderGUI } from './gui'
+import { renderGUI } from './interface/gui'
 
 export const bindControl = () => {
   if (ww < MobileWidth) smallScreen()

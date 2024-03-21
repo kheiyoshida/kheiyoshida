@@ -1,16 +1,16 @@
-import { StandIntervalMS } from '../../config/frame'
-import { recurringConstantEvent, recurringStandEvent } from '../../domain/events/events'
-import { MessageQueue, RenderSignal } from '../../domain/events/messages'
-import { setIntervalEvent } from '../timer'
-import { renderMap } from './others/map'
+import { StandIntervalMS } from '../config/frame'
+import { recurringConstantEvent, recurringStandEvent } from '../domain/events/events'
+import { MessageQueue, RenderSignal } from '../domain/events/messages'
+import { closeMap, renderMap } from './interface/map'
 import {
   renderCurrentView3d,
   renderGo3d,
   renderGoDownstairs3d,
   renderProceedToNextFloor3d,
   renderTurn3d,
-} from '.'
-import { RenderPack, packDomainIntention } from './pack'
+} from './render'
+import { RenderPack, packDomainIntention } from './render/pack'
+import { setIntervalEvent } from './timer'
 
 export type MakeRender = (intention: RenderPack) => () => void
 
@@ -22,6 +22,7 @@ export const ConsumeMessageMap: Record<RenderSignal, MakeRender> = {
   [RenderSignal.GoDownStairs]: renderGoDownstairs3d,
   [RenderSignal.ProceedToNextFloor]: renderProceedToNextFloor3d,
   [RenderSignal.OpenMap]: renderMap,
+  [RenderSignal.CloseMap]: closeMap
 }
 
 export const consumeMessageQueue = () => {

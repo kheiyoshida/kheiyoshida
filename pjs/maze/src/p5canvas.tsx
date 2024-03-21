@@ -30,7 +30,7 @@ export const P5Canvas = (sketch: Sketch, context: P5Context) => () => {
     }
   }, [canvasRef])
 
-  return <div style={styles(context).canvasContainer} ref={canvasRef} />
+  return <div id={`canvas-${context}`} style={styles(context).canvasContainer} ref={canvasRef} />
 }
 
 const sketchFactory = (s: Sketch, context: P5Context) => (p: p5) => {
