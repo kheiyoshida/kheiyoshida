@@ -4,7 +4,7 @@ import { P5Canvas } from './p5canvas'
 import { initialize3d, initializeServices } from './service'
 import { applyPalette, getPalette } from './service/render/color/palette'
 import { renderStartPage } from './service/interface/start'
-import { clearInterfaceLayer } from './service/interface'
+import { closeInterfaceLayer } from './service/interface'
 
 const setup = () => {
   p.createCanvas(ww, wh, p.WEBGL)
@@ -30,7 +30,7 @@ const setupInterface = () => {
     if (started) return
     started = true
     initializeServices()
-    clearInterfaceLayer()
+    closeInterfaceLayer()
   }
   p2d.mouseClicked = start
   p2d.touchStarted = start
