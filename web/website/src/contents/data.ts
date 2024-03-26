@@ -30,7 +30,7 @@ export const ContentData = {
       `Album with 7 songs. Available on Bandcamp and streaming services.`,
     ],
     caption: [
-      `Music is an interface. It's the interface to connect to something obscure and vague within yourself, which existence you need a "clue" to assume. Some music helps. It's like the water on the surface, which actually comes from the earth's underground even though all you can see are the waves on the surface. I made that kind of music through the experiments of music-generating programs, layered rhythms, and randomization of sound. I am excited to finally release this collection of works from the past 4 years or so (since when I started those experiments).`,
+      `Music is an interface. It's the interface to connect to something obscure and vague within yourself, which existence you need a "clue" to assume. Some music helps. It's like the water on the surface, which actually comes from the earth's underground even though all you can see are the waves on the surface. I made that kind of music through the experiments of music-generating programs, layered rhythms, and randomization of sound.`,
     ],
     links: {
       Bandcamp: 'https://kheiyoshida.bandcamp.com/album/surface-water',
