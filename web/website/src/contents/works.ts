@@ -1,7 +1,7 @@
 import { WithoutId, WorkPageInfo } from '../types'
 import { ContentData, insertSlug, worksLink } from './data'
 
-const { wasted, shinjuku, forest, tp4, maze, medwEP, gene, zen4computers,regrets, surfaceWater } =
+const { wasted, shinjuku, forest, tp4, maze, medwEP, gene, zen4computers, regrets, surfaceWater } =
   ContentData
 
 const makePathsWithLink = (title: string, paths: string[], placeholderPath?: string) =>
@@ -16,7 +16,7 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
       images: [{ path: surfaceWater.thumbnail, link: worksLink(surfaceWater.title) }],
     },
     date: surfaceWater.date,
-    caption: surfaceWater.message.join(' '),
+    caption: surfaceWater.message[0],
     contents: [
       {
         image: {
@@ -27,6 +27,9 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
           ],
         },
       },
+      ...Object.entries(surfaceWater.links).map(([k, v]) => ({
+        text: `<a href="${v}">Listen on ${k}</a>`,
+      })),
     ],
   },
   {
@@ -50,16 +53,18 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
       images: makePathsWithLink(wasted.title, [wasted.thumbnail], wasted.placeholder),
     },
     contents: wasted.sketch,
-    caption: wasted.caption
+    caption: wasted.caption,
   },
   {
     title: shinjuku.title,
     date: shinjuku.date,
-    thumbnail: { images: makePathsWithLink(shinjuku.title, [shinjuku.thumbnail], shinjuku.placeholder) },
+    thumbnail: {
+      images: makePathsWithLink(shinjuku.title, [shinjuku.thumbnail], shinjuku.placeholder),
+    },
     contents: shinjuku.sketch,
     caption: shinjuku.caption.join(' '),
   },
-  
+
   {
     title: tp4.title,
     date: tp4.date,

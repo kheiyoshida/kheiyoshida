@@ -27,12 +27,17 @@ export const ContentData = {
     thumbnail: resolveImagekitPath('works', 'surface-water', 'surface-water.png'),
     trackList: ['profit', 'shinjuku', 'wasted', '018th', 'regrets', 'platonic', 'divec'],
     message: [
-      `I am releasing an album "Surface Water" this spring.`,
-      `The album will be available on Bandcamp and streaming services.`,
+      `Album with 7 songs. Available on Bandcamp and streaming services.`,
     ],
     caption: [
       `Music is an interface. It's the interface to connect to something obscure and vague within yourself, which existence you need a "clue" to assume. Some music helps. It's like the water on the surface, which actually comes from the earth's underground even though all you can see are the waves on the surface. I made that kind of music through the experiments of music-generating programs, layered rhythms, and randomization of sound. I am excited to finally release this collection of works from the past 4 years or so (since when I started those experiments).`,
-    ]
+    ],
+    links: {
+      Bandcamp: 'https://kheiyoshida.bandcamp.com/album/surface-water',
+      Spotify: 'https://open.spotify.com/album/1YUjiO1HmUdDfJ2tfwY2bF?si=hVPRjfnwRXWBJhXLZAoLGA',
+      AppleMusic: 'https://music.apple.com/us/album/surface-water/1734791802',
+      YoutubeMusic: 'https://www.youtube.com/watch?v=TtL2PsZoia4&list=OLAK5uy_mDv_uD1d2fLE1p2oO01T-DeoAGRZExZC8',
+    }
   },
   wasted: {
     title: 'wasted',

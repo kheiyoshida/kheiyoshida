@@ -21,8 +21,11 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
       {
         text: surfaceWater.message[0],
       },
+      ...Object.entries(surfaceWater.links).map(([k, v]) => ({
+        text: `<a href="${v}">Listen on ${k}</a>`,
+      })),
       {
-        text: surfaceWater.message[1],
+        text: surfaceWater.caption.join(''),
       },
       {
         image: {
@@ -40,12 +43,9 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
               link: worksLink(shinjuku.title),
             },
           ],
-          layout: 'grid'
+          layout: 'grid',
         },
       },
-      {
-        text: surfaceWater.caption.join('')
-      }
     ],
   },
   {
