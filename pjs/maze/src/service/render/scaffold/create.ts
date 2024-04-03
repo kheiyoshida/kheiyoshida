@@ -1,3 +1,4 @@
+import { randomFloatBetween } from 'utils'
 import {
   Scaffold,
   ScaffoldLayer,

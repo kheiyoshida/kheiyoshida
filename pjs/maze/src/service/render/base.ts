@@ -1,7 +1,6 @@
 import { RenderGrid } from '../../domain/compose/renderSpec'
-import { setIntervalEvent } from '../timer'
-import { RenderFn, RenderQueue } from './queue'
 import { RenderPack } from './pack'
+import { RenderFn, RenderQueue } from './queue'
 
 export type RenderFunc = (
   grid: RenderGrid,
@@ -9,13 +8,10 @@ export type RenderFunc = (
   speed: number
 ) => Promise<void> | void
 
-export const registerIntervalRenderSequence = (interval: number, renderFns: RenderFn[]) => {
+export const registerIntervalRenderSequence = (renderFns: RenderFn[]) => {
   RenderQueue.update(renderFns)
-  RenderQueue.consume()
-  setIntervalEvent('render', RenderQueue.consume, interval)
 }
 
-export const reserveIntervalRender = (interval: number, renderFns: RenderFn[]) => {
+export const reserveIntervalRender = (renderFns: RenderFn[]) => {
   renderFns.forEach(RenderQueue.push)
-  setIntervalEvent('render', RenderQueue.consume, interval)
 }

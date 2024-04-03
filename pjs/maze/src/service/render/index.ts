@@ -1,10 +1,5 @@
-
 import { RenderGrid } from '../../domain/compose/renderSpec'
 import { registerIntervalRenderSequence, reserveIntervalRender } from './base'
-import { corridorToNextFloor } from './others/scenes'
-import { RenderQueue } from './queue'
-import { RenderPack } from './pack'
-import { getPalette } from './color/palette'
 import {
   DownstairsValues,
   GoMoveMagValues,
@@ -12,11 +7,14 @@ import {
   cameraReset,
   moveCamera,
 } from './camera'
+import { getPalette } from './color/palette'
 import { convertToModelGrid } from './model'
 import { finalize } from './model/finalize'
 import { convertModelGrid } from './model/modelToGeo'
+import { corridorToNextFloor } from './others/scenes'
+import { RenderPack } from './pack'
+import { RenderQueue } from './queue'
 import { createScaffold } from './scaffold'
-import { FrameInterval } from '../../config/frame'
 
 export const renderCurrentView3d =
   ({ renderGrid }: RenderPack) =>
@@ -38,53 +36,45 @@ const getGeos = (renderGrid: RenderGrid) => {
 
 export const renderCurrentTerrain = (renderGrid: RenderGrid) => {
   const geos = getGeos(renderGrid)
-
   p.background(getPalette().fill)
-  // p.fill(50)
-  // p.stroke(255)
-  
   geos.forEach((geo) => p.model(geo))
 }
 
 export const renderGo3d =
-  ({ renderGrid, speed }: RenderPack) =>
+  ({ renderGrid }: RenderPack) =>
   () => {
-    const interval = speed * FrameInterval
     const renderFns = GoMoveMagValues.map((val) => () => {
       moveCamera(val)
       renderCurrentTerrain(renderGrid)
     })
-    registerIntervalRenderSequence(interval, renderFns)
+    registerIntervalRenderSequence(renderFns)
   }
 
 export const renderTurn3d =
   (d: 'r' | 'l') =>
-  ({ renderGrid, speed }: RenderPack) =>
+  ({ renderGrid }: RenderPack) =>
   () => {
-    const interval = speed * FrameInterval
     const renderFns = TurnMoveLRDeltaValues.map((val) => () => {
       moveCamera(0, d === 'r' ? val : -val)
       renderCurrentTerrain(renderGrid)
     })
-    registerIntervalRenderSequence(interval, renderFns)
+    registerIntervalRenderSequence(renderFns)
   }
 
 export const renderGoDownstairs3d =
-  ({ renderGrid, speed }: RenderPack) =>
+  ({ renderGrid }: RenderPack) =>
   () => {
-    const interval = speed * FrameInterval 
     const renderFns = DownstairsValues.map((values) => () => {
       moveCamera(...values)
       renderCurrentTerrain(renderGrid)
     })
-    reserveIntervalRender(interval, renderFns)
+    reserveIntervalRender(renderFns)
   }
 
-export const renderProceedToNextFloor3d = (vision: RenderPack) => () => {
-  const interval = vision.speed * FrameInterval 
+export const renderProceedToNextFloor3d = () => () => {
   const renderFns = GoMoveMagValues.map((val) => () => {
     moveCamera(val)
     renderCurrentTerrain(corridorToNextFloor)
   })
-  reserveIntervalRender(interval, renderFns)
+  reserveIntervalRender(renderFns)
 }

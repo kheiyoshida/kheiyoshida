@@ -32,7 +32,7 @@ const start = () => {
 
 const Maze = P5Canvas({
   setup,
-  draw: () => undefined,
+  draw: () => undefined
 })
 
 export default () => {
