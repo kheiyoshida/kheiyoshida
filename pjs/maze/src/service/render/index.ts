@@ -1,8 +1,9 @@
 import { RenderGrid } from '../../domain/compose/renderSpec'
 import {
   DownstairsValues,
-  GoMoveMagValues,
+  
   cameraReset,
+  getGoDeltaArray,
   getTurnLRDeltaArray,
   moveCamera,
 } from './camera'
@@ -42,6 +43,7 @@ export const renderCurrentTerrain = (renderGrid: RenderGrid) => {
 export const renderGo =
   ({ renderGrid, speed }: RenderPack) =>
   () => {
+    const GoMoveMagValues = getGoDeltaArray(speed)
     const renderFns = GoMoveMagValues.map((val) => () => {
       moveCamera(val)
       renderCurrentTerrain(renderGrid)
@@ -71,7 +73,8 @@ export const renderGoDownstairs =
     reserveIntervalRender(renderFns)
   }
 
-export const renderProceedToNextFloor = () => () => {
+export const renderProceedToNextFloor = ({speed}: RenderPack) => () => {
+  const GoMoveMagValues = getGoDeltaArray(speed)
   const renderFns = GoMoveMagValues.map((val) => () => {
     moveCamera(val)
     renderCurrentTerrain(corridorToNextFloor)

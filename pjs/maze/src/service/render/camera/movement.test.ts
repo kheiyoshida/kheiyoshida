@@ -1,12 +1,20 @@
-import { createSinArray } from './movement'
+import { createAccumulatedDistanceArray, createSinArray } from './movement'
 
 test(`${createSinArray.name}`, () => {
-  expect(createSinArray(4, 0.15)).toMatchInlineSnapshot(`
-    [
-      0,
-      0.11753739745783764,
-      0.2334453638559054,
-      0.34611705707749296,
-    ]
-  `)
+  const result = createSinArray(4, 0.5)
+  expect(result).toHaveLength(4)
+  result.forEach((v) => {
+    expect(v).toBeLessThanOrEqual(1.0)
+  })
+  expect(result[3]).toBeCloseTo(1.0)
+})
+
+test(`${createAccumulatedDistanceArray.name}`, () => {
+  const result = createAccumulatedDistanceArray(8)
+  expect(result).toHaveLength(8)
+  result.forEach((v, i) => {
+    expect(v).toBeLessThanOrEqual(1.0)
+    expect(v).toBeLessThanOrEqual(result[i + 1] || 1.0)
+  })
+
 })

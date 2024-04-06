@@ -1,5 +1,5 @@
 import { CameraLookAhead, CameraZ, FloorLength, PathLength, WallHeight } from '../../../config'
-import { createSinArray } from './movement'
+import { createAccumulatedDistanceArray, createSinArray } from './movement'
 
 const DefaultZ = CameraZ
 export const cameraReset = () => {
@@ -14,7 +14,11 @@ export const moveCamera = (zDelta: number, turnDelta?: number, upDown?: number) 
   p.camera(0, finalY, finalZ, finalX, finalY, finalZ - CameraLookAhead)
 }
 
-export const GoMoveMagValues = [0.05, 0.1, 0.24, 0.33, 0.5, 0.65, 0.8, 0.95]
+const DefaultGoFrames = 8
+export const getGoDeltaArray = (speed: number) => {
+  const frameNumber = Math.floor(DefaultGoFrames / speed)
+  return createAccumulatedDistanceArray(frameNumber)
+}
 
 const DefaultTurnFrames = 4
 export const getTurnLRDeltaArray = (speed: number) => {
