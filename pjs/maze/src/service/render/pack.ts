@@ -8,6 +8,7 @@ export type RenderPack = {
   renderGrid: RenderGrid
   speed: number
   map: MapInfo
+  visibility: number
 }
 
 export const packDomainIntention = ({
@@ -15,11 +16,13 @@ export const packDomainIntention = ({
   renderGrid,
   speed,
   map,
+  visibility
 }: DomainIntention): RenderPack => {
   return {
     renewColors: resolveColorIntention(colorIntention),
     renderGrid,
     speed,
     map,
+    visibility
   }
 }

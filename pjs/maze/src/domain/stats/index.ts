@@ -36,3 +36,7 @@ export const floorToThreshold = (floor: number): [number, number] => {
 export const getRenderingSpeedFromCurrentState = () => {
   return toFloatPercent(statusStore.current.stamina)
 }
+
+export const getVisibilityFromCurrentState = () => {
+  return toFloatPercent(statusStore.current.stamina)
+}

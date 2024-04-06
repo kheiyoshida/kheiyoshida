@@ -1,8 +1,13 @@
-import { CameraLookAhead, CameraZ, FloorLength, PathLength, WallHeight } from '../../../config'
+import { CameraLookAhead, CameraZ, FloorLength, FloorPathAvgLength, FovyValue, PathLength, WallHeight, wh, ww } from '../../../config'
 import { createAccumulatedDistanceArray, createSinArray } from './movement'
 
+const ModelGridLength = 6
+const MaxVisibleLength = FloorPathAvgLength * ModelGridLength
+
 const DefaultZ = CameraZ
-export const cameraReset = () => {
+export const cameraReset = (visibility = 1.0) => {
+  const visibleLength = MaxVisibleLength * visibility
+  p.perspective(FovyValue, ww / wh, 10, visibleLength)
   p.camera(0, 0, DefaultZ, 0, 0, DefaultZ - CameraLookAhead)
 }
 

@@ -34,10 +34,10 @@ const drawCurrentGeometries = (geos: Geometry[]) => {
 }
 
 export const renderCurrentView =
-  ({ renderGrid }: RenderPack) =>
+  ({ renderGrid, visibility }: RenderPack) =>
   () => {
     const render = () => {
-      cameraReset()
+      cameraReset(visibility)
       renderCurrentTerrain(renderGrid)
     }
     RenderQueue.push(render)

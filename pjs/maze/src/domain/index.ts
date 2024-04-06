@@ -3,7 +3,7 @@ import { StatusState } from '../store/status'
 import { getRenderGridFromCurrentState } from './compose'
 import { RenderGrid } from './compose/renderSpec'
 import { MapInfo, getMapInfoFromCurrentState } from './maze/mapper'
-import { getRenderingSpeedFromCurrentState } from './stats'
+import { getRenderingSpeedFromCurrentState, getVisibilityFromCurrentState } from './stats'
 import { domainColorLogic } from './color'
 import { ColorIntention } from './color/types'
 
@@ -12,6 +12,7 @@ export type DomainIntention = {
   renderGrid: RenderGrid
   speed: number
   map: MapInfo
+  visibility: number
 }
 
 export type ListenableState = Pick<MazeState, 'floor'> & StatusState
@@ -26,5 +27,6 @@ export const getVisionIntentionFromCurrentState = (): DomainIntention => {
     renderGrid: getRenderGridFromCurrentState(),
     speed: getRenderingSpeedFromCurrentState(),
     map: getMapInfoFromCurrentState(),
+    visibility: getVisibilityFromCurrentState()
   }
 }

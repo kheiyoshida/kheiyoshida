@@ -13,7 +13,7 @@ export const FovyValue = IsMobile ? 120 : 60
 export const FloorLength = 400
 export const PathLength = 800
 export const WallHeight = 400
-export const FloorPathRatio = 1
+export const FloorPathAvgLength = (FloorLength + PathLength) / 2
 
 export const CameraZ = IsMobile ? FloorLength / 6 : FloorLength / 2
 export const CameraLookAhead = FloorLength
