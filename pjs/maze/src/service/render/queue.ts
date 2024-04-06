@@ -1,5 +1,3 @@
-import { FrameInterval } from '../../config/frame'
-
 export type RenderFn = () => void
 export type RenderFnQueue = RenderFn[]
 
@@ -21,19 +19,6 @@ const makeRenderQueue = () => {
   const update = (q: RenderFnQueue) => {
     queue = q
   }
-  const waitUntilQueueGetsEmpty = (onQueueCleared: () => void) => {
-    blocked = true
-    _wait(onQueueCleared)
-  }
-  const _wait = (onQueueCleared: () => void) => {
-    setTimeout(() => {
-      if (!blocked) {
-        onQueueCleared()
-      } else {
-        _wait(onQueueCleared)
-      }
-    }, FrameInterval / 4)
-  }
   return {
     get length() {
       return queue.length
@@ -41,7 +26,6 @@ const makeRenderQueue = () => {
     consume,
     push,
     update,
-    waitUntilQueueGetsEmpty,
   }
 }
 

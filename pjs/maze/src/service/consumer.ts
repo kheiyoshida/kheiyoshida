@@ -1,7 +1,7 @@
 import { MessageQueue, RenderSignal } from '../domain/events/messages'
 import { closeMap, renderMap } from './interface/map'
 import {
-  renderCurrentView3d,
+  renderCurrentView,
   renderGo,
   renderGoDownstairs,
   renderProceedToNextFloor,
@@ -12,7 +12,7 @@ import { RenderPack, packDomainIntention } from './render/pack'
 export type MakeRender = (intention: RenderPack) => () => void
 
 export const ConsumeMessageMap: Record<RenderSignal, MakeRender> = {
-  [RenderSignal.CurrentView]: renderCurrentView3d,
+  [RenderSignal.CurrentView]: renderCurrentView,
   [RenderSignal.Go]: renderGo,
   [RenderSignal.TurnRight]: renderTurn('r'),
   [RenderSignal.TurnLeft]: renderTurn('l'),

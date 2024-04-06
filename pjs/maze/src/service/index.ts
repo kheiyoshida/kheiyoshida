@@ -1,3 +1,4 @@
+import { FPS } from '../config'
 import {
   initializeEvent,
   recurringConstantEvent,
@@ -32,7 +33,7 @@ export const initialize3d = () => {
     },
   })
 
-  const frameIntervalMS = 1000 / 12
+  const frameIntervalMS = 1000 / FPS
   const setInterval = makeIntervalTimer(frameIntervalMS)
   setInterval((frameCount) => {
     FrameConsumer.consumeFrame(frameCount)

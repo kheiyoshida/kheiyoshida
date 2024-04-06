@@ -1,7 +1,7 @@
+import { Geometry } from 'p5'
 import { RenderGrid } from '../../domain/compose/renderSpec'
 import {
   DownstairsValues,
-  
   cameraReset,
   getGoDeltaArray,
   getTurnLRDeltaArray,
@@ -16,7 +16,24 @@ import { RenderPack } from './pack'
 import { RenderQueue, registerIntervalRenderSequence, reserveIntervalRender } from './queue'
 import { createScaffold } from './scaffold'
 
-export const renderCurrentView3d =
+export const renderCurrentTerrain = (renderGrid: RenderGrid) => {
+  const geos = getGeos(renderGrid)
+  drawCurrentGeometries(geos)
+}
+
+const getGeos = (renderGrid: RenderGrid) => {
+  const modelGrid = convertToModelGrid(renderGrid)
+  const coords = convertModelGrid(modelGrid, createScaffold())
+  const geos = finalize(coords)
+  return geos
+}
+
+const drawCurrentGeometries = (geos: Geometry[]) => {
+  p.background(getPalette().fill)
+  geos.forEach((geo) => p.model(geo))
+}
+
+export const renderCurrentView =
   ({ renderGrid }: RenderPack) =>
   () => {
     const render = () => {
@@ -26,19 +43,6 @@ export const renderCurrentView3d =
     RenderQueue.push(render)
     RenderQueue.consume()
   }
-
-const getGeos = (renderGrid: RenderGrid) => {
-  const modelGrid = convertToModelGrid(renderGrid)
-  const coords = convertModelGrid(modelGrid, createScaffold())
-  const geos = finalize(coords)
-  return geos
-}
-
-export const renderCurrentTerrain = (renderGrid: RenderGrid) => {
-  const geos = getGeos(renderGrid)
-  p.background(getPalette().fill)
-  geos.forEach((geo) => p.model(geo))
-}
 
 export const renderGo =
   ({ renderGrid, speed }: RenderPack) =>
@@ -73,11 +77,13 @@ export const renderGoDownstairs =
     reserveIntervalRender(renderFns)
   }
 
-export const renderProceedToNextFloor = ({speed}: RenderPack) => () => {
-  const GoMoveMagValues = getGoDeltaArray(speed)
-  const renderFns = GoMoveMagValues.map((val) => () => {
-    moveCamera(val)
-    renderCurrentTerrain(corridorToNextFloor)
-  })
-  reserveIntervalRender(renderFns)
-}
+export const renderProceedToNextFloor =
+  ({ speed }: RenderPack) =>
+  () => {
+    const GoMoveMagValues = getGoDeltaArray(speed)
+    const renderFns = GoMoveMagValues.map((val) => () => {
+      moveCamera(val)
+      renderCurrentTerrain(corridorToNextFloor)
+    })
+    reserveIntervalRender(renderFns)
+  }
