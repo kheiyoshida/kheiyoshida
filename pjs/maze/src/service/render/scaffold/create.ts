@@ -21,8 +21,8 @@ export const createScaffoldLayer = (layerIndex: number): ScaffoldLayer => {
 }
 
 export const getLayerYValue = (part: keyof ScaffoldLayer): number => {
-  if (part === 'lower') return WallHeight / 2
-  if (part === 'upper') return -WallHeight / 2
+  if (part === 'lower') return WallHeight / 2 * randomFloatBetween(0.95, 1)
+  if (part === 'upper') return -WallHeight / 2 * randomFloatBetween(0.95, 1)
   throw Error()
 }
 

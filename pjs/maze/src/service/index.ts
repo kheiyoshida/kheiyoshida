@@ -1,4 +1,8 @@
-import { initializeEvent, recurringConstantEvent, recurringStandEvent } from '../domain/events/events'
+import {
+  initializeEvent,
+  recurringConstantEvent,
+  recurringStandEvent,
+} from '../domain/events/events'
 import { consumeMessageQueue } from './consumer'
 import { bindControl } from './control'
 import { FrameConsumer } from './frame'
@@ -17,20 +21,19 @@ export const initialize3d = () => {
   FrameConsumer.registerFrameEvent('constant', {
     handler: consumeMessageQueue,
   })
-  
   FrameConsumer.registerFrameEvent('status', {
     handler: () => {
       recurringConstantEvent()
       recurringStandEvent()
-    }
+    },
   })
-
   FrameConsumer.registerFrameEvent('render', {
-    // frameInterval: 2,
     handler: () => RenderQueue.consume(),
   })
 
   const frameIntervalMS = 1000 / 12
   const setInterval = makeIntervalTimer(frameIntervalMS)
-  setInterval((frameCount) => FrameConsumer.consumeFrame(frameCount))
+  setInterval((frameCount) => {
+    FrameConsumer.consumeFrame(frameCount)
+  })
 }

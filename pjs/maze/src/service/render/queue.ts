@@ -35,6 +35,9 @@ const makeRenderQueue = () => {
     }, FrameInterval / 4)
   }
   return {
+    get length() {
+      return queue.length
+    },
     consume,
     push,
     update,
@@ -43,3 +46,11 @@ const makeRenderQueue = () => {
 }
 
 export const RenderQueue = makeRenderQueue()
+
+export const registerIntervalRenderSequence = (renderFns: RenderFn[]) => {
+  RenderQueue.update(renderFns)
+}
+
+export const reserveIntervalRender = (renderFns: RenderFn[]) => {
+  renderFns.forEach(RenderQueue.push)
+}

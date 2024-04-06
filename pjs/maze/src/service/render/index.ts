@@ -1,5 +1,4 @@
 import { RenderGrid } from '../../domain/compose/renderSpec'
-import { registerIntervalRenderSequence, reserveIntervalRender } from './base'
 import {
   DownstairsValues,
   GoMoveMagValues,
@@ -13,7 +12,7 @@ import { finalize } from './model/finalize'
 import { convertModelGrid } from './model/modelToGeo'
 import { corridorToNextFloor } from './others/scenes'
 import { RenderPack } from './pack'
-import { RenderQueue } from './queue'
+import { RenderQueue, registerIntervalRenderSequence, reserveIntervalRender } from './queue'
 import { createScaffold } from './scaffold'
 
 export const renderCurrentView3d =

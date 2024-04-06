@@ -8,7 +8,7 @@ export enum RenderSignal {
   GoDownStairs = 'GoDownStairs',
   ProceedToNextFloor = 'ProceedToNextFloor',
   OpenMap = 'OpenMap',
-  CloseMap = 'CloseMap'
+  CloseMap = 'CloseMap',
 }
 
 export type RenderMessage = [signal: RenderSignal, intention: DomainIntention]
@@ -29,6 +29,12 @@ const createMessageQueue = () => {
     }
   }
   return {
+    get debug() {
+      return MessageQueue.map((m) => m[0])
+    },
+    get isEmpty() {
+      return MessageQueue.length === 0
+    },
     push,
     consume,
   }

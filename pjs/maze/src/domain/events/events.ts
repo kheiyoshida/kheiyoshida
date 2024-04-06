@@ -13,12 +13,14 @@ export const initializeEvent = () => {
 export const recurringConstantEvent = () => {
   if (store.current.mapOpen) return
   updateStats('constant')
+  updateStats('stand')
 }
 
 export const recurringStandEvent = () => {
   if (store.current.mapOpen) return
-  updateStats('stand')
-  MessageQueue.push(RenderSignal.CurrentView)
+  if (MessageQueue.isEmpty) {
+    MessageQueue.push(RenderSignal.CurrentView)
+  }
 }
 
 export const walkEvent = () => {
