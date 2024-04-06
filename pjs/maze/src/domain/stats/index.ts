@@ -11,12 +11,12 @@ type StatsUpdatePattern = 'walk' | 'stand' | 'turn' | 'downstairs' | 'constant'
 export const updateStats = (pattern: StatsUpdatePattern) => {
   if (pattern === 'walk') {
     manipSanity(1)
-    manipStamina(-2)
+    manipStamina(-4)
   } else if (pattern === 'turn') {
     manipStamina(-1)
     manipSanity(-1)
   } else if (pattern === 'stand') {
-    manipStamina(2)
+    manipStamina(1)
   } else if (pattern === 'downstairs') {
     manipSanity(30)
   } else if (pattern === 'constant') {
@@ -30,5 +30,9 @@ export const floorToThreshold = (floor: number): [number, number] => {
   return [90, 50]
 }
 
-export const getRenderingSpeedFromCurrentState = () =>
-  1 / toFloatPercent(Math.min(100, 30 + statusStore.current.stamina))
+/**
+ * @returns 0.0x ~ 1.0x 
+ */
+export const getRenderingSpeedFromCurrentState = () => {
+  return toFloatPercent(statusStore.current.stamina)
+}

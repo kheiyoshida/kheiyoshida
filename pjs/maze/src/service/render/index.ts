@@ -2,8 +2,8 @@ import { RenderGrid } from '../../domain/compose/renderSpec'
 import {
   DownstairsValues,
   GoMoveMagValues,
-  TurnMoveLRDeltaValues,
   cameraReset,
+  getTurnLRDeltaArray,
   moveCamera,
 } from './camera'
 import { getPalette } from './color/palette'
@@ -39,8 +39,8 @@ export const renderCurrentTerrain = (renderGrid: RenderGrid) => {
   geos.forEach((geo) => p.model(geo))
 }
 
-export const renderGo3d =
-  ({ renderGrid }: RenderPack) =>
+export const renderGo =
+  ({ renderGrid, speed }: RenderPack) =>
   () => {
     const renderFns = GoMoveMagValues.map((val) => () => {
       moveCamera(val)
@@ -49,18 +49,19 @@ export const renderGo3d =
     registerIntervalRenderSequence(renderFns)
   }
 
-export const renderTurn3d =
+export const renderTurn =
   (d: 'r' | 'l') =>
-  ({ renderGrid }: RenderPack) =>
+  ({ renderGrid, speed }: RenderPack) =>
   () => {
-    const renderFns = TurnMoveLRDeltaValues.map((val) => () => {
+    const LRDeltaValues = getTurnLRDeltaArray(speed)
+    const renderFns = LRDeltaValues.map((val) => () => {
       moveCamera(0, d === 'r' ? val : -val)
       renderCurrentTerrain(renderGrid)
     })
     registerIntervalRenderSequence(renderFns)
   }
 
-export const renderGoDownstairs3d =
+export const renderGoDownstairs =
   ({ renderGrid }: RenderPack) =>
   () => {
     const renderFns = DownstairsValues.map((values) => () => {
@@ -70,7 +71,7 @@ export const renderGoDownstairs3d =
     reserveIntervalRender(renderFns)
   }
 
-export const renderProceedToNextFloor3d = () => () => {
+export const renderProceedToNextFloor = () => () => {
   const renderFns = GoMoveMagValues.map((val) => () => {
     moveCamera(val)
     renderCurrentTerrain(corridorToNextFloor)

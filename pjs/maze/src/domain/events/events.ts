@@ -16,7 +16,7 @@ export const recurringConstantEvent = () => {
   updateStats('stand')
 }
 
-export const recurringStandEvent = () => {
+export const standEvent = () => {
   if (store.current.mapOpen) return
   if (MessageQueue.isEmpty) {
     MessageQueue.push(RenderSignal.CurrentView)

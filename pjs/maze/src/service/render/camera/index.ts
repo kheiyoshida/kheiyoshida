@@ -1,4 +1,5 @@
-import { CameraLookAhead, CameraZ, FloorLength, PathLength, WallHeight } from '../../config'
+import { CameraLookAhead, CameraZ, FloorLength, PathLength, WallHeight } from '../../../config'
+import { createSinArray } from './movement'
 
 const DefaultZ = CameraZ
 export const cameraReset = () => {
@@ -15,10 +16,11 @@ export const moveCamera = (zDelta: number, turnDelta?: number, upDown?: number) 
 
 export const GoMoveMagValues = [0.05, 0.1, 0.24, 0.33, 0.5, 0.65, 0.8, 0.95]
 
-const createSinArray = (length: number, max = 0.5) =>
-  [...Array(length)].map((_, i) => Math.sin(max * Math.PI * (i / length)))
-
-export const TurnMoveLRDeltaValues = createSinArray(4, 0.15)
+const DefaultTurnFrames = 4
+export const getTurnLRDeltaArray = (speed: number) => {
+  const frameNumber = Math.floor(DefaultTurnFrames / speed)
+  return createSinArray(frameNumber, 0.15)
+}
 
 const DownFramesLength = 12
 export const DownstairsValues: Parameters<typeof moveCamera>[] = [...Array(DownFramesLength)].map(
