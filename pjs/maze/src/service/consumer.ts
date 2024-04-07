@@ -1,4 +1,3 @@
-import { DomainIntention } from '../domain'
 import { MessageQueue, RenderSignal } from '../domain/events/messages'
 import { closeMap, renderMap } from './interface/map'
 import {

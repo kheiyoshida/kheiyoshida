@@ -1,6 +1,8 @@
 import { toFloatPercent } from 'utils'
 import { statusStore } from '../../store'
 
+export * from './params'
+
 export const getStats = () => statusStore.current
 
 export const manipSanity = (delta: number) => statusStore.addStatusValue('sanity', delta)
@@ -10,17 +12,19 @@ type StatsUpdatePattern = 'walk' | 'stand' | 'turn' | 'downstairs' | 'constant'
 
 export const updateStats = (pattern: StatsUpdatePattern) => {
   if (pattern === 'walk') {
-    manipSanity(1)
+    manipSanity(4)
     manipStamina(-4)
   } else if (pattern === 'turn') {
     manipStamina(-1)
-    manipSanity(-1)
+    manipSanity(1)
   } else if (pattern === 'stand') {
-    manipStamina(1)
-  } else if (pattern === 'downstairs') {
-    manipSanity(30)
-  } else if (pattern === 'constant') {
+    manipStamina(2)
     manipSanity(-1)
+  } else if (pattern === 'downstairs') {
+    manipSanity(50)
+    manipStamina(20)
+  } else if (pattern === 'constant') {
+    // manipSanity(-1)
   }
 }
 
@@ -41,18 +45,3 @@ export const getVisibilityFromCurrentState = () => {
   return toFloatPercent(statusStore.current.stamina)
 }
 
-export type ScaffoldParams = {
-  corridorWidthLevel: number
-  wallHeightLevel: number
-  corridorLengthLevel: number
-  distortionLevel: number
-}
-
-export const getScaffoldParams = (): ScaffoldParams => {
-  return {
-    corridorWidthLevel: 1,
-    wallHeightLevel: 1,
-    corridorLengthLevel: 3,
-    distortionLevel: 0
-  }
-}

@@ -23,7 +23,7 @@ export const setupRenderingCycle = () => {
     },
   })
   FrameConsumer.registerFrameEvent('status', {
-    frameInterval: 2,
+    frameInterval: 4,
     handler: recurringConstantStatusEvent,
   })
 

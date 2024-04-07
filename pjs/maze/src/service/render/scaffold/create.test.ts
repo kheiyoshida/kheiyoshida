@@ -8,14 +8,6 @@ import {
   makeGetScaffoldXValue,
   makegetLayerYValue,
 } from '.'
-import { ScaffoldParams } from '../../../domain/stats'
-
-const params: ScaffoldParams = {
-  corridorWidthLevel: 1,
-  wallHeightLevel: 1,
-  corridorLengthLevel: 1,
-  distortionLevel: 0,
-}
 
 const defaultLengths: ScaffoldLengths = {
   floor: 400,
@@ -24,7 +16,7 @@ const defaultLengths: ScaffoldLengths = {
 }
 
 test(`${createScaffold.name}`, () => {
-  const scaffold = createScaffold(params)
+  const scaffold = createScaffold(defaultLengths)
   expect(scaffold).toHaveLength(7)
 })
 
