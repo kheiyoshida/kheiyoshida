@@ -13,7 +13,7 @@ import { finalize } from './model/finalize'
 import { convertModelGrid } from './model/modelToGeo'
 import { corridorToNextFloor } from './others/scenes'
 import { RenderPack } from './pack'
-import { RenderQueue, registerIntervalRenderSequence, reserveIntervalRender } from './queue'
+import { RenderQueue } from './queue'
 import { createScaffold } from './scaffold'
 
 export const renderCurrentTerrain = (renderGrid: RenderGrid) => {
@@ -51,7 +51,7 @@ export const renderGo =
       moveCamera(val)
       renderCurrentTerrain(renderGrid)
     })
-    registerIntervalRenderSequence(renderFns)
+    RenderQueue.update(renderFns)
   }
 
 export const renderTurn =
@@ -63,7 +63,7 @@ export const renderTurn =
       moveCamera(0, d === 'r' ? val : -val)
       renderCurrentTerrain(renderGrid)
     })
-    registerIntervalRenderSequence(renderFns)
+    RenderQueue.update(renderFns)
   }
 
 export const renderGoDownstairs =
@@ -73,7 +73,7 @@ export const renderGoDownstairs =
       moveCamera(...values)
       renderCurrentTerrain(renderGrid)
     })
-    reserveIntervalRender(renderFns)
+    RenderQueue.push(...renderFns)
   }
 
 export const renderProceedToNextFloor =
@@ -84,5 +84,5 @@ export const renderProceedToNextFloor =
       moveCamera(val)
       renderCurrentTerrain(corridorToNextFloor)
     })
-    reserveIntervalRender(renderFns)
+    RenderQueue.push(...renderFns)
   }

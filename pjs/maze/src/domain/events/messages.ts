@@ -23,7 +23,7 @@ const createMessageQueue = () => {
     if (message) return message
     throw Error(`message queue is empty`)
   }
-  const consume = (cb: (message: RenderMessage) => void) => {
+  const resolve = (cb: (message: RenderMessage) => void) => {
     while (MessageQueue.length) {
       cb(_consume())
     }
@@ -36,7 +36,7 @@ const createMessageQueue = () => {
       return MessageQueue.length === 0
     },
     push,
-    consume,
+    resolve,
   }
 }
 

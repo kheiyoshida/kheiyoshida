@@ -1,22 +1,18 @@
 import { FPS } from '../config'
-import {
-  initializeEvent,
-  recurringConstantEvent,
-  standEvent,
-} from '../domain/events/events'
+import { initializeEvent, recurringConstantStatusEvent, standEvent } from '../domain/events/events'
 import { consumeMessageQueue } from './consumer'
 import { bindControl } from './control'
-import { FrameConsumer } from './frame'
+import { FrameConsumer } from './time/frame'
 import { RenderQueue } from './render/queue'
 import { demo } from './sound/songs/demo'
-import { makeIntervalTimer } from './timer'
+import { makeIntervalTimer } from './time/timer'
 
 export const initializeServices = () => {
   bindControl()
-  // demo()
+  demo()
 }
 
-export const initialize3d = () => {
+export const setupRenderingCycle = () => {
   initializeEvent()
 
   FrameConsumer.registerFrameEvent('constant', {
@@ -28,9 +24,7 @@ export const initialize3d = () => {
   })
   FrameConsumer.registerFrameEvent('status', {
     frameInterval: 2,
-    handler: () => {
-      recurringConstantEvent()
-    },
+    handler: recurringConstantStatusEvent,
   })
 
   const frameIntervalMS = 1000 / FPS

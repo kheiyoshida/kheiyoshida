@@ -9,9 +9,9 @@ import {
 } from './render'
 import { RenderPack, packDomainIntention } from './render/pack'
 
-export type MakeRender = (intention: RenderPack) => () => void
+export type MakeRender = (domain: RenderPack) => () => void
 
-export const ConsumeMessageMap: Record<RenderSignal, MakeRender> = {
+export const MessageResolutionMap: Record<RenderSignal, MakeRender> = {
   [RenderSignal.CurrentView]: renderCurrentView,
   [RenderSignal.Go]: renderGo,
   [RenderSignal.TurnRight]: renderTurn('r'),
@@ -23,9 +23,9 @@ export const ConsumeMessageMap: Record<RenderSignal, MakeRender> = {
 }
 
 export const consumeMessageQueue = () => {
-  MessageQueue.consume(([signal, intention]) => {
-    const vision = packDomainIntention(intention)
-    const render = ConsumeMessageMap[signal](vision)
+  MessageQueue.resolve(([signal, intention]) => {
+    const pack = packDomainIntention(intention)
+    const render = MessageResolutionMap[signal](pack)
     render()
   })
 }

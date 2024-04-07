@@ -3,19 +3,12 @@ export type RenderFnQueue = RenderFn[]
 
 const makeRenderQueue = () => {
   let queue: RenderFnQueue = []
-  let blocked = false
   const consume = () => {
-    const fn = queue.shift()
-    if (fn) {
-      fn()
-    } else {
-      if (blocked) {
-        blocked = false
-      }
-      return true
-    }
+    const renderFn = queue.shift()
+    if (!renderFn) return
+    renderFn()
   }
-  const push = (fn: RenderFn) => queue.push(fn)
+  const push = (...fns: RenderFn[]) => queue.push(...fns)
   const update = (q: RenderFnQueue) => {
     queue = q
   }
@@ -31,10 +24,3 @@ const makeRenderQueue = () => {
 
 export const RenderQueue = makeRenderQueue()
 
-export const registerIntervalRenderSequence = (renderFns: RenderFn[]) => {
-  RenderQueue.update(renderFns)
-}
-
-export const reserveIntervalRender = (renderFns: RenderFn[]) => {
-  renderFns.forEach(RenderQueue.push)
-}
