@@ -10,47 +10,47 @@ import { drawTerrain } from './draw'
 import { corridorToNextFloor } from './others/scenes'
 import { RenderQueue } from './queue'
 
-export const renderCurrentView: RenderHandler = ({ renderGrid, visibility }) => {
+export const renderCurrentView: RenderHandler = ({ renderGrid, visibility, scaffold }) => {
   const drawFrame = () => {
     cameraReset(visibility)
-    drawTerrain(renderGrid)
+    drawTerrain(renderGrid, scaffold)
   }
   RenderQueue.push(drawFrame)
 }
 
-export const renderGo: RenderHandler = ({ renderGrid, speed }) => {
+export const renderGo: RenderHandler = ({ renderGrid, speed, scaffold }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta) => () => {
     moveCamera(zDelta)
-    drawTerrain(renderGrid)
+    drawTerrain(renderGrid, scaffold)
   })
   RenderQueue.update(drawFrameSequence)
 }
 
 export const renderTurn =
   (d: 'r' | 'l'): RenderHandler =>
-  ({ renderGrid, speed }) => {
+  ({ renderGrid, speed, scaffold }) => {
     const LRDeltaValues = getTurnLRDeltaArray(speed)
     const drawFrameSequence = LRDeltaValues.map((turnDelta) => () => {
       moveCamera(0, d === 'r' ? turnDelta : -turnDelta)
-      drawTerrain(renderGrid)
+      drawTerrain(renderGrid, scaffold)
     })
     RenderQueue.update(drawFrameSequence)
   }
 
-export const renderGoDownstairs: RenderHandler = ({ renderGrid }) => {
+export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffold }) => {
   const drawFrameSequence = DownstairsValues.map((values) => () => {
     moveCamera(...values)
-    drawTerrain(renderGrid)
+    drawTerrain(renderGrid, scaffold)
   })
   RenderQueue.push(...drawFrameSequence)
 }
 
-export const renderProceedToNextFloor: RenderHandler = ({ speed }) => {
+export const renderProceedToNextFloor: RenderHandler = ({ speed, scaffold }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta) => () => {
     moveCamera(zDelta)
-    drawTerrain(corridorToNextFloor)
+    drawTerrain(corridorToNextFloor, scaffold)
   })
   RenderQueue.push(...drawFrameSequence)
 }

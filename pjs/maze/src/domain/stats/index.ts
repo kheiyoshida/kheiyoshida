@@ -31,7 +31,7 @@ export const floorToThreshold = (floor: number): [number, number] => {
 }
 
 /**
- * @returns 0.0x ~ 1.0x 
+ * @returns 0.0x ~ 1.0x
  */
 export const getRenderingSpeedFromCurrentState = () => {
   return toFloatPercent(statusStore.current.stamina)
@@ -39,4 +39,20 @@ export const getRenderingSpeedFromCurrentState = () => {
 
 export const getVisibilityFromCurrentState = () => {
   return toFloatPercent(statusStore.current.stamina)
+}
+
+export type ScaffoldParams = {
+  corridorWidthLevel: number
+  wallHeightLevel: number
+  corridorLengthLevel: number
+  distortionLevel: number
+}
+
+export const getScaffoldParams = (): ScaffoldParams => {
+  return {
+    corridorWidthLevel: 1,
+    wallHeightLevel: 1,
+    corridorLengthLevel: 1,
+    distortionLevel: 0
+  }
 }
