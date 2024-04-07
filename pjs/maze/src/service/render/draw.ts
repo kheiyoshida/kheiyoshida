@@ -6,9 +6,12 @@ import { finalize } from './model/finalize'
 import { convertModelGrid } from './model/modelToGeo'
 import { Scaffold, ScaffoldLengths, createScaffold } from './scaffold'
 
-export const drawTerrain = (renderGrid: RenderGrid, lengths: ScaffoldLengths): void => {
+export const drawTerrain = (
+  renderGrid: RenderGrid,
+  { lengths, distortion }: { lengths: ScaffoldLengths; distortion: number }
+): void => {
   const modelGrid = convertToModelGrid(renderGrid)
-  const scaffold = createScaffold(lengths)
+  const scaffold = createScaffold(lengths, distortion)
   const geos = calculateGeometries(modelGrid, scaffold)
   drawGeometries(geos)
 }

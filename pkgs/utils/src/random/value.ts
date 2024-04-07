@@ -26,6 +26,10 @@ export const randomIntInAsymmetricRange = (range: number) => {
   return randomIntInclusiveBetween(-range, range)
 }
 
+export const randomFloatAsymmetricrange = (range: number) => {
+  return randomFloatBetween(-range, range)
+}
+
 export type ArgsRandomizer<Fn extends (...args: never[]) => unknown> = (
   ...args: Parameters<Fn>
 ) => Parameters<Fn>

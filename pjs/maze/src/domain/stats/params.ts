@@ -14,7 +14,7 @@ export const getScaffoldParams = (): ScaffoldParams => {
     corridorWidthLevel: calcWidthLevel(sanity),
     wallHeightLevel: calcHeightLevel(sanity + stamina),
     corridorLengthLevel: calcCorridorLengthLevel(stamina),
-    distortionLevel: 0,
+    distortionLevel: calcDistortion(sanity),
   }
 }
 
@@ -34,6 +34,7 @@ export const createIncreasingParameter =
     return clamp(min + ratio * diff, min, max)
   }
 
-const calcWidthLevel = createDecreasingParameter(0.5, 1, 80)
+const calcWidthLevel = createDecreasingParameter(0.44, 1, 90)
 const calcHeightLevel = createIncreasingParameter(1, 3, 100)
 const calcCorridorLengthLevel = createIncreasingParameter(1, 2, 80)
+const calcDistortion = createIncreasingParameter(0, 5, 100)

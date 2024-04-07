@@ -1,3 +1,5 @@
+import { Position3D } from 'p5utils/src/3d'
+import { randomFloatAsymmetricrange } from 'utils'
 import {
   Scaffold,
   ScaffoldLayer,
@@ -10,21 +12,29 @@ import { WallHeight } from '../../../config'
 
 const NumOfLayers = 7
 
-export const createScaffold = (lengths: ScaffoldLengths): Scaffold => {
-  return [...Array(NumOfLayers)].map((_, i) => createScaffoldLayer(i, lengths))
+export const createScaffold = (lengths: ScaffoldLengths, distortion: number): Scaffold => {
+  return [...Array(NumOfLayers)].map((_, i) => createScaffoldLayer(i, lengths, distortion))
 }
 
 export const createScaffoldLayer = (
   layerIndex: number,
-  lengths: ScaffoldLengths
+  lengths: ScaffoldLengths,
+  distortion: number
 ): ScaffoldLayer => {
   const zValue = getLayerZValue(layerIndex, lengths.floor, lengths.path)
   const getY = makegetLayerYValue(lengths.wall)
+  const distort = distortPosition(distortion)
+  const [lower, upper] = ['lower', 'upper']
+    .map((k) => createScaffoldLayerPart(getY(k as keyof ScaffoldLayer), zValue, lengths))
+    .map((position3ds) => position3ds.map(distort))
   return {
-    upper: createScaffoldLayerPart(getY('upper'), zValue, lengths),
-    lower: createScaffoldLayerPart(getY('lower'), zValue, lengths),
+    upper,
+    lower,
   }
 }
+
+const distortPosition = (distortion: number) => (position: Position3D) =>
+  position.map((v) => v + randomFloatAsymmetricrange(distortion)) as Position3D
 
 export const getLayerZValue = (layerIndex: number, floorLength: number, pathLength: number) => {
   const halfFloor = 0.5 * floorLength

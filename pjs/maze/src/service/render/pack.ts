@@ -1,12 +1,18 @@
-import { DomainIntention } from "../../domain";
-import { ScaffoldLengths } from "./scaffold";
-import { calcAdjustedLength } from "./scaffold/params";
+import { DomainIntention } from '../../domain'
+import { ScaffoldLengths } from './scaffold'
+import { calcAdjustedLength } from './scaffold/params'
 
 export type RenderPack = Omit<DomainIntention, 'scaffold'> & {
-  scaffoldLengths: ScaffoldLengths
+  scaffold: {
+    lengths: ScaffoldLengths
+    distortion: number
+  }
 }
 
 export const packRenderingInfo = (domain: DomainIntention): RenderPack => ({
   ...domain,
-  scaffoldLengths: calcAdjustedLength(domain.scaffold)
+  scaffold: {
+    lengths: calcAdjustedLength(domain.scaffold),
+    distortion: domain.scaffold.distortionLevel,
+  },
 })

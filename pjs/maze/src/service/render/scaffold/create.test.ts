@@ -16,12 +16,12 @@ const defaultLengths: ScaffoldLengths = {
 }
 
 test(`${createScaffold.name}`, () => {
-  const scaffold = createScaffold(defaultLengths)
+  const scaffold = createScaffold(defaultLengths, 0)
   expect(scaffold).toHaveLength(7)
 })
 
 test(`${createScaffoldLayer.name}`, () => {
-  const layer = createScaffoldLayer(1, defaultLengths)
+  const layer = createScaffoldLayer(1, defaultLengths, 0)
   expect(layer.lower[ScaffoldLayerCoordPosition.LL][2]).toBe(
     getLayerZValue(1, defaultLengths.floor, defaultLengths.path)
   )

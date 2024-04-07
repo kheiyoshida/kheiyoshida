@@ -16,9 +16,9 @@ export const updateStats = (pattern: StatsUpdatePattern) => {
     manipStamina(-4)
   } else if (pattern === 'turn') {
     manipStamina(-1)
-    manipSanity(1)
+    // manipSanity(1)
   } else if (pattern === 'stand') {
-    manipStamina(2)
+    manipStamina(1)
     manipSanity(-1)
   } else if (pattern === 'downstairs') {
     manipSanity(50)
