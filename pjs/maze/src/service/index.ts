@@ -13,7 +13,7 @@ import { makeIntervalTimer } from './timer'
 
 export const initializeServices = () => {
   bindControl()
-  demo()
+  // demo()
 }
 
 export const initialize3d = () => {

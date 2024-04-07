@@ -41,7 +41,6 @@ export const renderCurrentView =
       renderCurrentTerrain(renderGrid)
     }
     RenderQueue.push(render)
-    RenderQueue.consume()
   }
 
 export const renderGo =
