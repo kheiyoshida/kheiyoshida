@@ -4,12 +4,11 @@ import { getPalette } from './color/palette'
 import { ModelGrid, convertToModelGrid } from './model'
 import { finalize } from './model/finalize'
 import { convertModelGrid } from './model/modelToGeo'
-import { Scaffold, createScaffold } from './scaffold'
-import { ScaffoldParams } from '../../domain/stats'
+import { Scaffold, ScaffoldLengths, createScaffold } from './scaffold'
 
-export const drawTerrain = (renderGrid: RenderGrid, scaffoldParams: ScaffoldParams): void => {
+export const drawTerrain = (renderGrid: RenderGrid, lengths: ScaffoldLengths): void => {
   const modelGrid = convertToModelGrid(renderGrid)
-  const scaffold = createScaffold(scaffoldParams)
+  const scaffold = createScaffold(lengths)
   const geos = calculateGeometries(modelGrid, scaffold)
   drawGeometries(geos)
 }

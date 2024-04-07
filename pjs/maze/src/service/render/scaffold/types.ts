@@ -28,6 +28,12 @@ export type RenderBlockLayer = {
   br: Position3D
 }
 
+export type ScaffoldLengths = {
+  floor: number
+  path: number
+  wall: number
+}
+
 /**
  * collection of consistant Positon3D
  * each RenderBlock should get the concrete value from this

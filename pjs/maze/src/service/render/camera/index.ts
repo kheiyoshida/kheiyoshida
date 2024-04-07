@@ -1,23 +1,32 @@
-import { CameraLookAhead, CameraZ, FloorLength, FloorPathAvgLength, FovyValue, PathLength, WallHeight, wh, ww } from '../../../config'
+import {
+  CameraLookAhead,
+  CameraZ,
+  FloorLength,
+  FloorPathAvgLength,
+  FovyValue,
+  wh,
+  ww,
+} from '../../../config'
+import { ScaffoldLengths } from '../scaffold'
 import { createAccumulatedDistanceArray, createSinArray } from './movement'
 
 const ModelGridLength = 6
 const MaxVisibleLength = FloorPathAvgLength * ModelGridLength
 
-const DefaultZ = CameraZ
 export const cameraReset = (visibility = 1.0) => {
   const visibleLength = MaxVisibleLength * visibility
   p.perspective(FovyValue, ww / wh, 10, visibleLength)
-  p.camera(0, 0, DefaultZ, 0, 0, DefaultZ - CameraLookAhead)
+  p.camera(0, 0, CameraZ, 0, 0, CameraZ - CameraLookAhead)
 }
 
-const Size = FloorLength + PathLength
-export const moveCamera = (zDelta: number, turnDelta?: number, upDown?: number) => {
-  const finalX = turnDelta ? turnDelta * Size : 0
-  const finalZ = DefaultZ + zDelta * -Size
-  const finalY = upDown ? upDown * WallHeight : 0
-  p.camera(0, finalY, finalZ, finalX, finalY, finalZ - CameraLookAhead)
-}
+export const moveCamera =
+  (zDelta: number, turnDelta?: number, upDown?: number) => (lengths: ScaffoldLengths) => {
+    const size = lengths.path + lengths.floor
+    const finalX = turnDelta ? turnDelta * FloorLength * 2 : 0
+    const finalZ = CameraZ + zDelta * -size
+    const finalY = upDown ? upDown * lengths.wall : 0
+    p.camera(0, finalY, finalZ, finalX, finalY, finalZ - CameraLookAhead)
+  }
 
 const DefaultGoFrames = 8
 export const getGoDeltaArray = (speed: number) => {

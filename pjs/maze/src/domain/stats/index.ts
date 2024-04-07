@@ -52,7 +52,7 @@ export const getScaffoldParams = (): ScaffoldParams => {
   return {
     corridorWidthLevel: 1,
     wallHeightLevel: 1,
-    corridorLengthLevel: 1,
+    corridorLengthLevel: 3,
     distortionLevel: 0
   }
 }

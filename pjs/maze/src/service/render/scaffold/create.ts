@@ -4,28 +4,15 @@ import {
   ScaffoldLayerCoordPosition,
   ScaffoldLayerPart,
   ScaffoldLayerPartLength,
+  ScaffoldLengths,
 } from '.'
-import { FloorLength, PathLength, WallHeight } from '../../../config'
-import { ScaffoldParams } from '../../../domain/stats'
+import { WallHeight } from '../../../config'
 
 const NumOfLayers = 7
 
-export type ScaffoldLengths = {
-  floor: number
-  path: number
-  wall: number
-}
-
-export const createScaffold = (params: ScaffoldParams): Scaffold => {
-  const lengths = calcAdjustedLength(params)
+export const createScaffold = (lengths: ScaffoldLengths): Scaffold => {
   return [...Array(NumOfLayers)].map((_, i) => createScaffoldLayer(i, lengths))
 }
-
-const calcAdjustedLength = (params: ScaffoldParams): ScaffoldLengths => ({
-  floor: FloorLength * params.corridorWidthLevel,
-  path: PathLength * params.corridorLengthLevel,
-  wall: WallHeight * params.wallHeightLevel,
-})
 
 export const createScaffoldLayer = (
   layerIndex: number,

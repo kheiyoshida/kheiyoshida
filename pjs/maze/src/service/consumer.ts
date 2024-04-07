@@ -8,8 +8,9 @@ import {
   renderProceedToNextFloor,
   renderTurn,
 } from './render'
+import { RenderPack, packRenderingInfo } from './render/pack'
 
-export type RenderHandler = (domain: DomainIntention) => void
+export type RenderHandler = (pack: RenderPack) => void
 
 export const MessageResolutionMap: Record<RenderSignal, RenderHandler> = {
   [RenderSignal.CurrentView]: renderCurrentView,
@@ -24,6 +25,7 @@ export const MessageResolutionMap: Record<RenderSignal, RenderHandler> = {
 
 export const consumeMessageQueue = () => {
   MessageQueue.resolve(([signal, intention]) => {
-    MessageResolutionMap[signal](intention)
+    const pack = packRenderingInfo(intention)
+    MessageResolutionMap[signal](pack)
   })
 }

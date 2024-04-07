@@ -10,47 +10,47 @@ import { drawTerrain } from './draw'
 import { corridorToNextFloor } from './others/scenes'
 import { RenderQueue } from './queue'
 
-export const renderCurrentView: RenderHandler = ({ renderGrid, visibility, scaffold }) => {
+export const renderCurrentView: RenderHandler = ({ renderGrid, visibility, scaffoldLengths }) => {
   const drawFrame = () => {
     cameraReset(visibility)
-    drawTerrain(renderGrid, scaffold)
+    drawTerrain(renderGrid, scaffoldLengths)
   }
   RenderQueue.push(drawFrame)
 }
 
-export const renderGo: RenderHandler = ({ renderGrid, speed, scaffold }) => {
+export const renderGo: RenderHandler = ({ renderGrid, speed, scaffoldLengths }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta) => () => {
-    moveCamera(zDelta)
-    drawTerrain(renderGrid, scaffold)
+    moveCamera(zDelta)(scaffoldLengths)
+    drawTerrain(renderGrid, scaffoldLengths)
   })
   RenderQueue.update(drawFrameSequence)
 }
 
 export const renderTurn =
   (d: 'r' | 'l'): RenderHandler =>
-  ({ renderGrid, speed, scaffold }) => {
+  ({ renderGrid, speed, scaffoldLengths }) => {
     const LRDeltaValues = getTurnLRDeltaArray(speed)
     const drawFrameSequence = LRDeltaValues.map((turnDelta) => () => {
-      moveCamera(0, d === 'r' ? turnDelta : -turnDelta)
-      drawTerrain(renderGrid, scaffold)
+      moveCamera(0, d === 'r' ? turnDelta : -turnDelta)(scaffoldLengths)
+      drawTerrain(renderGrid, scaffoldLengths)
     })
     RenderQueue.update(drawFrameSequence)
   }
 
-export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffold }) => {
+export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffoldLengths }) => {
   const drawFrameSequence = DownstairsValues.map((values) => () => {
-    moveCamera(...values)
-    drawTerrain(renderGrid, scaffold)
+    moveCamera(...values)(scaffoldLengths)
+    drawTerrain(renderGrid, scaffoldLengths)
   })
   RenderQueue.push(...drawFrameSequence)
 }
 
-export const renderProceedToNextFloor: RenderHandler = ({ speed, scaffold }) => {
+export const renderProceedToNextFloor: RenderHandler = ({ speed, scaffoldLengths }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta) => () => {
-    moveCamera(zDelta)
-    drawTerrain(corridorToNextFloor, scaffold)
+    moveCamera(zDelta)(scaffoldLengths)
+    drawTerrain(corridorToNextFloor, scaffoldLengths)
   })
   RenderQueue.push(...drawFrameSequence)
 }
