@@ -39,13 +39,11 @@ export const closeMap = () => {
   getMapCanvasContainer().style.visibility = 'hidden'
 }
 
-export const renderMap =
-  ({ map }: RenderPack) =>
-  () => {
-    getMapCanvasContainer().style.visibility = 'visible'
-    drawMap(map)
-    document.getElementById('map-floor')!.innerHTML = `floor: B${map.floor}`
-  }
+export const renderMap = ({ map }: RenderPack) => {
+  getMapCanvasContainer().style.visibility = 'visible'
+  drawMap(map)
+  document.getElementById('map-floor')!.innerHTML = `floor: B${map.floor}`
+}
 
 const drawMap = ({ grid, current, direction }: MapInfo) => {
   const ctx = getMapCanvasCtx()

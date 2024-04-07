@@ -1,15 +1,15 @@
-export type RenderFn = () => void
-export type RenderFnQueue = RenderFn[]
+export type DrawFrame = () => void
+export type DrawFnArray = DrawFrame[]
 
 const makeRenderQueue = () => {
-  let queue: RenderFnQueue = []
+  let queue: DrawFnArray = []
   const consume = () => {
     const renderFn = queue.shift()
     if (!renderFn) return
     renderFn()
   }
-  const push = (...fns: RenderFn[]) => queue.push(...fns)
-  const update = (q: RenderFnQueue) => {
+  const push = (...fns: DrawFrame[]) => queue.push(...fns)
+  const update = (q: DrawFnArray) => {
     queue = q
   }
   return {
@@ -21,6 +21,4 @@ const makeRenderQueue = () => {
     update,
   }
 }
-
 export const RenderQueue = makeRenderQueue()
-

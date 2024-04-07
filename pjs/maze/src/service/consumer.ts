@@ -1,3 +1,4 @@
+import { DomainIntention } from '../domain'
 import { MessageQueue, RenderSignal } from '../domain/events/messages'
 import { closeMap, renderMap } from './interface/map'
 import {
@@ -7,11 +8,10 @@ import {
   renderProceedToNextFloor,
   renderTurn,
 } from './render'
-import { RenderPack, packDomainIntention } from './render/pack'
 
-export type MakeRender = (domain: RenderPack) => () => void
+export type RenderHandler = (domain: DomainIntention) => void
 
-export const MessageResolutionMap: Record<RenderSignal, MakeRender> = {
+export const MessageResolutionMap: Record<RenderSignal, RenderHandler> = {
   [RenderSignal.CurrentView]: renderCurrentView,
   [RenderSignal.Go]: renderGo,
   [RenderSignal.TurnRight]: renderTurn('r'),
@@ -19,13 +19,11 @@ export const MessageResolutionMap: Record<RenderSignal, MakeRender> = {
   [RenderSignal.GoDownStairs]: renderGoDownstairs,
   [RenderSignal.ProceedToNextFloor]: renderProceedToNextFloor,
   [RenderSignal.OpenMap]: renderMap,
-  [RenderSignal.CloseMap]: () => closeMap,
+  [RenderSignal.CloseMap]: closeMap,
 }
 
 export const consumeMessageQueue = () => {
   MessageQueue.resolve(([signal, intention]) => {
-    const pack = packDomainIntention(intention)
-    const render = MessageResolutionMap[signal](pack)
-    render()
+    MessageResolutionMap[signal](intention)
   })
 }

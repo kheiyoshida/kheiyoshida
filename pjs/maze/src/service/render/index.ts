@@ -1,5 +1,4 @@
-import { Geometry } from 'p5'
-import { RenderGrid } from '../../domain/compose/renderSpec'
+import { RenderHandler } from '../consumer'
 import {
   DownstairsValues,
   cameraReset,
@@ -7,82 +6,51 @@ import {
   getTurnLRDeltaArray,
   moveCamera,
 } from './camera'
-import { getPalette } from './color/palette'
-import { convertToModelGrid } from './model'
-import { finalize } from './model/finalize'
-import { convertModelGrid } from './model/modelToGeo'
+import { drawTerrain } from './draw'
 import { corridorToNextFloor } from './others/scenes'
-import { RenderPack } from './pack'
 import { RenderQueue } from './queue'
-import { createScaffold } from './scaffold'
 
-export const renderCurrentTerrain = (renderGrid: RenderGrid) => {
-  const geos = getGeos(renderGrid)
-  drawCurrentGeometries(geos)
-}
-
-const getGeos = (renderGrid: RenderGrid) => {
-  const modelGrid = convertToModelGrid(renderGrid)
-  const coords = convertModelGrid(modelGrid, createScaffold())
-  const geos = finalize(coords)
-  return geos
-}
-
-const drawCurrentGeometries = (geos: Geometry[]) => {
-  p.background(getPalette().fill)
-  geos.forEach((geo) => p.model(geo))
-}
-
-export const renderCurrentView =
-  ({ renderGrid, visibility }: RenderPack) =>
-  () => {
-    const render = () => {
-      cameraReset(visibility)
-      renderCurrentTerrain(renderGrid)
-    }
-    RenderQueue.push(render)
+export const renderCurrentView: RenderHandler = ({ renderGrid, visibility }) => {
+  const drawFrame = () => {
+    cameraReset(visibility)
+    drawTerrain(renderGrid)
   }
+  RenderQueue.push(drawFrame)
+}
 
-export const renderGo =
-  ({ renderGrid, speed }: RenderPack) =>
-  () => {
-    const GoMoveMagValues = getGoDeltaArray(speed)
-    const renderFns = GoMoveMagValues.map((val) => () => {
-      moveCamera(val)
-      renderCurrentTerrain(renderGrid)
-    })
-    RenderQueue.update(renderFns)
-  }
+export const renderGo: RenderHandler = ({ renderGrid, speed }) => {
+  const GoMoveMagValues = getGoDeltaArray(speed)
+  const drawFrameSequence = GoMoveMagValues.map((zDelta) => () => {
+    moveCamera(zDelta)
+    drawTerrain(renderGrid)
+  })
+  RenderQueue.update(drawFrameSequence)
+}
 
 export const renderTurn =
-  (d: 'r' | 'l') =>
-  ({ renderGrid, speed }: RenderPack) =>
-  () => {
+  (d: 'r' | 'l'): RenderHandler =>
+  ({ renderGrid, speed }) => {
     const LRDeltaValues = getTurnLRDeltaArray(speed)
-    const renderFns = LRDeltaValues.map((val) => () => {
-      moveCamera(0, d === 'r' ? val : -val)
-      renderCurrentTerrain(renderGrid)
+    const drawFrameSequence = LRDeltaValues.map((turnDelta) => () => {
+      moveCamera(0, d === 'r' ? turnDelta : -turnDelta)
+      drawTerrain(renderGrid)
     })
-    RenderQueue.update(renderFns)
+    RenderQueue.update(drawFrameSequence)
   }
 
-export const renderGoDownstairs =
-  ({ renderGrid }: RenderPack) =>
-  () => {
-    const renderFns = DownstairsValues.map((values) => () => {
-      moveCamera(...values)
-      renderCurrentTerrain(renderGrid)
-    })
-    RenderQueue.push(...renderFns)
-  }
+export const renderGoDownstairs: RenderHandler = ({ renderGrid }) => {
+  const drawFrameSequence = DownstairsValues.map((values) => () => {
+    moveCamera(...values)
+    drawTerrain(renderGrid)
+  })
+  RenderQueue.push(...drawFrameSequence)
+}
 
-export const renderProceedToNextFloor =
-  ({ speed }: RenderPack) =>
-  () => {
-    const GoMoveMagValues = getGoDeltaArray(speed)
-    const renderFns = GoMoveMagValues.map((val) => () => {
-      moveCamera(val)
-      renderCurrentTerrain(corridorToNextFloor)
-    })
-    RenderQueue.push(...renderFns)
-  }
+export const renderProceedToNextFloor: RenderHandler = ({ speed }) => {
+  const GoMoveMagValues = getGoDeltaArray(speed)
+  const drawFrameSequence = GoMoveMagValues.map((zDelta) => () => {
+    moveCamera(zDelta)
+    drawTerrain(corridorToNextFloor)
+  })
+  RenderQueue.push(...drawFrameSequence)
+}
