@@ -20,6 +20,7 @@ export const MessageResolutionMap: Record<RenderSignal, RenderHandler> = {
   [RenderSignal.ProceedToNextFloor]: renderProceedToNextFloor,
   [RenderSignal.OpenMap]: renderMap,
   [RenderSignal.CloseMap]: closeMap,
+  
 }
 
 export const consumeMessageQueue = () => {

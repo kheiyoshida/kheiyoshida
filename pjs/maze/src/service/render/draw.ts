@@ -1,7 +1,7 @@
 import { Geometry } from 'p5'
-import { ColorIntention } from '../../domain/color/types'
+import { ColorOperationParams } from '../../domain/color/types'
 import { RenderGrid } from '../../domain/compose/renderSpec'
-import { resolveColorIntention } from './color'
+import { createColorManager } from './color'
 import { ModelGrid, convertToModelGrid } from './model'
 import { finalize } from './model/finalize'
 import { convertModelGrid } from './model/modelToGeo'
@@ -10,7 +10,7 @@ import { Scaffold, ScaffoldValues, createScaffold } from './scaffold'
 export const drawTerrain = (
   renderGrid: RenderGrid,
   values: ScaffoldValues,
-  color: ColorIntention
+  color: ColorOperationParams
 ): void => {
   const modelGrid = convertToModelGrid(renderGrid)
   const scaffold = createScaffold(values)
@@ -24,8 +24,14 @@ const calculateGeometries = (modelGrid: ModelGrid, scaffold: Scaffold): Geometry
   return finalize(coords)
 }
 
-const paint = (color: ColorIntention) => {
-  resolveColorIntention(color)
+
+export const triggerFadeOut = (frames: number) =>
+  ColorManager.setFixedOperation(['fadeout', frames], frames)
+
+const ColorManager = createColorManager()
+
+const paint = (color: ColorOperationParams) => {
+  ColorManager.resolve(color)
 }
 
 const drawGeometries = (geos: Geometry[]): void => {

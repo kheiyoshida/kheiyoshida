@@ -6,7 +6,7 @@ import {
   getTurnLRDeltaArray,
   moveCamera,
 } from './camera'
-import { drawTerrain } from './draw'
+import { drawTerrain, triggerFadeOut } from './draw'
 import { corridorToNextFloor } from './others/scenes'
 import { RenderQueue } from './queue'
 import { Distortion } from './scaffold/distortion'
@@ -48,7 +48,10 @@ export const renderTurn =
   }
 
 export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffoldValues, color }) => {
-  const drawFrameSequence = DownstairsValues.map((values) => () => {
+  const drawFrameSequence = DownstairsValues.map((values, i) => () => {
+    if (i === 0) {
+      triggerFadeOut(DownstairsValues.length)
+    }
     moveCamera(...values)(scaffoldValues)
     drawTerrain(renderGrid, scaffoldValues, color)
   })

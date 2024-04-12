@@ -1,6 +1,6 @@
 import { ListenableState } from '..'
 
-export type ColorEffectPattern = 'default' | 'stay' | 'return' | 'gradation' | 'reverse' | 'random' | 'trans'
+export type ColorOperationPattern = 'default' | 'stay' | 'return' | 'gradation' | 'reverse' | 'random' | 'trans' | 'fadeout'
 
-export type ParameterizeState = (state: ListenableState) => ColorIntention
-export type ColorIntention = [pattern: ColorEffectPattern, ...args: number[]]
+export type ParameterizeState = (state: ListenableState) => ColorOperationParams
+export type ColorOperationParams = [pattern: ColorOperationPattern, ...args: number[]]

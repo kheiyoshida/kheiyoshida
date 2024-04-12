@@ -6,7 +6,7 @@ import {
   transColor,
 } from 'p5utils/src/render'
 import { ColorPalette } from '.'
-import { Colors } from '../constants'
+import { Colors } from './constants'
 
 export type PaletteFactory = (palette: ColorPalette) => ColorPalette
 
@@ -45,3 +45,26 @@ export const returnTo =
     stroke: p.lerpColor(palette.stroke, destPalette.stroke, lerpVal),
     fill: p.lerpColor(palette.fill, destPalette.fill, lerpVal),
   })
+
+export const fadeOut = (
+  steps: number,
+  startPalette: ColorPalette,
+  destPalette: ColorPalette = {
+    fill: p.color(...Colors.black),
+    stroke: p.color(...Colors.black),
+  }
+): PaletteFactory => {
+  const halfSteps = Math.floor(steps / 3)
+  const fadingPalettes = [...Array(halfSteps)].map((_, i) => ({
+    stroke: p.lerpColor(startPalette.stroke, destPalette.stroke, (i + 1) / halfSteps),
+    fill: p.lerpColor(startPalette.fill, destPalette.fill, (i + 1) / halfSteps),
+  }))
+  const fadeoutPalettes = fadingPalettes.concat([...Array(steps - halfSteps)].fill(destPalette))
+  return () => {
+    const dest = fadeoutPalettes.shift()
+    if (!dest) {
+      throw Error(`ran out of fade out palette`)
+    }
+    return dest
+  }
+}

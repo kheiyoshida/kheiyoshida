@@ -1,29 +1,43 @@
-import { ListenableState } from '../../../domain'
-import { ColorIntention } from '../../../domain/color/types'
-import { effectSceneManipMap } from './manipMaps'
-import { applyPalette, getPalette, setPalette } from './palette'
+import { ColorOperationParams, ColorOperationPattern } from '../../../domain/color/types'
+import { OperationMap } from './operations'
+import { ColorPalette, applyPalette, getPalette, setPalette } from './palette'
 
-// interface ColorManager {
-//   resolve: (intention: ColorIntention) => void
-//   setFixedOperation: (operation: 'fade', ttl: number) => void
-// }
+interface ColorManager {
+  resolve: (params: ColorOperationParams) => void
+  setFixedOperation: (operationParams: ColorOperationParams, ttl: number) => void
+}
 
-// export const createColorManager = (): ColorManager => {
-//   let operation
-//   return {
-//     resolve([scene, params]) {},
-//   }
-// }
+export const createColorManager = (): ColorManager => {
+  let fixedOp: ColorOperationParams | null = null
+  let fixedOpTTL = 0
+  return {
+    resolve([pattern, ...args]) {
+      const palette = getPalette()
+      if (fixedOp) {
+        const [op, ...params] = fixedOp
+        resolveOperation(palette, op, params)
+        fixedOpTTL--
+        if (fixedOpTTL <= 0) {
+          fixedOp = null
+        }
+      } else {
+        resolveOperation(palette, pattern, args)
+      }
+    },
+    setFixedOperation(operation, ttl) {
+      fixedOp = operation
+      fixedOpTTL = ttl
+    },
+  }
+}
 
-export type ApplyColors = () => void
-export type ScneProvider = (state: ListenableState) => ApplyColors
-
-export const resolveColorIntention = (params: ColorIntention) => {
-  const palette = getPalette()
-  const map = effectSceneManipMap
-  const pattern = params[0]
-  const newPalette = map[pattern](palette, params)
+const resolveOperation = (
+  palette: ColorPalette,
+  operationPattern: ColorOperationPattern,
+  params: number[]
+): void => {
+  const operation = OperationMap[operationPattern]
+  const newPalette = operation(palette, params)
   setPalette(newPalette)
   applyPalette(newPalette)
 }
-
