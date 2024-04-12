@@ -14,7 +14,7 @@ export const NumOfScaffoldLayers = 7
 export const createScaffold = (values: ScaffoldValues): Scaffold => {
   const scaffold = [...Array(NumOfScaffoldLayers)].map((_, i) => createScaffoldLayer(i, values))
   if (values.distortionRange !== 0) {
-    Distortion.updateDeltas(values.distortionRange)
+    Distortion.updateDeltas(values.distortionRange, values.distortionSpeed)
     applyDistortion(scaffold, Distortion)
   }
   return scaffold

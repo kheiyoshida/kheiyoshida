@@ -37,4 +37,4 @@ export const createIncreasingParameter =
 const calcWidthLevel = createDecreasingParameter(0.44, 1, 90)
 const calcHeightLevel = createIncreasingParameter(1, 3, 100)
 const calcCorridorLengthLevel = createIncreasingParameter(1, 2, 80)
-const calcDistortion = createIncreasingParameter(0, 5, 100)
+const calcDistortion = createIncreasingParameter(0, 1, 100)

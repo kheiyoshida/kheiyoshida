@@ -33,6 +33,7 @@ export type ScaffoldValues = {
   path: number
   wall: number
   distortionRange: number
+  distortionSpeed: number
 }
 
 /**

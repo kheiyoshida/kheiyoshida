@@ -1,10 +1,9 @@
-import { NumOfScaffoldLayers } from '../create'
 import {
   DistortionDelta,
   Scaffold,
   ScaffoldLayer,
   ScaffoldLayerPart,
-  ScaffoldLayerPartLength
+  ScaffoldLayerPartLength,
 } from '../types'
 import { iterateScaffold } from '../utils'
 import { createDistortionDelta } from './delta'
@@ -15,7 +14,7 @@ export interface DistortionScaffold {
   deltas: DeltaScaffold
   slideGo(): void
   slideTurn(lr: 'l' | 'r'): void
-  updateDeltas(range: number): void
+  updateDeltas(range: number, speed: number): void
 }
 
 export const createDistortionScaffold = (): DistortionScaffold => {
@@ -30,14 +29,13 @@ export const createDistortionScaffold = (): DistortionScaffold => {
     slideTurn: () => {
       throw Error('not implemented')
     },
-    updateDeltas: (range) => {
-      iterateScaffold(scaffold, (entity) => entity.move(range))
+    updateDeltas: (range, speed) => {
+      iterateScaffold(scaffold, (entity) => entity.move(range, speed))
     },
   }
 }
 
-const createDeltaScaffold = (): DeltaScaffold =>
-  [...Array(NumOfScaffoldLayers)].map(createScaffoldLayer)
+const createDeltaScaffold = (): DeltaScaffold => [...Array(7)].map(createScaffoldLayer)
 
 const createScaffoldLayer = (): ScaffoldLayer<DistortionDelta> => ({
   upper: createScaffoldLayerPart(),

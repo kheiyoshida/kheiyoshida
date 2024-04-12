@@ -36,7 +36,7 @@ test(`${applyDistortion.name}`, () => {
   ]
   const scaffold = JSON.parse(JSON.stringify(original))
   const distScaffold = createDistortionScaffold()
-  distScaffold.updateDeltas(100)
+  distScaffold.updateDeltas(100, 1)
   applyDistortion(scaffold, distScaffold)
   iterateScaffold(scaffold, (entity, key) => {
     expect(entity).not.toMatchObject(retrieveScaffoldEntity(original, key))

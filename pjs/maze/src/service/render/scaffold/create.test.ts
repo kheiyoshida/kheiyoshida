@@ -13,6 +13,7 @@ const defaultValues: ScaffoldValues = {
   path: 800,
   wall: 400,
   distortionRange: 0,
+  distortionSpeed: 0,
 }
 
 test(`${createScaffold.name}`, () => {
