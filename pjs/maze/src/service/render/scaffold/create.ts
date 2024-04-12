@@ -10,10 +10,10 @@ import {
 } from '.'
 import { WallHeight } from '../../../config'
 
-const NumOfLayers = 7
+export const NumOfScaffoldLayers = 7
 
 export const createScaffold = (lengths: ScaffoldLengths, distortion: number): Scaffold => {
-  return [...Array(NumOfLayers)].map((_, i) => createScaffoldLayer(i, lengths, distortion))
+  return [...Array(NumOfScaffoldLayers)].map((_, i) => createScaffoldLayer(i, lengths, distortion))
 }
 
 export const createScaffoldLayer = (
