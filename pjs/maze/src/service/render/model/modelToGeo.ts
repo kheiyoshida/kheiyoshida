@@ -1,8 +1,8 @@
-import { GeometryCoordinates, ModelGrid, RenderModel, ShapeCoordinates } from '.'
 import { FloorLength, PathLength, WallHeight } from '../../../config'
 import { RenderPosition } from '../../../domain/compose/renderSpec'
-import { RenderBlockCoords, Scaffold } from '../scaffold'
-import { getAltBlock, getAdjacentBlock, makeGetRenderBlock } from '../scaffold/block'
+import { Scaffold } from '../scaffold'
+import { getAdjacentBlock, getAltBlock, makeGetRenderBlock } from './block'
+import { GeometryCoordinates, ModelGrid, RenderBlockCoords, RenderModel, ShapeCoordinates } from './types'
 
 export const convertModelGrid = (
   modelGrid: ModelGrid,

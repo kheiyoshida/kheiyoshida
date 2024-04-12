@@ -1,32 +1,4 @@
 import { Position3D } from 'p5utils/src/3d/types'
-import * as RenderSpec from '../../../domain/compose/renderSpec'
-
-export type RenderBlockPosition = {
-  z: number
-  x: RenderSpec.RenderPosition
-  y?: never // maybe y in the future
-}
-
-export type RenderBlockCoords = {
-  front: RenderBlockLayer
-  rear: RenderBlockLayer
-}
-
-/**
- * defines the layer of render block's front or rear
- *  tl         tr
- *   '---------'
- *   |         |
- *   |         |
- *   '---------'
- *  bl         br
- */
-export type RenderBlockLayer = {
-  tl: Position3D
-  tr: Position3D
-  bl: Position3D
-  br: Position3D
-}
 
 export type ScaffoldValues = {
   floor: number

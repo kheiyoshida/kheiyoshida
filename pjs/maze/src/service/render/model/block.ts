@@ -1,10 +1,12 @@
 import {
-  RenderBlockCoords,
-  RenderBlockLayer,
-  RenderBlockPosition,
   Scaffold,
   ScaffoldLayer,
   ScaffoldLayerCoordPosition,
+} from '../scaffold/types'
+import {
+  RenderBlockCoords,
+  RenderBlockLayer,
+  RenderBlockPosition
 } from './types'
 import { RenderPosition } from '../../../domain/compose/renderSpec'
 

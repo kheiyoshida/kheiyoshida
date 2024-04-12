@@ -1,5 +1,5 @@
 import { ModelGrid, RenderModel } from '.'
-import { MockScaffold } from '../scaffold/__test__/mock'
+import { MockScaffold } from './__test__/mock'
 import { convertModelGrid } from './modelToGeo'
 
 test(`${convertModelGrid.name}`, () => {
