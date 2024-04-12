@@ -23,11 +23,10 @@ const VERSION = pjson.version
 let started = false
 
 const start = () => {
+  toneStart()
   if (started) return
   started = true
   initializeServices()
-
-  toneStart()
 }
 
 const Maze = P5Canvas({
