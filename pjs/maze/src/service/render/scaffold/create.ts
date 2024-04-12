@@ -1,40 +1,32 @@
-import { Position3D } from 'p5utils/src/3d'
-import { randomFloatAsymmetricrange } from 'utils'
 import {
   Scaffold,
   ScaffoldLayer,
   ScaffoldLayerCoordPosition,
   ScaffoldLayerPart,
   ScaffoldLayerPartLength,
-  ScaffoldLengths,
+  ScaffoldValues,
 } from '.'
 import { WallHeight } from '../../../config'
 
 export const NumOfScaffoldLayers = 7
 
-export const createScaffold = (lengths: ScaffoldLengths, distortion: number): Scaffold => {
-  return [...Array(NumOfScaffoldLayers)].map((_, i) => createScaffoldLayer(i, lengths, distortion))
+export const createScaffold = (values: ScaffoldValues): Scaffold => {
+  return [...Array(NumOfScaffoldLayers)].map((_, i) => createScaffoldLayer(i, values))
 }
 
 export const createScaffoldLayer = (
   layerIndex: number,
-  lengths: ScaffoldLengths,
-  distortion: number
+  values: ScaffoldValues,
 ): ScaffoldLayer => {
-  const zValue = getLayerZValue(layerIndex, lengths.floor, lengths.path)
-  const getY = makegetLayerYValue(lengths.wall)
-  const distort = distortPosition(distortion)
+  const zValue = getLayerZValue(layerIndex, values.floor, values.path)
+  const getY = makegetLayerYValue(values.wall)
   const [lower, upper] = ['lower', 'upper']
-    .map((k) => createScaffoldLayerPart(getY(k as keyof ScaffoldLayer), zValue, lengths))
-    .map((position3ds) => position3ds.map(distort))
+    .map((k) => createScaffoldLayerPart(getY(k as keyof ScaffoldLayer), zValue, values))
   return {
     upper,
     lower,
   }
 }
-
-const distortPosition = (distortion: number) => (position: Position3D) =>
-  position.map((v) => v + randomFloatAsymmetricrange(distortion)) as Position3D
 
 export const getLayerZValue = (layerIndex: number, floorLength: number, pathLength: number) => {
   const halfFloor = 0.5 * floorLength
@@ -55,9 +47,9 @@ export const makegetLayerYValue =
 export const createScaffoldLayerPart = (
   y: number,
   z: number,
-  lengths: ScaffoldLengths
+  values: ScaffoldValues
 ): ScaffoldLayerPart => {
-  const getX = makeGetScaffoldXValue(lengths.floor, lengths.path)
+  const getX = makeGetScaffoldXValue(values.floor, values.path)
   return [...Array(ScaffoldLayerPartLength)].map((_, i) => [getX(i), y, z])
 }
 

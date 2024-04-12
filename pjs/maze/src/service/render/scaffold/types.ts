@@ -28,10 +28,11 @@ export type RenderBlockLayer = {
   br: Position3D
 }
 
-export type ScaffoldLengths = {
+export type ScaffoldValues = {
   floor: number
   path: number
   wall: number
+  distortionRange: number
 }
 
 /**

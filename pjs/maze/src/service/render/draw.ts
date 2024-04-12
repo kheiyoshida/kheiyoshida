@@ -4,14 +4,14 @@ import { getPalette } from './color/palette'
 import { ModelGrid, convertToModelGrid } from './model'
 import { finalize } from './model/finalize'
 import { convertModelGrid } from './model/modelToGeo'
-import { Scaffold, ScaffoldLengths, createScaffold } from './scaffold'
+import { Scaffold, ScaffoldValues, createScaffold } from './scaffold'
 
 export const drawTerrain = (
   renderGrid: RenderGrid,
-  { lengths, distortion }: { lengths: ScaffoldLengths; distortion: number }
+  values: ScaffoldValues
 ): void => {
   const modelGrid = convertToModelGrid(renderGrid)
-  const scaffold = createScaffold(lengths, distortion)
+  const scaffold = createScaffold(values)
   const geos = calculateGeometries(modelGrid, scaffold)
   drawGeometries(geos)
 }

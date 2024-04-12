@@ -1,6 +1,6 @@
 import {
   ScaffoldLayerCoordPosition,
-  ScaffoldLengths,
+  ScaffoldValues,
   createScaffold,
   createScaffoldLayer,
   createScaffoldLayerPart,
@@ -9,21 +9,22 @@ import {
   makegetLayerYValue,
 } from '.'
 
-const defaultLengths: ScaffoldLengths = {
+const defaultValues: ScaffoldValues = {
   floor: 400,
   path: 800,
   wall: 400,
+  distortionRange: 0,
 }
 
 test(`${createScaffold.name}`, () => {
-  const scaffold = createScaffold(defaultLengths, 0)
+  const scaffold = createScaffold(defaultValues)
   expect(scaffold).toHaveLength(7)
 })
 
 test(`${createScaffoldLayer.name}`, () => {
-  const layer = createScaffoldLayer(1, defaultLengths, 0)
+  const layer = createScaffoldLayer(1, defaultValues)
   expect(layer.lower[ScaffoldLayerCoordPosition.LL][2]).toBe(
-    getLayerZValue(1, defaultLengths.floor, defaultLengths.path)
+    getLayerZValue(1, defaultValues.floor, defaultValues.path)
   )
 })
 
@@ -42,16 +43,16 @@ test.each([
   [800, -600],
   [1200, -1000],
 ])(`${makegetLayerYValue.name} (%i)`, (height, expected) => {
-  const getY = makegetLayerYValue(height, defaultLengths.wall)
-  expect(getY('lower')).toBe(defaultLengths.wall / 2)
+  const getY = makegetLayerYValue(height, defaultValues.wall)
+  expect(getY('lower')).toBe(defaultValues.wall / 2)
   expect(getY('upper')).toBe(expected)
 })
 
 test(`${createScaffoldLayerPart.name}`, () => {
   const [y, z] = [500, 1500]
-  const layerPart = createScaffoldLayerPart(y, z, defaultLengths)
+  const layerPart = createScaffoldLayerPart(y, z, defaultValues)
   layerPart.forEach((pos, i) => {
-    expect(pos[0]).toBe(makeGetScaffoldXValue(defaultLengths.floor, defaultLengths.path)(i))
+    expect(pos[0]).toBe(makeGetScaffoldXValue(defaultValues.floor, defaultValues.path)(i))
     expect(pos[1]).toBe(y)
     expect(pos[2]).toBe(z)
   })
@@ -63,6 +64,6 @@ test.each([
   [ScaffoldLayerCoordPosition.CR, 200],
   [ScaffoldLayerCoordPosition.RR, 1000],
 ])(`${makeGetScaffoldXValue.name}(%s)`, (position, expected) => {
-  const getX = makeGetScaffoldXValue(defaultLengths.floor, defaultLengths.path)
+  const getX = makeGetScaffoldXValue(defaultValues.floor, defaultValues.path)
   expect(getX(position)).toBe(expected)
 })

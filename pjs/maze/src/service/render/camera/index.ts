@@ -7,7 +7,7 @@ import {
   wh,
   ww,
 } from '../../../config'
-import { ScaffoldLengths } from '../scaffold'
+import { ScaffoldValues } from '../scaffold'
 import { createAccumulatedDistanceArray, createSinArray } from './movement'
 
 const ModelGridLength = 6
@@ -20,7 +20,7 @@ export const cameraReset = (visibility = 1.0) => {
 }
 
 export const moveCamera =
-  (zDelta: number, turnDelta?: number, upDown?: number) => (lengths: ScaffoldLengths) => {
+  (zDelta: number, turnDelta?: number, upDown?: number) => (lengths: ScaffoldValues) => {
     const size = lengths.path + lengths.floor
     const finalX = turnDelta ? turnDelta * FloorLength * 2 : 0
     const finalZ = CameraZ + zDelta * -size
