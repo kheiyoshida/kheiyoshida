@@ -44,9 +44,9 @@ export type Scaffold<T extends ScaffoldEntity = Position3D> = ScaffoldLayer<T>[]
 
 export type ScaffoldEntity = Position3D | DistortionDelta
 
+export type ScaffoldLayerPartKey = 'upper' | 'lower'
 export type ScaffoldLayer<T extends ScaffoldEntity = Position3D> = {
-  upper: ScaffoldLayerPart<T>
-  lower: ScaffoldLayerPart<T>
+  [k in ScaffoldLayerPartKey]: ScaffoldLayerPart<T>
 }
 
 /**
@@ -61,6 +61,12 @@ export enum ScaffoldLayerCoordPosition {
   CL = 1,
   CR = 2,
   RR = 3,
+}
+
+export type ScaffoldKey = {
+  layerIndex: number
+  partKey: ScaffoldLayerPartKey
+  position: ScaffoldLayerCoordPosition
 }
 
 export interface DistortionDelta {

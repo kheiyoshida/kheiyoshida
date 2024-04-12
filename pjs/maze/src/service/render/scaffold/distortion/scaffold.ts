@@ -2,11 +2,11 @@ import { NumOfScaffoldLayers } from '../create'
 import {
   DistortionDelta,
   Scaffold,
-  ScaffoldEntity,
   ScaffoldLayer,
   ScaffoldLayerPart,
-  ScaffoldLayerPartLength,
+  ScaffoldLayerPartLength
 } from '../types'
+import { iterateScaffold } from '../utils'
 import { createDistortionDelta } from './delta'
 
 export type DeltaScaffold = Scaffold<DistortionDelta>
@@ -34,16 +34,6 @@ export const createDistortionScaffold = (): DistortionScaffold => {
       iterateScaffold(scaffold, (entity) => entity.move(range))
     },
   }
-}
-
-export const iterateScaffold = <T extends ScaffoldEntity>(
-  scaffold: Scaffold<T>,
-  cb: (entity: T) => void
-) => {
-  scaffold.forEach((layer) => {
-    layer.upper.forEach(cb)
-    layer.lower.forEach(cb)
-  })
 }
 
 const createDeltaScaffold = (): DeltaScaffold =>

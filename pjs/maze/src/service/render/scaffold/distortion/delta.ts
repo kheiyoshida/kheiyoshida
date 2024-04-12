@@ -1,6 +1,7 @@
 import { Vector } from 'p5'
 import { Position3D } from 'p5utils/src/3d'
 import { DistortionDelta } from '../types'
+import { randomFloatAsymmetricrange } from 'utils'
 
 export const createDistortionDelta = (delta: Vector = new Vector()): DistortionDelta => {
   return {
@@ -15,7 +16,7 @@ export const createDistortionDelta = (delta: Vector = new Vector()): DistortionD
 }
 
 export const getMovementValues = (speed: number): Position3D => {
-  return [Math.random() * speed, Math.random() * speed, Math.random() * speed]
+  return [...Array(3)].map(() => randomFloatAsymmetricrange(speed)) as Position3D
 }
 
 export const restrainVectorWithinRange = (vector: Vector, range: number): void => {

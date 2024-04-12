@@ -1,3 +1,5 @@
+import { WallHeight } from '../../../config'
+import { Distortion, applyDistortion } from './distortion'
 import {
   Scaffold,
   ScaffoldLayer,
@@ -5,23 +7,25 @@ import {
   ScaffoldLayerPart,
   ScaffoldLayerPartLength,
   ScaffoldValues,
-} from '.'
-import { WallHeight } from '../../../config'
+} from './types'
 
 export const NumOfScaffoldLayers = 7
 
 export const createScaffold = (values: ScaffoldValues): Scaffold => {
-  return [...Array(NumOfScaffoldLayers)].map((_, i) => createScaffoldLayer(i, values))
+  const scaffold = [...Array(NumOfScaffoldLayers)].map((_, i) => createScaffoldLayer(i, values))
+  if (values.distortionRange !== 0) {
+    Distortion.updateDeltas(values.distortionRange)
+    applyDistortion(scaffold, Distortion)
+  }
+  return scaffold
 }
 
-export const createScaffoldLayer = (
-  layerIndex: number,
-  values: ScaffoldValues,
-): ScaffoldLayer => {
+export const createScaffoldLayer = (layerIndex: number, values: ScaffoldValues): ScaffoldLayer => {
   const zValue = getLayerZValue(layerIndex, values.floor, values.path)
   const getY = makegetLayerYValue(values.wall)
-  const [lower, upper] = ['lower', 'upper']
-    .map((k) => createScaffoldLayerPart(getY(k as keyof ScaffoldLayer), zValue, values))
+  const [lower, upper] = ['lower', 'upper'].map((k) =>
+    createScaffoldLayerPart(getY(k as keyof ScaffoldLayer), zValue, values)
+  )
   return {
     upper,
     lower,

@@ -5,7 +5,7 @@ import {
   Scaffold,
   ScaffoldLayer,
   ScaffoldLayerCoordPosition,
-} from '.'
+} from './types'
 import { RenderPosition } from '../../../domain/compose/renderSpec'
 
 export const makeGetRenderBlock =

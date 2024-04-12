@@ -1,13 +1,12 @@
 import {
-  ScaffoldLayerCoordPosition,
-  ScaffoldValues,
   createScaffold,
   createScaffoldLayer,
   createScaffoldLayerPart,
   getLayerZValue,
   makeGetScaffoldXValue,
   makegetLayerYValue,
-} from '.'
+} from './create'
+import { ScaffoldLayerCoordPosition, ScaffoldValues } from './types'
 
 const defaultValues: ScaffoldValues = {
   floor: 400,
