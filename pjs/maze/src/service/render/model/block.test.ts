@@ -1,7 +1,7 @@
-import { RenderBlockCoords, RenderBlockLayer } from './types'
 import { RenderPosition } from '../../../domain/compose/renderSpec'
 import { MockScaffold } from './__test__/mock'
-import { getAltBlock, getBlockLayer, getAdjacentBlock, makeGetRenderBlock } from './block'
+import { getAdjacentBlockZ, getAdjacentLayerY, getBlockLayer, makeGetRenderBlock } from './block'
+import { RenderBlockCoords, RenderBlockLayer } from './types'
 
 test(`${makeGetRenderBlock.name}`, () => {
   const scaffold = MockScaffold
@@ -31,37 +31,23 @@ test(`${getBlockLayer.name}`, () => {
   })
 })
 
-test(`${getAltBlock.name}`, () => {
-  const block: RenderBlockCoords = {
-    front: {
-      tl: [-1500, -500, -4500],
-      tr: [-500, -500, -4500],
-      bl: [-1500, 500, -4500],
-      br: [-500, 500, -4500],
-    },
-    rear: {
-      tl: [-1500, -500, -5500],
-      tr: [-500, -500, -5500],
-      bl: [-1500, 500, -5500],
-      br: [-500, 500, -5500],
-    },
+test(`${getAdjacentLayerY.name}`, () => {
+  const layer: RenderBlockLayer = {
+    tl: [-100, -50, 10],
+    tr: [100, -50, -10],
+    bl: [-100, 50, -10],
+    br: [80, 40, 10],
   }
-  const altBlock = getAltBlock(block, { y: 1000, z: -1000 })
-  Object.entries(altBlock.front).forEach(([k, [x, y, z]]) => {
-    const original = block.front[k as keyof RenderBlockLayer]
-    expect(x).toBe(original[0])
-    expect(y).toBe(original[1] + 1000)
-    expect(z).toBe(original[2] - 1000)
-  })
-  Object.entries(altBlock.rear).forEach(([k, [x, y, z]]) => {
-    const original = block.rear[k as keyof RenderBlockLayer]
-    expect(x).toBe(original[0])
-    expect(y).toBe(original[1] + 1000)
-    expect(z).toBe(original[2] - 1000)
+  const result = getAdjacentLayerY(layer)
+  expect(result).toMatchObject({
+    tl: layer.bl,
+    tr: layer.br,
+    bl: [-100, 150, 10],
+    br: [100, 130, -10],
   })
 })
 
-test(`${getAdjacentBlock.name}`, () => {
+test(`${getAdjacentBlockZ.name}`, () => {
   const block: RenderBlockCoords = {
     front: {
       tl: [-1500, -500, -4500],
@@ -76,7 +62,7 @@ test(`${getAdjacentBlock.name}`, () => {
       br: [-500, 500, -5500],
     },
   }
-  const slideBlock = getAdjacentBlock(block, { z: -1000 })
+  const slideBlock = getAdjacentBlockZ(block, { z: -1000 })
   Object.entries(slideBlock.front).forEach(([k, [_, __, z]]) => {
     const original = block.rear[k as keyof RenderBlockLayer]
     expect(z).toBe(original[2])

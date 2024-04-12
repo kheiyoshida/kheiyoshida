@@ -1,13 +1,5 @@
-import {
-  Scaffold,
-  ScaffoldLayer,
-  ScaffoldLayerCoordPosition,
-} from '../scaffold/types'
-import {
-  RenderBlockCoords,
-  RenderBlockLayer,
-  RenderBlockPosition
-} from './types'
+import { Scaffold, ScaffoldLayer, ScaffoldLayerCoordPosition } from '../scaffold/types'
+import { RenderBlockCoords, RenderBlockLayer, RenderBlockPosition } from './types'
 import { RenderPosition } from '../../../domain/compose/renderSpec'
 
 export const makeGetRenderBlock =
@@ -41,22 +33,28 @@ const TranslateMap: Record<
   [RenderPosition.RIGHT]: [ScaffoldLayerCoordPosition.CR, ScaffoldLayerCoordPosition.RR],
 }
 
-export const getAltBlock = (
-  block: RenderBlockCoords,
-  delta: { x?: number; y?: number; z?: number }
-): RenderBlockCoords => {
+export const getAdjacentBlockY = (block: RenderBlockCoords) => {
   return {
-    front: addValueToLBlockLayer(block.front, delta),
-    rear: addValueToLBlockLayer(block.rear, delta),
+    front: getAdjacentLayerY(block.front),
+    rear: getAdjacentLayerY(block.rear),
   }
 }
 
-export const getAdjacentBlock = (
+export const getAdjacentLayerY = (layer: RenderBlockLayer): RenderBlockLayer => {
+  return {
+    tl: layer.bl,
+    tr: layer.br,
+    bl: [layer.tl[0], layer.bl[1] + (layer.bl[1] - layer.tl[1]), layer.tl[2]],
+    br: [layer.tr[0], layer.br[1] + (layer.br[1] - layer.tr[1]), layer.tr[2]],
+  }
+}
+
+export const getAdjacentBlockZ = (
   block: RenderBlockCoords,
   delta: { z: number }
 ): RenderBlockCoords => {
   return {
-    front: {...block.rear},
+    front: { ...block.rear },
     rear: addValueToLBlockLayer(block.rear, delta),
   }
 }

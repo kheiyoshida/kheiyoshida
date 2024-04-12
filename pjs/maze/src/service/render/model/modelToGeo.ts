@@ -1,8 +1,14 @@
-import { FloorLength, PathLength, WallHeight } from '../../../config'
+import { FloorLength, PathLength } from '../../../config'
 import { RenderPosition } from '../../../domain/compose/renderSpec'
 import { Scaffold } from '../scaffold'
-import { getAdjacentBlock, getAltBlock, makeGetRenderBlock } from './block'
-import { GeometryCoordinates, ModelGrid, RenderBlockCoords, RenderModel, ShapeCoordinates } from './types'
+import { getAdjacentBlockY, getAdjacentBlockZ, makeGetRenderBlock } from './block'
+import {
+  GeometryCoordinates,
+  ModelGrid,
+  RenderBlockCoords,
+  RenderModel,
+  ShapeCoordinates,
+} from './types'
 
 export const convertModelGrid = (
   modelGrid: ModelGrid,
@@ -32,19 +38,19 @@ export const convertModelToGeometryCoords = (
 }
 
 const convertStairModel = (renderBlock: RenderBlockCoords): GeometryCoordinates => {
-  const oneStairDownBlock = getAltBlock(renderBlock, { y: WallHeight })
-  const corridorBlock = getAdjacentBlock(oneStairDownBlock, { z: -PathLength })
-  const corridorBlock2 = getAdjacentBlock(corridorBlock, { z: -FloorLength })
-  const corridorBlock3 = getAdjacentBlock(corridorBlock2, { z: -PathLength })
+  const oneStairDownBlock = getAdjacentBlockY(renderBlock)
+  const corridorBlock = getAdjacentBlockZ(oneStairDownBlock, { z: -PathLength })
+  const corridorBlock2 = getAdjacentBlockZ(corridorBlock, { z: -FloorLength })
+  const corridorBlock3 = getAdjacentBlockZ(corridorBlock2, { z: -PathLength })
   return [
     flatStair(oneStairDownBlock),
     sideWallOnLeft(oneStairDownBlock),
     sideWallOnRight(oneStairDownBlock),
     ...getCorridor(corridorBlock),
     ...getCorridor(corridorBlock2),
-    ...getCorridor(corridorBlock3)
+    ...getCorridor(corridorBlock3),
   ]
-  function getCorridor (corridorBlock: RenderBlockCoords){
+  function getCorridor(corridorBlock: RenderBlockCoords) {
     return [
       ceil(corridorBlock),
       floor(corridorBlock),
