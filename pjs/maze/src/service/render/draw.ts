@@ -1,6 +1,7 @@
 import { Geometry } from 'p5'
+import { ColorIntention } from '../../domain/color/types'
 import { RenderGrid } from '../../domain/compose/renderSpec'
-import { getPalette } from './color/palette'
+import { resolveColorIntention } from './color'
 import { ModelGrid, convertToModelGrid } from './model'
 import { finalize } from './model/finalize'
 import { convertModelGrid } from './model/modelToGeo'
@@ -8,11 +9,13 @@ import { Scaffold, ScaffoldValues, createScaffold } from './scaffold'
 
 export const drawTerrain = (
   renderGrid: RenderGrid,
-  values: ScaffoldValues
+  values: ScaffoldValues,
+  color: ColorIntention
 ): void => {
   const modelGrid = convertToModelGrid(renderGrid)
   const scaffold = createScaffold(values)
   const geos = calculateGeometries(modelGrid, scaffold)
+  paint(color)
   drawGeometries(geos)
 }
 
@@ -21,7 +24,11 @@ const calculateGeometries = (modelGrid: ModelGrid, scaffold: Scaffold): Geometry
   return finalize(coords)
 }
 
+const paint = (color: ColorIntention) => {
+  const renewColor = resolveColorIntention(color)
+  renewColor()
+}
+
 const drawGeometries = (geos: Geometry[]): void => {
-  p.background(getPalette().fill)
   geos.forEach((geo) => p.model(geo))
 }
