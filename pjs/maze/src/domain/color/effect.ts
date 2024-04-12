@@ -3,16 +3,16 @@ import { ParameterizeState, ColorOperationPattern } from './types'
 
 const selectA = createRandomSelect<ColorOperationPattern>([
   [20, 'stay'],
-  [10, 'gradation'],
+  // [10, 'gradation'],
   [20, 'return'],
-  [30, 'trans'],
+  // [30, 'trans'],
 ])
 
 const selectB = createRandomSelect<ColorOperationPattern>([
   [20, 'stay'],
-  [10, 'gradation'],
+  // [10, 'gradation'],
   [20, 'return'],
-  [30, 'trans'],
+  // [30, 'trans'],
 ])
 
 const selectC = createRandomSelect<ColorOperationPattern>([

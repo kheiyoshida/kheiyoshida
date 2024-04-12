@@ -18,7 +18,11 @@ export const createColorManager = (): ColorManager => {
         resolveOperation(palette, op, params)
         fixedOpTTL--
         if (fixedOpTTL <= 0) {
-          fixedOp = null
+          if (fixedOp[0] === 'fadeout') {
+            fixedOp[0] = 'default'
+          } else {
+            fixedOp = null
+          }
         }
       } else {
         resolveOperation(palette, pattern, args)

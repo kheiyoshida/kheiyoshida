@@ -24,7 +24,6 @@ const calculateGeometries = (modelGrid: ModelGrid, scaffold: Scaffold): Geometry
   return finalize(coords)
 }
 
-
 export const triggerFadeOut = (frames: number) =>
   ColorManager.setFixedOperation(['fadeout', frames], frames)
 
