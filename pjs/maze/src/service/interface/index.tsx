@@ -3,10 +3,10 @@ import { Buttons } from './buttons'
 import { Map } from './map'
 import { Start } from './start'
 
-export const Interface = ({ version }: { version: string }) => {
+export const Interface = ({ version, start }: { version: string, start: () => void }) => {
   return (
     <div style={style}>
-      <Start version={version} />
+      <Start version={version} start={start} />
       {IsMobile ? <Buttons /> : null}
       <Map />
     </div>

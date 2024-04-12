@@ -12,7 +12,6 @@ const setup = () => {
   p.perspective(FovyValue, ww / wh, 10, 8000)
   applyPalette(getPalette())
   p.noLoop()
-  setupRenderingCycle()
 
   // TODO: replace with native event
   p.mouseClicked = start
@@ -26,19 +25,20 @@ const start = () => {
   toneStart()
   if (started) return
   started = true
+  setupRenderingCycle()
   initializeServices()
 }
 
 const Maze = P5Canvas({
   setup,
-  draw: () => undefined
+  draw: () => undefined,
 })
 
 export default () => {
   return (
     <>
       <Maze />
-      <Interface version={VERSION} />
+      <Interface version={VERSION} start={start} />
     </>
   )
 }
