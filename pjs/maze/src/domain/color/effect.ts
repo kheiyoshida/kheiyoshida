@@ -1,21 +1,21 @@
 import { makeWeightedRandomPicker as createRandomSelect } from 'utils'
-import { ParameterizeState, Scene, ScenePattern } from './types'
+import { ParameterizeState, ColorEffectPattern } from './types'
 
-const selectA = createRandomSelect<ScenePattern<Scene.Effect>>([
+const selectA = createRandomSelect<ColorEffectPattern>([
   [20, 'stay'],
   [10, 'gradation'],
   [20, 'return'],
   [30, 'trans'],
 ])
 
-const selectB = createRandomSelect<ScenePattern<Scene.Effect>>([
+const selectB = createRandomSelect<ColorEffectPattern>([
   [20, 'stay'],
   [10, 'gradation'],
   [20, 'return'],
   [30, 'trans'],
 ])
 
-const selectC = createRandomSelect<ScenePattern<Scene.Effect>>([
+const selectC = createRandomSelect<ColorEffectPattern>([
   [30, 'stay'],
   [20, 'gradation'],
   [30, 'return'],
@@ -24,7 +24,7 @@ const selectC = createRandomSelect<ScenePattern<Scene.Effect>>([
   [20, 'trans'],
 ])
 
-const selectD = createRandomSelect<ScenePattern<Scene.Effect>>([
+const selectD = createRandomSelect<ColorEffectPattern>([
   [20, 'stay'],
   [20, 'gradation'],
   [35, 'return'],
@@ -33,7 +33,7 @@ const selectD = createRandomSelect<ScenePattern<Scene.Effect>>([
   [20, 'trans'],
 ])
 
-export const parameterizeEffectScene: ParameterizeState<Scene.Effect> = ({ floor, sanity }) => {
+export const parameterizeEffectScene: ParameterizeState = ({ floor, sanity }) => {
   const pattern =
     sanity > 5 ? (floor < 10 ? selectA() : selectB()) : floor < 10 ? selectC() : selectD()
   if (pattern === 'gradation') return [pattern, 1, Math.min(30, (100 - sanity) / 3)]

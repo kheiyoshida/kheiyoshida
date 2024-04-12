@@ -25,8 +25,7 @@ const calculateGeometries = (modelGrid: ModelGrid, scaffold: Scaffold): Geometry
 }
 
 const paint = (color: ColorIntention) => {
-  const renewColor = resolveColorIntention(color)
-  renewColor()
+  resolveColorIntention(color)
 }
 
 const drawGeometries = (geos: Geometry[]): void => {

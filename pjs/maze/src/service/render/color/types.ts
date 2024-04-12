@@ -1,9 +1,9 @@
-import { Scene, ScenePattern, ScenePatternParams } from '../../../domain/color/types'
+import { ColorEffectPattern, ColorIntention } from '../../../domain/color/types'
 import { ColorPalette } from './palette'
 
-export type ColorManipFn<S extends Scene> = (
+export type ColorManipFn = (
   palette: ColorPalette,
-  params: ScenePatternParams<S>
+  params: ColorIntention
 ) => ColorPalette
 
-export type ColorManipFnMap<S extends Scene> = { [k in ScenePattern<S>]: ColorManipFn<S> }
+export type ColorManipFnMap = { [k in ColorEffectPattern]: ColorManipFn }

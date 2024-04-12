@@ -1,32 +1,29 @@
 import { ListenableState } from '../../../domain'
-import { ColorIntention, Scene, ScenePatternParams } from '../../../domain/color/types'
-import { effectSceneManipMap, normalSceneManipMap } from './manipMaps'
-import { ColorPalette, applyPalette, getPalette, setPalette } from './palette'
-import { ColorManipFnMap } from './types'
+import { ColorIntention } from '../../../domain/color/types'
+import { effectSceneManipMap } from './manipMaps'
+import { applyPalette, getPalette, setPalette } from './palette'
+
+// interface ColorManager {
+//   resolve: (intention: ColorIntention) => void
+//   setFixedOperation: (operation: 'fade', ttl: number) => void
+// }
+
+// export const createColorManager = (): ColorManager => {
+//   let operation
+//   return {
+//     resolve([scene, params]) {},
+//   }
+// }
 
 export type ApplyColors = () => void
-
-export const bundleScene =
-  <S extends Scene>(
-    map: ColorManipFnMap<S>,
-    params: ScenePatternParams<S>,
-    palette: ColorPalette = getPalette()
-  ): ApplyColors =>
-  () => {
-    const newPalette = map[params[0]](palette, params)
-    setPalette(newPalette)
-    applyPalette(newPalette)
-  }
-
 export type ScneProvider = (state: ListenableState) => ApplyColors
 
-export const resolveColorIntention = <S extends Scene>([
-  scene,
-  params,
-]: ColorIntention<S>): ApplyColors => {
-  if (scene === Scene.Normal)
-    return bundleScene(normalSceneManipMap, params as ScenePatternParams<Scene.Normal>)
-  if (scene === Scene.Effect)
-    return bundleScene(effectSceneManipMap, params as ScenePatternParams<Scene.Effect>)
-  throw Error()
+export const resolveColorIntention = (params: ColorIntention) => {
+  const palette = getPalette()
+  const map = effectSceneManipMap
+  const pattern = params[0]
+  const newPalette = map[pattern](palette, params)
+  setPalette(newPalette)
+  applyPalette(newPalette)
 }
+
