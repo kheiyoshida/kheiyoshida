@@ -12,3 +12,8 @@ export const createAccumulatedDistanceArray = (length: number): number[] => {
   const normalized = distArray.map((dist) => dist / total)
   return normalized
 }
+
+export const getStairUpDown = (i: number, toggleInterval = 2): boolean => {
+  if (Math.floor(i / toggleInterval) % 2 === 0) return true
+  return false
+}

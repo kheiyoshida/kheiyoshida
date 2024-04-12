@@ -8,7 +8,7 @@ import {
   ww,
 } from '../../../config'
 import { ScaffoldValues } from '../scaffold'
-import { createAccumulatedDistanceArray, createSinArray } from './movement'
+import { createAccumulatedDistanceArray, createSinArray, getStairUpDown } from './movement'
 
 const ModelGridLength = 6
 const MaxVisibleLength = FloorPathAvgLength * ModelGridLength
@@ -40,12 +40,12 @@ export const getTurnLRDeltaArray = (speed: number) => {
   return createSinArray(frameNumber, 0.15)
 }
 
-const DownFramesLength = 12
+const DownFramesLength = 32
 export const DownstairsValues: Parameters<typeof moveCamera>[] = [...Array(DownFramesLength)].map(
   (_, i) => {
     const forward = 0.3
     const zDelta = (forward * (i + 1)) / DownFramesLength
-    const upDown = ((i % 2 === 0 ? 1 : 0.75) * (i + 1)) / DownFramesLength
+    const upDown = ((getStairUpDown(i, 2) ? 1 : 0.88) * (i + 1)) / DownFramesLength
     return [zDelta, 0, upDown]
   }
 )

@@ -1,4 +1,4 @@
-import { createAccumulatedDistanceArray, createSinArray } from './movement'
+import { createAccumulatedDistanceArray, createSinArray, getStairUpDown } from './movement'
 
 test(`${createSinArray.name}`, () => {
   const result = createSinArray(4, 0.5)
@@ -16,5 +16,17 @@ test(`${createAccumulatedDistanceArray.name}`, () => {
     expect(v).toBeLessThanOrEqual(1.0)
     expect(v).toBeLessThanOrEqual(result[i + 1] || 1.0)
   })
+})
 
+test.each([
+  [0, true],
+  [1, true],
+  [2, true],
+  [3, false],
+  [4, false],
+  [5, false],
+  [6, true],
+  [7, true],
+])(`${getStairUpDown.name} (%i)`, (i, expected) => {
+  expect(getStairUpDown(i, 3)).toBe(expected)
 })
