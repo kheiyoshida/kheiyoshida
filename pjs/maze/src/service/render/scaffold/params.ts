@@ -10,7 +10,7 @@ export const calcConcreteScaffoldValues = (params: ScaffoldParams): ScaffoldValu
   }
   return {
     ...lengths,
-    distortionRange: params.distortionLevel * (lengths.floor / 3),
-    distortionSpeed: params.distortionLevel * 10
+    distortionRange: params.distortionLevel * (lengths.floor / 4),
+    distortionSpeed: params.distortionLevel * 5
   }
 }

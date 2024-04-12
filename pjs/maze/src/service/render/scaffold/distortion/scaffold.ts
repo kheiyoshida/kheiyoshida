@@ -3,9 +3,9 @@ import {
   Scaffold,
   ScaffoldLayer,
   ScaffoldLayerPart,
-  ScaffoldLayerPartLength,
+  ScaffoldLayerPartLength
 } from '../types'
-import { iterateScaffold } from '../utils'
+import { iterateScaffold, slideScaffoldLayers } from '../utils'
 import { createDistortionDelta } from './delta'
 
 export type DeltaScaffold = Scaffold<DistortionDelta>
@@ -18,13 +18,13 @@ export interface DistortionScaffold {
 }
 
 export const createDistortionScaffold = (): DistortionScaffold => {
-  const scaffold = createDeltaScaffold()
+  let scaffold = createDeltaScaffold()
   return {
     get deltas() {
       return scaffold
     },
     slideGo: () => {
-      throw Error('not implemented')
+      scaffold = slideScaffoldLayers(scaffold, 2, createScaffoldLayer)
     },
     slideTurn: () => {
       throw Error('not implemented')

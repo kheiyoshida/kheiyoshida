@@ -9,6 +9,7 @@ import {
 import { drawTerrain } from './draw'
 import { corridorToNextFloor } from './others/scenes'
 import { RenderQueue } from './queue'
+import { Distortion } from './scaffold/distortion'
 
 export const renderCurrentView: RenderHandler = ({ renderGrid, visibility, scaffoldValues: scaffold }) => {
   const drawFrame = () => {
@@ -20,6 +21,7 @@ export const renderCurrentView: RenderHandler = ({ renderGrid, visibility, scaff
 
 export const renderGo: RenderHandler = ({ renderGrid, speed, scaffoldValues: scaffold }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
+  Distortion.slideGo()
   const drawFrameSequence = GoMoveMagValues.map((zDelta) => () => {
     moveCamera(zDelta)(scaffold)
     drawTerrain(renderGrid, scaffold)

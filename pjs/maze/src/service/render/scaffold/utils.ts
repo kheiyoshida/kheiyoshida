@@ -1,4 +1,4 @@
-import { Scaffold, ScaffoldEntity, ScaffoldKey } from './types'
+import { Scaffold, ScaffoldEntity, ScaffoldKey, ScaffoldLayer } from './types'
 
 export const iterateScaffold = <T extends ScaffoldEntity>(
   scaffold: Scaffold<T>,
@@ -19,4 +19,12 @@ export const retrieveScaffoldEntity = <T extends ScaffoldEntity>(
   { layerIndex, partKey, position }: ScaffoldKey
 ): T => {
   return scaffold[layerIndex][partKey][position]
+}
+
+export const slideScaffoldLayers = <T extends ScaffoldEntity>(
+  scaffold: Scaffold<T>,
+  slide: number,
+  createLayer: () => ScaffoldLayer<T>
+): Scaffold<T> => {
+  return [...scaffold.slice(slide), ...[...Array(slide)].map(createLayer)]
 }

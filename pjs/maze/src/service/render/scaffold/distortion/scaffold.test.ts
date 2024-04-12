@@ -1,7 +1,7 @@
-import * as delta from './delta'
 import { NumOfScaffoldLayers } from '../create'
-import { createDistortionScaffold } from './scaffold'
 import { DistortionDelta } from '../types'
+import * as delta from './delta'
+import { createDistortionScaffold } from './scaffold'
 
 describe(`${createDistortionScaffold.name}`, () => {
   it(`should create initial scaffold`, () => {

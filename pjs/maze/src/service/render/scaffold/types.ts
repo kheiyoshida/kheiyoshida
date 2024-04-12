@@ -43,7 +43,7 @@ export type ScaffoldValues = {
  */
 export type Scaffold<T extends ScaffoldEntity = Position3D> = ScaffoldLayer<T>[]
 
-export type ScaffoldEntity = Position3D | DistortionDelta
+export type ScaffoldEntity = Position3D | DistortionDelta | unknown
 
 export type ScaffoldLayerPartKey = 'upper' | 'lower'
 export type ScaffoldLayer<T extends ScaffoldEntity = Position3D> = {
