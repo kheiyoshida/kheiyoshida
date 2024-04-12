@@ -1,4 +1,4 @@
-import { store } from '../../store'
+import { statusStore, store } from '../../store'
 import * as mapper from '../maze/mapper'
 import * as maze from '../maze/maze'
 import { updateStats } from '../stats'
@@ -8,12 +8,18 @@ export const initializeEvent = () => {
   maze.generateMaze()
   mapper.resetMap()
   MessageQueue.push(RenderSignal.CurrentView)
+  MessageQueue.push(RenderSignal.ShowFloor)
 }
 
 export const recurringConstantStatusEvent = () => {
   if (store.current.mapOpen) return
   updateStats('constant')
   updateStats('stand')
+
+  if (statusStore.current.sanity <= 0) {
+    MessageQueue.push(RenderSignal.Die)
+    initializeEvent()
+  }
 }
 
 export const standEvent = () => {
@@ -43,6 +49,7 @@ export const goDownstairsEvent = () => {
 
   MessageQueue.push(RenderSignal.ProceedToNextFloor)
   MessageQueue.push(RenderSignal.CurrentView)
+  MessageQueue.push(RenderSignal.ShowFloor)
 }
 
 export const turnEvent = (dir: 'r' | 'l') => {

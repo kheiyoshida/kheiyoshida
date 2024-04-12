@@ -21,9 +21,7 @@ export const Map = () => {
         visibility: 'hidden',
       }}
     >
-      <div id="map-floor" style={{ color: 'white' }}>
-        floor: B1
-      </div>
+      <div id="map-floor" style={{ color: 'white' }}></div>
       <canvas id="map-canvas" width={mapSize} height={mapSize}></canvas>
     </div>
   )

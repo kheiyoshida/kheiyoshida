@@ -1,5 +1,6 @@
 import { IsMobile } from '../../config'
 import { Buttons } from './buttons'
+import { Floor } from './floor'
 import { Map } from './map'
 import { Start } from './start'
 
@@ -9,6 +10,7 @@ export const Interface = ({ version, start }: { version: string, start: () => vo
       <Start version={version} start={start} />
       {IsMobile ? <Buttons /> : null}
       <Map />
+      <Floor />
     </div>
   )
 }

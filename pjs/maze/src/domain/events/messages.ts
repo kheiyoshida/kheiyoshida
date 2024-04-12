@@ -9,6 +9,8 @@ export enum RenderSignal {
   ProceedToNextFloor = 'ProceedToNextFloor',
   OpenMap = 'OpenMap',
   CloseMap = 'CloseMap',
+  ShowFloor = 'ShowFloor',
+  Die = 'Die',
 }
 
 export type RenderMessage = [signal: RenderSignal, intention: DomainIntention]

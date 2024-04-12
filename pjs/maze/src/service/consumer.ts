@@ -1,7 +1,9 @@
 import { MessageQueue, RenderSignal } from '../domain/events/messages'
+import { showFloor } from './interface/handlers'
 import { closeMap, renderMap } from './interface/map'
 import {
   renderCurrentView,
+  renderDie,
   renderGo,
   renderGoDownstairs,
   renderProceedToNextFloor,
@@ -20,7 +22,8 @@ export const MessageResolutionMap: Record<RenderSignal, RenderHandler> = {
   [RenderSignal.ProceedToNextFloor]: renderProceedToNextFloor,
   [RenderSignal.OpenMap]: renderMap,
   [RenderSignal.CloseMap]: closeMap,
-  
+  [RenderSignal.ShowFloor]: showFloor,
+  [RenderSignal.Die]: renderDie
 }
 
 export const consumeMessageQueue = () => {

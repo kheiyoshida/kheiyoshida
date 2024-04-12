@@ -66,3 +66,9 @@ export const renderProceedToNextFloor: RenderHandler = ({ speed, scaffoldValues,
   })
   RenderQueue.push(...drawFrameSequence)
 }
+
+export const renderDie: RenderHandler = () => {
+  RenderQueue.push(() => {
+    triggerFadeOut(48)
+  })
+}
