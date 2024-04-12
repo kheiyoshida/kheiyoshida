@@ -39,17 +39,19 @@ export type ScaffoldLengths = {
  * each RenderBlock should get the concrete value from this
  * currently supports 7 layers (=RenderGrid.length + 1)
  */
-export type Scaffold = ScaffoldLayer[]
+export type Scaffold<T extends ScaffoldEntity = Position3D> = ScaffoldLayer<T>[]
 
-export type ScaffoldLayer = {
-  upper: ScaffoldLayerPart
-  lower: ScaffoldLayerPart
+export type ScaffoldEntity = Position3D | DistortionDelta
+
+export type ScaffoldLayer<T extends ScaffoldEntity = Position3D> = {
+  upper: ScaffoldLayerPart<T>
+  lower: ScaffoldLayerPart<T>
 }
 
 /**
  * index with `ScaffoldLayerCoordPosition`
  */
-export type ScaffoldLayerPart = Position3D[]
+export type ScaffoldLayerPart<T extends ScaffoldEntity = Position3D> = T[]
 
 export const ScaffoldLayerPartLength = 4
 
@@ -58,4 +60,9 @@ export enum ScaffoldLayerCoordPosition {
   CL = 1,
   CR = 2,
   RR = 3,
+}
+
+export interface DistortionDelta {
+  values: Position3D
+  move(range: number, speed?: number): void
 }
