@@ -8,7 +8,7 @@ export type StatusState = {
 
 const initialState: StatusState = {
   sanity: 100,
-  stamina: 100,
+  stamina: 50,
 }
 
 const reducers = {
