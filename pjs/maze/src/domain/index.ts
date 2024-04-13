@@ -6,7 +6,7 @@ import { getRenderGridFromCurrentState } from './translate/compose'
 import { RenderGrid } from './translate/compose/renderSpec'
 import { MapInfo, getMapInfoFromCurrentState } from './interface/mapper'
 import {
-  getRenderingSpeedFromCurrentState,
+  getWalkSpeedFromCurrentState,
   getScaffoldParams,
   getVisibilityFromCurrentState,
 } from './translate'
@@ -26,7 +26,7 @@ export type ListenableState = Pick<MazeState, 'floor'> & StatusState
 export const getDomainIntention = (): DomainIntention => {
   return {
     renderGrid: getRenderGridFromCurrentState(),
-    speed: getRenderingSpeedFromCurrentState(),
+    speed: getWalkSpeedFromCurrentState(),
     map: getMapInfoFromCurrentState(),
     visibility: getVisibilityFromCurrentState(),
     scaffold: getScaffoldParams(),

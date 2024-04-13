@@ -2,9 +2,11 @@ import { toFloatPercent } from 'utils'
 import { statusStore, store } from '../../store'
 import { createDecreasingParameter, createIncreasingParameter } from './utils/params'
 
-export const getRenderingSpeedFromCurrentState = () => {
-  return toFloatPercent(statusStore.current.stamina)
+export const getWalkSpeedFromCurrentState = () => {
+  return calcSpeed(statusStore.current.stamina)
 }
+
+const calcSpeed = createDecreasingParameter(0, 1, 80)
 
 export const getVisibilityFromCurrentState = (): number => {
   const floor = store.current.floor
@@ -30,7 +32,7 @@ export const getScaffoldParams = (): ScaffoldParams => {
   return params
 }
 
-const calcWidthLevel = createDecreasingParameter(0.1, 1, 75)
+const calcWidthLevel = createDecreasingParameter(0.2, 1, 75)
 const calcHeightLevel = createIncreasingParameter(1, 5, 100)
 const calcCorridorLengthLevel = createIncreasingParameter(1, 2, 75)
 const calcDistortion = createIncreasingParameter(0.05, 1, 80)

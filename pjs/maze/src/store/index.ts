@@ -19,7 +19,7 @@ export type MazeState = {
 }
 
 const initialState: MazeState = {
-  floor: 5,
+  floor: 1,
   matrix: [],
   current: [0, 0],
   stairPos: [],

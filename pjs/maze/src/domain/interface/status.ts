@@ -25,7 +25,7 @@ const StatusEventValues: Record<StatsUpdatePattern, { sanity: number; stamina: n
     stamina: -1,
   },
   constant: {
-    sanity: -1,
+    sanity: -1.5,
     stamina: 1,
   },
   downstairs: {
