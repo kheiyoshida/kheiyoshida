@@ -15,6 +15,10 @@ export const eventBlockRequired = () => {
   store.updateAcceptCommand(false)
 }
 
+export const unblockEvents = () => {
+  store.updateAcceptCommand(true)
+}
+
 export const recurringConstantStatusEvent = () => {
   if (!store.current.acceptCommand) return
   if (store.current.mapOpen) return

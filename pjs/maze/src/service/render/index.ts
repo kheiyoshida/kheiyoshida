@@ -1,4 +1,4 @@
-import { eventBlockRequired, initializeEvent, resurrectEvent } from '../../domain/events'
+import { eventBlockRequired, resurrectEvent, unblockEvents } from '../../domain/events'
 import { logger } from '../../utils/logger'
 import { RenderHandler } from '../consumer'
 import {
@@ -53,6 +53,7 @@ export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffoldValues, 
   const drawFrameSequence = DownstairsValues.map((values, i) => () => {
     if (i === 0) {
       triggerFadeOut(DownstairsValues.length)
+      eventBlockRequired()
     }
     moveCamera(...values)(scaffoldValues)
     drawTerrain(renderGrid, scaffoldValues, color)
@@ -62,9 +63,12 @@ export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffoldValues, 
 
 export const renderProceedToNextFloor: RenderHandler = ({ speed, scaffoldValues, color }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
-  const drawFrameSequence = GoMoveMagValues.map((zDelta) => () => {
+  const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
     moveCamera(zDelta)(scaffoldValues)
     drawTerrain(corridorToNextFloor, scaffoldValues, color)
+    if (i === GoMoveMagValues.length - 1) {
+      unblockEvents()
+    }
   })
   RenderQueue.push(...drawFrameSequence)
 }
@@ -85,7 +89,7 @@ export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, color }) 
   logger.log(RenderQueue.length)
 }
 
-export const renderResurrect: RenderHandler = ({speed, scaffoldValues, color}) => {
+export const renderResurrect: RenderHandler = ({ speed, scaffoldValues, color }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta) => () => {
     moveCamera(zDelta)(scaffoldValues)
