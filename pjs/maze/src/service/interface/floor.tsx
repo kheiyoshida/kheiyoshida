@@ -4,7 +4,7 @@ export const Floor: React.FC = () => {
       id="floor"
       style={{
         position: 'fixed',
-        top: '50vh',
+        top: 'calc(50vh - 3rem)',
         left: 'calc(50vw - 1.5rem)',
         visibility: 'hidden',
         fontSize: '1.5rem',
