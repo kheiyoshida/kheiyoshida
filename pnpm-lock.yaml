@@ -53,9 +53,6 @@ importers:
 
   pjs/maze:
     dependencies:
-      js-logger:
-        specifier: ^1.6.1
-        version: 1.6.1
       mgnr-core:
         specifier: workspace:^
         version: link:../../pkgs/mgnr-core
