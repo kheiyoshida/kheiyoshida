@@ -1,4 +1,4 @@
-import { MIN_STATUS_VALUE, MAX_STATUS_VALUE } from 'src/config/status'
+import { MIN_STATUS_VALUE, MAX_STATUS_VALUE, INITIAL_STATUS } from 'src/config/status'
 import { ReducerMap, clamp, makeStoreV2 } from 'utils'
 
 export type StatusState = {
@@ -7,11 +7,15 @@ export type StatusState = {
 }
 
 const initialState: StatusState = {
-  sanity: 100,
-  stamina: 100,
+  sanity: INITIAL_STATUS,
+  stamina: INITIAL_STATUS,
 }
 
 const reducers = {
+  resetStatus: (s) => () => {
+    s.sanity = INITIAL_STATUS
+    s.stamina = INITIAL_STATUS
+  },
   addStatusValue: (s) => (field: keyof StatusState, delta: number) => {
     s[field] = clamp(s[field] + delta, MIN_STATUS_VALUE, MAX_STATUS_VALUE)
   },

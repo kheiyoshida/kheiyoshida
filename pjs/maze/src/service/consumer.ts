@@ -7,6 +7,7 @@ import {
   renderGo,
   renderGoDownstairs,
   renderProceedToNextFloor,
+  renderResurrect,
   renderTurn,
 } from './render'
 import { RenderPack, packRenderingInfo } from './render/pack'
@@ -23,7 +24,8 @@ export const MessageResolutionMap: Record<RenderSignal, RenderHandler> = {
   [RenderSignal.OpenMap]: renderMap,
   [RenderSignal.CloseMap]: closeMap,
   [RenderSignal.ShowFloor]: showFloor,
-  [RenderSignal.Die]: renderDie
+  [RenderSignal.Die]: renderDie,
+  [RenderSignal.Resurrect]: renderResurrect,
 }
 
 export const consumeMessageQueue = () => {

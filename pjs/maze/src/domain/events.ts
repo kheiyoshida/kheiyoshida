@@ -7,18 +7,30 @@ import { MessageQueue, RenderSignal } from './messages'
 export const initializeEvent = () => {
   maze.generateMaze()
   mapper.resetMap()
-  MessageQueue.push(RenderSignal.CurrentView)
+
   MessageQueue.push(RenderSignal.ShowFloor)
 }
 
+export const eventBlockRequired = () => {
+  store.updateAcceptCommand(false)
+}
+
 export const recurringConstantStatusEvent = () => {
+  if (!store.current.acceptCommand) return
   if (store.current.mapOpen) return
   updateStats('constant')
 
   if (statusStore.current.sanity <= 0) {
     MessageQueue.push(RenderSignal.Die)
-    initializeEvent()
   }
+}
+
+export const resurrectEvent = () => {
+  store.updateAcceptCommand(true)
+  store.setFloor(1) // note: can be anywhere
+  statusStore.resetStatus()
+  initializeEvent()
+  MessageQueue.push(RenderSignal.Resurrect)
 }
 
 export const standEvent = () => {

@@ -65,6 +65,9 @@ const reducers = {
   incrementFloor: (s) => () => {
     s.floor += 1
   },
+  setFloor: (s) => (floor: number) => {
+    s.floor = floor
+  },
 
   // render
   updateAcceptCommand: (s) => (acceptCommand: boolean) => {

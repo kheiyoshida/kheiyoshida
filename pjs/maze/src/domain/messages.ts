@@ -11,6 +11,7 @@ export enum RenderSignal {
   CloseMap = 'CloseMap',
   ShowFloor = 'ShowFloor',
   Die = 'Die',
+  Resurrect = 'Resurrect',
 }
 
 export type RenderMessage = [signal: RenderSignal, intention: DomainIntention]

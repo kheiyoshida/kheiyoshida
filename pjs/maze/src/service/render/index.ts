@@ -1,3 +1,5 @@
+import { eventBlockRequired, initializeEvent, resurrectEvent } from '../../domain/events'
+import { logger } from '../../utils/logger'
 import { RenderHandler } from '../consumer'
 import {
   DownstairsValues,
@@ -67,8 +69,27 @@ export const renderProceedToNextFloor: RenderHandler = ({ speed, scaffoldValues,
   RenderQueue.push(...drawFrameSequence)
 }
 
-export const renderDie: RenderHandler = () => {
-  RenderQueue.push(() => {
-    triggerFadeOut(48)
+const DieFrames = 48
+export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, color }) => {
+  const dieSequence = [...Array(DieFrames)].map((_, i) => () => {
+    if (i === 0) {
+      triggerFadeOut(DieFrames)
+      eventBlockRequired()
+    }
+    drawTerrain(renderGrid, scaffoldValues, color)
+    if (i === DieFrames - 1) {
+      resurrectEvent()
+    }
   })
+  RenderQueue.update(dieSequence)
+  logger.log(RenderQueue.length)
+}
+
+export const renderResurrect: RenderHandler = ({speed, scaffoldValues, color}) => {
+  const GoMoveMagValues = getGoDeltaArray(speed)
+  const drawFrameSequence = GoMoveMagValues.map((zDelta) => () => {
+    moveCamera(zDelta)(scaffoldValues)
+    drawTerrain(corridorToNextFloor, scaffoldValues, color)
+  })
+  RenderQueue.update(drawFrameSequence)
 }
