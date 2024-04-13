@@ -61,7 +61,8 @@ const drawMap = ({ grid, current, direction }: MapInfo) => {
   // map
   loop2D(gridLength, (i, j) => {
     const cell = grid[i][j]
-    if (!cell || !cell.visited) return
+    if (!cell) return
+    if (!cell.visited && !process.env.DEBUG) return
     const [iEven, jEven] = [i % 2 === 0, j % 2 === 0]
     // node
     if (iEven && jEven) {
