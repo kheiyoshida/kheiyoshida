@@ -31,4 +31,5 @@ const style: React.CSSProperties = {
   overflowX: 'hidden',
   overflowY: 'hidden',
   overscrollBehavior: 'none',
+  fontFamily: "Courier New, Courier, monospace",
 }

@@ -1,4 +1,4 @@
-import { MIN_STATUS_VALUE, MAX_STATUS_VALUE, INITIAL_STATUS } from 'src/config/status'
+import { MIN_STATUS_VALUE, MAX_STATUS_VALUE, INITIAL_STATUS } from '../config/status'
 import { ReducerMap, clamp, makeStoreV2 } from 'utils'
 
 export type StatusState = {
