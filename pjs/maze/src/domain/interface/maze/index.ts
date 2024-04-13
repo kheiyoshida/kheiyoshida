@@ -1,13 +1,13 @@
 import { fireByRate, randomItemFromArray } from 'utils'
-import { store } from '../../store'
+import { store } from '../../../store'
 import {
   Matrix,
   getCorridorNodes,
   getDeadendNodes,
   getMatrixItem,
-} from '../../store/entities/matrix/matrix'
-import { Node } from '../../store/entities/matrix/node'
-import { Position, reducePosition } from '../../utils/position'
+} from '../../../store/entities/matrix/matrix'
+import { Node } from '../../../store/entities/matrix/node'
+import { Position, reducePosition } from '../../../utils/position'
 import { resetDeadEndItems } from './deadend'
 import { compass, positionalDirection } from './direction'
 import { paramBuild } from './params'
@@ -40,7 +40,10 @@ export const query = {
     return this.currentNode.edges[store.current.direction]
   },
   get reachedStair() {
-    return store.current.current[0] === store.current.stairPos[0] && store.current.current[1] === store.current.stairPos[1]
+    return (
+      store.current.current[0] === store.current.stairPos[0] &&
+      store.current.current[1] === store.current.stairPos[1]
+    )
   },
 }
 

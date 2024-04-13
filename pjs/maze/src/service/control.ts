@@ -1,5 +1,5 @@
 import { MobileWidth, ww } from '../config'
-import * as commands from '../domain/events/commands'
+import * as commands from '../domain/commands'
 import { getButtons } from './interface/buttons'
 
 export const bindControl = () => {

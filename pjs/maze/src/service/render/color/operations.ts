@@ -1,5 +1,5 @@
 import { randomColorVector } from 'p5utils/src/render'
-import { ColorOperationPattern } from '../../../domain/color/types'
+import { ColorOperationPattern } from '../../../domain/translate/color/types'
 import { ColorPalette, getPalette } from './palette'
 import {
   defaultPalette,

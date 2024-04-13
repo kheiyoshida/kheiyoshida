@@ -1,4 +1,4 @@
-import { ColorOperationParams, ColorOperationPattern } from '../../../domain/color/types'
+import { ColorOperationParams, ColorOperationPattern } from '../../../domain/translate/color/types'
 import { OperationMap } from './operations'
 import { ColorPalette, applyPalette, getPalette, setPalette } from './palette'
 

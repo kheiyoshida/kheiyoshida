@@ -1,6 +1,6 @@
 import { Geometry } from 'p5'
-import { ColorOperationParams } from '../../domain/color/types'
-import { RenderGrid } from '../../domain/compose/renderSpec'
+import { ColorOperationParams } from '../../domain/translate/color/types'
+import { RenderGrid } from '../../domain/translate/compose/renderSpec'
 import { createColorManager } from './color'
 import { ModelGrid, convertToModelGrid } from './model'
 import { finalize } from './model/finalize'

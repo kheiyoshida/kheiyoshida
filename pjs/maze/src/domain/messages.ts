@@ -1,4 +1,4 @@
-import { DomainIntention, getVisionIntentionFromCurrentState } from '..'
+import { DomainIntention, getDomainIntention } from '.'
 
 export enum RenderSignal {
   CurrentView = 'CurrentView',
@@ -18,7 +18,7 @@ export type RenderMessage = [signal: RenderSignal, intention: DomainIntention]
 const createMessageQueue = () => {
   const MessageQueue: RenderMessage[] = []
   const push = (signal: RenderSignal) => {
-    MessageQueue.push([signal, getVisionIntentionFromCurrentState()])
+    MessageQueue.push([signal, getDomainIntention()])
   }
   const _consume = (): RenderMessage => {
     const message = MessageQueue.shift()

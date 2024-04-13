@@ -1,5 +1,5 @@
 import { FloorLength, PathLength } from '../../../config'
-import { RenderPosition } from '../../../domain/compose/renderSpec'
+import { RenderPosition } from '../../../domain/translate/compose/renderSpec'
 import { Scaffold } from '../scaffold'
 import { getAdjacentBlockY, getAdjacentBlockZ, makeGetRenderBlock } from './block'
 import {

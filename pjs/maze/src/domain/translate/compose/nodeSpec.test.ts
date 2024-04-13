@@ -1,4 +1,4 @@
-import { Node } from '../../store/entities/matrix/node'
+import { Node } from '../../../store/entities/matrix/node'
 import { toNodeSpec, toPathSpec } from './nodeSpec'
 
 describe(`toNodeSpec`, () => {

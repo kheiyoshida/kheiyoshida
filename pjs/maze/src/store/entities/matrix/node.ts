@@ -1,5 +1,5 @@
 import { Position } from '../../../utils/position'
-import { Direction } from '../../../domain/maze/direction'
+import { Direction } from '../../../domain/interface/maze/direction'
 
 type Edges = {
   [k in Direction]: boolean

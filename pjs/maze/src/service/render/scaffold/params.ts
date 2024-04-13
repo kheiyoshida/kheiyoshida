@@ -1,6 +1,6 @@
 import { ScaffoldValues } from './types'
 import { FloorLength, PathLength, WallHeight } from '../../../config'
-import { ScaffoldParams } from '../../../domain/stats'
+import { ScaffoldParams } from '../../../domain/translate'
 
 export const calcConcreteScaffoldValues = (params: ScaffoldParams): ScaffoldValues => {
   const lengths = {

@@ -1,5 +1,17 @@
-import { clamp } from 'utils'
+import { toFloatPercent } from 'utils'
 import { statusStore } from '../../store'
+import { createDecreasingParameter, createIncreasingParameter } from './utils/params'
+
+/**
+ * @returns 0.0x ~ 1.0x
+ */
+export const getRenderingSpeedFromCurrentState = () => {
+  return toFloatPercent(statusStore.current.stamina)
+}
+
+export const getVisibilityFromCurrentState = () => {
+  return toFloatPercent(statusStore.current.stamina)
+}
 
 export type ScaffoldParams = {
   corridorWidthLevel: number
@@ -17,22 +29,6 @@ export const getScaffoldParams = (): ScaffoldParams => {
     distortionLevel: calcDistortion(sanity),
   }
 }
-
-export const createDecreasingParameter =
-  (min: number, max: number, threshold: number = 100) =>
-  (status: number) => {
-    const diff = max - min
-    const ratio = status >= threshold ? 1 : status / threshold
-    return clamp(min + ratio * diff, min, max)
-  }
-
-export const createIncreasingParameter =
-  (min: number, max: number, threshold: number = 100) =>
-  (status: number) => {
-    const diff = max - min
-    const ratio = status >= threshold ? 0 : 1 - status / threshold
-    return clamp(min + ratio * diff, min, max)
-  }
 
 const calcWidthLevel = createDecreasingParameter(0.44, 1, 90)
 const calcHeightLevel = createIncreasingParameter(1, 3, 100)

@@ -1,4 +1,4 @@
-import { ListenableState } from '..'
+import { ListenableState } from '../..'
 
 export type ColorOperationPattern = 'default' | 'stay' | 'return' | 'gradation' | 'reverse' | 'random' | 'trans' | 'fadeout'
 

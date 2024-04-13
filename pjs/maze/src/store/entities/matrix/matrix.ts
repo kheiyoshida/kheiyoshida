@@ -1,5 +1,5 @@
 import { Position, validatePosition } from '../../../utils/position'
-import { Direction, adjacentInDirection } from '../../../domain/maze/direction'
+import { Direction, adjacentInDirection } from '../../../domain/interface/maze/direction'
 import { Node } from './node'
 import { filterNodes, reduceMatrix } from './iterate'
 

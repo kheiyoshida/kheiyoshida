@@ -1,7 +1,7 @@
-import { statusStore, store } from '../../store'
-import * as mapper from '../maze/mapper'
-import * as maze from '../maze/maze'
-import { updateStats } from '../stats'
+import { statusStore, store } from '../store'
+import * as mapper from './interface/mapper'
+import * as maze from './interface/maze'
+import { updateStats } from './interface/status'
 import { MessageQueue, RenderSignal } from './messages'
 
 export const initializeEvent = () => {

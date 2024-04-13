@@ -1,5 +1,5 @@
 import { closeMapEvent, goDownstairsEvent, openMapEvent, turnEvent, walkEvent } from './events'
-import * as validaters from './validaters'
+import * as validaters from './translate/validaters'
 
 export const go = () => {
   if (!validaters.isAccepting()) return

@@ -1,4 +1,4 @@
-import { ConcreteRenderLayer, RenderGrid, RenderPattern } from '../../../domain/compose/renderSpec'
+import { ConcreteRenderLayer, RenderGrid, RenderPattern } from '../../../domain/translate/compose/renderSpec'
 import {
   convertCenterModel,
   convertSideModel,

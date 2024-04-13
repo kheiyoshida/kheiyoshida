@@ -3,7 +3,7 @@ import {
   RenderGrid,
   RenderPattern,
   RenderPosition,
-} from '../../../domain/compose/renderSpec'
+} from '../../../domain/translate/compose/renderSpec'
 import { CompoundRenderModel, ModelGrid, ModelGridLayer, RenderModel } from './types'
 
 export const convertToModelGrid = (renderGrid: RenderGrid): ModelGrid => {

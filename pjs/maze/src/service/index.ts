@@ -1,5 +1,5 @@
 import { FPS } from '../config'
-import { initializeEvent, recurringConstantStatusEvent, standEvent } from '../domain/events/events'
+import { initializeEvent, recurringConstantStatusEvent, standEvent } from '../domain/events'
 import { statusStore } from '../store'
 import { consumeMessageQueue } from './consumer'
 import { bindControl } from './control'

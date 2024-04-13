@@ -1,4 +1,4 @@
-import { MessageQueue, RenderSignal } from '../domain/events/messages'
+import { MessageQueue, RenderSignal } from '../domain/messages'
 import { showFloor } from './interface/handlers'
 import { closeMap, renderMap } from './interface/map'
 import {

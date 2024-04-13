@@ -1,7 +1,7 @@
 import { loop2D } from 'utils'
 import { mapSizing, wh, ww } from '../../config'
-import { NESW } from '../../domain/maze/direction'
-import { MapInfo } from '../../domain/maze/mapper'
+import { NESW } from '../../domain/interface/maze/direction'
+import { MapInfo } from 'src/domain/interface/mapper'
 import { RenderPack } from '../render/pack'
 
 const mapSize = Math.floor(Math.min(ww, wh) * mapSizing)

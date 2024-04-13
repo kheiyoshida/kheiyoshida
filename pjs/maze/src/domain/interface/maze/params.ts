@@ -1,5 +1,5 @@
 import { fireByRate as random, randomFloatBetween as randomBetween, randomIntBetween } from 'utils'
-import { BuildMatrixParams } from '../../store/entities/matrix'
+import { BuildMatrixParams } from '../../../store/entities/matrix'
 
 export const INITIAL_FLOOR_SIZE = 6
 const MAX_FLOOR_SIZE = 13
