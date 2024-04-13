@@ -1,7 +1,5 @@
+import { MIN_STATUS_VALUE, MAX_STATUS_VALUE } from 'src/config/status'
 import { ReducerMap, clamp, makeStoreV2 } from 'utils'
-
-const MAX_STATUS_VALUE = 100
-const MIN_STATUS_VALUE = 0
 
 export type StatusState = {
   sanity: number

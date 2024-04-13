@@ -14,7 +14,6 @@ export const initializeEvent = () => {
 export const recurringConstantStatusEvent = () => {
   if (store.current.mapOpen) return
   updateStats('constant')
-  updateStats('stand')
 
   if (statusStore.current.sanity <= 0) {
     MessageQueue.push(RenderSignal.Die)

@@ -1,6 +1,7 @@
 import { FPS } from '../config'
 import { initializeEvent, recurringConstantStatusEvent, standEvent } from '../domain/events'
 import { statusStore } from '../store'
+import { trackTime } from '../utils/time'
 import { consumeMessageQueue } from './consumer'
 import { bindControl } from './control'
 import { renderDebugText } from './interface/debug'
@@ -19,14 +20,14 @@ export const setupRenderingCycle = () => {
 
   FrameConsumer.registerFrameEvent('constant', {
     handler: () => {
-      renderDebugText(statusStore.current)
+      renderDebugText({ ...statusStore.current, time: trackTime() })
       standEvent()
       consumeMessageQueue()
       RenderQueue.consume()
     },
   })
   FrameConsumer.registerFrameEvent('status', {
-    frameInterval: 4,
+    frameInterval: 6,
     handler: recurringConstantStatusEvent,
   })
 
