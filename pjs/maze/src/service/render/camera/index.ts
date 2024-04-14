@@ -1,5 +1,15 @@
-import { DefaultGoFrames, DefaultTurnFrames, DownFramesLength, MaxVisibleLength } from 'src/config'
-import { CameraLookAhead, CameraZ, FloorLength, FovyValue, wh, ww } from '../../../config'
+import {
+  CameraLookAhead,
+  CameraZ,
+  DefaultGoFrames,
+  DefaultTurnFrames,
+  DownFramesLength,
+  FloorLength,
+  FovyValue,
+  MaxVisibleLength,
+  wh,
+  ww,
+} from '../../../config'
 import { ScaffoldValues } from '../scaffold'
 import { createAccumulatedDistanceArray, createSinArray, getStairUpDown } from './movement'
 
