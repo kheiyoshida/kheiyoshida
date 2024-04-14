@@ -22,7 +22,7 @@ const StatusEventValues: Record<StatsUpdatePattern, { sanity: number; stamina: n
   },
   turn: {
     sanity: 0,
-    stamina: -1,
+    stamina: 0,
   },
   constant: {
     sanity: -1.5,

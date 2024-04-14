@@ -20,7 +20,7 @@ export const CameraZ = IsMobile ? FloorLength / 6 : FloorLength / 2
 export const CameraLookAhead = FloorLength
 
 export const MaxDistortionSpeed = 10
-export const MaxDistortionRange = 0.25
+export const MaxDistortionRange = 0.4
 
 const ModelGridLength = 6
 export const MaxVisibleLength = FloorPathAvgLength * ModelGridLength
