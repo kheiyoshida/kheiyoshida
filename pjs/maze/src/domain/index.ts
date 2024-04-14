@@ -1,16 +1,16 @@
 import { MazeState } from '../store'
 import { StatusState } from '../store/status'
-import { domainColorLogic } from './translate/color'
-import { ColorOperationParams } from './translate/color/types'
-import { getRenderGridFromCurrentState } from './translate/compose'
-import { RenderGrid } from './translate/compose/renderSpec'
 import { MapInfo, getMapInfoFromCurrentState } from './interface/mapper'
 import {
-  getWalkSpeedFromCurrentState,
+  ScaffoldParams,
   getScaffoldParams,
   getVisibilityFromCurrentState,
+  getWalkSpeedFromCurrentState,
 } from './translate'
-import { ScaffoldParams } from './translate'
+import { domainColorLogic } from './translate/color'
+import { ColorOperationParams } from './translate/color/types'
+import { getRenderGridFromCurrentState } from './translate/renderGrid'
+import { RenderGrid } from './translate/renderGrid/renderSpec'
 
 export type DomainIntention = {
   renderGrid: RenderGrid

@@ -1,27 +1,27 @@
-import { FPS } from '../config'
-import { initializeEvent, recurringConstantStatusEvent, standEvent } from '../domain/events'
+import { initializeEvent, recurringConstantStatusEvent, constantEvent } from '../domain/events'
 import { statusStore } from '../store'
 import { trackTime } from '../utils/time'
 import { consumeMessageQueue } from './consumer'
 import { bindControl } from './control'
 import { renderDebugText } from './interface/debug'
 import { RenderQueue } from './render/queue'
-import { demo } from './sound/songs/demo'
+import { music } from './sound/songs/demo'
 import { FrameConsumer } from './time/frame'
-import { makeIntervalTimer } from './time/timer'
+import { handleInterval } from './time/timer'
 
 export const initializeServices = () => {
   bindControl()
-  demo()
+  music()
 }
 
 export const setupRenderingCycle = () => {
   initializeEvent()
 
-  FrameConsumer.registerFrameEvent('constant', {
+  FrameConsumer.registerFrameEvent('every-frame', {
+    frameInterval: 1,
     handler: () => {
       renderDebugText({ ...statusStore.current, time: trackTime() })
-      standEvent()
+      constantEvent()
       consumeMessageQueue()
       RenderQueue.consume()
     },
@@ -30,10 +30,7 @@ export const setupRenderingCycle = () => {
     frameInterval: 6,
     handler: recurringConstantStatusEvent,
   })
-
-  const frameIntervalMS = 1000 / FPS
-  const setInterval = makeIntervalTimer(frameIntervalMS)
-  setInterval((frameCount) => {
+  handleInterval((frameCount) => {
     FrameConsumer.consumeFrame(frameCount)
   })
 }

@@ -15,7 +15,6 @@ const smallScreen = () => {
   left.ontouchstart = commands.turnLeft
 }
 
-// TODO: replace with native keyCode events
 const wideScreen = () => {
   const keyCodeMap = {
     [p.UP_ARROW]: commands.go,

@@ -6,7 +6,7 @@ import {
   transColor,
 } from 'p5utils/src/render'
 import { ColorPalette } from '.'
-import { Colors } from './constants'
+import { Colors } from './colors'
 
 export type PaletteFactory = (palette: ColorPalette) => ColorPalette
 

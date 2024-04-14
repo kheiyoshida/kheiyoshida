@@ -27,6 +27,7 @@ export const makeFrameConsumer = (): FrameConsumer => {
     },
   }
 }
+
 export const FrameConsumer = makeFrameConsumer()
 
 const validateInterval = (interval: FrameEventSpec['frameInterval']) => {

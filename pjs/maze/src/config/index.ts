@@ -1,4 +1,5 @@
 export * from './frame'
+export * from './status'
 
 export const ww = window.innerWidth
 export const wh = window.innerHeight
@@ -17,3 +18,13 @@ export const FloorPathAvgLength = (FloorLength + PathLength) / 2
 
 export const CameraZ = IsMobile ? FloorLength / 6 : FloorLength / 2
 export const CameraLookAhead = FloorLength
+
+export const MaxDistortionSpeed = 10
+export const MaxDistortionRange = 0.25
+
+const ModelGridLength = 6
+export const MaxVisibleLength = FloorPathAvgLength * ModelGridLength
+
+export const DefaultGoFrames = 8
+export const DefaultTurnFrames = 4
+export const DownFramesLength = 32

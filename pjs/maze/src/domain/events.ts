@@ -37,7 +37,7 @@ export const resurrectEvent = () => {
   MessageQueue.push(RenderSignal.Resurrect)
 }
 
-export const standEvent = () => {
+export const constantEvent = () => {
   if (store.current.mapOpen) return
   if (MessageQueue.isEmpty) {
     MessageQueue.push(RenderSignal.CurrentView)

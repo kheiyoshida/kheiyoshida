@@ -2,18 +2,6 @@ import { toFloatPercent } from 'utils'
 import { statusStore, store } from '../../store'
 import { createDecreasingParameter, createIncreasingParameter } from './utils/params'
 
-export const getWalkSpeedFromCurrentState = () => {
-  return calcSpeed(statusStore.current.stamina)
-}
-
-const calcSpeed = createDecreasingParameter(0, 1, 80)
-
-export const getVisibilityFromCurrentState = (): number => {
-  const floor = store.current.floor
-  if (floor < 5) return toFloatPercent(statusStore.current.stamina)
-  return Math.max(0.1, toFloatPercent(statusStore.current.stamina - floor))
-}
-
 export type ScaffoldParams = {
   corridorWidthLevel: number
   wallHeightLevel: number
@@ -36,3 +24,15 @@ const calcWidthLevel = createDecreasingParameter(0.2, 1, 75)
 const calcHeightLevel = createIncreasingParameter(1, 5, 100)
 const calcCorridorLengthLevel = createIncreasingParameter(1, 2, 75)
 const calcDistortion = createIncreasingParameter(0.05, 1, 80)
+
+export const getWalkSpeedFromCurrentState = () => {
+  return calcSpeed(statusStore.current.stamina)
+}
+
+const calcSpeed = createDecreasingParameter(0, 1, 80)
+
+export const getVisibilityFromCurrentState = (): number => {
+  const floor = store.current.floor
+  if (floor < 5) return toFloatPercent(statusStore.current.stamina)
+  return Math.max(0.1, toFloatPercent(statusStore.current.stamina - floor))
+}

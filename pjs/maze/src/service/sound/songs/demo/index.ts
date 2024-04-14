@@ -4,21 +4,16 @@ import * as mgnr from 'mgnr-tone/src'
 import { registerTimeEvents } from 'mgnr-tone/src'
 import { Transport } from 'tone'
 import { fireByRate, randomIntInclusiveBetween } from 'utils'
-import { metro } from '../../debug/metro'
 import { setupKick } from './inst/kick'
 import { setupPadCh } from './inst/pad'
 import { setupSynCh } from './inst/syn'
 import { createFilteredDelaySend } from './mix/send'
 
-/**
- * demo song for beta release
- */
-export const demo = () => {
+export const music = () => {
   Transport.bpm.value = randomIntInclusiveBetween(96, 112)
-  metro()
 
   const key = pickRandomPitchName()
-  
+
   const scale = new Scale({
     key: key,
     pref: 'omit46',
@@ -43,7 +38,7 @@ export const demo = () => {
   const kickCh = setupKick()
   mixer.connect(kickCh, delaySend)
 
-  const padCh = setupPadCh(scale, )
+  const padCh = setupPadCh(scale)
   mixer.connect(padCh, delaySend, 2)
 
   const synCh = setupSynCh(scale2)

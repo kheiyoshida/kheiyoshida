@@ -9,7 +9,7 @@ import {
   moveCamera,
 } from './camera'
 import { drawTerrain, triggerFadeOut } from './draw'
-import { corridorToNextFloor } from './others/scenes'
+import { corridorToNextFloor } from '../../domain/translate/renderGrid/scenes'
 import { RenderQueue } from './queue'
 import { Distortion } from './scaffold/distortion'
 

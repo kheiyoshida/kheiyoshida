@@ -1,5 +1,3 @@
-export type ColorArgs = number[]
-
 export const Colors = {
   black: [5, 250],
   white: [180, 200],

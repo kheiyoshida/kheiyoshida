@@ -1,17 +1,7 @@
-import {
-  CameraLookAhead,
-  CameraZ,
-  FloorLength,
-  FloorPathAvgLength,
-  FovyValue,
-  wh,
-  ww,
-} from '../../../config'
+import { DefaultGoFrames, DefaultTurnFrames, DownFramesLength, MaxVisibleLength } from 'src/config'
+import { CameraLookAhead, CameraZ, FloorLength, FovyValue, wh, ww } from '../../../config'
 import { ScaffoldValues } from '../scaffold'
 import { createAccumulatedDistanceArray, createSinArray, getStairUpDown } from './movement'
-
-const ModelGridLength = 6
-const MaxVisibleLength = FloorPathAvgLength * ModelGridLength
 
 export const cameraReset = (visibility = 1.0) => {
   const visibleLength = MaxVisibleLength * visibility
@@ -28,19 +18,16 @@ export const moveCamera =
     p.camera(0, finalY, finalZ, finalX, finalY, finalZ - CameraLookAhead)
   }
 
-const DefaultGoFrames = 8
 export const getGoDeltaArray = (speed: number) => {
   const frameNumber = Math.floor(DefaultGoFrames / speed)
   return createAccumulatedDistanceArray(frameNumber)
 }
 
-const DefaultTurnFrames = 4
 export const getTurnLRDeltaArray = (speed: number) => {
   const frameNumber = Math.floor(DefaultTurnFrames / speed)
   return createSinArray(frameNumber, 0.15)
 }
 
-const DownFramesLength = 32
 export const DownstairsValues: Parameters<typeof moveCamera>[] = [...Array(DownFramesLength)].map(
   (_, i) => {
     const forward = 0.3

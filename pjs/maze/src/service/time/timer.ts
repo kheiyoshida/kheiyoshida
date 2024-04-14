@@ -1,8 +1,10 @@
-export const FrameInterval = [1, 2, 3, 4, 5, 6] as const
+import { FrameIntervalMS } from '../../config'
 
-const MAX_FRAMECOUNT = (FrameInterval as unknown as number[]).reduceRight((p, c) => p * c)
+export const FrameCountInterval = [1, 2, 3, 4, 5, 6] as const
 
-export const makeIntervalTimer = (intervalMS: number, maxCount = MAX_FRAMECOUNT) => {
+const MAX_FRAMECOUNT = (FrameCountInterval as unknown as number[]).reduceRight((p, c) => p * c)
+
+export const makeIntervalHandler = (intervalMS = FrameIntervalMS, maxCount = MAX_FRAMECOUNT) => {
   let frameCount = 0
   return (event: (frameCount: number) => void) => {
     setInterval(() => {
@@ -14,3 +16,5 @@ export const makeIntervalTimer = (intervalMS: number, maxCount = MAX_FRAMECOUNT)
     }, intervalMS)
   }
 }
+
+export const handleInterval = makeIntervalHandler()

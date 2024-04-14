@@ -19,7 +19,7 @@ export const createColorManager = (): ColorManager => {
         fixedOpTTL--
         if (fixedOpTTL <= 0) {
           if (fixedOp[0] === 'fadeout') {
-            fixedOp[0] = 'default'
+            fixedOp[0] = 'default' // always return to default after fadeout
           } else {
             fixedOp = null
           }

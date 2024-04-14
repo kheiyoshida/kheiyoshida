@@ -21,4 +21,5 @@ const makeRenderQueue = () => {
     update,
   }
 }
+
 export const RenderQueue = makeRenderQueue()

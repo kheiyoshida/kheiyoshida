@@ -1,11 +1,11 @@
-import { makeIntervalTimer } from './timer'
+import { makeIntervalHandler } from './timer'
 
 beforeEach(() => jest.useFakeTimers())
 afterEach(() => jest.useRealTimers())
 
-test(`${makeIntervalTimer.name}`, () => {
+test(`${makeIntervalHandler.name}`, () => {
   const intervalMS = 4
-  const timer = makeIntervalTimer(intervalMS, 4)
+  const timer = makeIntervalHandler(intervalMS, 4)
   const eventHandler = jest.fn()
   timer(eventHandler)
 

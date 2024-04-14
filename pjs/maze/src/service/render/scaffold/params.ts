@@ -1,6 +1,12 @@
-import { ScaffoldValues } from './types'
-import { FloorLength, PathLength, WallHeight } from '../../../config'
+import {
+  FloorLength,
+  MaxDistortionRange,
+  MaxDistortionSpeed,
+  PathLength,
+  WallHeight,
+} from '../../../config'
 import { ScaffoldParams } from '../../../domain/translate'
+import { ScaffoldValues } from './types'
 
 export const calcConcreteScaffoldValues = (params: ScaffoldParams): ScaffoldValues => {
   const lengths = {
@@ -10,7 +16,7 @@ export const calcConcreteScaffoldValues = (params: ScaffoldParams): ScaffoldValu
   }
   return {
     ...lengths,
-    distortionRange: params.distortionLevel * (lengths.floor / 4),
-    distortionSpeed: params.distortionLevel * 10
+    distortionRange: params.distortionLevel * lengths.floor * MaxDistortionRange,
+    distortionSpeed: params.distortionLevel * MaxDistortionSpeed,
   }
 }

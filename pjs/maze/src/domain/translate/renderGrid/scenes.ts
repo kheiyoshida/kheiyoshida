@@ -1,4 +1,4 @@
-import { RenderGrid, convertToRenderGrid } from '../../../domain/translate/compose/renderSpec'
+import { RenderGrid, convertToRenderGrid } from './renderSpec'
 
 export const corridorToNextFloor: RenderGrid = convertToRenderGrid([
   null,
