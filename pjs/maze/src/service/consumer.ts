@@ -17,8 +17,8 @@ export type RenderHandler = (pack: RenderPack) => void
 export const MessageResolutionMap: Record<RenderSignal, RenderHandler> = {
   [RenderSignal.CurrentView]: renderCurrentView,
   [RenderSignal.Go]: renderGo,
-  [RenderSignal.TurnRight]: renderTurn('r'),
-  [RenderSignal.TurnLeft]: renderTurn('l'),
+  [RenderSignal.TurnRight]: renderTurn('right'),
+  [RenderSignal.TurnLeft]: renderTurn('left'),
   [RenderSignal.GoDownStairs]: renderGoDownstairs,
   [RenderSignal.ProceedToNextFloor]: renderProceedToNextFloor,
   [RenderSignal.OpenMap]: renderMap,

@@ -1,3 +1,4 @@
+import { LR } from '../../../../utils/types'
 import {
   DistortionDelta,
   Scaffold,
@@ -13,7 +14,7 @@ export type DeltaScaffold = Scaffold<DistortionDelta>
 export interface DistortionScaffold {
   deltas: DeltaScaffold
   slideGo(): void
-  slideTurn(lr: 'l' | 'r'): void
+  slideTurn(direction: LR): void
   updateDeltas(range: number, speed: number): void
 }
 

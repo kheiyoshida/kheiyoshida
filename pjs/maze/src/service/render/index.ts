@@ -1,5 +1,7 @@
 import { eventBlockRequired, resurrectEvent, unblockEvents } from '../../domain/events'
+import { corridorToNextFloor } from '../../domain/translate/renderGrid/scenes'
 import { logger } from '../../utils/logger'
+import { LR } from '../../utils/types'
 import { RenderHandler } from '../consumer'
 import {
   DownstairsValues,
@@ -9,7 +11,6 @@ import {
   moveCamera,
 } from './camera'
 import { drawTerrain, triggerFadeOut } from './draw'
-import { corridorToNextFloor } from '../../domain/translate/renderGrid/scenes'
 import { RenderQueue } from './queue'
 import { Distortion } from './scaffold/distortion'
 
@@ -39,11 +40,11 @@ export const renderGo: RenderHandler = ({ renderGrid, speed, scaffoldValues, col
 }
 
 export const renderTurn =
-  (d: 'r' | 'l'): RenderHandler =>
+  (direction: LR): RenderHandler =>
   ({ renderGrid, speed, scaffoldValues, color }) => {
     const LRDeltaValues = getTurnLRDeltaArray(speed)
     const drawFrameSequence = LRDeltaValues.map((turnDelta) => () => {
-      moveCamera(0, d === 'r' ? turnDelta : -turnDelta)(scaffoldValues)
+      moveCamera(0, direction === 'right' ? turnDelta : -turnDelta)(scaffoldValues)
       drawTerrain(renderGrid, scaffoldValues, color)
     })
     RenderQueue.update(drawFrameSequence)

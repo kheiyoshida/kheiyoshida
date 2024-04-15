@@ -1,3 +1,4 @@
+import { LR } from '../utils/types'
 import { closeMapEvent, goDownstairsEvent, openMapEvent, turnEvent, walkEvent } from './events'
 import * as validaters from './translate/validaters'
 
@@ -11,13 +12,13 @@ export const go = () => {
   }
 }
 
-const turn = (dir: 'r' | 'l') => () => {
+const turn = (dir: LR) => () => {
   if (!validaters.isAccepting()) return
   turnEvent(dir)
 }
 
-export const turnRight = turn('r')
-export const turnLeft = turn('l')
+export const turnRight = turn('right')
+export const turnLeft = turn('left')
 
 export const callMap = () => {
   if (!validaters.isAccepting()) return

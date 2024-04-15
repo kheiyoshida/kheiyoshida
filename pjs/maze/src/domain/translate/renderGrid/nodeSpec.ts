@@ -16,8 +16,8 @@ const detectPathPattern = (reachable: boolean): TerrainPattern => (reachable ? '
 
 const getTerrain = (direction: Direction, node: Node): Terrain => ({
   front: detectPathPattern(node.edges[direction]),
-  left: detectPathPattern(node.edges[compass('l', direction)]),
-  right: detectPathPattern(node.edges[compass('r', direction)]),
+  left: detectPathPattern(node.edges[compass('left', direction)]),
+  right: detectPathPattern(node.edges[compass('right', direction)]),
 })
 
 export const toPathSpec =

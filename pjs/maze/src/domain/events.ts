@@ -1,4 +1,5 @@
 import { statusStore, store } from '../store'
+import { LR } from '../utils/types'
 import * as mapper from './interface/mapper'
 import * as maze from './interface/maze'
 import { updateStats } from './interface/status'
@@ -67,11 +68,11 @@ export const goDownstairsEvent = () => {
   MessageQueue.push(RenderSignal.ShowFloor)
 }
 
-export const turnEvent = (dir: 'r' | 'l') => {
+export const turnEvent = (dir: LR) => {
   if (store.current.mapOpen) {
     closeMapEvent()
   }
-  MessageQueue.push(dir === 'r' ? RenderSignal.TurnRight : RenderSignal.TurnLeft)
+  MessageQueue.push(dir === 'right' ? RenderSignal.TurnRight : RenderSignal.TurnLeft)
   maze.turn(dir)
   updateStats('turn')
   MessageQueue.push(RenderSignal.CurrentView)
