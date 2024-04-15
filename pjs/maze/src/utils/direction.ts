@@ -1,18 +1,20 @@
-import { Position, reducePosition } from '../../../utils/position'
-import { LR } from '../../../utils/types'
+import { Position, reducePosition } from './position'
+
+export type LR = 'left' | 'right'
+export type LRO = LR | 'opposite'
 
 export type Direction = 'n' | 'e' | 's' | 'w'
 
 export const NESW = ['n', 'e', 's', 'w'] as const
 
-export const compass = (d: LR | 'o', currentDirection: Direction) => {
+export const getTurnedDirection = (lro: LRO, currentDirection: Direction) => {
   const i = NESW.indexOf(currentDirection)
-  switch (d) {
+  switch (lro) {
     case 'right':
       return NESW[(i + 1) % 4]
     case 'left':
       return NESW[(i + 3) % 4]
-    case 'o':
+    case 'opposite':
       return NESW[(i + 2) % 4]
   }
 }

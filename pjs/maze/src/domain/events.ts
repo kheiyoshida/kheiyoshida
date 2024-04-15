@@ -1,5 +1,5 @@
 import { statusStore, store } from '../store'
-import { LR } from '../utils/types'
+import { LR } from "src/utils/direction"
 import * as mapper from './interface/mapper'
 import * as maze from './interface/maze'
 import { updateStats } from './interface/status'

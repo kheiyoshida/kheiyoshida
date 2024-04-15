@@ -1,6 +1,6 @@
 import { loop2D } from 'utils'
 import { mapSizing, wh, ww } from '../../config'
-import { NESW } from '../../domain/interface/maze/direction'
+import { NESW } from '../../utils/direction'
 import { MapInfo } from 'src/domain/interface/mapper'
 import { RenderPack } from '../render/pack'
 

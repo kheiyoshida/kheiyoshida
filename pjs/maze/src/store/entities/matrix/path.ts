@@ -6,7 +6,7 @@ import {
   requireNodeAtPosition,
 } from './matrix'
 import { Position } from '../../../utils/position'
-import { Direction, compass } from '../../../domain/interface/maze/direction'
+import { Direction, getTurnedDirection } from '../../../utils/direction'
 import { Node } from './node'
 
 /**
@@ -47,7 +47,7 @@ export const connectNodes = (node: Node, adjacent: Node, direction?: Direction):
   if (!node.isAdjacent(adjacent)) throw Error(`can only connect adjacent nodes`)
   const dir = direction || node.direction(adjacent)
   node.set({ [dir]: true })
-  adjacent.set({ [compass('o', dir)]: true })
+  adjacent.set({ [getTurnedDirection('opposite', dir)]: true })
 }
 
 /**

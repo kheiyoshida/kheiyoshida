@@ -8,9 +8,9 @@ import {
 } from '../../../store/entities/matrix/matrix'
 import { Node } from '../../../store/entities/matrix/node'
 import { Position, reducePosition } from '../../../utils/position'
-import { compass, positionalDirection } from './direction'
+import { getTurnedDirection, positionalDirection } from '../../../utils/direction'
 import { paramBuild } from './params'
-import { LR } from '../../../utils/types'
+import { LR } from "src/utils/direction"
 
 export const generateMaze = () => {
   const params = paramBuild(store.current.floor)
@@ -28,7 +28,7 @@ const retrieveInitialPositions = (matrix: Matrix) => {
   const corridorNodes = getCorridorNodes(matrix)
   const stairNode = randomItemFromArray(deadEnds)
   const initialNode = randomItemFromArray(corridorNodes)
-  const initialDirection = compass(fireByRate(0.5) ? 'right' : 'left', initialNode.corridorDirection!)
+  const initialDirection = getTurnedDirection(fireByRate(0.5) ? 'right' : 'left', initialNode.corridorDirection!)
   return { stairNode, initialNode, initialDirection }
 }
 
@@ -61,7 +61,7 @@ export const navigate = () => {
 }
 
 export const turn = (d: LR) => {
-  store.updateDirection(compass(d, store.current.direction))
+  store.updateDirection(getTurnedDirection(d, store.current.direction))
 }
 
 export const getFrontLoc = (dist = 1): Position => {

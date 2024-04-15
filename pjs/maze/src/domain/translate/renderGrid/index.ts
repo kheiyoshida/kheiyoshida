@@ -1,6 +1,6 @@
 import { pipe } from 'utils'
 import { Node } from '../../../store/entities/matrix/node'
-import { Direction } from '../../interface/maze/direction'
+import { Direction } from '../../../utils/direction'
 import { toPathSpec } from './nodeSpec'
 import { RenderGrid, convertToRenderGrid } from './renderSpec'
 import { store } from '../../../store'

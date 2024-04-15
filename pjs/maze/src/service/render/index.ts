@@ -1,7 +1,7 @@
 import { eventBlockRequired, resurrectEvent, unblockEvents } from '../../domain/events'
 import { corridorToNextFloor } from '../../domain/translate/renderGrid/scenes'
 import { logger } from '../../utils/logger'
-import { LR } from '../../utils/types'
+import { LR } from "src/utils/direction"
 import { RenderHandler } from '../consumer'
 import {
   DownstairsValues,

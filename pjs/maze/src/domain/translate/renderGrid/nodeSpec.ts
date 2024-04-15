@@ -1,4 +1,4 @@
-import { Direction, compass } from '../../interface/maze/direction'
+import { Direction, getTurnedDirection } from '../../../utils/direction'
 import { Node } from '../../../store/entities/matrix/node'
 
 export type PathSpec = [PathNode, PathNode, PathNode]
@@ -16,8 +16,8 @@ const detectPathPattern = (reachable: boolean): TerrainPattern => (reachable ? '
 
 const getTerrain = (direction: Direction, node: Node): Terrain => ({
   front: detectPathPattern(node.edges[direction]),
-  left: detectPathPattern(node.edges[compass('left', direction)]),
-  right: detectPathPattern(node.edges[compass('right', direction)]),
+  left: detectPathPattern(node.edges[getTurnedDirection('left', direction)]),
+  right: detectPathPattern(node.edges[getTurnedDirection('right', direction)]),
 })
 
 export const toPathSpec =

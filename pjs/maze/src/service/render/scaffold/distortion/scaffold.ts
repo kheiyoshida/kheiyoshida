@@ -1,4 +1,4 @@
-import { LR } from '../../../../utils/types'
+import { LR } from "src/utils/direction"
 import {
   DistortionDelta,
   Scaffold,
