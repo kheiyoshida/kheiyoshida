@@ -3,10 +3,10 @@ import { RenderGrid } from '../../../domain/translate/renderGrid/renderSpec'
 import { Scaffold } from '../scaffold'
 import { finalizeGeometries } from './finalize/finalize'
 import { convertToModelGrid } from './grid/modelGrid'
-import { convertToCoords } from './coords/modelToCoords'
+import { convertToGeometrySpecList } from './coords/modelToCoords'
 
 export const calculateGeometries = (renderGrid: RenderGrid, scaffold: Scaffold): Geometry[] => {
   const modelGrid = convertToModelGrid(renderGrid)
-  const coords = convertToCoords(modelGrid, scaffold)
+  const coords = convertToGeometrySpecList(modelGrid, scaffold)
   return finalizeGeometries(coords)
 }

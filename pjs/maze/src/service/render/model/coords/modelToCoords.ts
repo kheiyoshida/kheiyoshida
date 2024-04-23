@@ -3,41 +3,59 @@ import { RenderPosition } from '../../../../domain/translate/renderGrid/renderSp
 import { Scaffold } from '../../scaffold'
 import { getAdjacentBlockY, getAdjacentBlockZ, makeGetRenderBlock } from './block'
 import {
+  CompoundRenderModel,
   GeometrySpec,
   ModelGrid,
   RenderBlockCoords,
   RenderModel,
   ShapeCoordinates,
 } from '../types'
+import { Position3D } from 'p5utils/src/3d'
 
-export const convertToCoords = (
+export const convertToGeometrySpecList = (
   modelGrid: ModelGrid,
   scaffold: Scaffold
 ): GeometrySpec[] => {
-  const getRenderBlock = makeGetRenderBlock(scaffold)
   return modelGrid.flatMap((modelLayer, z) =>
-    modelLayer.flatMap((compound, x) => {
-      const block = getRenderBlock({ x, z })
-      return compound.map((model) => convertModelToGeometryCoords(model, block, x))
-    })
+    modelLayer.flatMap((compound, x) => convert(scaffold, compound, x, z))
   )
+}
+
+const convert = (
+  scaffold: Scaffold,
+  compound: CompoundRenderModel,
+  x: number,
+  z: number
+): GeometrySpec[] => {
+  const block = makeGetRenderBlock(scaffold)({ x, z })
+  return compound.flatMap((model) => {
+    if (model === RenderModel.Stair) return convertStairModel(block)
+    return convertSimpleModel(model, block, x)
+  })
+}
+
+const convertSimpleModel = (model: RenderModel, block: RenderBlockCoords, x: RenderPosition) => {
+  const normalPosition = [0, 0, 0] as Position3D // later
+  return {
+    coords: convertModelToGeometryCoords(model, block, x),
+    normalPosition,
+  }
 }
 
 export const convertModelToGeometryCoords = (
   model: RenderModel,
   renderBlock: RenderBlockCoords,
   side: RenderPosition
-): GeometrySpec => {
-  if (model === RenderModel.Ceil) return [ceil(renderBlock)]
-  if (model === RenderModel.Floor) return [floor(renderBlock)]
-  if (model === RenderModel.FrontWall) return [frontWall(renderBlock)]
-  if (model === RenderModel.SideWall) return [sideWall(side)(renderBlock)]
-  if (model === RenderModel.StairCeil) return [flatStair(renderBlock)]
-  if (model === RenderModel.Stair) return convertStairModel(renderBlock)
+): ShapeCoordinates => {
+  if (model === RenderModel.Ceil) return ceil(renderBlock)
+  if (model === RenderModel.Floor) return floor(renderBlock)
+  if (model === RenderModel.FrontWall) return frontWall(renderBlock)
+  if (model === RenderModel.SideWall) return sideWall(side)(renderBlock)
+  if (model === RenderModel.StairCeil) return flatStair(renderBlock)
   throw Error()
 }
 
-const convertStairModel = (renderBlock: RenderBlockCoords): GeometrySpec => {
+const convertStairModel = (renderBlock: RenderBlockCoords): GeometrySpec[] => {
   const oneStairDownBlock = getAdjacentBlockY(renderBlock)
   const corridorBlock = getAdjacentBlockZ(oneStairDownBlock, { z: -PathLength })
   const corridorBlock2 = getAdjacentBlockZ(corridorBlock, { z: -FloorLength })
@@ -49,15 +67,19 @@ const convertStairModel = (renderBlock: RenderBlockCoords): GeometrySpec => {
     ...getCorridor(corridorBlock),
     ...getCorridor(corridorBlock2),
     ...getCorridor(corridorBlock3),
+  ].map((coords) => ({
+    coords,
+    normalPosition: [0, 0, 0], // Later
+  }))
+}
+
+const getCorridor = (corridorBlock: RenderBlockCoords): ShapeCoordinates[] => {
+  return [
+    ceil(corridorBlock),
+    floor(corridorBlock),
+    sideWallOnLeft(corridorBlock),
+    sideWallOnRight(corridorBlock),
   ]
-  function getCorridor(corridorBlock: RenderBlockCoords) {
-    return [
-      ceil(corridorBlock),
-      floor(corridorBlock),
-      sideWallOnLeft(corridorBlock),
-      sideWallOnRight(corridorBlock),
-    ]
-  }
 }
 
 type RetrieveCoords = (block: RenderBlockCoords) => ShapeCoordinates

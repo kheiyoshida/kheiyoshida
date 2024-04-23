@@ -17,13 +17,11 @@ export enum RenderModel {
 }
 
 /**
- * collection of coordinates to represent `CompountRenderModel`
+ * geometry specifications to represent `RenderModel`
  */
-export type GeometrySpec = ShapeCoordinates[]
-
-type _GeometrySpec = {
-  coords: ShapeCoordinates[],
-  center: Position3D,
+export type GeometrySpec = {
+  coords: ShapeCoordinates
+  normalPosition: Position3D
 }
 
 /**
