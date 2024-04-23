@@ -1,3 +1,4 @@
+import { Position3D } from 'p5utils/src/3d'
 import {
   CameraLookAhead,
   CameraZ,
@@ -17,7 +18,8 @@ export const cameraReset = (visibility = 1.0) => {
   const visibleLength = MaxVisibleLength * visibility
   p.perspective(FovyValue, ww / wh, 10, visibleLength)
   p.camera(0, 0, CameraZ, 0, 0, CameraZ - CameraLookAhead)
-  // p.directionalLight(255, 0, 0, 0, 0, -1)
+  
+  light(0, 0, CameraZ)
 }
 
 export const moveCamera =
@@ -27,8 +29,12 @@ export const moveCamera =
     const finalZ = CameraZ + zDelta * -size
     const finalY = upDown ? upDown * lengths.wall : 0
     p.camera(0, finalY, finalZ, finalX, finalY, finalZ - CameraLookAhead)
-    // p.directionalLight(255, 0,0, 0, 0, -1)
+    light(finalX, finalY, finalZ)
   }
+
+const light = (...center: Position3D) => {
+  p.pointLight(255, 255, 255, ...center)
+}
 
 export const getGoDeltaArray = (speed: number) => {
   const frameNumber = Math.floor(DefaultGoFrames / speed)

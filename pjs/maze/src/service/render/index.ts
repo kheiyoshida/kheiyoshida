@@ -1,7 +1,7 @@
 import { eventBlockRequired, resurrectEvent, unblockEvents } from '../../domain/events'
 import { corridorToNextFloor } from '../../domain/translate/renderGrid/scenes'
 import { logger } from '../../utils/logger'
-import { LR } from "src/utils/direction"
+import { LR } from 'src/utils/direction'
 import { RenderHandler } from '../consumer'
 import {
   DownstairsValues,
@@ -22,10 +22,7 @@ export const renderCurrentView: RenderHandler = ({
 }) => {
   const drawFrame = () => {
     cameraReset(visibility)
-    
     drawTerrain(renderGrid, scaffoldValues, color)
-    p.directionalLight(255, 255, 255, 0, 0, 1)
-    p.ambientLight(255, 255, 255)
   }
   RenderQueue.push(drawFrame)
 }

@@ -1,6 +1,12 @@
 import { RenderPosition } from '../../../../domain/translate/renderGrid/renderSpec'
 import { MockScaffold } from '../__test__/mock'
-import { getAdjacentBlockZ, getAdjacentLayerY, getBlockLayer, makeGetRenderBlock } from './block'
+import {
+  getAdjacentBlockZ,
+  getAdjacentLayerY,
+  getBlockCenter,
+  getBlockLayer,
+  makeGetRenderBlock,
+} from './block'
 import { RenderBlockCoords, RenderBlockLayer } from '../types'
 
 test(`${makeGetRenderBlock.name}`, () => {
@@ -71,4 +77,29 @@ test(`${getAdjacentBlockZ.name}`, () => {
     const original = block.rear[k as keyof RenderBlockLayer]
     expect(z).toBe(original[2] - 1000)
   })
+})
+
+test(`${getBlockCenter.name}`, () => {
+  const block: RenderBlockCoords = {
+    front: {
+      tl: [-1500, -500, -500],
+      tr: [-500, -500, -500],
+      bl: [-1500, 500, -500],
+      br: [-500, 500, -500],
+    },
+    rear: {
+      tl: [-1500, -500, -1500],
+      tr: [-500, -500, -1500],
+      bl: [-1500, 500, -1500],
+      br: [-500, 500, -1500],
+    },
+  }
+  const result = getBlockCenter(block)
+  expect(result).toMatchInlineSnapshot(`
+    [
+      -1000,
+      0,
+      -1000,
+    ]
+  `)
 })

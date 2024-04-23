@@ -1,10 +1,14 @@
 import { Scaffold, ScaffoldLayer, ScaffoldLayerCoordPosition } from '../../scaffold/types'
 import { RenderBlockCoords, RenderBlockLayer, RenderBlockPosition } from '../types'
 import { RenderPosition } from '../../../../domain/translate/renderGrid/renderSpec'
+import { Position3D, sumPosition3d } from 'p5utils/src/3d'
 
 export const makeGetRenderBlock =
   (scaffold: Scaffold) =>
   ({ x, z }: RenderBlockPosition): RenderBlockCoords => {
+    if (z < 0) {
+      throw Error(`z is out of range: ${z}`)
+    }
     return {
       front: getBlockLayer(scaffold[z], x),
       rear: getBlockLayer(scaffold[z + 1], x),
@@ -69,4 +73,11 @@ const addValueToLBlockLayer = (
       [x + (delta.x || 0), y + (delta.y || 0), z + (delta.z || 0)],
     ])
   ) as RenderBlockLayer
+}
+
+export const getBlockCenter = (block: RenderBlockCoords): Position3D => {
+  return sumPosition3d(
+    ...Object.values(block.front),
+    ...Object.values(block.rear),
+  ).map(v => v / 8) as Position3D
 }

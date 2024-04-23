@@ -1,45 +1,41 @@
 import { FloorLength, PathLength } from '../../../../config'
 import { RenderPosition } from '../../../../domain/translate/renderGrid/renderSpec'
 import { Scaffold } from '../../scaffold'
-import { getAdjacentBlockY, getAdjacentBlockZ, makeGetRenderBlock } from './block'
 import {
   CompoundRenderModel,
   GeometrySpec,
   ModelGrid,
   RenderBlockCoords,
+  RenderBlockPosition,
   RenderModel,
   ShapeCoordinates,
 } from '../types'
-import { Position3D } from 'p5utils/src/3d'
+import { getAdjacentBlockY, getAdjacentBlockZ, makeGetRenderBlock } from './block'
+import { getNormalPosition } from './normal'
 
 export const convertToGeometrySpecList = (
   modelGrid: ModelGrid,
   scaffold: Scaffold
 ): GeometrySpec[] => {
   return modelGrid.flatMap((modelLayer, z) =>
-    modelLayer.flatMap((compound, x) => convert(scaffold, compound, x, z))
+    modelLayer.flatMap((compound, x) => convert(scaffold, compound, { x, z }))
   )
 }
 
 const convert = (
   scaffold: Scaffold,
   compound: CompoundRenderModel,
-  x: number,
-  z: number
+  blockPosition: RenderBlockPosition
 ): GeometrySpec[] => {
-  const block = makeGetRenderBlock(scaffold)({ x, z })
+  const getRenderBlock = makeGetRenderBlock(scaffold)
+  const block = getRenderBlock(blockPosition)
   return compound.flatMap((model) => {
     if (model === RenderModel.Stair) return convertStairModel(block)
-    return convertSimpleModel(model, block, x)
+    return {
+      coords: convertModelToGeometryCoords(model, block, blockPosition.x),
+      normalPosition: getNormalPosition(model, blockPosition, getRenderBlock),
+    }
   })
-}
-
-const convertSimpleModel = (model: RenderModel, block: RenderBlockCoords, x: RenderPosition) => {
-  const normalPosition = [0, 0, 0] as Position3D // later
-  return {
-    coords: convertModelToGeometryCoords(model, block, x),
-    normalPosition,
-  }
 }
 
 export const convertModelToGeometryCoords = (
