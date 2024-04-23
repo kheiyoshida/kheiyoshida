@@ -22,7 +22,10 @@ export const renderCurrentView: RenderHandler = ({
 }) => {
   const drawFrame = () => {
     cameraReset(visibility)
+    
     drawTerrain(renderGrid, scaffoldValues, color)
+    p.directionalLight(255, 255, 255, 0, 0, 1)
+    p.ambientLight(255, 255, 255)
   }
   RenderQueue.push(drawFrame)
 }

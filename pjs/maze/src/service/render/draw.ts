@@ -22,5 +22,6 @@ export const triggerFadeOut = (frames: number) =>
   ColorManager.setFixedOperation(['fadeout', frames], frames)
 
 const drawGeometries = (geos: Geometry[]): void => {
+  p.noStroke()
   geos.forEach((geo) => p.model(geo))
 }

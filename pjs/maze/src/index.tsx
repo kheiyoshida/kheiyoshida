@@ -8,6 +8,7 @@ import { toneStart } from './service/sound'
 
 const setup = () => {
   p.createCanvas(ww, wh, p.WEBGL)
+  p.textureMode(p.NORMAL)
   p.angleMode(p.DEGREES)
   p.perspective(FovyValue, ww / wh, 10, 8000)
   applyPalette(getPalette())

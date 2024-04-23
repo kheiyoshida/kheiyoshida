@@ -17,6 +17,7 @@ export const cameraReset = (visibility = 1.0) => {
   const visibleLength = MaxVisibleLength * visibility
   p.perspective(FovyValue, ww / wh, 10, visibleLength)
   p.camera(0, 0, CameraZ, 0, 0, CameraZ - CameraLookAhead)
+  // p.directionalLight(255, 0, 0, 0, 0, -1)
 }
 
 export const moveCamera =
@@ -26,6 +27,7 @@ export const moveCamera =
     const finalZ = CameraZ + zDelta * -size
     const finalY = upDown ? upDown * lengths.wall : 0
     p.camera(0, finalY, finalZ, finalX, finalY, finalZ - CameraLookAhead)
+    // p.directionalLight(255, 0,0, 0, 0, -1)
   }
 
 export const getGoDeltaArray = (speed: number) => {
