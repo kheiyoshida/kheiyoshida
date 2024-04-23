@@ -3,7 +3,7 @@ import { RenderPosition } from '../../../../domain/translate/renderGrid/renderSp
 import { Scaffold } from '../../scaffold'
 import { getAdjacentBlockY, getAdjacentBlockZ, makeGetRenderBlock } from './block'
 import {
-  GeometryCoordinates,
+  GeometrySpec,
   ModelGrid,
   RenderBlockCoords,
   RenderModel,
@@ -13,7 +13,7 @@ import {
 export const convertToCoords = (
   modelGrid: ModelGrid,
   scaffold: Scaffold
-): GeometryCoordinates[] => {
+): GeometrySpec[] => {
   const getRenderBlock = makeGetRenderBlock(scaffold)
   return modelGrid.flatMap((modelLayer, z) =>
     modelLayer.flatMap((compound, x) => {
@@ -27,7 +27,7 @@ export const convertModelToGeometryCoords = (
   model: RenderModel,
   renderBlock: RenderBlockCoords,
   side: RenderPosition
-): GeometryCoordinates => {
+): GeometrySpec => {
   if (model === RenderModel.Ceil) return [ceil(renderBlock)]
   if (model === RenderModel.Floor) return [floor(renderBlock)]
   if (model === RenderModel.FrontWall) return [frontWall(renderBlock)]
@@ -37,7 +37,7 @@ export const convertModelToGeometryCoords = (
   throw Error()
 }
 
-const convertStairModel = (renderBlock: RenderBlockCoords): GeometryCoordinates => {
+const convertStairModel = (renderBlock: RenderBlockCoords): GeometrySpec => {
   const oneStairDownBlock = getAdjacentBlockY(renderBlock)
   const corridorBlock = getAdjacentBlockZ(oneStairDownBlock, { z: -PathLength })
   const corridorBlock2 = getAdjacentBlockZ(corridorBlock, { z: -FloorLength })

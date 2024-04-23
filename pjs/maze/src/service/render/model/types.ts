@@ -16,8 +16,20 @@ export enum RenderModel {
   StairCeil = 'StairCeil',
 }
 
+/**
+ * collection of coordinates to represent `CompountRenderModel`
+ */
+export type GeometrySpec = ShapeCoordinates[]
+
+type _GeometrySpec = {
+  coords: ShapeCoordinates[],
+  center: Position3D,
+}
+
+/**
+ * rectangle coordinates
+ */
 export type ShapeCoordinates = Position3D[]
-export type GeometryCoordinates = ShapeCoordinates[]
 
 export type RenderBlockPosition = {
   z: number

@@ -11,6 +11,6 @@ test(`${convertToCoords.name}`, () => {
     ],
     [[RenderModel.FrontWall], [RenderModel.FrontWall], [RenderModel.FrontWall]],
   ]
-  const geometries = convertToCoords(modelGrid, MockScaffold)
-  expect(geometries).toHaveLength(9)
+  const coordinatesList = convertToCoords(modelGrid, MockScaffold)
+  expect(coordinatesList).toHaveLength(9)
 })
