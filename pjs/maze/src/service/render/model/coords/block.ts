@@ -1,6 +1,6 @@
-import { Scaffold, ScaffoldLayer, ScaffoldLayerCoordPosition } from '../scaffold/types'
-import { RenderBlockCoords, RenderBlockLayer, RenderBlockPosition } from './types'
-import { RenderPosition } from '../../../domain/translate/renderGrid/renderSpec'
+import { Scaffold, ScaffoldLayer, ScaffoldLayerCoordPosition } from '../../scaffold/types'
+import { RenderBlockCoords, RenderBlockLayer, RenderBlockPosition } from '../types'
+import { RenderPosition } from '../../../../domain/translate/renderGrid/renderSpec'
 
 export const makeGetRenderBlock =
   (scaffold: Scaffold) =>

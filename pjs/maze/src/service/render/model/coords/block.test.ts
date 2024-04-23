@@ -1,7 +1,7 @@
-import { RenderPosition } from '../../../domain/translate/renderGrid/renderSpec'
-import { MockScaffold } from './__test__/mock'
+import { RenderPosition } from '../../../../domain/translate/renderGrid/renderSpec'
+import { MockScaffold } from '../__test__/mock'
 import { getAdjacentBlockZ, getAdjacentLayerY, getBlockLayer, makeGetRenderBlock } from './block'
-import { RenderBlockCoords, RenderBlockLayer } from './types'
+import { RenderBlockCoords, RenderBlockLayer } from '../types'
 
 test(`${makeGetRenderBlock.name}`, () => {
   const scaffold = MockScaffold

@@ -1,8 +1,8 @@
-import { ModelGrid, RenderModel } from '.'
-import { MockScaffold } from './__test__/mock'
-import { convertModelGrid } from './modelToGeo'
+import { ModelGrid, RenderModel } from '../types'
+import { MockScaffold } from '../__test__/mock'
+import { convertToCoords } from './modelToCoords'
 
-test(`${convertModelGrid.name}`, () => {
+test(`${convertToCoords.name}`, () => {
   const modelGrid: ModelGrid = [
     [
       [RenderModel.Floor, RenderModel.Ceil],
@@ -11,6 +11,6 @@ test(`${convertModelGrid.name}`, () => {
     ],
     [[RenderModel.FrontWall], [RenderModel.FrontWall], [RenderModel.FrontWall]],
   ]
-  const geometries = convertModelGrid(modelGrid, MockScaffold)
+  const geometries = convertToCoords(modelGrid, MockScaffold)
   expect(geometries).toHaveLength(9)
 })

@@ -1,6 +1,6 @@
 import p5 from 'p5'
 import { Position3D } from 'p5utils/src/3d'
-import { GeometryCoordinates } from '.'
+import { GeometryCoordinates } from '..'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type pExtended = p5 & { beginGeometry: any; endGeometry: any }

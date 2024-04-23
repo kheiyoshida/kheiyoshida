@@ -1,4 +1,4 @@
-import { ConcreteRenderLayer, RenderGrid, RenderPattern } from '../../../domain/translate/renderGrid/renderSpec'
+import { ConcreteRenderLayer, RenderGrid, RenderPattern } from '../../../../domain/translate/renderGrid/renderSpec'
 import {
   convertCenterModel,
   convertSideModel,
@@ -7,7 +7,7 @@ import {
   trimModelsHorizontal,
   trimModelsVertical,
 } from './modelGrid'
-import { ModelGrid, ModelGridLayer, RenderModel } from './types'
+import { ModelGrid, ModelGridLayer, RenderModel } from '../types'
 
 test(`${convertToModelGrid.name}`, () => {
   const grid: RenderGrid = [null, null, [1, 1, 1], [0, 0, 1], [1, 0, 1], [1, 0, 0]]

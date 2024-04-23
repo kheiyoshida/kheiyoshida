@@ -1,6 +1,6 @@
-import { FloorLength, PathLength } from '../../../config'
-import { RenderPosition } from '../../../domain/translate/renderGrid/renderSpec'
-import { Scaffold } from '../scaffold'
+import { FloorLength, PathLength } from '../../../../config'
+import { RenderPosition } from '../../../../domain/translate/renderGrid/renderSpec'
+import { Scaffold } from '../../scaffold'
 import { getAdjacentBlockY, getAdjacentBlockZ, makeGetRenderBlock } from './block'
 import {
   GeometryCoordinates,
@@ -8,9 +8,9 @@ import {
   RenderBlockCoords,
   RenderModel,
   ShapeCoordinates,
-} from './types'
+} from '../types'
 
-export const convertModelGrid = (
+export const convertToCoords = (
   modelGrid: ModelGrid,
   scaffold: Scaffold
 ): GeometryCoordinates[] => {
