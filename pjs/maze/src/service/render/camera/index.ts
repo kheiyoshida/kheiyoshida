@@ -13,12 +13,13 @@ import {
 } from '../../../config'
 import { ScaffoldValues } from '../scaffold'
 import { createAccumulatedDistanceArray, createSinArray, getStairUpDown } from './movement'
+import { randomIntInAsymmetricRange } from 'utils'
+import p5 from 'p5'
 
 export const cameraReset = (visibility = 1.0) => {
   const visibleLength = MaxVisibleLength * visibility
   p.perspective(FovyValue, ww / wh, 10, visibleLength)
-  p.camera(0, 0, CameraZ, 0, 0, CameraZ - CameraLookAhead)
-  light(0, 0, CameraZ)
+  cameraWithLight(0, 0, CameraZ, 0, 0, CameraZ - CameraLookAhead)
 }
 
 export const moveCamera =
@@ -27,13 +28,24 @@ export const moveCamera =
     const finalX = turnDelta ? turnDelta * FloorLength * 2 : 0
     const finalZ = CameraZ + zDelta * -size
     const finalY = upDown ? upDown * lengths.wall : 0
-    p.camera(0, finalY, finalZ, finalX, finalY, finalZ - CameraLookAhead)
-    light(finalX, finalY, finalZ)
+    cameraWithLight(0, finalY, finalZ, finalX, finalY, finalZ - CameraLookAhead)
   }
 
-export const light = (...[x, y, z]: Position3D) => {
-  p.ambientLight(50)
+export const cameraWithLight = (...[x, y, z, dx, dy, dz]: [...Position3D, ...Position3D]) => {
+  p.camera(x, y, z, dx, dy, dz)
+  p.ambientMaterial(255, 0, 0)
+  p.ambientLight(20, 0.5)
+  p.directionalLight(30, 30, 30, ...normalize(dx, dy, dz))
+  p.pointLight(200, 200, 200, x, y, z - randomIntInAsymmetricRange(100))
   p.pointLight(255, 255, 255, x, y, z)
+
+  p.lightFalloff(3, 0, 0)
+  p.specularMaterial(10)
+  p.shininess(100)
+}
+
+const normalize = (...xyz: Position3D): Position3D => {
+  return new p5.Vector(...xyz).normalize().array() as Position3D
 }
 
 export const getGoDeltaArray = (speed: number) => {

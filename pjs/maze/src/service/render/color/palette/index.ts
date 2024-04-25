@@ -19,8 +19,7 @@ export const getPalette = (): ColorPalette => Palette || defaultPalette()
 export const setPalette = (palette: ColorPalette): void => {
   Palette = palette
 }
-export const getPaletteColor = (domain: ColorDomains): p5.Color =>
-  getPalette()[domain]
+export const getPaletteColor = (domain: ColorDomains): p5.Color => getPalette()[domain]
 
 export const changePaletteColor = (domain: ColorDomains, color: p5.Color) => ({
   ...Palette,
@@ -30,5 +29,5 @@ export const changePaletteColor = (domain: ColorDomains, color: p5.Color) => ({
 export const applyPalette = (palette: ColorPalette) => {
   applyColor('fill', palette.fill)
   applyColor('stroke', palette.stroke)
-  applyColor('background', palette.fill)
+  p.background(0)
 }
