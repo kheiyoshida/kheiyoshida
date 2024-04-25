@@ -11,7 +11,8 @@ export const finalizeSurface = (
   dir: NormalDirectionOption = 'opposite'
 ): void => {
   p.beginShape()
-  p.normal(calcNormal(surfaceVertices, theOtherVertex, dir))
+  const normal = calcNormal(surfaceVertices, theOtherVertex, dir)
+  p.normal(normal)
   surfaceVertices.forEach(vectorVertex)
   p.endShape()
 }

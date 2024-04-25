@@ -23,5 +23,6 @@ export const triggerFadeOut = (frames: number) =>
 
 const drawGeometries = (geos: Geometry[]): void => {
   p.noStroke()
+  p.fill(15)
   geos.forEach((geo) => p.model(geo))
 }

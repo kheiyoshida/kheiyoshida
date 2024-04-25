@@ -1,4 +1,4 @@
-import { initializeEvent, recurringConstantStatusEvent, constantEvent } from '../domain/events'
+import { constantEvent, initializeEvent, recurringConstantStatusEvent } from '../domain/events'
 import { statusStore } from '../store'
 import { trackTime } from '../utils/time'
 import { consumeMessageQueue } from './consumer'
@@ -7,7 +7,6 @@ import { renderDebugText } from './interface/debug'
 import { RenderQueue } from './render/queue'
 import { music } from './sound/songs/demo'
 import { FrameConsumer } from './time/frame'
-import { handleInterval } from './time/timer'
 
 export const initializeServices = () => {
   bindControl()
@@ -30,7 +29,8 @@ export const setupRenderingCycle = () => {
     frameInterval: 6,
     handler: recurringConstantStatusEvent,
   })
-  handleInterval((frameCount) => {
-    FrameConsumer.consumeFrame(frameCount)
-  })
+}
+
+export const consumeFrame = () => {
+  FrameConsumer.consumeFrame(p.frameCount)
 }

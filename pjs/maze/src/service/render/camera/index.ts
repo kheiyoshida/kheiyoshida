@@ -18,7 +18,6 @@ export const cameraReset = (visibility = 1.0) => {
   const visibleLength = MaxVisibleLength * visibility
   p.perspective(FovyValue, ww / wh, 10, visibleLength)
   p.camera(0, 0, CameraZ, 0, 0, CameraZ - CameraLookAhead)
-  
   light(0, 0, CameraZ)
 }
 
@@ -32,8 +31,9 @@ export const moveCamera =
     light(finalX, finalY, finalZ)
   }
 
-const light = (...center: Position3D) => {
-  p.pointLight(255, 255, 255, ...center)
+export const light = (...[x, y, z]: Position3D) => {
+  p.ambientLight(50)
+  p.pointLight(255, 255, 255, x, y, z)
 }
 
 export const getGoDeltaArray = (speed: number) => {

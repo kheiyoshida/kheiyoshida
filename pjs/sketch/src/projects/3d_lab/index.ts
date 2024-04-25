@@ -4,6 +4,9 @@ import { applyConfig } from 'p5utils/src/utils/project'
 import { P5Canvas } from '../../lib/p5canvas'
 import { bindControl } from './control'
 import { cameraStore, geometryStore, sketchStore, skinStore } from './state'
+import { pushPop } from 'p5utils/src/render'
+import { Position3D } from 'p5utils/src/3d'
+import { makePingpongNumberStore } from 'utils'
 
 const preload = () => {
   skinStore.lazyInit()
@@ -42,13 +45,32 @@ const draw = () => {
   cameraStore.moveCamera()
 
   // render
-  p.lights()
+  // p.lights()
 
   draw3DGrid(3, 2000, camera)
 
-  p.texture(skinStore.current.img)
-  geometryStore.render()
+  // p.texture(skinStore.current.img)
+  // geometryStore.render()]
+
+  zPos.renew()
+  p.pointLight(255, 255, 255, 0, 0, zPos.current)
+
+  positions.forEach((position) => {
+    pushPop(() => {
+      p.translate(...position)
+      p.box(500)
+    })
+  })  
 }
+
+const zPos = makePingpongNumberStore(() => 10, -1000, 1000, 0)
+
+const positions: Position3D[] = [
+  [0, -500, 0],
+  [500, 0, 0],
+  [-500, 0, 0],
+  [0, 500, 0],
+]
 
 export default P5Canvas({
   preload,

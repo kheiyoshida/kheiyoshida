@@ -1,6 +1,4 @@
 import p5 from 'p5'
-import { vectorFromDegreeAngles } from 'p5utils/src/3d'
-import { Position3D } from 'p5utils/src/3d/types'
 import * as shape from 'p5utils/src/3dShape'
 import * as createGraph from 'p5utils/src/3dShape/create'
 import { finalizeGeometry } from 'p5utils/src/3dShape/finalize'
@@ -34,15 +32,15 @@ const init: LazyInit<GeometryState> = () => {
 const reducers = {
   render: (s) => () => {
     p.noStroke()
-    const angle = { theta: p.millis() * 0.2, phi: p.millis() * 0.1 }
+    // const angle = { theta: p.millis() * 0.2, phi: p.millis() * 0.1 }
     // const geo = finalizeGeometry(s.graph)
-    shape.renderGeometry(s.geo, [0, 0, 0], angle)
+    shape.renderGeometry(s.geo, [0, 0, 0], )
 
     // reference
-    // pushPop(() => {
-    //   p.translate(-500, -500, -400)
-    //   p.sphere(100)
-    // })
+    pushPop(() => {
+      p.translate(-500, -500, -400)
+      p.sphere(100)
+    })
   },
 } satisfies ReducerMap<GeometryState>
 

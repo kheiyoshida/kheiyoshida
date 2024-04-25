@@ -13,6 +13,7 @@ import {
 import { drawTerrain, triggerFadeOut } from './draw'
 import { RenderQueue } from './queue'
 import { Distortion } from './scaffold/distortion'
+import { makePingpongNumberStore } from 'utils'
 
 export const renderCurrentView: RenderHandler = ({
   renderGrid,
@@ -23,9 +24,13 @@ export const renderCurrentView: RenderHandler = ({
   const drawFrame = () => {
     cameraReset(visibility)
     drawTerrain(renderGrid, scaffoldValues, color)
-  }
+    zPos.renew()
+    p.pointLight(200, 200, 200, 0, 0, zPos.current)
+  } 
   RenderQueue.push(drawFrame)
 }
+
+const zPos = makePingpongNumberStore(c => 10, -1000, 200, 200)
 
 export const renderGo: RenderHandler = ({ renderGrid, speed, scaffoldValues, color }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
