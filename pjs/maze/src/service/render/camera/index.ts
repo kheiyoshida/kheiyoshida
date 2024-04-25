@@ -33,15 +33,16 @@ export const moveCamera =
 
 export const cameraWithLight = (...[x, y, z, dx, dy, dz]: [...Position3D, ...Position3D]) => {
   p.camera(x, y, z, dx, dy, dz)
-  p.ambientLight(50)
-  p.lightFalloff(2, 0, 0)
-  p.spotLight(200, 200, 100, x, y, z, ...normalize(dx, dy, dz), Math.PI * 20, 50)
+  p.ambientLight(120)
+  p.lightFalloff(3, 0, 0)
+  p.directionalLight(50, 50, 50, 0, 1, -1)
+  p.spotLight(50, 50, 50, x, y, z, ...normalize(dx, dy, dz), Math.PI * 20, 50)
 
-  p.pointLight(200, 200, 200, x, y, z - randomIntInAsymmetricRange(100))
-  p.pointLight(255, 255, 255, x, y, z)
+  p.pointLight(250, 250, 250, x, y, z - randomIntInAsymmetricRange(120))
+  p.pointLight(150, 150, 150, x, y, z)
 
   p.specularMaterial(10)
-  p.shininess(10)
+  p.shininess(5)
 }
 
 const normalize = (...xyz: Position3D): Position3D => {
