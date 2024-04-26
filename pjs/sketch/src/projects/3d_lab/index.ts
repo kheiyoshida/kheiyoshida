@@ -41,8 +41,8 @@ const draw = () => {
   sketchStore.paint()
 
   // camera
-  cameraStore.turnCamera()
-  cameraStore.moveCamera()
+  // cameraStore.turnCamera()
+  // cameraStore.moveCamera()
 
   // render
   // p.lights()
@@ -53,6 +53,7 @@ const draw = () => {
   // geometryStore.render()]
 
   zPos.renew()
+  p.lightFalloff(0, 1/300, 0)
   p.pointLight(255, 255, 255, 0, 0, zPos.current)
 
   positions.forEach((position) => {
@@ -70,6 +71,7 @@ const positions: Position3D[] = [
   [500, 0, 0],
   [-500, 0, 0],
   [0, 500, 0],
+  [0, 0, -500],
 ]
 
 export default P5Canvas({

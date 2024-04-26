@@ -1,4 +1,6 @@
+import p5 from 'p5'
 import { Position3D } from 'p5utils/src/3d'
+import { randomIntInAsymmetricRange } from 'utils'
 import {
   CameraLookAhead,
   CameraZ,
@@ -6,19 +8,17 @@ import {
   DefaultTurnFrames,
   DownFramesLength,
   FloorLength,
-  FovyValue,
-  MaxVisibleLength,
-  wh,
-  ww,
 } from '../../../config'
 import { ScaffoldValues } from '../scaffold'
 import { createAccumulatedDistanceArray, createSinArray, getStairUpDown } from './movement'
-import { randomIntInAsymmetricRange } from 'utils'
-import p5 from 'p5'
+
+const MinFallOff = 50
+const DefaultFallOff = 250
+let fallOffValue = DefaultFallOff
 
 export const cameraReset = (visibility = 1.0) => {
-  const visibleLength = MaxVisibleLength * visibility
-  p.perspective(FovyValue, ww / wh, 10, visibleLength)
+  fallOffValue = MinFallOff + DefaultFallOff * visibility
+  // p.perspective(FovyValue, ww / wh, 10)
   cameraWithLight(0, 0, CameraZ, 0, 0, CameraZ - CameraLookAhead)
 }
 
@@ -33,16 +33,26 @@ export const moveCamera =
 
 export const cameraWithLight = (...[x, y, z, dx, dy, dz]: [...Position3D, ...Position3D]) => {
   p.camera(x, y, z, dx, dy, dz)
-  p.ambientLight(120)
-  p.lightFalloff(3, 0, 0)
-  p.directionalLight(50, 50, 50, 0, 1, -1)
-  p.spotLight(50, 50, 50, x, y, z, ...normalize(dx, dy, dz), Math.PI * 20, 50)
 
-  p.pointLight(250, 250, 250, x, y, z - randomIntInAsymmetricRange(120))
-  p.pointLight(150, 150, 150, x, y, z)
+  p.lightFalloff(0.5, 1 / fallOffValue, 0)
 
-  p.specularMaterial(10)
-  p.shininess(5)
+  const ambiendValue = 20
+  p.directionalLight(ambiendValue, ambiendValue, ambiendValue, 0, 1, 0)
+  p.spotLight(
+    ambiendValue,
+    ambiendValue,
+    ambiendValue,
+    x,
+    y,
+    z,
+    ...normalize(dx, dy, dz),
+    Math.PI * 10,
+    50
+  )
+
+  const v = 200
+  p.pointLight(v, v, v, x, y, z - randomIntInAsymmetricRange(20))
+  p.pointLight(v, v, v, x, y, z)
 }
 
 const normalize = (...xyz: Position3D): Position3D => {

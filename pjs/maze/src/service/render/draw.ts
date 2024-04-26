@@ -25,19 +25,20 @@ export const triggerFadeOut = (frames: number) =>
 
 const drawGeometries = (geos: Geometry[]): void => {
   p.noStroke()
-  p.texture(getSkin())
+  p.fill(127)
+  // p.texture(getSkin())
   geos.forEach((geo) => p.model(geo))
 }
 
 let skin: p5.Image
 const getSkin = () => {
-  if (!skin) skin = p.createImage(300, 300)
+  if (!skin) skin = p.createImage(50, 50)
   skin.loadPixels()
   updateImagePixels(skin, ([r, g, b, a]) => {
-    if (fireByRate(0.5)) return [r,g,b,a]
-    if (fireByRate(0.95)) return [20, 20, 20, 255]
-    const v = randomIntInclusiveBetween(0, 10)
-    return [v, v, v, 100]
+    // if (fireByRate(0.2)) return [r,g,b,a]
+    if (fireByRate(0.5)) return [120, 120, 120, 255]
+    // const v = fireByRate(0.5) ? 120 : randomIntInclusiveBetween(0, 250)
+    return [randomIntInclusiveBetween(120, 250),randomIntInclusiveBetween(120, 250),randomIntInclusiveBetween(120, 250), 255]
   })
   skin.updatePixels()
   return skin
