@@ -1,12 +1,12 @@
-import { LR } from "src/utils/direction"
+import { LR } from 'src/utils/direction'
 import {
   DistortionDelta,
   Scaffold,
   ScaffoldLayer,
   ScaffoldLayerPart,
-  ScaffoldLayerPartLength
+  ScaffoldLayerPartLength,
 } from '../types'
-import { iterateScaffold, slideScaffoldLayers } from '../utils'
+import { iterateScaffold, slideScaffoldLayers, turnScaffold } from '../utils'
 import { createDistortionDelta } from './delta'
 
 export type DeltaScaffold = Scaffold<DistortionDelta>
@@ -27,8 +27,9 @@ export const createDistortionScaffold = (): DistortionScaffold => {
     slideGo: () => {
       scaffold = slideScaffoldLayers(scaffold, 2, createScaffoldLayer)
     },
-    slideTurn: () => {
-      throw Error('not implemented')
+    slideTurn: (lr: LR) => {
+      scaffold = turnScaffold(scaffold, lr, createScaffoldLayer)
+      iterateScaffold(scaffold, (entity) => turnDistortionDelta(entity.values, lr))
     },
     updateDeltas: (range, speed) => {
       iterateScaffold(scaffold, (entity) => entity.move(range, speed))
@@ -45,3 +46,11 @@ const createScaffoldLayer = (): ScaffoldLayer<DistortionDelta> => ({
 
 const createScaffoldLayerPart = (): ScaffoldLayerPart<DistortionDelta> =>
   [...Array(ScaffoldLayerPartLength)].map(createDistortionDelta)
+
+export const turnDistortionDelta = (deltaValues: DistortionDelta['values'], lr: LR) => {
+  return [
+    lr === 'left' ? -deltaValues[2] : deltaValues[2],
+    deltaValues[1],
+    lr === 'right' ? -deltaValues[0] : deltaValues[0],
+  ]
+}

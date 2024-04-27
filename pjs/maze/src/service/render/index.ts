@@ -48,9 +48,12 @@ export const renderTurn =
   (direction: LR): RenderHandler =>
   ({ renderGrid, speed, scaffoldValues, color }) => {
     const LRDeltaValues = getTurnLRDeltaArray(speed)
-    const drawFrameSequence = LRDeltaValues.map((turnDelta) => () => {
+    const drawFrameSequence = LRDeltaValues.map((turnDelta, i) => () => {
       moveCamera(0, direction === 'right' ? turnDelta : -turnDelta)(scaffoldValues)
       drawTerrain(renderGrid, scaffoldValues, color)
+      if (i === LRDeltaValues.length - 1) {
+        Distortion.slideTurn(direction)
+      }
     })
     RenderQueue.update(drawFrameSequence)
   }
