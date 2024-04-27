@@ -53,7 +53,7 @@ const draw = () => {
   // geometryStore.render()]
 
   zPos.renew()
-  p.lightFalloff(0, 1/300, 0)
+  p.lightFalloff(0, 1 / 300, 0)
   p.pointLight(255, 255, 255, 0, 0, zPos.current)
 
   positions.forEach((position) => {
@@ -61,7 +61,7 @@ const draw = () => {
       p.translate(...position)
       p.box(500)
     })
-  })  
+  })
 }
 
 const zPos = makePingpongNumberStore(() => 10, -1000, 1000, 0)

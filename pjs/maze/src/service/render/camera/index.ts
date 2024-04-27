@@ -18,7 +18,6 @@ let fallOffValue = DefaultFallOff
 
 export const cameraReset = (visibility = 1.0) => {
   fallOffValue = MinFallOff + DefaultFallOff * visibility
-  // p.perspective(FovyValue, ww / wh, 10)
   cameraWithLight(0, 0, CameraZ, 0, 0, CameraZ - CameraLookAhead)
 }
 
@@ -31,17 +30,19 @@ export const moveCamera =
     cameraWithLight(0, finalY, finalZ, finalX, finalY, finalZ - CameraLookAhead)
   }
 
+const PointLightVal = 200
+const AmbientLightVal = 20
+
 export const cameraWithLight = (...[x, y, z, dx, dy, dz]: [...Position3D, ...Position3D]) => {
   p.camera(x, y, z, dx, dy, dz)
 
   p.lightFalloff(0.5, 1 / fallOffValue, 0)
-
-  const ambiendValue = 20
-  p.directionalLight(ambiendValue, ambiendValue, ambiendValue, 0, 1, 0)
+  
+  p.directionalLight(AmbientLightVal, AmbientLightVal, AmbientLightVal, 0, 1, 0)
   p.spotLight(
-    ambiendValue,
-    ambiendValue,
-    ambiendValue,
+    AmbientLightVal,
+    AmbientLightVal,
+    AmbientLightVal,
     x,
     y,
     z,
@@ -49,10 +50,8 @@ export const cameraWithLight = (...[x, y, z, dx, dy, dz]: [...Position3D, ...Pos
     Math.PI * 10,
     50
   )
-
-  const v = 200
-  p.pointLight(v, v, v, x, y, z - randomIntInAsymmetricRange(20))
-  p.pointLight(v, v, v, x, y, z)
+  p.pointLight(PointLightVal, PointLightVal, PointLightVal, x, y, z - randomIntInAsymmetricRange(20))
+  p.pointLight(PointLightVal, PointLightVal, PointLightVal, x, y, z)
 }
 
 const normalize = (...xyz: Position3D): Position3D => {
