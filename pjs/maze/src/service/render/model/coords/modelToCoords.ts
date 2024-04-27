@@ -1,4 +1,5 @@
-import { FloorLength, PathLength } from '../../../../config'
+import { sumPosition3d } from 'p5utils/src/3d'
+import { FloorLength, PathLength, WallHeight } from '../../../../config'
 import { RenderPosition } from '../../../../domain/translate/renderGrid/renderSpec'
 import { Scaffold } from '../../scaffold'
 import {
@@ -10,7 +11,7 @@ import {
   RenderModel,
   ShapeCoordinates,
 } from '../types'
-import { getAdjacentBlockY, getAdjacentBlockZ, makeGetRenderBlock } from './block'
+import { getAdjacentBlockY, getAdjacentBlockZ, getBlockCenter, makeGetRenderBlock } from './block'
 import { getNormalPosition } from './normal'
 
 export const convertToGeometrySpecList = (
@@ -56,6 +57,7 @@ const convertStairModel = (renderBlock: RenderBlockCoords): GeometrySpec[] => {
   const corridorBlock = getAdjacentBlockZ(oneStairDownBlock, { z: -PathLength })
   const corridorBlock2 = getAdjacentBlockZ(corridorBlock, { z: -FloorLength })
   const corridorBlock3 = getAdjacentBlockZ(corridorBlock2, { z: -PathLength })
+  const defaultNormalPosition = sumPosition3d(getBlockCenter(oneStairDownBlock), [0, WallHeight, FloorLength])
   return [
     flatStair(oneStairDownBlock),
     sideWallOnLeft(oneStairDownBlock),
@@ -65,7 +67,7 @@ const convertStairModel = (renderBlock: RenderBlockCoords): GeometrySpec[] => {
     ...getCorridor(corridorBlock3),
   ].map((coords) => ({
     coords,
-    normalPosition: [0, 0, 0], // Later
+    normalPosition: defaultNormalPosition,
   }))
 }
 

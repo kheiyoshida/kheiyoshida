@@ -32,7 +32,7 @@ export type ShapeCoordinates = Position3D[]
 export type RenderBlockPosition = {
   z: number
   x: RenderSpec.RenderPosition
-  y?: never // maybe y in the future
+  y?: number // maybe y in the future
 }
 
 export type RenderBlockCoords = {

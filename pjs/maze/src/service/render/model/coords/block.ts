@@ -5,14 +5,16 @@ import { Position3D, sumPosition3d } from 'p5utils/src/3d'
 
 export const makeGetRenderBlock =
   (scaffold: Scaffold) =>
-  ({ x, z }: RenderBlockPosition): RenderBlockCoords => {
-    if (z < 0) {
-      throw Error(`z is out of range: ${z}`)
-    }
-    return {
+  ({ x, z, y }: RenderBlockPosition): RenderBlockCoords => {
+    if (z < 0) throw Error(`z is out of range: ${z}`)
+    const block: RenderBlockCoords = {
       front: getBlockLayer(scaffold[z], x),
       rear: getBlockLayer(scaffold[z + 1], x),
     }
+    if (y !== undefined && y === -1) {
+      return getAdjacentBlockY(block)
+    }
+    return block
   }
 
 export const getBlockLayer = (
@@ -37,6 +39,10 @@ const TranslateMap: Record<
   [RenderPosition.RIGHT]: [ScaffoldLayerCoordPosition.CR, ScaffoldLayerCoordPosition.RR],
 }
 
+/**
+ * get one floor down block virtually
+ * *doesn't support upper block for now
+ */
 export const getAdjacentBlockY = (block: RenderBlockCoords) => {
   return {
     front: getAdjacentLayerY(block.front),
@@ -76,8 +82,7 @@ const addValueToLBlockLayer = (
 }
 
 export const getBlockCenter = (block: RenderBlockCoords): Position3D => {
-  return sumPosition3d(
-    ...Object.values(block.front),
-    ...Object.values(block.rear),
-  ).map(v => v / 8) as Position3D
+  return sumPosition3d(...Object.values(block.front), ...Object.values(block.rear)).map(
+    (v) => v / 8
+  ) as Position3D
 }

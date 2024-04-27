@@ -28,6 +28,12 @@ const getNormalPositionBlock = (
         x: RenderPosition.CENTER,
         z: position.z,
       }
+    case RenderModel.StairCeil:
+      return {
+        x: RenderPosition.CENTER,
+        z: position.z,
+        y: -1
+      }
     default:
       return position
   }
