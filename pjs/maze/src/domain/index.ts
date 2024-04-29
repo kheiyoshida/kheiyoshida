@@ -1,14 +1,10 @@
 import { MazeState } from '../store'
 import { StatusState } from '../store/status'
 import { MapInfo, getMapInfoFromCurrentState } from './interface/mapper'
-import {
-  ScaffoldParams,
-  getScaffoldParams,
-  getVisibilityFromCurrentState,
-  getWalkSpeedFromCurrentState,
-} from './translate'
+import { ScaffoldParams, getScaffoldParams, getWalkSpeedFromCurrentState } from './translate'
 import { domainColorLogic } from './translate/color'
 import { ColorOperationParams } from './translate/color/types'
+import { LightVariables, getLightColorIntention } from './translate/light'
 import { getRenderGridFromCurrentState } from './translate/renderGrid'
 import { RenderGrid } from './translate/renderGrid/renderSpec'
 
@@ -16,7 +12,7 @@ export type DomainIntention = {
   renderGrid: RenderGrid
   speed: number
   map: MapInfo
-  visibility: number
+  light: LightVariables
   scaffold: ScaffoldParams
   color: ColorOperationParams
 }
@@ -28,7 +24,7 @@ export const getDomainIntention = (): DomainIntention => {
     renderGrid: getRenderGridFromCurrentState(),
     speed: getWalkSpeedFromCurrentState(),
     map: getMapInfoFromCurrentState(),
-    visibility: getVisibilityFromCurrentState(),
+    light: getLightColorIntention(),
     scaffold: getScaffoldParams(),
     color: domainColorLogic(),
   }

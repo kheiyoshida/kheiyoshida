@@ -1,5 +1,4 @@
-import { toFloatPercent } from 'utils'
-import { statusStore, store } from '../../store'
+import { statusStore } from '../../store'
 import { createDecreasingParameter, createIncreasingParameter } from './utils/params'
 
 export type ScaffoldParams = {
@@ -30,9 +29,3 @@ export const getWalkSpeedFromCurrentState = () => {
 }
 
 const calcSpeed = createDecreasingParameter(0, 1, 80)
-
-export const getVisibilityFromCurrentState = (): number => {
-  const floor = store.current.floor
-  if (floor < 5) return toFloatPercent(statusStore.current.stamina)
-  return Math.max(0.1, toFloatPercent(statusStore.current.stamina - floor))
-}

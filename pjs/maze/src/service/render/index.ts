@@ -5,27 +5,28 @@ import { logger } from '../../utils/logger'
 import { RenderHandler } from '../consumer'
 import { cameraReset, moveCamera } from './camera'
 import { DownstairsValues, getGoDeltaArray, getTurnLRDeltaArray } from './camera/movement'
-import { drawTerrain, triggerFadeOut } from './draw'
+import { drawTerrain } from './draw'
 import { RenderQueue } from './queue'
 import { Distortion } from './scaffold/distortion'
+import { triggerFadeOut } from './camera/light'
 
 export const renderCurrentView: RenderHandler = ({
   renderGrid,
-  visibility,
+  light,
   scaffoldValues,
   color,
 }) => {
   const drawFrame = () => {
-    cameraReset(visibility)
+    cameraReset(light)
     drawTerrain(renderGrid, scaffoldValues, color)
   }
   RenderQueue.push(drawFrame)
 }
 
-export const renderGo: RenderHandler = ({ renderGrid, speed, scaffoldValues, color }) => {
+export const renderGo: RenderHandler = ({ renderGrid, speed, scaffoldValues, color, light }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
-    moveCamera({ zDelta }, scaffoldValues)
+    moveCamera({ zDelta }, scaffoldValues, light)
     drawTerrain(renderGrid, scaffoldValues, color)
     if (i === GoMoveMagValues.length - 1) {
       Distortion.slideGo()
@@ -36,10 +37,10 @@ export const renderGo: RenderHandler = ({ renderGrid, speed, scaffoldValues, col
 
 export const renderTurn =
   (direction: LR): RenderHandler =>
-  ({ renderGrid, speed, scaffoldValues, color }) => {
+  ({ renderGrid, speed, scaffoldValues, color, light }) => {
     const LRDeltaValues = getTurnLRDeltaArray(speed)
     const drawFrameSequence = LRDeltaValues.map((turnDelta, i) => () => {
-      moveCamera({ turnDelta: direction === 'right' ? turnDelta : -turnDelta }, scaffoldValues)
+      moveCamera({ turnDelta: direction === 'right' ? turnDelta : -turnDelta }, scaffoldValues, light)
       drawTerrain(renderGrid, scaffoldValues, color)
       if (i === LRDeltaValues.length - 1) {
         Distortion.slideTurn(direction)
@@ -48,22 +49,22 @@ export const renderTurn =
     RenderQueue.update(drawFrameSequence)
   }
 
-export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffoldValues, color }) => {
+export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffoldValues, color, light }) => {
   const drawFrameSequence = DownstairsValues.map((values, i) => () => {
     if (i === 0) {
       triggerFadeOut(DownstairsValues.length)
       eventBlockRequired()
     }
-    moveCamera(values, scaffoldValues)
+    moveCamera(values, scaffoldValues, light)
     drawTerrain(renderGrid, scaffoldValues, color)
   })
   RenderQueue.push(...drawFrameSequence)
 }
 
-export const renderProceedToNextFloor: RenderHandler = ({ speed, scaffoldValues, color }) => {
+export const renderProceedToNextFloor: RenderHandler = ({ speed, scaffoldValues, color, light }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
-    moveCamera({ zDelta }, scaffoldValues)
+    moveCamera({ zDelta }, scaffoldValues, light)
     drawTerrain(corridorToNextFloor, scaffoldValues, color)
     if (i === GoMoveMagValues.length - 1) {
       unblockEvents()
@@ -73,13 +74,13 @@ export const renderProceedToNextFloor: RenderHandler = ({ speed, scaffoldValues,
 }
 
 const DieFrames = 48
-export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, color, visibility }) => {
+export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, color, light }) => {
   const dieSequence = [...Array(DieFrames)].map((_, i) => () => {
     if (i === 0) {
       triggerFadeOut(DieFrames)
       eventBlockRequired()
     }
-    cameraReset(visibility)
+    cameraReset(light)
     drawTerrain(renderGrid, scaffoldValues, color)
     if (i === DieFrames - 1) {
       resurrectEvent()
@@ -89,10 +90,10 @@ export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, color, vi
   logger.log(RenderQueue.length)
 }
 
-export const renderResurrect: RenderHandler = ({ speed, scaffoldValues, color }) => {
+export const renderResurrect: RenderHandler = ({ speed, scaffoldValues, color, light }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta) => () => {
-    moveCamera({ zDelta }, scaffoldValues)
+    moveCamera({ zDelta }, scaffoldValues, light)
     drawTerrain(corridorToNextFloor, scaffoldValues, color)
   })
   RenderQueue.update(drawFrameSequence)

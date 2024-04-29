@@ -5,10 +5,6 @@ import { calculateGeometries } from './model'
 import { ScaffoldValues, createScaffold } from './scaffold'
 import { SkinColorManager } from './texture'
 
-export const triggerFadeOut = (frames: number) => {
-  // ColorManager.setFixedOperation(['fadeout', frames], frames)
-}
-
 export const drawTerrain = (
   renderGrid: RenderGrid,
   values: ScaffoldValues,

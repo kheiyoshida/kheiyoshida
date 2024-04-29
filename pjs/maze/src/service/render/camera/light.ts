@@ -1,21 +1,28 @@
 import p5 from 'p5'
 import { Position3D } from 'p5utils/src/3d'
 import { randomIntInAsymmetricRange } from 'utils'
+import { createColorManager } from '../color'
+import { Colors } from '../color/colors'
+import { LightVariables } from '../../../domain/translate/light'
 
-const PointLightVal = 200
 const AmbientLightVal = 20
 const MinFallOff = 50
 const DefaultFallOff = 250
 
-export const light = (
+export const LightColorManager = createColorManager(Colors.white)
+
+export const triggerFadeOut = (frames: number) => {
+  LightColorManager.setFixedOperation(['fadeout', frames], frames)
+}
+
+export const handleLight = (
   cameraPosition: Position3D,
   directionalPosition: Position3D,
-  visibility?: number
+  light: LightVariables
 ) => {
-  if (visibility) {
-    const falloff = calcLightFalloff(visibility)
-    p.lightFalloff(0.5, falloff, 0)
-  }
+  LightColorManager.resolve(light.colorParams)
+  const falloff = calcLightFalloff(light.visibility)
+  p.lightFalloff(0.5, falloff, 0)
 
   const ambientColor = [AmbientLightVal, AmbientLightVal, AmbientLightVal] as const
   p.directionalLight(...ambientColor, 0, 1, 0)
@@ -27,7 +34,7 @@ export const light = (
     50
   )
 
-  const pointLightColor = [PointLightVal, PointLightVal, PointLightVal] as const
+  const pointLightColor = LightColorManager.currentRGB
   p.pointLight(...pointLightColor, ...cameraPosition)
 
   p.pointLight(

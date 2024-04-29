@@ -2,8 +2,9 @@ import p5 from 'p5'
 import { updateImagePixels } from 'p5utils/src/media/image/data'
 import { fireByRate, randomFloatBetween } from 'utils'
 import { createColorManager } from '../color'
+import { Colors } from '../color/colors'
 
-export const SkinColorManager = createColorManager([120, 120, 120])
+export const SkinColorManager = createColorManager(Colors.gray)
 
 let skin: p5.Image
 export const getSkin = () => {

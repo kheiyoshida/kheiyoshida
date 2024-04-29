@@ -11,6 +11,7 @@ const setup = () => {
   p.angleMode(p.DEGREES)
   p.perspective(FovyValue, ww / wh, 10, 8000)
   p.frameRate(FPS)
+  p.fill(0)
   p.noStroke()
 
   // TODO: replace with native event

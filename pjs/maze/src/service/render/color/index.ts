@@ -23,6 +23,7 @@ export const createColorManager = (
       return current
     },
     get currentRGB() {
+      if (!current) return defaultRGB
       return [p.red(current), p.green(current), p.blue(current)] as RGB
     },
     resolve([pattern, ...args]) {
@@ -48,5 +49,6 @@ export const createColorManager = (
       fixedOp = operation
       fixedOpTTL = ttl
     },
+    
   }
 }

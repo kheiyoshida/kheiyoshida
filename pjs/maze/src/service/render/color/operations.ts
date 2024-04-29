@@ -14,7 +14,7 @@ export const createOperationMap = (defaultColorRGB: RGB): ColorOperationMap => (
   gradation: (c, [min, max]) => moveColor(c, randomColorVector([min, max])),
   return: (c, [lerpVal]) => p.lerpColor(c, p.color(...defaultColorRGB), lerpVal),
   random: randomColor,
-  fadeout: (c, [steps]) => fadeOut(steps, c, p.color(...defaultColorRGB))(),
+  fadeout: (c, [steps]) => fadeOut(steps, c, p.color(...Colors.darkness))(),
 })
 
 export const fadeOut = (
