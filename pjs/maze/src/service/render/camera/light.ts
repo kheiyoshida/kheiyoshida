@@ -4,6 +4,8 @@ import { randomIntInAsymmetricRange } from 'utils'
 
 const PointLightVal = 200
 const AmbientLightVal = 20
+const MinFallOff = 50
+const DefaultFallOff = 250
 
 export const light = (
   cameraPosition: Position3D,
@@ -35,9 +37,6 @@ export const light = (
     cameraPosition[2] - randomIntInAsymmetricRange(50)
   )
 }
-
-const MinFallOff = 50
-const DefaultFallOff = 250
 
 const calcLightFalloff = (visibility = 1.0) => {
   return 1 / (MinFallOff + DefaultFallOff * visibility)
