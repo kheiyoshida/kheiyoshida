@@ -1,6 +1,6 @@
 import p5, { Geometry } from 'p5'
 import { updateImagePixels } from 'p5utils/src/media/image/data'
-import { fireByRate, randomIntInclusiveBetween } from 'utils'
+import { fireByRate, randomFloatBetween } from 'utils'
 import { ColorOperationParams } from '../../domain/translate/color/types'
 import { RenderGrid } from '../../domain/translate/renderGrid/renderSpec'
 import { createColorManager } from './color'
@@ -32,14 +32,21 @@ const drawGeometries = (geos: Geometry[]): void => {
 
 let skin: p5.Image
 const getSkin = () => {
-  if (!skin) skin = p.createImage(50, 50)
+  if (!skin) skin = p.createImage(200, 200)
   skin.loadPixels()
+  if (fireByRate(0.88)) {
+    updateImagePixels(skin, ([r, g, b, a]) => {
+      return [120, 120, 120, 255]
+    })
+  }
   updateImagePixels(skin, ([r, g, b, a]) => {
-    // if (fireByRate(0.2)) return [r,g,b,a]
     if (fireByRate(0.5)) return [120, 120, 120, 255]
-    // const v = fireByRate(0.5) ? 120 : randomIntInclusiveBetween(0, 250)
-    return [randomIntInclusiveBetween(120, 250),randomIntInclusiveBetween(120, 250),randomIntInclusiveBetween(120, 250), 255]
+    if (fireByRate(0.9)) return [r, g, b, a]
+    return [getColorValue(0.2), getColorValue(0.2),getColorValue(0.2), 255]
   })
   skin.updatePixels()
+
   return skin
 }
+
+const getColorValue = (level = 1.0) => 120 + randomFloatBetween(0, 10 * level) * 12
