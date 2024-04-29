@@ -27,7 +27,7 @@ export const getLightColor = (): ColorOperationParams => {
 }
 
 const pickPattern = (sanity: number) => {
-  if (sanity > 80) return sanePicker()
+  if (sanity > 40) return sanePicker()
   else return insanePicker()
 }
 

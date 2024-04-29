@@ -1,30 +1,28 @@
-import { makeWeightedRandomPicker as createRandomSelect } from 'utils'
+import { makeWeightedRandomPicker } from 'utils'
 import { ParameterizeState, ColorOperationPattern } from './types'
 
-const selectA = createRandomSelect<ColorOperationPattern>([
+const selectA = makeWeightedRandomPicker<ColorOperationPattern>([
   [20, 'stay'],
   [10, 'gradation'],
   [20, 'return'],
 ])
 
-const selectB = createRandomSelect<ColorOperationPattern>([
+const selectB = makeWeightedRandomPicker<ColorOperationPattern>([
   [20, 'stay'],
   [10, 'gradation'],
   [20, 'return'],
 ])
 
-const selectC = createRandomSelect<ColorOperationPattern>([
+const selectC = makeWeightedRandomPicker<ColorOperationPattern>([
   [30, 'stay'],
   [20, 'gradation'],
   [30, 'return'],
-  // [1, 'random'],
 ])
 
-const selectD = createRandomSelect<ColorOperationPattern>([
+const selectD = makeWeightedRandomPicker<ColorOperationPattern>([
   [20, 'stay'],
   [20, 'gradation'],
   [35, 'return'],
-  // [1, 'random'],
 ])
 
 export const parameterizeEffectScene: ParameterizeState = ({ floor, sanity }) => {

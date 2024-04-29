@@ -4,7 +4,6 @@ import { parameterizeEffectScene } from './effect'
 import { ColorOperationParams } from './types'
 
 export const domainColorLogic = (): ColorOperationParams => {
-  return ['default']
   const state = { floor: store.current.floor, ...statusStore.current }
   const [mid, low] = floorToThreshold(state.floor)
   if (state.sanity >= mid) return parameterizeNormalScene(state)

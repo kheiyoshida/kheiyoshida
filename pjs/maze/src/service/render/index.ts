@@ -4,18 +4,13 @@ import { corridorToNextFloor } from '../../domain/translate/renderGrid/scenes'
 import { logger } from '../../utils/logger'
 import { RenderHandler } from '../consumer'
 import { cameraReset, moveCamera } from './camera'
+import { triggerFadeOut } from './camera/light'
 import { DownstairsValues, getGoDeltaArray, getTurnLRDeltaArray } from './camera/movement'
-import { drawTerrain } from './draw'
+import { drawTerrain, updateAesthetics } from './draw'
 import { RenderQueue } from './queue'
 import { Distortion } from './scaffold/distortion'
-import { triggerFadeOut } from './camera/light'
 
-export const renderCurrentView: RenderHandler = ({
-  renderGrid,
-  light,
-  scaffoldValues,
-  color,
-}) => {
+export const renderCurrentView: RenderHandler = ({ renderGrid, light, scaffoldValues, color }) => {
   const drawFrame = () => {
     cameraReset(light)
     drawTerrain(renderGrid, scaffoldValues, color)
@@ -40,7 +35,11 @@ export const renderTurn =
   ({ renderGrid, speed, scaffoldValues, color, light }) => {
     const LRDeltaValues = getTurnLRDeltaArray(speed)
     const drawFrameSequence = LRDeltaValues.map((turnDelta, i) => () => {
-      moveCamera({ turnDelta: direction === 'right' ? turnDelta : -turnDelta }, scaffoldValues, light)
+      moveCamera(
+        { turnDelta: direction === 'right' ? turnDelta : -turnDelta },
+        scaffoldValues,
+        light
+      )
       drawTerrain(renderGrid, scaffoldValues, color)
       if (i === LRDeltaValues.length - 1) {
         Distortion.slideTurn(direction)
@@ -61,9 +60,19 @@ export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffoldValues, 
   RenderQueue.push(...drawFrameSequence)
 }
 
-export const renderProceedToNextFloor: RenderHandler = ({ speed, scaffoldValues, color, light }) => {
+export const renderProceedToNextFloor: RenderHandler = ({
+  speed,
+  scaffoldValues,
+  color,
+  light,
+  map: { floor },
+}) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
+    if (i === 0) {
+      updateAesthetics(floor)
+      eventBlockRequired()
+    }
     moveCamera({ zDelta }, scaffoldValues, light)
     drawTerrain(corridorToNextFloor, scaffoldValues, color)
     if (i === GoMoveMagValues.length - 1) {

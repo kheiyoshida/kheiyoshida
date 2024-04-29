@@ -1,14 +1,14 @@
-import { clamp, makeWeightedRandomPicker as createRandomSelect } from 'utils'
+import { clamp, makeWeightedRandomPicker } from 'utils'
 import { ColorOperationPattern, ParameterizeState } from './types'
 
-const selectA = createRandomSelect<ColorOperationPattern>([
+const selectA = makeWeightedRandomPicker<ColorOperationPattern>([
   [80, 'default'],
   [15, 'stay'],
   [2.5, 'gradation'],
   [2.5, 'return'],
 ])
 
-const selectB = createRandomSelect<ColorOperationPattern>([
+const selectB = makeWeightedRandomPicker<ColorOperationPattern>([
   [60, 'default'],
   [15, 'stay'],
   [7.5, 'gradation'],

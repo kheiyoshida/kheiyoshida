@@ -7,28 +7,34 @@ export interface ColorManager {
   currentRGB: RGB
   resolve: (params: ColorOperationParams) => void
   setFixedOperation: (operationParams: ColorOperationParams, ttl: number) => void
+  changeDefaultColor: () => void
 }
 
 export type RGB = [number, number, number]
 
-export const createColorManager = (
+export const makeColorManager = (
   defaultRGB: RGB,
+  changeDefaultColor?: (rgb: RGB) => RGB,
   operationMap: ColorOperationMap = createOperationMap(defaultRGB)
 ): ColorManager => {
   let current: p5.Color
   let fixedOp: ColorOperationParams | null = null
   let fixedOpTTL = 0
+  const init = () => {
+    current = p.color(...defaultRGB)
+  }
   return {
     get current() {
+      if (!current) init()
       return current
     },
     get currentRGB() {
-      if (!current) return defaultRGB
+      if (!current) init()
       return [p.red(current), p.green(current), p.blue(current)] as RGB
     },
     resolve([pattern, ...args]) {
       if (!current) {
-        current = p.color(...defaultRGB)
+        init()
       }
       if (fixedOp === null) {
         current = operationMap[pattern](current, args)
@@ -49,6 +55,11 @@ export const createColorManager = (
       fixedOp = operation
       fixedOpTTL = ttl
     },
-    
+    changeDefaultColor() {
+      if (changeDefaultColor) {
+        defaultRGB = changeDefaultColor(defaultRGB)
+        operationMap = createOperationMap(defaultRGB)
+      }
+    }
   }
 }

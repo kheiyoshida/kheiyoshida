@@ -1,7 +1,7 @@
 import p5 from 'p5'
 import { Position3D } from 'p5utils/src/3d'
-import { randomIntInAsymmetricRange } from 'utils'
-import { createColorManager } from '../color'
+import { randomIntInAsymmetricRange, randomIntInclusiveBetween } from 'utils'
+import { makeColorManager } from '../color'
 import { Colors } from '../color/colors'
 import { LightVariables } from '../../../domain/translate/light'
 
@@ -9,7 +9,11 @@ const AmbientLightVal = 20
 const MinFallOff = 50
 const DefaultFallOff = 250
 
-export const LightColorManager = createColorManager(Colors.white)
+export const LightColorManager = makeColorManager(Colors.white, () => [
+  randomIntInclusiveBetween(200, 250),
+  randomIntInclusiveBetween(200, 250),
+  randomIntInclusiveBetween(200, 250),
+])
 
 export const triggerFadeOut = (frames: number) => {
   LightColorManager.setFixedOperation(['fadeout', frames], frames)
