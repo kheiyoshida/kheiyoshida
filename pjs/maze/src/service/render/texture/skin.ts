@@ -53,7 +53,8 @@ const makeSimpleSkin = (g: p5.Graphics) => (color: RGB) => {
   g.background(color)
   g.fill(0)
   const v = randomIntInclusiveBetween(2, 4)
-  g.rect(g.width / 4, g.height / v, g.width / 2, g.height / 2)
+  const h = randomIntInclusiveBetween(2, 4)
+  g.rect(g.width / 4, g.height / v, g.width / 2, g.height / h)
   return g
 }
 

@@ -57,18 +57,26 @@ const convertStairModel = (renderBlock: RenderBlockCoords): GeometrySpec[] => {
   const corridorBlock = getAdjacentBlockZ(oneStairDownBlock, { z: -PathLength })
   const corridorBlock2 = getAdjacentBlockZ(corridorBlock, { z: -FloorLength })
   const corridorBlock3 = getAdjacentBlockZ(corridorBlock2, { z: -PathLength })
-  const defaultNormalPosition = sumPosition3d(getBlockCenter(oneStairDownBlock), [0, WallHeight, FloorLength])
-  return [
+  const stairSpecs = bindNormal([
     flatStair(oneStairDownBlock),
     sideWallOnLeft(oneStairDownBlock),
     sideWallOnRight(oneStairDownBlock),
-    ...getCorridor(corridorBlock),
-    ...getCorridor(corridorBlock2),
-    ...getCorridor(corridorBlock3),
-  ].map((coords) => ({
-    coords,
-    normalPosition: defaultNormalPosition,
-  }))
+  ], oneStairDownBlock)
+  const corridorSpecs = bindNormal(getCorridor(corridorBlock), corridorBlock)
+  const corridorSpecs2 = bindNormal(getCorridor(corridorBlock2), corridorBlock2)
+  const corridorSpecs3 = bindNormal(getCorridor(corridorBlock3), corridorBlock3)
+  return [
+    ...stairSpecs,
+    ...corridorSpecs,
+    ...corridorSpecs2,
+    ...corridorSpecs3,
+  ]
+  function bindNormal(coords: ShapeCoordinates[], renderBlock: RenderBlockCoords): GeometrySpec[] {
+    return coords.map((coord) => ({
+      coords: coord,
+      normalPosition: getBlockCenter(renderBlock),
+    }))
+  }
 }
 
 const getCorridor = (corridorBlock: RenderBlockCoords): ShapeCoordinates[] => {

@@ -1,11 +1,10 @@
 import p5 from 'p5'
 import { Position3D } from 'p5utils/src/3d'
 import { randomIntInAsymmetricRange, randomIntInclusiveBetween } from 'utils'
+import { LightVariables } from '../../../domain/translate/light'
 import { makeColorManager } from '../color'
 import { Colors } from '../color/colors'
-import { LightVariables } from '../../../domain/translate/light'
 
-const AmbientLightVal = 20
 const MinFallOff = 50
 const DefaultFallOff = 250
 
@@ -28,17 +27,14 @@ export const handleLight = (
   const falloff = calcLightFalloff(light.visibility)
   p.lightFalloff(0.5, falloff, 0)
 
-  const ambientColor = [AmbientLightVal, AmbientLightVal, AmbientLightVal] as const
-  p.directionalLight(...ambientColor, 0, 1, 0)
+  const pointLightColor = LightColorManager.currentRGB
   p.spotLight(
-    ...ambientColor,
+    ...pointLightColor,
     ...cameraPosition,
     ...normalize(...directionalPosition),
     Math.PI * 10,
-    50
+    30
   )
-
-  const pointLightColor = LightColorManager.currentRGB
   p.pointLight(...pointLightColor, ...cameraPosition)
 
   p.pointLight(
