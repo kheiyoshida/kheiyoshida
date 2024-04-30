@@ -10,19 +10,19 @@ import { drawTerrain, updateAesthetics } from './draw'
 import { RenderQueue } from './queue'
 import { Distortion } from './scaffold/distortion'
 
-export const renderCurrentView: RenderHandler = ({ renderGrid, light, scaffoldValues, color }) => {
+export const renderCurrentView: RenderHandler = ({ renderGrid, light, scaffoldValues }) => {
   const drawFrame = () => {
     cameraReset(light)
-    drawTerrain(renderGrid, scaffoldValues, color)
+    drawTerrain(renderGrid, scaffoldValues)
   }
   RenderQueue.push(drawFrame)
 }
 
-export const renderGo: RenderHandler = ({ renderGrid, speed, scaffoldValues, color, light }) => {
+export const renderGo: RenderHandler = ({ renderGrid, speed, scaffoldValues, light }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
     moveCamera({ zDelta }, scaffoldValues, light)
-    drawTerrain(renderGrid, scaffoldValues, color)
+    drawTerrain(renderGrid, scaffoldValues)
     if (i === GoMoveMagValues.length - 1) {
       Distortion.slideGo()
     }
@@ -32,7 +32,7 @@ export const renderGo: RenderHandler = ({ renderGrid, speed, scaffoldValues, col
 
 export const renderTurn =
   (direction: LR): RenderHandler =>
-  ({ renderGrid, speed, scaffoldValues, color, light }) => {
+  ({ renderGrid, speed, scaffoldValues, light }) => {
     const LRDeltaValues = getTurnLRDeltaArray(speed)
     const drawFrameSequence = LRDeltaValues.map((turnDelta, i) => () => {
       moveCamera(
@@ -40,7 +40,7 @@ export const renderTurn =
         scaffoldValues,
         light
       )
-      drawTerrain(renderGrid, scaffoldValues, color)
+      drawTerrain(renderGrid, scaffoldValues)
       if (i === LRDeltaValues.length - 1) {
         Distortion.slideTurn(direction)
       }
@@ -48,14 +48,14 @@ export const renderTurn =
     RenderQueue.update(drawFrameSequence)
   }
 
-export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffoldValues, color, light }) => {
+export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffoldValues, light }) => {
   const drawFrameSequence = DownstairsValues.map((values, i) => () => {
     if (i === 0) {
       triggerFadeOut(DownstairsValues.length)
       eventBlockRequired()
     }
     moveCamera(values, scaffoldValues, light)
-    drawTerrain(renderGrid, scaffoldValues, color)
+    drawTerrain(renderGrid, scaffoldValues)
   })
   RenderQueue.push(...drawFrameSequence)
 }
@@ -63,18 +63,17 @@ export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffoldValues, 
 export const renderProceedToNextFloor: RenderHandler = ({
   speed,
   scaffoldValues,
-  color,
   light,
-  map: { floor },
+  texture,
 }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
     if (i === 0) {
-      updateAesthetics(floor)
+      updateAesthetics(texture)
       eventBlockRequired()
     }
     moveCamera({ zDelta }, scaffoldValues, light)
-    drawTerrain(corridorToNextFloor, scaffoldValues, color)
+    drawTerrain(corridorToNextFloor, scaffoldValues)
     if (i === GoMoveMagValues.length - 1) {
       unblockEvents()
     }
@@ -83,14 +82,14 @@ export const renderProceedToNextFloor: RenderHandler = ({
 }
 
 const DieFrames = 48
-export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, color, light }) => {
+export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, light }) => {
   const dieSequence = [...Array(DieFrames)].map((_, i) => () => {
     if (i === 0) {
       triggerFadeOut(DieFrames)
       eventBlockRequired()
     }
     cameraReset(light)
-    drawTerrain(renderGrid, scaffoldValues, color)
+    drawTerrain(renderGrid, scaffoldValues)
     if (i === DieFrames - 1) {
       resurrectEvent()
     }
@@ -99,11 +98,18 @@ export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, color, li
   logger.log(RenderQueue.length)
 }
 
-export const renderResurrect: RenderHandler = ({ speed, scaffoldValues, color, light }) => {
+export const renderResurrect: RenderHandler = ({ speed, scaffoldValues, light, texture }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
-  const drawFrameSequence = GoMoveMagValues.map((zDelta) => () => {
+  const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
+    if (i === 0) {
+      updateAesthetics(texture)
+      eventBlockRequired()
+    }
     moveCamera({ zDelta }, scaffoldValues, light)
-    drawTerrain(corridorToNextFloor, scaffoldValues, color)
+    drawTerrain(corridorToNextFloor, scaffoldValues)
+    if (i === GoMoveMagValues.length - 1) {
+      unblockEvents()
+    }
   })
   RenderQueue.update(drawFrameSequence)
 }

@@ -38,8 +38,8 @@ const sanePicker = makeWeightedRandomPicker<ColorOperationPattern>([
 ])
 
 const insanePicker = makeWeightedRandomPicker<ColorOperationPattern>([
-  [4, 'stay'],
-  [4, 'gradation'],
+  [6, 'stay'],
+  [2, 'gradation'],
   [2, 'return'],
 ])
 

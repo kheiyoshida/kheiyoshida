@@ -1,4 +1,5 @@
-import { statusStore } from '../../store'
+import { statusStore, store } from '../../store'
+import { ColorOperationParams } from './color/types'
 import { createDecreasingParameter, createIncreasingParameter } from './utils/params'
 
 export type ScaffoldParams = {
@@ -29,3 +30,24 @@ export const getWalkSpeedFromCurrentState = () => {
 }
 
 const calcSpeed = createDecreasingParameter(0, 1, 80)
+
+export type SkinStrategy = 'simple' | 'random'
+export type TextureParams = {
+  skin: [SkinStrategy, ...number[]]
+  color: ColorOperationParams
+}
+
+export const getTextureParams = () => ({
+  skin: getTextureSkinStrategy(store.current.floor),
+  color: getTextureColor(store.current.floor),
+})
+
+const getTextureSkinStrategy = (floor: number): TextureParams['skin'] => {
+  if (floor < 3 || floor % 10 === 0) return ['simple']
+  return ['random', floor - 2]
+}
+
+const getTextureColor = (floor: number): ColorOperationParams => {
+  if (floor < 5) return ['default']
+  return ['gradation', -20, 20]
+}

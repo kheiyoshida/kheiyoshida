@@ -1,21 +1,24 @@
 import p5 from 'p5'
 import { loop, randomIntInclusiveBetween } from 'utils'
+import { SkinStrategy } from '../../../domain/translate'
 import { ColorManager, RGB } from '../color'
 
 const SkinSize = 200
 
 export const makeSkinManager = (color: ColorManager) => {
   let skin: p5.Image
+  let skinFactory: ReturnType<typeof makeSkinFactory>
   const init = () => {
     if (!skin) {
       skin = p.createImage(SkinSize, SkinSize)
-      skin = loadGraphics(skin, randomSkin(color.currentRGB))
+      skinFactory = makeSkinFactory()
+      skin = loadGraphics(skin, skinFactory.simple(color.currentRGB))
     }
   }
   return {
-    renew: () => {
+    renew: (strategy: SkinStrategy, ...args: number[]) => {
       init()
-      skin = loadGraphics(skin, randomSkin(color.currentRGB))
+      skin = loadGraphics(skin, skinFactory[strategy](color.currentRGB, ...args))
       return skin
     },
     get current() {
@@ -35,19 +38,36 @@ const loadGraphics = (skin: p5.Image, graphics: p5.Graphics) => {
   return skin
 }
 
-const randomSkin = (color: RGB) => {
-  const graphics = p.createGraphics(SkinSize, SkinSize)
-  graphics.pixelDensity(1)
-  graphics.background(0)
+type CreateSkin = (color: RGB, ...args: number[]) => p5.Graphics
+
+const makeSkinFactory = (): Record<SkinStrategy, CreateSkin> => {
+  const graphics = p.createGraphics(SkinSize / 2, SkinSize / 2)
+  graphics.pixelDensity(2)
+  return {
+    random: makeRandomSkin(graphics),
+    simple: makeSimpleSkin(graphics),
+  }
+}
+
+const makeSimpleSkin = (g: p5.Graphics) => (color: RGB) => {
+  g.background(color)
+  g.fill(0)
+  const v = randomIntInclusiveBetween(2, 4)
+  g.rect(g.width / 4, g.height / v, g.width / 2, g.height / 2)
+  return g
+}
+
+const makeRandomSkin = (g: p5.Graphics) => (color: RGB, numOfRect: number) => {
+  g.background(...color)
   p.noStroke()
-  graphics.fill(...color)
-  loop(8, () => {
-    graphics.rect(
-      randomIntInclusiveBetween(0, graphics.width),
-      randomIntInclusiveBetween(0, graphics.height),
-      randomIntInclusiveBetween(0, graphics.width),
-      randomIntInclusiveBetween(0, graphics.height)
+  g.fill(0)
+  loop(numOfRect, () => {
+    g.rect(
+      randomIntInclusiveBetween(0, g.width),
+      randomIntInclusiveBetween(0, g.height),
+      randomIntInclusiveBetween(0, g.width),
+      randomIntInclusiveBetween(0, g.height)
     )
   })
-  return graphics
+  return g
 }
