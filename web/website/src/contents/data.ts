@@ -108,16 +108,13 @@ export const ContentData = {
   },
   maze: {
     title: 'maze',
-    date: '2023-',
+    date: '2023-2024',
     sketch: Sketch.maze,
     caption: [
-      // 'Explore different auto-generated mazes in every play. ',
-      // 'The art is also randomly generated, which you will never see again.',
-      // 'The music is fully scripted. It’s not using any audio files.',
-      // 'There’s no objective in this game. But I hope you’ll find a story that can’t be interpreted into words.',
-      // 'On every major release, I will put seeds of stories into this game.  ',
+      `Explore the maze that never allows you to reach the goal. Is it merely an escape from death or hope for achievement?`,
+      '*Play with arrow key, WASD (PC) or buttons on screen (mobile)'
     ],
-    images: [thumbnailPath('maze.gif')],
+    images: [thumbnailPath('maze.webp')],
     placeholder: thumbnailPath('maze.png'),
   },
   medwEP: {

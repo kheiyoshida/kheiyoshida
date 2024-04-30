@@ -99,6 +99,7 @@ const CustomImage = ({
       src={path}
       alt={retrieveImgAlt(path)}
       fill
+      quality={85}
       priority={priority}
       loader={imageKitLoader}
       onLoad={onLoad}

@@ -11,6 +11,13 @@ const makePathsWithoutLink = (paths: string[]) => paths.map((p) => ({ path: p })
 
 const _WorkEntities: WithoutId<WorkPageInfo>[] = [
   {
+    title: maze.title,
+    date: maze.date,
+    contents: maze.sketch,
+    thumbnail: { images: makePathsWithLink(maze.title, [...maze.images], maze.placeholder) },
+    caption: maze.caption.join(` `),
+  },
+  {
     title: surfaceWater.title,
     thumbnail: {
       images: [{ path: surfaceWater.thumbnail, link: worksLink(surfaceWater.title) }],
@@ -72,13 +79,7 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
     contents: tp4.sketch,
     caption: tp4.caption.join(` `),
   },
-  {
-    title: maze.title,
-    date: maze.date,
-    contents: maze.sketch,
-    thumbnail: { images: makePathsWithLink(maze.title, [...maze.images], maze.placeholder) },
-    caption: maze.caption.join(` `),
-  },
+
   {
     title: medwEP.title,
     date: medwEP.date,
