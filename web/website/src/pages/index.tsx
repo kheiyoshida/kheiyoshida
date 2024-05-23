@@ -13,6 +13,7 @@ const Home: NextPage<HomePageProps> = ({ works }) => {
     <>
       <PageTypeContext.Provider value={{ type: 'feed' }}>
         <Feed works={works} />
+        <div style={{ height: '20vh' }}></div>
       </PageTypeContext.Provider>
     </>
   )
