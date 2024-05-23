@@ -1,95 +1,96 @@
-import p5 from 'p5'
-import { callContext, createAnalyzer, createSoundSource } from 'p5utils/src/media/audio/analyzer'
-import { FFTSize } from 'p5utils/src/media/audio/types'
-import { degree2Vector, drawLineBetweenVectors, mapToSphere, pushPop } from 'p5utils/src/render'
-import { randomFloatBetween as randomBetween } from 'utils'
-import { requireMusic } from '../../assets/'
+import { fireByRate, loop, randomFloatBetween } from 'utils'
 import { P5Canvas } from '../../lib/p5canvas'
-
-let cw: number
-let ch: number
-
-let fillColor: p5.Color
-let strokeColor: p5.Color
-
-const fftSize: FFTSize = 256
-const soundSource = createSoundSource(requireMusic('regrets.mp3'))
-const analyser = createAnalyzer(soundSource.source, fftSize)
-
-let started = false
-
-let center: p5.Vector
+import { cameraStore } from './camera'
+import {
+  BackgroundGray,
+  DataCutoff,
+  SightLength,
+  TotalScaffoldLayers,
+  VisibleAngle,
+  fftSize
+} from './constants'
+import { finalizeGeometry } from './helpers'
+import { Model, modelStore } from './model'
+import { scaffoldStore } from './scaffold'
+import { sketchStore } from './sketch'
+import { bindPlayEvent, soundAnalyzer } from './sound'
+import { makeNormalizeValueInRange } from 'utils'
 
 const setup = () => {
-  cw = p.windowWidth
-  ch = p.windowHeight
-  p.createCanvas(cw, ch, p.WEBGL)
+  p.createCanvas(window.innerWidth, window.innerHeight, p.WEBGL)
+  p.textureMode(p.NORMAL)
   p.angleMode(p.DEGREES)
-  fillColor = p.color(10, 245)
-  strokeColor = p.color(200, 100)
-  p.background(fillColor)
-  p.stroke(strokeColor)
-  p.strokeWeight(1)
+  p.perspective(VisibleAngle, p.width / p.height, 10, SightLength)
 
-  const start = () => {
-    const context = callContext()
-    if (context.state === 'suspended') {
-      context.resume()
-    } else {
-      started = true
-      soundSource.play()
-    }
-  }
+  sketchStore.lazyInit()
+  sketchStore.paintBackGround()
+  cameraStore.lazyInit()
 
-  p.mousePressed = start
+  const start = bindPlayEvent()
+  p.mouseClicked = start
   p.touchStarted = start
 
-  center = p.createVector(0, 0, 0)
-}
-
-const drawInVectorPosition = (vec: p5.Vector, draw: () => void) => {
-  pushPop(() => {
-    p.translate(vec)
-    draw()
+  loop(fftSize / 2, (i) => {
+    modelStore.addModel(i % TotalScaffoldLayers)
   })
 }
 
-let coefficient = 2
+const normalizeRange = makeNormalizeValueInRange(DataCutoff, 1)
 
 const draw = () => {
-  if (!started) return
-  const dataArray = analyser.waveform()
+  cameraStore.updateMove({
+    theta: randomFloatBetween(-0.01, 0.01),
+    phi: randomFloatBetween(-0.01, 0.005),
+  })
 
-  p.background(fillColor)
+  // update data
+  let d = 0
+  const render: number[] = []
+  soundAnalyzer.analyze().forEach((data, index) => {
+    scaffoldStore.updateShrinkLevel(index, normalizeRange(data))
+    scaffoldStore.updateDistortLevel(index, (data - 0.5) * 2)
+    if (data > DataCutoff) {
+      render.push(index)
+    }
+    d += data
+  })
 
-  p.fill(strokeColor)
+  // render
+  cameraStore.moveCamera()
+  if (p.frameCount % 2 === 0 ) {
+    sketchStore.paintBackGround()
+  }
+  p.pointLight(0, 0, 0, 0, 0, 0)
+  p.ambientLight(BackgroundGray)
 
-  const m = p.millis() * 0.01
-  p.rotateX(m * 0.01)
-  p.rotateY(m * 0.02)
+  const updateFrame = parseInt(Math.abs(Math.sin(p.millis() * 0.01)).toFixed()) + 2
+  if (p.frameCount % updateFrame === 0) {
+    sketchStore.updateSkin(d / soundAnalyzer.bufferLength)
+  }
 
-  const r = p5.Vector.random3D()
-  r.mult(1)
-  center.add(r)
+  p.texture(sketchStore.current.skin)
+  modelStore.current.models.forEach((modelSpec, index) => {
+    if (!render.includes(index)) return
+    const model = modelSpec.map(scaffoldStore.calculateScaffoldPosition) as Model
+    try {
+      const geo = finalizeGeometry(model)
+      p.model(geo)
+    } catch (e) {
+      console.warn(e)
+    }
+  })
 
-  coefficient += randomBetween(-0.1, 0.1)
-
-  mapToSphere(
-    dataArray,
-    (theta, phi, data, percent) => {
-      const reduction = Math.abs(percent - 0.5) * 2 * coefficient
-      const vec1 = degree2Vector(theta, phi + coefficient * 10, data * 600)
-      const vec2 = degree2Vector(theta, phi, data * 800 * reduction)
-      vec1.add(center)
-      vec2.add(center)
-      drawLineBetweenVectors(vec1, vec2)
-      drawInVectorPosition(vec1, () => p.sphere(data * 3))
-      drawInVectorPosition(vec2, () => p.sphere(data * 5))
-    },
-    1
-  )
-
-  p.camera(p.sin(m) * 1000, p.cos(m) * 1000, 500 + p.tan(m) * 500)
+  // update
+  modelStore.current.models.forEach((_, i) => {
+    if (render.includes(i) && fireByRate(0.5)) {
+      if (i < 3) {
+        if (modelStore.current.models[i].every(spec => spec.layer < 5)) {
+          return
+        }
+      }
+      modelStore.replaceModel(i)
+    }
+  })
 }
 
 export default P5Canvas({

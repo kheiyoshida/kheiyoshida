@@ -51,6 +51,122 @@ importers:
         specifier: ^5.3.2
         version: 5.3.3
 
+  pjs/forest:
+    dependencies:
+      mgnr-core:
+        specifier: workspace:^
+        version: link:../../pkgs/mgnr-core
+      mgnr-tone:
+        specifier: workspace:^
+        version: link:../../pkgs/mgnr-tone
+      mgnr-tone-presets:
+        specifier: workspace:^
+        version: link:../../pkgs/mgnr-tone-presets
+      p5:
+        specifier: ^1.9.0
+        version: 1.9.0
+      p5utils:
+        specifier: workspace:^
+        version: link:../../pkgs/p5utils
+      react:
+        specifier: 18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+      tone:
+        specifier: ^14.7.77
+        version: 14.7.77
+      utils:
+        specifier: workspace:^
+        version: link:../../pkgs/utils
+    devDependencies:
+      '@types/node':
+        specifier: ^20.10.4
+        version: 20.11.16
+      '@types/p5':
+        specifier: ^1.7.4
+        version: 1.7.6
+      '@types/react':
+        specifier: ^18.2.56
+        version: 18.2.56
+      '@types/react-dom':
+        specifier: ^18.2.19
+        version: 18.2.19
+      '@vitejs/plugin-react':
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.1.4)
+      jest-canvas-mock:
+        specifier: ^2.5.2
+        version: 2.5.2
+      test-utils:
+        specifier: workspace:^
+        version: link:../../pkgs/test-utils
+      typescript:
+        specifier: ^4.8.4
+        version: 4.9.4
+      vite:
+        specifier: ^5.1.4
+        version: 5.1.4(@types/node@20.11.16)
+
+  pjs/lab:
+    dependencies:
+      mgnr-core:
+        specifier: workspace:^
+        version: link:../../pkgs/mgnr-core
+      mgnr-tone:
+        specifier: workspace:^
+        version: link:../../pkgs/mgnr-tone
+      mgnr-tone-presets:
+        specifier: workspace:^
+        version: link:../../pkgs/mgnr-tone-presets
+      p5:
+        specifier: ^1.9.0
+        version: 1.9.0
+      p5utils:
+        specifier: workspace:^
+        version: link:../../pkgs/p5utils
+      react:
+        specifier: 18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+      tone:
+        specifier: ^14.7.77
+        version: 14.7.77
+      utils:
+        specifier: workspace:^
+        version: link:../../pkgs/utils
+    devDependencies:
+      '@types/node':
+        specifier: ^20.10.4
+        version: 20.11.16
+      '@types/p5':
+        specifier: ^1.7.4
+        version: 1.7.6
+      '@types/react':
+        specifier: ^18.2.56
+        version: 18.2.56
+      '@types/react-dom':
+        specifier: ^18.2.19
+        version: 18.2.19
+      '@vitejs/plugin-react':
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.1.4)
+      jest-canvas-mock:
+        specifier: ^2.5.2
+        version: 2.5.2
+      test-utils:
+        specifier: workspace:^
+        version: link:../../pkgs/test-utils
+      typescript:
+        specifier: ^4.8.4
+        version: 4.9.4
+      vite:
+        specifier: ^5.1.4
+        version: 5.1.4(@types/node@20.11.16)
+
   pjs/maze:
     dependencies:
       mgnr-core:
@@ -203,15 +319,6 @@ importers:
 
   pjs/sketch:
     dependencies:
-      mgnr-core:
-        specifier: workspace:^
-        version: link:../../pkgs/mgnr-core
-      mgnr-tone:
-        specifier: workspace:^
-        version: link:../../pkgs/mgnr-tone
-      mgnr-tone-presets:
-        specifier: workspace:^
-        version: link:../../pkgs/mgnr-tone-presets
       p5:
         specifier: ^1.9.0
         version: 1.9.0
@@ -224,9 +331,6 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
-      tone:
-        specifier: ^14.7.77
-        version: 14.7.77
       utils:
         specifier: workspace:^
         version: link:../../pkgs/utils
@@ -395,6 +499,9 @@ importers:
       eslint-config-next:
         specifier: 13.1.2
         version: 13.1.2(eslint@8.32.0)(typescript@4.9.4)
+      forest:
+        specifier: workspace:^
+        version: link:../../pjs/forest
       maze:
         specifier: workspace:^
         version: link:../../pjs/maze

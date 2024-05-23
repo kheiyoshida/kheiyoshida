@@ -16,15 +16,15 @@ export const Canvas = ({ sketch }: { sketch: Sketch }) => {
 const getSketchComponent = (sketch: Sketch) => {
   switch (sketch) {
     case Sketch.wasted:
-      return dynamic(() => import('sketch/src/projects/wasted_revisited'), { ssr: false })
+      return dynamic(() => import('sketch/src/projects/wasted'), { ssr: false })
     case Sketch.shinjuku:
       return dynamic(() => import('sketch/src/projects/shinjuku'), { ssr: false })
     case Sketch.forest:
-      return dynamic(() => import('sketch/src/projects/mgnr-demo'), { ssr: false })
+      return dynamic(() => import('forest'), { ssr: false })
     case Sketch.maze:
-      return dynamic(() => import('maze/src'), { ssr: false })
+      return dynamic(() => import('maze'), { ssr: false })
     case Sketch.regrets:
-      return dynamic(() => import('sketch/src/projects/regrets_revisited'), { ssr: false })
+      return dynamic(() => import('sketch/src/projects/regrets'), { ssr: false })
     case Sketch.tp4:
       return dynamic(() => import('sketch/src/projects/tp4'), { ssr: false })
     default:

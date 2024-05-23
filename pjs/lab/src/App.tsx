@@ -1,16 +1,8 @@
 import { useEffect, useState } from 'react'
-import Regrets_revisited from './projects/regrets'
-import Shinjuku from './projects/shinjuku'
-import SurfaceWater from './projects/surface-water'
-import Tp4 from './projects/tp4'
-import Wasted_revisited from './projects/wasted'
+import Lab from './labs/3d'
 
 const Projects = {
-  regrets_revisited: <Regrets_revisited />,
-  shinjuku: <Shinjuku />,
-  tp4: <Tp4 />,
-  wasted_revisited: <Wasted_revisited />,
-  'suface-water': <SurfaceWater />,
+  '3d': <Lab />,
 } as const
 
 export default () => {

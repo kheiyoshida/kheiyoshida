@@ -1,7 +1,7 @@
 import { draw3DGrid } from 'p5utils/src/3d/debug'
 import { loadFont } from 'p5utils/src/font'
 import { applyConfig } from 'p5utils/src/utils/project'
-import { P5Canvas } from '../../lib/p5canvas'
+import { P5Canvas } from '../../p5canvas'
 import { bindControl } from './control'
 import { cameraStore, geometryStore, sketchStore, skinStore } from './state'
 import { pushPop } from 'p5utils/src/render'

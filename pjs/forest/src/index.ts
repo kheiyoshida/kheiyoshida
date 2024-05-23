@@ -14,7 +14,7 @@ import { music } from './services/sound'
 import { showInstruction } from './services/ui'
 import { cameraStore, objectStore, sketchStore, variableStore } from './state'
 import { fireByRate } from 'utils'
-import { P5Canvas } from '../../lib/p5canvas'
+import { P5Canvas } from './p5canvas'
 
 const musicCommands = music()
 const startSound = () => {

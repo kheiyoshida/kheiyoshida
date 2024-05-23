@@ -53,6 +53,11 @@ const JestConfig: Config = {
         '<rootDir>/jest/setup.ts'
       ]
     },
+    {
+      ...RootConfig,
+      displayName: 'forest',
+      rootDir: './pjs/forest',
+    },
     // pkgs
     {
       ...RootConfig,

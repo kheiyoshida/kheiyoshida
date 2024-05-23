@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Forest</title>
+    <style>
+      :root {
+        touch-action: manipulation;
+        height: 100% ;
+      }
+      html, body {margin: 0; height: 100%; overflow: hidden}
+      html {
+        font-size: clamp(16px, 3.2vw, 22px);
+        font-family: 'Courier New', Courier, monospace;
+      }
+      body {
+        touch-action: manipulation;
+        letter-spacing: .2em;
+        width:100vw;
+        height: 100vh;
+        overscroll-behavior-y: none;
+        padding: 0;
+        margin: 0;
+        background-color: black;
+      }
+      #root {
+        width: 100%;
+        margin: 0 auto;
+      }
+      canvas {
+        border: 1px solid black;
+        touch-action: manipulation;
+      }
+      div {
+        touch-action: manipulation;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
