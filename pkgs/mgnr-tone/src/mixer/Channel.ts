@@ -18,6 +18,8 @@ export type FadeValues = Parameters<Tone.Param['rampTo']>
 
 export type MuteValue = 'on' | 'off' | 'toggle'
 
+export type ChannelNode = Pick<Tone.ToneAudioNode, 'connect'>
+
 export abstract class Channel {
   readonly effects: Tone.ToneAudioNode[]
   readonly vol: Tone.Volume
@@ -33,9 +35,9 @@ export abstract class Channel {
     return this.vol.volume.value <= this.volumeRange.min
   }
 
-  abstract get first(): Tone.Channel | ToneInst
+  abstract get first(): ChannelNode
 
-  get last(): Tone.ToneAudioNode | ToneInst {
+  get last(): ChannelNode {
     return this.vol
   }
 
@@ -47,7 +49,7 @@ export abstract class Channel {
   }
 
   protected connectNodes() {
-    let current: Tone.ToneAudioNode = this.first
+    let current = this.first
     if (this.effects && this.effects.length) {
       for (const node of this.effects) {
         current.connect(node)

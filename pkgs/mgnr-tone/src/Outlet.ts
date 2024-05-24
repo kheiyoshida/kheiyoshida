@@ -1,13 +1,12 @@
-import Logger from 'js-logger'
-import { Instrument, InstrumentOptions } from 'tone/build/esm/instrument/Instrument'
-import {Outlet} from 'mgnr-core/src/Outlet'
+import { Outlet } from 'mgnr-core/src/Outlet'
 import { Note } from 'mgnr-core/src/generator/Note'
 import { convertMidiToNoteName } from 'mgnr-core/src/generator/convert'
+import { Instrument, InstrumentOptions } from 'tone/build/esm/instrument/Instrument'
 import { pickRange } from 'utils'
 import * as Transport from './tone-wrapper/Transport'
 import { scheduleLoop } from './tone-wrapper/utils'
 
-export type ToneInst = Instrument<InstrumentOptions>
+export type ToneInst = Pick<Instrument<InstrumentOptions>, 'triggerAttackRelease' | 'connect'>
 
 export class ToneOutlet extends Outlet<ToneInst> {
   /**

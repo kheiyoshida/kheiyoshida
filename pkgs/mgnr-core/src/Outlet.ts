@@ -5,7 +5,7 @@ import { SeqEvent } from './types'
 /**
  * Adapter for Generator's Sequence and external sources
  */
-export abstract class Outlet<Inst = any> {
+export abstract class Outlet<Inst = unknown> {
   private _generator?: SequenceGenerator
   get generator(): SequenceGenerator {
     if (!this._generator) {
