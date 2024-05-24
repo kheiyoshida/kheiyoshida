@@ -1,6 +1,6 @@
 import * as Tone from 'tone'
 import { Range } from 'utils'
-import { ToneInst } from '../Outlet'
+import { ToneInst } from 'src/instrument/types'
 import { Send, Sends } from './Send'
 
 export type ChConf = {

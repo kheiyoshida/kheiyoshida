@@ -11,7 +11,7 @@ import {
 } from './Channel'
 import { MasterChannel, MasterChannelConf } from './Master'
 import { Send } from './Send'
-import { ToneInst } from '../Outlet'
+import { ToneInst } from 'src/instrument/types'
 
 export type Inst = Instrument<InstrumentOptions>
 

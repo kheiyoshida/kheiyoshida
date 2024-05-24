@@ -1,12 +1,10 @@
 import { Outlet } from 'mgnr-core/src/Outlet'
 import { Note } from 'mgnr-core/src/generator/Note'
 import { convertMidiToNoteName } from 'mgnr-core/src/generator/convert'
-import { Instrument, InstrumentOptions } from 'tone/build/esm/instrument/Instrument'
 import { pickRange } from 'utils'
 import * as Transport from './tone-wrapper/Transport'
 import { scheduleLoop } from './tone-wrapper/utils'
-
-export type ToneInst = Pick<Instrument<InstrumentOptions>, 'triggerAttackRelease' | 'connect'>
+import { ToneInst } from './instrument/types'
 
 export class ToneOutlet extends Outlet<ToneInst> {
   /**
