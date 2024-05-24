@@ -8,6 +8,7 @@ export class CompositeInstrument implements ToneInst {
   constructor(...instruments: ToneInst[]) {
     this.instruments = instruments
   }
+  
   triggerAttackRelease(
     note: Frequency,
     duration: Time,

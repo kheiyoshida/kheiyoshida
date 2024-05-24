@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import Lab from './labs/3d'
 import Synth from './labs/synth'
+import Mgnr from './labs/mgnr'
 
 const Projects = {
   '3d': <Lab />,
   synth: <Synth />,
+  mgnr: <Mgnr />
 } as const
 
 export default () => {

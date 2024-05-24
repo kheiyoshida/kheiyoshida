@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { WebMidi } from 'webmidi'
-import { play, polysynth, polysynth2, toneStart } from './synths'
+import { composite, toneStart } from './synths'
 
 toneStart()
 
@@ -15,13 +15,7 @@ WebMidi.enable()
       const el = document.getElementById('note')!
       const note = `${e.note.name}${e.note.accidental || ''}${e.note.octave}`
       el.innerText = note
-      polysynth.triggerAttack(note)
-      polysynth2.triggerAttack(note)
-    })
-    keyboard.channels[1].addListener('noteoff', (e) => {
-      const note = `${e.note.name}${e.note.accidental || ''}${e.note.octave}`
-      polysynth.triggerRelease(note)
-      polysynth2.triggerRelease(note)
+      composite.triggerAttackRelease(note, '2n')
     })
   })
   .catch((err) => console.error(err))
@@ -32,7 +26,6 @@ export default () => {
   }, [])
   return (
     <div style={synthLabStyle}>
-      <button onClick={play}>play</button>
       <div id="note"></div>
     </div>
   )

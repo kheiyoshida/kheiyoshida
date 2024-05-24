@@ -1,4 +1,5 @@
 import * as Tone from 'tone'
+import * as MGNR from 'mgnr-tone'
 
 export const toneStart = () => {
   if (Tone.context.state === 'suspended') {
@@ -6,7 +7,7 @@ export const toneStart = () => {
   }
 }
 
-export const polysynth = new Tone.PolySynth(Tone.Synth, {
+export const polysynth = new Tone.PolySynth(Tone.MonoSynth, {
   oscillator: {
     type: 'sine4',
   },
@@ -17,11 +18,18 @@ export const polysynth = new Tone.PolySynth(Tone.Synth, {
     release: 0.3,
   },
   volume: -10,
-  detune: -10,
-}).toDestination()
+  detune: -20,
+  filter: {
+    type: 'lowpass',
+    frequency: 100,
+  },
+})
 
-export const polysynth2 = new Tone.PolySynth(Tone.Synth, {
+export const polysynth2 = new Tone.PolySynth(Tone.AMSynth, {
   oscillator: {
+    type: 'sine4',
+  },
+  modulation: {
     type: 'sine4',
   },
   envelope: {
@@ -32,28 +40,9 @@ export const polysynth2 = new Tone.PolySynth(Tone.Synth, {
   },
   volume: -20,
   detune: 5,
-}).toDestination()
+})
 
-export const play = () => {
-  toneStart()
-  const env = new Tone.AmplitudeEnvelope({
-    attack: 0.8,
-    decay: 1,
-    sustain: 0.5,
-    release: 3,
-  }).toDestination()
-  const osc = new Tone.Oscillator('C4', 'sine')
-  osc.detune.value = -3
-  osc.volume.value = -10
-  osc.connect(env).start()
+export const composite = new MGNR.CompositeInstrument(polysynth, polysynth2)
 
-  const osc2 = new Tone.Oscillator('C4', 'sine')
-  osc2.volume.value = -10
-  osc2.connect(env).start()
-
-  // const osc3 = new Tone.Oscillator()
-  // osc3.frequency.value = 'F#5'
-  // osc3.connect(env).start()
-
-  env.triggerAttackRelease('4n')
-}
+const vol = new Tone.Channel().toDestination()
+composite.connect(vol)
