@@ -4,7 +4,7 @@ import { convertMidiToNoteName } from 'mgnr-core/src/generator/convert'
 import { pickRange } from 'utils'
 import * as Transport from './tone-wrapper/Transport'
 import { scheduleLoop } from './tone-wrapper/utils'
-import { ToneInst } from './instrument/types'
+import { ToneInst } from './types'
 
 export class ToneOutlet extends Outlet<ToneInst> {
   /**

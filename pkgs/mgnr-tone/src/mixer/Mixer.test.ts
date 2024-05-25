@@ -1,4 +1,4 @@
-import { Delay, Gain, PingPongDelay, PolySynth } from 'tone'
+import { Delay, PingPongDelay, PolySynth } from 'tone'
 import { Mixer } from './Mixer'
 jest.mock('tone')
 
@@ -36,10 +36,10 @@ describe(`${Mixer}`, () => {
   test(`${Mixer.prototype.fadeChannelSend.name}`, () => {
     const mixer = new Mixer()
     const instCh = mixer.createInstChannel({
-      inst: new PolySynth()
+      inst: new PolySynth(),
     })
     const sendCh = mixer.createSendChannel({
-      effects: [new PingPongDelay()]
+      effects: [new PingPongDelay()],
     })
     mixer.connect(instCh, sendCh, 1)
     const fade = jest.spyOn(instCh.sends.nodes[0], 'fade').mockImplementation()
@@ -49,10 +49,10 @@ describe(`${Mixer}`, () => {
   test(`${Mixer.prototype.muteChannelSend.name}`, () => {
     const mixer = new Mixer()
     const instCh = mixer.createInstChannel({
-      inst: new PolySynth()
+      inst: new PolySynth(),
     })
     const sendCh = mixer.createSendChannel({
-      effects: [new PingPongDelay()]
+      effects: [new PingPongDelay()],
     })
     mixer.connect(instCh, sendCh, 1)
     const mute = jest.spyOn(instCh.sends.nodes[0], 'mute').mockImplementation()
@@ -61,7 +61,7 @@ describe(`${Mixer}`, () => {
   })
   test(`${Mixer.prototype.deleteChannel.name}`, () => {
     const mixer = new Mixer()
-    const instCh = mixer.createInstChannel({inst: new PolySynth()})
+    const instCh = mixer.createInstChannel({ inst: new PolySynth() })
     const spyDispose = jest.spyOn(instCh, 'dispose').mockImplementation()
     mixer.deleteChannel(instCh)
     expect(mixer.channels).toHaveLength(0)

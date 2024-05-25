@@ -36,7 +36,7 @@ describe(`${ToneOutlet.name}`, () => {
 
     const inst = new Tone.PolySynth()
     const outId = 'outId'
-    const seqOut = new ToneOutlet(inst, generator)
+    const seqOut = new ToneOutlet(inst, false, generator)
     return { seqOut, generator, inst, outId }
   }
   let spyScheduleLoop: jest.SpyInstance

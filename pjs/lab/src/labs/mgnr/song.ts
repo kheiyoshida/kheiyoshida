@@ -103,7 +103,14 @@ export const prepareSong = () => {
       {
         pitch: 60,
         vel: 100,
-        dur: 1,
+        dur: 6,
+      },
+    ],
+    2: [
+      {
+        pitch: 64,
+        vel: 100,
+        dur: 2,
       },
     ],
   })

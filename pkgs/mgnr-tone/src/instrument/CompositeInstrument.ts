@@ -1,7 +1,7 @@
 import { InputNode } from 'tone'
 import { Frequency, Time } from 'tone/build/esm/core/type/Units'
 import { Instrument, InstrumentOptions } from 'tone/build/esm/instrument/Instrument'
-import { ToneInst } from './types'
+import { ToneInst } from '../types'
 
 export class CompositeInstrument implements ToneInst {
   private instruments: ToneInst[]

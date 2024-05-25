@@ -1,6 +1,6 @@
 /* eslint-disable no-extra-semi */
 import * as Tone from 'tone'
-import { ToneInst } from 'src/instrument/types'
+import { ToneInst } from '../types'
 import { Channel, InstChannel, SendChannel } from './Channel'
 import { Send } from './Send'
 jest.mock('tone')

@@ -1,5 +1,5 @@
 import { ToneOutlet } from './Outlet'
-import { ToneInst } from './instrument/types'
+import { ToneInst } from './types'
 import { InstChannel } from './mixer/Channel'
 import { MasterChannelConf } from './mixer/Master'
 import { Mixer } from './mixer/Mixer'

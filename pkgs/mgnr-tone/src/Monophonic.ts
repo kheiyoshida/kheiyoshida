@@ -14,8 +14,12 @@ type Note = [pitch: number, ...TimeRange]
 
 export class MonophoniManager {
   #maps: MonophonicMap[]
-  constructor(pitchRanges: PitchRange[]) {
-    this.#maps = pitchRanges.map((r) => new MonophonicMap(r))
+  constructor(pitchRanges?: PitchRange[]) {
+    if (pitchRanges) {
+      this.#maps = pitchRanges.map((r) => new MonophonicMap(r))
+    } else {
+      this.#maps = [new MonophonicMap()]
+    }
   }
   register(...note: Note): Note | null {
     const [pitch, ...range] = note
