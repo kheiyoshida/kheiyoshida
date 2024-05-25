@@ -39,8 +39,8 @@ const mono = new Tone.MonoSynth({
   },
   envelope: {
     attack: 0,
-    decay: 0.3,
-    sustain: 0.3,
+    decay: 1,
+    sustain: 1,
     release: 0,
   },
   volume: -20,
@@ -53,40 +53,45 @@ export const prepareSong = () => {
   const scale = mgnr.createScale('C', 'omit25', { min: 60, max: 100 })
   const mixer = mgnr.getMixer()
 
+  mono.triggerAttackRelease('C4', 4, '+0.5', 0.5)
+  mono.triggerAttackRelease('C5', 2, '+1', 0.5)
+
   const synCh = mixer.createInstChannel({
     inst: mono,
     volumeRange: { min: -20, max: -10 },
     initialVolume: -10,
     // effects: [new Tone.PingPongDelay('.8n', 0.3)],
   })
-  // const out1 = mgnr.createOutlet(synCh)
 
-  // const generator = mgnr.createGenerator({
-  //   scale: scale,
-  //   length: 4,
-  //   division: 8,
-  //   density: 1,
-  //   noteDur: 1,
-  //   fillPref: 'mono',
-  //   fillStrategy: 'fixed',
+  const outlet = mgnr.createOutlet(synCh, true)
+  const port1 = outlet.createPort()
+
+  const generator = mgnr.createGenerator({
+    scale: scale,
+    length: 8,
+    division: 8,
+    density: 1,
+    noteDur: 1,
+    fillPref: 'mono',
+    fillStrategy: 'fixed',
+  })
+
+  // generator.constructNotes({
+  //   0: [
+  //     {
+  //       pitch: 60,
+  //       vel: 127,
+  //       dur: 4,
+  //     },
+  //   ],
   // })
-
-  // // generator.constructNotes({
-  // //   2: [
-  // //     {
-  // //       pitch: 60,
-  // //       vel: 127,
-  // //       dur: 1,
-  // //     },
-  // //   ],
-  // // })
-  // generator
-  //   .feedOutlet(out1)
-  //   .loopSequence(4)
-  //   .onEnded((mes) => {
-  //     // mes.out.generator.mutate({ rate: 0.5, strategy: 'randomize' })
-  //     mes.repeatLoop()
-  //   })
+  generator
+    .feedOutlet(port1)
+    .loopSequence(4)
+    .onEnded((mes) => {
+      // mes.out.generator.mutate({ rate: 0.5, strategy: 'randomize' })
+      mes.repeatLoop()
+    })
 
   const generator2 = mgnr.createGenerator({
     scale: scale,
@@ -97,25 +102,19 @@ export const prepareSong = () => {
     fillPref: 'mono',
     fillStrategy: 'fixed',
   })
-  const out2 = mgnr.createOutlet(synCh)
-  generator2.constructNotes({
-    1: [
-      {
-        pitch: 60,
-        vel: 100,
-        dur: 6,
-      },
-    ],
-    2: [
-      {
-        pitch: 64,
-        vel: 100,
-        dur: 2,
-      },
-    ],
-  })
+  
+  const port = outlet.createPort()
+  // generator2.constructNotes({
+  //   2: [
+  //     {
+  //       pitch: 62,
+  //       vel: 100,
+  //       dur: 4,
+  //     },
+  //   ],
+  // })
   generator2
-    .feedOutlet(out2)
+    .feedOutlet(port)
     .loopSequence(2)
     .onEnded((mes) => mes.repeatLoop())
 }

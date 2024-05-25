@@ -1,17 +1,37 @@
-import { Outlet } from 'mgnr-core/src/Outlet'
+import { Outlet, OutletPort } from 'mgnr-core/src/Outlet'
 import { Note } from 'mgnr-core/src/generator/Note'
 import { convertMidiToNoteName } from 'mgnr-core/src/generator/convert'
 import { pickRange } from 'utils'
 import * as Transport from './tone-wrapper/Transport'
 import { scheduleLoop } from './tone-wrapper/utils'
 import { ToneInst } from './types'
+import { SequenceGenerator } from 'mgnr-core/src/generator/Generator'
+import { MonophoniManager, PitchRange } from './Monophonic'
 
 export class ToneOutlet extends Outlet<ToneInst> {
-  /**
-   * ids of assign events
-   */
-  private assignIds: number[] = []
+  #mono?: MonophoniManager
+  constructor(inst: ToneInst, mono: PitchRange[] | boolean = false) {
+    super(inst)
+    if (mono !== false) {
+      this.#mono = new MonophoniManager(mono === true ? undefined : mono)
+    }
+  }
+  assignNote(pitch: number, duration: number, time: number, velocity: number): void {
+    if (this.#mono) {
+      const monoNote = this.#mono.register(pitch, time, time + duration)
+      if (monoNote === null) return
+      duration = monoNote[2] - monoNote[1]
+      time = monoNote[1]
+    }
+    const noteName = convertMidiToNoteName(pitch)
+    this.inst.triggerAttackRelease(noteName, duration, time, velocity / 127)
+  }
+  createPort(generator?: SequenceGenerator): ToneOutletPort {
+    return new ToneOutletPort(this, generator)
+  }
+}
 
+export class ToneOutletPort extends OutletPort<ToneOutlet> {
   protected checkEvent(totalNumOfLoops: number, loopNth: number, loopStartedAt: number) {
     if (this.events.elapsed) {
       this.events.elapsed({
@@ -34,10 +54,8 @@ export class ToneOutlet extends Outlet<ToneInst> {
     }
   }
 
-  /**
-   * @param startTime time elapsed in Tone.Transport
-   */
-  public loopSequence(numOfLoops = 1, startTime = 0): ToneOutlet {
+  private loopIds: number[] = []
+  public loopSequence(numOfLoops = 1, startTime = 0): ToneOutletPort {
     if (this.generator.sequence.isEmpty) return this
     const e = scheduleLoop(
       (time, loopNth) => {
@@ -50,18 +68,15 @@ export class ToneOutlet extends Outlet<ToneInst> {
       startTime,
       numOfLoops
     )
-    this.assignIds.push(e)
+    this.loopIds.push(e)
     return this
   }
 
   private assignNote(note: Note, time: number): void {
     const pitch = this.getConcretePitch(note)
-    this.inst.triggerAttackRelease(
-      convertMidiToNoteName(pitch),
-      pickRange(note.dur) * this.secsPerDivision,
-      time,
-      pickRange(note.vel) / 127
-    )
+    const duration = pickRange(note.dur) * this.secsPerDivision
+    const velocity = pickRange(note.vel)
+    this.outlet.assignNote(pitch, duration, time, velocity)
   }
 
   private getConcretePitch(note: Note): number {
@@ -83,7 +98,7 @@ export class ToneOutlet extends Outlet<ToneInst> {
   }
 
   public cancelAssign() {
-    this.assignIds.forEach((id) => Transport.clear(id))
-    this.assignIds = []
+    this.loopIds.forEach((id) => Transport.clear(id))
+    this.loopIds = []
   }
 }

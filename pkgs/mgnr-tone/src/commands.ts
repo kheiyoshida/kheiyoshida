@@ -10,7 +10,7 @@ export function getMixer(masterConf: MasterChannelConf = {}) {
   return new Mixer(masterConf)
 }
 
-export function createOutlet(inst: ToneInst | InstChannel): ToneOutlet {
-  if (inst instanceof InstChannel) return new ToneOutlet(inst.inst)
-  else return new ToneOutlet(inst)
+export function createOutlet(inst: ToneInst | InstChannel, mono?: boolean): ToneOutlet {
+  if (inst instanceof InstChannel) return new ToneOutlet(inst.inst, mono)
+  else return new ToneOutlet(inst, mono)
 }

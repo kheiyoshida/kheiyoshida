@@ -17,7 +17,15 @@ jest.mock('./tone-wrapper/Transport', () => ({
 }))
 
 describe(`${ToneOutlet.name}`, () => {
-  const defaultNotes = {
+  const prepareGeneratorWithNotes = (notes = defaultNotes) => {
+    const generator = new SequenceGenerator(
+      new NotePicker({ fillStrategy: 'fixed' }),
+      new Sequence()
+    )
+    generator.constructNotes(notes)
+    return generator
+  }
+  const defaultNotes: SequenceNoteMap = {
     0: [
       {
         vel: 100,
@@ -26,47 +34,90 @@ describe(`${ToneOutlet.name}`, () => {
       },
     ],
   }
-  const prepare = (
-    { notes }: { notes: SequenceNoteMap } = {
-      notes: defaultNotes,
-    }
-  ) => {
-    const generator = new SequenceGenerator(new NotePicker({ fillStrategy: 'fixed' }), new Sequence())
-    generator.constructNotes(notes)
-
+  const prepareOutlet = () => {
     const inst = new Tone.PolySynth()
-    const outId = 'outId'
-    const seqOut = new ToneOutlet(inst, false, generator)
-    return { seqOut, generator, inst, outId }
+    const outlet = new ToneOutlet(inst)
+    return { outlet, inst }
   }
   let spyScheduleLoop: jest.SpyInstance
   beforeEach(() => {
     spyScheduleLoop = jest.spyOn(wrapperUtil, 'scheduleLoop').mockImplementation(mockScheduleLoop)
   })
-  it(`can assign sequence to inst`, () => {
-    const { seqOut, inst } = prepare()
-    seqOut.loopSequence(4, 0)
+  it(`creates port that can assign notes`, () => {
+    const { outlet } = prepareOutlet()
+    const port = outlet.createPort(prepareGeneratorWithNotes())
+    const spyOutletAssign = jest.spyOn(outlet, 'assignNote').mockImplementation(() => undefined)
+    port.loopSequence(4, 0)
     expect(spyScheduleLoop.mock.calls[0].slice(1)).toMatchObject([
       1, // duration
       0, // startTime
       4, // numOfLoops
     ])
-    ;(inst.triggerAttackRelease as jest.Mock).mock.calls.forEach(
-      ([pitch, duration, time, velocity], i) => {
-        expect(pitch).toBe('C4')
-        expect(duration).toBe(FIXED_SECONDS_PER_MEASURE / 16)
-        expect(time).toBe(i)
-        expect(velocity).toBeLessThan(1)
-      }
+    expect(spyOutletAssign).toHaveBeenCalledWith(
+      60,
+      expect.any(Number),
+      expect.any(Number),
+      100
     )
   })
   it(`should trigger elapsed events on each loop`, () => {
     const eventHandler = jest.fn()
-    const { seqOut } = prepare({
-      notes: defaultNotes,
-    })
-    seqOut.onElapsed(eventHandler)
-    seqOut.loopSequence(4, 0)
+    const { outlet } = prepareOutlet()
+    const port = outlet.createPort(prepareGeneratorWithNotes())
+    port.onElapsed(eventHandler)
+    port.loopSequence(4, 0)
     expect(eventHandler).toHaveBeenCalledTimes(4)
+  })
+  it(`can create multiple ports and notes can be handled by monophonic manager`, () => {
+    const inst = new Tone.Synth()
+    const outlet = new ToneOutlet(inst, true)
+    const notes1: SequenceNoteMap = {
+      0: [
+        {
+          vel: 100,
+          pitch: 60,
+          dur: 4,
+        },
+      ],
+    }
+    const port1 = outlet.createPort(prepareGeneratorWithNotes(notes1))
+    const notes2: SequenceNoteMap = {
+      2: [
+        {
+          vel: 100,
+          pitch: 60,
+          dur: 4,
+        },
+      ],
+    }
+    const port2 = outlet.createPort(prepareGeneratorWithNotes(notes2))
+
+    const spyInstTrigger = jest.spyOn(inst, 'triggerAttackRelease').mockImplementation(jest.fn())
+    const spyAssign = jest.spyOn(outlet, 'assignNote')
+
+    // act
+    port1.loopSequence(1)
+    port2.loopSequence(1)
+
+    // assert
+    expect(spyAssign).toHaveBeenCalledTimes(2)
+    expect(spyInstTrigger.mock.calls).toMatchObject([
+      // port 1
+      ['C4', 0.25, 0, expect.any(Number)],
+      // port 2
+      [
+        'C4',
+        0.125,
+        0.25, // should come after first note
+        expect.any(Number),
+      ],
+    ])
+    /**
+     * 0             0.25
+     * 0 | 1 | 2 | 3 | 4 | 5 |
+     * [----note1----]
+     *       [-----note2-----]
+     *               [-note2`]
+     */
   })
 })

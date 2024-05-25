@@ -3,7 +3,7 @@ import { Range } from 'utils'
 /**
  * @note not inclusive for max value
  */
-type PitchRange = Range
+export type PitchRange = Range
 
 /**
  * @note start should always smaller than the end

@@ -1,10 +1,10 @@
 import { fireByRate } from 'utils'
-import { Outlet } from '../Outlet'
+import { Outlet, OutletPort } from '../Outlet'
 import { MutateSpec } from '../types'
 import { Note } from './Note'
 import { NotePicker, NotePickerConf } from './NotePicker'
+import { Sequence, SequenceConf, SequenceNoteMap } from './Sequence'
 import { Scale } from './scale/Scale'
-import { Sequence, SequenceNoteMap, SequenceConf } from './Sequence'
 
 export type GeneratorConf = {
   scale?: Scale
@@ -14,7 +14,7 @@ export type GeneratorConf = {
 export class SequenceGenerator<I = unknown> {
   readonly picker: NotePicker
   readonly sequence: Sequence
-  private outlet!: Outlet<I>
+  private outlet!: OutletPort<Outlet<I>>
 
   get scale(): Scale {
     return this.picker.scale
@@ -29,9 +29,9 @@ export class SequenceGenerator<I = unknown> {
     this.sequence = sequence
   }
 
-  public feedOutlet(outlet: Outlet<I>): Outlet<I> {
+  public feedOutlet(outlet: OutletPort<Outlet<I>>): OutletPort<Outlet<I>> {
     if (this.outlet) {
-      throw Error(`outlet is already set. create another generator to feed this outlet`)
+      throw Error(`outlet port is already set. create another generator to feed this outlet`)
     }
     outlet.generator = this
     this.outlet = outlet
