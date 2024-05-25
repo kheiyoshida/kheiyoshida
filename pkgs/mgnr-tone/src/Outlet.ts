@@ -3,38 +3,58 @@ import { SequenceGenerator } from 'mgnr-core/src/generator/Generator'
 import { Note } from 'mgnr-core/src/generator/Note'
 import { convertMidiToNoteName } from 'mgnr-core/src/generator/convert'
 import { pickRange } from 'utils'
+import { LayeredNoteBuffer, NoteBuffer } from './Buffer'
+import { LayeredInstrument } from './instrument'
 import * as Transport from './tone-wrapper/Transport'
 import { scheduleLoop } from './tone-wrapper/utils'
 import { ToneInst } from './types'
-import { NoteBuffer } from './Buffer'
 
 export class ToneOutlet extends Outlet<ToneInst> {
-  #buffer?: NoteBuffer
-  constructor(
-    inst: ToneInst,
-    bufferTimeFrame?: number,
-  ) {
-    super(inst)
-    if (bufferTimeFrame) {
-      this.#buffer = new NoteBuffer(bufferTimeFrame)
-      Transport.scheduleRepeat((time) => {
-        const notes = this.#buffer!.consume(time)
-        if (!notes.length) return
-        const note = notes[0] // only use one at a time
-        this.#triggerNote(note.pitch, note.duration, time, note.velocity)
-      }, bufferTimeFrame)
-    }
-  }
   assignNote(pitch: number, duration: number, time: number, velocity: number): void {
-    if (this.#buffer) this.#buffer.insert({ pitch, duration, time, velocity })
-    else this.#triggerNote(pitch, duration, time, velocity)
+    this.triggerNote(pitch, duration, time, velocity)
   }
-  #triggerNote(pitch: number, duration: number, time: number, velocity: number): void {
+  protected triggerNote(pitch: number, duration: number, time: number, velocity: number): void {
     const noteName = convertMidiToNoteName(pitch)
     this.inst.triggerAttackRelease(noteName, duration, time, velocity / 127)
   }
   createPort(generator?: SequenceGenerator): ToneOutletPort {
     return new ToneOutletPort(this, generator)
+  }
+}
+
+export class MonoOutlet extends ToneOutlet {
+  #buffer: NoteBuffer
+  constructor(inst: ToneInst, bufferTimeFrame: number = Transport.toSeconds('16n')) {
+    super(inst)
+    this.#buffer = new NoteBuffer(bufferTimeFrame)
+    Transport.scheduleRepeat((time) => {
+      const notes = this.#buffer!.consume(time)
+      if (!notes.length) return
+      const note = notes[0] // only use one at a time
+      this.triggerNote(note.pitch, note.duration, time, note.velocity)
+    }, bufferTimeFrame)
+  }
+  assignNote(pitch: number, duration: number, time: number, velocity: number): void {
+    this.#buffer.insert({ pitch, duration, time, velocity })
+  }
+}
+
+export class LayeredOutlet extends ToneOutlet {
+  #buffer: LayeredNoteBuffer
+  constructor(inst: LayeredInstrument, bufferTimeFrame: number = Transport.toSeconds('16n')) {
+    super(inst)
+    this.#buffer = new LayeredNoteBuffer(bufferTimeFrame, inst.instruments)
+    Transport.scheduleRepeat((time) => {
+      const noteGroups = this.#buffer!.consume(time)
+      noteGroups.forEach((notes) => {
+        if (!notes.length) return
+        const note = notes[0] // only use one at a time
+        this.triggerNote(note.pitch, note.duration, time, note.velocity)
+      })
+    }, bufferTimeFrame)
+  }
+  assignNote(pitch: number, duration: number, time: number, velocity: number): void {
+    this.#buffer.insert({ pitch, duration, time, velocity })
   }
 }
 

@@ -1,3 +1,6 @@
+import { Range } from "utils"
+import { findWithinRangeItem } from "./instrument"
+
 export type BufferedNote = {
   pitch: number
   time: number
@@ -27,4 +30,22 @@ export const findIndexBackwards = (notes: BufferedNote[], note: BufferedNote): n
     if (Math.round(notes[i].time * 100) === Math.round(note.time * 100)) return null
   }
   return 0
+}
+
+export type RangeBuffer = Range & {
+  buffer: NoteBuffer
+}
+
+export class LayeredNoteBuffer {
+  #buffers: RangeBuffer[]
+  constructor(timeFrame: number, pitchRanges: Range[]) {
+    this.#buffers = pitchRanges.map(range => ({ ...range, buffer: new NoteBuffer(timeFrame) }))
+  }
+  insert(note: BufferedNote) {
+    const buffer = findWithinRangeItem(this.#buffers, note.pitch)
+    if (buffer) buffer.buffer.insert(note)
+  }
+  consume(currentTime: number): BufferedNote[][] {
+    return this.#buffers.map(b => b.buffer.consume(currentTime))
+  }
 }

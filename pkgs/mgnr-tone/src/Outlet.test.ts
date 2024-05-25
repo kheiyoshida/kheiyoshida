@@ -3,7 +3,7 @@ import { mockScheduleLoop } from './__tests__/mock'
 import { SequenceGenerator } from 'mgnr-core/src/generator/Generator'
 import { NotePicker } from 'mgnr-core/src/generator/NotePicker'
 import { Sequence, SequenceNoteMap } from 'mgnr-core/src/generator/Sequence'
-import { ToneOutlet } from './Outlet'
+import { MonoOutlet, ToneOutlet } from './Outlet'
 import * as wrapperUtil from './tone-wrapper/utils'
 
 jest.mock('tone')
@@ -68,4 +68,8 @@ describe(`${ToneOutlet.name}`, () => {
     port.loopSequence(4, 0)
     expect(eventHandler).toHaveBeenCalledTimes(4)
   })
+})
+
+describe(`${MonoOutlet.name}`, () => {
+  
 })
