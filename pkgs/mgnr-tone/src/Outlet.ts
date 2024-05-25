@@ -1,28 +1,35 @@
 import { Outlet, OutletPort } from 'mgnr-core/src/Outlet'
+import { SequenceGenerator } from 'mgnr-core/src/generator/Generator'
 import { Note } from 'mgnr-core/src/generator/Note'
 import { convertMidiToNoteName } from 'mgnr-core/src/generator/convert'
 import { pickRange } from 'utils'
 import * as Transport from './tone-wrapper/Transport'
 import { scheduleLoop } from './tone-wrapper/utils'
 import { ToneInst } from './types'
-import { SequenceGenerator } from 'mgnr-core/src/generator/Generator'
-import { MonophoniManager, PitchRange } from './Monophonic'
+import { NoteBuffer } from './Buffer'
 
 export class ToneOutlet extends Outlet<ToneInst> {
-  #mono?: MonophoniManager
-  constructor(inst: ToneInst, mono: PitchRange[] | boolean = false) {
+  #buffer?: NoteBuffer
+  constructor(
+    inst: ToneInst,
+    bufferTimeFrame?: number,
+  ) {
     super(inst)
-    if (mono !== false) {
-      this.#mono = new MonophoniManager(mono === true ? undefined : mono)
+    if (bufferTimeFrame) {
+      this.#buffer = new NoteBuffer(bufferTimeFrame)
+      Transport.scheduleRepeat((time) => {
+        const notes = this.#buffer!.consume(time)
+        if (!notes.length) return
+        const note = notes[0] // only use one at a time
+        this.#triggerNote(note.pitch, note.duration, time, note.velocity)
+      }, bufferTimeFrame)
     }
   }
   assignNote(pitch: number, duration: number, time: number, velocity: number): void {
-    if (this.#mono) {
-      const monoNote = this.#mono.register(pitch, time, time + duration)
-      if (monoNote === null) return
-      duration = monoNote[2] - monoNote[1]
-      time = monoNote[1]
-    }
+    if (this.#buffer) this.#buffer.insert({ pitch, duration, time, velocity })
+    else this.#triggerNote(pitch, duration, time, velocity)
+  }
+  #triggerNote(pitch: number, duration: number, time: number, velocity: number): void {
     const noteName = convertMidiToNoteName(pitch)
     this.inst.triggerAttackRelease(noteName, duration, time, velocity / 127)
   }
