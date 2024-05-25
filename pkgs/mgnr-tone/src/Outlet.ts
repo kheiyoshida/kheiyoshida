@@ -21,14 +21,16 @@ export class ToneOutlet extends Outlet<ToneInst> {
       })
     }
     if (loopNth === totalNumOfLoops) {
+      this.cancelAssign()
       const actualEndTime = loopStartedAt + totalNumOfLoops * this.sequenceDuration
-      this.events.ended &&
+      if (this.events.ended) {
         this.events.ended({
           out: this,
           loop: totalNumOfLoops,
           endTime: actualEndTime,
           repeatLoop: () => this.loopSequence(totalNumOfLoops, actualEndTime),
         })
+      }
     }
   }
 
@@ -82,5 +84,6 @@ export class ToneOutlet extends Outlet<ToneInst> {
 
   public cancelAssign() {
     this.assignIds.forEach((id) => Transport.clear(id))
+    this.assignIds = []
   }
 }

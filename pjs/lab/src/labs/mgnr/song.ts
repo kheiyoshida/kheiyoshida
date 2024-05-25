@@ -33,6 +33,20 @@ export const polysynth2 = new Tone.PolySynth(Tone.MonoSynth, {
   detune: -200,
 })
 
+const mono = new Tone.MonoSynth({
+  oscillator: {
+    type: 'sine4',
+  },
+  envelope: {
+    attack: 0,
+    decay: 0.3,
+    sustain: 0.3,
+    release: 0,
+  },
+  volume: -20,
+  detune: -200,
+})
+
 export const composite = new mgnr.CompositeInstrument(polysynth, polysynth2)
 
 export const prepareSong = () => {
@@ -40,30 +54,61 @@ export const prepareSong = () => {
   const mixer = mgnr.getMixer()
 
   const synCh = mixer.createInstChannel({
-    inst: composite,
+    inst: mono,
     volumeRange: { min: -20, max: -10 },
     initialVolume: -10,
-    effects: [new Tone.PingPongDelay('.8n', 0.3)],
+    // effects: [new Tone.PingPongDelay('.8n', 0.3)],
   })
-  const synOut = mgnr.createOutlet(synCh)
+  // const out1 = mgnr.createOutlet(synCh)
 
-  const generator = mgnr.createGenerator({
+  // const generator = mgnr.createGenerator({
+  //   scale: scale,
+  //   length: 4,
+  //   division: 8,
+  //   density: 1,
+  //   noteDur: 1,
+  //   fillPref: 'mono',
+  //   fillStrategy: 'fixed',
+  // })
+
+  // // generator.constructNotes({
+  // //   2: [
+  // //     {
+  // //       pitch: 60,
+  // //       vel: 127,
+  // //       dur: 1,
+  // //     },
+  // //   ],
+  // // })
+  // generator
+  //   .feedOutlet(out1)
+  //   .loopSequence(4)
+  //   .onEnded((mes) => {
+  //     // mes.out.generator.mutate({ rate: 0.5, strategy: 'randomize' })
+  //     mes.repeatLoop()
+  //   })
+
+  const generator2 = mgnr.createGenerator({
     scale: scale,
-    length: 32,
+    length: 8,
     division: 8,
-    density: 0.8,
-    noteDur: {
-      min: 4,
-      max: 6,
-    },
+    density: 1,
+    noteDur: 1,
+    fillPref: 'mono',
+    fillStrategy: 'fixed',
   })
-
-  generator.constructNotes()
-  generator
-    .feedOutlet(synOut)
-    .loopSequence(4)
-    .onEnded((mes) => {
-      mes.out.generator.mutate({ rate: 0.5, strategy: 'randomize' })
-      mes.repeatLoop()
-    })
+  const out2 = mgnr.createOutlet(synCh)
+  generator2.constructNotes({
+    1: [
+      {
+        pitch: 60,
+        vel: 100,
+        dur: 1,
+      },
+    ],
+  })
+  generator2
+    .feedOutlet(out2)
+    .loopSequence(2)
+    .onEnded((mes) => mes.repeatLoop())
 }

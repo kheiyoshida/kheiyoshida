@@ -1,12 +1,16 @@
 import * as Tone from 'tone'
 import { prepareSong } from './song'
 
+let started = false
+
 const play = () => {
   if (Tone.context.state === 'suspended') {
     Tone.start()
   }
+  if (started) return
   prepareSong()
   Tone.Transport.start()
+  started = true
 }
 
 export default () => {
