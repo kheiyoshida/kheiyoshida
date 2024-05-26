@@ -36,7 +36,7 @@ describe(`${ToneOutlet.name}`, () => {
 })
 
 describe(`${MonoOutlet.name}`, () => {
-  it(`consumes only one item at each time frame`, () => {
+  it(`consumes items at each time frame`, () => {
     const inst = new Tone.Synth()
     const outlet = new MonoOutlet(inst, 250)
     const spyInstTrigger = jest.spyOn(inst, 'triggerAttackRelease').mockImplementation(jest.fn())
@@ -49,7 +49,7 @@ describe(`${MonoOutlet.name}`, () => {
 })
 
 describe(`${LayeredOutlet.name}`, () => {
-  it(`consumes only one item for each layer at each time frame`, () => {
+  it(`consumes items for each layer at each time frame`, () => {
     const inst = new Tone.Synth()
     const inst2 = new Tone.Synth()
     const composite = new LayeredInstrument([

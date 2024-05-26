@@ -72,7 +72,7 @@ export const prepareSong = () => {
     effects: [new Tone.BitCrusher(16)],
   })
 
-  const outlet = mgnr.createOutlet(synCh.inst, Tone.Transport.toSeconds('16n'))
+  const outlet = mgnr.createOutlet(synCh.inst, Tone.Transport.toSeconds('2n'))
 
   const port1 = outlet.createPort()
 
@@ -93,11 +93,11 @@ export const prepareSong = () => {
         dur: 1,
         vel: 100,
       },
-      {
-        pitch: 80,
-        dur: 1,
-        vel: 100,
-      },
+      // {
+      //   pitch: 80,
+      //   dur: 1,
+      //   vel: 100,
+      // },
     ],
     4: [
       {
@@ -124,7 +124,11 @@ export const prepareSong = () => {
   generator
     .feedOutlet(port1)
     .loopSequence(2)
+    .onElapsed(() => {
+      console.log('loop elapsed')
+    })
     .onEnded((mes) => {
+      console.log('loop ended')
       // mes.out.generator.mutate({ rate: 0.5, strategy: 'move' })
       mes.repeatLoop()
     })

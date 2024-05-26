@@ -32,9 +32,7 @@ type RangedInst = Range & {
 }
 
 export class LayeredInstrument implements ToneInst {
-  constructor(public instruments: RangedInst[]) {
-    
-  }
+  constructor(public instruments: RangedInst[]) {}
   triggerAttackRelease(
     note: Frequency,
     duration: Time,

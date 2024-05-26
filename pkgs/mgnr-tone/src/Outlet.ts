@@ -29,7 +29,7 @@ export class MonoOutlet extends ToneOutlet {
       const notes = this.#buffer!.consume(time)
       if (!notes.length) return
       const note = notes[0] // only use one at a time
-      this.triggerNote(note.pitch, note.duration, time, note.velocity)
+      this.triggerNote(note.pitch, note.duration, note.time, note.velocity)
     }, bufferTimeFrame)
   }
   assignNote(pitch: number, duration: number, time: number, velocity: number): void {
@@ -46,8 +46,9 @@ export class LayeredOutlet extends ToneOutlet {
       const noteGroups = this.#buffer!.consume(time)
       noteGroups.forEach((notes) => {
         if (!notes.length) return
-        const note = notes[0] // only use one at a time
-        this.triggerNote(note.pitch, note.duration, time, note.velocity)
+        notes.forEach(note => {
+          this.triggerNote(note.pitch, note.duration, note.time, note.velocity)
+        })
       })
     }, bufferTimeFrame)
   }

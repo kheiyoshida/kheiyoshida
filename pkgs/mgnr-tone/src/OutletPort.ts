@@ -28,6 +28,11 @@ export class ToneOutletPort extends OutletPort<ToneOutlet> {
     }
   }
 
+  /**
+   * Outlet needs to have overhead for time=0 notes
+   */
+  static BufferTime = 0.05
+
   private loopIds: number[] = []
   public loopSequence(numOfLoops = 1, startTime = 0): ToneOutletPort {
     if (this.generator.sequence.isEmpty) return this
@@ -35,7 +40,7 @@ export class ToneOutletPort extends OutletPort<ToneOutlet> {
       (time, loopNth) => {
         this.checkEvent(numOfLoops, loopNth, startTime)
         this.generator.sequence.iterateEachNote((note, position) => {
-          this.assignNote(note, time + position * this.secsPerDivision)
+          this.assignNote(note, time + position * this.secsPerDivision + ToneOutletPort.BufferTime)
         })
       },
       this.sequenceDuration,
