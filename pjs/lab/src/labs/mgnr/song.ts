@@ -63,24 +63,13 @@ export const composite2 = new mgnr.CompositeInstrument(polysynth, polysynth2)
 
 export const prepareSong = () => {
   const scale = mgnr.createScale('C', 'major', { min: 30, max: 80 })
-  const scale2 = mgnr.createScale('C', 'omit25', { min: 57, max: 80 })
+
   const mixer = mgnr.getMixer()
 
   const synCh = mixer.createInstChannel({
     inst: composite,
     initialVolume: -6,
-    effects: [
-      new Tone.BitCrusher(16),
-    ]
-  })
-  const compositeCh = mixer.createInstChannel({
-    inst: composite2,
-    initialVolume: -20,
-    effects: [
-      new Tone.Filter(300, 'highpass'),
-      new Tone.BitCrusher(16),
-      new Tone.PingPongDelay('.8n', 0.3)
-    ]
+    effects: [new Tone.BitCrusher(16)],
   })
 
   const outlet = mgnr.createOutlet(synCh.inst, Tone.Transport.toSeconds('16n'))
@@ -94,7 +83,7 @@ export const prepareSong = () => {
     density: 0.5,
     noteDur: 1,
     fillPref: 'mono',
-    // fillStrategy: 'fixed',
+    fillStrategy: 'fixed',
   })
 
   generator.constructNotes({
@@ -136,47 +125,60 @@ export const prepareSong = () => {
     .feedOutlet(port1)
     .loopSequence(2)
     .onEnded((mes) => {
-      mes.out.generator.mutate({ rate: 0.5, strategy: 'move' })
+      // mes.out.generator.mutate({ rate: 0.5, strategy: 'move' })
       mes.repeatLoop()
     })
 
-  const generator2 = mgnr.createGenerator({
-    scale: scale,
-    length: 10,
-    division: 8,
-    density: 0.5,
-    noteDur: 1,
-    fillPref: 'mono',
-  })
-
-  const port = outlet.createPort()
-  generator2.constructNotes()
-  generator2
-    .feedOutlet(port)
-    .loopSequence(2)
-    .onEnded((mes) => mes.repeatLoop())
-
-  const outlet2 = mgnr.createOutlet(compositeCh.inst)
-  const o2p1 = outlet2.createPort()
-  const g = mgnr.createGenerator({
-    scale: scale2,
-    length: 10,
-    division: 16,
-    density: 0.7,
-    noteDur: {
-      min: 4,
-      max: 8,
-    },
-    fillPref: 'mono',
-  })
-  g.constructNotes()
-  g.feedOutlet(o2p1)
-    .loopSequence(4)
-    .onElapsed(() => {
-      g.mutate({ rate: 0.5, strategy: 'inPlace' })
+  const setupCh2 = () => {
+    const scale2 = mgnr.createScale('C', 'omit25', { min: 57, max: 80 })
+    const compositeCh = mixer.createInstChannel({
+      inst: composite2,
+      initialVolume: -20,
+      effects: [
+        new Tone.Filter(300, 'highpass'),
+        new Tone.BitCrusher(16),
+        new Tone.PingPongDelay('.8n', 0.3),
+      ],
     })
-    .onEnded((mes) => {
-      g.mutate({ rate: 0.5, strategy: 'randomize' })
-      mes.repeatLoop()
+    const generator2 = mgnr.createGenerator({
+      scale: scale,
+      length: 10,
+      division: 8,
+      density: 0.5,
+      noteDur: 1,
+      fillPref: 'mono',
     })
+  
+    const port2 = outlet.createPort()
+    generator2.constructNotes()
+    generator2
+      .feedOutlet(port2)
+      .loopSequence(2)
+      .onEnded((mes) => mes.repeatLoop())
+  
+    const outlet2 = mgnr.createOutlet(compositeCh.inst)
+    const o2p1 = outlet2.createPort()
+    const g = mgnr.createGenerator({
+      scale: scale2,
+      length: 10,
+      division: 16,
+      density: 0.7,
+      noteDur: {
+        min: 4,
+        max: 8,
+      },
+      fillPref: 'mono',
+    })
+    g.constructNotes()
+    g.feedOutlet(o2p1)
+      .loopSequence(4)
+      .onElapsed(() => {
+        g.mutate({ rate: 0.5, strategy: 'inPlace' })
+      })
+      .onEnded((mes) => {
+        g.mutate({ rate: 0.5, strategy: 'randomize' })
+        mes.repeatLoop()
+      })
+  }
+  // setupCh2()
 }

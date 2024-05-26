@@ -9,6 +9,10 @@ jest.mock('tone', () => ({
   Delay: jest.fn(() => ({
     connect: jest.fn(),
   })),
+  NoiseSynth: class {
+    triggerAttackRelease = jest.fn()
+    connect = jest.fn()
+  }
 }))
 
 

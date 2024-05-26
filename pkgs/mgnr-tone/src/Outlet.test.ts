@@ -1,75 +1,72 @@
 import * as Tone from 'tone'
-import { mockScheduleLoop } from './__tests__/mock'
-import { SequenceGenerator } from 'mgnr-core/src/generator/Generator'
-import { NotePicker } from 'mgnr-core/src/generator/NotePicker'
-import { Sequence, SequenceNoteMap } from 'mgnr-core/src/generator/Sequence'
-import { MonoOutlet, ToneOutlet } from './Outlet'
-import * as wrapperUtil from './tone-wrapper/utils'
+import { LayeredOutlet, MonoOutlet, ToneOutlet } from './Outlet'
+import { LayeredInstrument } from './instrument'
 
-jest.mock('tone')
+beforeEach(() => jest.useFakeTimers())
+afterEach(() => jest.useRealTimers())
 
-const FIXED_SECONDS_PER_MEASURE = 1
+jest.mock('tone', () => ({
+  ...jest.doMock('tone'),
+  Synth: jest.fn().mockImplementation(() => ({ triggerAttackRelease: jest.fn() })),
+  NoiseSynth: class {}
+}))
+
 jest.mock('./tone-wrapper/Transport', () => ({
   ...jest.createMockFromModule<typeof import('./tone-wrapper/Transport')>(
     './tone-wrapper/Transport'
   ),
-  toSeconds: () => FIXED_SECONDS_PER_MEASURE,
+  scheduleRepeat: (cb: (time: number) => void, bufferTimeFrame: number) => {
+    let t = 0
+    setInterval(() => {
+      t += bufferTimeFrame
+      cb(t)
+    }, bufferTimeFrame)
+  },
 }))
 
 describe(`${ToneOutlet.name}`, () => {
-  const prepareGeneratorWithNotes = (notes = defaultNotes) => {
-    const generator = new SequenceGenerator(
-      new NotePicker({ fillStrategy: 'fixed' }),
-      new Sequence()
-    )
-    generator.constructNotes(notes)
-    return generator
-  }
-  const defaultNotes: SequenceNoteMap = {
-    0: [
-      {
-        vel: 100,
-        pitch: 60,
-        dur: 1,
-      },
-    ],
-  }
-  const prepareOutlet = () => {
-    const inst = new Tone.PolySynth()
+  it(`triggers the instrument at the correct time`, () => {
+    const inst = new Tone.Synth()
     const outlet = new ToneOutlet(inst)
-    return { outlet, inst }
-  }
-  let spyScheduleLoop: jest.SpyInstance
-  beforeEach(() => {
-    spyScheduleLoop = jest.spyOn(wrapperUtil, 'scheduleLoop').mockImplementation(mockScheduleLoop)
-  })
-  it(`creates port that can assign notes`, () => {
-    const { outlet } = prepareOutlet()
-    const port = outlet.createPort(prepareGeneratorWithNotes())
-    const spyOutletAssign = jest.spyOn(outlet, 'assignNote').mockImplementation(() => undefined)
-    port.loopSequence(4, 0)
-    expect(spyScheduleLoop.mock.calls[0].slice(1)).toMatchObject([
-      1, // duration
-      0, // startTime
-      4, // numOfLoops
-    ])
-    expect(spyOutletAssign).toHaveBeenCalledWith(
-      60,
-      expect.any(Number),
-      expect.any(Number),
-      100
-    )
-  })
-  it(`should trigger elapsed events on each loop`, () => {
-    const eventHandler = jest.fn()
-    const { outlet } = prepareOutlet()
-    const port = outlet.createPort(prepareGeneratorWithNotes())
-    port.onElapsed(eventHandler)
-    port.loopSequence(4, 0)
-    expect(eventHandler).toHaveBeenCalledTimes(4)
+    const spyInstTrigger = jest.spyOn(inst, 'triggerAttackRelease').mockImplementation(jest.fn())
+    outlet.assignNote(60, 1, 250, 100)
+    expect(spyInstTrigger).toHaveBeenCalledTimes(1)
+    expect(spyInstTrigger).toHaveBeenCalledWith('C4', 1, 250, expect.any(Number))
   })
 })
 
 describe(`${MonoOutlet.name}`, () => {
-  
+  it(`consumes only one item at each time frame`, () => {
+    const inst = new Tone.Synth()
+    const outlet = new MonoOutlet(inst, 250)
+    const spyInstTrigger = jest.spyOn(inst, 'triggerAttackRelease').mockImplementation(jest.fn())
+    outlet.assignNote(60, 1, 250, 100)
+    outlet.assignNote(62, 1, 250, 100) // gets dropped
+    jest.advanceTimersByTime(250)
+    expect(spyInstTrigger).toHaveBeenCalledTimes(1)
+    expect(spyInstTrigger).toHaveBeenCalledWith('C4', 1, 250, expect.any(Number))
+  })
+})
+
+describe(`${LayeredOutlet.name}`, () => {
+  it(`consumes only one item for each layer at each time frame`, () => {
+    const inst = new Tone.Synth()
+    const inst2 = new Tone.Synth()
+    const composite = new LayeredInstrument([
+      { min: 20, max: 71, inst: inst },
+      { min: 72, max: 100, inst: inst2 },
+    ])
+    const outlet = new LayeredOutlet(composite, 250)
+    const spyInstTrigger = jest.spyOn(inst, 'triggerAttackRelease').mockImplementation(jest.fn())
+    const spyInst2Trigger = jest.spyOn(inst2, 'triggerAttackRelease').mockImplementation(jest.fn())
+    outlet.assignNote(60, 1, 250, 100)
+    outlet.assignNote(62, 1, 250, 100) // gets dropped
+    outlet.assignNote(72, 1, 250, 100) // doesn't get dropped
+    outlet.assignNote(74, 1, 250, 100) // gets dropped
+    jest.advanceTimersByTime(250)
+    expect(spyInstTrigger).toHaveBeenCalledTimes(1)
+    expect(spyInstTrigger).toHaveBeenCalledWith('C4', 1, 250, expect.any(Number))
+    expect(spyInst2Trigger).toHaveBeenCalledTimes(1)
+    expect(spyInst2Trigger).toHaveBeenCalledWith('C5', 1, 250, expect.any(Number))
+  })
 })

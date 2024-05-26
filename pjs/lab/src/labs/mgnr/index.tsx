@@ -16,7 +16,7 @@ const play = () => {
 export default () => {
   return (
     <div style={synthLabStyle} onClick={play}>
-      click to play
+      <button onClick={play}>click to play</button>
     </div>
   )
 }
