@@ -2,13 +2,6 @@ import { NotePicker } from './NotePicker'
 import { Scale } from './scale/Scale'
 
 describe(`${NotePicker.name}`, () => {
-  describe(`fields`, () => {
-    test(`harmonizeEnabled`, () => {
-      const picker = new NotePicker({ harmonizer: { degree: ['4'] } })
-      expect(picker.harmonizeEnabled).toBe(true)
-    })
-  })
-
   test(`${NotePicker.prototype.updateConfig.name}`, () => {
     const picker = new NotePicker({ noteDur: { min: 2, max: 4 } })
     picker.updateConfig({ noteDur: 2 })
@@ -17,18 +10,16 @@ describe(`${NotePicker.name}`, () => {
 
   describe(`${NotePicker.prototype.pickHarmonizedNotes.name}`, () => {
     it(`should pick harmonzied note`, () => {
-      const picker = new NotePicker({ harmonizer: { degree: ['5'] } })
-      jest.spyOn(picker, 'pickNote').mockReturnValue({
-        pitch: 60,
-        vel: 100,
-        dur: 2,
-      })
+      const scale = new Scale()
+      const picker = new NotePicker({ harmonizer: { degree: ['5'] } }, scale)
+      jest.spyOn(scale, 'pickRandomPitch').mockReturnValue(60)
       const notes = picker.pickHarmonizedNotes()
       expect(notes!.map((n) => n.pitch)).toMatchObject([60, 67])
     })
     it(`should not return anything when pickNote failed`, () => {
-      const picker = new NotePicker({ harmonizer: { degree: ['5'] } })
-      jest.spyOn(picker, 'pickNote').mockReturnValue(undefined)
+      const scale = new Scale()
+      const picker = new NotePicker({ harmonizer: { degree: ['5'] } }, scale)
+      jest.spyOn(scale, 'pickRandomPitch').mockReturnValue(undefined as unknown as number)
       expect(picker.pickHarmonizedNotes()).toBe(undefined)
     })
     it(`should return the picked note when hamonize was not enabled`, () => {
@@ -85,8 +76,7 @@ describe(`${NotePicker.name}`, () => {
       expect(nearest).toHaveBeenCalled()
     })
     it(`should assign random pitch if the strategy is "fixed"`, () => {
-      const picker = new NotePicker({fillStrategy: 'fixed'})
-      const change = jest.spyOn(picker, 'changeNotePitch')
+      const picker = new NotePicker({ fillStrategy: 'fixed' })
       const note = {
         pitch: 61,
         dur: 1,
@@ -94,7 +84,6 @@ describe(`${NotePicker.name}`, () => {
       }
       picker.adjustNotePitch(note)
       expect(note.pitch).not.toBe(61)
-      expect(change).toHaveBeenCalled()
     })
   })
 })

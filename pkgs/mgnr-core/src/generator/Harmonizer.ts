@@ -26,11 +26,12 @@ export class Harmonizer {
   }
 }
 
-export function harmonize(note: Note, wholePitches: Semitone[], conf: HarmonizerConf): Note[] {
+export function harmonize(note: Note, wholePitches: Semitone[], conf: Partial<HarmonizerConf>): Note[] {
+  const fullconf = overrideDefault(Harmonizer.getDefaultConf(), conf)
   if (note.pitch === 'random') return [note]
-  return conf.degree
+  return fullconf.degree
     .map((d) =>
-      getHarmonicPitch(conf, note.pitch as number, convertDegreeToSemitone(d), wholePitches)
+      getHarmonicPitch(fullconf, note.pitch as number, convertDegreeToSemitone(d), wholePitches)
     )
     .filter((n): n is number => n !== null)
     .map((harmonicPitch) => ({ ...note, pitch: harmonicPitch }))
