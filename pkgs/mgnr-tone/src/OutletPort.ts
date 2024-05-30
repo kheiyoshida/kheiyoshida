@@ -1,9 +1,9 @@
 import { OutletPort } from 'mgnr-core/src/Outlet'
 import { Note } from 'mgnr-core/src/generator/Note'
 import { pickRange } from 'utils'
+import { ToneOutlet } from './Outlet'
 import * as Transport from './tone-wrapper/Transport'
 import { scheduleLoop } from './tone-wrapper/utils'
-import { ToneOutlet } from './Outlet'
 
 export class ToneOutletPort extends OutletPort<ToneOutlet> {
   protected checkEvent(totalNumOfLoops: number, loopNth: number, loopStartedAt: number) {
@@ -55,7 +55,7 @@ export class ToneOutletPort extends OutletPort<ToneOutlet> {
     const pitch = this.getConcretePitch(note)
     const duration = pickRange(note.dur) * this.secsPerDivision
     const velocity = pickRange(note.vel)
-    this.outlet.assignNote(pitch, duration, time, velocity)
+    this.outlet.sendNote(pitch, duration, time, velocity)
   }
 
   private getConcretePitch(note: Note): number {

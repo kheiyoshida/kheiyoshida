@@ -46,8 +46,8 @@ describe(`${ToneOutletPort.name}`, () => {
   })
   it(`assigns notes`, () => {
     const { outlet } = prepareOutlet()
-    const port = outlet.createPort(prepareGeneratorWithNotes())
-    const spyOutletAssign = jest.spyOn(outlet, 'assignNote').mockImplementation(() => undefined)
+    const port = outlet.assignGenerator(prepareGeneratorWithNotes())
+    const spyOutletAssign = jest.spyOn(outlet, 'sendNote').mockImplementation(() => undefined)
     port.loopSequence(4, 0)
     expect(spyScheduleLoop.mock.calls[0].slice(1)).toMatchObject([
       1, // duration
@@ -59,7 +59,7 @@ describe(`${ToneOutletPort.name}`, () => {
   it(`should trigger elapsed events on each loop`, () => {
     const eventHandler = jest.fn()
     const { outlet } = prepareOutlet()
-    const port = outlet.createPort(prepareGeneratorWithNotes())
+    const port = outlet.assignGenerator(prepareGeneratorWithNotes())
     port.onElapsed(eventHandler)
     port.loopSequence(4, 0)
     expect(eventHandler).toHaveBeenCalledTimes(4)

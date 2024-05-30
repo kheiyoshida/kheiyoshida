@@ -29,7 +29,7 @@ describe(`${ToneOutlet.name}`, () => {
     const inst = new Tone.Synth()
     const outlet = new ToneOutlet(inst)
     const spyInstTrigger = jest.spyOn(inst, 'triggerAttackRelease').mockImplementation(jest.fn())
-    outlet.assignNote(60, 1, 250, 100)
+    outlet.sendNote(60, 1, 250, 100)
     expect(spyInstTrigger).toHaveBeenCalledTimes(1)
     expect(spyInstTrigger).toHaveBeenCalledWith('C4', 1, 250, expect.any(Number))
   })
@@ -40,8 +40,8 @@ describe(`${MonoOutlet.name}`, () => {
     const inst = new Tone.Synth()
     const outlet = new MonoOutlet(inst, 250)
     const spyInstTrigger = jest.spyOn(inst, 'triggerAttackRelease').mockImplementation(jest.fn())
-    outlet.assignNote(60, 1, 250, 100)
-    outlet.assignNote(62, 1, 250, 100) // gets dropped
+    outlet.sendNote(60, 1, 250, 100)
+    outlet.sendNote(62, 1, 250, 100) // gets dropped
     jest.advanceTimersByTime(250)
     expect(spyInstTrigger).toHaveBeenCalledTimes(1)
     expect(spyInstTrigger).toHaveBeenCalledWith('C4', 1, 250, expect.any(Number))
@@ -59,10 +59,10 @@ describe(`${LayeredOutlet.name}`, () => {
     const outlet = new LayeredOutlet(composite, 250)
     const spyInstTrigger = jest.spyOn(inst, 'triggerAttackRelease').mockImplementation(jest.fn())
     const spyInst2Trigger = jest.spyOn(inst2, 'triggerAttackRelease').mockImplementation(jest.fn())
-    outlet.assignNote(60, 1, 250, 100)
-    outlet.assignNote(62, 1, 250, 100) // gets dropped
-    outlet.assignNote(72, 1, 250, 100) // doesn't get dropped
-    outlet.assignNote(74, 1, 250, 100) // gets dropped
+    outlet.sendNote(60, 1, 250, 100)
+    outlet.sendNote(62, 1, 250, 100) // gets dropped
+    outlet.sendNote(72, 1, 250, 100) // doesn't get dropped
+    outlet.sendNote(74, 1, 250, 100) // gets dropped
     jest.advanceTimersByTime(250)
     expect(spyInstTrigger).toHaveBeenCalledTimes(1)
     expect(spyInstTrigger).toHaveBeenCalledWith('C4', 1, 250, expect.any(Number))

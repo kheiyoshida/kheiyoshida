@@ -8,14 +8,14 @@ import { ToneInst } from './types'
 import { ToneOutletPort } from './OutletPort'
 
 export class ToneOutlet extends Outlet<ToneInst> {
-  assignNote(pitch: number, duration: number, time: number, velocity: number): void {
+  sendNote(pitch: number, duration: number, time: number, velocity: number): void {
     this.triggerNote(pitch, duration, time, velocity)
   }
   protected triggerNote(pitch: number, duration: number, time: number, velocity: number): void {
     const noteName = convertMidiToNoteName(pitch)
     this.inst.triggerAttackRelease(noteName, duration, time, velocity / 127)
   }
-  createPort(generator?: SequenceGenerator): ToneOutletPort {
+  assignGenerator(generator: SequenceGenerator): ToneOutletPort {
     return new ToneOutletPort(this, generator)
   }
 }
@@ -28,11 +28,10 @@ export class MonoOutlet extends ToneOutlet {
     Transport.scheduleRepeat((time) => {
       const notes = this.#buffer!.consume(time)
       if (!notes.length) return
-      const note = notes[0] // only use one at a time
-      this.triggerNote(note.pitch, note.duration, note.time, note.velocity)
+      notes.forEach((note) => this.triggerNote(note.pitch, note.duration, note.time, note.velocity))
     }, bufferTimeFrame)
   }
-  assignNote(pitch: number, duration: number, time: number, velocity: number): void {
+  sendNote(pitch: number, duration: number, time: number, velocity: number): void {
     this.#buffer.insert({ pitch, duration, time, velocity })
   }
 }
@@ -46,13 +45,13 @@ export class LayeredOutlet extends ToneOutlet {
       const noteGroups = this.#buffer!.consume(time)
       noteGroups.forEach((notes) => {
         if (!notes.length) return
-        notes.forEach(note => {
+        notes.forEach((note) => {
           this.triggerNote(note.pitch, note.duration, note.time, note.velocity)
         })
       })
     }, bufferTimeFrame)
   }
-  assignNote(pitch: number, duration: number, time: number, velocity: number): void {
+  sendNote(pitch: number, duration: number, time: number, velocity: number): void {
     this.#buffer.insert({ pitch, duration, time, velocity })
   }
 }

@@ -18,9 +18,6 @@ const prepareDrums = () => {
 
   const outlet = mgnr.createOutlet(synCh.inst, Tone.Transport.toSeconds('2n'))
 
-  const port1 = outlet.createPort()
-  const port2 = outlet.createPort()
-
   const generator = mgnr.createGenerator({
     scale: scale,
     length: 16,
@@ -119,12 +116,13 @@ const prepareDrums = () => {
     ],
   })
 
-  generator
-    .feedOutlet(port1)
+  outlet
+    .assignGenerator(generator)
     .loopSequence(4)
-    .onEnded(mes => mes.repeatLoop())
-  generator2
-    .feedOutlet(port2)
+    .onEnded((mes) => mes.repeatLoop())
+
+  outlet
+    .assignGenerator(generator2)
     .loopSequence(2)
     .onEnded((mes) => {
       mes.out.generator.mutate({ rate: 0.25, strategy: 'move' })
@@ -155,10 +153,9 @@ const prepareSynth = () => {
     },
     fillPref: 'mono',
   })
-  const port2 = outlet2.createPort()
   generator2.constructNotes()
-  generator2
-    .feedOutlet(port2)
+  outlet2
+    .assignGenerator(generator2)
     .loopSequence(2)
     .onElapsed(() => {
       generator2.mutate({ rate: 0.5, strategy: 'inPlace' })

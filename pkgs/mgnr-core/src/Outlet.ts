@@ -2,27 +2,20 @@ import { SequenceGenerator } from './generator/Generator'
 import { SeqEvent, SequenceLoopElapsedHandler, SequenceLoopEndedHandler } from './types'
 
 export abstract class Outlet<Inst = unknown> {
-  constructor(protected inst: Inst, mono = false) {}
-  abstract assignNote(...args: unknown[]): void
-  abstract createPort(): OutletPort<Outlet>
+  constructor(protected inst: Inst) {}
+  abstract sendNote(...args: unknown[]): void
+  abstract assignGenerator(generator: SequenceGenerator): OutletPort<Outlet>
 }
 
 export abstract class OutletPort<O extends Outlet = Outlet> {
-  get generator(): SequenceGenerator {
-    if (!this._generator) throw Error(`generator is not set`)
-    return this._generator
-  }
-  set generator(gen: SequenceGenerator) {
-    this._generator = gen
-  }
   constructor(
-    protected outlet: O,
-    private _generator?: SequenceGenerator
+    readonly outlet: O,
+    readonly generator: SequenceGenerator
   ) {}
 
   readonly events: SeqEvent = {}
 
-  public abstract loopSequence(loop?: number, startTime?: number): OutletPort
+  public abstract loopSequence(loop?: number, startTime?: number): OutletPort<O>
 
   public onElapsed(eventHandler: SequenceLoopElapsedHandler) {
     this.events.elapsed = eventHandler
