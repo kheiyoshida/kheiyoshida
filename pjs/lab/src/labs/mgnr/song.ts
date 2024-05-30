@@ -5,7 +5,7 @@ import { drumMachine, compsoiteSynth } from './instruments'
 const mixer = mgnr.getMixer()
 
 export const prepareSong = () => {
-  prepareDrums()
+  // prepareDrums()
   prepareSynth()
 }
 
@@ -119,31 +119,27 @@ const prepareDrums = () => {
   outlet
     .assignGenerator(generator)
     .loopSequence(4)
-    .onEnded((mes) => mes.repeatLoop())
+    .onEnded((c) => c.repeatLoop())
 
   outlet
     .assignGenerator(generator2)
     .loopSequence(2)
-    .onEnded((mes) => {
-      mes.out.generator.mutate({ rate: 0.25, strategy: 'move' })
-      mes.repeatLoop()
+    .onEnded((c) => {
+      c.generator.mutate({ rate: 0.25, strategy: 'move' })
+      c.repeatLoop()
     })
 }
 
 const prepareSynth = () => {
-  const scale2 = mgnr.createScale('C', 'omit25', { min: 30, max: 80 })
+  const scale = mgnr.createScale('C', 'omit25', { min: 30, max: 80 })
   const compositeCh = mixer.createInstChannel({
     inst: compsoiteSynth,
     initialVolume: -20,
-    effects: [
-      // new Tone.Filter(1000, 'lowpass'),
-      // new Tone.Distortion(0.2),
-      new Tone.PingPongDelay('.8n', 0.3),
-    ],
+    effects: [new Tone.PingPongDelay('.8n', 0.3)],
   })
-  const outlet2 = mgnr.createOutlet(compositeCh.inst)
-  const generator2 = mgnr.createGenerator({
-    scale: scale2,
+  const outlet = mgnr.createOutlet(compositeCh.inst)
+  const generator = mgnr.createGenerator({
+    scale: scale,
     length: 10,
     division: 16,
     density: 0.7,
@@ -153,15 +149,15 @@ const prepareSynth = () => {
     },
     fillPref: 'mono',
   })
-  generator2.constructNotes()
-  outlet2
-    .assignGenerator(generator2)
-    .loopSequence(2)
-    .onElapsed(() => {
-      generator2.mutate({ rate: 0.5, strategy: 'inPlace' })
+  generator.constructNotes()
+  outlet
+    .assignGenerator(generator)
+    .loopSequence(4)
+    .onElapsed((c) => {
+      c.generator.mutate({ rate: 0.5, strategy: 'inPlace' })
     })
-    .onEnded((mes) => {
-      generator2.mutate({ rate: 0.5, strategy: 'randomize' })
-      mes.repeatLoop()
+    .onEnded((c) => {
+      c.generator.mutate({ rate: 0.5, strategy: 'randomize' })
+      c.repeatLoop()
     })
 }

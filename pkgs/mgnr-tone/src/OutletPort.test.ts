@@ -64,4 +64,12 @@ describe(`${ToneOutletPort.name}`, () => {
     port.loopSequence(4, 0)
     expect(eventHandler).toHaveBeenCalledTimes(4)
   })
+  it(`should trigger ended event when loop ends`, () => {
+    const eventHandler = jest.fn()
+    const { outlet } = prepareOutlet()
+    const port = outlet.assignGenerator(prepareGeneratorWithNotes())
+    port.onEnded(eventHandler)
+    port.loopSequence(4, 0)
+    expect(eventHandler).toHaveBeenCalledTimes(1)
+  })
 })

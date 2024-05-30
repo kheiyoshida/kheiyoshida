@@ -1,5 +1,5 @@
 import { SequenceGenerator } from './generator/Generator'
-import { SeqEvent, SequenceLoopElapsedHandler, SequenceLoopEndedHandler } from './types'
+import { LoopEvent, LoopElapsedHandler, LoopEndedHandler } from './types'
 
 export abstract class Outlet<Inst = unknown> {
   constructor(protected inst: Inst) {}
@@ -13,16 +13,16 @@ export abstract class OutletPort<O extends Outlet = Outlet> {
     readonly generator: SequenceGenerator
   ) {}
 
-  readonly events: SeqEvent = {}
+  readonly events: LoopEvent = {}
 
   public abstract loopSequence(loop?: number, startTime?: number): OutletPort<O>
 
-  public onElapsed(eventHandler: SequenceLoopElapsedHandler) {
+  public onElapsed(eventHandler: LoopElapsedHandler) {
     this.events.elapsed = eventHandler
     return this
   }
 
-  public onEnded(eventHandler: SequenceLoopEndedHandler) {
+  public onEnded(eventHandler: LoopEndedHandler) {
     this.events.ended = eventHandler
     return this
   }

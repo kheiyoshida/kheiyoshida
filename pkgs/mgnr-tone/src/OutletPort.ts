@@ -6,25 +6,22 @@ import * as Transport from './tone-wrapper/Transport'
 import { scheduleLoop } from './tone-wrapper/utils'
 
 export class ToneOutletPort extends OutletPort<ToneOutlet> {
+  /**
+   * @note loopNth starts from 1
+   */
   protected checkEvent(totalNumOfLoops: number, loopNth: number, loopStartedAt: number) {
     if (this.events.elapsed) {
       this.events.elapsed({
-        out: this,
-        loop: loopNth,
-        endTime: loopStartedAt + loopNth * this.sequenceDuration,
+        generator: this.generator,
       })
     }
     if (loopNth === totalNumOfLoops) {
-      this.cancelAssign()
       const actualEndTime = loopStartedAt + totalNumOfLoops * this.sequenceDuration
-      if (this.events.ended) {
-        this.events.ended({
-          out: this,
-          loop: totalNumOfLoops,
-          endTime: actualEndTime,
-          repeatLoop: () => this.loopSequence(totalNumOfLoops, actualEndTime),
-        })
-      }
+      if (!this.events.ended) return
+      this.events.ended({
+        generator: this.generator,
+        repeatLoop: (numOfLoops) => this.loopSequence(numOfLoops || totalNumOfLoops, actualEndTime),
+      })
     }
   }
 
@@ -33,10 +30,9 @@ export class ToneOutletPort extends OutletPort<ToneOutlet> {
    */
   static BufferTime = 0.05
 
-  private loopIds: number[] = []
   public loopSequence(numOfLoops = 1, startTime = 0): ToneOutletPort {
     if (this.generator.sequence.isEmpty) return this
-    const e = scheduleLoop(
+    scheduleLoop(
       (time, loopNth) => {
         this.checkEvent(numOfLoops, loopNth, startTime)
         this.generator.sequence.iterateEachNote((note, position) => {
@@ -47,7 +43,6 @@ export class ToneOutletPort extends OutletPort<ToneOutlet> {
       startTime,
       numOfLoops
     )
-    this.loopIds.push(e)
     return this
   }
 
@@ -74,10 +69,5 @@ export class ToneOutletPort extends OutletPort<ToneOutlet> {
 
   private get secsPerDivision() {
     return this.secsPerMeasure / this.generator.sequence.division
-  }
-
-  public cancelAssign() {
-    this.loopIds.forEach((id) => Transport.clear(id))
-    this.loopIds = []
   }
 }

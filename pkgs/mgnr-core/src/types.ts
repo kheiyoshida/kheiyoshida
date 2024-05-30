@@ -1,21 +1,19 @@
-import { OutletPort } from './Outlet'
+import { SequenceGenerator } from './generator/Generator'
 
-export type SeqEventKey = 'elapsed' | 'ended'
+export type LoopEventKey = 'elapsed' | 'ended'
 
 export type SequenceLoopEventContext = {
-  out: OutletPort
-  loop: number
-  endTime: number
+  generator: SequenceGenerator
 }
 
-export type SequenceLoopElapsedHandler = (context: SequenceLoopEventContext) => void
-export type SequenceLoopEndedHandler = (
-  context: SequenceLoopEventContext & { repeatLoop: () => void }
+export type LoopElapsedHandler = (context: SequenceLoopEventContext) => void
+export type LoopEndedHandler = (
+  context: SequenceLoopEventContext & { repeatLoop: (numOfLoops?: number) => void }
 ) => void
 
-export type SeqEvent = {
-  elapsed?: SequenceLoopElapsedHandler
-  ended?: SequenceLoopEndedHandler
+export type LoopEvent = {
+  elapsed?: LoopElapsedHandler
+  ended?: LoopEndedHandler
 }
 
 export type MutateStrategy = 'randomize' | 'move' | 'inPlace' | 'recursion'
