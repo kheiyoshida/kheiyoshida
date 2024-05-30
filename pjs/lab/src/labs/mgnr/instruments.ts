@@ -1,7 +1,7 @@
 import * as mgnr from 'mgnr-tone'
 import * as Tone from 'tone'
 
-export const monoSynth = new Tone.MonoSynth({
+export const monoSynth = new Tone.PolySynth(Tone.MonoSynth, {
   oscillator: {
     type: 'sine',
   },
@@ -19,7 +19,7 @@ export const monoSynth = new Tone.MonoSynth({
   },
 })
 
-export const monoSynth2 = new Tone.MonoSynth({
+export const monoSynth2 = new Tone.PolySynth(Tone.MonoSynth, {
   oscillator: {
     type: 'sine2',
   },
@@ -30,7 +30,7 @@ export const monoSynth2 = new Tone.MonoSynth({
     release: 0.1,
   },
   volume: -10,
-  detune: 100,
+  detune: 20,
   filter: {
     type: 'lowpass',
     frequency: 2000,

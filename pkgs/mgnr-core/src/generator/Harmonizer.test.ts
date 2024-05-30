@@ -1,18 +1,19 @@
-import { Harmonizer } from './Harmonizer'
+import { Harmonizer, harmonize } from './Harmonizer'
 import { Scale } from './scale/Scale'
 
-describe(`${Harmonizer.name}`, () => {
+describe(`${harmonize.name}`, () => {
   it(`can harmonize note by degree`, () => {
     const scale = new Scale({})
-    const harmonizer = new Harmonizer({
-      degree: ['5'],
-    })
     const note = {
       pitch: 60,
       dur: 1,
       vel: 100,
     }
-    const res = harmonizer.harmonize(note, scale.wholePitches)
+    const res = harmonize(note, scale.wholePitches, {
+      degree: ['5'],
+      force: false,
+      lookDown: false,
+    })
     expect(res).toMatchObject([
       {
         ...note,

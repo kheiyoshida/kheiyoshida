@@ -11,7 +11,7 @@ export type NotePickerConf = {
   noteVel: number | Range
   veloPref: 'randomPerEach' | 'consistent'
   fillStrategy: 'random' | 'fill' | 'fixed'
-  harmonizer?: HarmonizerConf
+  harmonizer?: Partial<HarmonizerConf>
 }
 
 export class NotePicker {
@@ -34,6 +34,7 @@ export class NotePicker {
     this._conf = overrideDefault(NotePicker.getDefaultConf(), conf)
     this.scale = scale || new Scale({ key: 'C', range: { min: 24, max: 120 } })
   }
+
   static getDefaultConf(): NotePickerConf {
     return {
       noteDur: 1,

@@ -1,4 +1,3 @@
-import Logger from 'js-logger'
 import { overrideDefault } from 'utils'
 import { Note } from './Note'
 import { Degree, MidiNum, OCTAVE, Semitone } from './constants'
@@ -6,17 +5,15 @@ import { convertDegreeToSemitone } from './convert'
 
 export type HarmonizerConf = {
   degree: (Degree | Semitone)[]
-  force?: boolean
-  lookDown?: boolean
+  force: boolean
+  lookDown: boolean
 }
 
 export class Harmonizer {
   private conf: HarmonizerConf
-
   constructor(conf: Partial<HarmonizerConf>) {
     this.conf = overrideDefault(Harmonizer.getDefaultConf(), conf)
   }
-
   static getDefaultConf(): HarmonizerConf {
     return {
       degree: [],
@@ -24,66 +21,44 @@ export class Harmonizer {
       lookDown: false,
     }
   }
-
-  /**
-   * harmonize note's pitch.
-   * @param note original note
-   * @param wholePitches available pitches in the scale
-   */
   public harmonize(note: Note, wholePitches: Semitone[]): Note[] {
-    return this.conf.degree
-      .map((d) => this._harmonize(note, d, wholePitches))
-      .filter((n): n is Note => n !== undefined)
+    return harmonize(note, wholePitches, this.conf)
   }
+}
 
-  private _harmonize(note: Note, degree: Degree | Semitone, pitches: Semitone[]): Note | undefined {
-    if (note.pitch === 'random') {
-      Logger.info(`random harmonize`)
-      return note
-    }
-    const semiDeg = convertDegreeToSemitone(degree)
-    if (this.conf.force) {
-      const pitch = this.getPitch(note.pitch, semiDeg)
-      return { ...note, pitch }
-    } else {
-      const pitch = this.lookupHarmonicPitch(note.pitch, semiDeg, pitches)
-      if (pitch !== undefined) {
-        return { ...note, pitch }
-      }
-    }
-  }
+export function harmonize(note: Note, wholePitches: Semitone[], conf: HarmonizerConf): Note[] {
+  if (note.pitch === 'random') return [note]
+  return conf.degree
+    .map((d) =>
+      getHarmonicPitch(conf, note.pitch as number, convertDegreeToSemitone(d), wholePitches)
+    )
+    .filter((n): n is number => n !== null)
+    .map((harmonicPitch) => ({ ...note, pitch: harmonicPitch }))
+}
 
-  /**
-   * recursively look up harmonic pitch in the scale's pitches.
-   * note that it tries to look up nearest pitch if there's none matching.
-   *
-   * @param rootPitch original pitch of provided note
-   * @param degree degree in semitone
-   * @param pitches scale's pitch list
-   * @returns harmonized pitch
-   */
-  private lookupHarmonicPitch(
-    rootPitch: number,
-    degree: Semitone,
-    pitches: Semitone[],
-    r = 0
-  ): MidiNum | undefined {
-    if (r > OCTAVE) {
-      Logger.warn(`could not find harmonized pitch: ${rootPitch} ${pitches}`)
-      return
-    }
-    const p = this.getPitch(rootPitch, degree)
-    if (pitches.includes(p)) {
-      return p
-    } else {
-      return this.lookupHarmonicPitch(rootPitch, degree + 1, pitches, r + 1)
-    }
-  }
+const getHarmonicPitch = (
+  conf: HarmonizerConf,
+  originalPitch: Semitone,
+  distance: Semitone,
+  pitches: Semitone[]
+): number | null => {
+  if (conf.force) return getPitchInDistance(originalPitch, distance, conf.lookDown)
+  else return lookupHarmonicPitch(originalPitch, distance, pitches, conf.lookDown)
+}
 
-  /**
-   * add/subtract pitch
-   */
-  private getPitch(pitch: MidiNum, semi: Semitone) {
-    return this.conf.lookDown ? pitch - semi : pitch + semi
-  }
+function lookupHarmonicPitch(
+  rootPitch: number,
+  degree: Semitone,
+  pitches: Semitone[],
+  lookDown: boolean,
+  r = 0
+): MidiNum | null {
+  if (r > OCTAVE) return null
+  const p = getPitchInDistance(rootPitch, degree, lookDown)
+  if (pitches.includes(p)) return p
+  else return lookupHarmonicPitch(rootPitch, degree + 1, pitches, lookDown, r + 1)
+}
+
+function getPitchInDistance(pitch: MidiNum, distance: Semitone, lookDown: boolean) {
+  return pitch + (lookDown ? -distance : distance)
 }

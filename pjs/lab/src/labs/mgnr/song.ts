@@ -131,7 +131,7 @@ const prepareDrums = () => {
 }
 
 const prepareSynth = () => {
-  const scale = mgnr.createScale('C', 'omit25', { min: 30, max: 80 })
+  const scale = mgnr.createScale('C', 'omit25', { min: 50, max: 80 })
   const compositeCh = mixer.createInstChannel({
     inst: compsoiteSynth,
     initialVolume: -20,
@@ -148,6 +148,11 @@ const prepareSynth = () => {
       max: 8,
     },
     fillPref: 'mono',
+    harmonizer: {
+      degree: ['3', '5', '7'],
+      force: false,
+      lookDown: false
+    }
   })
   generator.constructNotes()
   outlet

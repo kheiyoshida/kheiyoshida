@@ -6,22 +6,25 @@ toneStart()
 
 const keyboardName = 'Q Mini'
 
-WebMidi.enable()
-  .then(() => {
-    const keyboard = WebMidi.getInputByName(keyboardName)
-    if (!keyboard) throw new Error('No keyboard found')
+const enable = () => {
+  WebMidi.enable()
+    .then(() => {
+      const keyboard = WebMidi.getInputByName(keyboardName)
+      if (!keyboard) throw new Error('No keyboard found')
 
-    keyboard.channels[1].addListener('noteon', (e) => {
-      const el = document.getElementById('note')!
-      const note = `${e.note.name}${e.note.accidental || ''}${e.note.octave}`
-      el.innerText = note
-      composite.triggerAttackRelease(note, '2n')
+      keyboard.channels[1].addListener('noteon', (e) => {
+        const el = document.getElementById('note')!
+        const note = `${e.note.name}${e.note.accidental || ''}${e.note.octave}`
+        el.innerText = note
+        composite.triggerAttackRelease(note, '2n')
+      })
     })
-  })
-  .catch((err) => console.error(err))
+    .catch((err) => console.error(err))
+}
 
 export default () => {
   useEffect(() => {
+    enable()
     toneStart()
   }, [])
   return (

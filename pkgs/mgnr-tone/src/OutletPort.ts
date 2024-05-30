@@ -34,10 +34,10 @@ export class ToneOutletPort extends OutletPort<ToneOutlet> {
     if (this.generator.sequence.isEmpty) return this
     scheduleLoop(
       (time, loopNth) => {
-        this.checkEvent(numOfLoops, loopNth, startTime)
         this.generator.sequence.iterateEachNote((note, position) => {
           this.assignNote(note, time + position * this.secsPerDivision + ToneOutletPort.BufferTime)
         })
+        this.checkEvent(numOfLoops, loopNth, startTime)
       },
       this.sequenceDuration,
       startTime,
