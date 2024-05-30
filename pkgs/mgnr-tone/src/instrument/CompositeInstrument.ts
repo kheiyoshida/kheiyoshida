@@ -17,7 +17,11 @@ export class CompositeInstrument implements ToneInst {
     velocity?: number | undefined
   ): Instrument<InstrumentOptions> {
     this.instruments.forEach((instrument) => {
-      instrument.triggerAttackRelease(note, duration, time, velocity)
+      if (instrument instanceof NoiseSynth) { // maybe we should avoid this
+        instrument.triggerAttackRelease(duration, time, velocity)
+      } else {
+        instrument.triggerAttackRelease(note, duration, time, velocity)
+      }
     })
     return this.instruments[0] as Instrument<InstrumentOptions> // satisfy compiler
   }
