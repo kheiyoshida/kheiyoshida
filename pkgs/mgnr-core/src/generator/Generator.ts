@@ -175,3 +175,11 @@ export class SequenceGenerator {
     })
   }
 }
+
+function mutateNotesPitches(sequence: Sequence, scale: Scale, rate: number) {
+  sequence.iterateEachNote((n) => {
+    if (fireByRate(rate)) {
+      changeNotePitch(n, scale)
+    }
+  })
+}
