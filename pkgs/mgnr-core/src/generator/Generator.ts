@@ -10,6 +10,35 @@ import {
 import { Sequence, SequenceConf, SequenceNoteMap } from './Sequence'
 import { Scale } from './scale/Scale'
 
+import type { Tail } from 'utils'
+
+type Middleware = (ctx: GeneratorContext, ...params: never[]) => void
+type Injected<MW extends Middleware> = (...params: Tail<Parameters<MW>>) => void
+type Middlewares = Record<string, Middleware>
+type InjectedMiddlewares<MW extends Middlewares> = {
+  [k in keyof MW]: Injected<MW[k]>
+}
+
+type Generator<MW extends Middlewares> = GeneratorContext &
+  InjectedMiddlewares<MW> &
+  InjectedMiddlewares<typeof defaultMiddlewares>
+
+export const createGenerator = <MW extends Middlewares>(
+  context: GeneratorContext,
+  middlewares: MW = <MW>{}
+): Generator<MW> => {
+  const injected = Object.fromEntries(
+    Object.entries({ ...defaultMiddlewares, ...middlewares }).map(([k, mw]) => [
+      k,
+      (...args) => mw(context, ...args),
+    ])
+  ) as InjectedMiddlewares<MW & typeof defaultMiddlewares>
+  return {
+    ...context,
+    ...injected,
+  }
+}
+
 export type GeneratorConf = {
   scale?: Scale
 } & Partial<SequenceConf> &
@@ -47,24 +76,15 @@ export class SequenceGenerator {
   }
 
   public updateConfig(config: Partial<GeneratorConf>): void {
-    this.sequence.updateConfig(config)
-    this.picker = { ...this.picker, ...config }
-    this.constructNotes()
+    updateConfig(this.getContext(), config)
   }
 
   public constructNotes(initialNotes?: SequenceNoteMap) {
-    const context = this.getContext()
-    assignInitialNotes(context, initialNotes)
-    assignNotes(context)
+    constructNotes(this.getContext(), initialNotes)
   }
 
   public resetNotes(notes?: SequenceNoteMap) {
-    const context = this.getContext()
-    eraseSequenceNotes(context)
-    assignInitialNotes(context, notes)
-    removeNotesOutOfLength(context.sequence)
-    adjustPitch(context)
-    assignNotes(context)
+    resetNotes(this.getContext(), notes)
   }
 
   public eraseSequenceNotes() {
@@ -88,7 +108,28 @@ export class SequenceGenerator {
   }
 }
 
-const resetNotes = (context: GeneratorContext) => (notes?: SequenceNoteMap) => {
+const defaultMiddlewares = {
+  updateConfig,
+  constructNotes,
+  resetNotes,
+  eraseSequenceNotes,
+  adjustPitch,
+  changeSequenceLength,
+  mutate,
+} satisfies Middlewares
+
+function updateConfig(context: GeneratorContext, config: Partial<GeneratorConf>) {
+  context.sequence.updateConfig(config)
+  Object.assign(context.picker, config)
+  constructNotes(context)
+}
+
+function constructNotes(context: GeneratorContext, initialNotes?: SequenceNoteMap) {
+  assignInitialNotes(context, initialNotes)
+  assignNotes(context)
+}
+
+function resetNotes(context: GeneratorContext, notes?: SequenceNoteMap) {
   eraseSequenceNotes(context)
   assignInitialNotes(context, notes)
   removeNotesOutOfLength(context.sequence)
