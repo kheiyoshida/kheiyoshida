@@ -3,13 +3,22 @@ import { HarmonizerConf, harmonize } from './Harmonizer'
 import { Note } from './Note'
 import { Scale } from './scale/Scale'
 
-export type NotePickerConf = {
-  noteDur: number | Range
+type VelocityConf = {
   noteVel: number | Range
   veloPref: 'randomPerEach' | 'consistent'
+}
+
+type DurationConf = {
+  fillStrategy: 'random' | 'fill' | 'fixed'
+  noteDur: number | Range
+}
+
+type PitchConf = {
   fillStrategy: 'random' | 'fill' | 'fixed'
   harmonizer?: Partial<HarmonizerConf>
 }
+
+export type NotePickerConf = VelocityConf & DurationConf & PitchConf
 
 export class NotePicker {
   private _conf: NotePickerConf
@@ -62,18 +71,22 @@ export class NotePicker {
   }
 }
 
+// Note
+
+export function pickNote(conf: NotePickerConf, scale: Scale): Note | undefined {
+  const pitch = getNotePitch(conf, scale)
+  if (!pitch) return
+  return {
+    pitch: pitch,
+    dur: getNoteDuration(conf),
+    vel: getNoteVelocity(conf),
+  }
+}
+
 export function pickHarmonizedNotes(conf: NotePickerConf, scale: Scale): Note[] | undefined {
   const n = pickNote(conf, scale)
   if (!n) return
   return [n, ...harmonizeNote(n, conf, scale)]
-}
-
-export function pickNote(conf: NotePickerConf, scale: Scale): Note | undefined {
-  if (conf.fillStrategy === 'random') {
-    return pickRandomNote(conf)
-  } else {
-    return pickConcreteNote(conf, scale)
-  }
 }
 
 export function harmonizeNote(note: Note, conf: NotePickerConf, scale: Scale): Note[] {
@@ -81,10 +94,12 @@ export function harmonizeNote(note: Note, conf: NotePickerConf, scale: Scale): N
   return harmonize(note, scale.wholePitches, conf.harmonizer)
 }
 
+// Pitch
+
 export function adjustNotePitch(
   n: Note,
   scale: Scale,
-  conf: NotePickerConf,
+  conf: PitchConf,
   d?: 'up' | 'down' | 'bi'
 ): void {
   if (isIncludedInScale(n.pitch, scale)) return
@@ -105,31 +120,26 @@ function isIncludedInScale(pitch: Note['pitch'], scale: Scale): boolean {
   return scale.primaryPitches.includes(pitch)
 }
 
-function getNoteVelocity({ veloPref, noteVel }: NotePickerConf): Note['vel'] {
-  return veloPref === 'randomPerEach' ? noteVel : pickRange(noteVel)
-}
-
-function pickRandomNote(conf: NotePickerConf): Note {
-  return {
-    pitch: 'random',
-    dur: conf.noteDur,
-    vel: getNoteVelocity(conf),
-  }
-}
-
-function pickConcreteNote(conf: NotePickerConf, scale: Scale): Note | undefined {
-  const pitch = scale.pickRandomPitch()
-  if (!pitch) return
-  return {
-    pitch,
-    dur: pickRange(conf.noteDur),
-    vel: getNoteVelocity(conf),
-  }
+function getNotePitch(conf: PitchConf, scale: Scale): Note['pitch'] | undefined {
+  if (conf.fillStrategy === 'random') return 'random'
+  else return scale.pickRandomPitch()
 }
 
 function getDifferentPitch(scale: Scale, originalPitch: number, r = 0): number {
   if (r > 20) return originalPitch
   const newPitch = scale.pickRandomPitch()
-  if (originalPitch !== newPitch) return newPitch
+  if (originalPitch !== newPitch && newPitch !== undefined) return newPitch
   return getDifferentPitch(scale, originalPitch, r + 1)
+}
+
+// Duration
+
+function getNoteDuration({ noteDur, fillStrategy }: DurationConf): Note['dur'] {
+  return fillStrategy === 'random' ? noteDur : pickRange(noteDur)
+}
+
+// Velocity
+
+function getNoteVelocity({ veloPref, noteVel }: VelocityConf): Note['vel'] {
+  return veloPref === 'randomPerEach' ? noteVel : pickRange(noteVel)
 }

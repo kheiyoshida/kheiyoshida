@@ -104,7 +104,7 @@ export class Scale {
     this._primaryPitches = primaryPitches
   }
 
-  public pickRandomPitch(): MidiNum {
+  public pickRandomPitch(): MidiNum | undefined {
     return randomItemFromArray(this.primaryPitches)
   }
 
