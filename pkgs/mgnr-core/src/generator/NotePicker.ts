@@ -20,6 +20,17 @@ type PitchConf = {
 
 export type NotePickerConf = VelocityConf & DurationConf & PitchConf
 
+export const fillNoteConf = (provided: Partial<NotePickerConf>): NotePickerConf => {
+  return overrideDefault(getDefaultConf(), provided)
+}
+
+const getDefaultConf = (): NotePickerConf => ({
+  noteDur: 1,
+  noteVel: 100,
+  veloPref: 'randomPerEach',
+  fillStrategy: 'fill',
+})
+
 export class NotePicker {
   private _conf: NotePickerConf
   get conf(): NotePickerConf {
@@ -89,7 +100,7 @@ export function pickHarmonizedNotes(conf: NotePickerConf, scale: Scale): Note[] 
   return [n, ...harmonizeNote(n, conf, scale)]
 }
 
-export function harmonizeNote(note: Note, conf: NotePickerConf, scale: Scale): Note[] {
+export function harmonizeNote(note: Note, conf: PitchConf, scale: Scale): Note[] {
   if (!conf.harmonizer) return []
   return harmonize(note, scale.wholePitches, conf.harmonizer)
 }
