@@ -1,6 +1,5 @@
 import { fireByRate } from 'utils'
 import { MutateSpec } from '../types'
-import { Note } from './Note'
 import {
   NotePickerConf,
   adjustNotePitch,
@@ -15,6 +14,12 @@ export type GeneratorConf = {
   scale?: Scale
 } & Partial<SequenceConf> &
   Partial<NotePickerConf>
+
+type GeneratorContext = {
+  sequence: Sequence
+  picker: NotePickerConf
+  scale: Scale
+}
 
 export class SequenceGenerator {
   picker: NotePickerConf
@@ -33,6 +38,14 @@ export class SequenceGenerator {
     this.sequence = sequence
   }
 
+  private getContext(): GeneratorContext {
+    return {
+      sequence: this.sequence,
+      picker: this.picker,
+      scale: this.scale,
+    }
+  }
+
   public updateConfig(config: Partial<GeneratorConf>): void {
     this.sequence.updateConfig(config)
     this.picker = { ...this.picker, ...config }
@@ -40,65 +53,26 @@ export class SequenceGenerator {
   }
 
   public constructNotes(initialNotes?: SequenceNoteMap) {
-    this.assignInitialNotes(initialNotes)
-    this.assignNotes()
-  }
-
-  private assignInitialNotes(initialNotes?: SequenceNoteMap) {
-    if (!initialNotes) return
-    Sequence.iteratePosition(initialNotes, (position) => {
-      this.sequence.addNotes(
-        position,
-        this.picker.harmonizer
-          ? initialNotes[position].flatMap((note) => [
-              note,
-              ...harmonizeNote(note, this.picker, this.scale),
-            ])
-          : initialNotes[position]
-      )
-    })
-  }
-
-  private assignNotes() {
-    switch (this.picker.fillStrategy) {
-      case 'random':
-      case 'fill':
-        this.fillAvailableSpaceInSequence()
-        break
-      case 'fixed':
-        break
-    }
-  }
-
-  private fillAvailableSpaceInSequence() {
-    let fail = 0
-    while (this.sequence.availableSpace > 0 && fail < 5) {
-      const notes = pickHarmonizedNotes(this.picker, this.scale)
-      if (!notes) {
-        fail += 1
-      } else {
-        const pos = this.sequence.getAvailablePosition()
-        this.sequence.addNotes(pos, notes)
-      }
-    }
+    const context = this.getContext()
+    assignInitialNotes(context, initialNotes)
+    assignNotes(context)
   }
 
   public resetNotes(notes?: SequenceNoteMap) {
-    this.eraseSequenceNotes()
-    this.assignInitialNotes(notes)
-    this.removeNotesOutOfLength()
-    this.adjustPitch()
-    this.assignNotes()
+    const context = this.getContext()
+    eraseSequenceNotes(context)
+    assignInitialNotes(context, notes)
+    removeNotesOutOfLength(context.sequence)
+    adjustPitch(context)
+    assignNotes(context)
   }
 
   public eraseSequenceNotes() {
-    this.sequence.deleteEntireNotes()
+    eraseSequenceNotes(this.getContext())
   }
 
   public adjustPitch() {
-    this.sequence.iterateEachNote((n) => {
-      adjustNotePitch(n, this.scale, this.picker)
-    })
+    adjustPitch(this.getContext())
   }
 
   public changeSequenceLength(
@@ -106,77 +80,131 @@ export class SequenceGenerator {
     length: number,
     onSequenceLengthLimit: (currentMethod: 'shrink' | 'extend') => void = () => undefined
   ) {
-    if (method === 'extend') {
-      if (!this.sequence.canExtend(length)) return onSequenceLengthLimit(method)
-      this.extend(length)
-    } else {
-      if (!this.sequence.canShrink(length)) return onSequenceLengthLimit(method)
-      this.shrink(length)
-    }
+    changeSequenceLength(this.getContext(), method, length, onSequenceLengthLimit)
   }
 
-  private extend(length: number) {
-    this.sequence.extend(length)
-    this.assignNotes()
-  }
-
-  private shrink(length: number) {
-    this.sequence.shrink(length)
-    this.removeNotesOutOfLength()
-  }
-
-  /**
-   * delete excessive notes, typically after shrinking
-   */
-  private removeNotesOutOfLength() {
-    this.sequence.iteratePosition((p) => {
-      if (p >= this.sequence.length) {
-        this.sequence.deleteNotesInPosition(p)
-      }
-    })
-  }
-
-  public mutate({ rate, strategy }: MutateSpec) {
-    switch (strategy) {
-      case 'randomize':
-        this.randomizeNotes(rate)
-        break
-      case 'move':
-        this.moveNotes(rate)
-        break
-      case 'inPlace':
-        this.mutateNotesPitches(rate)
-        break
-    }
-  }
-
-  private randomizeNotes(rate: number) {
-    this.sequence.deleteRandomNotes(rate)
-    this.assignNotes()
-  }
-
-  private moveNotes(rate: number) {
-    const removed = this.sequence.deleteRandomNotes(rate)
-    this.recycleNotes(removed)
-  }
-
-  private recycleNotes(notes: Note[]) {
-    notes.forEach((n) => {
-      const pos = this.sequence.getAvailablePosition()
-      this.sequence.addNote(pos, n)
-    })
-  }
-
-  private mutateNotesPitches(rate: number) {
-    this.sequence.iterateEachNote((n) => {
-      if (fireByRate(rate)) {
-        changeNotePitch(n, this.scale)
-      }
-    })
+  public mutate(spec: MutateSpec) {
+    mutate(this.getContext(), spec)
   }
 }
 
-function mutateNotesPitches(sequence: Sequence, scale: Scale, rate: number) {
+const resetNotes = (context: GeneratorContext) => (notes?: SequenceNoteMap) => {
+  eraseSequenceNotes(context)
+  assignInitialNotes(context, notes)
+  removeNotesOutOfLength(context.sequence)
+  adjustPitch(context)
+  assignNotes(context)
+}
+
+function assignInitialNotes(context: GeneratorContext, initialNotes?: SequenceNoteMap) {
+  if (!initialNotes) return
+  Sequence.iteratePosition(initialNotes, (position) => {
+    context.sequence.addNotes(
+      position,
+      context.picker.harmonizer
+        ? initialNotes[position].flatMap((note) => [
+            note,
+            ...harmonizeNote(note, context.picker, context.scale),
+          ])
+        : initialNotes[position]
+    )
+  })
+}
+
+function eraseSequenceNotes({ sequence }: GeneratorContext) {
+  sequence.deleteEntireNotes()
+}
+
+function adjustPitch({ sequence, scale, picker }: GeneratorContext) {
+  sequence.iterateEachNote((n) => {
+    adjustNotePitch(n, scale, picker)
+  })
+}
+
+function changeSequenceLength(
+  context: GeneratorContext,
+  method: 'shrink' | 'extend',
+  length: number,
+  onSequenceLengthLimit: (currentMethod: 'shrink' | 'extend') => void = () => undefined
+) {
+  if (method === 'extend') {
+    if (!context.sequence.canExtend(length)) return onSequenceLengthLimit(method)
+    extend(context, length)
+  } else {
+    if (!context.sequence.canShrink(length)) return onSequenceLengthLimit(method)
+    shrink(context, length)
+  }
+}
+
+function extend(context: GeneratorContext, length: number) {
+  context.sequence.extend(length)
+  assignNotes(context)
+}
+
+function shrink(context: GeneratorContext, length: number) {
+  context.sequence.shrink(length)
+  removeNotesOutOfLength(context.sequence)
+}
+
+function removeNotesOutOfLength(sequence: Sequence) {
+  sequence.iteratePosition((p) => {
+    if (p >= sequence.length) {
+      sequence.deleteNotesInPosition(p)
+    }
+  })
+}
+
+function mutate(context: GeneratorContext, { rate, strategy }: MutateSpec) {
+  switch (strategy) {
+    case 'randomize':
+      randomizeNotes(context, rate)
+      break
+    case 'move':
+      moveNotes(context, rate)
+      break
+    case 'inPlace':
+      mutateNotesPitches(context, rate)
+      break
+  }
+}
+
+function randomizeNotes(context: GeneratorContext, rate: number) {
+  context.sequence.deleteRandomNotes(rate)
+  assignNotes(context)
+}
+
+function assignNotes(context: GeneratorContext) {
+  switch (context.picker.fillStrategy) {
+    case 'random':
+    case 'fill':
+      fillAvailableSpaceInSequence(context)
+      break
+    case 'fixed':
+      break
+  }
+}
+
+function fillAvailableSpaceInSequence({ sequence, picker, scale }: GeneratorContext) {
+  let fail = 0
+  while (sequence.availableSpace > 0 && fail < 5) {
+    const notes = pickHarmonizedNotes(picker, scale)
+    if (!notes) {
+      fail += 1
+    } else {
+      const pos = sequence.getAvailablePosition()
+      sequence.addNotes(pos, notes)
+    }
+  }
+}
+
+function moveNotes({ sequence }: GeneratorContext, rate: number) {
+  sequence.deleteRandomNotes(rate).forEach((n) => {
+    const pos = sequence.getAvailablePosition()
+    sequence.addNote(pos, n)
+  })
+}
+
+function mutateNotesPitches({ sequence, scale }: GeneratorContext, rate: number) {
   sequence.iterateEachNote((n) => {
     if (fireByRate(rate)) {
       changeNotePitch(n, scale)

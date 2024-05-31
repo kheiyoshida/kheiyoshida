@@ -16,3 +16,6 @@ export type IntRange<F extends number, T extends number> = Exclude<Enumerate<T>,
 
 export type PartialRequired<R extends Record<string, unknown>, K extends keyof R> = Partial<R> &
   Required<{ [k in K]: R[k] }>
+
+export type Head<T extends unknown[]> = T extends [infer H, ...unknown[]] ? H : never
+export type Tail<T extends unknown[]> = T extends [unknown, ...infer R] ? R : never

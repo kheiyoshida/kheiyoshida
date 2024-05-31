@@ -1,24 +1,24 @@
+import type { Tail } from "utils"
+
 type SequenceContext = {
   config: {
     foo: number
   }
 }
 
-type MiddlewareMap = Record<string, Middleware>
-type InjectedMiddlewares<MW extends MiddlewareMap> = {
-  [k in keyof MW]: ReturnType<MW[k]>
+type Middleware = (ctx: SequenceContext, ...params: never[]) => void
+type Injected<MW extends Middleware> = (...params: Tail<Parameters<MW>>) => void
+type Middlewares = Record<string, Middleware>
+type InjectedMiddlewares<MW extends Middlewares> = {
+  [k in keyof MW]: Injected<MW[k]>
 }
 
-type Generator<MW extends MiddlewareMap> = SequenceContext & InjectedMiddlewares<MW>
-
-type Middleware = (ctx: SequenceContext) => (...params: never[]) => void
-
-export const createGenerator = <MW extends MiddlewareMap>(
+export const createGenerator = <MW extends Middlewares>(
   context: SequenceContext,
   middlewares: MW
-): Generator<MW> => {
+) => {
   const injected = Object.fromEntries(
-    Object.entries(middlewares).map(([k, mw]) => [k, (...args) => mw(context)(...args)])
+    Object.entries(middlewares).map(([k, mw]) => [k, (...args) => mw(context, ...args)])
   ) as InjectedMiddlewares<MW>
   return {
     ...context,
