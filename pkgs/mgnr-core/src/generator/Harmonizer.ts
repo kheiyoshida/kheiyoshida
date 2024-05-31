@@ -9,26 +9,19 @@ export type HarmonizerConf = {
   lookDown: boolean
 }
 
-export class Harmonizer {
-  private conf: HarmonizerConf
-  constructor(conf: Partial<HarmonizerConf>) {
-    this.conf = overrideDefault(Harmonizer.getDefaultConf(), conf)
-  }
-  static getDefaultConf(): HarmonizerConf {
-    return {
-      degree: [],
-      force: false,
-      lookDown: false,
-    }
-  }
-  public harmonize(note: Note, wholePitches: Semitone[]): Note[] {
-    return harmonize(note, wholePitches, this.conf)
-  }
-}
+const getDefaultConf = () => ({
+  degree: [],
+  force: false,
+  lookDown: false,
+})
 
-export function harmonize(note: Note, wholePitches: Semitone[], conf: Partial<HarmonizerConf>): Note[] {
-  const fullconf = overrideDefault(Harmonizer.getDefaultConf(), conf)
-  if (note.pitch === 'random') return [note]
+export function harmonize(
+  note: Note,
+  wholePitches: Semitone[],
+  conf: Partial<HarmonizerConf>
+): Note[] {
+  const fullconf = overrideDefault(getDefaultConf(), conf)
+  if (note.pitch === 'random') return []
   return fullconf.degree
     .map((d) =>
       getHarmonicPitch(fullconf, note.pitch as number, convertDegreeToSemitone(d), wholePitches)
@@ -37,7 +30,7 @@ export function harmonize(note: Note, wholePitches: Semitone[], conf: Partial<Ha
     .map((harmonicPitch) => ({ ...note, pitch: harmonicPitch }))
 }
 
-const getHarmonicPitch = (
+export const getHarmonicPitch = (
   conf: HarmonizerConf,
   originalPitch: Semitone,
   distance: Semitone,

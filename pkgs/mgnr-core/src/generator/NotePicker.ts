@@ -62,13 +62,13 @@ export class NotePicker {
   }
 }
 
-function pickHarmonizedNotes(conf: NotePickerConf, scale:Scale): Note[] | undefined {
+export function pickHarmonizedNotes(conf: NotePickerConf, scale: Scale): Note[] | undefined {
   const n = pickNote(conf, scale)
   if (!n) return
   return [n, ...harmonizeNote(n, conf, scale)]
 }
 
-function pickNote(conf: NotePickerConf, scale:Scale): Note | undefined {
+export function pickNote(conf: NotePickerConf, scale: Scale): Note | undefined {
   if (conf.fillStrategy === 'random') {
     return pickRandomNote(conf)
   } else {
@@ -76,12 +76,17 @@ function pickNote(conf: NotePickerConf, scale:Scale): Note | undefined {
   }
 }
 
-function harmonizeNote(note: Note, conf: NotePickerConf, scale: Scale): Note[] {
+export function harmonizeNote(note: Note, conf: NotePickerConf, scale: Scale): Note[] {
   if (!conf.harmonizer) return []
   return harmonize(note, scale.wholePitches, conf.harmonizer)
 }
 
-function adjustNotePitch(n: Note, scale: Scale, conf: NotePickerConf, d?: 'up' | 'down' | 'bi'): void {
+export function adjustNotePitch(
+  n: Note,
+  scale: Scale,
+  conf: NotePickerConf,
+  d?: 'up' | 'down' | 'bi'
+): void {
   if (isIncludedInScale(n.pitch, scale)) return
   if (conf.fillStrategy !== 'fixed') {
     n.pitch = scale.pickNearestPitch(n.pitch as number, d)
@@ -90,7 +95,7 @@ function adjustNotePitch(n: Note, scale: Scale, conf: NotePickerConf, d?: 'up' |
   }
 }
 
-function changeNotePitch(n: Note, scale: Scale): void {
+export function changeNotePitch(n: Note, scale: Scale): void {
   if (n.pitch === 'random') return
   n.pitch = getDifferentPitch(scale, n.pitch) || n.pitch
 }
