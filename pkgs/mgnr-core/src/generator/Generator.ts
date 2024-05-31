@@ -19,14 +19,14 @@ type InjectedMiddlewares<MW extends Middlewares> = {
   [k in keyof MW]: Injected<MW[k]>
 }
 
-type Generator<MW extends Middlewares> = GeneratorContext &
+export type SequenceGenerator<MW extends Middlewares = Middlewares> = GeneratorContext &
   InjectedMiddlewares<MW> &
   InjectedMiddlewares<typeof defaultMiddlewares>
 
 export const createGenerator = <MW extends Middlewares>(
   context: GeneratorContext,
   middlewares: MW = <MW>{}
-): Generator<MW> => {
+): SequenceGenerator<MW> => {
   const injected = Object.fromEntries(
     Object.entries({ ...defaultMiddlewares, ...middlewares }).map(([k, mw]) => [
       k,
@@ -50,65 +50,7 @@ type GeneratorContext = {
   scale: Scale
 }
 
-export class SequenceGenerator {
-  picker: NotePickerConf
-  readonly sequence: Sequence
-
-  get notes(): SequenceNoteMap {
-    return this.sequence.notes
-  }
-
-  constructor(
-    picker: NotePickerConf,
-    sequence: Sequence,
-    readonly scale: Scale = new Scale()
-  ) {
-    this.picker = picker
-    this.sequence = sequence
-  }
-
-  private getContext(): GeneratorContext {
-    return {
-      sequence: this.sequence,
-      picker: this.picker,
-      scale: this.scale,
-    }
-  }
-
-  public updateConfig(config: Partial<GeneratorConf>): void {
-    updateConfig(this.getContext(), config)
-  }
-
-  public constructNotes(initialNotes?: SequenceNoteMap) {
-    constructNotes(this.getContext(), initialNotes)
-  }
-
-  public resetNotes(notes?: SequenceNoteMap) {
-    resetNotes(this.getContext(), notes)
-  }
-
-  public eraseSequenceNotes() {
-    eraseSequenceNotes(this.getContext())
-  }
-
-  public adjustPitch() {
-    adjustPitch(this.getContext())
-  }
-
-  public changeSequenceLength(
-    method: 'shrink' | 'extend',
-    length: number,
-    onSequenceLengthLimit: (currentMethod: 'shrink' | 'extend') => void = () => undefined
-  ) {
-    changeSequenceLength(this.getContext(), method, length, onSequenceLengthLimit)
-  }
-
-  public mutate(spec: MutateSpec) {
-    mutate(this.getContext(), spec)
-  }
-}
-
-const defaultMiddlewares = {
+export const defaultMiddlewares = {
   updateConfig,
   constructNotes,
   resetNotes,

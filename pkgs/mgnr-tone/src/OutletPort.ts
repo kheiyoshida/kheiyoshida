@@ -55,7 +55,7 @@ export class ToneOutletPort extends OutletPort<ToneOutlet> {
 
   private getConcretePitch(note: Note): number {
     return note.pitch === 'random'
-      ? this.generator.picker.scale.pickRandomPitch() // violation of law of demeter
+      ? this.generator.scale.pickRandomPitch()!
       : note.pitch
   }
 

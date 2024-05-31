@@ -1,8 +1,5 @@
 import * as mgnr from './commands'
-import { SequenceGenerator } from './generator/Generator'
-import { fillNoteConf } from './generator/NotePicker'
 import { Scale } from './generator/scale/Scale'
-import { Sequence } from './generator/Sequence'
 
 test(`${mgnr.createScale.name}`, () => {
   expect(() => mgnr.createScale('C')).not.toThrow()
@@ -17,22 +14,5 @@ test(`${mgnr.createGenerator.name}`, () => {
     fillPref: 'mono',
     scale: new Scale({ key: 'D' }),
   })
-  expect(generator).toBeInstanceOf(SequenceGenerator)
-})
-
-test(`${mgnr.pingpongSequenceLength.name}`, () => {
-  const lengthChange = mgnr.pingpongSequenceLength('extend')
-  const sequence = new Sequence({ length: 8, lenRange: { min: 4, max: 12 } })
-  const generator = new SequenceGenerator(fillNoteConf({}), sequence)
-  expect(sequence.length).toBe(8)
-  lengthChange(generator, 3)
-  expect(sequence.length).toBe(11)
-  lengthChange(generator, 3)
-  expect(sequence.length).toBe(8)
-  lengthChange(generator, 3)
-  expect(sequence.length).toBe(5)
-  lengthChange(generator, 3)
-  expect(sequence.length).toBe(8)
-  lengthChange(generator, 3)
-  expect(sequence.length).toBe(11)
+  expect(generator).toHaveProperty('sequence')
 })

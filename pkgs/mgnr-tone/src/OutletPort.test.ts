@@ -1,10 +1,9 @@
+import { createGenerator } from 'mgnr-core/src'
+import { SequenceNoteMap } from 'mgnr-core/src/generator/Sequence'
 import * as Tone from 'tone'
-import { mockScheduleLoop } from './__tests__/mock'
-import { SequenceGenerator } from 'mgnr-core/src/generator/Generator'
-import { NotePicker } from 'mgnr-core/src/generator/NotePicker'
-import { Sequence, SequenceNoteMap } from 'mgnr-core/src/generator/Sequence'
 import { ToneOutlet } from './Outlet'
 import { ToneOutletPort } from './OutletPort'
+import { mockScheduleLoop } from './__tests__/mock'
 import * as wrapperUtil from './tone-wrapper/utils'
 
 jest.mock('tone')
@@ -19,10 +18,9 @@ jest.mock('./tone-wrapper/Transport', () => ({
 
 describe(`${ToneOutletPort.name}`, () => {
   const prepareGeneratorWithNotes = (notes = defaultNotes) => {
-    const generator = new SequenceGenerator(
-      new NotePicker({ fillStrategy: 'fixed' }),
-      new Sequence()
-    )
+    const generator = createGenerator({
+      fillStrategy: 'fixed',
+    })
     generator.constructNotes(notes)
     return generator
   }

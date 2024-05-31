@@ -1,5 +1,5 @@
 import { getSubset } from 'utils'
-import { GeneratorConf, SequenceGenerator } from './generator/Generator'
+import { GeneratorConf, createGenerator as createGen } from './generator/Generator'
 import { fillNoteConf } from './generator/NotePicker'
 import { Sequence } from './generator/Sequence'
 import { Scale, ScaleConf } from './generator/scale/Scale'
@@ -19,19 +19,10 @@ export function createScale(
   else return new Scale(confOrKey)
 }
 
-export function createGenerator(conf: GeneratorConf): SequenceGenerator {
+export function createGenerator(conf: GeneratorConf) {
   const sequence = new Sequence(
     getSubset(conf, ['length', 'lenRange', 'division', 'density', 'fillPref'])
   )
-  return new SequenceGenerator(fillNoteConf(conf), sequence, conf.scale)
-}
-
-export function pingpongSequenceLength(initialMethod: 'shrink' | 'extend') {
-  let direction = initialMethod
-  return (gen: SequenceGenerator, len: number) => {
-    gen.changeSequenceLength(direction, len, (method) => {
-      direction = method === 'extend' ? 'shrink' : 'extend'
-      gen.changeSequenceLength(direction, len)
-    })
-  }
+  const picker = fillNoteConf(conf)
+  return createGen({ picker, sequence, scale: conf.scale || new Scale() })
 }
