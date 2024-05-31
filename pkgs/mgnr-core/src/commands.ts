@@ -1,6 +1,6 @@
 import { getSubset } from 'utils'
 import { GeneratorConf, SequenceGenerator } from './generator/Generator'
-import { NotePicker } from './generator/NotePicker'
+import { fillNoteConf } from './generator/NotePicker'
 import { Sequence } from './generator/Sequence'
 import { Scale, ScaleConf } from './generator/scale/Scale'
 
@@ -20,14 +20,10 @@ export function createScale(
 }
 
 export function createGenerator(conf: GeneratorConf): SequenceGenerator {
-  const picker = new NotePicker(
-    getSubset(conf, ['noteDur', 'noteVel', 'veloPref', 'fillStrategy', 'harmonizer']),
-    conf.scale
-  )
   const sequence = new Sequence(
     getSubset(conf, ['length', 'lenRange', 'division', 'density', 'fillPref'])
   )
-  return new SequenceGenerator(picker, sequence)
+  return new SequenceGenerator(fillNoteConf(conf), sequence, conf.scale)
 }
 
 export function pingpongSequenceLength(initialMethod: 'shrink' | 'extend') {

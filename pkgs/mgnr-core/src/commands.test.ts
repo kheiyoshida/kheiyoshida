@@ -1,6 +1,6 @@
 import * as mgnr from './commands'
 import { SequenceGenerator } from './generator/Generator'
-import { NotePicker } from './generator/NotePicker'
+import { fillNoteConf } from './generator/NotePicker'
 import { Scale } from './generator/scale/Scale'
 import { Sequence } from './generator/Sequence'
 
@@ -20,11 +20,10 @@ test(`${mgnr.createGenerator.name}`, () => {
   expect(generator).toBeInstanceOf(SequenceGenerator)
 })
 
-
 test(`${mgnr.pingpongSequenceLength.name}`, () => {
   const lengthChange = mgnr.pingpongSequenceLength('extend')
-  const sequence = new Sequence({length: 8, lenRange: {min: 4, max: 12}})
-  const generator = new SequenceGenerator(new NotePicker(), sequence)
+  const sequence = new Sequence({ length: 8, lenRange: { min: 4, max: 12 } })
+  const generator = new SequenceGenerator(fillNoteConf({}), sequence)
   expect(sequence.length).toBe(8)
   lengthChange(generator, 3)
   expect(sequence.length).toBe(11)

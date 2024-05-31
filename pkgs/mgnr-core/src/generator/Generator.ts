@@ -1,7 +1,13 @@
 import { fireByRate } from 'utils'
 import { MutateSpec } from '../types'
 import { Note } from './Note'
-import { NotePicker, NotePickerConf } from './NotePicker'
+import {
+  NotePickerConf,
+  adjustNotePitch,
+  changeNotePitch,
+  harmonizeNote,
+  pickHarmonizedNotes,
+} from './NotePicker'
 import { Sequence, SequenceConf, SequenceNoteMap } from './Sequence'
 import { Scale } from './scale/Scale'
 
@@ -11,25 +17,25 @@ export type GeneratorConf = {
   Partial<NotePickerConf>
 
 export class SequenceGenerator {
-  readonly picker: NotePicker
+  picker: NotePickerConf
   readonly sequence: Sequence
-
-  get scale(): Scale {
-    return this.picker.scale
-  }
 
   get notes(): SequenceNoteMap {
     return this.sequence.notes
   }
 
-  constructor(picker: NotePicker, sequence: Sequence) {
+  constructor(
+    picker: NotePickerConf,
+    sequence: Sequence,
+    readonly scale: Scale = new Scale()
+  ) {
     this.picker = picker
     this.sequence = sequence
   }
 
   public updateConfig(config: Partial<GeneratorConf>): void {
     this.sequence.updateConfig(config)
-    this.picker.updateConfig(config)
+    this.picker = { ...this.picker, ...config }
     this.constructNotes()
   }
 
@@ -43,15 +49,18 @@ export class SequenceGenerator {
     Sequence.iteratePosition(initialNotes, (position) => {
       this.sequence.addNotes(
         position,
-        this.picker.harmonizeEnabled
-          ? initialNotes[position].flatMap((note) => [note, ...this.picker.harmonizeNote(note)])
+        this.picker.harmonizer
+          ? initialNotes[position].flatMap((note) => [
+              note,
+              ...harmonizeNote(note, this.picker, this.scale),
+            ])
           : initialNotes[position]
       )
     })
   }
 
   private assignNotes() {
-    switch (this.picker.conf.fillStrategy) {
+    switch (this.picker.fillStrategy) {
       case 'random':
       case 'fill':
         this.fillAvailableSpaceInSequence()
@@ -64,7 +73,7 @@ export class SequenceGenerator {
   private fillAvailableSpaceInSequence() {
     let fail = 0
     while (this.sequence.availableSpace > 0 && fail < 5) {
-      const notes = this.picker.pickHarmonizedNotes()
+      const notes = pickHarmonizedNotes(this.picker, this.scale)
       if (!notes) {
         fail += 1
       } else {
@@ -88,7 +97,7 @@ export class SequenceGenerator {
 
   public adjustPitch() {
     this.sequence.iterateEachNote((n) => {
-      this.picker.adjustNotePitch(n)
+      adjustNotePitch(n, this.scale, this.picker)
     })
   }
 
@@ -161,7 +170,7 @@ export class SequenceGenerator {
   private mutateNotesPitches(rate: number) {
     this.sequence.iterateEachNote((n) => {
       if (fireByRate(rate)) {
-        this.picker.changeNotePitch(n)
+        changeNotePitch(n, this.scale)
       }
     })
   }

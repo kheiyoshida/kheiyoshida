@@ -31,57 +31,6 @@ const getDefaultConf = (): NotePickerConf => ({
   fillStrategy: 'fill',
 })
 
-export class NotePicker {
-  private _conf: NotePickerConf
-  get conf(): NotePickerConf {
-    return this._conf
-  }
-
-  readonly scale: Scale
-
-  get harmonizeEnabled() {
-    return this._conf.harmonizer !== undefined
-  }
-
-  constructor(conf: Partial<NotePickerConf> = {}, scale?: Scale) {
-    this._conf = overrideDefault(NotePicker.getDefaultConf(), conf)
-    this.scale = scale || new Scale({ key: 'C', range: { min: 24, max: 120 } })
-  }
-
-  static getDefaultConf(): NotePickerConf {
-    return {
-      noteDur: 1,
-      noteVel: 100,
-      veloPref: 'randomPerEach',
-      fillStrategy: 'fill',
-    }
-  }
-
-  public updateConfig(conf: Partial<NotePickerConf>) {
-    this._conf = overrideDefault(this._conf, conf)
-  }
-
-  public pickHarmonizedNotes(): Note[] | undefined {
-    return pickHarmonizedNotes(this.conf, this.scale)
-  }
-
-  public pickNote(): Note | undefined {
-    return pickNote(this.conf, this.scale)
-  }
-
-  public harmonizeNote(note: Note): Note[] {
-    return harmonizeNote(note, this._conf, this.scale)
-  }
-
-  public adjustNotePitch(n: Note, d?: 'up' | 'down' | 'bi'): void {
-    adjustNotePitch(n, this.scale, this._conf, d)
-  }
-
-  public changeNotePitch(n: Note): void {
-    changeNotePitch(n, this.scale)
-  }
-}
-
 // Note
 
 export function pickNote(conf: NotePickerConf, scale: Scale): Note | undefined {
