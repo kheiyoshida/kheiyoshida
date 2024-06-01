@@ -219,7 +219,7 @@ describe(`${Sequence.name}`, () => {
   test(`${Sequence.prototype.getAvailablePosition.name}`, () => {
     const currentNotes = makeNotes()
     const alreadyUsed = Object.keys(currentNotes).map((k) => Number(k))
-    const seqNotes = new Sequence({ fillPref: 'mono' })
+    const seqNotes = new Sequence({ polyphony: 'mono' })
     seqNotes.replaceEntireNotes(currentNotes)
     for (let i = 0; i < 50; i++) {
       const res = seqNotes.getAvailablePosition()

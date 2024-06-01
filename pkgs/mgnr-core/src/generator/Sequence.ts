@@ -8,15 +8,30 @@ import {
 } from 'utils'
 import { Note } from './Note'
 
-type SeqDivision = 16 | 8 | 4 | 2 | 1
-
 export type SequenceConf = {
   length: number
   lenRange: Range
+
+  /**
+   * 0 - 1 percentage
+   */
   density: number
+
+  /**
+   * minimum unit of note duration
+   * e.g. duration=2 note with division 16 means 8th note
+   */
   division: SeqDivision
-  fillPref: 'mono' | 'allowPoly'
+
+  /**
+   * if set to 'poly', sequence can have multiple notes at the same time
+   */
+  polyphony: Polyphony
 }
+
+type SeqDivision = 16 | 8 | 4 | 2 | 1
+
+type Polyphony = 'mono' | 'poly'
 
 export type SequenceNoteMap = {
   [position: number]: Note[]
@@ -31,7 +46,7 @@ export class Sequence {
   protected conf: SequenceConf
 
   get poly() {
-    return this.conf.fillPref === 'allowPoly'
+    return this.conf.polyphony === 'poly'
   }
 
   /**
@@ -109,7 +124,7 @@ export class Sequence {
     },
     division: 16,
     density: 0.5,
-    fillPref: 'allowPoly',
+    polyphony: 'poly',
   }
 
   constructor(conf: Partial<SequenceConf> = {}) {
@@ -194,7 +209,7 @@ export class Sequence {
    * if poly allowed, just returns random position
    */
   public getAvailablePosition() {
-    return this.conf.fillPref === 'mono'
+    return this.conf.polyphony === 'mono'
       ? this.searchEmptyPosition()
       : randomIntBetween(0, this.length)
   }

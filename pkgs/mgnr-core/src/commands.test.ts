@@ -12,7 +12,7 @@ test(`${mgnr.createScale.name}`, () => {
 test(`${mgnr.createGenerator.name}`, () => {
   const generator = mgnr.createGenerator({
     sequence: {
-      fillPref: 'mono',
+      polyphony: 'mono',
     },
     scale: new Scale({ key: 'D' }),
   })

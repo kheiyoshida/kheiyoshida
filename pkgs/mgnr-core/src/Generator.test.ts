@@ -104,7 +104,7 @@ describe(`generator middlewares`, () => {
     })
     it(`should fill up available space after assigning initial notes`, () => {
       const picker = fillNoteConf({ fillStrategy: 'fill', duration: 1 })
-      const sequence = new Sequence({ fillPref: 'mono', length: 8, density: 0.5 })
+      const sequence = new Sequence({ polyphony: 'mono', length: 8, density: 0.5 })
       const generator = buildGenerator({ picker, sequence, scale })
       const initialNotes = { 0: defaultNotes[0].slice() }
       generator.constructNotes(initialNotes)
@@ -116,7 +116,7 @@ describe(`generator middlewares`, () => {
   describe(`${defaultMiddlewares.changeSequenceLength.name}`, () => {
     it(`can extend its sequence length, filling the extended part with notes`, () => {
       const picker = fillNoteConf({ fillStrategy: 'fill', duration: 1 })
-      const sequence = new Sequence({ fillPref: 'mono', length: 8, density: 0.5 })
+      const sequence = new Sequence({ polyphony: 'mono', length: 8, density: 0.5 })
       const generator = buildGenerator({ picker, sequence, scale })
       generator.changeSequenceLength('extend', 8)
       expect(sequence.length).toBe(16)
@@ -124,7 +124,7 @@ describe(`generator middlewares`, () => {
     })
     it(`can shrink and remove excessive notes after shrinking`, () => {
       const picker = fillNoteConf({ fillStrategy: 'fill', duration: 1 })
-      const sequence = new Sequence({ fillPref: 'mono', length: 8, density: 0.5 })
+      const sequence = new Sequence({ polyphony: 'mono', length: 8, density: 0.5 })
       const generator = buildGenerator({ picker, sequence, scale })
       generator.changeSequenceLength('shrink', 4)
       expect(generator.sequence.length).toBe(4)
@@ -200,7 +200,7 @@ describe(`generator middlewares`, () => {
     })
     it(`can randomly alter note's pitch in place`, () => {
       const picker = fillNoteConf({})
-      const sequence = new Sequence({ fillPref: 'mono', length: 8, density: 0.5 })
+      const sequence = new Sequence({ polyphony: 'mono', length: 8, density: 0.5 })
       const generator = buildGenerator({ picker, sequence, scale })
       generator.constructNotes(defaultNotes)
       const beforeNotes = deepCopy({ ...sequence.notes })
@@ -217,7 +217,7 @@ describe(`generator middlewares`, () => {
     it(`can adjust notes on scale changes`, () => {
       const scale = new Scale({ key: 'C', pref: '_1M' })
       const picker = fillNoteConf({ fillStrategy: 'fill' })
-      const sequence = new Sequence({ fillPref: 'mono', length: 8, density: 0.5 })
+      const sequence = new Sequence({ polyphony: 'mono', length: 8, density: 0.5 })
       const generator = buildGenerator({ picker, sequence, scale })
       generator.constructNotes()
       sequence.iterateEachNote((note) => {
@@ -232,7 +232,7 @@ describe(`generator middlewares`, () => {
   })
 
   describe(`${defaultMiddlewares.eraseSequenceNotes.name}`, () => {
-    const sequence = new Sequence({ fillPref: 'mono' })
+    const sequence = new Sequence({ polyphony: 'mono' })
     const picker = fillNoteConf({})
     const generator = buildGenerator({ picker, sequence, scale })
     generator.constructNotes()
