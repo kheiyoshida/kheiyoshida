@@ -31,7 +31,8 @@ describe(`${pickNote.name}`, () => {
   it(`should pick runtime random note if strategy is "random"`, () => {
     const noteDur = { min: 2, max: 4 }
     const conf = fillNoteConf({
-      fillStrategy: 'random',
+      pitchStrategy: 'randomPerLoop',
+      durationStrategy: 'randomInRange',
       duration: noteDur,
       velocity: 100,
     })
@@ -40,10 +41,11 @@ describe(`${pickNote.name}`, () => {
     expect(note?.dur).toBe(noteDur)
     expect(note?.vel).toBe(100)
   })
-  it(`should pick note with concrete values if strategy is "fill"`, () => {
+  it(`should pick note with concrete values if strategy is "fixed"`, () => {
     const noteDur = { min: 2, max: 4 }
     const conf = fillNoteConf({
-      fillStrategy: 'fill',
+      pitchStrategy: 'fixed',
+      durationStrategy: 'fixed',
       duration: noteDur,
       velocity: 100,
     })
@@ -76,15 +78,5 @@ describe(`${adjustNotePitch.name}`, () => {
       conf
     )
     expect(nearest).toHaveBeenCalled()
-  })
-  it(`should assign random pitch if the strategy is "fixed"`, () => {
-    const conf = fillNoteConf({ fillStrategy: 'fixed' })
-    const note = {
-      pitch: 61,
-      dur: 1,
-      vel: 100,
-    }
-    adjustNotePitch(note, new Scale(), conf)
-    expect(note.pitch).not.toBe(61)
   })
 })

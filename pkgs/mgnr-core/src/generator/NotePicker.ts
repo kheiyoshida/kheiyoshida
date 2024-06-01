@@ -10,11 +10,11 @@ type VelocityConf = {
 
 type DurationConf = {
   duration: number | Range
-  fillStrategy: 'random' | 'fill' | 'fixed'
+  durationStrategy: 'randomInRange' | 'fixed'
 }
 
 type PitchConf = {
-  fillStrategy: 'random' | 'fill' | 'fixed'
+  pitchStrategy: 'randomPerLoop' | 'fixed'
   harmonizer?: Partial<HarmonizerConf>
 }
 
@@ -28,7 +28,8 @@ const getDefaultConf = (): NotePickerConf => ({
   duration: 1,
   velocity: 100,
   veloPref: 'randomPerEach',
-  fillStrategy: 'fill',
+  durationStrategy: 'fixed',
+  pitchStrategy: 'fixed',
 })
 
 // Note
@@ -63,10 +64,8 @@ export function adjustNotePitch(
   d?: 'up' | 'down' | 'bi'
 ): void {
   if (isIncludedInScale(n.pitch, scale)) return
-  if (conf.fillStrategy !== 'fixed') {
+  if (conf.pitchStrategy === 'fixed') {
     n.pitch = scale.pickNearestPitch(n.pitch as number, d)
-  } else {
-    changeNotePitch(n, scale)
   }
 }
 
@@ -81,7 +80,7 @@ function isIncludedInScale(pitch: Note['pitch'], scale: Scale): boolean {
 }
 
 function getNotePitch(conf: PitchConf, scale: Scale): Note['pitch'] | undefined {
-  if (conf.fillStrategy === 'random') return 'random'
+  if (conf.pitchStrategy === 'randomPerLoop') return 'random'
   else return scale.pickRandomPitch()
 }
 
@@ -94,8 +93,8 @@ function getDifferentPitch(scale: Scale, originalPitch: number, r = 0): number {
 
 // Duration
 
-function getNoteDuration({ duration: noteDur, fillStrategy }: DurationConf): Note['dur'] {
-  return fillStrategy === 'random' ? noteDur : pickRange(noteDur)
+function getNoteDuration({ duration: noteDur, durationStrategy }: DurationConf): Note['dur'] {
+  return durationStrategy === 'randomInRange' ? noteDur : pickRange(noteDur)
 }
 
 // Velocity

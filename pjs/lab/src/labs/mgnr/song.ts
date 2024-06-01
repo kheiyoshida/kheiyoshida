@@ -7,7 +7,7 @@ import { fireByRate, randomIntInclusiveBetween } from 'utils'
 const mixer = mgnr.getMixer()
 
 export const prepareSong = () => {
-  Tone.Transport.bpm.value = 160
+  Tone.Transport.bpm.value = 80
   prepareDrums()
   prepareSynth()
 }
@@ -17,9 +17,7 @@ const prepareDrums = () => {
   const synCh = mixer.createInstChannel({
     inst: drumMachine,
     initialVolume: -6,
-    effects: [
-      new Tone.BitCrusher(16)
-    ]
+    effects: [new Tone.BitCrusher(16)],
   })
 
   const outlet = mgnr.createOutlet(synCh.inst, Tone.Transport.toSeconds('2n'))
@@ -27,14 +25,14 @@ const prepareDrums = () => {
   const generator = mgnr.createGenerator({
     scale: scale,
     note: {
-      noteDur: 1,
-      fillStrategy: 'fill',
+      duration: 1,
     },
     sequence: {
+      fillStrategy: 'fill',
       length: 16,
       division: 16,
       density: 0.25,
-      fillPref: 'allowPoly',
+      polyphony: 'poly',
     },
   })
   const generator2 = mgnr.createGenerator({
@@ -43,11 +41,11 @@ const prepareDrums = () => {
       length: 12,
       division: 16,
       density: 0.5,
-      fillPref: 'mono',
+      polyphony: 'mono',
+      fillStrategy: 'fill',
     },
     note: {
-      noteDur: 1,
-      fillStrategy: 'fill',
+      duration: 1,
     },
   })
 
@@ -141,7 +139,10 @@ const prepareDrums = () => {
     .onEnded((g) => {
       g.resetNotes(fixedNotes)
     })
-  outlet.assignGenerator(generator2).loopSequence(2).onEnded(g => g.mutate({rate: 0.3, strategy: 'inPlace'}))
+  outlet
+    .assignGenerator(generator2)
+    .loopSequence(2)
+    .onEnded((g) => g.mutate({ rate: 0.3, strategy: 'inPlace' }))
 }
 
 const prepareSynth = () => {
@@ -158,10 +159,11 @@ const prepareSynth = () => {
       length: 10,
       density: 0.7,
       division: 4,
-      fillPref: 'mono',
+      polyphony: 'mono',
+      fillStrategy: 'fill',
     },
     note: {
-      noteDur: {
+      duration: {
         min: 4,
         max: 8,
       },
@@ -170,7 +172,6 @@ const prepareSynth = () => {
       //   force: false,
       //   lookDown: false,
       // },
-      fillStrategy: 'fill',
     },
     middlewares: {
       custom: (ctx) => {
