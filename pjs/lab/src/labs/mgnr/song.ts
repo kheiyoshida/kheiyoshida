@@ -133,6 +133,7 @@ const prepareDrums = () => {
     .assignGenerator(generator2)
     .loopSequence(2)
     .onEnded((generator) => {
+      generator.f
       generator.mutate({ rate: 0.25, strategy: 'move' })
     })
 }

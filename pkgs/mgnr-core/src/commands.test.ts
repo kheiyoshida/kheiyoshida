@@ -11,7 +11,9 @@ test(`${mgnr.createScale.name}`, () => {
 
 test(`${mgnr.createGenerator.name}`, () => {
   const generator = mgnr.createGenerator({
-    fillPref: 'mono',
+    sequence: {
+      fillPref: 'mono',
+    },
     scale: new Scale({ key: 'D' }),
   })
   expect(generator).toHaveProperty('sequence')

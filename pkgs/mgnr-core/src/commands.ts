@@ -1,4 +1,9 @@
-import { GeneratorConf, Middlewares, createGenerator as createGen } from './generator/Generator'
+import {
+  GeneratorConf,
+  Middlewares,
+  SequenceGenerator,
+  createGenerator as createGen,
+} from './generator/Generator'
 import { fillNoteConf } from './generator/NotePicker'
 import { Sequence } from './generator/Sequence'
 import { Scale, ScaleConf } from './generator/scale/Scale'
@@ -18,8 +23,10 @@ export function createScale(
   else return new Scale(confOrKey)
 }
 
-export function createGenerator(conf: GeneratorConf & { middlewares?: Middlewares }) {
+export function createGenerator<MW extends Middlewares>(
+  conf: GeneratorConf & { middlewares?: MW }
+): SequenceGenerator<MW> {
   const sequence = new Sequence(conf.sequence)
-  const picker = fillNoteConf(conf.note)
+  const picker = fillNoteConf(conf.note || {})
   return createGen({ picker, sequence, scale: conf.scale || new Scale() }, conf.middlewares)
 }

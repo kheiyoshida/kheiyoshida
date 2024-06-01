@@ -70,13 +70,17 @@ describe(`generator middlewares`, () => {
       const picker = fillNoteConf({ noteDur: { min: 1, max: 4 } })
       const scale = new Scale()
       const sequence = new Sequence({ density: 0.5, length: 8 })
-      const generator = createGenerator({ picker, sequence, scale })
+      const generator = createGenerator({ picker, sequence, scale }, {})
       generator.updateConfig({
-        density: 0.9,
+        sequence: {
+          density: 0.9,
+        },
       })
       expect(sequence.density).toBe(0.9)
       generator.updateConfig({
-        noteDur: 2,
+        note: {
+          noteDur: 2,
+        },
       })
       expect(generator.picker.noteDur).toBe(2)
     })

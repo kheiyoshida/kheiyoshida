@@ -13,21 +13,20 @@ import { Scale } from './scale/Scale'
 import type { Tail } from 'utils'
 
 export type Middleware = (ctx: GeneratorContext, ...params: never[]) => void
-export type Middlewares = Record<string, Middleware>
+export type Middlewares = { readonly [k: string]: Middleware }
 
 type Injected<MW extends Middleware> = (...params: Tail<Parameters<MW>>) => void
 type InjectedMiddlewares<MW extends Middlewares> = {
   [k in keyof MW]: Injected<MW[k]>
 }
 
-export type SequenceGenerator<MW extends Middlewares = Middlewares> = GeneratorContext &
-  InjectedMiddlewares<MW> &
-  InjectedMiddlewares<typeof defaultMiddlewares>
+export type SequenceGenerator<MW extends Middlewares> = GeneratorContext &
+  InjectedMiddlewares<MW & typeof defaultMiddlewares>
 
 export const createGenerator = <MW extends Middlewares>(
   context: GeneratorContext,
   middlewares: MW = <MW>{}
-) => {
+): SequenceGenerator<MW> => {
   const injected = Object.fromEntries(
     Object.entries({ ...defaultMiddlewares, ...middlewares }).map(([k, mw]) => [
       k,
@@ -51,8 +50,8 @@ export const createGenerator = <MW extends Middlewares>(
 
 export type GeneratorConf = {
   scale?: Scale
-  sequence: Partial<SequenceConf>
-  note: Partial<NotePickerConf>
+  sequence?: Partial<SequenceConf>
+  note?: Partial<NotePickerConf>
 }
 
 type GeneratorContext = {

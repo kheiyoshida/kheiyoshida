@@ -1,4 +1,4 @@
-import type { Tail } from "utils"
+import type { Tail } from 'utils'
 
 type SequenceContext = {
   config: {
@@ -25,3 +25,17 @@ export const createGenerator = <MW extends Middlewares>(
     ...injected,
   }
 }
+
+type InferObject<Obj extends Record<string, unknown>> = {
+  [k in keyof Obj]: Obj[k]
+}
+
+const foo = <Obj extends { readonly [k: string]: unknown }>(map: Obj): InferObject<Obj> => ({
+  ...map,
+})
+
+const mapped = foo({
+  a: 1,
+})
+
+

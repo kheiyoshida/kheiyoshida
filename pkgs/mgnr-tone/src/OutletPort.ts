@@ -4,14 +4,15 @@ import { pickRange } from 'utils'
 import { ToneOutlet } from './Outlet'
 import * as Transport from './tone-wrapper/Transport'
 import { scheduleLoop } from './tone-wrapper/utils'
+import { Middlewares } from 'mgnr-core/src/generator/Generator'
 
-export class ToneOutletPort extends OutletPort<ToneOutlet> {
+export class ToneOutletPort<MW extends Middlewares> extends OutletPort<ToneOutlet, MW> {
   /**
    * Outlet needs to have overhead for time=0 notes
    */
   static BufferTime = 0.05
 
-  public loopSequence(numOfLoops = this.numOfLoops, startTime = 0): ToneOutletPort {
+  public loopSequence(numOfLoops = this.numOfLoops, startTime = 0): ToneOutletPort<MW> {
     this.numOfLoops = numOfLoops
     if (this.numOfLoops >= 1) {
       scheduleLoop(

@@ -19,7 +19,9 @@ jest.mock('./tone-wrapper/Transport', () => ({
 describe(`${ToneOutletPort.name}`, () => {
   const prepareGeneratorWithNotes = (notes = defaultNotes) => {
     const generator = createGenerator({
-      fillStrategy: 'fixed',
+      note: {
+        fillStrategy: 'fixed',
+      },
     })
     generator.constructNotes(notes)
     return generator

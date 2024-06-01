@@ -1,6 +1,6 @@
 import { Outlet, OutletPort } from './Outlet'
 import { createGenerator } from './commands'
-import { SequenceGenerator } from './generator/Generator'
+import { Middlewares, SequenceGenerator } from './generator/Generator'
 
 class MockInst {
   triggerNote(...args: unknown[]) {}
@@ -10,12 +10,12 @@ class MockOutlet extends Outlet<MockInst> {
   sendNote(...args: unknown[]): void {
     this.inst.triggerNote(...args)
   }
-  assignGenerator(generator: SequenceGenerator): OutletPort<Outlet<MockInst>> {
+  assignGenerator<GMW extends Middlewares>(generator: SequenceGenerator<GMW>) {
     return new MockOutletPort(this, generator)
   }
 }
 
-class MockOutletPort extends OutletPort<MockOutlet> {
+class MockOutletPort<GMW extends Middlewares> extends OutletPort<MockOutlet, GMW> {
   public loopSequence() {
     this.outlet.sendNote('note')
     return this

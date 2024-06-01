@@ -1,19 +1,19 @@
-import { SequenceGenerator } from './generator/Generator'
+import { Middlewares, SequenceGenerator } from './generator/Generator'
 import { LoopEvent, SequenceLoopHandler } from './types'
 
 export abstract class Outlet<Inst = unknown> {
   constructor(protected inst: Inst) {}
   abstract sendNote(...args: unknown[]): void
-  abstract assignGenerator(generator: SequenceGenerator): OutletPort<Outlet>
+  abstract assignGenerator<GMW extends Middlewares>(generator: SequenceGenerator<GMW>): OutletPort<Outlet<Inst>, GMW>
 }
 
-export abstract class OutletPort<O extends Outlet = Outlet> {
+export abstract class OutletPort<O extends Outlet, GMW extends Middlewares = Middlewares> {
   constructor(
     readonly outlet: O,
-    readonly generator: SequenceGenerator
+    readonly generator: SequenceGenerator<GMW>
   ) {}
 
-  readonly events: LoopEvent = {}
+  readonly events: LoopEvent<GMW> = {}
 
   private _numOfLoops: number = 1
   get numOfLoops() {
@@ -26,14 +26,14 @@ export abstract class OutletPort<O extends Outlet = Outlet> {
     this._numOfLoops = value
   }
 
-  public abstract loopSequence(numOfLoops?: number, startTime?: number): OutletPort<O>
+  public abstract loopSequence(numOfLoops?: number, startTime?: number): OutletPort<O, GMW>
 
-  public onElapsed(eventHandler: SequenceLoopHandler) {
+  public onElapsed(eventHandler: SequenceLoopHandler<GMW>) {
     this.events.elapsed = eventHandler
     return this
   }
 
-  public onEnded(eventHandler: SequenceLoopHandler) {
+  public onEnded(eventHandler: SequenceLoopHandler<GMW>) {
     this.events.ended = eventHandler
     return this
   }

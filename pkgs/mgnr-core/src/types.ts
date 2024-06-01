@@ -1,14 +1,14 @@
-import { SequenceGenerator } from './generator/Generator'
+import { Middlewares, SequenceGenerator } from './generator/Generator'
 
 export type LoopEventKey = 'elapsed' | 'ended'
 
-export type SequenceLoopHandler = (
-  generator: SequenceGenerator, loopNth: number
+export type SequenceLoopHandler<GMW extends Middlewares> = (
+  generator: SequenceGenerator<GMW>, loopNth: number
 ) => void
 
-export type LoopEvent = {
-  elapsed?: SequenceLoopHandler
-  ended?: SequenceLoopHandler
+export type LoopEvent<GMW extends Middlewares> = {
+  elapsed?: SequenceLoopHandler<GMW>
+  ended?: SequenceLoopHandler<GMW>
 }
 
 export type MutateStrategy = 'randomize' | 'move' | 'inPlace' | 'recursion'
