@@ -20,21 +20,29 @@ const prepareDrums = () => {
 
   const generator = mgnr.createGenerator({
     scale: scale,
-    length: 16,
-    division: 16,
-    density: 0.5,
-    noteDur: 1,
-    fillPref: 'mono',
-    fillStrategy: 'fill',
+    note: {
+      noteDur: 1,
+      fillStrategy: 'fill',
+    },
+    sequence: {
+      length: 16,
+      division: 16,
+      density: 0.5,
+      fillPref: 'mono',
+    },
   })
   const generator2 = mgnr.createGenerator({
     scale: scale,
-    length: 16,
-    division: 16,
-    density: 0.5,
-    noteDur: 1,
-    fillPref: 'mono',
-    fillStrategy: 'fill',
+    sequence: {
+      length: 16,
+      division: 16,
+      density: 0.5,
+      fillPref: 'mono',
+    },
+    note: {
+      noteDur: 1,
+      fillStrategy: 'fill',
+    },
   })
 
   generator.constructNotes({
@@ -121,12 +129,11 @@ const prepareDrums = () => {
     .loopSequence(4)
     .onEnded((c) => c.repeatLoop())
 
-  outlet
+  const port = outlet
     .assignGenerator(generator2)
     .loopSequence(2)
-    .onEnded((c) => {
-      c.generator.mutate({ rate: 0.25, strategy: 'move' })
-      c.repeatLoop()
+    .onEnded((generator) => {
+      generator.mutate({ rate: 0.25, strategy: 'move' })
     })
 }
 
@@ -140,29 +147,39 @@ const prepareSynth = () => {
   const outlet = mgnr.createOutlet(compositeCh.inst)
   const generator = mgnr.createGenerator({
     scale: scale,
-    length: 10,
-    division: 16,
-    density: 0.7,
-    noteDur: {
-      min: 4,
-      max: 8,
+    sequence: {
+      length: 10,
+      density: 0.7,
+      division: 16,
+      fillPref: 'mono',
     },
-    fillPref: 'mono',
-    harmonizer: {
-      degree: ['3', '5', '7'],
-      force: false,
-      lookDown: false
-    }
+    note: {
+      noteDur: {
+        min: 4,
+        max: 8,
+      },
+      harmonizer: {
+        degree: ['3', '5', '7'],
+        force: false,
+        lookDown: false,
+      },
+      fillStrategy: 'fill',
+    },
+    middlewares: {
+      custom: (ctx) => {
+        console.log('this is custome middleware: ', ctx.scale.key)
+      },
+    },
   })
   generator.constructNotes()
   outlet
     .assignGenerator(generator)
     .loopSequence(4)
-    .onElapsed((c) => {
-      c.generator.mutate({ rate: 0.5, strategy: 'inPlace' })
+    .onElapsed((generator) => {
+      generator.mutate({ rate: 0.5, strategy: 'inPlace' })
     })
-    .onEnded((c) => {
-      c.generator.mutate({ rate: 0.5, strategy: 'randomize' })
-      c.repeatLoop()
+    .onEnded((generator) => {
+      generator.custom()
+      generator.mutate({ rate: 0.5, strategy: 'randomize' })
     })
 }

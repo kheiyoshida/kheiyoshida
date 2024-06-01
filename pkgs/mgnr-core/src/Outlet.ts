@@ -1,5 +1,5 @@
 import { SequenceGenerator } from './generator/Generator'
-import { LoopEvent, LoopElapsedHandler, LoopEndedHandler } from './types'
+import { LoopEvent, SequenceLoopHandler } from './types'
 
 export abstract class Outlet<Inst = unknown> {
   constructor(protected inst: Inst) {}
@@ -15,14 +15,25 @@ export abstract class OutletPort<O extends Outlet = Outlet> {
 
   readonly events: LoopEvent = {}
 
-  public abstract loopSequence(loop?: number, startTime?: number): OutletPort<O>
+  private _numOfLoops: number = 1
+  get numOfLoops() {
+    return this._numOfLoops
+  }
+  set numOfLoops(value: number) {
+    if (value < 1 || !Number.isInteger(value)) {
+      this._numOfLoops = 0
+    }
+    this._numOfLoops = value
+  }
 
-  public onElapsed(eventHandler: LoopElapsedHandler) {
+  public abstract loopSequence(numOfLoops?: number, startTime?: number): OutletPort<O>
+
+  public onElapsed(eventHandler: SequenceLoopHandler) {
     this.events.elapsed = eventHandler
     return this
   }
 
-  public onEnded(eventHandler: LoopEndedHandler) {
+  public onEnded(eventHandler: SequenceLoopHandler) {
     this.events.ended = eventHandler
     return this
   }

@@ -12,9 +12,10 @@ import { Scale } from './scale/Scale'
 
 import type { Tail } from 'utils'
 
-type Middleware = (ctx: GeneratorContext, ...params: never[]) => void
+export type Middleware = (ctx: GeneratorContext, ...params: never[]) => void
+export type Middlewares = Record<string, Middleware>
+
 type Injected<MW extends Middleware> = (...params: Tail<Parameters<MW>>) => void
-type Middlewares = Record<string, Middleware>
 type InjectedMiddlewares<MW extends Middlewares> = {
   [k in keyof MW]: Injected<MW[k]>
 }
@@ -26,7 +27,7 @@ export type SequenceGenerator<MW extends Middlewares = Middlewares> = GeneratorC
 export const createGenerator = <MW extends Middlewares>(
   context: GeneratorContext,
   middlewares: MW = <MW>{}
-): SequenceGenerator<MW> => {
+) => {
   const injected = Object.fromEntries(
     Object.entries({ ...defaultMiddlewares, ...middlewares }).map(([k, mw]) => [
       k,
@@ -36,13 +37,23 @@ export const createGenerator = <MW extends Middlewares>(
   return {
     ...context,
     ...injected,
+    get context() {
+      return context
+    },
+    get mw() {
+      return injected
+    },
+    get middlewares() {
+      return injected
+    },
   }
 }
 
 export type GeneratorConf = {
   scale?: Scale
-} & Partial<SequenceConf> &
-  Partial<NotePickerConf>
+  sequence: Partial<SequenceConf>
+  note: Partial<NotePickerConf>
+}
 
 type GeneratorContext = {
   sequence: Sequence
@@ -61,8 +72,8 @@ export const defaultMiddlewares = {
 } satisfies Middlewares
 
 function updateConfig(context: GeneratorContext, config: Partial<GeneratorConf>) {
-  context.sequence.updateConfig(config)
-  Object.assign(context.picker, config)
+  context.sequence.updateConfig(config.sequence || {})
+  Object.assign(context.picker, config.note)
   constructNotes(context)
 }
 

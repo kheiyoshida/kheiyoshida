@@ -7,42 +7,28 @@ import { scheduleLoop } from './tone-wrapper/utils'
 
 export class ToneOutletPort extends OutletPort<ToneOutlet> {
   /**
-   * @note loopNth starts from 1
-   */
-  protected checkEvent(totalNumOfLoops: number, loopNth: number, loopStartedAt: number) {
-    if (this.events.elapsed) {
-      this.events.elapsed({
-        generator: this.generator,
-      })
-    }
-    if (loopNth === totalNumOfLoops) {
-      const actualEndTime = loopStartedAt + totalNumOfLoops * this.sequenceDuration
-      if (!this.events.ended) return
-      this.events.ended({
-        generator: this.generator,
-        repeatLoop: (numOfLoops) => this.loopSequence(numOfLoops || totalNumOfLoops, actualEndTime),
-      })
-    }
-  }
-
-  /**
    * Outlet needs to have overhead for time=0 notes
    */
   static BufferTime = 0.05
 
-  public loopSequence(numOfLoops = 1, startTime = 0): ToneOutletPort {
-    if (this.generator.sequence.isEmpty) return this
-    scheduleLoop(
-      (time, loopNth) => {
-        this.generator.sequence.iterateEachNote((note, position) => {
-          this.assignNote(note, time + position * this.secsPerDivision + ToneOutletPort.BufferTime)
-        })
-        this.checkEvent(numOfLoops, loopNth, startTime)
-      },
-      this.sequenceDuration,
-      startTime,
-      numOfLoops
-    )
+  public loopSequence(numOfLoops = this.numOfLoops, startTime = 0): ToneOutletPort {
+    this.numOfLoops = numOfLoops
+    if (this.numOfLoops >= 1) {
+      scheduleLoop(
+        (time, loopNth) => {
+          this.generator.sequence.iterateEachNote((note, position) => {
+            this.assignNote(
+              note,
+              time + position * this.secsPerDivision + ToneOutletPort.BufferTime
+            )
+          })
+          this.checkEvent(numOfLoops, loopNth, startTime)
+        },
+        this.sequenceDuration,
+        startTime,
+        numOfLoops
+      )
+    }
     return this
   }
 
@@ -53,10 +39,28 @@ export class ToneOutletPort extends OutletPort<ToneOutlet> {
     this.outlet.sendNote(pitch, duration, time, velocity)
   }
 
+  /**
+   * @note loopNth starts from 1
+   */
+  private checkEvent(totalNumOfLoops: number, loopNth: number, loopStartedAt: number) {
+    if (loopNth === totalNumOfLoops) this.handleEnded(totalNumOfLoops, loopNth, loopStartedAt)
+    else this.handleElapsed(loopNth)
+  }
+
+  private handleElapsed(loopNth: number) {
+    if (!this.events.elapsed) return
+    this.events.elapsed(this.generator, loopNth)
+  }
+
+  private handleEnded(totalNumOfLoops: number, loopNth: number, loopStartedAt: number) {
+    if (!this.events.ended) return
+    this.events.ended(this.generator, loopNth)
+    const actualEndTime = loopStartedAt + totalNumOfLoops * this.sequenceDuration
+    this.loopSequence(this.numOfLoops, actualEndTime)
+  }
+
   private getConcretePitch(note: Note): number {
-    return note.pitch === 'random'
-      ? this.generator.scale.pickRandomPitch()!
-      : note.pitch
+    return note.pitch === 'random' ? this.generator.scale.pickRandomPitch()! : note.pitch
   }
 
   private get secsPerMeasure() {

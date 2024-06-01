@@ -1,5 +1,4 @@
-import { getSubset } from 'utils'
-import { GeneratorConf, createGenerator as createGen } from './generator/Generator'
+import { GeneratorConf, Middlewares, createGenerator as createGen } from './generator/Generator'
 import { fillNoteConf } from './generator/NotePicker'
 import { Sequence } from './generator/Sequence'
 import { Scale, ScaleConf } from './generator/scale/Scale'
@@ -19,10 +18,8 @@ export function createScale(
   else return new Scale(confOrKey)
 }
 
-export function createGenerator(conf: GeneratorConf) {
-  const sequence = new Sequence(
-    getSubset(conf, ['length', 'lenRange', 'division', 'density', 'fillPref'])
-  )
-  const picker = fillNoteConf(conf)
-  return createGen({ picker, sequence, scale: conf.scale || new Scale() })
+export function createGenerator(conf: GeneratorConf & { middlewares?: Middlewares }) {
+  const sequence = new Sequence(conf.sequence)
+  const picker = fillNoteConf(conf.note)
+  return createGen({ picker, sequence, scale: conf.scale || new Scale() }, conf.middlewares)
 }

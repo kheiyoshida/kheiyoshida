@@ -2,10 +2,10 @@ import { Outlet } from 'mgnr-core/src/Outlet'
 import { SequenceGenerator } from 'mgnr-core/src/generator/Generator'
 import { convertMidiToNoteName } from 'mgnr-core/src/generator/convert'
 import { LayeredNoteBuffer, NoteBuffer } from './Buffer'
+import { ToneOutletPort } from './OutletPort'
 import { LayeredInstrument } from './instrument'
 import * as Transport from './tone-wrapper/Transport'
 import { ToneInst } from './types'
-import { ToneOutletPort } from './OutletPort'
 
 export class ToneOutlet extends Outlet<ToneInst> {
   sendNote(pitch: number, duration: number, time: number, velocity: number): void {
