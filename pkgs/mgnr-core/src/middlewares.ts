@@ -101,14 +101,8 @@ export function randomizeNotes(context: GeneratorContext, rate: number) {
 }
 
 export function assignNotes(context: GeneratorContext) {
-  switch (context.picker.fillStrategy) {
-    case 'random':
-    case 'fill':
-      fillAvailableSpaceInSequence(context)
-      break
-    case 'fixed':
-      break
-  }
+  if (context.sequence.conf.fillStrategy === 'fixed') return
+  fillAvailableSpaceInSequence(context)
 }
 
 export function fillAvailableSpaceInSequence({ sequence, picker, scale }: GeneratorContext) {

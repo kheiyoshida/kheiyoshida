@@ -87,8 +87,8 @@ describe(`generator middlewares`, () => {
   })
   describe(`${defaultMiddlewares.constructNotes.name}`, () => {
     it(`should assign initial notes if provided`, () => {
-      const picker = fillNoteConf({ fillStrategy: 'fixed' })
-      const sequence = new Sequence()
+      const picker = fillNoteConf({})
+      const sequence = new Sequence({ fillStrategy: 'fixed' })
       const generator = buildGenerator({ picker, sequence, scale: new Scale() })
       generator.constructNotes(defaultNotes)
       expect(generator.sequence.notes).toMatchObject(defaultNotes)

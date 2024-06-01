@@ -13,9 +13,15 @@ export type SequenceConf = {
   lenRange: Range
 
   /**
-   * 0 - 1 percentage
+   * density of notes that fill this sequence
+   * float 0 - 1
    */
   density: number
+
+  /**
+   * if notes are fixed regardless of density setting 
+   */
+  fillStrategy: 'fill' | 'fixed'
 
   /**
    * minimum unit of note duration
@@ -43,49 +49,32 @@ export class Sequence {
     return this._notes
   }
 
-  protected conf: SequenceConf
+  private _conf: SequenceConf
+  get conf() {
+    return this._conf
+  }
 
   get poly() {
-    return this.conf.polyphony === 'poly'
+    return this._conf.polyphony === 'poly'
   }
-
-  /**
-   * the number of divisions
-   * e.g. length 8 means 8 sixteenth notes in a sequence
-   */
   get length(): number {
-    return this.conf.length
+    return this._conf.length
   }
-
-  /**
-   * min/max limit to which sequence can shrink/extend
-   */
   get lenRange() {
-    return this.conf.lenRange
+    return this._conf.lenRange
   }
-
-  /**
-   * unit of each note with length 1
-   */
   get division() {
-    return this.conf.division
+    return this._conf.division
   }
-
-  /**
-   * the ratio of notes/available space
-   */
   get density(): number {
-    return this.conf.density
+    return this._conf.density
   }
-
   get availableSpace() {
     return this.maxNumOfNotes - this.usedSpace
   }
-
   get maxNumOfNotes() {
     return Math.floor(this.length * this.density)
   }
-
   get usedSpace() {
     let used = 0
     this.iterateEachNote((note) => {
@@ -122,17 +111,18 @@ export class Sequence {
       min: 2,
       max: 50,
     },
+    fillStrategy: 'fill',
     division: 16,
     density: 0.5,
     polyphony: 'poly',
   }
 
   constructor(conf: Partial<SequenceConf> = {}) {
-    this.conf = overrideDefault(Sequence.DefaultConf, conf)
+    this._conf = overrideDefault(Sequence.DefaultConf, conf)
   }
 
   public updateConfig(conf: Partial<SequenceConf>) {
-    this.conf = overrideDefault(this.conf, conf)
+    this._conf = overrideDefault(this._conf, conf)
   }
 
   public addNote(pos: number | undefined, note: Note) {
@@ -209,7 +199,7 @@ export class Sequence {
    * if poly allowed, just returns random position
    */
   public getAvailablePosition() {
-    return this.conf.polyphony === 'mono'
+    return this._conf.polyphony === 'mono'
       ? this.searchEmptyPosition()
       : randomIntBetween(0, this.length)
   }
@@ -219,7 +209,7 @@ export class Sequence {
   }
 
   public extend(len: number) {
-    this.conf.length += len
+    this._conf.length += len
   }
 
   public canShrink(byLength: number) {
@@ -227,7 +217,7 @@ export class Sequence {
   }
 
   public shrink(len: number) {
-    this.conf.length -= len
+    this._conf.length -= len
   }
 
   static iteratePosition(noteMap: SequenceNoteMap, cb: (position: number) => void) {
