@@ -167,6 +167,13 @@ describe(`${Sequence.name}`, () => {
     seqNotes.deleteNotesInPosition(4)
     expect(seqNotes.notes).toMatchObject({ 2: notes[2] })
   })
+  test(`${Sequence.prototype.deleteNoteFromPosition.name}`, () => {
+    const sequence = new Sequence()
+    sequence.replaceEntireNotes(makeNotes())
+    const [note, ...rest] = sequence.notes[4]
+    sequence.deleteNoteFromPosition(4, note)
+    expect(sequence.notes[4]).toMatchObject(rest)
+  })
   test(`${Sequence.prototype.deleteRandomNotes.name}`, () => {
     jest.spyOn(utils, 'randomRemoveFromArray').mockImplementation((notes) => {
       if (notes.length > 1)

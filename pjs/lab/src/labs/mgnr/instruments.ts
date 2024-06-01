@@ -61,7 +61,7 @@ export const hh = new Tone.NoiseSynth({
 export const snare = new mgnr.CompositeInstrument(
   new Tone.MembraneSynth({
     oscillator: {
-      type: 'sine',
+      type: 'square',
     },
     envelope: {
       attack: 0,
@@ -69,14 +69,14 @@ export const snare = new mgnr.CompositeInstrument(
       sustain: 0.3,
       release: 0.2,
     },
-    volume: -24,
-    detune: -100,
+    volume: -40,
+    detune: -500,
   }),
   new Tone.NoiseSynth({
     envelope: {
       attack: 0,
       decay: 0.05,
-      sustain: 0.05,
+      sustain: 0.01,
       release: 0,
     },
     volume: -20,

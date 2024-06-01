@@ -1,11 +1,13 @@
 import * as mgnr from 'mgnr-tone'
 import * as Tone from 'tone'
-import { drumMachine, compsoiteSynth } from './instruments'
+import { compsoiteSynth, drumMachine } from './instruments'
+import { SequenceNoteMap } from '../../../../../pkgs/mgnr-core/src/generator/Sequence'
+import { fireByRate, randomIntInclusiveBetween } from 'utils'
 
 const mixer = mgnr.getMixer()
 
 export const prepareSong = () => {
-  // prepareDrums()
+  prepareDrums()
   prepareSynth()
 }
 
@@ -27,8 +29,8 @@ const prepareDrums = () => {
     sequence: {
       length: 16,
       division: 16,
-      density: 0.5,
-      fillPref: 'mono',
+      density: 0.25,
+      fillPref: 'allowPoly',
     },
   })
   const generator2 = mgnr.createGenerator({
@@ -41,11 +43,11 @@ const prepareDrums = () => {
     },
     note: {
       noteDur: 1,
-      fillStrategy: 'fill',
+      fillStrategy: 'fixed',
     },
   })
 
-  generator.constructNotes({
+  const fixedNotes: SequenceNoteMap = {
     0: [
       {
         pitch: 30,
@@ -84,14 +86,8 @@ const prepareDrums = () => {
         vel: 100,
       },
     ],
-    14: [
-      {
-        pitch: 90,
-        dur: 1,
-        vel: 100,
-      },
-    ],
-  })
+  }
+  generator.constructNotes(fixedNotes)
 
   generator2.constructNotes({
     2: [
@@ -126,16 +122,29 @@ const prepareDrums = () => {
 
   outlet
     .assignGenerator(generator)
-    .loopSequence(4)
-    .onEnded((c) => c.repeatLoop())
-
-  const port = outlet
-    .assignGenerator(generator2)
-    .loopSequence(2)
-    .onEnded((generator) => {
-      generator.f
-      generator.mutate({ rate: 0.25, strategy: 'move' })
+    .loopSequence(8)
+    .onElapsed((g, n) => {
+      if (n % 2 === 1) {
+        g.sequence.iterateEachNote((note, i) => {
+          if (fireByRate(0.2)) {
+            g.sequence.deleteNoteFromPosition(i, note)
+          }
+        })
+      } else {
+        if (fireByRate(0.2)) {
+          // g.constructNotes()
+          g.sequence.addNote(randomIntInclusiveBetween(0, g.sequence.length - 1), {
+            pitch: 30,
+            dur: 1,
+            vel: 100,
+          })
+        }
+      }
     })
+    .onEnded((g) => {
+      g.resetNotes(fixedNotes)
+    })
+  outlet.assignGenerator(generator2).loopSequence(2)
 }
 
 const prepareSynth = () => {
@@ -151,7 +160,7 @@ const prepareSynth = () => {
     sequence: {
       length: 10,
       density: 0.7,
-      division: 16,
+      division: 4,
       fillPref: 'mono',
     },
     note: {
@@ -180,7 +189,6 @@ const prepareSynth = () => {
       generator.mutate({ rate: 0.5, strategy: 'inPlace' })
     })
     .onEnded((generator) => {
-      generator.custom()
       generator.mutate({ rate: 0.5, strategy: 'randomize' })
     })
 }

@@ -156,6 +156,12 @@ export class Sequence {
     }
   }
 
+  public deleteNoteFromPosition(position: number, note: Note) {
+    if (this.notes[position]) {
+      this.notes[position] = this.notes[position].filter((n) => n !== note)
+    }
+  }
+
   public deleteRandomNotes(rate: number): Note[] {
     let removed: Note[] = []
     this.iteratePosition((i) => {

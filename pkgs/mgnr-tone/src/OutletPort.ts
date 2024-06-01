@@ -54,8 +54,9 @@ export class ToneOutletPort<MW extends Middlewares> extends OutletPort<ToneOutle
   }
 
   private handleEnded(totalNumOfLoops: number, loopNth: number, loopStartedAt: number) {
-    if (!this.events.ended) return
-    this.events.ended(this.generator, loopNth)
+    if (this.events.ended) {
+      this.events.ended(this.generator, loopNth)
+    }
     const actualEndTime = loopStartedAt + totalNumOfLoops * this.sequenceDuration
     this.loopSequence(this.numOfLoops, actualEndTime)
   }
