@@ -22,16 +22,10 @@ export type ScaleArgs = Partial<ScaleConf>
 export class Scale {
   protected _conf!: ScaleConf
 
-  /**
-   * root tone name of the scale.
-   */
   get key(): PitchName {
     return this._conf.key
   }
 
-  /**
-   * prefered degree in the key
-   */
   get scaleType(): ScaleType {
     return this._conf.pref
   }
@@ -63,7 +57,7 @@ export class Scale {
   }
 
   /**
-   * range of the pitches applied to primaryPitches
+   * range of the pitches for primaryPitches
    */
   get pitchRange(): Range {
     return this._conf.range
@@ -72,7 +66,7 @@ export class Scale {
   /**
    * root tone midi number
    */
-  get lowestPitch() {
+  get lowestPitch(): MidiNum {
     return ROOT_TONE_MAP[this.key]
   }
 
@@ -91,7 +85,13 @@ export class Scale {
     }
   }
 
-  constructor(values: Partial<ScaleConf> = {}) {
+  constructor(fixedPitches: MidiNum[])
+  constructor(values?: Partial<ScaleConf>)
+  constructor(values: Partial<ScaleConf> | MidiNum[] = {}) {
+    if (Array.isArray(values)) {
+      this.setNewValues(values, values, Scale.DefaultValue)
+      return
+    }
     const conf = this.buildConf(values)
     const result = constructScalePitchesFromConf(conf)
     validateScalePitches(result, conf)

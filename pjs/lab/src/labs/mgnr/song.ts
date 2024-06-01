@@ -7,15 +7,19 @@ import { fireByRate, randomIntInclusiveBetween } from 'utils'
 const mixer = mgnr.getMixer()
 
 export const prepareSong = () => {
+  Tone.Transport.bpm.value = 160
   prepareDrums()
   prepareSynth()
 }
 
 const prepareDrums = () => {
-  const scale = mgnr.createScale('C', 'major', { min: 30, max: 80 })
+  const scale = mgnr.createScale([30, 50, 90])
   const synCh = mixer.createInstChannel({
     inst: drumMachine,
     initialVolume: -6,
+    effects: [
+      new Tone.BitCrusher(16)
+    ]
   })
 
   const outlet = mgnr.createOutlet(synCh.inst, Tone.Transport.toSeconds('2n'))
@@ -36,14 +40,14 @@ const prepareDrums = () => {
   const generator2 = mgnr.createGenerator({
     scale: scale,
     sequence: {
-      length: 16,
+      length: 12,
       division: 16,
       density: 0.5,
       fillPref: 'mono',
     },
     note: {
       noteDur: 1,
-      fillStrategy: 'fixed',
+      fillStrategy: 'fill',
     },
   })
 
@@ -111,13 +115,6 @@ const prepareDrums = () => {
         vel: 100,
       },
     ],
-    14: [
-      {
-        pitch: 90,
-        dur: 1,
-        vel: 100,
-      },
-    ],
   })
 
   outlet
@@ -144,7 +141,7 @@ const prepareDrums = () => {
     .onEnded((g) => {
       g.resetNotes(fixedNotes)
     })
-  outlet.assignGenerator(generator2).loopSequence(2)
+  outlet.assignGenerator(generator2).loopSequence(2).onEnded(g => g.mutate({rate: 0.3, strategy: 'inPlace'}))
 }
 
 const prepareSynth = () => {
@@ -168,11 +165,11 @@ const prepareSynth = () => {
         min: 4,
         max: 8,
       },
-      harmonizer: {
-        degree: ['3', '5', '7'],
-        force: false,
-        lookDown: false,
-      },
+      // harmonizer: {
+      //   degree: ['3', '5', '7'],
+      //   force: false,
+      //   lookDown: false,
+      // },
       fillStrategy: 'fill',
     },
     middlewares: {

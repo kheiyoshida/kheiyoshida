@@ -1,8 +1,10 @@
 import { GeneratorConf, Middlewares, createGenerator as createGen } from './generator/Generator'
 import { fillNoteConf } from './generator/NotePicker'
 import { Sequence } from './generator/Sequence'
+import { MidiNum } from './generator/constants'
 import { Scale, ScaleConf } from './generator/scale/Scale'
 
+export function createScale(pitches: MidiNum[]): Scale
 export function createScale(
   key: ScaleConf['key'],
   pref?: ScaleConf['pref'],
@@ -10,12 +12,14 @@ export function createScale(
 ): Scale
 export function createScale(conf: Partial<ScaleConf>): Scale
 export function createScale(
-  confOrKey?: Partial<ScaleConf> | ScaleConf['key'],
+  confOrKeyOrPitches?: Partial<ScaleConf> | ScaleConf['key'] | MidiNum[],
   pref?: ScaleConf['pref'],
   range?: ScaleConf['range']
 ): Scale {
-  if (typeof confOrKey === 'string') return new Scale({ key: confOrKey, pref, range })
-  else return new Scale(confOrKey)
+  if (typeof confOrKeyOrPitches === 'string')
+    return new Scale({ key: confOrKeyOrPitches, pref, range })
+  if (Array.isArray(confOrKeyOrPitches)) return new Scale(confOrKeyOrPitches)
+  return new Scale(confOrKeyOrPitches)
 }
 
 export function createGenerator<MW extends Middlewares>(

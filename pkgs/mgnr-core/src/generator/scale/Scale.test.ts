@@ -39,6 +39,10 @@ describe(`${Scale.name}`, () => {
         })
       }).toThrow()
     })
+    it(`can be constructed with fixed pitches`,() => {
+      const scale = new Scale([60, 62, 64])
+      expect(scale.primaryPitches).toMatchObject([60, 62, 64])
+    })
   })
   describe(`${Scale.prototype.pickRandomPitch.name}`, () => {
     it(`should pick random note from the range`, () => {

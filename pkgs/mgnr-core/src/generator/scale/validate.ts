@@ -1,5 +1,4 @@
-import { NumRange } from 'utils'
-import { Range } from 'utils'
+import { NumRange, Range } from 'utils'
 import { HIGHEST_MIDI_NUM, LOWEST_MIDI_NUM } from '../constants'
 import { Modulation } from './Modulation'
 import { ScaleConf } from './Scale'
@@ -11,7 +10,10 @@ export class EmptyScaleError extends Error {
   }
 }
 
-export function validateScalePitches(result: ReturnType<typeof constructScalePitches>, conf: ScaleConf): void {
+export function validateScalePitches(
+  result: ReturnType<typeof constructScalePitches>,
+  conf: ScaleConf
+): void {
   if (result.wholePitches.length === 0 || result.primaryPitches.length === 0) {
     throw new EmptyScaleError(conf)
   }
@@ -28,7 +30,10 @@ export function validateModulationConf(conf: ScaleConf): boolean {
   }
 }
 
-export function validateModResult(result: ReturnType<typeof constructScalePitches>, mod: Modulation): boolean {
+export function validateModResult(
+  result: ReturnType<typeof constructScalePitches>,
+  mod: Modulation
+): boolean {
   try {
     validateScalePitches(result, mod.nextScaleConf)
     return true
@@ -48,4 +53,3 @@ export function validateScaleRange(range: Range): NumRange {
     `Scale.range should be between ${LOWEST_MIDI_NUM} - ${HIGHEST_MIDI_NUM}`
   )
 }
-   
