@@ -1,4 +1,4 @@
-import { GeneratorConf, Middlewares, createGenerator as createGen } from './generator/Generator'
+import { GeneratorConf, Middlewares, buildGenerator as createGen } from './Generator'
 import { fillNoteConf } from './generator/NotePicker'
 import { Sequence } from './generator/Sequence'
 import { MidiNum } from './generator/constants'

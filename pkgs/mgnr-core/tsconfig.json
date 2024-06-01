@@ -9,11 +9,6 @@
     "rootDir": "./",
     "moduleResolution": "node",
     "baseUrl": "./",
-    "paths": {
-        "src/*": [
-            "./src/*"
-        ],
-    },
     "resolveJsonModule": true,
     "allowJs": true,
     "declaration": true,

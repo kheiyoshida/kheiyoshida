@@ -1,8 +1,8 @@
 import { fireByRate } from 'utils'
-import { MutateSpec } from '../types'
+import { MutateSpec } from './types'
 import { GeneratorConf, GeneratorContext } from './Generator'
-import { adjustNotePitch, changeNotePitch, harmonizeNote, pickHarmonizedNotes } from './NotePicker'
-import { Sequence, SequenceNoteMap } from './Sequence'
+import { adjustNotePitch, changeNotePitch, harmonizeNote, pickHarmonizedNotes } from './generator/NotePicker'
+import { Sequence, SequenceNoteMap } from './generator/Sequence'
 
 export function updateConfig(context: GeneratorContext, config: Partial<GeneratorConf>) {
   context.sequence.updateConfig(config.sequence || {})

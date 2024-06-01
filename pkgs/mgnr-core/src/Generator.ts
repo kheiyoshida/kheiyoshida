@@ -1,5 +1,5 @@
-import { NotePickerConf } from './NotePicker'
-import { Sequence, SequenceConf } from './Sequence'
+import { NotePickerConf } from './generator/NotePicker'
+import { Sequence, SequenceConf } from './generator/Sequence'
 import {
   adjustPitch,
   changeSequenceLength,
@@ -9,9 +9,21 @@ import {
   resetNotes,
   updateConfig,
 } from './middlewares'
-import { Scale } from './scale/Scale'
+import { Scale } from './generator/scale/Scale'
 
 import type { Tail } from 'utils'
+
+export type GeneratorConf = {
+  scale?: Scale
+  sequence?: Partial<SequenceConf>
+  note?: Partial<NotePickerConf>
+}
+
+export type GeneratorContext = {
+  scale: Scale
+  sequence: Sequence
+  picker: NotePickerConf
+}
 
 export type Middleware = (ctx: GeneratorContext, ...params: never[]) => void
 export type Middlewares = { readonly [k: string]: Middleware }
@@ -24,7 +36,7 @@ type InjectedMiddlewares<MW extends Middlewares> = {
 export type SequenceGenerator<MW extends Middlewares> = GeneratorContext &
   InjectedMiddlewares<MW & typeof defaultMiddlewares>
 
-export const createGenerator = <MW extends Middlewares>(
+export const buildGenerator = <MW extends Middlewares>(
   context: GeneratorContext,
   middlewares: MW = <MW>{}
 ): SequenceGenerator<MW> => {
@@ -48,19 +60,6 @@ export const createGenerator = <MW extends Middlewares>(
     },
   }
 }
-
-export type GeneratorConf = {
-  scale?: Scale
-  sequence?: Partial<SequenceConf>
-  note?: Partial<NotePickerConf>
-}
-
-export type GeneratorContext = {
-  sequence: Sequence
-  picker: NotePickerConf
-  scale: Scale
-}
-
 export const defaultMiddlewares = {
   updateConfig,
   constructNotes,

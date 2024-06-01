@@ -1,10 +1,8 @@
-import { OutletPort } from 'mgnr-core/src/Outlet'
-import { Note } from 'mgnr-core/src/generator/Note'
+import { Middlewares, Note, OutletPort } from 'mgnr-core'
 import { pickRange } from 'utils'
 import { ToneOutlet } from './Outlet'
 import * as Transport from './tone-wrapper/Transport'
 import { scheduleLoop } from './tone-wrapper/utils'
-import { Middlewares } from 'mgnr-core/src/generator/Generator'
 
 export class ToneOutletPort<MW extends Middlewares> extends OutletPort<ToneOutlet, MW> {
   /**

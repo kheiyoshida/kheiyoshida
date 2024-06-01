@@ -1,9 +1,9 @@
-import { convertNoteNameToMidi } from 'mgnr-core/src/generator/convert'
+import { convertNoteNameToMidi } from 'mgnr-core'
 import { InputNode, NoiseSynth } from 'tone'
 import { Frequency, Time } from 'tone/build/esm/core/type/Units'
 import { Instrument, InstrumentOptions } from 'tone/build/esm/instrument/Instrument'
-import { ToneInst } from '../types'
 import { Range } from 'utils'
+import { ToneInst } from '../types'
 
 export class CompositeInstrument implements ToneInst {
   private instruments: ToneInst[]
@@ -17,7 +17,8 @@ export class CompositeInstrument implements ToneInst {
     velocity?: number | undefined
   ): Instrument<InstrumentOptions> {
     this.instruments.forEach((instrument) => {
-      if (instrument instanceof NoiseSynth) { // maybe we should avoid this
+      if (instrument instanceof NoiseSynth) {
+        // maybe we should avoid this
         instrument.triggerAttackRelease(duration, time, velocity)
       } else {
         instrument.triggerAttackRelease(note, duration, time, velocity)

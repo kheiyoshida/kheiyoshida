@@ -1,6 +1,4 @@
-import { Outlet } from 'mgnr-core/src/Outlet'
-import { Middlewares, SequenceGenerator } from 'mgnr-core/src/generator/Generator'
-import { convertMidiToNoteName } from 'mgnr-core/src/generator/convert'
+import { Middlewares, Outlet, SequenceGenerator, convertMidiToNoteName } from 'mgnr-core'
 import { LayeredNoteBuffer, NoteBuffer } from './Buffer'
 import { ToneOutletPort } from './OutletPort'
 import { LayeredInstrument } from './instrument'

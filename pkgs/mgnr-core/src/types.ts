@@ -1,4 +1,4 @@
-import { Middlewares, SequenceGenerator } from './generator/Generator'
+import { Middlewares, SequenceGenerator } from './Generator'
 
 export type LoopEventKey = 'elapsed' | 'ended'
 

@@ -1,4 +1,4 @@
-import { Middlewares, SequenceGenerator } from './generator/Generator'
+import { Middlewares, SequenceGenerator } from './Generator'
 import { LoopEvent, SequenceLoopHandler } from './types'
 
 export abstract class Outlet<Inst = unknown> {

@@ -86,7 +86,7 @@ export class Scale {
   }
 
   constructor(fixedPitches: MidiNum[])
-  constructor(values?: Partial<ScaleConf>)
+  constructor(config?: Partial<ScaleConf>)
   constructor(values: Partial<ScaleConf> | MidiNum[] = {}) {
     if (Array.isArray(values)) {
       this.setNewValues(values, values, Scale.DefaultValue)

@@ -1,5 +1,4 @@
-import { createGenerator } from 'mgnr-core/src'
-import { SequenceNoteMap } from 'mgnr-core/src/generator/Sequence'
+import { SequenceNoteMap, createGenerator } from 'mgnr-core'
 import * as Tone from 'tone'
 import { ToneOutlet } from './Outlet'
 import { ToneOutletPort } from './OutletPort'
