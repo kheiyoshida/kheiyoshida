@@ -32,8 +32,8 @@ describe(`${pickNote.name}`, () => {
     const noteDur = { min: 2, max: 4 }
     const conf = fillNoteConf({
       fillStrategy: 'random',
-      noteDur,
-      noteVel: 100,
+      duration: noteDur,
+      velocity: 100,
     })
     const note = pickNote(conf, new Scale())
     expect(note?.pitch).toBe('random')
@@ -44,8 +44,8 @@ describe(`${pickNote.name}`, () => {
     const noteDur = { min: 2, max: 4 }
     const conf = fillNoteConf({
       fillStrategy: 'fill',
-      noteDur,
-      noteVel: 100,
+      duration: noteDur,
+      velocity: 100,
     })
     const note = pickNote(conf, new Scale())
     expect(note?.pitch).not.toBe('random')

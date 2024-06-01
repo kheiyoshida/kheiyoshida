@@ -4,13 +4,13 @@ import { Note } from './Note'
 import { Scale } from './scale/Scale'
 
 type VelocityConf = {
-  noteVel: number | Range
+  velocity: number | Range
   veloPref: 'randomPerEach' | 'consistent'
 }
 
 type DurationConf = {
+  duration: number | Range
   fillStrategy: 'random' | 'fill' | 'fixed'
-  noteDur: number | Range
 }
 
 type PitchConf = {
@@ -25,8 +25,8 @@ export const fillNoteConf = (provided: Partial<NotePickerConf>): NotePickerConf 
 }
 
 const getDefaultConf = (): NotePickerConf => ({
-  noteDur: 1,
-  noteVel: 100,
+  duration: 1,
+  velocity: 100,
   veloPref: 'randomPerEach',
   fillStrategy: 'fill',
 })
@@ -94,12 +94,12 @@ function getDifferentPitch(scale: Scale, originalPitch: number, r = 0): number {
 
 // Duration
 
-function getNoteDuration({ noteDur, fillStrategy }: DurationConf): Note['dur'] {
+function getNoteDuration({ duration: noteDur, fillStrategy }: DurationConf): Note['dur'] {
   return fillStrategy === 'random' ? noteDur : pickRange(noteDur)
 }
 
 // Velocity
 
-function getNoteVelocity({ veloPref, noteVel }: VelocityConf): Note['vel'] {
+function getNoteVelocity({ veloPref, velocity: noteVel }: VelocityConf): Note['vel'] {
   return veloPref === 'randomPerEach' ? noteVel : pickRange(noteVel)
 }

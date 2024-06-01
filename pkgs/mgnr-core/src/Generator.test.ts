@@ -67,7 +67,7 @@ const deepCopy = <T>(v: T) => JSON.parse(JSON.stringify(v)) as T
 describe(`generator middlewares`, () => {
   describe(`${defaultMiddlewares.updateConfig.name}`, () => {
     it(`should update config with given fields & values`, () => {
-      const picker = fillNoteConf({ noteDur: { min: 1, max: 4 } })
+      const picker = fillNoteConf({ duration: { min: 1, max: 4 } })
       const scale = new Scale()
       const sequence = new Sequence({ density: 0.5, length: 8 })
       const generator = buildGenerator({ picker, sequence, scale }, {})
@@ -79,10 +79,10 @@ describe(`generator middlewares`, () => {
       expect(sequence.density).toBe(0.9)
       generator.updateConfig({
         note: {
-          noteDur: 2,
+          duration: 2,
         },
       })
-      expect(generator.picker.noteDur).toBe(2)
+      expect(generator.picker.duration).toBe(2)
     })
   })
   describe(`${defaultMiddlewares.constructNotes.name}`, () => {
@@ -103,7 +103,7 @@ describe(`generator middlewares`, () => {
       })
     })
     it(`should fill up available space after assigning initial notes`, () => {
-      const picker = fillNoteConf({ fillStrategy: 'fill', noteDur: 1 })
+      const picker = fillNoteConf({ fillStrategy: 'fill', duration: 1 })
       const sequence = new Sequence({ fillPref: 'mono', length: 8, density: 0.5 })
       const generator = buildGenerator({ picker, sequence, scale })
       const initialNotes = { 0: defaultNotes[0].slice() }
@@ -115,7 +115,7 @@ describe(`generator middlewares`, () => {
 
   describe(`${defaultMiddlewares.changeSequenceLength.name}`, () => {
     it(`can extend its sequence length, filling the extended part with notes`, () => {
-      const picker = fillNoteConf({ fillStrategy: 'fill', noteDur: 1 })
+      const picker = fillNoteConf({ fillStrategy: 'fill', duration: 1 })
       const sequence = new Sequence({ fillPref: 'mono', length: 8, density: 0.5 })
       const generator = buildGenerator({ picker, sequence, scale })
       generator.changeSequenceLength('extend', 8)
@@ -123,7 +123,7 @@ describe(`generator middlewares`, () => {
       expect(sequence.numOfNotes).toBe(sequence.density * sequence.length)
     })
     it(`can shrink and remove excessive notes after shrinking`, () => {
-      const picker = fillNoteConf({ fillStrategy: 'fill', noteDur: 1 })
+      const picker = fillNoteConf({ fillStrategy: 'fill', duration: 1 })
       const sequence = new Sequence({ fillPref: 'mono', length: 8, density: 0.5 })
       const generator = buildGenerator({ picker, sequence, scale })
       generator.changeSequenceLength('shrink', 4)
