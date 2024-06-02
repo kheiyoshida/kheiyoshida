@@ -18,18 +18,22 @@ export const setupKick = () => {
 
   const generator = mgnr.createGenerator({
     scale: mgnr.createScale({ range: { min: 30, max: 31 } }),
-    length: 8,
-    division: 8,
-    density: 0.3,
-    fillStrategy: 'fill',
-    fillPref: 'mono',
-    lenRange: {
-      min: 4,
-      max: 50,
+    sequence: {
+      length: 8,
+      division: 8,
+      density: 0.3,
+      fillStrategy: 'fill',
+      polyphony: 'mono',
+      lenRange: {
+        min: 4,
+        max: 50,
+      },
     },
+    middlewares: {
+      changeLength: mgnr.pingpongSequenceLength('extend'),
+    }
   })
 
-  generator.feedOutlet(kickOut)
   generator.constructNotes({
     0: [
       {
@@ -47,16 +51,19 @@ export const setupKick = () => {
     ],
   })
 
-  const changeLength = mgnr.pingpongSequenceLength('extend')
-  kickOut.loopSequence(2).onEnded(({ out, endTime }) => {
-    out.generator.mutate({ strategy: 'move', rate: 0.3 })
-    changeLength(out.generator, 3)
-    kickOut.loopSequence(2, endTime)
-  })
+  kickOut
+    .assignGenerator(generator)
+    .loopSequence(2)
+    .onEnded((generator) => {
+      generator.mutate({ strategy: 'move', rate: 0.3 })
+      generator.changeLength(3)
+    })
 
   const randomizeConfig = () => {
     generator.updateConfig({
-      density: randomFloatBetween(0.3, 0.5),
+      sequence: {
+        density: randomFloatBetween(0.3, 0.5),
+      },
     })
   }
 

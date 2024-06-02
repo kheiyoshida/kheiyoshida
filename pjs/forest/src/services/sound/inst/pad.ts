@@ -23,46 +23,58 @@ export const setupPadCh = (scale: Scale) => {
 
   const generator = mgnr.createGenerator({
     scale: scale,
-    length: 50,
-    division: 16,
-    density: 0.2,
-    noteDur: {
-      min: 3,
-      max: 8,
+    sequence: {
+      length: 50,
+      division: 16,
+      density: 0.2,
+      lenRange: {
+        min: 40,
+        max: 60,
+      },
+      fillStrategy: 'fill',
+      polyphony: 'mono',
     },
-    lenRange: {
-      min: 40,
-      max: 60,
+    note: {
+      duration: {
+        min: 3,
+        max: 8,
+      },
+      velocity: {
+        min: 80,
+        max: 120,
+      },
+      harmonizer: {
+        degree: ['6'],
+        lookDown: false,
+      },
     },
-    noteVel: {
-      min: 80,
-      max: 120,
-    },
-    fillStrategy: 'fill',
-    fillPref: 'mono',
-    harmonizer: {
-      degree: ['6'],
-      lookDown: false,
+    middlewares: {
+      lengthChange: mgnr.pingpongSequenceLength('extend'),
     },
   })
 
-  const lengthChange = mgnr.pingpongSequenceLength('extend')
   generator.constructNotes()
-  generator.feedOutlet(out)
-  out.loopSequence(2).onEnded((mes) => {
-    mes.out.generator.mutate({ rate: 0.3, strategy: 'randomize' })
-    mes.out.generator.mutate({ rate: 0.4, strategy: 'inPlace' })
-    lengthChange(mes.out.generator, 4)
-    out.loopSequence(2, mes.endTime)
-  })
+
+  out
+    .assignGenerator(generator)
+    .loopSequence(2)
+    .onEnded((generator) => {
+      generator.mutate({ rate: 0.3, strategy: 'randomize' })
+      generator.mutate({ rate: 0.4, strategy: 'inPlace' })
+      generator.lengthChange(4)
+    })
 
   const randomizeConfig = () => {
     generator.updateConfig({
-      noteDur: {
-        min: randomIntInclusiveBetween(3, 5),
-        max: randomIntInclusiveBetween(6, 10),
+      note: {
+        duration: {
+          min: randomIntInclusiveBetween(3, 5),
+          max: randomIntInclusiveBetween(6, 10),
+        },
       },
-      density: randomFloatBetween(0.2, 0.4),
+      sequence: {
+        density: randomFloatBetween(0.2, 0.4),
+      },
     })
   }
 

@@ -213,7 +213,7 @@ export class Sequence {
   }
 
   public canShrink(byLength: number) {
-    return this.length > byLength && this.length - byLength > this.lenRange.min
+    return this.length > byLength && this.length - byLength >= this.lenRange.min
   }
 
   public shrink(len: number) {

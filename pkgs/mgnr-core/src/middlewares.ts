@@ -52,14 +52,24 @@ export function changeSequenceLength(
   context: GeneratorContext,
   method: 'shrink' | 'extend',
   length: number,
-  onSequenceLengthLimit: (currentMethod: 'shrink' | 'extend') => void = () => undefined
+  onSequenceLengthLimit: () => void = () => undefined
 ) {
   if (method === 'extend') {
-    if (!context.sequence.canExtend(length)) return onSequenceLengthLimit(method)
+    if (!context.sequence.canExtend(length)) return onSequenceLengthLimit()
     extend(context, length)
   } else {
-    if (!context.sequence.canShrink(length)) return onSequenceLengthLimit(method)
+    if (!context.sequence.canShrink(length)) return onSequenceLengthLimit()
     shrink(context, length)
+  }
+}
+
+export function pingpongSequenceLength(initialMethod: 'shrink' | 'extend') {
+  let direction = initialMethod
+  return (context: GeneratorContext, len: number) => {
+    changeSequenceLength(context, direction, len, () => {
+      direction = direction === 'extend' ? 'shrink' : 'extend'
+      changeSequenceLength(context, direction, len)
+    })
   }
 }
 
@@ -132,3 +142,4 @@ export function mutateNotesPitches({ sequence, scale }: GeneratorContext, rate: 
     }
   })
 }
+

@@ -23,52 +23,65 @@ export const setupExtraSynCh = (scale: Scale) => {
 
   const generator = mgnr.createGenerator({
     scale,
-    length: 10,
-    division: 16,
-    density: 0.3,
-    fillStrategy: 'fill',
-    fillPref: 'mono',
-    noteDur: {
-      min: 1,
-      max: 3,
+    sequence: {
+      length: 10,
+      division: 16,
+      density: 0.3,
+      fillStrategy: 'fill',
+      polyphony: 'mono',
+      lenRange: {
+        min: 12,
+        max: 30,
+      },
     },
-    lenRange: {
-      min: 12,
-      max: 30,
+    note: {
+      duration: {
+        min: 1,
+        max: 3,
+      },
+    },
+    middlewares: {
+      lengthChange: mgnr.pingpongSequenceLength('extend'),
     },
   })
 
   generator.constructNotes()
-  generator.feedOutlet(out)
-  const lengthChange = mgnr.pingpongSequenceLength('extend')
+
   out
+    .assignGenerator(generator)
     .loopSequence(2)
-    .onElapsed(() => {
+    .onElapsed((generator) => {
       generator.mutate({ rate: 0.3, strategy: 'randomize' })
     })
-    .onEnded((mes) => {
-      mes.out.generator.mutate({ rate: 0.2, strategy: 'inPlace' })
-      lengthChange(mes.out.generator, 4)
-      mes.repeatLoop()
+    .onEnded((generator) => {
+      generator.mutate({ rate: 0.2, strategy: 'inPlace' })
+      generator.lengthChange(4)
     })
 
   const generator2 = mgnr.createGenerator({
     scale,
-    length: 16,
-    division: 16,
-    density: 0.3,
-    fillStrategy: 'fill',
-    fillPref: 'mono',
-    noteDur: {
-      min: 2,
-      max: 3,
+    sequence: {
+      length: 16,
+      division: 16,
+      density: 0.3,
+      fillStrategy: 'fill',
+      polyphony: 'mono',
+      lenRange: {
+        min: 10,
+        max: 40,
+      },
     },
-    lenRange: {
-      min: 10,
-      max: 40,
+    note: {
+      duration: {
+        min: 2,
+        max: 3,
+      },
+    },
+    middlewares: {
+      lengthChange: mgnr.pingpongSequenceLength('extend'),
     },
   })
-  generator2.feedOutlet(out)
+
   generator2.constructNotes({
     0: [
       {
@@ -85,27 +98,37 @@ export const setupExtraSynCh = (scale: Scale) => {
       },
     ],
   })
-  const lengthChange2 = mgnr.pingpongSequenceLength('extend')
-  out.loopSequence(2).onEnded((mes) => {
-    mes.out.generator.mutate({ rate: 0.2, strategy: 'inPlace' })
-    lengthChange2(mes.out.generator, 6)
-    mes.repeatLoop()
-  })
+
+  out
+    .assignGenerator(generator2)
+    .loopSequence(2)
+    .onEnded((generator) => {
+      generator.mutate({ rate: 0.2, strategy: 'inPlace' })
+      generator.lengthChange(6)
+    })
 
   const randomizeConfig = () => {
     generator.updateConfig({
-      density: randomFloatBetween(0.3, 0.7),
-      noteDur: {
-        min: randomIntInclusiveBetween(1,2),
-        max: randomIntInclusiveBetween(2, 5)
-      }
-    }),
+      sequence: {
+        density: randomFloatBetween(0.3, 0.7),
+      },
+      note: {
+        duration: {
+          min: randomIntInclusiveBetween(1, 2),
+          max: randomIntInclusiveBetween(2, 5),
+        },
+      },
+    })
     generator2.updateConfig({
-      density: randomFloatBetween(0.3, 0.7),
-      noteDur: {
-        min: randomIntInclusiveBetween(2, 3),
-        max: randomIntInclusiveBetween(3, 5)
-      }
+      sequence: {
+        density: randomFloatBetween(0.3, 0.7),
+      },
+      note: {
+        duration: {
+          min: randomIntInclusiveBetween(2, 3),
+          max: randomIntInclusiveBetween(3, 5),
+        },
+      },
     })
   }
 

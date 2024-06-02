@@ -1,6 +1,7 @@
 import * as mgnr from 'mgnr-tone/src'
 import { defaultTom, kickFactory } from 'mgnr-tone-presets'
 import { randomFloatBetween } from 'utils'
+import { changeNotePitch } from 'mgnr-core/src/generator/NotePicker'
 
 export const setupTom = () => {
   const mixer = mgnr.getMixer()
@@ -19,31 +20,39 @@ export const setupTom = () => {
   const tomOut = mgnr.createOutlet(tomCh)
   const generator = mgnr.createGenerator({
     scale: mgnr.createScale({ range: { min: 20, max: 40 } }),
-    length: 20,
-    division: 16,
-    density: 0.1,
-    lenRange: {
-      min: 10,
-      max: 40
+    sequence: {
+      length: 20,
+      division: 16,
+      density: 0.1,
+      lenRange: {
+        min: 10,
+        max: 40,
+      },
+      fillStrategy: 'fill',
+      polyphony: 'mono',
     },
-    fillStrategy: 'fill',
-    fillPref: 'mono',
+    middlewares: {
+      changeLength: mgnr.pingpongSequenceLength('extend'),
+    },
   })
   generator.constructNotes(kickFactory(10, 8))
-  generator.feedOutlet(tomOut)
-  const changeLength = mgnr.pingpongSequenceLength('extend')
-  tomOut.loopSequence(2).onEnded(({ out, endTime }) => {
-    out.generator.mutate({ rate: 0.5, strategy: 'randomize' })
-    out.generator.mutate({ rate: 0.2, strategy: 'inPlace' })
-    changeLength(out.generator, 4)
-    tomOut.loopSequence(2, endTime)
-  })
+
+  tomOut
+    .assignGenerator(generator)
+    .loopSequence(2)
+    .onEnded((generator) => {
+      generator.mutate({ rate: 0.5, strategy: 'randomize' })
+      generator.mutate({ rate: 0.2, strategy: 'inPlace' })
+      generator.changeLength(4)
+    })
 
   const randomizeConfig = () => {
     generator.updateConfig({
-      density: randomFloatBetween(0.1, 0.3),      
+      sequence: {
+        density: randomFloatBetween(0.1, 0.3),
+      },
     })
   }
 
-  return {tomCh, randomizeConfig}
+  return { tomCh, randomizeConfig }
 }

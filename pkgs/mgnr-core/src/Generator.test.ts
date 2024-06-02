@@ -156,8 +156,8 @@ describe(`generator middlewares`, () => {
       // 8 -> 14 x
       generator.changeSequenceLength('extend', 6)
       expect(sequence.length).toBe(8)
-      // 8 -> 4 x
-      generator.changeSequenceLength('shrink', 4)
+      // 8 -> 2 x
+      generator.changeSequenceLength('shrink', 6)
       expect(sequence.length).toBe(8)
       // 8 -> 6 o
       generator.changeSequenceLength('shrink', 2)
