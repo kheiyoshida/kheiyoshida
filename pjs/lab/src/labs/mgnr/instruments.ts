@@ -1,7 +1,7 @@
 import * as mgnr from 'mgnr-tone'
 import * as Tone from 'tone'
 
-export const monoSynth = new Tone.MonoSynth({
+export const monoSynth = new Tone.PolySynth(Tone.MonoSynth, {
   oscillator: {
     type: 'sine',
   },
@@ -19,7 +19,7 @@ export const monoSynth = new Tone.MonoSynth({
   },
 })
 
-export const monoSynth2 = new Tone.MonoSynth({
+export const monoSynth2 = new Tone.PolySynth(Tone.MonoSynth, {
   oscillator: {
     type: 'triangle10',
   },
@@ -51,8 +51,8 @@ export const kick = new Tone.MembraneSynth({
 export const hh = new Tone.NoiseSynth({
   envelope: {
     attack: 0,
-    decay: 0.3,
-    sustain: 0.05,
+    decay: 0.1,
+    sustain: 1/100,
     release: 0,
   },
   volume: -22,
@@ -61,7 +61,7 @@ export const hh = new Tone.NoiseSynth({
 export const snare = new mgnr.CompositeInstrument(
   new Tone.MembraneSynth({
     oscillator: {
-      type: 'square',
+      type: 'square32',
     },
     envelope: {
       attack: 0,
@@ -90,3 +90,17 @@ export const drumMachine = new mgnr.LayeredInstrument([
 ])
 
 export const compsoiteSynth = new mgnr.CompositeInstrument(monoSynth, monoSynth2)
+
+export const leadSynth = new Tone.MonoSynth({
+  oscillator: {
+    type: 'sawtooth20',
+  },
+  envelope: {
+    attack: 0,
+    decay: 0.1,
+    sustain: 0.1,
+    release: 0.1,
+  },
+  detune: -20,
+  volume: -10,
+})

@@ -1,13 +1,13 @@
 import * as mgnr from 'mgnr-tone'
 import * as Tone from 'tone'
-import { compsoiteSynth, drumMachine } from './instruments'
-import { SequenceNoteMap } from '../../../../../pkgs/mgnr-core/src/generator/Sequence'
 import { fireByRate, randomIntInclusiveBetween } from 'utils'
+import { compsoiteSynth, drumMachine } from './instruments'
+import { dnb } from './sequence'
 
 const mixer = mgnr.getMixer()
 
 export const prepareSong = () => {
-  Tone.Transport.bpm.value = 80
+  Tone.Transport.bpm.value = 172
   prepareDrums()
   prepareSynth()
 }
@@ -20,7 +20,7 @@ const prepareDrums = () => {
     effects: [new Tone.BitCrusher(16)],
   })
 
-  const outlet = mgnr.createOutlet(synCh.inst, Tone.Transport.toSeconds('2n'))
+  const outlet = mgnr.createOutlet(synCh.inst, Tone.Transport.toSeconds('16n'))
 
   const generator = mgnr.createGenerator({
     scale: scale,
@@ -32,7 +32,7 @@ const prepareDrums = () => {
       length: 16,
       division: 16,
       density: 0.25,
-      polyphony: 'poly',
+      polyphony: 'mono',
     },
   })
   const generator2 = mgnr.createGenerator({
@@ -49,85 +49,36 @@ const prepareDrums = () => {
     },
   })
 
-  const fixedNotes: SequenceNoteMap = {
-    0: [
-      {
-        pitch: 30,
-        dur: 1,
-        vel: 100,
-      },
-    ],
-    4: [
-      {
-        pitch: 30,
-        dur: 1,
-        vel: 100,
-      },
-      {
-        pitch: 50,
-        dur: 1,
-        vel: 100,
-      },
-    ],
-    8: [
-      {
-        pitch: 30,
-        dur: 1,
-        vel: 100,
-      },
-    ],
-    12: [
-      {
-        pitch: 30,
-        dur: 1,
-        vel: 100,
-      },
-      {
-        pitch: 50,
-        dur: 1,
-        vel: 100,
-      },
-    ],
-  }
-  generator.constructNotes(fixedNotes)
-
-  generator2.constructNotes({
-    2: [
-      {
-        pitch: 90,
-        dur: 1,
-        vel: 100,
-      },
-    ],
-    6: [
-      {
-        pitch: 90,
-        dur: 1,
-        vel: 100,
-      },
-    ],
-    10: [
-      {
-        pitch: 90,
-        dur: 1,
-        vel: 100,
-      },
-    ],
-  })
+  generator.constructNotes(dnb)
+  generator2.constructNotes()
 
   outlet
     .assignGenerator(generator)
-    .loopSequence(8)
+    .loopSequence(4)
     .onElapsed((g, n) => {
       if (n % 2 === 1) {
         g.sequence.iterateEachNote((note, i) => {
-          if (fireByRate(0.2)) {
+          if (fireByRate(0.5)) {
+            g.sequence.deleteNoteFromPosition(i, note)
+          }
+        })
+      }
+    })
+    .onEnded((g) => {
+      g.resetNotes(dnb)
+    })
+  outlet
+    .assignGenerator(generator2)
+    .loopSequence(4)
+    .onElapsed((g, n) => {
+      if (n % 2 === 1) {
+        g.sequence.iterateEachNote((note, i) => {
+          if (fireByRate(0.1)) {
             g.sequence.deleteNoteFromPosition(i, note)
           }
         })
       } else {
         if (fireByRate(0.2)) {
-          // g.constructNotes()
           g.sequence.addNote(randomIntInclusiveBetween(0, g.sequence.length - 1), {
             pitch: 30,
             dur: 1,
@@ -136,13 +87,7 @@ const prepareDrums = () => {
         }
       }
     })
-    .onEnded((g) => {
-      g.resetNotes(fixedNotes)
-    })
-  outlet
-    .assignGenerator(generator2)
-    .loopSequence(2)
-    .onEnded((g) => g.mutate({ rate: 0.3, strategy: 'inPlace' }))
+    .onEnded((g) => g.mutate({ rate: 0.3, strategy: 'move' }))
 }
 
 const prepareSynth = () => {
@@ -167,15 +112,10 @@ const prepareSynth = () => {
         min: 4,
         max: 8,
       },
-      // harmonizer: {
-      //   degree: ['3', '5', '7'],
-      //   force: false,
-      //   lookDown: false,
-      // },
-    },
-    middlewares: {
-      custom: (ctx) => {
-        console.log('this is custome middleware: ', ctx.scale.key)
+      harmonizer: {
+        degree: ['3', '5', '7'],
+        force: false,
+        lookDown: false,
       },
     },
   })

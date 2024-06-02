@@ -114,9 +114,6 @@ importers:
       '@types/webmidi':
         specifier: ^2.0.10
         version: 2.0.10
-      mgnr-core:
-        specifier: workspace:^
-        version: link:../../pkgs/mgnr-core
       mgnr-tone:
         specifier: workspace:^
         version: link:../../pkgs/mgnr-tone

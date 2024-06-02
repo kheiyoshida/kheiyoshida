@@ -26,9 +26,8 @@ export class MonoOutlet extends ToneOutlet {
     Transport.scheduleRepeat((time) => {
       const notes = this.#buffer!.consume(time)
       if (!notes.length) return
-      notes.forEach((note) => {
-        this.triggerNote(note.pitch, note.duration, note.time, note.velocity)
-      })
+      const note = notes[0]
+      this.triggerNote(note.pitch, note.duration, note.time, note.velocity)
     }, bufferTimeFrame)
   }
   sendNote(pitch: number, duration: number, time: number, velocity: number): void {
@@ -45,9 +44,8 @@ export class LayeredOutlet extends ToneOutlet {
       const noteGroups = this.#buffer!.consume(time)
       noteGroups.forEach((notes) => {
         if (!notes.length) return
-        notes.forEach((note) => {
-          this.triggerNote(note.pitch, note.duration, note.time, note.velocity)
-        })
+        const note = notes[0]
+        this.triggerNote(note.pitch, note.duration, note.time, note.velocity)
       })
     }, bufferTimeFrame)
   }
