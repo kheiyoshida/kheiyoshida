@@ -3,6 +3,7 @@ import { pickRange } from 'utils'
 import { ToneOutlet } from './Outlet'
 import * as Transport from './tone-wrapper/Transport'
 import { scheduleLoop } from './tone-wrapper/utils'
+import * as Tone from 'tone'
 
 export class ToneOutletPort<MW extends Middlewares> extends OutletPort<ToneOutlet, MW> {
   /**
@@ -15,6 +16,8 @@ export class ToneOutletPort<MW extends Middlewares> extends OutletPort<ToneOutle
     if (this.numOfLoops >= 1) {
       scheduleLoop(
         (time, loopNth) => {
+          // console.log('schedule', time, Tone.Transport.ticks)
+          
           this.generator.sequence.iterateEachNote((note, position) => {
             this.assignNote(
               note,

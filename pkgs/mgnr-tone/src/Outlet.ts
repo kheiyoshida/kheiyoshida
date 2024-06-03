@@ -28,7 +28,7 @@ export class MonoOutlet extends ToneOutlet {
       if (!notes.length) return
       const note = notes[0]
       this.triggerNote(note.pitch, note.duration, note.time, note.velocity)
-    }, bufferTimeFrame)
+    }, bufferTimeFrame, 0)
   }
   sendNote(pitch: number, duration: number, time: number, velocity: number): void {
     this.#buffer.insert({ pitch, duration, time, velocity })
@@ -47,7 +47,7 @@ export class LayeredOutlet extends ToneOutlet {
         const note = notes[0]
         this.triggerNote(note.pitch, note.duration, note.time, note.velocity)
       })
-    }, bufferTimeFrame)
+    }, bufferTimeFrame, 0)
   }
   sendNote(pitch: number, duration: number, time: number, velocity: number): void {
     this.#buffer.insert({ pitch, duration, time, velocity })
