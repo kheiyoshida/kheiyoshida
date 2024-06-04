@@ -59,17 +59,7 @@ export const prepareDrums: mgnr.ThemeComponentMaker = (startAt) => {
     channel: synCh,
     playLess() {},
     playMore() {},
-    fadeIn: (duration) => {
-      synCh.dynamicVolumeFade(synCh.volumeRangeDiff, duration)
-    },
-    fadeOut: (duration) => {
-      synCh.dynamicVolumeFade(-synCh.volumeRangeDiff, duration)
-      Tone.Transport.scheduleOnce(() => {
-        port1.numOfLoops = 0
-        port2.numOfLoops = 0
-        mixer.deleteChannel(synCh)
-      }, `+${duration}`)
-    },
+    ...mgnr.injectFadeInOut(synCh, [port1, port2]),
   }
 }
 
@@ -109,16 +99,7 @@ export const prepareStaticDrums: mgnr.ThemeComponentMaker = (startAt) => {
     channel: synCh,
     playLess() {},
     playMore() {},
-    fadeIn: (duration) => {
-      synCh.dynamicVolumeFade(synCh.volumeRangeDiff, duration)
-    },
-    fadeOut: (duration) => {
-      synCh.dynamicVolumeFade(-synCh.volumeRangeDiff, duration)
-      Tone.Transport.scheduleOnce(() => {
-        port1.numOfLoops = 0
-        mixer.deleteChannel(synCh)
-      }, `+${duration}`)
-    },
+    ...mgnr.injectFadeInOut(synCh, [port1]),
   }
 }
 
@@ -171,16 +152,7 @@ export const prepareSynth: mgnr.ThemeComponentMaker = (startAt, scale) => {
     channel: synCh,
     playLess() {},
     playMore() {},
-    fadeIn: (duration) => {
-      synCh.dynamicVolumeFade(synCh.volumeRangeDiff, duration)
-    },
-    fadeOut: (duration) => {
-      synCh.dynamicVolumeFade(-synCh.volumeRangeDiff, duration)
-      Tone.Transport.scheduleOnce(() => {
-        mixer.deleteChannel(synCh)
-        port.numOfLoops = 0
-      }, `+${duration}`)
-    },
+    ...mgnr.injectFadeInOut(synCh, [port]),
   }
 }
 
@@ -221,13 +193,6 @@ export const prepareStaticSynth: mgnr.ThemeComponentMaker = (startAt, scale) => 
     channel: synCh,
     playLess() {},
     playMore() {},
-    fadeIn: (duration) => synCh.dynamicVolumeFade(synCh.volumeRangeDiff, duration),
-    fadeOut: (duration) => {
-      synCh.dynamicVolumeFade(-synCh.volumeRangeDiff, duration)
-      Tone.Transport.scheduleOnce(() => {
-        mixer.deleteChannel(synCh)
-        port.numOfLoops = 0
-      }, `+${duration}`)
-    },
+    ...mgnr.injectFadeInOut(synCh, [port]),
   }
 }
