@@ -1,20 +1,9 @@
-import { ThemeGridPosition, createThemeGrid } from 'mgnr-tone'
+import { ThemeGridPosition } from 'mgnr-tone'
 import { useState } from 'react'
 import * as Tone from 'tone'
 import { createMusic } from './music'
-import { aggressiveTheme, staticTheme } from './themes'
+import { themeGrid } from './themes'
 
-const themeGrid = createThemeGrid({
-  'center-center': staticTheme,
-  'bottom-center': aggressiveTheme,
-  'top-center': aggressiveTheme,
-  'top-left': aggressiveTheme,
-  'top-right': aggressiveTheme,
-  'center-left': aggressiveTheme,
-  'center-right': aggressiveTheme,
-  'bottom-left': aggressiveTheme,
-  'bottom-right': aggressiveTheme,
-})
 const music = createMusic(themeGrid)
 
 let started = false
@@ -26,9 +15,14 @@ const play = () => {
   if (started) return
   Tone.Transport.bpm.value = 162
   Tone.Transport.start(0)
-  Tone.Transport.scheduleRepeat((t) => {
-    music.applyNextTheme()
-  }, '1m', 0)
+  music.applyInitialTheme()
+  Tone.Transport.scheduleRepeat(
+    () => {
+      music.checkNextTheme()
+    },
+    '4m',
+    0
+  )
   started = true
 }
 
