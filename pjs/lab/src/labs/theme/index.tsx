@@ -1,8 +1,20 @@
-import * as Tone from 'tone'
-import { Alignment, createMusic, createThemeGrid } from './music'
+import { ThemeGridPosition, createThemeGrid } from 'mgnr-tone'
 import { useState } from 'react'
+import * as Tone from 'tone'
+import { createMusic } from './music'
+import { aggressiveTheme, staticTheme } from './themes'
 
-const themeGrid = createThemeGrid()
+const themeGrid = createThemeGrid({
+  'center-center': staticTheme,
+  'bottom-center': aggressiveTheme,
+  'top-center': aggressiveTheme,
+  'top-left': aggressiveTheme,
+  'top-right': aggressiveTheme,
+  'center-left': aggressiveTheme,
+  'center-right': aggressiveTheme,
+  'bottom-left': aggressiveTheme,
+  'bottom-right': aggressiveTheme,
+})
 const music = createMusic(themeGrid)
 
 let started = false
@@ -16,7 +28,7 @@ const play = () => {
   Tone.Transport.start(0)
   Tone.Transport.scheduleRepeat((t) => {
     music.applyNextTheme()
-  }, '2m')
+  }, '1m', 0)
   started = true
 }
 
@@ -34,11 +46,11 @@ export default () => {
 }
 
 const Grid = () => {
-  const [alignment, setAlignment] = useState(themeGrid.currentAlignment)
+  const [currentPosition, setPosition] = useState<ThemeGridPosition>('center-center')
 
-  const select = (alignment: Alignment) => {
-    themeGrid.updateAlignment(alignment)
-    setAlignment(alignment)
+  const select = (position: ThemeGridPosition) => {
+    themeGrid.updatePosition(position)
+    setPosition(position)
   }
   return (
     <div
@@ -50,18 +62,27 @@ const Grid = () => {
         gridTemplateColumns: '1fr 1fr 1fr',
       }}
     >
-      {[...Array(3)].map((_, i) => (
+      {positions.map((p, i) => (
         <div
-          key={i}
-          style={{ backgroundColor: alignment === i - 1 ? 'rgb(180, 10, 50)' : 'rgb(50, 50, 50)' }}
-          onClick={() => select((i - 1) as Alignment)}
+          key={p}
+          style={{
+            backgroundColor: currentPosition === p ? 'rgb(180, 10, 50)' : 'rgb(50, 50, 50)',
+          }}
+          onClick={() => select(p)}
         >
-          {i - 1}
+          {p}
         </div>
       ))}
     </div>
   )
 }
+
+// prettier-ignore
+const positions: ThemeGridPosition[] = [
+  'top-left','top-center', 'top-right',
+  'center-left', 'center-center', 'center-right',
+  'bottom-left', 'bottom-center', 'bottom-right',
+]
 
 const synthLabStyle: React.CSSProperties = {
   width: '100%',

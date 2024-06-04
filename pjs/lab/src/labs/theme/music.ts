@@ -1,45 +1,48 @@
-import { Theme, prepareDrums, prepareSynth } from './themes'
+import { Scale, Theme, ThemeGrid } from 'mgnr-tone'
+import * as Tone from 'tone'
 
-export const createMusic = (themeGrid: ReturnType<typeof createThemeGrid>) => {
+export const createMusic = (themeGrid: ThemeGrid) => {
   let currentTheme: Theme
+  const scale = new Scale({ range: { min: 30, max: 80 }, pref: 'omit25' })
+
+  const getNextBar = () => Tone.Transport.toSeconds('@4m')
+
   return {
     applyNextTheme() {
       if (!currentTheme) {
-        currentTheme = themeGrid.getInitialTheme()()
+        const makeTheme = themeGrid.getInitialTheme()
+        currentTheme = makeTheme(getNextBar(), scale)
+        Tone.Transport.scheduleOnce(() => {
+          currentTheme.top?.fadeIn('4m')
+          currentTheme.bottom?.fadeIn('4m')
+        }, '@4m')
         return
       }
       const nextTheme = themeGrid.getNextTheme()
       if (!nextTheme) return
-      currentTheme.fadeOut()
-      currentTheme = nextTheme()
-    },
-  }
-}
 
-export type Alignment = -1 | 0 | 1
+      const { top, bottom } = currentTheme
+      Tone.Transport.scheduleOnce((t) => {
+        Tone.Transport.scheduleOnce(
+          () => {
+            top.fadeOut('12m')
+          },
+          t + Tone.Transport.toSeconds('4m')
+        )
+        Tone.Transport.scheduleOnce(
+          () => {
+            bottom.fadeOut('4m')
+          },
+          t + Tone.Transport.toSeconds('2m')
+        )
+      }, '@4m')
 
-export const createThemeGrid = () => {
-  let lastAlignment: Alignment = 0
-  let currentAlignment: Alignment = 0
-  const themes: Record<Alignment, () => Theme> = {
-    [-1]: prepareSynth,
-    [0]: prepareDrums,
-    1: prepareSynth,
-  }
-  return {
-    get currentAlignment() {
-      return currentAlignment
-    },
-    updateAlignment: (nextAlignment: Alignment) => {
-      currentAlignment = nextAlignment
-    },
-    getInitialTheme: () => {
-      return themes[0]
-    },
-    getNextTheme: () => {
-      if (lastAlignment === currentAlignment) return
-      lastAlignment = currentAlignment
-      return themes[currentAlignment]
+      currentTheme = nextTheme(getNextBar(), scale)
+
+      Tone.Transport.scheduleOnce(() => {
+        currentTheme.top?.fadeIn('12m')
+        currentTheme.bottom?.fadeIn('4m')
+      }, '@4m')
     },
   }
 }

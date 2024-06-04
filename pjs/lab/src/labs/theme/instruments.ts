@@ -56,7 +56,7 @@ export const createDrumMachine = () => {
   return drumMachine
 }
 
-export const createPadSynth = () => {
+export const createSynth = () => {
   const synth = new mgnr.CompositeInstrument(
     new Tone.MonoSynth({
       oscillator: {
@@ -79,6 +79,36 @@ export const createPadSynth = () => {
         decay: 0.1,
         sustain: 0.2,
         release: 0,
+      },
+    }),
+  )
+  return synth
+}
+
+export const createPadSynth = () => {
+  const synth = new mgnr.CompositeInstrument(
+    new Tone.PolySynth(Tone.Synth, {
+      oscillator: {
+        type: 'sine',
+      },
+      envelope: {
+        attack: 0.5,
+        decay: 0.1,
+        sustain: 0.2,
+        release: 0.5,
+      },
+      detune: 20,
+    }),
+    new Tone.PolySynth(Tone.Synth, {
+      oscillator: {
+        type: 'sine4',
+      },
+      detune: -20,
+      envelope: {
+        attack: 0.5,
+        decay: 0.1,
+        sustain: 0.2,
+        release: 0.5,
       },
     }),
   )
