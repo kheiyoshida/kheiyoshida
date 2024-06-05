@@ -44,8 +44,8 @@ export const injectThemeAlignment = (
 
 export const detemineInitialLevel = (alignment: ThemeAlignment): Record<ThemeComponentPosition, ComponentPlayLevel> => {
   return {
-    top: alignment.includes('top') ? 4 : 3,
-    bottom: alignment.includes('bottom') ? 4 : 3,
+    top: alignment.includes('top') ? 4 : alignment.includes('bottom') ? 2 : 3,
+    bottom: alignment.includes('bottom') ? 4 : alignment.includes('top') ? 2 : 3,
   }
 }
 
@@ -74,9 +74,9 @@ export type ThemeComponent = {
   fadeOut: (duration: Duration) => void
 }
 
-export const injectFadeInOut = (
+export const injectFadeInOut = <MW extends Middlewares>(
   channel: ThemeComponent['channel'],
-  ports: ToneOutletPort<Middlewares>[]
+  ports: Array<ToneOutletPort<Middlewares> | ToneOutletPort<MW>>
 ): Pick<ThemeComponent, 'fadeIn' | 'fadeOut'> => {
   return {
     fadeIn: (duration) => channel.dynamicVolumeFade(channel.volumeRangeDiff, duration),

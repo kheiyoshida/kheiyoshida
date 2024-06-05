@@ -1,14 +1,37 @@
-import { Scale, Theme, ThemeAlignment, ThemeGrid, ThemeGridDirection, ThemeShiftInfo } from 'mgnr-tone'
+import {
+  Scale,
+  Theme,
+  ThemeAlignment,
+  ThemeGrid,
+  ThemeGridDirection,
+  ThemeShiftInfo,
+} from 'mgnr-tone'
 import * as Tone from 'tone'
 
 export const createCommandBuffer = () => {
-  let commands: ThemeGridDirection[] = []
+  const commands: ThemeGridDirection[] = [
+    'down',
+    'up',
+    'up',
+    'up',
+    'up',
+    'up',
+    'up',
+    'down',
+    'down',
+    'down',
+    'down',
+    'down',
+    'down',
+    'down',
+  ]
   return {
     get command(): ThemeGridDirection | null {
-      return commands.pop() || null
+      return commands.shift() || null
     },
     set(value: ThemeGridDirection) {
-      commands = [value]
+      commands.push(value)
+      // commands = [value]
     },
   }
 }
@@ -37,40 +60,48 @@ export const createMusic = (themeGrid: ThemeGrid) => {
 
   function applyNextTheme(shift: ThemeShiftInfo) {
     if (shift.theme !== null) {
-      fadeOutPreviousTheme()
+      fadeOutPreviousTheme(shift.direction)
       fadeInNextTheme(shift)
     } else {
       applyThemeAlignment(shift.themeAlignment)
     }
   }
 
-  function fadeOutPreviousTheme() {
+  function fadeOutPreviousTheme(direction: ThemeGridDirection) {
     const { top, bottom } = currentTheme
     Tone.Transport.scheduleOnce((t) => {
       Tone.Transport.scheduleOnce(
         () => {
-          top.fadeOut('12m')
+          if (direction === 'up') {
+            top.fadeOut('16m')
+            bottom.fadeOut('8m')
+          } else {
+            top.fadeOut('8m')
+            bottom.fadeOut('16m')
+          }
         },
         t + Tone.Transport.toSeconds('4m')
-      )
-      Tone.Transport.scheduleOnce(
-        () => {
-          bottom.fadeOut('4m')
-        },
-        t + Tone.Transport.toSeconds('2m')
       )
     }, '@4m')
   }
 
-  function fadeInNextTheme({theme, themeAlignment, direction}: ThemeShiftInfo) {
+  function fadeInNextTheme({ theme, themeAlignment, direction }: ThemeShiftInfo) {
     currentTheme = theme!(getNextBar(), scale, themeAlignment)
-    Tone.Transport.scheduleOnce(() => {
+    Tone.Transport.scheduleOnce((t) => {
+      Tone.Transport.scheduleOnce(
+        () => {
+          if (direction === 'up') {
+            currentTheme.top.fadeIn('16m')
+          } else {
+            currentTheme.bottom.fadeIn('16m')
+          }
+        },
+        t + Tone.Transport.toSeconds('4m')
+      )
       if (direction === 'up') {
-        currentTheme.top.fadeIn('12m')
-        currentTheme.bottom.fadeIn('4m')
+        currentTheme.bottom.fadeIn('8m')
       } else {
-        currentTheme.top.fadeIn('4m')
-        currentTheme.bottom.fadeIn('12m')
+        currentTheme.top.fadeIn('8m')
       }
     }, '@4m')
   }

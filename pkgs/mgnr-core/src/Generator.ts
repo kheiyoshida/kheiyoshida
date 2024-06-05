@@ -49,15 +49,6 @@ export const buildGenerator = <MW extends Middlewares>(
   return {
     ...context,
     ...injected,
-    get context() {
-      return context
-    },
-    get mw() {
-      return injected
-    },
-    get middlewares() {
-      return injected
-    },
   }
 }
 export const defaultMiddlewares = {

@@ -19,6 +19,7 @@ export function resetNotes(context: GeneratorContext, notes?: SequenceNoteMap) {
   eraseSequenceNotes(context)
   assignInitialNotes(context, notes)
   removeNotesOutOfLength(context.sequence)
+  removeNotesOutOfCapacity(context)
   adjustPitch(context)
   assignNotes(context)
 }
@@ -89,6 +90,12 @@ export function removeNotesOutOfLength(sequence: Sequence) {
       sequence.deleteNotesInPosition(p)
     }
   })
+}
+
+export function removeNotesOutOfCapacity({sequence}: GeneratorContext) {
+  while(sequence.availableSpace < 0) {
+    sequence.deleteRandomNotes(0.1)
+  }
 }
 
 export function mutate(context: GeneratorContext, { rate, strategy }: MutateSpec) {

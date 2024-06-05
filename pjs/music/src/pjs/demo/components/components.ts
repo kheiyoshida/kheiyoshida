@@ -25,7 +25,7 @@ export const prepareDrums: ThemeComponentMaker = (startAt, _, level) => {
 
   const outlet = createOutlet(synCh.inst, Tone.Transport.toSeconds('16n'))
 
-  const density = makeLevelMap([0.3, 0.3, 0.5, 0.8, 0.9])
+  const density = makeLevelMap([0.3, 0.3, 0.4, 0.5, 0.5])
 
   const generator = createGenerator({
     scale: dmScale,
@@ -39,6 +39,7 @@ export const prepareDrums: ThemeComponentMaker = (startAt, _, level) => {
       density: 0.5,
       polyphony: 'mono',
     },
+    notes: dnb,
   })
 
   const generator2 = createGenerator({
@@ -53,10 +54,11 @@ export const prepareDrums: ThemeComponentMaker = (startAt, _, level) => {
       density: density[level],
       polyphony: 'mono',
     },
+    middlewares: {
+      foo: () => undefined,
+    },
+    notes: fill,
   })
-
-  generator.constructNotes(dnb)
-  generator2.constructNotes(fill)
 
   const port1 = outlet
     .assignGenerator(generator) //
@@ -94,7 +96,7 @@ export const prepareStaticDrums: ThemeComponentMaker = (startAt, _, level) => {
 
   const outlet = createOutlet(synCh.inst, Tone.Transport.toSeconds('16n'))
 
-  const density = makeLevelMap([0.2, 0.2, 0.25, 0.3, 0.35])
+  const density = makeLevelMap([0.5, 0.5, 0.5, 0.6, 0.7])
   const generator = createGenerator({
     scale: dmScale,
     note: {
@@ -107,9 +109,8 @@ export const prepareStaticDrums: ThemeComponentMaker = (startAt, _, level) => {
       density: density[level],
       polyphony: 'mono',
     },
+    notes: danceBeat,
   })
-
-  generator.constructNotes(danceBeat)
 
   const port1 = outlet
     .assignGenerator(generator)
@@ -165,22 +166,6 @@ export const prepareSynth: ThemeComponentMaker = (startAt, scale, level) => {
       },
     },
   })
-  generator.constructNotes({
-    0: [
-      {
-        pitch: 48,
-        vel: 100,
-        dur: 2,
-      },
-    ],
-    4: [
-      {
-        pitch: 52,
-        vel: 100,
-        dur: 2,
-      },
-    ],
-  })
   const port = outlet
     .assignGenerator(generator)
     .loopSequence(4, startAt)
@@ -203,7 +188,7 @@ export const prepareSynth: ThemeComponentMaker = (startAt, scale, level) => {
 export const prepareStaticSynth: ThemeComponentMaker = (startAt, scale, level) => {
   const delayLevel = (l: ComponentPlayLevel) => (l >= 4 ? 0.4 : 0.3)
   const delay = new Tone.PingPongDelay('8n.', delayLevel(level))
-  const density = (l: ComponentPlayLevel) => (l >= 3 ? 0.8 : 0.6)
+  const density = makeLevelMap([0.5, 0.5, 0.6, 0.7, 0.8])
   const synCh = mixer.createInstChannel({
     inst: createPadSynth(),
     initialVolume: -30,
@@ -216,7 +201,7 @@ export const prepareStaticSynth: ThemeComponentMaker = (startAt, scale, level) =
     sequence: {
       length: 16,
       division: 8,
-      density: density(level),
+      density: density[level],
       polyphony: 'mono',
       fillStrategy: 'fill',
     },
@@ -230,11 +215,12 @@ export const prepareStaticSynth: ThemeComponentMaker = (startAt, scale, level) =
       },
     },
   })
-  generator.constructNotes()
+
   const port = outlet
     .assignGenerator(generator)
-    .loopSequence(4, startAt)
+    .loopSequence(2, startAt)
     .onElapsed((g) => g.mutate({ rate: 0.2, strategy: 'randomize' }))
+    .onEnded((g) => g.resetNotes())
 
   return {
     channel: synCh,
@@ -243,7 +229,7 @@ export const prepareStaticSynth: ThemeComponentMaker = (startAt, scale, level) =
       delay.set({ wet: delayLevel(level) })
       generator.updateConfig({
         sequence: {
-          density: density(level),
+          density: density[level],
         },
       })
     },
@@ -252,7 +238,7 @@ export const prepareStaticSynth: ThemeComponentMaker = (startAt, scale, level) =
       delay.set({ wet: delayLevel(level) })
       generator.updateConfig({
         sequence: {
-          density: density(level),
+          density: density[level],
         },
       })
     },

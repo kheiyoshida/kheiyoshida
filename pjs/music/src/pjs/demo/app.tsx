@@ -22,7 +22,7 @@ const play = () => {
     () => {
       music.checkNextTheme(commandBuffer.command)
     },
-    '4m',
+    '16m',
     0
   )
   started = true
