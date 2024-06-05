@@ -28,19 +28,23 @@ export const setupKick = () => {
   const kickOut = mgnr.createOutlet(kickCh)
   const generator = mgnr.createGenerator({
     scale: mgnr.createScale({ range: { min: 30, max: 31 } }),
-    length: 32,
-    division: 8,
-    density: 0.55,
-    fillStrategy: 'fill',
-    fillPref: 'mono',
+    sequence: {
+      length: 32,
+      division: 8,
+      density: 0.55,
+      fillStrategy: 'fill',
+      polyphony: 'mono',
+    },
   })
   const kickTemplate = kickFactory(32, 8)
   generator.constructNotes(kickTemplate)
-  generator.feedOutlet(kickOut)
-  kickOut.loopSequence(2).onEnded(({ repeatLoop }) => {
-    generator.resetNotes(kickTemplate)
-    repeatLoop()
-  })
+
+  kickOut
+    .assignGenerator(generator)
+    .loopSequence(2)
+    .onEnded((generator) => {
+      generator.resetNotes(kickTemplate)
+    })
   kickCh.mute('on')
   mgnr.registerTimeEvents({
     repeat: [

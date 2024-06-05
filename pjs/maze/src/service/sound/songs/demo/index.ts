@@ -9,7 +9,7 @@ import { setupPadCh } from './inst/pad'
 import { setupSynCh } from './inst/syn'
 import { createFilteredDelaySend } from './mix/send'
 
-export const music = () => {
+export const oldMusic = () => {
   Transport.bpm.value = randomIntInclusiveBetween(96, 112)
 
   const key = pickRandomPitchName()

@@ -26,38 +26,43 @@ export const setupPadCh = (scale: mgnr.Scale) => {
   const outlet = mgnr.createOutlet(padCh)
   const generator = mgnr.createGenerator({
     scale: scale,
-    length: 12,
-    division: 8,
-    density: 0.4,
-    noteDur: {
-      min: 4,
-      max: 8,
+    sequence: {
+      length: 12,
+      division: 8,
+      density: 0.4,
+      lenRange: {
+        min: 4,
+        max: 40,
+      },
+      fillStrategy: 'fill',
+      polyphony: 'mono',
     },
-    lenRange: {
-      min: 4,
-      max: 40,
+    note: {
+      duration: {
+        min: 4,
+        max: 8,
+      },
+      velocity: {
+        min: 80,
+        max: 120,
+      },
+      harmonizer: {
+        degree: ['6'],
+      },
     },
-    noteVel: {
-      min: 80,
-      max: 120,
-    },
-    fillStrategy: 'fill',
-    fillPref: 'mono',
-    harmonizer: {
-      degree: ['6'],
+    middlewares: {
+      changeLength: mgnr.pingpongSequenceLength('extend'),
     },
   })
   generator.constructNotes()
 
-  const changeLength = mgnr.pingpongSequenceLength('extend')
-  generator
-    .feedOutlet(outlet)
+  outlet
+    .assignGenerator(generator)
     .loopSequence(2)
-    .onEnded(({ repeatLoop }) => {
+    .onEnded((generator) => {
       generator.mutate({ rate: 0.3, strategy: 'randomize' })
       generator.mutate({ rate: 0.3, strategy: 'inPlace' })
-      changeLength(generator, 2)
-      repeatLoop()
+      generator.changeLength(2)
     })
 
   mgnr.registerTimeEvents({

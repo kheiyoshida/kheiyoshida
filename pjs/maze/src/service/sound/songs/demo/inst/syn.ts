@@ -29,56 +29,70 @@ export const setupSynCh = (scale: mgnr.Scale) => {
 
   const generator = mgnr.createGenerator({
     scale,
-    length: 10,
-    division: 8,
-    density: 0.3,
-    fillStrategy: 'fill',
-    fillPref: 'allowPoly',
-    noteDur: {
-      min: 4,
-      max: 6,
+    sequence: {
+      length: 10,
+      division: 8,
+      density: 0.3,
+      fillStrategy: 'fill',
+      polyphony: 'poly',
+      lenRange: {
+        min: 30,
+        max: 50,
+      },
     },
-    lenRange: {
-      min: 30,
-      max: 50,
+    note: {
+      duration: {
+        min: 4,
+        max: 6,
+      },
+      harmonizer: {
+        degree: ['3'],
+        lookDown: true,
+      },
     },
-    harmonizer: {
-      degree: ['3'],
-      lookDown: true,
+    middlewares: {
+      changeLength: mgnr.pingpongSequenceLength('extend'),
     },
   })
+
   const outlet = mgnr.createOutlet(synCh)
   generator.constructNotes()
-  generator.feedOutlet(outlet)
-
-  const changeLength = mgnr.pingpongSequenceLength('extend')
   outlet
+    .assignGenerator(generator)
+
     .loopSequence(4)
-    .onElapsed(() => {
+    .onElapsed((generator) => {
       generator.mutate({ strategy: 'randomize', rate: 0.3 })
     })
-    .onEnded(({ repeatLoop }) => {
+    .onEnded((generator) => {
       generator.mutate({ rate: 0.2, strategy: 'inPlace' })
-      changeLength(generator, 4)
-      repeatLoop()
+      generator.changeLength(4)
     })
 
   const generator2 = mgnr.createGenerator({
     scale,
-    length: 16,
-    division: 16,
-    density: 0.3,
-    fillStrategy: 'fill',
-    fillPref: 'mono',
-    noteDur: 1,
-    lenRange: {
-      min: 2,
-      max: 40,
+    sequence: {
+      length: 16,
+      division: 16,
+      density: 0.3,
+
+      fillStrategy: 'fill',
+      polyphony: 'mono',
+      lenRange: {
+        min: 2,
+        max: 40,
+      },
+    },
+    note: {
+      duration: 1,
+    },
+    middlewares: {
+      changeLength: mgnr.pingpongSequenceLength('extend'),
     },
   })
   generator2.constructNotes()
   const outlet2 = mgnr.createOutlet(synCh)
-  generator2.feedOutlet(outlet2)
+  outlet2.assignGenerator(generator)
   generator2.constructNotes({
     0: [
       {
@@ -95,12 +109,14 @@ export const setupSynCh = (scale: mgnr.Scale) => {
       },
     ],
   })
-  const changeLength2 = mgnr.pingpongSequenceLength('extend')
-  outlet2.loopSequence(4).onEnded(({ repeatLoop }) => {
-    generator2.mutate({ rate: 0.2, strategy: 'inPlace' })
-    changeLength2(generator2, 4)
-    repeatLoop()
-  })
+
+  outlet2
+    .assignGenerator(generator2)
+    .loopSequence(4)
+    .onEnded((generator) => {
+      generator.mutate({ rate: 0.2, strategy: 'inPlace' })
+      generator.changeLength(4)
+    })
 
   mgnr.registerTimeEvents({
     repeat: [
