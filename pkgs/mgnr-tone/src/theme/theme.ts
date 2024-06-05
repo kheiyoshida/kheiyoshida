@@ -15,21 +15,34 @@ export type ThemeMaker = (
   ...args: unknown[]
 ) => Theme
 
-export type ThemeComponentPosition = 'top' | 'bottom' // | 'right' | 'left' | 'center'
+export type ThemeComponentPosition = 'top' | 'bottom' | 'right' | 'left' | 'center'
 
 export type Theme = {
   [k in ThemeComponentPosition]: ThemeComponent
 } & { updateAlignment(direction: ThemeGridDirection): void }
 
-export type ThemeComponentMakerMap = { [k in ThemeComponentPosition]: ThemeComponentMaker }
+export type ThemeComponentMakerMap = { [k in ThemeComponentPosition]?: ThemeComponentMaker }
+
+const makePseudoComponent = (): ThemeComponent => ({
+  playMore: () => {},
+  playLess: () => {},
+  fadeIn: () => {},
+  fadeOut: () => {},
+})
 
 export const injectThemeAlignment =
-  (theme: Omit<ThemeComponentMakerMap, 'updateAlignment'>): ThemeMaker =>
+  (components: Omit<ThemeComponentMakerMap, 'updateAlignment'>): ThemeMaker =>
   (startAt, scale, alignment) => {
-    const initialLevels = detemineInitialLevel(alignment)
-    const top = theme.top(startAt, scale, initialLevels.top)
-    const bottom = theme.bottom(startAt, scale, initialLevels.bottom)
-
+    const initialLevels = determineInitialLevel(alignment)
+    const { top, bottom, left, right, center } = Object.entries(components).reduce(
+      (acc, [k, v]) => ({
+        ...acc,
+        [k]: v
+          ? v(startAt, scale, initialLevels[k as ThemeComponentPosition])
+          : makePseudoComponent(),
+      }),
+      {} as Theme
+    )
     const updateAlignment = (direction: ThemeGridDirection) => {
       if (direction === 'up') {
         top.playMore()
@@ -43,16 +56,22 @@ export const injectThemeAlignment =
     return {
       top,
       bottom,
+      left,
+      right,
+      center,
       updateAlignment,
     }
   }
 
-export const detemineInitialLevel = (
+export const determineInitialLevel = (
   alignment: ThemeAlignment
 ): Record<ThemeComponentPosition, ComponentPlayLevel> => {
   return {
     top: alignment.includes('top') ? 4 : alignment.includes('bottom') ? 2 : 3,
     bottom: alignment.includes('bottom') ? 4 : alignment.includes('top') ? 2 : 3,
+    right: alignment.includes('right') ? 4 : alignment.includes('left') ? 2 : 3,
+    left: alignment.includes('left') ? 4 : alignment.includes('right') ? 2 : 3,
+    center: 3,
   }
 }
 
@@ -74,7 +93,6 @@ export type ThemeComponentMaker = (
 ) => ThemeComponent
 
 export type ThemeComponent = {
-  channel: ReturnType<Mixer['createInstChannel']>
   playMore: () => void
   playLess: () => void
   fadeIn: (duration: Duration) => void
@@ -82,7 +100,7 @@ export type ThemeComponent = {
 }
 
 export const injectFadeInOut = <MW extends Middlewares>(
-  channel: ThemeComponent['channel'],
+  channel: ReturnType<Mixer['createInstChannel']>,
   ports: Array<ToneOutletPort<Middlewares> | ToneOutletPort<MW>>
 ): Pick<ThemeComponent, 'fadeIn' | 'fadeOut'> => {
   return {

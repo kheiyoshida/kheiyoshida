@@ -1,11 +1,4 @@
-import {
-  Scale,
-  Theme,
-  ThemeAlignment,
-  ThemeGrid,
-  ThemeGridDirection,
-  ThemeShiftInfo,
-} from 'mgnr-tone'
+import { Scale, Theme, ThemeGrid, ThemeGridDirection, ThemeShiftInfo } from 'mgnr-tone'
 import * as Tone from 'tone'
 
 export const createCommandBuffer = () => {

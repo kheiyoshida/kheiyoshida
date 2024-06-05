@@ -70,7 +70,6 @@ export const prepareDrums: ThemeComponentMaker = (startAt, _, level) => {
     .onEnded((g) => g.resetNotes(fill))
 
   return {
-    channel: synCh,
     playLess() {
       level = clampPlayLevel(level - 1)
     },
@@ -119,7 +118,6 @@ export const prepareStaticDrums: ThemeComponentMaker = (startAt, _, level) => {
     .onEnded((g) => g.resetNotes(danceBeat))
 
   return {
-    channel: synCh,
     playLess() {
       level = clampPlayLevel(level - 1)
       generator.updateConfig({
@@ -172,7 +170,6 @@ export const prepareSynth: ThemeComponentMaker = (startAt, scale, level) => {
     .onEnded((g) => g.mutate({ rate: 0.2, strategy: 'randomize' }))
 
   return {
-    channel: synCh,
     playLess() {
       level = clampPlayLevel(level - 1)
       delay.set({ wet: delayLevel(level) })
@@ -223,7 +220,6 @@ export const prepareStaticSynth: ThemeComponentMaker = (startAt, scale, level) =
     .onEnded((g) => g.resetNotes())
 
   return {
-    channel: synCh,
     playLess() {
       level = clampPlayLevel(level - 1)
       delay.set({ wet: delayLevel(level) })
