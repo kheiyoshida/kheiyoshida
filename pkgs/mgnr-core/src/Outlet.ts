@@ -26,6 +26,10 @@ export abstract class OutletPort<O extends Outlet, GMW extends Middlewares = Mid
     this._numOfLoops = value
   }
 
+  public stopLoop() {
+    this._numOfLoops = 0
+  }
+
   public abstract loopSequence(numOfLoops?: number, startTime?: number): OutletPort<O, GMW>
 
   public onElapsed(eventHandler: SequenceLoopHandler<GMW>) {

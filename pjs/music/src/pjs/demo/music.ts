@@ -63,7 +63,7 @@ export const createMusic = (themeGrid: ThemeGrid) => {
       fadeOutPreviousTheme(shift.direction)
       fadeInNextTheme(shift)
     } else {
-      applyThemeAlignment(shift.themeAlignment)
+      applyThemeAlignment(shift.direction)
     }
   }
 
@@ -106,8 +106,8 @@ export const createMusic = (themeGrid: ThemeGrid) => {
     }, '@4m')
   }
 
-  function applyThemeAlignment(alignment: ThemeAlignment) {
-    currentTheme.updateAlignment(alignment)
+  function applyThemeAlignment(direction: ThemeGridDirection) {
+    currentTheme.updateAlignment(direction)
   }
 
   return {
