@@ -1,28 +1,29 @@
-import { ThemeMaker, createThemeGrid } from 'mgnr-tone'
-import { prepareDrums, prepareStaticDrums, prepareStaticSynth, prepareSynth } from './components/components'
+import { createThemeGrid, injectThemeAlignment } from 'mgnr-tone'
+import {
+  prepareDrums,
+  prepareStaticDrums,
+  prepareStaticSynth,
+  prepareSynth,
+} from './components/components'
 
-export const aggressiveTheme: ThemeMaker = (startAt, scale) => {
-  return {
-    top: prepareSynth(startAt, scale),
-    bottom: prepareDrums(startAt, scale),
-  }
-}
+const aggressiveTheme = injectThemeAlignment({
+  top: prepareSynth,
+  bottom: prepareDrums,
+})
 
-export const staticTheme: ThemeMaker = (startAt, scale) => {
-  return {
-    top: prepareStaticSynth(startAt, scale),
-    bottom: prepareStaticDrums(startAt, scale),
-  }
-}
+const staticTheme = injectThemeAlignment({
+  top: prepareStaticSynth,
+  bottom: prepareStaticDrums,
+})
 
 export const themeGrid = createThemeGrid({
-  'center-center': staticTheme,
-  'bottom-center': aggressiveTheme,
-  'top-center': aggressiveTheme,
-  'top-left': aggressiveTheme,
-  'top-right': aggressiveTheme,
-  'center-left': aggressiveTheme,
-  'center-right': aggressiveTheme,
-  'bottom-left': aggressiveTheme,
-  'bottom-right': aggressiveTheme,
+  'left-top': aggressiveTheme,
+  'center-top': aggressiveTheme,
+  'right-top': aggressiveTheme,
+  'left-middle': staticTheme,
+  'center-middle': staticTheme,
+  'right-middle': staticTheme,
+  'left-bottom': staticTheme,
+  'center-bottom': staticTheme,
+  'right-bottom': staticTheme,
 })

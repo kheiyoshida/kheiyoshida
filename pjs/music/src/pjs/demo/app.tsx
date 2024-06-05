@@ -1,8 +1,10 @@
-import { ThemeGridPosition } from 'mgnr-tone'
-import { useState } from 'react'
+import { ThemeGridDirection, ThemeGridPosition } from 'mgnr-tone'
+import { useEffect, useState } from 'react'
 import * as Tone from 'tone'
-import { createMusic } from './music'
+import { createCommandBuffer, createMusic } from './music'
 import { themeGrid } from './themes'
+
+const commandBuffer = createCommandBuffer()
 
 const music = createMusic(themeGrid)
 
@@ -18,7 +20,7 @@ const play = () => {
   music.applyInitialTheme()
   Tone.Transport.scheduleRepeat(
     () => {
-      music.checkNextTheme()
+      music.checkNextTheme(commandBuffer.command)
     },
     '4m',
     0
@@ -35,17 +37,31 @@ export default () => {
           click to start
         </button>
       </div>
+      <Commands />
+    </div>
+  )
+}
+
+const commands: ThemeGridDirection[] = ['up', 'down', 'right', 'left']
+
+const Commands = () => {
+  return (
+    <div style={{ margin: 16 }}>
+      {commands.map((c) => (
+        <button key={c} onClick={() => commandBuffer.set(c)}>
+          {c}
+        </button>
+      ))}
     </div>
   )
 }
 
 const Grid = () => {
-  const [currentPosition, setPosition] = useState<ThemeGridPosition>('center-center')
+  const [currentPosition, setPosition] = useState<ThemeGridPosition>('center-middle')
+  useEffect(() => {
+    setPosition(themeGrid.current)
+  }, [themeGrid.current])
 
-  const select = (position: ThemeGridPosition) => {
-    themeGrid.updatePosition(position)
-    setPosition(position)
-  }
   return (
     <div
       style={{
@@ -62,7 +78,6 @@ const Grid = () => {
           style={{
             backgroundColor: currentPosition === p ? 'rgb(180, 10, 50)' : 'rgb(50, 50, 50)',
           }}
-          onClick={() => select(p)}
         >
           {p}
         </div>
@@ -73,9 +88,9 @@ const Grid = () => {
 
 // prettier-ignore
 const positions: ThemeGridPosition[] = [
-  'top-left','top-center', 'top-right',
-  'center-left', 'center-center', 'center-right',
-  'bottom-left', 'bottom-center', 'bottom-right',
+  'left-top','center-top','right-top',
+  'left-middle','center-middle','right-middle',
+  'left-bottom','center-bottom','right-bottom',
 ]
 
 const style: React.CSSProperties = {

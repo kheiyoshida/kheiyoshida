@@ -1,21 +1,33 @@
-import * as mgnr from 'mgnr-tone'
+import {
+  ComponentPlayLevel,
+  ThemeComponentMaker,
+  clampPlayLevel,
+  createGenerator,
+  createOutlet,
+  createScale,
+  getMixer,
+  injectFadeInOut,
+  makeLevelMap,
+} from 'mgnr-tone'
 import * as Tone from 'tone'
 import { createDrumMachine, createPadSynth, createSynth } from './instruments'
 import { danceBeat, dnb, fill } from './sequence'
 
-const mixer = mgnr.getMixer()
+const mixer = getMixer()
 
-export const prepareDrums: mgnr.ThemeComponentMaker = (startAt) => {
-  const dmScale = mgnr.createScale([30, 50, 90])
+export const prepareDrums: ThemeComponentMaker = (startAt, _, level) => {
+  const dmScale = createScale([30, 50, 90])
   const synCh = mixer.createInstChannel({
     inst: createDrumMachine(),
     initialVolume: -30,
     effects: [new Tone.BitCrusher(16)],
   })
 
-  const outlet = mgnr.createOutlet(synCh.inst, Tone.Transport.toSeconds('16n'))
+  const outlet = createOutlet(synCh.inst, Tone.Transport.toSeconds('16n'))
 
-  const generator = mgnr.createGenerator({
+  const density = makeLevelMap([0.3, 0.3, 0.5, 0.8, 0.9])
+
+  const generator = createGenerator({
     scale: dmScale,
     note: {
       duration: 1,
@@ -29,7 +41,7 @@ export const prepareDrums: mgnr.ThemeComponentMaker = (startAt) => {
     },
   })
 
-  const generator2 = mgnr.createGenerator({
+  const generator2 = createGenerator({
     scale: dmScale,
     note: {
       duration: 1,
@@ -38,7 +50,7 @@ export const prepareDrums: mgnr.ThemeComponentMaker = (startAt) => {
       fillStrategy: 'fill',
       length: 64,
       division: 16,
-      density: 0.5,
+      density: density[level],
       polyphony: 'mono',
     },
   })
@@ -57,23 +69,33 @@ export const prepareDrums: mgnr.ThemeComponentMaker = (startAt) => {
 
   return {
     channel: synCh,
-    playLess() {},
-    playMore() {},
-    ...mgnr.injectFadeInOut(synCh, [port1, port2]),
+    playLess() {
+      level = clampPlayLevel(level - 1)
+    },
+    playMore() {
+      level = clampPlayLevel(level + 1)
+      generator2.updateConfig({
+        sequence: {
+          density: density[level],
+        },
+      })
+    },
+    ...injectFadeInOut(synCh, [port1, port2]),
   }
 }
 
-export const prepareStaticDrums: mgnr.ThemeComponentMaker = (startAt) => {
-  const dmScale = mgnr.createScale([30, 50, 90])
+export const prepareStaticDrums: ThemeComponentMaker = (startAt, _, level) => {
+  const dmScale = createScale([30, 50, 90])
   const synCh = mixer.createInstChannel({
     inst: createDrumMachine(),
     initialVolume: -30,
     effects: [new Tone.BitCrusher(16)],
   })
 
-  const outlet = mgnr.createOutlet(synCh.inst, Tone.Transport.toSeconds('16n'))
+  const outlet = createOutlet(synCh.inst, Tone.Transport.toSeconds('16n'))
 
-  const generator = mgnr.createGenerator({
+  const density = makeLevelMap([0.2, 0.2, 0.25, 0.3, 0.35])
+  const generator = createGenerator({
     scale: dmScale,
     note: {
       duration: 1,
@@ -82,7 +104,7 @@ export const prepareStaticDrums: mgnr.ThemeComponentMaker = (startAt) => {
       fillStrategy: 'fixed',
       length: 16,
       division: 16,
-      density: 0.25,
+      density: density[level],
       polyphony: 'mono',
     },
   })
@@ -97,21 +119,37 @@ export const prepareStaticDrums: mgnr.ThemeComponentMaker = (startAt) => {
 
   return {
     channel: synCh,
-    playLess() {},
-    playMore() {},
-    ...mgnr.injectFadeInOut(synCh, [port1]),
+    playLess() {
+      level = clampPlayLevel(level - 1)
+      generator.updateConfig({
+        sequence: {
+          density: density[level],
+        },
+      })
+    },
+    playMore() {
+      level = clampPlayLevel(level + 1)
+      generator.updateConfig({
+        sequence: {
+          density: density[level],
+        },
+      })
+    },
+    ...injectFadeInOut(synCh, [port1]),
   }
 }
 
-export const prepareSynth: mgnr.ThemeComponentMaker = (startAt, scale) => {
+export const prepareSynth: ThemeComponentMaker = (startAt, scale, level) => {
+  const delayLevel = (l: ComponentPlayLevel) => (l >= 4 ? 0.4 : 0.3)
+  const delay = new Tone.PingPongDelay('8n.', delayLevel(level))
   const synCh = mixer.createInstChannel({
     inst: createSynth(),
     initialVolume: -30,
-    effects: [new Tone.PingPongDelay('8n.', 0.3)],
+    effects: [delay],
   })
-  const outlet = mgnr.createOutlet(synCh.inst)
+  const outlet = createOutlet(synCh.inst)
 
-  const generator = mgnr.createGenerator({
+  const generator = createGenerator({
     scale,
     sequence: {
       length: 16,
@@ -150,26 +188,35 @@ export const prepareSynth: mgnr.ThemeComponentMaker = (startAt, scale) => {
 
   return {
     channel: synCh,
-    playLess() {},
-    playMore() {},
-    ...mgnr.injectFadeInOut(synCh, [port]),
+    playLess() {
+      level = clampPlayLevel(level - 1)
+      delay.set({ wet: delayLevel(level) })
+    },
+    playMore() {
+      level = clampPlayLevel(level + 1)
+      delay.set({ wet: delayLevel(level) })
+    },
+    ...injectFadeInOut(synCh, [port]),
   }
 }
 
-export const prepareStaticSynth: mgnr.ThemeComponentMaker = (startAt, scale) => {
+export const prepareStaticSynth: ThemeComponentMaker = (startAt, scale, level) => {
+  const delayLevel = (l: ComponentPlayLevel) => (l >= 4 ? 0.4 : 0.3)
+  const delay = new Tone.PingPongDelay('8n.', delayLevel(level))
+  const density = (l: ComponentPlayLevel) => (l >= 3 ? 0.8 : 0.6)
   const synCh = mixer.createInstChannel({
     inst: createPadSynth(),
     initialVolume: -30,
-    effects: [new Tone.PingPongDelay('8n.', 0.3)],
+    effects: [delay],
   })
-  const outlet = mgnr.createOutlet(synCh.inst)
+  const outlet = createOutlet(synCh.inst)
 
-  const generator = mgnr.createGenerator({
+  const generator = createGenerator({
     scale,
     sequence: {
       length: 16,
       division: 8,
-      density: 0.8,
+      density: density(level),
       polyphony: 'mono',
       fillStrategy: 'fill',
     },
@@ -191,8 +238,24 @@ export const prepareStaticSynth: mgnr.ThemeComponentMaker = (startAt, scale) => 
 
   return {
     channel: synCh,
-    playLess() {},
-    playMore() {},
-    ...mgnr.injectFadeInOut(synCh, [port]),
+    playLess() {
+      level = clampPlayLevel(level - 1)
+      delay.set({ wet: delayLevel(level) })
+      generator.updateConfig({
+        sequence: {
+          density: density(level),
+        },
+      })
+    },
+    playMore() {
+      level = clampPlayLevel(level + 1)
+      delay.set({ wet: delayLevel(level) })
+      generator.updateConfig({
+        sequence: {
+          density: density(level),
+        },
+      })
+    },
+    ...injectFadeInOut(synCh, [port]),
   }
 }
