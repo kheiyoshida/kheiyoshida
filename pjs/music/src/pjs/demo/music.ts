@@ -1,9 +1,16 @@
-import { Scale, Theme, ThemeGrid, ThemeGridDirection, ThemeShiftInfo } from 'mgnr-tone'
+import {
+  Scale,
+  Theme,
+  ThemeGrid,
+  ThemeGridDirection,
+  ThemeShiftInfo,
+  makeFadeInTheme,
+  makeFadeOutTheme,
+} from 'mgnr-tone'
 import * as Tone from 'tone'
 
 export const createCommandBuffer = () => {
   const commands: ThemeGridDirection[] = [
-    'down',
     'up',
     'up',
     'up',
@@ -60,43 +67,16 @@ export const createMusic = (themeGrid: ThemeGrid) => {
     }
   }
 
+  const fadeOutTheme = makeFadeOutTheme()
+
   function fadeOutPreviousTheme(direction: ThemeGridDirection) {
-    const { top, bottom } = currentTheme
-    Tone.Transport.scheduleOnce((t) => {
-      Tone.Transport.scheduleOnce(
-        () => {
-          if (direction === 'up') {
-            top.fadeOut('16m')
-            bottom.fadeOut('8m')
-          } else {
-            top.fadeOut('8m')
-            bottom.fadeOut('16m')
-          }
-        },
-        t + Tone.Transport.toSeconds('4m')
-      )
-    }, '@4m')
+    fadeOutTheme(currentTheme, direction)
   }
 
+  const fadeInTheme = makeFadeInTheme()
   function fadeInNextTheme({ theme, themeAlignment, direction }: ThemeShiftInfo) {
     currentTheme = theme!(getNextBar(), scale, themeAlignment)
-    Tone.Transport.scheduleOnce((t) => {
-      Tone.Transport.scheduleOnce(
-        () => {
-          if (direction === 'up') {
-            currentTheme.top.fadeIn('16m')
-          } else {
-            currentTheme.bottom.fadeIn('16m')
-          }
-        },
-        t + Tone.Transport.toSeconds('4m')
-      )
-      if (direction === 'up') {
-        currentTheme.bottom.fadeIn('8m')
-      } else {
-        currentTheme.top.fadeIn('8m')
-      }
-    }, '@4m')
+    fadeInTheme(currentTheme, direction)
   }
 
   function applyThemeAlignment(direction: ThemeGridDirection) {

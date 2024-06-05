@@ -1,10 +1,10 @@
 import { Middlewares, Scale } from 'mgnr-core'
 import { Transport } from 'tone'
+import { clamp } from 'utils'
 import { ToneOutletPort } from '../OutletPort'
 import { getMixer } from '../commands'
 import { Mixer } from '../mixer/Mixer'
-import { ThemeAlignment, ThemeGridDirection, ThemeGridPosition } from './grid'
-import { clamp } from 'utils'
+import { ThemeAlignment, ThemeGridDirection } from './grid'
 
 export type Duration = `${number}m`
 
@@ -24,24 +24,22 @@ export type Theme = {
 export type ThemeComponentMakerMap = { [k in ThemeComponentPosition]?: ThemeComponentMaker }
 
 const makePseudoComponent = (): ThemeComponent => ({
-  playMore: () => {},
-  playLess: () => {},
-  fadeIn: () => {},
-  fadeOut: () => {},
+  playMore: () => undefined,
+  playLess: () => undefined,
+  fadeIn: () => undefined,
+  fadeOut: () => undefined,
 })
 
 export const injectThemeAlignment =
   (components: Omit<ThemeComponentMakerMap, 'updateAlignment'>): ThemeMaker =>
   (startAt, scale, alignment) => {
     const initialLevels = determineInitialLevel(alignment)
-    const { top, bottom, left, right, center } = Object.entries(components).reduce(
-      (acc, [k, v]) => ({
-        ...acc,
-        [k]: v
-          ? v(startAt, scale, initialLevels[k as ThemeComponentPosition])
-          : makePseudoComponent(),
-      }),
-      {} as Theme
+    const keys: ThemeComponentPosition[] = ['top', 'bottom', 'right', 'left', 'center']
+    const { top, bottom, left, right, center } = Object.fromEntries(
+      keys.map((k) => {
+        const component = components[k]
+        return [k, component ? component(startAt, scale, initialLevels[k]) : makePseudoComponent()]
+      })
     )
     const updateAlignment = (direction: ThemeGridDirection) => {
       if (direction === 'up') {
@@ -114,3 +112,77 @@ export const injectFadeInOut = <MW extends Middlewares>(
     },
   }
 }
+
+const directionMap: Record<ThemeGridDirection, [ThemeComponentPosition, ThemeComponentPosition]> = {
+  up: ['top', 'bottom'], // inDirection, against
+  down: ['bottom', 'top'],
+  left: ['left', 'right'],
+  right: ['right', 'left'],
+}
+
+type DirectionDurationMap = {
+  inDirection: Duration
+  againstDirection: Duration
+  neutral: Duration
+}
+
+export const makeFadeOutTheme =
+  (
+    duration: DirectionDurationMap = {
+      inDirection: '16m',
+      againstDirection: '4m',
+      neutral: '12m',
+    },
+    timing = '@4m',
+    delay = '4m'
+  ) =>
+  (theme: Theme, direction: ThemeGridDirection) => {
+    const [inDirection, againstDirection] = directionMap[direction]
+    const keys: ThemeComponentPosition[] = ['top', 'left', 'right', 'bottom', 'center']
+    const fadeOut = () => {
+      keys.forEach((k) => {
+        const v = theme[k]
+        if (k === inDirection) {
+          v.fadeOut(duration.inDirection)
+        } else if (k === againstDirection) {
+          v.fadeOut(duration.againstDirection)
+        } else {
+          v.fadeOut(duration.neutral)
+        }
+      })
+    }
+    Transport.scheduleOnce((t) => {
+      Transport.scheduleOnce(fadeOut, t + Transport.toSeconds(delay))
+    }, timing)
+  }
+
+export const makeFadeInTheme =
+  (
+    duration: DirectionDurationMap = {
+      inDirection: '16m',
+      againstDirection: '4m',
+      neutral: '12m',
+    },
+    timing = '@4m',
+    delay = '4m'
+  ) =>
+  (theme: Theme, direction: ThemeGridDirection) => {
+    const [inDirection, againstDirection] = directionMap[direction]
+    const keys: ThemeComponentPosition[] = ['top', 'left', 'right', 'bottom', 'center']
+    const fadeIn = (t: number) => {
+      keys.forEach((k) => {
+        const v = theme[k]
+        if (k === inDirection) {
+          Transport.scheduleOnce(
+            () => v.fadeIn(duration.inDirection),
+            t + Transport.toSeconds(delay)
+          )
+        } else if (k === againstDirection) {
+          v.fadeIn(duration.againstDirection)
+        } else {
+          v.fadeIn(duration.neutral)
+        }
+      })
+    }
+    Transport.scheduleOnce((t) => fadeIn(t), timing)
+  }
