@@ -40,7 +40,9 @@ export const createThemeGrid = (themeMakers: { [position in ThemeGridPosition]: 
         }
       }
     },
-    current: lastGridPosition
+    get current() {
+      return position
+    }
   }
 }
 

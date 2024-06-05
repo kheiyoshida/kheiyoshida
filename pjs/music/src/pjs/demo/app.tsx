@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import * as Tone from 'tone'
 import { createCommandBuffer, createMusic } from './music'
 import { themeGrid } from './themes'
+import { fireByRate } from 'utils'
 
 const commandBuffer = createCommandBuffer()
 
@@ -33,7 +34,7 @@ export default () => {
     <div style={style}>
       <Grid />
       <div style={{ margin: 16 }}>
-        <button style={{ padding: 16 }} onClick={play}>
+        <button style={{ padding: 8, margin: 8 }} onClick={play}>
           click to start
         </button>
       </div>
@@ -57,10 +58,19 @@ const Commands = () => {
 }
 
 const Grid = () => {
-  const [currentPosition, setPosition] = useState<ThemeGridPosition>('center-middle')
+  const [position, setPosition] = useState<ThemeGridPosition | null>('center-middle')
+  const [alignment, setAlignment] = useState<ThemeGridPosition | null>('center-middle')
   useEffect(() => {
-    setPosition(themeGrid.current)
-  }, [themeGrid.current])
+    setInterval(() => {
+      if (fireByRate(0.5)) {
+        setPosition(themeGrid.current.grid)
+        setAlignment(themeGrid.current.theme)
+      } else {
+        setPosition(null)
+        setAlignment(null)
+      }
+    }, 60000 / 162)
+  }, [])
 
   return (
     <div
@@ -68,19 +78,46 @@ const Grid = () => {
         display: 'grid',
         width: 500,
         height: 500,
-        gap: 8,
+        gap: 20,
         gridTemplateColumns: '1fr 1fr 1fr',
       }}
     >
-      {positions.map((p, i) => (
+      {positions.map((p) => (
+        <MiniGrid key={p} alignment={alignment} matchPosition={p === position} />
+      ))}
+    </div>
+  )
+}
+
+const MiniGrid = ({
+  alignment,
+  matchPosition,
+}: {
+  alignment: ThemeGridPosition | null
+  matchPosition: boolean
+}) => {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        width: '100%',
+        height: '100%',
+        gap: 20,
+        gridTemplateColumns: '1fr 1fr 1fr',
+      }}
+    >
+      {positions.map((p) => (
         <div
           key={p}
           style={{
-            backgroundColor: currentPosition === p ? 'rgb(180, 10, 50)' : 'rgb(50, 50, 50)',
+            backgroundColor:
+              matchPosition && alignment === p
+                ? 'rgb(180, 10, 50)'
+                : fireByRate(0.3)
+                  ? 'white'
+                  : 'gray',
           }}
-        >
-          {p}
-        </div>
+        ></div>
       ))}
     </div>
   )
@@ -102,5 +139,5 @@ const style: React.CSSProperties = {
   flexDirection: 'column',
   color: 'white',
   fontSize: 24,
-  backgroundColor: 'rgba(100, 100, 100)',
+  backgroundColor: 'black',
 }

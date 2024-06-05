@@ -34,7 +34,7 @@ export const createDrumMachine = () => {
         sustain: 0.3,
         release: 0.2,
       },
-      volume: -34,
+      volume: -20,
       detune: -500,
     }),
     new Tone.NoiseSynth({
