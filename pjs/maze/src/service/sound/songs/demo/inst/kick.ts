@@ -25,7 +25,7 @@ const createKickCh = () => {
 export const setupKick = () => {
   const mixer = mgnr.getMixer()
   const kickCh = mixer.createInstChannel(createKickCh())
-  const kickOut = mgnr.createOutlet(kickCh)
+  const kickOut = mgnr.createOutlet(kickCh.inst, Tone.Transport.toSeconds('16n'))
   const generator = mgnr.createGenerator({
     scale: mgnr.createScale({ range: { min: 30, max: 31 } }),
     sequence: {

@@ -3,11 +3,10 @@ import * as Tone from 'tone'
 import { TranslateMap, createMusicCommandBuffer } from './commands'
 import { RenderHandler } from '../consumer'
 
-const music = demo.createMusic(demo.themeGrid)
-
 const buffer = createMusicCommandBuffer()
 
 const makeSetupMusic = (bpm = 162, checkInterval = '16m') => {
+  const music = demo.createMusic(demo.themeGrid)
   let started = false
   return () => {
     if (Tone.context.state === 'suspended') {
