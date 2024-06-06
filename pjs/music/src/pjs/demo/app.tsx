@@ -5,7 +5,21 @@ import { createCommandBuffer, createMusic } from './music'
 import { themeGrid } from './themes'
 import { fireByRate } from 'utils'
 
-const commandBuffer = createCommandBuffer()
+const commandBuffer = createCommandBuffer([
+  'up',
+  'up',
+  'up',
+  'up',
+  'up',
+  'up',
+  'down',
+  'down',
+  'down',
+  'down',
+  'down',
+  'down',
+  'down',
+])
 
 const music = createMusic(themeGrid)
 

@@ -1,1 +1,1 @@
-export * from './demo'
+export * as demo from './demo'

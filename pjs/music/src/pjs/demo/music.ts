@@ -9,29 +9,19 @@ import {
 } from 'mgnr-tone'
 import * as Tone from 'tone'
 
-export const createCommandBuffer = () => {
-  const commands: ThemeGridDirection[] = [
-    'up',
-    'up',
-    'up',
-    'up',
-    'up',
-    'up',
-    'down',
-    'down',
-    'down',
-    'down',
-    'down',
-    'down',
-    'down',
-  ]
+export const createCommandBuffer = (
+  initialCommands: ThemeGridDirection[] = [] 
+) => {
+  let commands: ThemeGridDirection[] = initialCommands
   return {
     get command(): ThemeGridDirection | null {
       return commands.shift() || null
     },
-    set(value: ThemeGridDirection) {
+    push(value: ThemeGridDirection) {
       commands.push(value)
-      // commands = [value]
+    },
+    set(value: ThemeGridDirection) {
+      commands = [value]
     },
   }
 }

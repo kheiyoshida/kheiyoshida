@@ -181,6 +181,9 @@ importers:
       mgnr-tone-presets:
         specifier: workspace:^
         version: link:../../pkgs/mgnr-tone-presets
+      music:
+        specifier: workspace:^
+        version: link:../music
       p5:
         specifier: ^1.9.0
         version: 1.9.0
@@ -319,6 +322,43 @@ importers:
       webpack-dev-server:
         specifier: ^4.11.1
         version: 4.15.1(webpack-cli@4.10.0)(webpack@5.89.0)
+
+  pjs/music:
+    dependencies:
+      mgnr-tone:
+        specifier: workspace:^
+        version: link:../../pkgs/mgnr-tone
+      react:
+        specifier: 18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+      tone:
+        specifier: ^14.7.77
+        version: 14.7.77
+      utils:
+        specifier: workspace:^
+        version: link:../../pkgs/utils
+    devDependencies:
+      '@types/node':
+        specifier: ^20.10.4
+        version: 20.11.16
+      '@types/react':
+        specifier: ^18.2.56
+        version: 18.2.56
+      '@types/react-dom':
+        specifier: ^18.2.19
+        version: 18.2.19
+      '@vitejs/plugin-react':
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.1.4)
+      typescript:
+        specifier: ^4.8.4
+        version: 4.9.4
+      vite:
+        specifier: ^5.1.4
+        version: 5.1.4(@types/node@20.11.16)
 
   pjs/sketch:
     dependencies:

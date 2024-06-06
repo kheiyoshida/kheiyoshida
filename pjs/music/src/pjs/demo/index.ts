@@ -1,2 +1,2 @@
-export { createMusic } from './music'
+export { createMusic, createCommandBuffer } from './music'
 export { themeGrid } from './themes'
