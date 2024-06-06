@@ -4,6 +4,7 @@ import * as mapper from './interface/mapper'
 import * as maze from './interface/maze'
 import { updateStats } from './interface/status'
 import { MessageQueue, RenderSignal } from './messages'
+import { updateAesthetics } from './interface/aesthetics'
 
 export const initializeEvent = () => {
   maze.generateMaze()
@@ -25,6 +26,8 @@ export const recurringConstantStatusEvent = () => {
   if (store.current.mapOpen) return
   updateStats('constant')
 
+  MessageQueue.push(RenderSignal.UpdateMusicAlignment)
+
   if (statusStore.current.sanity <= 0) {
     MessageQueue.push(RenderSignal.Die)
   }
@@ -32,7 +35,7 @@ export const recurringConstantStatusEvent = () => {
 
 export const resurrectEvent = () => {
   store.updateAcceptCommand(true)
-  store.setFloor(1) // note: can be anywhere
+  store.setFloor(1)
   statusStore.resetStatus()
   initializeEvent()
   MessageQueue.push(RenderSignal.Resurrect)
@@ -62,7 +65,9 @@ export const goDownstairsEvent = () => {
   maze.goDownStairs()
   mapper.resetMap()
   updateStats('downstairs')
+  updateAesthetics()
 
+  MessageQueue.push(RenderSignal.UpdateMusicAesthetics)
   MessageQueue.push(RenderSignal.ProceedToNextFloor)
   MessageQueue.push(RenderSignal.CurrentView)
   MessageQueue.push(RenderSignal.ShowFloor)

@@ -16,6 +16,7 @@ export type MazeState = {
   grid: Grid
   mapOpen: boolean
   acceptCommand: boolean
+  aesthetics: number
 }
 
 const initialState: MazeState = {
@@ -27,6 +28,7 @@ const initialState: MazeState = {
   grid: [],
   mapOpen: false,
   acceptCommand: true,
+  aesthetics: 5
 }
 
 const reducers = {
@@ -67,6 +69,9 @@ const reducers = {
   },
   setFloor: (s) => (floor: number) => {
     s.floor = floor
+  },
+  setAesthetics: (s) => (aesthetics: number) => {
+    s.aesthetics = aesthetics
   },
 
   // render

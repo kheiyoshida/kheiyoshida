@@ -51,3 +51,20 @@ const getTextureColor = (floor: number): ColorOperationParams => {
   if (floor < 5) return ['default']
   return ['gradation', -20, 20]
 }
+
+export type MusicCommand = {
+  alignment: MusicAlignment
+  aesthetics: MusicAesthetics
+}
+export type MusicAlignment = 'law' | 'chaos' | null
+export type MusicAesthetics = 'dark' | 'bright' | null
+
+export const getMusicCommands = (): MusicCommand => ({
+  alignment: getSanityCommand(statusStore.current.sanity),
+  aesthetics: getAestheticCommand(store.current.aesthetics),
+})
+
+const getSanityCommand = (san: number): MusicAlignment =>
+  san < 70 ? 'chaos' : san > 130 ? 'law' : null
+const getAestheticCommand = (aesthetics: number): MusicAesthetics =>
+  aesthetics <= 3 ? 'dark' : aesthetics >= 7 ? 'bright' : null

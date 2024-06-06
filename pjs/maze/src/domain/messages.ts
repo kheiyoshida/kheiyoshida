@@ -12,6 +12,8 @@ export enum RenderSignal {
   ShowFloor = 'ShowFloor',
   Die = 'Die',
   Resurrect = 'Resurrect',
+  UpdateMusicAlignment = 'UpdateMusicAlignment',
+  UpdateMusicAesthetics = 'UpdateMusicAesthetics'
 }
 
 export type RenderMessage = [signal: RenderSignal, intention: DomainIntention]
