@@ -1,5 +1,6 @@
 import * as Tone from 'tone'
 import * as MGNR from 'mgnr-tone'
+import { createNuancePad } from './preset'
 
 export const toneStart = () => {
   if (Tone.context.state === 'suspended') {
@@ -7,42 +8,50 @@ export const toneStart = () => {
   }
 }
 
-export const polysynth = new Tone.PolySynth(Tone.MonoSynth, {
+export const polysynth = new Tone.MonoSynth( {
   oscillator: {
-    type: 'sine4',
+    type: 'pulse',
   },
   envelope: {
     attack: 0.1,
-    decay: 0.3,
-    sustain: 0.3,
+    decay: 0.5,
+    sustain: 0.1,
     release: 0.3,
   },
   volume: -10,
-  detune: -20,
+  detune: -100,
   filter: {
     type: 'lowpass',
     frequency: 100,
   },
+  filterEnvelope: {
+    attack: 0.7,
+    decay: 0.3,
+    sustain: 0.1,
+    release: 0.5,
+  }
 })
 
-export const polysynth2 = new Tone.PolySynth(Tone.AMSynth, {
+export const polysynth2 = new Tone.MonoSynth({
   oscillator: {
-    type: 'sine4',
-  },
-  modulation: {
-    type: 'sine4',
+    type: 'sawtooth4',
   },
   envelope: {
     attack: 0.1,
-    decay: 0.3,
-    sustain: 0.3,
+    decay: 0.5,
+    sustain: 0.1,
     release: 0.3,
   },
   volume: -20,
-  detune: 5,
+  detune: 100,
+  filter: {
+    type: 'lowpass',
+    frequency: 100,
+  }
 })
 
-export const composite = new MGNR.CompositeInstrument(polysynth, polysynth2)
+// export const composite = new MGNR.CompositeInstrument(polysynth, polysynth2)
+export const composite = createNuancePad()
 
 const vol = new Tone.Channel().toDestination()
 composite.connect(vol)

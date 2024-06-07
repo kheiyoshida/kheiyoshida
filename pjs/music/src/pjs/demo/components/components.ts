@@ -8,9 +8,16 @@ import {
   getMixer,
   injectFadeInOut,
   makeLevelMap,
+  pingpongSequenceLength,
 } from 'mgnr-tone'
 import * as Tone from 'tone'
-import { createDrumMachine, createPadSynth, createSynth } from './instruments'
+import {
+  createDrumMachine,
+  createNuancePad,
+  createPadSynth,
+  createSynth,
+  wonderBass,
+} from './instruments'
 import { danceBeat, dnb, fill } from './sequence'
 
 const mixer = getMixer()
@@ -239,5 +246,121 @@ export const prepareStaticSynth: ThemeComponentMaker = (startAt, scale, level) =
       })
     },
     ...injectFadeInOut(synCh, [port]),
+  }
+}
+
+export const prepareNauncePadTrack: ThemeComponentMaker = (startAt, scale, level) => {
+  const pad = createNuancePad()
+  const channel = mixer.createInstChannel({
+    inst: pad,
+    initialVolume: -30,
+    effects: [new Tone.PingPongDelay('8n.', 0.3)],
+  })
+  const outlet = createOutlet(channel.inst, Tone.Transport.toSeconds('16n'))
+  const generator = createGenerator({
+    scale,
+    sequence: {
+      length: 16,
+      division: 16,
+      density: 0.8,
+      polyphony: 'mono',
+      fillStrategy: 'fill',
+    },
+    note: {
+      duration: {
+        min: 1,
+        max: 2,
+      },
+    },
+  })
+  const port = outlet.assignGenerator(generator).loopSequence(4, startAt)
+
+  const generator2 = createGenerator({
+    scale,
+    sequence: {
+      division: 16,
+      length: 12,
+      density: 0.3,
+      polyphony: 'mono',
+      fillStrategy: 'fill',
+    },
+    note: {
+      duration: {
+        min: 1,
+        max: 2,
+      },
+      harmonizer: { degree: ['3', '5'] },
+    },
+    middlewares: {
+      lengthChange: pingpongSequenceLength('extend'),
+    },
+  })
+  const port2 = outlet
+    .assignGenerator(generator2)
+    .loopSequence(4, startAt)
+    .onElapsed((g) => g.mutate({ rate: 0.2, strategy: 'inPlace' }))
+    .onEnded((g) => g.resetNotes())
+
+  return {
+    ...injectFadeInOut(channel, [port, port2]),
+    playLess() {},
+    playMore() {},
+  }
+}
+
+export const prepareWonderBassTrack: ThemeComponentMaker = (startAt, scale, level) => {
+  const pad = wonderBass()
+  const channel = mixer.createInstChannel({
+    inst: pad,
+    initialVolume: -30,
+  })
+  const outlet = createOutlet(channel.inst, Tone.Transport.toSeconds('16n'))
+  const generator = createGenerator({
+    scale,
+    sequence: {
+      length: 16,
+      division: 16,
+      density: 0.5,
+      polyphony: 'mono',
+      fillStrategy: 'fill',
+    },
+    note: {
+      duration: {
+        min: 1,
+        max: 4,
+      },
+    },
+  })
+  const port = outlet.assignGenerator(generator).loopSequence(4, startAt)
+
+  const generator2 = createGenerator({
+    scale,
+    sequence: {
+      division: 4,
+      length: 12,
+      density: 0.3,
+      polyphony: 'mono',
+      fillStrategy: 'fill',
+    },
+    note: {
+      duration: {
+        min: 1,
+        max: 2,
+      },
+    },
+    middlewares: {
+      lengthChange: pingpongSequenceLength('extend'),
+    },
+  })
+  const port2 = outlet
+    .assignGenerator(generator2)
+    .loopSequence(4, startAt)
+    .onElapsed((g) => g.mutate({ rate: 0.2, strategy: 'inPlace' }))
+    .onEnded((g) => g.resetNotes())
+
+  return {
+    ...injectFadeInOut(channel, [port, port2]),
+    playLess() {},
+    playMore() {},
   }
 }
