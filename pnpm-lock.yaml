@@ -114,6 +114,9 @@ importers:
       '@types/webmidi':
         specifier: ^2.0.10
         version: 2.0.10
+      maze:
+        specifier: workspace:^
+        version: link:../maze
       mgnr-tone:
         specifier: workspace:^
         version: link:../../pkgs/mgnr-tone

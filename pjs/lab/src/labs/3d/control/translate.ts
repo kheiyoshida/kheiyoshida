@@ -1,10 +1,10 @@
 import { SwipeOrMouseMove, TouchOrMousePosition, normalizeMouseInput } from 'p5utils/src/control'
-import { MoveThreshold } from '../config'
+import { SwipeMoveThreshold } from '../config'
 import { ControlIntention, MoveDirection } from './types'
 
 export const translateSwipeIntention = (
   swipe: SwipeOrMouseMove,
-  threshold = MoveThreshold,
+  threshold = SwipeMoveThreshold,
 ): ControlIntention => {
   const turn = {
     x: Math.abs(swipe.x) > threshold ? swipe.x / threshold : 0,
