@@ -17,3 +17,6 @@ export const divPosition3d = (position: Position3D, by: number) =>
 
 export const multPosition3d = (position: Position3D, by: number) =>
   position.map((p) => p * by) as Position3D
+
+export const averagePosition3ds = (positions: Position3D[]) =>
+  divPosition3d(sumPosition3d(...positions), positions.length)

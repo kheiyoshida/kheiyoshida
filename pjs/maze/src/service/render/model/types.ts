@@ -24,6 +24,11 @@ export type GeometrySpec = {
   normalPosition: Position3D
 }
 
+export type RenderBlock = {
+  blockCoords: RenderBlockCoords
+  position: RenderBlockPosition
+}
+
 /**
  * rectangle coordinates
  */
