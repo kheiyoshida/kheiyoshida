@@ -35,7 +35,9 @@ export const createMusic = (themeGrid: ThemeGrid) => {
   })
 
   const sendTrack = getMixer().createSendChannel({
-    effects: [new Tone.Reverb(0.5), new Tone.Filter(8000, 'lowpass')],
+    effects: [
+      // new Tone.Reverb(0.5), 
+      new Tone.Filter(8000, 'lowpass')],
   })
   const getNextBar = () => Tone.Transport.toSeconds('@4m')
 
