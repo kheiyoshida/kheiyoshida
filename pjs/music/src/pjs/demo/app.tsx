@@ -136,7 +136,7 @@ const positions: ThemeGridPosition[] = [
 ]
 
 const style: React.CSSProperties = {
-  width: '100%',
+  width: '100vw',
   height: '100vh',
   display: 'flex',
   justifyContent: 'center',
@@ -145,4 +145,8 @@ const style: React.CSSProperties = {
   color: 'white',
   fontSize: 24,
   backgroundColor: 'black',
+  zIndex: 20,
+  position: 'fixed',
+  top: 0,
+  left: 0
 }

@@ -548,6 +548,9 @@ importers:
       maze:
         specifier: workspace:^
         version: link:../../pjs/maze
+      music:
+        specifier: workspace:^
+        version: link:../../pjs/music
       next:
         specifier: 13.1.2
         version: 13.1.2(@babel/core@7.23.9)(react-dom@18.2.0)(react@18.2.0)(sass@1.69.5)

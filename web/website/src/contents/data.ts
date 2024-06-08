@@ -18,9 +18,18 @@ export enum Sketch {
   tp4 = 'tp4',
   regrets = 'regrets',
   maze = 'maze',
+  mandala = 'mandala',
 }
 
 export const ContentData = {
+  mandala: {
+    title: 'mandala',
+    date: '2024',
+    sketch: Sketch.mandala,
+    images: ['not yet'],
+    thumbnail: resolveImagekitPath('works', 'surface-water', 'surface-water.png'),
+    caption: 'auto generated music grid'
+  },
   surfaceWater: {
     title: 'Surface Water',
     date: '2024',

@@ -15,6 +15,8 @@ export const Canvas = ({ sketch }: { sketch: Sketch }) => {
 
 const getSketchComponent = (sketch: Sketch) => {
   switch (sketch) {
+    case Sketch.mandala:
+      return dynamic(() => import('music/src/pjs/demo/app'), { ssr: false })
     case Sketch.wasted:
       return dynamic(() => import('sketch/src/projects/wasted'), { ssr: false })
     case Sketch.shinjuku:

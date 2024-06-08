@@ -23,7 +23,8 @@
     "react-dom": "18.2.0",
     "sass": "^1.57.1",
     "sketch": "workspace:^",
-    "typescript": "4.9.4"
+    "typescript": "4.9.4",
+    "music": "workspace:^"
   },
   "devDependencies": {
     "@types/p5": "^1.7.6",
