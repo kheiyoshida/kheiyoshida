@@ -52,7 +52,7 @@ export const longPad =
     return {
       playLess() {},
       playMore() {},
-      ...injectFadeInOut(synCh, [port, port2]),
+      ...injectFadeInOut(synCh, [port, port2], scale),
     }
   }
 
@@ -86,7 +86,7 @@ export const movingPad =
     return {
       playLess() {},
       playMore() {},
-      ...injectFadeInOut(synCh, [port, port2]),
+      ...injectFadeInOut(synCh, [port, port2], scale),
     }
   }
 
@@ -100,8 +100,9 @@ export const darkMovingPad: ThemeComponentMaker = (startAt, source, level) => {
   })
   const outlet = createOutlet(synCh.inst)
 
+  const scale = source.createScale()
   const generator = createGenerator({
-    scale: source.createScale(),
+    scale,
     sequence: {
       length: 16,
       division: 16,
@@ -130,7 +131,7 @@ export const darkMovingPad: ThemeComponentMaker = (startAt, source, level) => {
       level = clampPlayLevel(level + 1)
       delay.set({ wet: delayLevel(level) })
     },
-    ...injectFadeInOut(synCh, [port]),
+    ...injectFadeInOut(synCh, [port], scale),
   }
 }
 
@@ -145,8 +146,9 @@ export const harmonisedPad: ThemeComponentMaker = (startAt, source, level) => {
   })
   const outlet = createOutlet(synCh.inst)
 
+  const scale = source.createScale()
   const generator = createGenerator({
-    scale: source.createScale(),
+    scale,
     sequence: {
       length: 16,
       division: 8,
@@ -190,6 +192,6 @@ export const harmonisedPad: ThemeComponentMaker = (startAt, source, level) => {
         },
       })
     },
-    ...injectFadeInOut(synCh, [port]),
+    ...injectFadeInOut(synCh, [port], scale),
   }
 }

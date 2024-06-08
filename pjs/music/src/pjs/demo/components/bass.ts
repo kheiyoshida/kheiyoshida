@@ -41,7 +41,7 @@ export const defaultBass =
       .loopSequence(4, startAt)
       .onEnded((g) => g.mutate({ rate: 0.2, strategy: 'randomize' }))
     return {
-      ...injectFadeInOut(channel, [port, port2]),
+      ...injectFadeInOut(channel, [port, port2], scale),
       playLess() {},
       playMore() {},
     }
@@ -74,7 +74,7 @@ export const longBass: ThemeComponentMaker = (startAt, source, level, send) => {
     .onEnded((g) => g.resetNotes())
 
   return {
-    ...injectFadeInOut(channel, [port, port2]),
+    ...injectFadeInOut(channel, [port, port2], scale),
     playLess() {},
     playMore() {},
   }

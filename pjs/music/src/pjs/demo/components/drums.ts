@@ -68,7 +68,7 @@ export const defaultDrums =
           },
         })
       },
-      ...injectFadeInOut(synCh, [port1, port2]),
+      ...injectFadeInOut(synCh, [port1, port2], dmScale),
     }
   }
 
@@ -155,6 +155,6 @@ export const dnbDrums =
           },
         })
       },
-      ...injectFadeInOut(synCh, [port1, port2]),
+      ...injectFadeInOut(synCh, [port1, port2], dmScale),
     }
   }

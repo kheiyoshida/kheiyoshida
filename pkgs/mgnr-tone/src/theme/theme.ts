@@ -1,4 +1,4 @@
-import { Middlewares, ScaleSource } from 'mgnr-core'
+import { Middlewares, Scale, ScaleSource } from 'mgnr-core'
 import { Transport } from 'tone'
 import { clamp } from 'utils'
 import { ToneOutletPort } from '../OutletPort'
@@ -102,15 +102,17 @@ export type ThemeComponent = {
 
 export const injectFadeInOut = <MW extends Middlewares>(
   channel: ReturnType<Mixer['createInstChannel']>,
-  ports: Array<ToneOutletPort<Middlewares> | ToneOutletPort<MW>>
+  ports: Array<ToneOutletPort<Middlewares> | ToneOutletPort<MW>>,
+  scale: Scale
 ): Pick<ThemeComponent, 'fadeIn' | 'fadeOut'> => {
   return {
     fadeIn: (duration) => channel.dynamicVolumeFade(channel.volumeRangeDiff, duration),
-    fadeOut: (duration) => {
+    fadeOut: (duration, ) => {
       channel.dynamicVolumeFade(-channel.volumeRangeDiff, duration)
       Transport.scheduleOnce(() => {
         getMixer().deleteChannel(channel)
         ports.forEach((port) => port.stopLoop())
+        scale.dispose()
       }, `+${duration}`)
     },
   }
