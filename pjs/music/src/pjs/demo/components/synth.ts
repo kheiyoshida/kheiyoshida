@@ -16,7 +16,7 @@ export const sampleSynth: ThemeComponentMaker = (startAt, source, level) => {
   const delayLevel = (l: ComponentPlayLevel) => (l >= 4 ? 0.4 : 0.3)
   const delay = new Tone.PingPongDelay('8n.', delayLevel(level))
   const synCh = mixer.createInstChannel({
-    inst: instruments.brightLead(),
+    inst: instruments.darkLead(),
     initialVolume: -30,
     effects: [],
   })

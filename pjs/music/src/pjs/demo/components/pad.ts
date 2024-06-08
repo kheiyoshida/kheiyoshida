@@ -17,8 +17,12 @@ const mixer = getMixer()
 
 export const samplePad: ThemeComponentMaker = (startAt, source, level) => {
   const synCh = mixer.createInstChannel({
-    inst: instruments.nuancePad(),
+    inst: instruments.darkPad(),
     initialVolume: -30,
+    volumeRange: {
+      max: -20,
+      min: -40,
+    },
     effects: [
       new Tone.Filter(200, 'highpass'),
       new Tone.PingPongDelay('8n.', 0.3),

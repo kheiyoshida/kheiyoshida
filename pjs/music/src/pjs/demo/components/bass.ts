@@ -8,8 +8,34 @@ import {
 } from 'mgnr-tone'
 import * as Tone from 'tone'
 import * as instruments from './instruments'
+import { generateLongSequences, randomBassline, randomise } from './patterns/generators'
 
 const mixer = getMixer()
+
+export const sampleBass: ThemeComponentMaker = (startAt, source) => {
+  const inst = instruments.darkBass()
+  const channel = mixer.createInstChannel({
+    inst,
+    initialVolume: -20,
+  })
+  const outlet = createOutlet(channel.inst, Tone.Transport.toSeconds('16n'))
+  const scale = source.createScale({ range: { min: 20, max: 50 } })
+  const generator = randomBassline(scale)
+  const port = outlet
+    .assignGenerator(generator)
+    .loopSequence(4, startAt)
+    .onElapsed((g) => g.mutate({ rate: 0.5, strategy: 'inPlace' }))
+  const generator2 = randomise(scale)
+  const port2 = outlet
+    .assignGenerator(generator2)
+    .loopSequence(4, startAt)
+    .onEnded((g) => g.mutate({ rate: 0.2, strategy: 'randomize' }))
+  return {
+    ...injectFadeInOut(channel, [port, port2]),
+    playLess() {},
+    playMore() {},
+  }
+}
 
 export const prepareWonderBassTrack: ThemeComponentMaker = (startAt, source) => {
   const pad = instruments.wonderBass()
