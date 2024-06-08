@@ -11,37 +11,86 @@ import {
 } from 'mgnr-tone'
 import * as Tone from 'tone'
 import * as instruments from './instruments'
-import { generateLongSequences } from './patterns/generators'
+import {
+  addHarmonyToLongSequence,
+  generateLongSequences,
+  movingSequence,
+  randomise,
+} from './patterns/generators'
+import { Character } from '../themes'
+import { SendChannel } from 'mgnr-tone/src/mixer/Channel'
 
 const mixer = getMixer()
 
-export const samplePad: ThemeComponentMaker = (startAt, source, level) => {
-  const synCh = mixer.createInstChannel({
-    inst: instruments.darkPad(),
-    initialVolume: -30,
-    volumeRange: {
-      max: -20,
-      min: -40,
-    },
-    effects: [
-      new Tone.Filter(200, 'highpass'),
-      new Tone.PingPongDelay('8n.', 0.3),
-    ]
-  })
-  const outlet = createOutlet(synCh.inst)
-  const generator = generateLongSequences(source.createScale({ range: { min: 42, max: 80 } }))
-  const port = outlet
-    .assignGenerator(generator)
-    .loopSequence(4, startAt)
-    .onEnded((g) => g.mutate({ rate: 0.2, strategy: 'randomize' }))
-  return {
-    playLess() {},
-    playMore() {},
-    ...injectFadeInOut(synCh, [port]),
+export const longPad =
+  (character: Character): ThemeComponentMaker =>
+  (startAt, source, level, send) => {
+    const synCh = mixer.createInstChannel({
+      inst: character === 'bright' ? instruments.nuancePad() : instruments.darkPad(),
+      initialVolume: -30,
+      volumeRange: {
+        max: -10,
+        min: -40,
+      },
+      effects: [new Tone.Filter(300, 'highpass'), new Tone.PingPongDelay('8n.', 0.5)],
+    })
+    mixer.connect(synCh, send as SendChannel, 0.5)
+    const outlet = createOutlet(synCh.inst)
+    const scale = source.createScale({ range: { min: 42, max: 80 } })
+    const generator = generateLongSequences(scale)
+    const generator2 = addHarmonyToLongSequence(scale)
+    const port = outlet
+      .assignGenerator(generator)
+      .loopSequence(4, startAt)
+      .onElapsed((g) => g.mutate({ rate: 0.2, strategy: 'inPlace' }))
+      .onEnded((g) => g.mutate({ rate: 0.2, strategy: 'randomize' }))
+    const port2 = outlet
+      .assignGenerator(generator2)
+      .loopSequence(4, startAt)
+      .onElapsed((g) => g.mutate({ rate: 0.2, strategy: 'randomize' }))
+      .onEnded((g) => g.mutate({ rate: 0.2, strategy: 'randomize' }))
+    return {
+      playLess() {},
+      playMore() {},
+      ...injectFadeInOut(synCh, [port, port2]),
+    }
   }
-}
 
-export const darkPadSynth: ThemeComponentMaker = (startAt, source, level) => {
+export const movingPad =
+  (character: Character): ThemeComponentMaker =>
+  (startAt, source, level, send) => {
+    const synCh = mixer.createInstChannel({
+      inst: character === 'bright' ? instruments.nuancePad() : instruments.darkPad(),
+      initialVolume: -30,
+      volumeRange: {
+        max: -10,
+        min: -40,
+      },
+      effects: [new Tone.PingPongDelay('8n.', 0.3), new Tone.Filter(500, 'highpass')],
+    })
+    mixer.connect(synCh, send as SendChannel, 0.5)
+    const outlet = createOutlet(synCh.inst)
+    const scale = source.createScale({ range: { min: 50, max: 90 } })
+    const generator = movingSequence(scale)
+    const generator2 = randomise(scale)
+    const port = outlet
+      .assignGenerator(generator)
+      .loopSequence(4, startAt)
+      .onElapsed((g) => g.mutate({ rate: 0.2, strategy: 'inPlace' }))
+      .onEnded((g) => g.mutate({ rate: 0.2, strategy: 'randomize' }))
+    const port2 = outlet
+      .assignGenerator(generator2)
+      .loopSequence(4, startAt)
+      .onElapsed((g) => g.mutate({ rate: 0.2, strategy: 'randomize' }))
+      .onEnded((g) => g.mutate({ rate: 0.2, strategy: 'randomize' }))
+    return {
+      playLess() {},
+      playMore() {},
+      ...injectFadeInOut(synCh, [port, port2]),
+    }
+  }
+
+export const darkMovingPad: ThemeComponentMaker = (startAt, source, level) => {
   const delayLevel = (l: ComponentPlayLevel) => (l >= 4 ? 0.4 : 0.3)
   const delay = new Tone.PingPongDelay('8n.', delayLevel(level))
   const synCh = mixer.createInstChannel({
@@ -142,65 +191,5 @@ export const harmonisedPad: ThemeComponentMaker = (startAt, source, level) => {
       })
     },
     ...injectFadeInOut(synCh, [port]),
-  }
-}
-
-export const nuancePad: ThemeComponentMaker = (startAt, source) => {
-  const pad = instruments.nuancePad()
-  const channel = mixer.createInstChannel({
-    inst: pad,
-    initialVolume: -30,
-    effects: [new Tone.PingPongDelay('8n.', 0.3)],
-  })
-  const outlet = createOutlet(channel.inst, Tone.Transport.toSeconds('16n'))
-  const scale = source.createScale({ range: { min: 60, max: 100 }, pref: 'omit47' })
-  const generator = createGenerator({
-    scale,
-    sequence: {
-      length: 16,
-      division: 16,
-      density: 0.8,
-      polyphony: 'mono',
-      fillStrategy: 'fill',
-    },
-    note: {
-      duration: {
-        min: 1,
-        max: 2,
-      },
-    },
-  })
-  const port = outlet.assignGenerator(generator).loopSequence(4, startAt)
-
-  const generator2 = createGenerator({
-    scale,
-    sequence: {
-      division: 16,
-      length: 12,
-      density: 0.3,
-      polyphony: 'mono',
-      fillStrategy: 'fill',
-    },
-    note: {
-      duration: {
-        min: 1,
-        max: 2,
-      },
-      harmonizer: { degree: ['3', '5'] },
-    },
-    middlewares: {
-      lengthChange: pingpongSequenceLength('extend'),
-    },
-  })
-  const port2 = outlet
-    .assignGenerator(generator2)
-    .loopSequence(4, startAt)
-    .onElapsed((g) => g.mutate({ rate: 0.2, strategy: 'inPlace' }))
-    .onEnded((g) => g.resetNotes())
-
-  return {
-    ...injectFadeInOut(channel, [port, port2]),
-    playLess() {},
-    playMore() {},
   }
 }

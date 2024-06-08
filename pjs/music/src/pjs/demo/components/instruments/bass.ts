@@ -109,6 +109,43 @@ export const brightBass = () =>
     })
   )
 
+export const droneBass = () =>
+  new mgnr.CompositeInstrument(
+    new Tone.MonoSynth({
+      oscillator: {
+        type: 'sine',
+      },
+      envelope: {
+        attack: 0.5,
+        decay: 0.5,
+        sustain: 0.8,
+        release: 0.5,
+      },
+      volume: -10,
+      filter: {
+        type: 'lowpass',
+        frequency: 100,
+      },
+    }),
+    new Tone.MonoSynth({
+      oscillator: {
+        type: 'square2',
+      },
+      envelope: {
+        attack: 0.2,
+        decay: 0.5,
+        sustain: 0.3,
+        release: 0.5,
+      },
+      volume: -20,
+      detune: 100,
+      filter: {
+        type: 'lowpass',
+        frequency: 100,
+      },
+    })
+  )
+
 export const wonderBass = () =>
   new mgnr.CompositeInstrument(
     new Tone.MonoSynth({
@@ -116,10 +153,10 @@ export const wonderBass = () =>
         type: 'pulse',
       },
       envelope: {
-        attack: 0.01,
+        attack: 0.1,
         decay: 0.5,
         sustain: 0.1,
-        release: 0.3,
+        release: 0.5,
       },
       volume: -10,
       detune: -100,
@@ -139,10 +176,10 @@ export const wonderBass = () =>
         type: 'sawtooth4',
       },
       envelope: {
-        attack: 0.05,
+        attack: 0.2,
         decay: 0.5,
         sustain: 0.1,
-        release: 0.3,
+        release: 0.5,
       },
       volume: -20,
       detune: 100,

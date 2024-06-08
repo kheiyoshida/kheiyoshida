@@ -1,42 +1,39 @@
 import { createThemeGrid, injectThemeAlignment } from 'mgnr-tone'
 import * as cp from './components'
 
-const devTheme = injectThemeAlignment({
-  top: cp.sampleSynth,
-  // left: cp.samplePad,
-  center: cp.prepareDrums,
-  bottom: cp.sampleBass
+export type Character = 'dark' | 'neutral' | 'bright'
+
+const top = (character: Character) => injectThemeAlignment({
+  top: cp.freeformSynth(character),
+  center: cp.movingPad(character),
+  bottom: cp.longBass
 })
 
-const aggressiveTheme = injectThemeAlignment({
-  top: cp.darkPadSynth,
-  bottom: cp.prepareDrums,
+const middle = (character: Character) => injectThemeAlignment({
+  top: cp.defaultSynth(character),
+  center: cp.longPad(character),
+  bottom: cp.defaultDrums(character),
 })
 
-const staticTheme = injectThemeAlignment({
-  top: cp.harmonisedPad,
-  bottom: cp.prepareStaticDrums,
-})
-
-const ambientTheme = injectThemeAlignment({
-  // top: cp.nuancePad,
-  // left: cp.prepareWonderBassTrack,
-  bottom: cp.prepareDrums
+const bottom = (character: Character) => injectThemeAlignment({
+  top: character === 'dark' ? cp.longPad(character) : cp.movingPad(character),
+  center: cp.defaultBass(character),
+  bottom: cp.dnbDrums(character)
 })
 
 export const themeGrid = createThemeGrid({
   // top
-  'left-top': aggressiveTheme,
-  'center-top': aggressiveTheme,
-  'right-top': aggressiveTheme,
+  'left-top': top('dark'),
+  'center-top': top('neutral'),
+  'right-top': top('bright'),
 
   // middle
-  'left-middle': staticTheme,
-  'center-middle': devTheme,
-  'right-middle': staticTheme,
+  'left-middle': middle('dark'),
+  'center-middle': middle('neutral'),
+  'right-middle': middle('bright'),
 
   // bottom
-  'left-bottom': staticTheme,
-  'center-bottom': staticTheme,
-  'right-bottom': staticTheme,
+  'left-bottom': bottom('dark'),
+  'center-bottom': bottom('neutral'),
+  'right-bottom': bottom('bright'),
 })

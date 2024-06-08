@@ -11,7 +11,12 @@ export const darkLead = () =>
         attack: 0.05,
         decay: 0.3,
         sustain: 0.2,
-        release: 0.05,
+        release: 0.1,
+      },
+      volume: -16,
+      filter: {
+        type: 'lowpass',
+        frequency: 2000,
       },
     }),
     new Tone.MonoSynth({
@@ -108,7 +113,7 @@ export const anxiousThinSynth = () =>
       oscillator: {
         type: 'sine4',
       },
-      detune: -100,
+      detune: -40,
       envelope: {
         attack: 0.005,
         decay: 0.1,

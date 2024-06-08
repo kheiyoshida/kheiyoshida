@@ -13,6 +13,7 @@ export const darkPad = () =>
         sustain: 0.5,
         release: 1.5,
       },
+      volume: -10,
       detune: 20,
     }),
     new Tone.PolySynth(Tone.MonoSynth, {
@@ -20,6 +21,7 @@ export const darkPad = () =>
         type: 'triangle2',
       },
       detune: -20,
+      volume: -20,
       envelope: {
         attack: 0.2,
         decay: 0.5,
@@ -43,7 +45,7 @@ export const nuancePad = () =>
         attack: 0.2,
         decay: 0.2,
         sustain: 0.5,
-        release: 0.8,
+        release: 1.2,
       },
       volume: -6,
       detune: -20,

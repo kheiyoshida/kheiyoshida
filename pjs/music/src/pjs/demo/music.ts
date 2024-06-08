@@ -4,6 +4,7 @@ import {
   ThemeGridDirection,
   ThemeShiftInfo,
   createScaleSource,
+  getMixer,
   makeFadeInTheme,
   makeFadeOutTheme,
 } from 'mgnr-tone'
@@ -28,11 +29,17 @@ export const createMusic = (themeGrid: ThemeGrid) => {
   let currentTheme: Theme
   const scale = createScaleSource({ key: 'D', range: { min: 30, max: 80 }, pref: 'omit25' })
 
+  const sendTrack = getMixer().createSendChannel({
+    effects: [
+      new Tone.Reverb(0.5),
+      new Tone.Filter(8000, 'lowpass')
+    ]
+  })
   const getNextBar = () => Tone.Transport.toSeconds('@4m')
 
   function applyInitialTheme() {
     const theme = themeGrid.getInitialTheme()
-    currentTheme = theme(0, scale, 'center-middle')
+    currentTheme = theme(0, scale, 'center-middle', sendTrack)
     currentTheme.top.fadeIn('1m')
     currentTheme.bottom.fadeIn('1m')
     currentTheme.left.fadeIn('1m')
@@ -73,7 +80,7 @@ export const createMusic = (themeGrid: ThemeGrid) => {
 
   const fadeInTheme = makeFadeInTheme()
   function fadeInNextTheme({ theme, themeAlignment, direction }: ThemeShiftInfo) {
-    currentTheme = theme!(getNextBar(), scale, themeAlignment)
+    currentTheme = theme!(getNextBar(), scale, themeAlignment, sendTrack)
     fadeInTheme(currentTheme, direction)
   }
 

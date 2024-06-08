@@ -32,13 +32,16 @@ const makePseudoComponent = (): ThemeComponent => ({
 
 export const injectThemeAlignment =
   (components: Omit<ThemeComponentMakerMap, 'updateAlignment'>): ThemeMaker =>
-  (startAt, source, alignment) => {
+  (startAt, source, alignment, ...rest) => {
     const initialLevels = determineInitialLevel(alignment)
     const keys: ThemeComponentPosition[] = ['top', 'bottom', 'right', 'left', 'center']
     const { top, bottom, left, right, center } = Object.fromEntries(
       keys.map((k) => {
         const component = components[k]
-        return [k, component ? component(startAt, source, initialLevels[k]) : makePseudoComponent()]
+        return [
+          k,
+          component ? component(startAt, source, initialLevels[k], ...rest) : makePseudoComponent(),
+        ]
       })
     )
     const updateAlignment = (direction: ThemeGridDirection) => {

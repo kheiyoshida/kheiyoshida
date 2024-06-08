@@ -1,25 +1,15 @@
 import { ThemeGridDirection, ThemeGridPosition } from 'mgnr-tone'
 import { useEffect, useState } from 'react'
 import * as Tone from 'tone'
+import { fireByRate, randomItemFromArray } from 'utils'
 import { createCommandBuffer, createMusic } from './music'
 import { themeGrid } from './themes'
-import { fireByRate } from 'utils'
 
-const commandBuffer = createCommandBuffer([
-  // 'up',
-  // 'up',
-  // 'up',
-  // 'up',
-  // 'up',
-  // 'up',
-  // 'down',
-  // 'down',
-  // 'down',
-  // 'down',
-  // 'down',
-  // 'down',
-  // 'down',
-])
+const commandBuffer = createCommandBuffer(
+  [...Array(50)].map(() =>
+    randomItemFromArray(['down', 'up', 'right', 'left'] as ThemeGridDirection[])
+  )
+)
 
 const music = createMusic(themeGrid)
 
