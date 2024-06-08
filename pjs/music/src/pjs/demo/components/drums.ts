@@ -8,12 +8,12 @@ import {
   injectFadeInOut,
   makeLevelMap,
 } from 'mgnr-tone'
+import { SendChannel } from 'mgnr-tone/src/mixer/Channel'
 import * as Tone from 'tone'
 import { Character } from '../themes'
 import { beatDrums, tightDrums } from './instruments'
-import { backHH, danceBeat, dnb, fill, kick4 } from './patterns/sequences'
-import { dnbBeat, kicks, randomFill } from './patterns/beat'
-import { SendChannel } from 'mgnr-tone/src/mixer/Channel'
+import { kicks, randomFill } from './patterns/beat'
+import { backHH, dnb, fill, kick4 } from './patterns/sequences'
 
 const mixer = getMixer()
 

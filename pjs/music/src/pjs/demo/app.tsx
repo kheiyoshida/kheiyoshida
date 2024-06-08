@@ -27,8 +27,8 @@ const play = () => {
     () => {
       music.checkNextTheme(commandBuffer.command)
     },
-    '16m',
-    0
+    '32m',
+    '16m'
   )
   started = true
 }
@@ -40,10 +40,10 @@ export default () => {
       <Grid />
       <div style={{ margin: 16 }}>
         <button style={{ padding: 8, margin: 8 }} onClick={play}>
-          click to start
+        ▶︎ PLAY
         </button>
       </div>
-      <Commands />
+      {/* <Commands /> */}
     </div>
   )
 }
@@ -81,9 +81,9 @@ const Grid = () => {
     <div
       style={{
         display: 'grid',
-        width: 500,
-        height: 500,
-        gap: 20,
+        width: 300,
+        height: 300,
+        gap: 18,
         gridTemplateColumns: '1fr 1fr 1fr',
       }}
     >

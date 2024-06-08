@@ -79,11 +79,11 @@ export const brightBass = () =>
   new mgnr.CompositeInstrument(
     new Tone.MonoSynth({
       oscillator: {
-        type: 'triangle4',
+        type: 'triangle8',
       },
       envelope: {
         attack: 0.01,
-        decay: 0.7,
+        decay: 0.5,
         sustain: 0.3,
         release: 0.1,
       },
@@ -103,7 +103,7 @@ export const brightBass = () =>
       volume: -16,
       detune: -20,
       filter: {
-        type: 'highpass',
+        type: 'lowpass',
         frequency: 1000,
       },
     })
