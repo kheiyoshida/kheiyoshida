@@ -11,8 +11,31 @@ import {
 } from 'mgnr-tone'
 import * as Tone from 'tone'
 import * as instruments from './instruments'
+import { generateLongSequences } from './patterns/generators'
 
 const mixer = getMixer()
+
+export const samplePad: ThemeComponentMaker = (startAt, source, level) => {
+  const synCh = mixer.createInstChannel({
+    inst: instruments.darkPad(),
+    initialVolume: -30,
+    effects: [
+      new Tone.Filter(100, 'highpass'),
+      new Tone.PingPongDelay('8n.', 0.3),
+    ]
+  })
+  const outlet = createOutlet(synCh.inst)
+  const generator = generateLongSequences(source.createScale({ range: { min: 50, max: 100 } }))
+  const port = outlet
+    .assignGenerator(generator)
+    .loopSequence(4, startAt)
+    .onEnded((g) => g.mutate({ rate: 0.2, strategy: 'randomize' }))
+  return {
+    playLess() {},
+    playMore() {},
+    ...injectFadeInOut(synCh, [port]),
+  }
+}
 
 export const darkPadSynth: ThemeComponentMaker = (startAt, source, level) => {
   const delayLevel = (l: ComponentPlayLevel) => (l >= 4 ? 0.4 : 0.3)
@@ -63,7 +86,7 @@ export const harmonisedPad: ThemeComponentMaker = (startAt, source, level) => {
   const delay = new Tone.PingPongDelay('8n.', delayLevel(level))
   const density = makeLevelMap([0.5, 0.5, 0.6, 0.7, 0.8])
   const synCh = mixer.createInstChannel({
-    inst: instruments.createPadSynth(),
+    inst: instruments.darkPad(),
     initialVolume: -30,
     effects: [delay],
   })
@@ -119,7 +142,7 @@ export const harmonisedPad: ThemeComponentMaker = (startAt, source, level) => {
 }
 
 export const nuancePad: ThemeComponentMaker = (startAt, source) => {
-  const pad = instruments.createNuancePad()
+  const pad = instruments.nuancePad()
   const channel = mixer.createInstChannel({
     inst: pad,
     initialVolume: -30,

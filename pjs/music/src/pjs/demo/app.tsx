@@ -6,19 +6,19 @@ import { themeGrid } from './themes'
 import { fireByRate } from 'utils'
 
 const commandBuffer = createCommandBuffer([
-  'up',
-  'up',
-  'up',
-  'up',
-  'up',
-  'up',
-  'down',
-  'down',
-  'down',
-  'down',
-  'down',
-  'down',
-  'down',
+  // 'up',
+  // 'up',
+  // 'up',
+  // 'up',
+  // 'up',
+  // 'up',
+  // 'down',
+  // 'down',
+  // 'down',
+  // 'down',
+  // 'down',
+  // 'down',
+  // 'down',
 ])
 
 const music = createMusic(themeGrid)
@@ -37,7 +37,7 @@ const play = () => {
     () => {
       music.checkNextTheme(commandBuffer.command)
     },
-    '8m',
+    '16m',
     0
   )
   started = true
