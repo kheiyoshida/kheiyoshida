@@ -44,6 +44,7 @@ const play = () => {
 }
 
 export default () => {
+  useEffect(play, [])
   return (
     <div style={style}>
       <Grid />

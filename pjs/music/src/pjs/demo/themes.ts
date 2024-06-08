@@ -1,36 +1,34 @@
 import { createThemeGrid, injectThemeAlignment } from 'mgnr-tone'
-import {
-  prepareDrums,
-  prepareNauncePadTrack,
-  prepareStaticDrums,
-  prepareStaticSynth,
-  prepareSynth,
-  prepareWonderBassTrack
-} from './components/components'
+import * as cp from './components'
 
 const aggressiveTheme = injectThemeAlignment({
-  top: prepareSynth,
-  bottom: prepareDrums,
+  top: cp.darkPadSynth,
+  bottom: cp.prepareDrums,
 })
 
 const staticTheme = injectThemeAlignment({
-  top: prepareStaticSynth,
-  bottom: prepareStaticDrums,
+  top: cp.harmonisedPad,
+  bottom: cp.prepareStaticDrums,
 })
 
 const ambientTheme = injectThemeAlignment({
-  top: prepareNauncePadTrack,
-  left: prepareWonderBassTrack,
-  // bottom: prepareDrums
+  top: cp.nuancePad,
+  left: cp.prepareWonderBassTrack,
+  bottom: cp.prepareDrums
 })
 
 export const themeGrid = createThemeGrid({
+  // top
   'left-top': aggressiveTheme,
   'center-top': aggressiveTheme,
   'right-top': aggressiveTheme,
+
+  // middle
   'left-middle': staticTheme,
   'center-middle': ambientTheme,
   'right-middle': staticTheme,
+
+  // bottom
   'left-bottom': staticTheme,
   'center-bottom': staticTheme,
   'right-bottom': staticTheme,
