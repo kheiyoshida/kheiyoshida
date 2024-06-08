@@ -9,18 +9,28 @@ import {
   makeLevelMap,
 } from 'mgnr-tone'
 import * as Tone from 'tone'
-import { createDrumMachine } from './instruments'
-import { danceBeat, dnb, fill } from './patterns/sequences'
+import { createDrumMachine, beatDrums, tightDrums } from './instruments'
+import { backHH, danceBeat, dnb, fill } from './patterns/sequences'
 
 const mixer = getMixer()
 
 export const prepareDrums: ThemeComponentMaker = (startAt, _, level) => {
   const dmScale = createScale([30, 50, 90])
   const synCh = mixer.createInstChannel({
-    inst: createDrumMachine(),
+    inst: tightDrums(),
     initialVolume: -30,
-    effects: [new Tone.BitCrusher(16)],
+    effects: [
+      new Tone.BitCrusher(8),
+      // new Tone.Filter(100, 'highpass'),
+      // new Tone.Filter(10000, 'lowpass')
+    ],
   })
+
+  const reverb = mixer.createSendChannel({
+    initialVolume: -10,
+    effects: [new Tone.Reverb(0.2)],
+  })
+  mixer.connect(synCh, reverb, 1)
 
   const outlet = createOutlet(synCh.inst, Tone.Transport.toSeconds('16n'))
 
@@ -48,7 +58,7 @@ export const prepareDrums: ThemeComponentMaker = (startAt, _, level) => {
     },
     sequence: {
       fillStrategy: 'fill',
-      length: 64,
+      length: 16,
       division: 16,
       density: density[level],
       polyphony: 'mono',
@@ -56,7 +66,7 @@ export const prepareDrums: ThemeComponentMaker = (startAt, _, level) => {
     middlewares: {
       foo: () => undefined,
     },
-    notes: fill,
+    notes: backHH,
   })
 
   const port1 = outlet

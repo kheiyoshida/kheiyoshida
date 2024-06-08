@@ -17,6 +17,10 @@ export const sampleBass: ThemeComponentMaker = (startAt, source) => {
   const channel = mixer.createInstChannel({
     inst,
     initialVolume: -20,
+    volumeRange: {
+      max: -12,
+      min: -40,
+    },
   })
   const outlet = createOutlet(channel.inst, Tone.Transport.toSeconds('16n'))
   const scale = source.createScale({ range: { min: 20, max: 50 } })

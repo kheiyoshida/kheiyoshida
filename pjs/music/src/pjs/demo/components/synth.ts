@@ -18,7 +18,8 @@ export const sampleSynth: ThemeComponentMaker = (startAt, source, level) => {
   const synCh = mixer.createInstChannel({
     inst: instruments.darkLead(),
     initialVolume: -30,
-    effects: [],
+    volumeRange: { max: -20, min: -40 },
+    effects: [delay],
   })
   const outlet = createOutlet(synCh.inst)
 

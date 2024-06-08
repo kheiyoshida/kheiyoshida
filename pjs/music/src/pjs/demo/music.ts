@@ -33,11 +33,11 @@ export const createMusic = (themeGrid: ThemeGrid) => {
   function applyInitialTheme() {
     const theme = themeGrid.getInitialTheme()
     currentTheme = theme(0, scale, 'center-middle')
-    currentTheme.top.fadeIn('4m')
-    currentTheme.bottom.fadeIn('4m')
-    currentTheme.left.fadeIn('4m')
-    currentTheme.right.fadeIn('4m')
-    currentTheme.center.fadeIn('4m')
+    currentTheme.top.fadeIn('1m')
+    currentTheme.bottom.fadeIn('1m')
+    currentTheme.left.fadeIn('1m')
+    currentTheme.right.fadeIn('1m')
+    currentTheme.center.fadeIn('1m')
     
     // currentTheme = theme(getNextBar(), scale, 'center-middle')
     // Tone.Transport.scheduleOnce(() => {

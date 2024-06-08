@@ -2,9 +2,9 @@ import { createThemeGrid, injectThemeAlignment } from 'mgnr-tone'
 import * as cp from './components'
 
 const devTheme = injectThemeAlignment({
-  // top: cp.sampleSynth,
-  left: cp.samplePad,
-  center: cp.prepareStaticDrums,
+  top: cp.sampleSynth,
+  // left: cp.samplePad,
+  center: cp.prepareDrums,
   bottom: cp.sampleBass
 })
 
