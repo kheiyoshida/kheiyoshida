@@ -8,7 +8,7 @@ export class ToneOutletPort<MW extends Middlewares> extends OutletPort<ToneOutle
   /**
    * Outlet needs to have overhead for time=0 notes
    */
-  static BufferTime = 0.05
+  static BufferTime = 0.5
 
   public loopSequence(numOfLoops = this.numOfLoops, startTime = 0): ToneOutletPort<MW> {
     this.numOfLoops = numOfLoops
