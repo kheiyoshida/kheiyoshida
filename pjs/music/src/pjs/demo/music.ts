@@ -4,6 +4,7 @@ import {
   ThemeGrid,
   ThemeGridDirection,
   ThemeShiftInfo,
+  createScaleSource,
   makeFadeInTheme,
   makeFadeOutTheme,
 } from 'mgnr-tone'
@@ -28,7 +29,7 @@ export const createCommandBuffer = (
 
 export const createMusic = (themeGrid: ThemeGrid) => {
   let currentTheme: Theme
-  const scale = new Scale({ range: { min: 30, max: 80 }, pref: 'omit47' })
+  const scale = createScaleSource({ key: 'D', range: { min: 30, max: 80 }, pref: 'omit25' })
 
   const getNextBar = () => Tone.Transport.toSeconds('@4m')
 

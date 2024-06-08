@@ -1,4 +1,4 @@
-import { Middlewares, Scale } from 'mgnr-core'
+import { Middlewares, ScaleSource } from 'mgnr-core'
 import { Transport } from 'tone'
 import { clamp } from 'utils'
 import { ToneOutletPort } from '../OutletPort'
@@ -10,7 +10,7 @@ export type Duration = `${number}m`
 
 export type ThemeMaker = (
   startAt: number,
-  scale: Scale,
+  source: ScaleSource,
   alignment: ThemeAlignment,
   ...args: unknown[]
 ) => Theme
@@ -32,13 +32,13 @@ const makePseudoComponent = (): ThemeComponent => ({
 
 export const injectThemeAlignment =
   (components: Omit<ThemeComponentMakerMap, 'updateAlignment'>): ThemeMaker =>
-  (startAt, scale, alignment) => {
+  (startAt, source, alignment) => {
     const initialLevels = determineInitialLevel(alignment)
     const keys: ThemeComponentPosition[] = ['top', 'bottom', 'right', 'left', 'center']
     const { top, bottom, left, right, center } = Object.fromEntries(
       keys.map((k) => {
         const component = components[k]
-        return [k, component ? component(startAt, scale, initialLevels[k]) : makePseudoComponent()]
+        return [k, component ? component(startAt, source, initialLevels[k]) : makePseudoComponent()]
       })
     )
     const updateAlignment = (direction: ThemeGridDirection) => {
@@ -85,7 +85,7 @@ export const makeLevelMap = (values: number[]): Record<ComponentPlayLevel, numbe
 
 export type ThemeComponentMaker = (
   startAt: number,
-  scale: Scale,
+  source: ScaleSource,
   initialLevel: ComponentPlayLevel,
   ...args: unknown[]
 ) => ThemeComponent

@@ -5,7 +5,7 @@ import {
   prepareStaticDrums,
   prepareStaticSynth,
   prepareSynth,
-  prepareWonderBassTrack,
+  prepareWonderBassTrack
 } from './components/components'
 
 const aggressiveTheme = injectThemeAlignment({
@@ -19,9 +19,9 @@ const staticTheme = injectThemeAlignment({
 })
 
 const ambientTheme = injectThemeAlignment({
-  // top: prepareNauncePadTrack,
+  top: prepareNauncePadTrack,
   left: prepareWonderBassTrack,
-  bottom: prepareDrums
+  // bottom: prepareDrums
 })
 
 export const themeGrid = createThemeGrid({

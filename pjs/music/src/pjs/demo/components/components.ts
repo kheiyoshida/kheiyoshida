@@ -145,7 +145,7 @@ export const prepareStaticDrums: ThemeComponentMaker = (startAt, _, level) => {
   }
 }
 
-export const prepareSynth: ThemeComponentMaker = (startAt, scale, level) => {
+export const prepareSynth: ThemeComponentMaker = (startAt, source, level) => {
   const delayLevel = (l: ComponentPlayLevel) => (l >= 4 ? 0.4 : 0.3)
   const delay = new Tone.PingPongDelay('8n.', delayLevel(level))
   const synCh = mixer.createInstChannel({
@@ -156,7 +156,7 @@ export const prepareSynth: ThemeComponentMaker = (startAt, scale, level) => {
   const outlet = createOutlet(synCh.inst)
 
   const generator = createGenerator({
-    scale,
+    scale: source.createScale(),
     sequence: {
       length: 16,
       division: 16,
@@ -189,7 +189,7 @@ export const prepareSynth: ThemeComponentMaker = (startAt, scale, level) => {
   }
 }
 
-export const prepareStaticSynth: ThemeComponentMaker = (startAt, scale, level) => {
+export const prepareStaticSynth: ThemeComponentMaker = (startAt, source, level) => {
   const delayLevel = (l: ComponentPlayLevel) => (l >= 4 ? 0.4 : 0.3)
   const delay = new Tone.PingPongDelay('8n.', delayLevel(level))
   const density = makeLevelMap([0.5, 0.5, 0.6, 0.7, 0.8])
@@ -201,7 +201,7 @@ export const prepareStaticSynth: ThemeComponentMaker = (startAt, scale, level) =
   const outlet = createOutlet(synCh.inst)
 
   const generator = createGenerator({
-    scale,
+    scale: source.createScale(),
     sequence: {
       length: 16,
       division: 8,
@@ -249,7 +249,7 @@ export const prepareStaticSynth: ThemeComponentMaker = (startAt, scale, level) =
   }
 }
 
-export const prepareNauncePadTrack: ThemeComponentMaker = (startAt, scale, level) => {
+export const prepareNauncePadTrack: ThemeComponentMaker = (startAt, source, level) => {
   const pad = createNuancePad()
   const channel = mixer.createInstChannel({
     inst: pad,
@@ -257,6 +257,7 @@ export const prepareNauncePadTrack: ThemeComponentMaker = (startAt, scale, level
     effects: [new Tone.PingPongDelay('8n.', 0.3)],
   })
   const outlet = createOutlet(channel.inst, Tone.Transport.toSeconds('16n'))
+  const scale = source.createScale({ range: { min: 60, max: 100 }, pref: 'omit47' })
   const generator = createGenerator({
     scale,
     sequence: {
@@ -308,13 +309,18 @@ export const prepareNauncePadTrack: ThemeComponentMaker = (startAt, scale, level
   }
 }
 
-export const prepareWonderBassTrack: ThemeComponentMaker = (startAt, scale, level) => {
+export const prepareWonderBassTrack: ThemeComponentMaker = (startAt, source, level) => {
   const pad = wonderBass()
   const channel = mixer.createInstChannel({
     inst: pad,
-    initialVolume: -30,
+    initialVolume: -20,
+    volumeRange: {
+      max: -6,
+      min: -40,
+    },
   })
   const outlet = createOutlet(channel.inst, Tone.Transport.toSeconds('16n'))
+  const scale = source.createScale({ range: { min: 20, max: 45 } })
   const generator = createGenerator({
     scale,
     sequence: {
