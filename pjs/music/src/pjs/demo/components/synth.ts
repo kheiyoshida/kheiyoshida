@@ -37,15 +37,13 @@ export const defaultSynth =
 
     const density = makeLevelMap([0.3, 0.4, 0.5, 0.6, 0.7])
 
-    const generator = randomSequence(
-      source.createScale({ range: { min: 40, max: 80 } }),
-      density[level]
-    )
+    const scale = source.createScale({ range: { min: 40, max: 80 } })
+    const generator = randomSequence(scale, density[level])
     const port = outlet
       .assignGenerator(generator)
       .loopSequence(4, startAt)
       .onEnded((g) => g.mutate({ rate: 0.2, strategy: 'randomize' }))
-    const generator2 = randomise(source.createScale({ range: { min: 40, max: 80 } }))
+    const generator2 = randomise(scale)
     const port2 = outlet
       .assignGenerator(generator2)
       .loopSequence(4, startAt)
@@ -70,7 +68,7 @@ export const defaultSynth =
           },
         })
       },
-      ...injectFadeInOut(synCh, [port, port2]),
+      ...injectFadeInOut(synCh, [port, port2], scale),
     }
   }
 
@@ -97,9 +95,8 @@ export const freeformSynth =
 
     const density = makeLevelMap([0.3, 0.4, 0.5, 0.6, 0.7])
 
-    const generator = strictArpegio(
-      source.createScale({ range: { min: 50, max: 100 }, pref: 'major' })
-    )
+    const scale = source.createScale({ range: { min: 50, max: 100 }, pref: 'major' })
+    const generator = strictArpegio(scale)
     const port = outlet
       .assignGenerator(generator)
       .loopSequence(4, startAt)
@@ -107,9 +104,7 @@ export const freeformSynth =
         g.mutate({ rate: 0.2, strategy: 'randomize' })
         g.changeLength(2)
       })
-    const generator2 = randomise(
-      source.createScale({ range: { min: 50, max: 100 }, pref: 'major' })
-    )
+    const generator2 = randomise(scale)
     const port2 = outlet
       .assignGenerator(generator2)
       .loopSequence(4, startAt)
@@ -134,6 +129,6 @@ export const freeformSynth =
           },
         })
       },
-      ...injectFadeInOut(synCh, [port, port2]),
+      ...injectFadeInOut(synCh, [port, port2], scale),
     }
   }

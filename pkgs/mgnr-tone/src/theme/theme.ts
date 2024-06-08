@@ -134,9 +134,9 @@ type DirectionDurationMap = {
 export const makeFadeOutTheme =
   (
     duration: DirectionDurationMap = {
-      inDirection: '16m',
-      againstDirection: '4m',
-      neutral: '12m',
+      inDirection: '24m',
+      againstDirection: '8m',
+      neutral: '16m',
     },
     timing = '@4m',
     delay = '4m'
@@ -164,9 +164,9 @@ export const makeFadeOutTheme =
 export const makeFadeInTheme =
   (
     duration: DirectionDurationMap = {
-      inDirection: '16m',
-      againstDirection: '4m',
-      neutral: '12m',
+      inDirection: '24m',
+      againstDirection: '8m',
+      neutral: '16m',
     },
     timing = '@4m',
     delay = '4m'
