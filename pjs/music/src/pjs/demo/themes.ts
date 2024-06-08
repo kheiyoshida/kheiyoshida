@@ -12,8 +12,8 @@ const staticTheme = injectThemeAlignment({
 })
 
 const ambientTheme = injectThemeAlignment({
-  top: cp.nuancePad,
-  left: cp.prepareWonderBassTrack,
+  // top: cp.nuancePad,
+  // left: cp.prepareWonderBassTrack,
   bottom: cp.prepareDrums
 })
 

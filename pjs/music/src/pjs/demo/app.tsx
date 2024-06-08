@@ -31,14 +31,14 @@ const play = () => {
   }
   if (started) return
   Tone.Transport.bpm.value = 162
-  Tone.Transport.start("+2") // it should give some buffer time to set things up
+  Tone.Transport.start()
   music.applyInitialTheme()
   Tone.Transport.scheduleRepeat(
     () => {
       music.checkNextTheme(commandBuffer.command)
     },
-    '16m',
-    '16:0:0'
+    '8m',
+    0
   )
   started = true
 }
