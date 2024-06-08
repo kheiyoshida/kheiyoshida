@@ -17,15 +17,15 @@ const mixer = getMixer()
 
 export const samplePad: ThemeComponentMaker = (startAt, source, level) => {
   const synCh = mixer.createInstChannel({
-    inst: instruments.darkPad(),
+    inst: instruments.nuancePad(),
     initialVolume: -30,
     effects: [
-      new Tone.Filter(100, 'highpass'),
+      new Tone.Filter(200, 'highpass'),
       new Tone.PingPongDelay('8n.', 0.3),
     ]
   })
   const outlet = createOutlet(synCh.inst)
-  const generator = generateLongSequences(source.createScale({ range: { min: 50, max: 100 } }))
+  const generator = generateLongSequences(source.createScale({ range: { min: 42, max: 80 } }))
   const port = outlet
     .assignGenerator(generator)
     .loopSequence(4, startAt)
@@ -41,7 +41,7 @@ export const darkPadSynth: ThemeComponentMaker = (startAt, source, level) => {
   const delayLevel = (l: ComponentPlayLevel) => (l >= 4 ? 0.4 : 0.3)
   const delay = new Tone.PingPongDelay('8n.', delayLevel(level))
   const synCh = mixer.createInstChannel({
-    inst: instruments.createSynth(),
+    inst: instruments.anxiousThinSynth(),
     initialVolume: -30,
     effects: [delay],
   })
