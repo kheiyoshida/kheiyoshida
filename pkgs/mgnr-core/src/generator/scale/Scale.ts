@@ -70,6 +70,14 @@ export class Scale {
     return ROOT_TONE_MAP[this.key]
   }
 
+  private _disposed = false
+  get isDisposed() {
+    return this._disposed
+  }
+  dispose() {
+    this._disposed = true
+  }
+
   static DefaultValue: ScaleConf = {
     key: 'C',
     range: { min: 24, max: 120 },
