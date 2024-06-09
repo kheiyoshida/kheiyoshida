@@ -29,7 +29,7 @@ export const themeGrid = createThemeGrid({
 
   // middle
   'left-middle': middle('dark'),
-  'center-middle': middle('neutral'),
+  'center-middle': top('neutral'),
   'right-middle': middle('bright'),
 
   // bottom
