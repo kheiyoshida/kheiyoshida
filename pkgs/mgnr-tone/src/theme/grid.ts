@@ -11,9 +11,9 @@ export type GridAlignment = `${GridColumn}-${GridRow}`
 export type GridDirection = 'up' | 'down' | 'left' | 'right'
 
 export type SceneShiftInfo = {
-  theme: SceneMaker | null
+  scene: SceneMaker | null
   direction: GridDirection
-  themeAlignment: GridAlignment
+  sceneAlignment: GridAlignment
 }
 
 export const createSceneGrid = (themeMakers: { [position in GridPosition]: SceneMaker }) => {
@@ -27,16 +27,16 @@ export const createSceneGrid = (themeMakers: { [position in GridPosition]: Scene
       position.move(direction)
       if (lastGridPosition === position.grid) {
         return {
-          theme: null,
+          scene: null,
           direction,
-          themeAlignment: position.theme,
+          sceneAlignment: position.theme,
         }
       } else {
         lastGridPosition = position.grid
         return {
-          theme: themeMakers[position.grid],
+          scene: themeMakers[position.grid],
           direction,
-          themeAlignment: position.theme,
+          sceneAlignment: position.theme,
         }
       }
     },
@@ -60,16 +60,16 @@ export const createGridPositionManager = (
       return translateThemeAlignment(col, row)
     },
     move: (direction: GridDirection) => {
-      if (direction === 'up') row = clampGridPositionIndex(row + 3)
-      if (direction === 'down') row = clampGridPositionIndex(row - 3)
-      if (direction === 'left') col = clampGridPositionIndex(col - 3)
-      if (direction === 'right') col = clampGridPositionIndex(col + 3)
+      if (direction === 'up') row = clampGridPositionIndex(row + 1)
+      if (direction === 'down') row = clampGridPositionIndex(row - 1)
+      if (direction === 'left') col = clampGridPositionIndex(col - 1)
+      if (direction === 'right') col = clampGridPositionIndex(col + 1)
     },
   }
 }
 
 export const clampGridPositionIndex = (number: number): GridPositionIndex =>
-  clamp(number, 2, 8) as GridPositionIndex
+  clamp(number, 1, 9) as GridPositionIndex
 
 export const translateGridPosition = (
   col: GridPositionIndex,

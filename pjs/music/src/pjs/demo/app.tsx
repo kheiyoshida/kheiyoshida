@@ -5,7 +5,7 @@ import { fireByRate, randomItemFromArray } from 'utils'
 import { createCommandBuffer, createMusic } from './music'
 import { themeGrid } from './themes'
 
-const commandBuffer = createCommandBuffer(
+const commandBuffer = createCommandBuffer(['up', 'up']
   // [...Array(50)].map(() =>
   //   randomItemFromArray(['down', 'up', 'right', 'left'] as ThemeGridDirection[])
   // )
@@ -27,8 +27,8 @@ const play = () => {
     () => {
       music.checkNextTheme(commandBuffer.command)
     },
-    '32m',
-    '16m'
+    '8m',
+    0
   )
   started = true
 }

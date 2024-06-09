@@ -1,39 +1,58 @@
-import { createSceneGrid, injectThemeAlignment } from 'mgnr-tone'
-import * as cp from './components'
+import { SceneMaker, createSceneGrid } from 'mgnr-tone'
 
 export type Character = 'dark' | 'neutral' | 'bright'
 
-const top = (character: Character) => injectThemeAlignment({
-  top: cp.freeformSynth(character),
-  center: cp.movingPad(character),
-  bottom: cp.longBass
+const devScene: SceneMaker = (source, alignment) => ({
+  top: {
+    outId: 'synth',
+    generators: [
+      {
+        generator: {
+          scale: source.createScale(),
+          note: {
+            duration: 1,
+          },
+        },
+        loops: 4,
+        onElapsed: (g) => g.mutate({ rate: 0.2, strategy: 'inPlace' }),
+        onEnded: (g) => g.resetNotes(),
+      },
+    ],
+  },
 })
 
-const middle = (character: Character) => injectThemeAlignment({
-  top: cp.defaultSynth(character),
-  center: cp.longPad(character),
-  bottom: cp.defaultDrums(character),
-})
-
-const bottom = (character: Character) => injectThemeAlignment({
-  top: character === 'dark' ? cp.longPad(character) : cp.movingPad(character),
-  center: cp.defaultBass(character),
-  bottom: cp.dnbDrums(character)
+const devScene2: SceneMaker = (source, alignment) => ({
+  top: {
+    outId: 'synth',
+    generators: [
+      {
+        generator: {
+          scale: source.createScale(),
+          note: {
+            duration: 4,
+          },
+        },
+        loops: 4,
+        onElapsed: (g) => g.mutate({ rate: 0.2, strategy: 'inPlace' }),
+        onEnded: (g) => g.resetNotes(),
+      },
+    ],
+  },
 })
 
 export const themeGrid = createSceneGrid({
   // top
-  'left-top': top('dark'),
-  'center-top': top('neutral'),
-  'right-top': top('bright'),
+  'left-top': devScene,
+  'center-top': devScene2,
+  'right-top': devScene,
 
   // middle
-  'left-middle': middle('dark'),
-  'center-middle': top('neutral'),
-  'right-middle': middle('bright'),
+  'left-middle': devScene,
+  'center-middle': devScene,
+  'right-middle': devScene,
 
   // bottom
-  'left-bottom': bottom('dark'),
-  'center-bottom': bottom('neutral'),
-  'right-bottom': bottom('bright'),
+  'left-bottom': devScene,
+  'center-bottom': devScene,
+  'right-bottom': devScene,
 })
