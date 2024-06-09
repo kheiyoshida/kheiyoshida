@@ -1,4 +1,4 @@
-import { ThemeComponentMaker, createOutlet, getMixer, injectFadeInOut } from 'mgnr-tone'
+import { SceneComponentMaker, createOutlet, getMixer, injectFadeInOut } from 'mgnr-tone'
 import { SendChannel } from 'mgnr-tone/src/mixer/Channel'
 import * as Tone from 'tone'
 import { Character } from '../themes'
@@ -13,7 +13,7 @@ import {
 const mixer = getMixer()
 
 export const defaultBass =
-  (character: Character): ThemeComponentMaker =>
+  (character: Character): SceneComponentMaker =>
   (startAt, source) => {
     const channel = mixer.createInstChannel({
       inst:
@@ -47,7 +47,7 @@ export const defaultBass =
     }
   }
 
-export const longBass: ThemeComponentMaker = (startAt, source, level, send) => {
+export const longBass: SceneComponentMaker = (startAt, source, level, send) => {
   const pad = instruments.droneBass()
   const channel = mixer.createInstChannel({
     inst: pad,

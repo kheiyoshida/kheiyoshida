@@ -1,5 +1,5 @@
 import {
-  ThemeComponentMaker,
+  SceneComponentMaker,
   clampPlayLevel,
   createGenerator,
   createOutlet,
@@ -21,7 +21,7 @@ const dmScale = createScale([30, 50, 90])
 const snareHHScale = createScale([50, 90])
 
 export const defaultDrums =
-  (character: Character): ThemeComponentMaker =>
+  (character: Character): SceneComponentMaker =>
   (startAt, _, level, send) => {
     const synCh = mixer.createInstChannel({
       inst: tightDrums(),
@@ -73,7 +73,7 @@ export const defaultDrums =
   }
 
 export const dnbDrums =
-  (character: Character): ThemeComponentMaker =>
+  (character: Character): SceneComponentMaker =>
   (startAt, _, level, send) => {
     const dmScale = createScale([30, 50, 90])
     const synCh = mixer.createInstChannel({

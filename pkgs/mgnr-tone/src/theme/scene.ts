@@ -4,26 +4,26 @@ import { clamp } from 'utils'
 import { ToneOutletPort } from '../OutletPort'
 import { getMixer } from '../commands'
 import { Mixer } from '../mixer/Mixer'
-import { ThemeAlignment, ThemeGridDirection } from './grid'
+import { GridAlignment, GridDirection } from './grid'
 
 export type Duration = `${number}m`
 
-export type ThemeMaker = (
+export type SceneMaker = (
   startAt: number,
   source: ScaleSource,
-  alignment: ThemeAlignment,
+  alignment: GridAlignment,
   ...args: unknown[]
-) => Theme
+) => Scene
 
-export type ThemeComponentPosition = 'top' | 'bottom' | 'right' | 'left' | 'center'
+export type SceneComponentPosition = 'top' | 'bottom' | 'right' | 'left' | 'center'
 
-export type Theme = {
-  [k in ThemeComponentPosition]: ThemeComponent
-} & { updateAlignment(direction: ThemeGridDirection): void }
+export type Scene = {
+  [k in SceneComponentPosition]: SceneComponent
+} & { updateAlignment(direction: GridDirection): void }
 
-export type ThemeComponentMakerMap = { [k in ThemeComponentPosition]?: ThemeComponentMaker }
+export type ThemeComponentMakerMap = { [k in SceneComponentPosition]?: SceneComponentMaker }
 
-const makePseudoComponent = (): ThemeComponent => ({
+const makePseudoComponent = (): SceneComponent => ({
   playMore: () => undefined,
   playLess: () => undefined,
   fadeIn: () => undefined,
@@ -31,10 +31,10 @@ const makePseudoComponent = (): ThemeComponent => ({
 })
 
 export const injectThemeAlignment =
-  (components: Omit<ThemeComponentMakerMap, 'updateAlignment'>): ThemeMaker =>
+  (components: Omit<ThemeComponentMakerMap, 'updateAlignment'>): SceneMaker =>
   (startAt, source, alignment, ...rest) => {
     const initialLevels = determineInitialLevel(alignment)
-    const keys: ThemeComponentPosition[] = ['top', 'bottom', 'right', 'left', 'center']
+    const keys: SceneComponentPosition[] = ['top', 'bottom', 'right', 'left', 'center']
     const { top, bottom, left, right, center } = Object.fromEntries(
       keys.map((k) => {
         const component = components[k]
@@ -44,7 +44,7 @@ export const injectThemeAlignment =
         ]
       })
     )
-    const updateAlignment = (direction: ThemeGridDirection) => {
+    const updateAlignment = (direction: GridDirection) => {
       if (direction === 'up') {
         top.playMore()
         bottom.playLess()
@@ -65,8 +65,8 @@ export const injectThemeAlignment =
   }
 
 export const determineInitialLevel = (
-  alignment: ThemeAlignment
-): Record<ThemeComponentPosition, ComponentPlayLevel> => {
+  alignment: GridAlignment
+): Record<SceneComponentPosition, ComponentPlayLevel> => {
   return {
     top: alignment.includes('top') ? 4 : alignment.includes('bottom') ? 2 : 3,
     bottom: alignment.includes('bottom') ? 4 : alignment.includes('top') ? 2 : 3,
@@ -86,14 +86,14 @@ export const makeLevelMap = (values: number[]): Record<ComponentPlayLevel, numbe
   5: values[4],
 })
 
-export type ThemeComponentMaker = (
+export type SceneComponentMaker = (
   startAt: number,
   source: ScaleSource,
   initialLevel: ComponentPlayLevel,
   ...args: unknown[]
-) => ThemeComponent
+) => SceneComponent
 
-export type ThemeComponent = {
+export type SceneComponent = {
   playMore: () => void
   playLess: () => void
   fadeIn: (duration: Duration) => void
@@ -104,7 +104,7 @@ export const injectFadeInOut = <MW extends Middlewares>(
   channel: ReturnType<Mixer['createInstChannel']>,
   ports: Array<ToneOutletPort<Middlewares> | ToneOutletPort<MW>>,
   scale: Scale
-): Pick<ThemeComponent, 'fadeIn' | 'fadeOut'> => {
+): Pick<SceneComponent, 'fadeIn' | 'fadeOut'> => {
   return {
     fadeIn: (duration) => channel.dynamicVolumeFade(channel.volumeRangeDiff, duration),
     fadeOut: (duration, ) => {
@@ -118,7 +118,7 @@ export const injectFadeInOut = <MW extends Middlewares>(
   }
 }
 
-const directionMap: Record<ThemeGridDirection, [ThemeComponentPosition, ThemeComponentPosition]> = {
+const directionMap: Record<GridDirection, [SceneComponentPosition, SceneComponentPosition]> = {
   up: ['top', 'bottom'], // inDirection, against
   down: ['bottom', 'top'],
   left: ['left', 'right'],
@@ -141,9 +141,9 @@ export const makeFadeOutTheme =
     timing = '@4m',
     delay = '4m'
   ) =>
-  (theme: Theme, direction: ThemeGridDirection) => {
+  (theme: Scene, direction: GridDirection) => {
     const [inDirection, againstDirection] = directionMap[direction]
-    const keys: ThemeComponentPosition[] = ['top', 'left', 'right', 'bottom', 'center']
+    const keys: SceneComponentPosition[] = ['top', 'left', 'right', 'bottom', 'center']
     const fadeOut = () => {
       keys.forEach((k) => {
         const v = theme[k]
@@ -171,9 +171,9 @@ export const makeFadeInTheme =
     timing = '@4m',
     delay = '4m'
   ) =>
-  (theme: Theme, direction: ThemeGridDirection) => {
+  (theme: Scene, direction: GridDirection) => {
     const [inDirection, againstDirection] = directionMap[direction]
-    const keys: ThemeComponentPosition[] = ['top', 'left', 'right', 'bottom', 'center']
+    const keys: SceneComponentPosition[] = ['top', 'left', 'right', 'bottom', 'center']
     const fadeIn = (t: number) => {
       keys.forEach((k) => {
         const v = theme[k]

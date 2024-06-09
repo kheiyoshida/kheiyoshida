@@ -1,4 +1,4 @@
-import { createThemeGrid, injectThemeAlignment } from 'mgnr-tone'
+import { createSceneGrid, injectThemeAlignment } from 'mgnr-tone'
 import * as cp from './components'
 
 export type Character = 'dark' | 'neutral' | 'bright'
@@ -21,7 +21,7 @@ const bottom = (character: Character) => injectThemeAlignment({
   bottom: cp.dnbDrums(character)
 })
 
-export const themeGrid = createThemeGrid({
+export const themeGrid = createSceneGrid({
   // top
   'left-top': top('dark'),
   'center-top': top('neutral'),

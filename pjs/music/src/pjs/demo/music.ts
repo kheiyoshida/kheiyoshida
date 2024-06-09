@@ -1,8 +1,8 @@
 import {
-  Theme,
-  ThemeGrid,
-  ThemeGridDirection,
-  ThemeShiftInfo,
+  Scene,
+  SceneGrid,
+  GridDirection,
+  SceneShiftInfo,
   createScaleSource,
   getMixer,
   makeFadeInTheme,
@@ -11,23 +11,23 @@ import {
 import * as Tone from 'tone'
 import { randomItemFromArray } from 'utils'
 
-export const createCommandBuffer = (initialCommands: ThemeGridDirection[] = []) => {
-  let commands: ThemeGridDirection[] = initialCommands
+export const createCommandBuffer = (initialCommands: GridDirection[] = []) => {
+  let commands: GridDirection[] = initialCommands
   return {
-    get command(): ThemeGridDirection | null {
+    get command(): GridDirection | null {
       return commands.shift() || null
     },
-    push(value: ThemeGridDirection) {
+    push(value: GridDirection) {
       commands.push(value)
     },
-    set(value: ThemeGridDirection) {
+    set(value: GridDirection) {
       commands = [value]
     },
   }
 }
 
-export const createMusic = (themeGrid: ThemeGrid) => {
-  let currentTheme: Theme
+export const createMusic = (themeGrid: SceneGrid) => {
+  let currentTheme: Scene
   const scale = createScaleSource({
     key: randomItemFromArray(['A', 'D', 'B']),
     range: { min: 20, max: 100 },
@@ -60,14 +60,14 @@ export const createMusic = (themeGrid: ThemeGrid) => {
     }, '@4m')
   }
 
-  function checkNextTheme(command: ThemeGridDirection | null) {
+  function checkNextTheme(command: GridDirection | null) {
     if (!command) return
     const shift = themeGrid.move(command)
-    // console.log('shift', shift)
+    console.log('shift', shift)
     applyNextTheme(shift)
   }
 
-  function applyNextTheme(shift: ThemeShiftInfo) {
+  function applyNextTheme(shift: SceneShiftInfo) {
     if (shift.theme !== null) {
       fadeOutPreviousTheme(shift.direction)
       fadeInNextTheme(shift)
@@ -78,17 +78,17 @@ export const createMusic = (themeGrid: ThemeGrid) => {
 
   const fadeOutTheme = makeFadeOutTheme()
 
-  function fadeOutPreviousTheme(direction: ThemeGridDirection) {
+  function fadeOutPreviousTheme(direction: GridDirection) {
     fadeOutTheme(currentTheme, direction)
   }
 
   const fadeInTheme = makeFadeInTheme()
-  function fadeInNextTheme({ theme, themeAlignment, direction }: ThemeShiftInfo) {
+  function fadeInNextTheme({ theme, themeAlignment, direction }: SceneShiftInfo) {
     currentTheme = theme!(getNextBar(), scale, themeAlignment, sendTrack)
     fadeInTheme(currentTheme, direction)
   }
 
-  function applyThemeAlignment(direction: ThemeGridDirection) {
+  function applyThemeAlignment(direction: GridDirection) {
     currentTheme.updateAlignment(direction)
   }
 

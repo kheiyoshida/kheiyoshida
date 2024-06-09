@@ -1,29 +1,29 @@
 import { IntRange, clamp } from 'utils'
-import { ThemeMaker } from './theme'
+import { SceneMaker } from './scene'
 
 export type GridPositionIndex = IntRange<1, 10>
 
-export type ThemeGrid = ReturnType<typeof createThemeGrid>
-export type ThemeGridRow = 'top' | 'middle' | 'bottom'
-export type ThemeGridColumn = 'left' | 'center' | 'right'
-export type ThemeGridPosition = `${ThemeGridColumn}-${ThemeGridRow}`
-export type ThemeAlignment = `${ThemeGridColumn}-${ThemeGridRow}`
-export type ThemeGridDirection = 'up' | 'down' | 'left' | 'right'
+export type SceneGrid = ReturnType<typeof createSceneGrid>
+export type GridRow = 'top' | 'middle' | 'bottom'
+export type GridColumn = 'left' | 'center' | 'right'
+export type GridPosition = `${GridColumn}-${GridRow}`
+export type GridAlignment = `${GridColumn}-${GridRow}`
+export type GridDirection = 'up' | 'down' | 'left' | 'right'
 
-export type ThemeShiftInfo = {
-  theme: ThemeMaker | null
-  direction: ThemeGridDirection
-  themeAlignment: ThemeAlignment
+export type SceneShiftInfo = {
+  theme: SceneMaker | null
+  direction: GridDirection
+  themeAlignment: GridAlignment
 }
 
-export const createThemeGrid = (themeMakers: { [position in ThemeGridPosition]: ThemeMaker }) => {
+export const createSceneGrid = (themeMakers: { [position in GridPosition]: SceneMaker }) => {
   const position = createGridPositionManager()
-  let lastGridPosition: ThemeGridPosition = position.grid
+  let lastGridPosition: GridPosition = position.grid
   return {
     getInitialTheme: () => {
       return themeMakers[lastGridPosition]
     },
-    move: (direction: ThemeGridDirection): ThemeShiftInfo => {
+    move: (direction: GridDirection): SceneShiftInfo => {
       position.move(direction)
       if (lastGridPosition === position.grid) {
         return {
@@ -53,13 +53,13 @@ export const createGridPositionManager = (
   let col: GridPositionIndex = initialCol
   let row: GridPositionIndex = initialRow
   return {
-    get grid(): ThemeGridPosition {
+    get grid(): GridPosition {
       return translateGridPosition(col, row)
     },
-    get theme(): ThemeGridPosition {
+    get theme(): GridPosition {
       return translateThemeAlignment(col, row)
     },
-    move: (direction: ThemeGridDirection) => {
+    move: (direction: GridDirection) => {
       if (direction === 'up') row = clampGridPositionIndex(row + 3)
       if (direction === 'down') row = clampGridPositionIndex(row - 3)
       if (direction === 'left') col = clampGridPositionIndex(col - 3)
@@ -74,17 +74,17 @@ export const clampGridPositionIndex = (number: number): GridPositionIndex =>
 export const translateGridPosition = (
   col: GridPositionIndex,
   row: GridPositionIndex
-): ThemeGridPosition => {
+): GridPosition => {
   return `${translateGridColPosition(col)}-${translateGriwRowPosition(row)}`
 }
 
-const translateGridColPosition = (index: number): ThemeGridColumn => {
+const translateGridColPosition = (index: number): GridColumn => {
   if (index < 4) return 'left'
   if (index < 7) return 'center'
   return 'right'
 }
 
-const translateGriwRowPosition = (index: number): ThemeGridRow => {
+const translateGriwRowPosition = (index: number): GridRow => {
   if (index < 4) return 'bottom'
   if (index < 7) return 'middle'
   return 'top'
@@ -93,11 +93,11 @@ const translateGriwRowPosition = (index: number): ThemeGridRow => {
 export const translateThemeAlignment = (
   col: GridPositionIndex,
   row: GridPositionIndex
-): ThemeGridPosition => {
+): GridPosition => {
   return `${translateThemeColPosition(col)}-${translateThemeRowPosition(row)}`
 }
 
-const translateThemeColPosition = (index: number): ThemeGridColumn => {
+const translateThemeColPosition = (index: number): GridColumn => {
   const i = (index - 1) % 3
   if (i === 0) return 'left'
   if (i === 1) return 'center'
@@ -105,7 +105,7 @@ const translateThemeColPosition = (index: number): ThemeGridColumn => {
   throw Error(`unkwon index ${index}`)
 }
 
-const translateThemeRowPosition = (index: number): ThemeGridRow => {
+const translateThemeRowPosition = (index: number): GridRow => {
   const i = (index - 1) % 3
   if (i === 0) return 'bottom'
   if (i === 1) return 'middle'

@@ -1,4 +1,4 @@
-import { ThemeGridDirection, ThemeGridPosition } from 'mgnr-tone'
+import { GridDirection, GridPosition } from 'mgnr-tone'
 import { useEffect, useState } from 'react'
 import * as Tone from 'tone'
 import { fireByRate, randomItemFromArray } from 'utils'
@@ -48,7 +48,7 @@ export default () => {
   )
 }
 
-const commands: ThemeGridDirection[] = ['up', 'down', 'right', 'left']
+const commands: GridDirection[] = ['up', 'down', 'right', 'left']
 
 const Commands = () => {
   return (
@@ -63,8 +63,8 @@ const Commands = () => {
 }
 
 const Grid = () => {
-  const [position, setPosition] = useState<ThemeGridPosition | null>('center-middle')
-  const [alignment, setAlignment] = useState<ThemeGridPosition | null>('center-middle')
+  const [position, setPosition] = useState<GridPosition | null>('center-middle')
+  const [alignment, setAlignment] = useState<GridPosition | null>('center-middle')
   useEffect(() => {
     setInterval(() => {
       if (fireByRate(0.5)) {
@@ -98,7 +98,7 @@ const MiniGrid = ({
   alignment,
   matchPosition,
 }: {
-  alignment: ThemeGridPosition | null
+  alignment: GridPosition | null
   matchPosition: boolean
 }) => {
   return (
@@ -129,7 +129,7 @@ const MiniGrid = ({
 }
 
 // prettier-ignore
-const positions: ThemeGridPosition[] = [
+const positions: GridPosition[] = [
   'left-top','center-top','right-top',
   'left-middle','center-middle','right-middle',
   'left-bottom','center-bottom','right-bottom',

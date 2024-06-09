@@ -1,7 +1,7 @@
-import { ThemeAlignment } from './grid'
-import { determineInitialLevel } from './theme'
+import { GridAlignment } from './grid'
+import { determineInitialLevel } from './scene'
 
-test.each<[ThemeAlignment, ReturnType<typeof determineInitialLevel>]>([
+test.each<[GridAlignment, ReturnType<typeof determineInitialLevel>]>([
   [
     'center-bottom',
     {

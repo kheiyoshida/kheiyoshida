@@ -1,6 +1,6 @@
 import {
   ComponentPlayLevel,
-  ThemeComponentMaker,
+  SceneComponentMaker,
   clampPlayLevel,
   createOutlet,
   getMixer,
@@ -16,7 +16,7 @@ import { SendChannel } from 'mgnr-tone/src/mixer/Channel'
 const mixer = getMixer()
 
 export const defaultSynth =
-  (character: Character): ThemeComponentMaker =>
+  (character: Character): SceneComponentMaker =>
   (startAt, source, level, send) => {
     const delayLevel = (l: ComponentPlayLevel) => (l >= 4 ? 0.4 : 0.3)
     const delay = new Tone.PingPongDelay('8n.', delayLevel(level))
@@ -73,7 +73,7 @@ export const defaultSynth =
   }
 
 export const freeformSynth =
-  (character: Character): ThemeComponentMaker =>
+  (character: Character): SceneComponentMaker =>
   (startAt, source, level, send) => {
     const delayLevel = makeLevelMap([0.1, 0.2, 0.3, 0.4, 0.5])
     const delay = new Tone.PingPongDelay('2n', delayLevel[level])

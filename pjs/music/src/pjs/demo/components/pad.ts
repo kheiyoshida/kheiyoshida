@@ -1,6 +1,6 @@
 import {
   ComponentPlayLevel,
-  ThemeComponentMaker,
+  SceneComponentMaker,
   clampPlayLevel,
   createGenerator,
   createOutlet,
@@ -23,7 +23,7 @@ import { SendChannel } from 'mgnr-tone/src/mixer/Channel'
 const mixer = getMixer()
 
 export const longPad =
-  (character: Character): ThemeComponentMaker =>
+  (character: Character): SceneComponentMaker =>
   (startAt, source, level, send) => {
     const synCh = mixer.createInstChannel({
       inst: character === 'bright' ? instruments.nuancePad() : instruments.darkPad(),
@@ -57,7 +57,7 @@ export const longPad =
   }
 
 export const movingPad =
-  (character: Character): ThemeComponentMaker =>
+  (character: Character): SceneComponentMaker =>
   (startAt, source, level, send) => {
     const synCh = mixer.createInstChannel({
       inst: character === 'bright' ? instruments.nuancePad() : instruments.darkPad(),
@@ -90,7 +90,7 @@ export const movingPad =
     }
   }
 
-export const darkMovingPad: ThemeComponentMaker = (startAt, source, level) => {
+export const darkMovingPad: SceneComponentMaker = (startAt, source, level) => {
   const delayLevel = (l: ComponentPlayLevel) => (l >= 4 ? 0.4 : 0.3)
   const delay = new Tone.PingPongDelay('8n.', delayLevel(level))
   const synCh = mixer.createInstChannel({
@@ -135,7 +135,7 @@ export const darkMovingPad: ThemeComponentMaker = (startAt, source, level) => {
   }
 }
 
-export const harmonisedPad: ThemeComponentMaker = (startAt, source, level) => {
+export const harmonisedPad: SceneComponentMaker = (startAt, source, level) => {
   const delayLevel = (l: ComponentPlayLevel) => (l >= 4 ? 0.4 : 0.3)
   const delay = new Tone.PingPongDelay('8n.', delayLevel(level))
   const density = makeLevelMap([0.5, 0.5, 0.6, 0.7, 0.8])

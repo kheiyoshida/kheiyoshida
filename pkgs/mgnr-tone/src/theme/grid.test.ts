@@ -1,15 +1,15 @@
 import {
   GridPositionIndex,
-  ThemeGridPosition,
+  GridPosition,
   clampGridPositionIndex,
   createGridPositionManager,
-  createThemeGrid,
+  createSceneGrid,
   translateGridPosition,
   translateThemeAlignment,
 } from './grid'
 
-test(`${createThemeGrid.name}`, () => {
-  const grid = createThemeGrid({
+test(`${createSceneGrid.name}`, () => {
+  const grid = createSceneGrid({
     'left-top': jest.fn(),
     'left-middle': jest.fn(),
     'left-bottom': jest.fn(),
@@ -70,7 +70,7 @@ test(`${clampGridPositionIndex.name}`, () => {
   expect(clampGridPositionIndex(10)).toBe(9)
 })
 
-test.each<[GridPositionIndex, GridPositionIndex, ThemeGridPosition]>([
+test.each<[GridPositionIndex, GridPositionIndex, GridPosition]>([
   [5, 5, 'center-middle'],
   [3, 5, 'left-middle'],
   [8, 8, 'right-top'],
@@ -80,7 +80,7 @@ test.each<[GridPositionIndex, GridPositionIndex, ThemeGridPosition]>([
   expect(translateGridPosition(col, row)).toBe(expected)
 })
 
-test.each<[GridPositionIndex, GridPositionIndex, ThemeGridPosition]>([
+test.each<[GridPositionIndex, GridPositionIndex, GridPosition]>([
   [1, 1, 'left-bottom'],
   [2, 2, 'center-middle'],
   [3, 3, 'right-top'],
