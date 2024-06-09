@@ -1,58 +1,44 @@
-import { SceneMaker, createSceneGrid } from 'mgnr-tone'
+import { SceneComponentMaker, SceneMaker, createSceneGrid } from 'mgnr-tone'
+import * as cp from './components'
 
 export type Character = 'dark' | 'neutral' | 'bright'
 
-const devScene: SceneMaker = (source, alignment) => ({
-  top: {
-    outId: 'synth',
-    generators: [
-      {
-        generator: {
-          scale: source.createScale(),
-          note: {
-            duration: 1,
-          },
-        },
-        loops: 4,
-        onElapsed: (g) => g.mutate({ rate: 0.2, strategy: 'inPlace' }),
-        onEnded: (g) => g.resetNotes(),
-      },
-    ],
-  },
+export type AvailableOutlets = 'synth' | 'pad' | 'drums' | 'bass'
+
+export type DemoComponentMaker = SceneComponentMaker<AvailableOutlets>
+export type DemoSceneMaker = SceneMaker<AvailableOutlets>
+
+const top: DemoSceneMaker = (source, alignment) => ({
+  top: cp.movingPad(source, 3),
+  left: cp.longBass(source, 3),
+  right: cp.defaultSynth(source, 3),
 })
 
-const devScene2: SceneMaker = (source, alignment) => ({
-  top: {
-    outId: 'synth',
-    generators: [
-      {
-        generator: {
-          scale: source.createScale(),
-          note: {
-            duration: 4,
-          },
-        },
-        loops: 4,
-        onElapsed: (g) => g.mutate({ rate: 0.2, strategy: 'inPlace' }),
-        onEnded: (g) => g.resetNotes(),
-      },
-    ],
-  },
+const middle: DemoSceneMaker = (source, alignment) => ({
+  left: cp.defaultBass(source, 3),
+  // right: cp.defaultSynth(source, 3),
+  bottom: cp.defaultDrums(source, 3),
+})
+
+const bottom: DemoSceneMaker = (source, alignment) => ({
+  left: cp.defaultBass(source, 3),
+  top: cp.longPad(source, 3),
+  bottom: cp.dnbDrums(source, 3),
 })
 
 export const themeGrid = createSceneGrid({
   // top
-  'left-top': devScene,
-  'center-top': devScene2,
-  'right-top': devScene,
+  'left-top': top,
+  'center-top': top,
+  'right-top': top,
 
   // middle
-  'left-middle': devScene,
-  'center-middle': devScene,
-  'right-middle': devScene,
+  'left-middle': middle,
+  'center-middle': middle,
+  'right-middle': middle,
 
   // bottom
-  'left-bottom': devScene,
-  'center-bottom': devScene,
-  'right-bottom': devScene,
+  'left-bottom': bottom,
+  'center-bottom': bottom,
+  'right-bottom': bottom,
 })

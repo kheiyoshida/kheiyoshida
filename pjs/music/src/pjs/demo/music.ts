@@ -1,6 +1,5 @@
 import {
   GridDirection,
-  Scene,
   SceneGrid,
   SceneShiftInfo,
   createMusicState,
@@ -8,8 +7,11 @@ import {
   createScaleSource,
   getMixer,
 } from 'mgnr-tone'
+import { ToneOutlet } from 'mgnr-tone/src/Outlet'
 import * as Tone from 'tone'
 import { randomItemFromArray } from 'utils'
+import * as instruments from './components/instruments'
+import { AvailableOutlets } from './themes'
 
 export const createCommandBuffer = (initialCommands: GridDirection[] = []) => {
   let commands: GridDirection[] = initialCommands
@@ -27,7 +29,6 @@ export const createCommandBuffer = (initialCommands: GridDirection[] = []) => {
 }
 
 export const createMusic = (sceneGrid: SceneGrid) => {
-  
   const scale = createScaleSource({
     key: randomItemFromArray(['A', 'D', 'B']),
     range: { min: 20, max: 100 },
@@ -35,18 +36,45 @@ export const createMusic = (sceneGrid: SceneGrid) => {
   })
 
   const sendTrack = getMixer().createSendChannel({
-    effects: [
-      // new Tone.Reverb(0.5),
-      new Tone.Filter(8000, 'lowpass'),
-    ],
+    effects: [new Tone.Reverb(0.5), new Tone.Filter(8000, 'lowpass')],
   })
+
   const mixer = getMixer()
+
+  // theme
   const synCh = mixer.createInstChannel({
-    inst: new Tone.MonoSynth(),
+    inst: instruments.brightLead(),
+    effects: [
+      new Tone.PingPongDelay(0.3)
+    ],
+    volumeRange: {
+      max: -20,
+      min: -40,
+    },
   })
+  const padCh = mixer.createInstChannel({
+    inst: instruments.darkPad(),
+  })
+  const bassCh = mixer.createInstChannel({
+    inst: instruments.darkBass(),
+    volumeRange: {
+      max: -20,
+      min: -40,
+    },
+  })
+  const drumsCh = mixer.createInstChannel({
+    inst: instruments.beatDrums(),
+  })
+
   mixer.connect(synCh, sendTrack, 0.2)
-  const outlets = {
-    synth: createOutlet(synCh.inst, Tone.Transport.toSeconds('16n'))
+  mixer.connect(padCh, sendTrack, 0.5)
+  mixer.connect(drumsCh, sendTrack, 0.2)
+
+  const outlets: Record<AvailableOutlets, ToneOutlet> = {
+    synth: createOutlet(synCh.inst, Tone.Transport.toSeconds('16n')),
+    pad: createOutlet(padCh.inst),
+    drums: createOutlet(drumsCh.inst, Tone.Transport.toSeconds('16n')),
+    bass: createOutlet(bassCh.inst, Tone.Transport.toSeconds('16n')),
   }
 
   const state = createMusicState(outlets)
