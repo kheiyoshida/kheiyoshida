@@ -54,6 +54,10 @@ export const createMusic = (sceneGrid: SceneGrid) => {
   })
   const padCh = mixer.createInstChannel({
     inst: instruments.darkPad(),
+    effects: [
+      new Tone.Filter(300, 'highpass'),
+      new Tone.PingPongDelay(0.2),
+    ]
   })
   const bassCh = mixer.createInstChannel({
     inst: instruments.darkBass(),
