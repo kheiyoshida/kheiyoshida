@@ -1,7 +1,7 @@
-import { Scale, changeSequenceLength, createGenerator, pingpongSequenceLength } from 'mgnr-tone'
+import { GeneratorConf, Scale, changeSequenceLength, createGenerator, pingpongSequenceLength } from 'mgnr-tone'
 
-export const generateLongSequences = (scale: Scale) => {
-  const generator = createGenerator({
+export const generateLongSequences = (scale: Scale):GeneratorConf => 
+  ({
     scale,
     sequence: {
       length: 16,
@@ -16,8 +16,6 @@ export const generateLongSequences = (scale: Scale) => {
       },
     },
   })
-  return generator
-}
 
 export const addHarmonyToLongSequence = (scale: Scale) =>
   createGenerator({
@@ -54,8 +52,8 @@ export const movingSequence = (scale: Scale) =>
     },
   })
 
-export const randomSequence = (scale: Scale, density: number) =>
-  createGenerator({
+export const randomSequence = (scale: Scale, density: number):GeneratorConf =>
+  ({
     scale,
     sequence: {
       length: 12,
@@ -88,8 +86,8 @@ export const randomBassline = (scale: Scale) =>
     },
   })
 
-export const randomise = (scale: Scale) =>
-  createGenerator({
+export const randomise = (scale: Scale):GeneratorConf =>
+  ({
     scale,
     sequence: {
       length: 10,
@@ -105,8 +103,8 @@ export const randomise = (scale: Scale) =>
     },
   })
 
-export const strictArpegio = (scale: Scale) =>
-  createGenerator({
+export const strictArpegio = (scale: Scale):GeneratorConf =>
+  ({
     scale,
     sequence: {
       length: 12,
@@ -121,7 +119,5 @@ export const strictArpegio = (scale: Scale) =>
     note: {
       duration: 1,
     },
-    middlewares: {
-      changeLength: pingpongSequenceLength('extend'),
-    },
+    
   })

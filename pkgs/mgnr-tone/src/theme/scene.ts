@@ -3,33 +3,30 @@ import {
   Middlewares,
   ScaleSource,
   SequenceGenerator,
-  SequenceNoteMap
+  SequenceNoteMap,
 } from 'mgnr-core'
-import { GridAlignment, GridDirection } from './grid'
+import { GridAlignment } from './grid'
+import { clamp } from 'utils'
 
 export type Duration = `${number}m`
 
-export type SceneMaker = (
+export type SceneMaker<AvailableOutlets = string> = (
   source: ScaleSource,
-  alignment: GridAlignment,
-) => Scene
+  alignment: GridAlignment
+) => Scene<AvailableOutlets>
 
 export type SceneComponentPosition = 'top' | 'bottom' | 'right' | 'left' | 'center'
 
-export type Scene = {
-  [k in SceneComponentPosition]?: SceneComponent
-} 
+export type Scene<AvailableOutlets> = {
+  [k in SceneComponentPosition]?: SceneComponent<AvailableOutlets>
+}
 
 // & { updateAlignment(direction: GridDirection): void }
 
-export type ThemeComponentMakerMap = { [k in SceneComponentPosition]?: SceneComponentMaker }
-
-export type SceneComponentMaker = (
-  startAt: number,
+export type SceneComponentMaker<AvailableOutlets = string> = (
   source: ScaleSource,
-
-  ...args: unknown[]
-) => SceneComponent
+  level: ComponentPlayLevel
+) => SceneComponent<AvailableOutlets>
 
 export type GeneratorSpec<MW extends Middlewares = Middlewares> = {
   generator: GeneratorConf
@@ -40,13 +37,10 @@ export type GeneratorSpec<MW extends Middlewares = Middlewares> = {
   onEnded: (g: SequenceGenerator<MW>) => void
 }
 
-export type SceneComponent = {
-  outId: string
+export type SceneComponent<AvailableOutlets = string> = {
+  outId: AvailableOutlets
   generators: GeneratorSpec[]
-  // playMore: () => void
-  // playLess: () => void
 }
-
 
 // const makePseudoComponent = (): SceneComponent => ({
 //   playMore: () => undefined,
@@ -102,14 +96,14 @@ export const determineInitialLevel = (
   }
 }
 
-// export const clampPlayLevel = (l: number) => clamp(l, 1, 5) as ComponentPlayLevel
-// export const makeLevelMap = (values: number[]): Record<ComponentPlayLevel, number> => ({
-//   1: values[0],
-//   2: values[1],
-//   3: values[2],
-//   4: values[3],
-//   5: values[4],
-// })
+export const clampPlayLevel = (l: number) => clamp(l, 1, 5) as ComponentPlayLevel
+export const makeLevelMap = (values: number[]): Record<ComponentPlayLevel, number> => ({
+  1: values[0],
+  2: values[1],
+  3: values[2],
+  4: values[3],
+  5: values[4],
+})
 
 // export const injectFadeInOut = <MW extends Middlewares>(
 //   channel: ReturnType<Mixer['createInstChannel']>,
