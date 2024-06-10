@@ -49,26 +49,42 @@ export const createMusic = (sceneGrid: SceneGrid) => {
     effects: [new Tone.PingPongDelay(0.3)],
     initialVolume: -40,
     volumeRange: {
-      max: -20,
+      max: -10,
       min: -40,
     },
   })
   const padCh = mixer.createInstChannel({
     inst: instruments.darkPad(),
     initialVolume: -40,
+    volumeRange: {
+      max: -10,
+      min: -40,
+    },
     effects: [new Tone.Filter(300, 'highpass'), new Tone.PingPongDelay(0.2)],
   })
   const bassCh = mixer.createInstChannel({
     inst: instruments.darkBass(),
     initialVolume: -40,
     volumeRange: {
-      max: -20,
+      max: -12,
+      min: -40,
+    },
+  })
+  const droneBassCh = mixer.createInstChannel({
+    inst: instruments.droneBass(),
+    initialVolume: -40,
+    volumeRange: {
+      max: -12,
       min: -40,
     },
   })
   const drumsCh = mixer.createInstChannel({
     inst: instruments.beatDrums(),
     initialVolume: -40,
+    volumeRange: {
+      max: -16,
+      min: -40,
+    },
   })
 
   mixer.connect(synCh, sendTrack, 0.2)
@@ -80,6 +96,7 @@ export const createMusic = (sceneGrid: SceneGrid) => {
     pad: padCh,
     drums: drumsCh,
     bass: bassCh,
+    droneBass: droneBassCh,
   }
   const handlefade = makeFader(channels)
 
@@ -88,6 +105,7 @@ export const createMusic = (sceneGrid: SceneGrid) => {
     pad: createOutlet(padCh.inst),
     drums: createOutlet(drumsCh.inst, Tone.Transport.toSeconds('16n')),
     bass: createOutlet(bassCh.inst, Tone.Transport.toSeconds('16n')),
+    droneBass: createOutlet(droneBassCh.inst, Tone.Transport.toSeconds('16n')),
   }
 
   const state = createMusicState(outlets)
@@ -102,23 +120,15 @@ export const createMusic = (sceneGrid: SceneGrid) => {
   function checkNextTheme(command: GridDirection | null) {
     if (!command) return
     const shift = sceneGrid.move(command)
-    console.log('shift', shift)
-    console.log(state.active)
-    console.log(state.active.left!.ports.map(p => p.numOfLoops))
     applyNextTheme(shift)
   }
 
   function applyNextTheme(shift: SceneShiftInfo) {
     if (shift.makeScene !== null) {
-      fadeOutPreviousTheme(shift.direction)
       fadeInNextTheme(shift)
     } else {
       applyThemeAlignment(shift.direction)
     }
-  }
-
-  function fadeOutPreviousTheme(direction: GridDirection) {
-    // fadeOutTheme(currentTheme, direction)
   }
 
   function fadeInNextTheme({ makeScene, sceneAlignment, direction }: SceneShiftInfo) {

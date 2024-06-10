@@ -6,6 +6,22 @@ import { backHH, dnb, fill, kick4 } from './patterns/sequences'
 const dmScale = createScale([30, 50, 90])
 const snareHHScale = createScale([50, 90])
 
+export const onlyKicks: DemoComponentMaker = (_, level) => {
+
+  return {
+    outId: 'drums',
+    generators: [
+      {
+        generator: kicks(dmScale, 0.6),
+        notes: kick4,
+        loops: 2,
+        onElapsed: () => undefined,
+        onEnded: (g) => g.resetNotes(kick4),
+      },
+    ],
+  }
+}
+
 export const defaultDrums: DemoComponentMaker = (_, level) => {
   const density = makeLevelMap([0.3, 0.3, 0.4, 0.5, 0.5])
   return {
@@ -13,13 +29,15 @@ export const defaultDrums: DemoComponentMaker = (_, level) => {
     generators: [
       {
         generator: kicks(dmScale, 0.6),
-        loops: 4,
+        notes: kick4,
+        loops: 2,
         onElapsed: (g) => g.mutate({ rate: 0.1, strategy: 'inPlace' }),
         onEnded: (g) => g.resetNotes(kick4),
       },
       {
         generator: randomFill(snareHHScale, density[level]),
-        loops: 4,
+        notes: backHH,
+        loops: 2,
         onElapsed: () => undefined,
         onEnded: (g) => g.resetNotes(backHH),
       },

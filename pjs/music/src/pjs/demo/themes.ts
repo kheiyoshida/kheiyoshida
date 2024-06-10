@@ -3,22 +3,23 @@ import * as cp from './components'
 
 export type Character = 'dark' | 'neutral' | 'bright'
 
-export type AvailableOutlets = 'synth' | 'pad' | 'drums' | 'bass'
+export type AvailableOutlets = 'synth' | 'pad' | 'drums' | 'bass' | 'droneBass'
 
 export type DemoComponentMaker = SceneComponentMaker<AvailableOutlets>
 export type DemoSceneMaker = SceneMaker<AvailableOutlets>
 
 const top: DemoSceneMaker = (source, alignment) => ({
-  // top: cp.movingPad(source, 3),
+  top: cp.movingPad(source, 3),
   left: cp.longBass(source, 3),
-  // right: cp.defaultSynth(source, 3),
+  right: cp.defaultSynth(source, 3),
+  // bottom: cp.onlyKicks(source, 3),
 })
 
 const middle: DemoSceneMaker = (source, alignment) => ({
   // top: cp.longPad(source, 3),
   left: cp.defaultBass(source, 3),
   // right: cp.defaultSynth(source, 3),
-  // bottom: cp.defaultDrums(source, 3),
+  bottom: cp.defaultDrums(source, 3),
 })
 
 const bottom: DemoSceneMaker = (source, alignment) => ({

@@ -77,10 +77,9 @@ it(`should override port when there's already an active ones`, () => {
   )
 
   expect(state.active.top).not.toBeNull()
-  expect(state.active.top?.ports).toHaveLength(2)
+  expect(state.active.top?.ports).toHaveLength(1)
   expect(state.active.top?.ports[0].numOfLoops).toBe(0) // -> becomes 2 on next onElapsed
   expect(spyOverride).toHaveBeenCalledWith(state.active.top?.ports[0], newSpec)
-  expect(state.active.top?.ports[1].numOfLoops).toBe(0) // stops
 })
 
 it(`should deactivate the component if it's absent in the next scene`, () => {

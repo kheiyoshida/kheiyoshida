@@ -1,4 +1,4 @@
-import { Middlewares, createGenerator } from 'mgnr-core'
+import { Middlewares, SequenceGenerator, createGenerator } from 'mgnr-core'
 import * as Transport from '../tone-wrapper/Transport'
 import { ToneOutlet } from '../Outlet'
 import { ToneOutletPort } from '../OutletPort'
@@ -35,32 +35,34 @@ export const createMusicState = (outlets: Record<string, ToneOutlet>) => {
         }
       }
     })
+    console.log(inOut)
     return inOut
   }
 
   const applyComponent = (
     position: SceneComponentPosition,
-    component: SceneComponent,
+    nextComponent: SceneComponent,
     nextStart: number
   ) => {
-    const currentComponent = active[position]
-    if (currentComponent) {
-      currentComponent.ports.forEach((p) => p.stopLoop())
+    const activeComponent = active[position]
+    if (activeComponent) {
+      activeComponent.ports.forEach((p) => p.stopLoop())
     }
-    const newPorts: ToneOutletPort<Middlewares>[] = currentComponent ? currentComponent.ports : []
-    component.generators.forEach((spec, i) => {
-      const port = currentComponent?.ports[i]
+    const newPorts: ToneOutletPort<Middlewares>[] = []
+    nextComponent.generators.forEach((spec, i) => {
+      const port = activeComponent?.ports[i]
       if (port) {
         overridePort(port, spec)
+        newPorts.push(port)
       } else {
-        const outlet = outlets[component.outId]
-        if (!outlet) throw Error(`outlet ${component.outId} not found`)
+        const outlet = outlets[nextComponent.outId]
+        if (!outlet) throw Error(`outlet ${nextComponent.outId} not found`)
         newPorts.push(createNewPortForOutlet(outlet, spec, nextStart))
       }
     })
     active[position] = {
       ports: newPorts,
-      component,
+      component: nextComponent,
     }
   }
 
@@ -73,19 +75,20 @@ export const createMusicState = (outlets: Record<string, ToneOutlet>) => {
 }
 
 export const overridePort = (port: ToneOutletPort<Middlewares>, spec: GeneratorSpec) => {
-  port.onElapsed((g) => {
+  const override = (g: SequenceGenerator<Middlewares>) => {
     g.updateConfig(spec.generator)
     g.resetNotes(spec.notes)
     port.numOfLoops = spec.loops
     port.onElapsed(spec.onElapsed)
     port.onEnded(spec.onEnded)
-  })
+  }
+  port.onEnded(override)
 }
 
 export const cancelPort = (port: ToneOutletPort<Middlewares>) => {
-  port.stopLoop()
-  // Transport.scheduleOnce(() => {
-  // }, '8m')
+  Transport.scheduleOnce(() => {
+    port.stopLoop()
+  }, '8m')
 }
 
 export const createNewPortForOutlet = (

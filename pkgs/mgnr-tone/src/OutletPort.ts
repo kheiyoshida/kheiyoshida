@@ -31,6 +31,10 @@ export class ToneOutletPort<MW extends Middlewares> extends OutletPort<ToneOutle
     return this
   }
 
+  get seq() {
+    return this.generator.sequence
+  }
+
   private assignNote(note: Note, time: number): void {
     const pitch = this.getConcretePitch(note)
     const duration = pickRange(note.dur) * this.secsPerDivision
@@ -42,6 +46,7 @@ export class ToneOutletPort<MW extends Middlewares> extends OutletPort<ToneOutle
    * @note loopNth starts from 1
    */
   private checkEvent(totalNumOfLoops: number, loopNth: number, loopStartedAt: number) {
+    
     if (loopNth === totalNumOfLoops) this.handleEnded(totalNumOfLoops, loopNth, loopStartedAt)
     else this.handleElapsed(loopNth)
   }
@@ -52,10 +57,11 @@ export class ToneOutletPort<MW extends Middlewares> extends OutletPort<ToneOutle
   }
 
   private handleEnded(totalNumOfLoops: number, loopNth: number, loopStartedAt: number) {
+    // should be here before sequenceDuration might change on ended()
+    const actualEndTime = loopStartedAt + totalNumOfLoops * this.sequenceDuration
     if (this.events.ended) {
       this.events.ended(this.generator, loopNth)
     }
-    const actualEndTime = loopStartedAt + totalNumOfLoops * this.sequenceDuration
     this.loopSequence(this.numOfLoops, actualEndTime)
   }
 

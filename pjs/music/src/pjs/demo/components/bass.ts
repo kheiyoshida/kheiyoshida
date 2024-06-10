@@ -9,6 +9,7 @@ import {
 export const defaultBass: DemoComponentMaker = (source, level) => {
   const scale = source.createScale({ range: { min: 20, max: 50 } })
   return {
+    id: '',
     outId: 'bass',
     generators: [
       {
@@ -30,7 +31,7 @@ export const defaultBass: DemoComponentMaker = (source, level) => {
 export const longBass: DemoComponentMaker = (source, level) => {
   const scale = source.createScale({ range: { min: 20, max: 45 }, pref: 'major' })
   return {
-    outId: 'bass',
+    outId: 'droneBass',
     generators: [
       {
         generator: generateLongSequences(scale),
