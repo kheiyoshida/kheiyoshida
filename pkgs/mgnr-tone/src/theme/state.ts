@@ -21,8 +21,9 @@ export const createMusicState = (outlets: Record<string, ToneOutlet>) => {
   const applyScene = (scene: Scene, nextStart = Transport.toSeconds('@4m')) => {
     const keys: SceneComponentPosition[] = ['top', 'bottom', 'right', 'left', 'center']
     keys.forEach((p) => {
-      const component = scene[p]
-      if (component) applyComponent(p, component, nextStart)
+      const sceneComponent = scene[p]
+      if (sceneComponent) applyComponent(p, sceneComponent, nextStart)
+      else active[p] = null
     })
   }
 
