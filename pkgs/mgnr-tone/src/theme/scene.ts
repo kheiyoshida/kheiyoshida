@@ -17,7 +17,7 @@ export type SceneMaker<AvailableOutlets = string> = (
 
 export type SceneComponentPosition = 'top' | 'bottom' | 'right' | 'left' | 'center'
 
-export type Scene<AvailableOutlets> = {
+export type Scene<AvailableOutlets = string> = {
   [k in SceneComponentPosition]?: SceneComponent<AvailableOutlets>
 }
 

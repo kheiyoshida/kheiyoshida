@@ -21,8 +21,15 @@ export const createMusicState = (outlets: Record<string, ToneOutlet>) => {
   const applyScene = (scene: Scene, nextStart = Transport.toSeconds('@4m')) => {
     const keys: SceneComponentPosition[] = ['top', 'bottom', 'right', 'left', 'center']
     keys.forEach((p) => {
-      const component = scene[p]
-      if (component) applyComponent(p, component, nextStart)
+      const sceneComponent = scene[p]
+      if (sceneComponent) applyComponent(p, sceneComponent, nextStart)
+      else {
+        const activeCp = active[p]
+        if (activeCp) {
+          activeCp.ports.forEach(cancelPort)
+          active[p] = null
+        }
+      }
     })
   }
 
@@ -68,6 +75,10 @@ export const overridePort = (port: ToneOutletPort<Middlewares>, spec: GeneratorS
     port.onElapsed(spec.onElapsed)
     port.onEnded(spec.onEnded)
   })
+}
+
+export const cancelPort = (port: ToneOutletPort<Middlewares>) => {
+  port.stopLoop()
 }
 
 export const createNewPortForOutlet = (

@@ -1,123 +1,115 @@
-import { GeneratorConf, Scale, changeSequenceLength, createGenerator, pingpongSequenceLength } from 'mgnr-tone'
+import { GeneratorConf, Scale } from 'mgnr-tone'
 
-export const generateLongSequences = (scale: Scale):GeneratorConf => 
-  ({
-    scale,
-    sequence: {
-      length: 16,
-      division: 1,
-      density: 1,
-      polyphony: 'mono',
+export const generateLongSequences = (scale: Scale): GeneratorConf => ({
+  scale,
+  sequence: {
+    length: 16,
+    division: 1,
+    density: 1,
+    polyphony: 'mono',
+  },
+  note: {
+    duration: {
+      min: 1,
+      max: 4,
     },
-    note: {
-      duration: {
-        min: 1,
-        max: 4,
-      },
-    },
-  })
+  },
+})
 
-export const addHarmonyToLongSequence = (scale: Scale) =>
-  createGenerator({
-    scale,
-    sequence: {
-      length: 6,
-      division: 1,
-      density: 0.3,
-      polyphony: 'mono',
+export const addHarmonyToLongSequence = (scale: Scale): GeneratorConf => ({
+  scale,
+  sequence: {
+    length: 6,
+    division: 1,
+    density: 0.3,
+    polyphony: 'mono',
+  },
+  note: {
+    duration: {
+      min: 1,
+      max: 4,
     },
-    note: {
-      duration: {
-        min: 1,
-        max: 4,
-      },
-    },
-  })
+  },
+})
 
-export const movingSequence = (scale: Scale) =>
-  createGenerator({
-    scale,
-    sequence: {
-      length: 16,
-      division: 16,
-      density: 0.5,
-      polyphony: 'mono',
-      fillStrategy: 'fill',
+export const movingSequence = (scale: Scale): GeneratorConf => ({
+  scale,
+  sequence: {
+    length: 16,
+    division: 16,
+    density: 0.5,
+    polyphony: 'mono',
+    fillStrategy: 'fill',
+  },
+  note: {
+    duration: {
+      min: 1,
+      max: 4,
     },
-    note: {
-      duration: {
-        min: 1,
-        max: 4,
-      },
-    },
-  })
+  },
+})
 
-export const randomSequence = (scale: Scale, density: number):GeneratorConf =>
-  ({
-    scale,
-    sequence: {
-      length: 12,
-      division: 16,
-      density,
-      polyphony: 'mono',
+export const randomSequence = (scale: Scale, density: number): GeneratorConf => ({
+  scale,
+  sequence: {
+    length: 12,
+    division: 16,
+    density,
+    polyphony: 'mono',
+  },
+  note: {
+    duration: {
+      min: 1,
+      max: 2,
     },
-    note: {
-      duration: {
-        min: 1,
-        max: 2,
-      },
-    },
-  })
+  },
+})
 
-export const randomBassline = (scale: Scale) =>
-  createGenerator({
-    scale,
-    sequence: {
-      length: 16,
-      division: 16,
-      density: 0.5,
-      polyphony: 'mono',
+export const randomBassline = (scale: Scale): GeneratorConf => ({
+  scale,
+  sequence: {
+    length: 16,
+    division: 16,
+    density: 0.5,
+    polyphony: 'mono',
+  },
+  note: {
+    duration: {
+      min: 1,
+      max: 8,
     },
-    note: {
-      duration: {
-        min: 1,
-        max: 8,
-      },
-    },
-  })
+  },
+})
 
-export const randomise = (scale: Scale):GeneratorConf =>
-  ({
-    scale,
-    sequence: {
-      length: 10,
-      division: 16,
-      density: 0.5,
-      polyphony: 'mono',
+export const randomise = (scale: Scale): GeneratorConf => ({
+  scale,
+  sequence: {
+    length: 10,
+    division: 16,
+    density: 0.5,
+    polyphony: 'mono',
+  },
+  note: {
+    duration: {
+      min: 1,
+      max: 2,
     },
-    note: {
-      duration: {
-        min: 1,
-        max: 2,
-      },
-    },
-  })
+  },
+})
 
-export const strictArpegio = (scale: Scale):GeneratorConf =>
-  ({
-    scale,
-    sequence: {
-      length: 12,
-      lenRange: {
-        min: 4, 
-        max: 24
-      },
-      division: 16,
-      density: 1,
-      polyphony: 'mono',
+export const strictArpegio = (scale: Scale): GeneratorConf => ({
+  scale,
+  sequence: {
+    length: 12,
+    lenRange: {
+      min: 4,
+      max: 24,
     },
-    note: {
-      duration: 1,
-    },
-    
-  })
+    division: 16,
+    density: 1,
+    polyphony: 'mono',
+  },
+  note: {
+    duration: 1,
+  },
+})
