@@ -6,7 +6,6 @@ export const dnbBeat = (scale: Scale, density: number): GeneratorConf => ({
     duration: 1,
   },
   sequence: {
-    fillStrategy: 'fixed',
     length: 16,
     division: 16,
     density: density,
@@ -16,15 +15,14 @@ export const dnbBeat = (scale: Scale, density: number): GeneratorConf => ({
 
 export const randomFill = (scale: Scale, density: number): GeneratorConf => ({
   scale,
-  note: {
-    duration: 1,
-  },
   sequence: {
-    fillStrategy: 'fixed',
     length: 16,
     division: 16,
     density: density,
     polyphony: 'mono',
+  },
+  note: {
+    duration: 1,
   },
 })
 
@@ -34,7 +32,6 @@ export const kicks = (scale: Scale, density: number): GeneratorConf => ({
     duration: 1,
   },
   sequence: {
-    fillStrategy: 'fixed',
     length: 16,
     division: 16,
     density: density,

@@ -24,18 +24,17 @@ export const createMusicState = (outlets: Record<string, ToneOutlet>) => {
     const inOut = checkDiff(active, scene)
     const positions: SceneComponentPosition[] = ['top', 'bottom', 'right', 'left', 'center']
     positions.forEach((position) => {
-      const activeCp = active[position]
-      const sceneComponent = scene[position]
-      if (sceneComponent) {
-        applyComponent(position, sceneComponent, nextStart)
-      } else {
-        if (activeCp) {
-          activeCp.ports.forEach(cancelPort)
-          active[position] = null
-        }
+      const shouldDrop = inOut.out[position] !== undefined
+      if (shouldDrop) {
+        if (!active[position]) throw Error(`active[${position}] is null`)
+        active[position]!.ports.forEach(cancelPort)
+        active[position] = null
+      }
+      if (scene[position]) {
+        if (!scene[position]) throw Error(`scene[${position}] is null`)
+        applyComponent(position, scene[position]!, nextStart)
       }
     })
-    console.log(inOut)
     return inOut
   }
 

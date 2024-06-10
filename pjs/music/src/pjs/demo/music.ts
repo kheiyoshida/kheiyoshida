@@ -82,7 +82,7 @@ export const createMusic = (sceneGrid: SceneGrid) => {
     inst: instruments.beatDrums(),
     initialVolume: -40,
     volumeRange: {
-      max: -16,
+      max: -12,
       min: -40,
     },
   })
