@@ -8,7 +8,7 @@ import {
 import { GridAlignment } from './grid'
 import { clamp } from 'utils'
 
-export type Duration = `${number}m`
+
 
 export type SceneMaker<AvailableOutlets = string> = (
   source: ScaleSource,
@@ -105,94 +105,3 @@ export const makeLevelMap = (values: number[]): Record<ComponentPlayLevel, numbe
   5: values[4],
 })
 
-// export const injectFadeInOut = <MW extends Middlewares>(
-//   channel: ReturnType<Mixer['createInstChannel']>,
-//   ports: Array<ToneOutletPort<Middlewares> | ToneOutletPort<MW>>,
-//   scale: Scale
-// ): Pick<SceneComponent, 'fadeIn' | 'fadeOut'> => {
-//   return {
-//     fadeIn: (duration) => channel.dynamicVolumeFade(channel.volumeRangeDiff, duration),
-//     fadeOut: (duration) => {
-//       channel.dynamicVolumeFade(-channel.volumeRangeDiff, duration)
-//       Transport.scheduleOnce(() => {
-//         getMixer().deleteChannel(channel)
-//         ports.forEach((port) => port.stopLoop())
-//         scale.dispose()
-//       }, `+${duration}`)
-//     },
-//   }
-// }
-
-// const directionMap: Record<GridDirection, [SceneComponentPosition, SceneComponentPosition]> = {
-//   up: ['top', 'bottom'], // inDirection, against
-//   down: ['bottom', 'top'],
-//   left: ['left', 'right'],
-//   right: ['right', 'left'],
-// }
-
-// type DirectionDurationMap = {
-//   inDirection: Duration
-//   againstDirection: Duration
-//   neutral: Duration
-// }
-
-// export const makeFadeOutTheme =
-//   (
-//     duration: DirectionDurationMap = {
-//       inDirection: '24m',
-//       againstDirection: '8m',
-//       neutral: '16m',
-//     },
-//     timing = '@4m',
-//     delay = '4m'
-//   ) =>
-//   (theme: Scene, direction: GridDirection) => {
-//     const [inDirection, againstDirection] = directionMap[direction]
-//     const keys: SceneComponentPosition[] = ['top', 'left', 'right', 'bottom', 'center']
-//     const fadeOut = () => {
-//       keys.forEach((k) => {
-//         const v = theme[k]
-//         if (k === inDirection) {
-//           v.fadeOut(duration.inDirection)
-//         } else if (k === againstDirection) {
-//           v.fadeOut(duration.againstDirection)
-//         } else {
-//           v.fadeOut(duration.neutral)
-//         }
-//       })
-//     }
-//     Transport.scheduleOnce((t) => {
-//       Transport.scheduleOnce(fadeOut, t + Transport.toSeconds(delay))
-//     }, timing)
-//   }
-
-// export const makeFadeInTheme =
-//   (
-//     duration: DirectionDurationMap = {
-//       inDirection: '24m',
-//       againstDirection: '8m',
-//       neutral: '16m',
-//     },
-//     timing = '@4m',
-//     delay = '4m'
-//   ) =>
-//   (theme: Scene, direction: GridDirection) => {
-//     const [inDirection, againstDirection] = directionMap[direction]
-//     const keys: SceneComponentPosition[] = ['top', 'left', 'right', 'bottom', 'center']
-//     const fadeIn = (t: number) => {
-//       keys.forEach((k) => {
-//         const v = theme[k]
-//         if (k === inDirection) {
-//           Transport.scheduleOnce(
-//             () => v.fadeIn(duration.inDirection),
-//             t + Transport.toSeconds(delay)
-//           )
-//         } else if (k === againstDirection) {
-//           v.fadeIn(duration.againstDirection)
-//         } else {
-//           v.fadeIn(duration.neutral)
-//         }
-//       })
-//     }
-//     Transport.scheduleOnce((t) => fadeIn(t), timing)
-//   }

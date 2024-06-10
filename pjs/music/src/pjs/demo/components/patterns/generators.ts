@@ -3,7 +3,7 @@ import { GeneratorConf, Scale } from 'mgnr-tone'
 export const generateLongSequences = (scale: Scale): GeneratorConf => ({
   scale,
   sequence: {
-    length: 16,
+    length: 6,
     division: 1,
     density: 1,
     polyphony: 'mono',
@@ -19,7 +19,7 @@ export const generateLongSequences = (scale: Scale): GeneratorConf => ({
 export const addHarmonyToLongSequence = (scale: Scale): GeneratorConf => ({
   scale,
   sequence: {
-    length: 6,
+    length: 4,
     division: 1,
     density: 0.3,
     polyphony: 'mono',

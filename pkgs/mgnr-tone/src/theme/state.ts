@@ -3,14 +3,16 @@ import * as Transport from '../tone-wrapper/Transport'
 import { ToneOutlet } from '../Outlet'
 import { ToneOutletPort } from '../OutletPort'
 import { GeneratorSpec, Scene, SceneComponent, SceneComponentPosition } from './scene'
+import { InOut } from './fade'
 
+export type ActiveComponents = Record<SceneComponentPosition, ActiveComponentState | null>
 type ActiveComponentState = {
   ports: ToneOutletPort<Middlewares>[]
   component: SceneComponent
 }
 
 export const createMusicState = (outlets: Record<string, ToneOutlet>) => {
-  const active: Record<SceneComponentPosition, ActiveComponentState | null> = {
+  const active: ActiveComponents = {
     top: null,
     bottom: null,
     right: null,
@@ -18,19 +20,22 @@ export const createMusicState = (outlets: Record<string, ToneOutlet>) => {
     center: null,
   }
 
-  const applyScene = (scene: Scene, nextStart = Transport.toSeconds('@4m')) => {
-    const keys: SceneComponentPosition[] = ['top', 'bottom', 'right', 'left', 'center']
-    keys.forEach((p) => {
-      const sceneComponent = scene[p]
-      if (sceneComponent) applyComponent(p, sceneComponent, nextStart)
-      else {
-        const activeCp = active[p]
+  const applyScene = (scene: Scene, nextStart = Transport.toSeconds('@4m')): InOut => {
+    const inOut = checkDiff(active, scene)
+    const positions: SceneComponentPosition[] = ['top', 'bottom', 'right', 'left', 'center']
+    positions.forEach((position) => {
+      const activeCp = active[position]
+      const sceneComponent = scene[position]
+      if (sceneComponent) {
+        applyComponent(position, sceneComponent, nextStart)
+      } else {
         if (activeCp) {
           activeCp.ports.forEach(cancelPort)
-          active[p] = null
+          active[position] = null
         }
       }
     })
+    return inOut
   }
 
   const applyComponent = (
@@ -50,7 +55,7 @@ export const createMusicState = (outlets: Record<string, ToneOutlet>) => {
       } else {
         const outlet = outlets[component.outId]
         if (!outlet) throw Error(`outlet ${component.outId} not found`)
-        newPorts.push(createNewPortForOutlet(outlets[component.outId], spec, nextStart))
+        newPorts.push(createNewPortForOutlet(outlet, spec, nextStart))
       }
     })
     active[position] = {
@@ -79,6 +84,8 @@ export const overridePort = (port: ToneOutletPort<Middlewares>, spec: GeneratorS
 
 export const cancelPort = (port: ToneOutletPort<Middlewares>) => {
   port.stopLoop()
+  // Transport.scheduleOnce(() => {
+  // }, '8m')
 }
 
 export const createNewPortForOutlet = (
@@ -96,4 +103,24 @@ export const createNewPortForOutlet = (
     .loopSequence(spec.loops, start)
     .onElapsed(spec.onElapsed)
     .onEnded(spec.onEnded)
+}
+
+export const checkDiff = (activeComponents: ActiveComponents, nextScene: Scene): InOut => {
+  const inOut: InOut = { in: {}, out: {} }
+  Object.keys(activeComponents).forEach((p) => {
+    const position = p as SceneComponentPosition
+    const activeComponent = activeComponents[position]
+    const sceneComponent = nextScene[position]
+    if (activeComponent && sceneComponent) {
+      if (activeComponent.component.outId !== sceneComponent.outId) {
+        inOut.in[position] = sceneComponent.outId
+        inOut.out[position] = activeComponent.component.outId
+      }
+    } else if (activeComponent && !sceneComponent) {
+      inOut.out[position] = activeComponent.component.outId
+    } else if (!activeComponent && sceneComponent) {
+      inOut.in[position] = sceneComponent.outId
+    }
+  })
+  return inOut
 }

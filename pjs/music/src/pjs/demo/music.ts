@@ -8,6 +8,8 @@ import {
   getMixer,
 } from 'mgnr-tone'
 import { ToneOutlet } from 'mgnr-tone/src/Outlet'
+import { InstChannel } from 'mgnr-tone/src/mixer/Channel'
+import { makeFader } from 'mgnr-tone/src/theme/fade'
 import * as Tone from 'tone'
 import { randomItemFromArray } from 'utils'
 import * as instruments from './components/instruments'
@@ -44,9 +46,8 @@ export const createMusic = (sceneGrid: SceneGrid) => {
   // theme
   const synCh = mixer.createInstChannel({
     inst: instruments.brightLead(),
-    effects: [
-      new Tone.PingPongDelay(0.3)
-    ],
+    effects: [new Tone.PingPongDelay(0.3)],
+    initialVolume: -40,
     volumeRange: {
       max: -20,
       min: -40,
@@ -54,13 +55,12 @@ export const createMusic = (sceneGrid: SceneGrid) => {
   })
   const padCh = mixer.createInstChannel({
     inst: instruments.darkPad(),
-    effects: [
-      new Tone.Filter(300, 'highpass'),
-      new Tone.PingPongDelay(0.2),
-    ]
+    initialVolume: -40,
+    effects: [new Tone.Filter(300, 'highpass'), new Tone.PingPongDelay(0.2)],
   })
   const bassCh = mixer.createInstChannel({
     inst: instruments.darkBass(),
+    initialVolume: -40,
     volumeRange: {
       max: -20,
       min: -40,
@@ -68,11 +68,20 @@ export const createMusic = (sceneGrid: SceneGrid) => {
   })
   const drumsCh = mixer.createInstChannel({
     inst: instruments.beatDrums(),
+    initialVolume: -40,
   })
 
   mixer.connect(synCh, sendTrack, 0.2)
   mixer.connect(padCh, sendTrack, 0.5)
   mixer.connect(drumsCh, sendTrack, 0.2)
+
+  const channels: Record<AvailableOutlets, InstChannel> = {
+    synth: synCh,
+    pad: padCh,
+    drums: drumsCh,
+    bass: bassCh,
+  }
+  const handlefade = makeFader(channels)
 
   const outlets: Record<AvailableOutlets, ToneOutlet> = {
     synth: createOutlet(synCh.inst, Tone.Transport.toSeconds('16n')),
@@ -84,20 +93,23 @@ export const createMusic = (sceneGrid: SceneGrid) => {
   const state = createMusicState(outlets)
 
   function applyInitialTheme() {
-    const scene = sceneGrid.getInitialTheme()
-    const s = scene(scale, 'center-middle')
-    state.applyScene(s)
+    const makeScene = sceneGrid.getInitialScene()
+    const scene = makeScene(scale, 'center-middle')
+    const result = state.applyScene(scene, Tone.Transport.toSeconds('@4m'))
+    handlefade(result, 'up')
   }
 
   function checkNextTheme(command: GridDirection | null) {
     if (!command) return
     const shift = sceneGrid.move(command)
     console.log('shift', shift)
+    console.log(state.active)
+    console.log(state.active.left!.ports.map(p => p.numOfLoops))
     applyNextTheme(shift)
   }
 
   function applyNextTheme(shift: SceneShiftInfo) {
-    if (shift.scene !== null) {
+    if (shift.makeScene !== null) {
       fadeOutPreviousTheme(shift.direction)
       fadeInNextTheme(shift)
     } else {
@@ -109,10 +121,10 @@ export const createMusic = (sceneGrid: SceneGrid) => {
     // fadeOutTheme(currentTheme, direction)
   }
 
-  function fadeInNextTheme({ scene, sceneAlignment, direction }: SceneShiftInfo) {
-    const s = scene!(scale, sceneAlignment)
-    state.applyScene(s)
-    // fadeInTheme(currentTheme, direction)
+  function fadeInNextTheme({ makeScene, sceneAlignment, direction }: SceneShiftInfo) {
+    const scene = makeScene!(scale, sceneAlignment)
+    const result = state.applyScene(scene)
+    handlefade(result, direction)
   }
 
   function applyThemeAlignment(direction: GridDirection) {
