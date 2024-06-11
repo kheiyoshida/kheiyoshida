@@ -57,7 +57,7 @@ export const themeGrid = createSceneGrid({
   'left-bottom': ambient('dynamic'),
 
   'center-top': electronica('static'),
-  'center-middle': electronica('static'), // 
+  'center-middle': electronica('hybrid'), // 
   'center-bottom': electronica('dynamic'),
 
   'right-top': dnb('static'),

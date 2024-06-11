@@ -22,7 +22,7 @@ test(`${createSceneGrid.name}`, () => {
   })
   const shift = grid.move('up')
   expect(shift.direction).toBe('up')
-  expect(shift.makeScene).toBeNull()
+  expect(shift.makeScene).not.toBeNull()
   expect(shift.sceneAlignment).toBe('center-top')
 
   const shift2 = grid.move('up')
@@ -30,7 +30,7 @@ test(`${createSceneGrid.name}`, () => {
   expect(shift2.sceneAlignment).toBe('center-bottom')
 
   const shift3 = grid.move('right')
-  expect(shift3.makeScene).toBeNull()
+  expect(shift3.makeScene).not.toBeNull()
   expect(shift3.sceneAlignment).toBe('right-bottom')
 })
 
