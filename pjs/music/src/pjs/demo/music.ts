@@ -86,6 +86,11 @@ export const createMusic = (sceneGrid: SceneGrid) => {
       max: -12,
       min: -40,
     },
+    effects: [
+      new Tone.BitCrusher(16),
+      new Tone.Filter(100, 'highpass'),
+      new Tone.Filter(3000, 'lowshelf'),
+    ],
   })
 
   mixer.connect(synCh, sendTrack, 0.2)

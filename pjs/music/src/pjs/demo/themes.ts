@@ -42,7 +42,7 @@ const ambient = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
 const electronica = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
   top: cp.longPad(meta),
   right: cp.defaultSynth(meta),
-  bottom: cp.defaultDrums,
+  bottom: cp.defaultDrums(meta),
 })
 
 const dnb = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({

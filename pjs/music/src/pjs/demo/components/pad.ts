@@ -101,10 +101,10 @@ export const longPad =
   (source, alignment) => {
     const { randomness, saturation } = translate(alignment)
     const noteDurationMap: Record<Randomness, Range | number> = {
-      static: 4,
+      static: 2,
       hybrid: {
-        min: 2,
-        max: 4,
+        min: 1,
+        max: 3,
       },
       dynamic: {
         min: 1,
@@ -172,7 +172,7 @@ export const longPad =
               polyphony: 'mono',
             },
             note: {
-              duration: noteDurationMap[metaRandomness],
+              duration: 1,
             },
           },
           loops: 2,
