@@ -117,22 +117,14 @@ export const createMusic = (sceneGrid: SceneGrid) => {
     Object.values(result.in).forEach((outlet) => {
       const ch = channels[outlet as AvailableOutlets]
       if (!ch) throw Error(`channel not found: ${outlet}`)
-        ch.dynamicVolumeFade(ch.volumeRangeDiff, '4m')
+      ch.dynamicVolumeFade(ch.volumeRangeDiff, '4m')
     })
   }
 
-  function checkNextTheme(command: GridDirection | null) {
+  function checkNextShift(command: GridDirection | null) {
     if (!command) return
     const shift = sceneGrid.move(command)
-    applyNextTheme(shift)
-  }
-
-  function applyNextTheme(shift: SceneShiftInfo) {
-    if (shift.makeScene !== null) {
-      fadeInNextTheme(shift)
-    } else {
-      applyThemeAlignment(shift.direction)
-    }
+    fadeInNextTheme(shift)
   }
 
   function fadeInNextTheme({ makeScene, sceneAlignment, direction }: SceneShiftInfo) {
@@ -141,12 +133,8 @@ export const createMusic = (sceneGrid: SceneGrid) => {
     handlefade(result, direction)
   }
 
-  function applyThemeAlignment(direction: GridDirection) {
-    // currentTheme.updateAlignment(direction)
-  }
-
   return {
     applyInitialTheme,
-    checkNextTheme,
+    checkNextTheme: checkNextShift,
   }
 }

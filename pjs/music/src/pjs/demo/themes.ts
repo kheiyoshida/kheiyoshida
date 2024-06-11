@@ -10,8 +10,8 @@ export type DemoSceneMaker = SceneMaker<AvailableOutlets>
 
 const ambient: DemoSceneMaker = injectSceneMakerDeps({
   top: cp.movingPad,
-  left: cp.longDroneBass,
-  right: cp.defaultSynth,
+  // left: cp.longDroneBass,
+  // right: cp.defaultSynth,
 })
 
 const electronica: DemoSceneMaker = injectSceneMakerDeps({
