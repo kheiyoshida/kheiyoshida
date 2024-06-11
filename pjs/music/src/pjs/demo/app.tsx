@@ -6,7 +6,12 @@ import { createCommandBuffer, createMusic } from './music'
 import { themeGrid } from './themes'
 
 const commandBuffer = createCommandBuffer(
-  ['up', 'up', 'down', 'down', 'up', 'up', 'down', 'down']
+  ['up', 'up', 'up', // ambient
+    'down', 'down', 'down', // nica
+    'down', 'down', 'down', // dnb
+    'up', 'up', 'up', 
+    'down', 'down'
+  ]
   // [...Array(50)].map(() =>
   //   randomItemFromArray(['down', 'up', 'right', 'left'] as GridDirection[])
   // )

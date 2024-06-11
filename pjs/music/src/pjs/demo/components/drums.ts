@@ -1,53 +1,11 @@
-import { createScale, makeLevelMap } from 'mgnr-tone'
+import { createScale } from 'mgnr-tone'
 import { DemoComponentMaker } from '../themes'
-import { kicks, randomFill } from './patterns/beat'
-import { backHH, dnb, fill, kick4 } from './patterns/sequences'
+import { dnb, fill, kick2, snare } from './patterns/sequences'
 
 const dmScale = createScale([30, 50, 90])
 const snareHHScale = createScale([50, 90])
 
-export const onlyKicks: DemoComponentMaker = (_, level) => {
-
-  return {
-    outId: 'drums',
-    generators: [
-      {
-        generator: kicks(dmScale, 0.6),
-        notes: kick4,
-        loops: 2,
-        onElapsed: () => undefined,
-        onEnded: (g) => g.resetNotes(kick4),
-      },
-    ],
-  }
-}
-
 export const defaultDrums: DemoComponentMaker = (_, level) => {
-  const density = makeLevelMap([0.3, 0.3, 0.4, 0.5, 0.5])
-  return {
-    outId: 'drums',
-    generators: [
-      {
-        generator: kicks(dmScale, 0.6),
-        notes: kick4,
-        loops: 2,
-        onElapsed: (g) => g.mutate({ rate: 0.1, strategy: 'inPlace' }),
-        onEnded: (g) => g.resetNotes(kick4),
-      },
-      {
-        generator: randomFill(snareHHScale, density[level]),
-        notes: backHH,
-        loops: 2,
-        onElapsed: () => undefined,
-        onEnded: (g) => g.resetNotes(backHH),
-      },
-    ],
-  }
-}
-
-export const dnbDrums: DemoComponentMaker = (_, level) => {
-  const dmScale = createScale([30, 50, 90])
-  const density = makeLevelMap([0.3, 0.4, 0.5, 0.6, 0.7])
   return {
     outId: 'drums',
     generators: [
@@ -60,7 +18,53 @@ export const dnbDrums: DemoComponentMaker = (_, level) => {
           sequence: {
             length: 16,
             division: 16,
-            density: density[level],
+            density: 2 / 16,
+            polyphony: 'mono',
+          },
+        },
+        notes: kick2,
+        loops: 2,
+        onElapsed: (g) => g.mutate({ rate: 0.1, strategy: 'move' }),
+        onEnded: (g) => g.resetNotes(kick2),
+      },
+      {
+        generator: {
+          scale: snareHHScale,
+          note: {
+            duration: 1,
+          },
+          sequence: {
+            length: 16,
+            division: 16,
+            density: 4 / 16,
+            polyphony: 'mono',
+          },
+        },
+        notes: snare,
+        loops: 2,
+        onElapsed: (g) => g.mutate({ rate: 0.1, strategy: 'inPlace' }),
+        onEnded: (g) => g.resetNotes(snare),
+      },
+    ],
+  }
+}
+
+export const dnbDrums: DemoComponentMaker = (_, level) => {
+  const dmScale = createScale([30, 50, 90])
+
+  return {
+    outId: 'drums',
+    generators: [
+      {
+        generator: {
+          scale: dmScale,
+          note: {
+            duration: 1,
+          },
+          sequence: {
+            length: 16,
+            division: 16,
+            density: 5 / 16,
             polyphony: 'mono',
           },
           notes: dnb,
@@ -79,7 +83,7 @@ export const dnbDrums: DemoComponentMaker = (_, level) => {
             fillStrategy: 'fill',
             length: 16,
             division: 16,
-            density: density[level],
+            density: 6 / 16,
             polyphony: 'mono',
           },
           notes: fill,

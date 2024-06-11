@@ -3,13 +3,12 @@ import { DemoComponentMaker } from '../themes'
 import { randomSequence, randomise, strictArpegio } from './patterns/generators'
 
 export const defaultSynth: DemoComponentMaker = (source, level) => {
-  const density = makeLevelMap([0.3, 0.4, 0.5, 0.6, 0.7])
-  const scale = source.createScale({ range: { min: 40, max: 80 } })
+  const scale = source.createScale({ range: { min: 60, max: 100 } })
   return {
     outId: 'synth',
     generators: [
       {
-        generator: randomSequence(scale, density[level]),
+        generator: randomSequence(scale, 0.3),
         loops: 4,
         onElapsed: () => {
           return
