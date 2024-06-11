@@ -6,6 +6,7 @@ import {
   createOutlet,
   createScaleSource,
   getMixer,
+  pickRandomPitchName,
 } from 'mgnr-tone'
 import { ToneOutlet } from 'mgnr-tone/src/Outlet'
 import { InstChannel } from 'mgnr-tone/src/mixer/Channel'
@@ -32,13 +33,17 @@ export const createCommandBuffer = (initialCommands: GridDirection[] = []) => {
 
 export const createMusic = (sceneGrid: SceneGrid) => {
   const scale = createScaleSource({
-    key: randomItemFromArray(['A', 'D', 'B']),
+    key: pickRandomPitchName(),
     range: { min: 20, max: 100 },
     pref: randomItemFromArray(['omit25', 'omit27', 'omit47']),
   })
 
   const sendTrack = getMixer().createSendChannel({
-    effects: [new Tone.Reverb(0.5), new Tone.Filter(8000, 'lowpass')],
+    effects: [
+      new Tone.PingPongDelay('8n.', 0.1),
+      new Tone.Reverb(0.5),
+      new Tone.Filter(8000, 'lowpass'),
+    ],
   })
 
   const mixer = getMixer()
@@ -46,7 +51,7 @@ export const createMusic = (sceneGrid: SceneGrid) => {
   // theme
   const synCh = mixer.createInstChannel({
     inst: instruments.darkLead(),
-    effects: [new Tone.Filter(300, 'highpass'), new Tone.PingPongDelay('8n.', 0.1)],
+    effects: [new Tone.Filter(300, 'highpass'), new Tone.Filter(10000, 'lowpass')],
     initialVolume: -40,
     volumeRange: {
       max: -18,
@@ -60,7 +65,7 @@ export const createMusic = (sceneGrid: SceneGrid) => {
       max: -10,
       min: -40,
     },
-    effects: [new Tone.Filter(500, 'highpass'), new Tone.PingPongDelay('8n.', 0.3)],
+    effects: [new Tone.Filter(500, 'highpass')],
   })
   const bassCh = mixer.createInstChannel({
     inst: instruments.darkBass(),
@@ -69,7 +74,7 @@ export const createMusic = (sceneGrid: SceneGrid) => {
       max: -12,
       min: -40,
     },
-    effects: [new Tone.Filter(50, 'highpass'), new Tone.PingPongDelay('2n', 0.1)],
+    effects: [new Tone.Filter(50, 'highpass')],
   })
   const droneBassCh = mixer.createInstChannel({
     inst: instruments.droneBass(),
@@ -78,7 +83,7 @@ export const createMusic = (sceneGrid: SceneGrid) => {
       max: -12,
       min: -40,
     },
-    effects: [new Tone.Filter(50, 'highpass'), new Tone.PingPongDelay('2n', 0.1)],
+    effects: [new Tone.Filter(50, 'highpass')],
   })
   const drumsCh = mixer.createInstChannel({
     inst: instruments.beatDrums(),
@@ -87,14 +92,11 @@ export const createMusic = (sceneGrid: SceneGrid) => {
       max: -12,
       min: -40,
     },
-    effects: [
-      new Tone.Filter(120, 'highpass'),
-      new Tone.Filter(3000, 'lowshelf'),
-    ],
+    effects: [new Tone.Filter(120, 'highpass'), new Tone.Filter(10000, 'lowpass')],
   })
 
-  mixer.connect(synCh, sendTrack, 0.2)
-  mixer.connect(padCh, sendTrack, 0.5)
+  mixer.connect(synCh, sendTrack, 0.8)
+  mixer.connect(padCh, sendTrack, 1.2)
   mixer.connect(drumsCh, sendTrack, 0.2)
   mixer.connect(droneBassCh, sendTrack, 0.2)
 

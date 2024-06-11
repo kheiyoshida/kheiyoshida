@@ -27,7 +27,7 @@ type DirectionDurationMap = {
 export const makeFader = (
   channels: Record<string, InstChannel>,
   duration: DirectionDurationMap = {
-    inDirection: '32m',
+    inDirection: '24m',
     againstDirection: '12m',
     neutral: '16m',
   },

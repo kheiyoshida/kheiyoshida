@@ -48,7 +48,7 @@ export const explicitSnare = () =>
         sustain: 1 / 500,
         release: 0.1,
       },
-      volume: -20,
+      volume: -24,
     }),
     new Tone.NoiseSynth({
       envelope: {
@@ -69,7 +69,7 @@ export const explicitSnare = () =>
         sustain: 1 / 1000,
         release: 0.05,
       },
-      volume: -3,
+      volume: -6,
       noise: {
         type: 'pink',
       },

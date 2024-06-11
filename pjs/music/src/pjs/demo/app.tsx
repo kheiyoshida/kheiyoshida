@@ -5,23 +5,8 @@ import { fireByRate, randomItemFromArray } from 'utils'
 import { createCommandBuffer, createMusic } from './music'
 import { themeGrid } from './themes'
 
-const categoryTour: GridDirection[] = [
-  'right',
-  'up', 'up', 'up','up', // thick
-  'left', 'left', // static
-  'down', 'down', 'down', 'down', 'down', 'down', 'down', 'down', // thin
-  'right',
-  'up', 'up', 'up','up', // neutral
-]
-
-
 const commandBuffer = createCommandBuffer(
-  // categoryTour
-  ['right', 'right', 'left', 'left', 'left', 'left', 'right'
-  ]
-  // [...Array(50)].map(() =>
-  //   randomItemFromArray(['down', 'up', 'right', 'left'] as GridDirection[])
-  // )
+  [...Array(50)].map(() => randomItemFromArray(['down', 'up', 'right', 'left'] as GridDirection[]))
 )
 
 const music = createMusic(themeGrid)
@@ -34,8 +19,8 @@ const play = () => {
   }
   if (started) return
   Tone.Transport.bpm.value = 162
-  music.applyInitialTheme()
   Tone.Transport.start()
+  music.applyInitialTheme()
   Tone.Transport.scheduleRepeat(
     () => {
       music.checkNextTheme(commandBuffer.command)
@@ -53,7 +38,7 @@ export default () => {
       <Grid />
       <div style={{ margin: 16 }}>
         <button style={{ padding: 8, margin: 8 }} onClick={play}>
-        ▶︎ PLAY
+          ▶︎ PLAY
         </button>
       </div>
       {/* <Commands /> */}
@@ -161,5 +146,5 @@ const style: React.CSSProperties = {
   zIndex: 20,
   position: 'fixed',
   top: 0,
-  left: 0
+  left: 0,
 }

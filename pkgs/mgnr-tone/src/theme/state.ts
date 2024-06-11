@@ -27,6 +27,7 @@ export const createMusicState = (outlets: Record<string, ToneOutlet>) => {
       const shouldDrop = inOut.out[position] !== undefined
       if (shouldDrop) {
         if (!active[position]) throw Error(`active[${position}] is null`)
+          console.log('dropping', position, active[position]!.ports)
         active[position]!.ports.forEach(cancelPort)
         active[position] = null
       }
@@ -87,7 +88,7 @@ export const overridePort = (port: ToneOutletPort<Middlewares>, spec: GeneratorS
 export const cancelPort = (port: ToneOutletPort<Middlewares>) => {
   Transport.scheduleOnce(() => {
     port.stopLoop()
-  }, '8m')
+  }, '+8m')
 }
 
 export const createNewPortForOutlet = (
