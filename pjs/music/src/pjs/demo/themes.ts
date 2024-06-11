@@ -40,7 +40,7 @@ const ambient = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
 })
 
 const electronica = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
-  top: cp.longPad,
+  top: cp.longPad(meta),
   right: cp.defaultSynth(meta),
   bottom: cp.defaultDrums,
 })
@@ -51,17 +51,14 @@ const dnb = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
   bottom: cp.dnbDrums,
 })
 
-const devScene: DemoSceneMaker = ambient('dynamic')
-
 export const themeGrid = createSceneGrid({
   'left-top': ambient('static'),
   'left-middle': ambient('hybrid'),
   'left-bottom': ambient('dynamic'),
 
-  'center-top': ambient('static'),
-  'center-middle': ambient('hybrid'),
-  // 'center-middle': devScene,
-  'center-bottom': ambient('dynamic'),
+  'center-top': electronica('static'),
+  'center-middle': electronica('hybrid'), // 
+  'center-bottom': electronica('dynamic'),
 
   'right-top': dnb('static'),
   'right-middle': dnb('hybrid'),

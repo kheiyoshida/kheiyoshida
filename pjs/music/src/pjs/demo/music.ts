@@ -114,7 +114,7 @@ export const createMusic = (sceneGrid: SceneGrid) => {
 
   function applyInitialTheme() {
     const makeScene = sceneGrid.getInitialScene()
-    const scene = makeScene(scale, 'center-bottom')
+    const scene = makeScene(scale, 'center-middle')
     const result = state.applyScene(scene, Tone.Transport.toSeconds('@4m'))
     Object.values(result.in).forEach((outlet) => {
       const ch = channels[outlet as AvailableOutlets]
