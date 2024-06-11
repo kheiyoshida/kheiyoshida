@@ -1,44 +1,66 @@
-import { SceneComponentMaker, SceneMaker, createSceneGrid } from 'mgnr-tone'
+import {
+  GridColumn,
+  GridRow,
+  SceneComponentMaker,
+  SceneMaker,
+  createSceneGrid,
+  injectSceneMakerDeps,
+} from 'mgnr-tone'
 import * as cp from './components'
 
-export type Character = 'dark' | 'neutral' | 'bright'
+export type Saturation = 'thin' | 'neutral' | 'thick'
+export type Randomness = 'static' | 'hybrid' | 'dynamic'
 
-export type AvailableOutlets = 'synth' | 'pad' | 'drums' | 'bass'
+const saturationMap: Record<GridColumn, Saturation> = {
+  left: 'thin',
+  center: 'neutral',
+  right: 'thick',
+}
+
+const randomnessMap: Record<GridRow, Randomness> = {
+  top: 'static',
+  middle: 'hybrid',
+  bottom: 'dynamic',
+}
+
+export const translate = ({ col, row }: { col: GridColumn; row: GridRow }) => ({
+  saturation: saturationMap[col],
+  randomness: randomnessMap[row],
+})
+
+export type AvailableOutlets = 'synth' | 'pad' | 'drums' | 'bass' | 'droneBass'
 
 export type DemoComponentMaker = SceneComponentMaker<AvailableOutlets>
 export type DemoSceneMaker = SceneMaker<AvailableOutlets>
 
-const top: DemoSceneMaker = (source, alignment) => ({
-  top: cp.movingPad(source, 3),
-  left: cp.longBass(source, 3),
-  right: cp.defaultSynth(source, 3),
+const ambient = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
+  left: cp.longDroneBass(meta),
+  center: cp.movingPad(meta),
+  top: cp.defaultSynth(meta),
 })
 
-const middle: DemoSceneMaker = (source, alignment) => ({
-  left: cp.defaultBass(source, 3),
-  // right: cp.defaultSynth(source, 3),
-  bottom: cp.defaultDrums(source, 3),
+const electronica = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
+  top: cp.defaultSynth(meta),
+  center: cp.longPad(meta),
+  bottom: cp.defaultDrums(meta),
 })
 
-const bottom: DemoSceneMaker = (source, alignment) => ({
-  left: cp.defaultBass(source, 3),
-  top: cp.longPad(source, 3),
-  bottom: cp.dnbDrums(source, 3),
+const dnb = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
+  bottom: cp.dnbDrums(meta),
+  center: cp.movingPad(meta),
+  right: cp.defaultBass(meta),
 })
 
 export const themeGrid = createSceneGrid({
-  // top
-  'left-top': top,
-  'center-top': top,
-  'right-top': top,
+  'left-top': ambient('static'),
+  'left-middle': ambient('hybrid'),
+  'left-bottom': ambient('dynamic'),
 
-  // middle
-  'left-middle': middle,
-  'center-middle': middle,
-  'right-middle': middle,
+  'center-top': electronica('static'),
+  'center-middle': electronica('hybrid'), // 
+  'center-bottom': electronica('dynamic'),
 
-  // bottom
-  'left-bottom': bottom,
-  'center-bottom': bottom,
-  'right-bottom': bottom,
+  'right-top': dnb('static'),
+  'right-middle': dnb('hybrid'),
+  'right-bottom': dnb('dynamic'),
 })

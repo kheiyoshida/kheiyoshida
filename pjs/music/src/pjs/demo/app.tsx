@@ -6,9 +6,7 @@ import { createCommandBuffer, createMusic } from './music'
 import { themeGrid } from './themes'
 
 const commandBuffer = createCommandBuffer(
-  [...Array(50)].map(() =>
-    randomItemFromArray(['down', 'up', 'right', 'left'] as GridDirection[])
-  )
+  [...Array(50)].map(() => randomItemFromArray(['down', 'up', 'right', 'left'] as GridDirection[]))
 )
 
 const music = createMusic(themeGrid)
@@ -27,8 +25,8 @@ const play = () => {
     () => {
       music.checkNextTheme(commandBuffer.command)
     },
-    '8m',
-    0
+    '16m',
+    '16m'
   )
   started = true
 }
@@ -40,7 +38,7 @@ export default () => {
       <Grid />
       <div style={{ margin: 16 }}>
         <button style={{ padding: 8, margin: 8 }} onClick={play}>
-        ▶︎ PLAY
+          ▶︎ PLAY
         </button>
       </div>
       {/* <Commands /> */}
@@ -148,5 +146,5 @@ const style: React.CSSProperties = {
   zIndex: 20,
   position: 'fixed',
   top: 0,
-  left: 0
+  left: 0,
 }

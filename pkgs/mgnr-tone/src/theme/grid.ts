@@ -11,38 +11,28 @@ export type GridAlignment = `${GridColumn}-${GridRow}`
 export type GridDirection = 'up' | 'down' | 'left' | 'right'
 
 export type SceneShiftInfo = {
-  scene: SceneMaker | null
+  makeScene: SceneMaker
   direction: GridDirection
   sceneAlignment: GridAlignment
 }
 
 export const createSceneGrid = (themeMakers: { [position in GridPosition]: SceneMaker }) => {
   const position = createGridPositionManager()
-  let lastGridPosition: GridPosition = position.grid
   return {
-    getInitialTheme: () => {
-      return themeMakers[lastGridPosition]
+    getInitialScene: () => {
+      return themeMakers['center-middle']
     },
     move: (direction: GridDirection): SceneShiftInfo => {
       position.move(direction)
-      if (lastGridPosition === position.grid) {
-        return {
-          scene: null,
-          direction,
-          sceneAlignment: position.theme,
-        }
-      } else {
-        lastGridPosition = position.grid
-        return {
-          scene: themeMakers[position.grid],
-          direction,
-          sceneAlignment: position.theme,
-        }
+      return {
+        makeScene: themeMakers[position.grid],
+        direction,
+        sceneAlignment: position.theme,
       }
     },
     get current() {
       return position
-    }
+    },
   }
 }
 

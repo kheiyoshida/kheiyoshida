@@ -8,22 +8,22 @@ export const darkPad = () =>
         type: 'sine',
       },
       envelope: {
-        attack: 0.2,
+        attack: 0.4,
         decay: 0.5,
         sustain: 0.5,
         release: 1.5,
       },
       volume: -10,
-      detune: 20,
+      detune: 10,
     }),
     new Tone.PolySynth(Tone.MonoSynth, {
       oscillator: {
         type: 'triangle2',
       },
-      detune: -20,
+      detune: -10,
       volume: -20,
       envelope: {
-        attack: 0.2,
+        attack: 0.4,
         decay: 0.5,
         sustain: 0.5,
         release: 1.5,

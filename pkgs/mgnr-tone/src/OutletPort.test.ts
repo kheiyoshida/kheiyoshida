@@ -18,7 +18,7 @@ jest.mock('./tone-wrapper/Transport', () => ({
 describe(`${ToneOutletPort.name}`, () => {
   const prepareGeneratorWithNotes = (notes = defaultNotes) => {
     const generator = createGenerator({
-      note: {
+      sequence: {
         fillStrategy: 'fixed',
       },
     })
@@ -47,7 +47,7 @@ describe(`${ToneOutletPort.name}`, () => {
     const { outlet } = prepareOutlet()
     const port = outlet.assignGenerator(prepareGeneratorWithNotes())
     const spyOutletAssign = jest.spyOn(outlet, 'sendNote').mockImplementation(() => undefined)
-    port.onEnded(() => port.numOfLoops = 0)
+    port.onEnded(() => (port.numOfLoops = 0))
     port.loopSequence(4, 0)
     expect(spyScheduleLoop.mock.calls[0].slice(1)).toMatchObject([
       1, // duration
@@ -60,7 +60,7 @@ describe(`${ToneOutletPort.name}`, () => {
     const eventHandler = jest.fn()
     const { outlet } = prepareOutlet()
     const port = outlet.assignGenerator(prepareGeneratorWithNotes())
-    port.onElapsed(eventHandler).onEnded(() => port.numOfLoops = 0)
+    port.onElapsed(eventHandler).onEnded(() => (port.numOfLoops = 0))
     port.loopSequence(4, 0)
     expect(eventHandler).toHaveBeenCalledTimes(3)
   })

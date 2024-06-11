@@ -1,25 +1,11 @@
 import * as mgnr from 'mgnr-tone'
 import * as Tone from 'tone'
 
-export const heavyKick = () =>
-  new Tone.MembraneSynth({
-    oscillator: {
-      type: 'triangle',
-    },
-    envelope: {
-      attack: 0,
-      decay: 1,
-      sustain: 1,
-      release: 0.5,
-    },
-    volume: -6,
-  })
-
 export const tightKick = () =>
   new Tone.MembraneSynth({
     envelope: {
       attack: 0,
-      decay: 0.7,
+      decay: 0.5,
       sustain: 0.3,
       release: 0.05,
     },
@@ -58,11 +44,11 @@ export const explicitSnare = () =>
       detune: -500,
       envelope: {
         attack: 0,
-        decay: 0.4,
+        decay: 0.3,
         sustain: 1 / 500,
-        release: 0.2,
+        release: 0.1,
       },
-      volume: -20,
+      volume: -24,
     }),
     new Tone.NoiseSynth({
       envelope: {
@@ -79,11 +65,11 @@ export const explicitSnare = () =>
     new Tone.NoiseSynth({
       envelope: {
         attack: 0,
-        decay: 0.3,
+        decay: 0.2,
         sustain: 1 / 1000,
         release: 0.05,
       },
-      volume: -3,
+      volume: -6,
       noise: {
         type: 'pink',
       },

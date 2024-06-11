@@ -26,8 +26,8 @@ export const darkLead = () =>
       detune: -20,
       envelope: {
         attack: 0.1,
-        decay: 0.5,
-        sustain: 0.2,
+        decay: 0.3,
+        sustain: 0.15,
         release: 0.05,
       },
     })

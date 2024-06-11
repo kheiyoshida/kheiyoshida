@@ -21,7 +21,7 @@ export const darkBass = () =>
     }),
     new Tone.MonoSynth({
       oscillator: {
-        type: 'triangle2',
+        type: 'triangle6',
       },
       envelope: {
         attack: 0.01,
@@ -30,10 +30,10 @@ export const darkBass = () =>
         release: 0.1,
       },
       volume: -10,
-      detune: -100,
+      detune: -60,
       filter: {
         type: 'lowpass',
-        frequency: 100,
+        frequency: 120,
       },
     })
   )
@@ -116,12 +116,12 @@ export const droneBass = () =>
         type: 'sine',
       },
       envelope: {
-        attack: 0.5,
+        attack: 0.8,
         decay: 0.5,
         sustain: 0.8,
         release: 0.5,
       },
-      volume: -10,
+      volume: -12,
       filter: {
         type: 'lowpass',
         frequency: 100,
@@ -132,13 +132,13 @@ export const droneBass = () =>
         type: 'square2',
       },
       envelope: {
-        attack: 0.2,
+        attack: 0.8,
         decay: 0.5,
         sustain: 0.3,
         release: 0.5,
       },
-      volume: -20,
-      detune: 100,
+      volume: -18,
+      detune: -10,
       filter: {
         type: 'lowpass',
         frequency: 100,

@@ -5,6 +5,7 @@ import { adjustNotePitch, changeNotePitch, harmonizeNote, pickHarmonizedNotes } 
 import { Sequence, SequenceNoteMap } from './generator/Sequence'
 
 export function updateConfig(context: GeneratorContext, config: Partial<GeneratorConf>) {
+  context.scale = config.scale || context.scale
   context.sequence.updateConfig(config.sequence || {})
   Object.assign(context.picker, config.note)
   constructNotes(context)
@@ -18,6 +19,14 @@ export function constructNotes(context: GeneratorContext, initialNotes?: Sequenc
 export function resetNotes(context: GeneratorContext, notes?: SequenceNoteMap) {
   eraseSequenceNotes(context)
   assignInitialNotes(context, notes)
+  removeNotesOutOfLength(context.sequence)
+  removeNotesOutOfCapacity(context)
+  adjustPitch(context)
+  assignNotes(context)
+}
+
+export function adjustNotes(context: GeneratorContext, fixedNotes?: SequenceNoteMap) {
+  assignInitialNotes(context, fixedNotes)
   removeNotesOutOfLength(context.sequence)
   removeNotesOutOfCapacity(context)
   adjustPitch(context)

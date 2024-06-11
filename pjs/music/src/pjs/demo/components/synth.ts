@@ -1,58 +1,83 @@
-import { makeLevelMap } from 'mgnr-tone'
-import { DemoComponentMaker } from '../themes'
-import { randomSequence, randomise, strictArpegio } from './patterns/generators'
+import { Range } from 'utils'
+import { DemoComponentMaker, Randomness, Saturation, translate } from '../themes'
 
-export const defaultSynth: DemoComponentMaker = (source, level) => {
-  const density = makeLevelMap([0.3, 0.4, 0.5, 0.6, 0.7])
-  const scale = source.createScale({ range: { min: 40, max: 80 } })
-  return {
-    outId: 'synth',
-    generators: [
-      {
-        generator: randomSequence(scale, density[level]),
-        loops: 4,
-        onElapsed: () => {
-          return
-        },
-        onEnded: (g) => g.mutate({ rate: 0.2, strategy: 'randomize' }),
+export const defaultSynth =
+  (metaRandomness: Randomness): DemoComponentMaker =>
+  (source, alignment) => {
+    const { randomness, saturation } = translate(alignment)
+    const densityMap: Record<Saturation, number> = {
+      thin: 0.3,
+      neutral: 0.5,
+      thick: 0.8,
+    }
+    const durationMap: Record<Randomness, number> = {
+      static: 1,
+      hybrid: 2,
+      dynamic: 4,
+    }
+    const sequenceLengthMap: Record<Randomness, number> = {
+      static: 8,
+      hybrid: 16,
+      dynamic: 11,
+    }
+    const pitchRangeMap: Record<Saturation, Range> = {
+      thin: {
+        min: 80,
+        max: 96,
       },
-      {
-        generator: randomise(scale),
-        loops: 4,
-        onElapsed: () => {
-          return
-        },
-        onEnded: (g) => g.mutate({ rate: 0.2, strategy: 'randomize' }),
+      neutral: {
+        min: 72,
+        max: 96,
       },
-    ],
+      thick: {
+        min: 60,
+        max: 100,
+      },
+    }
+    const scale = source.createScale({ range: pitchRangeMap[saturation] })
+    return {
+      outId: 'synth',
+      generators: [
+        {
+          generator: {
+            scale,
+            sequence: {
+              length: 16,
+              division: 16,
+              density: densityMap[saturation],
+              polyphony: 'mono',
+            },
+            note: {
+              duration: {
+                min: 1,
+                max: durationMap[randomness],
+              },
+            },
+          },
+          loops: 4,
+          onElapsed: () => undefined,
+          onEnded: (g) => g.mutate({ rate: 0.2, strategy: 'randomize' }),
+        },
+        {
+          generator: {
+            scale,
+            sequence: {
+              length: sequenceLengthMap[metaRandomness] - 2,
+              division: 16,
+              density: metaRandomness !== 'static' ? 0.3 : 0,
+              polyphony: 'mono',
+            },
+            note: {
+              duration: {
+                min: 1,
+                max: durationMap[metaRandomness],
+              },
+            },
+          },
+          loops: 4,
+          onElapsed: () => undefined,
+          onEnded: (g) => g.mutate({ rate: 0.2, strategy: 'randomize' }),
+        },
+      ],
+    }
   }
-}
-
-export const freeformSynth: DemoComponentMaker = (source) => {
-  const scale = source.createScale({ range: { min: 50, max: 100 }, pref: 'major' })
-  return {
-    outId: 'synth',
-    generators: [
-      {
-        generator: strictArpegio(scale),
-        // middlewares: { changeLength: pingpongSequenceLength('extend') },
-        loops: 4,
-        onElapsed: () => {
-          return
-        },
-        onEnded: (g) => {
-          g.mutate({ rate: 0.2, strategy: 'randomize' })
-          // g.changeLength(2)
-        },
-      },
-      {
-        generator: randomise(scale),
-        loops: 4,
-        onElapsed: () => {
-          return
-        },
-        onEnded: (g) => g.mutate({ rate: 0.2, strategy: 'randomize' }),
-      },
-    ],
-  }
-}
