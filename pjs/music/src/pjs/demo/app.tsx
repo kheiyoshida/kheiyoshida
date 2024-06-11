@@ -6,12 +6,12 @@ import { createCommandBuffer, createMusic } from './music'
 import { themeGrid } from './themes'
 
 const commandBuffer = createCommandBuffer(
-  ['up', 'up', 'up', // ambient
-    'down', 'down', 'down', // nica
-    'down', 'down', 'down', // dnb
-    'up', 'up', 'up', 
-    'down', 'down'
-  ]
+  // ['up', 'up', 'up', // ambient
+  //   'down', 'down', 'down', // nica
+  //   'down', 'down', 'down', // dnb
+  //   'up', 'up', 'up', 
+  //   'down', 'down'
+  // ]
   // [...Array(50)].map(() =>
   //   randomItemFromArray(['down', 'up', 'right', 'left'] as GridDirection[])
   // )
@@ -27,8 +27,8 @@ const play = () => {
   }
   if (started) return
   Tone.Transport.bpm.value = 162
-  Tone.Transport.start()
   music.applyInitialTheme()
+  Tone.Transport.start()
   Tone.Transport.scheduleRepeat(
     () => {
       music.checkNextTheme(commandBuffer.command)
