@@ -46,10 +46,10 @@ export const createMusic = (sceneGrid: SceneGrid) => {
   // theme
   const synCh = mixer.createInstChannel({
     inst: instruments.darkLead(),
-    effects: [new Tone.Filter(300, 'highpass'), new Tone.PingPongDelay('2n', 0.1)],
+    effects: [new Tone.Filter(300, 'highpass'), new Tone.PingPongDelay('8n.', 0.1)],
     initialVolume: -40,
     volumeRange: {
-      max: -12,
+      max: -18,
       min: -40,
     },
   })
@@ -57,7 +57,7 @@ export const createMusic = (sceneGrid: SceneGrid) => {
     inst: instruments.darkPad(),
     initialVolume: -40,
     volumeRange: {
-      max: -12,
+      max: -10,
       min: -40,
     },
     effects: [new Tone.Filter(500, 'highpass'), new Tone.PingPongDelay('8n.', 0.3)],
@@ -114,7 +114,7 @@ export const createMusic = (sceneGrid: SceneGrid) => {
 
   function applyInitialTheme() {
     const makeScene = sceneGrid.getInitialScene()
-    const scene = makeScene(scale, 'center-middle')
+    const scene = makeScene(scale, 'center-bottom')
     const result = state.applyScene(scene, Tone.Transport.toSeconds('@4m'))
     Object.values(result.in).forEach((outlet) => {
       const ch = channels[outlet as AvailableOutlets]
