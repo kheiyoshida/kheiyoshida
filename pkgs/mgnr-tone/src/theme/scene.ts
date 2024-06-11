@@ -18,8 +18,6 @@ export type Scene<AvailableOutlets = string> = {
   [k in SceneComponentPosition]?: SceneComponent<AvailableOutlets>
 }
 
-// & { updateAlignment(direction: GridDirection): void }
-
 export type SceneComponentMaker<AvailableOutlets = string> = (
   source: ScaleSource,
   alignment: {

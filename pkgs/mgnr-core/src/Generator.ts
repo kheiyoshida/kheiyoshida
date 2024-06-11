@@ -1,6 +1,7 @@
 import { NotePickerConf } from './generator/NotePicker'
 import { Sequence, SequenceConf } from './generator/Sequence'
 import {
+  adjustNotes,
   adjustPitch,
   changeSequenceLength,
   constructNotes,
@@ -55,6 +56,7 @@ export const defaultMiddlewares = {
   updateConfig,
   constructNotes,
   resetNotes,
+  adjustNotes,
   eraseSequenceNotes,
   adjustPitch,
   changeSequenceLength,

@@ -76,7 +76,7 @@ export const createMusicState = (outlets: Record<string, ToneOutlet>) => {
 export const overridePort = (port: ToneOutletPort<Middlewares>, spec: GeneratorSpec) => {
   const override = (g: SequenceGenerator<Middlewares>) => {
     g.updateConfig(spec.generator)
-    g.resetNotes(spec.notes)
+    g.adjustNotes(spec.notes)
     port.numOfLoops = spec.loops
     port.onElapsed(spec.onElapsed)
     port.onEnded(spec.onEnded)

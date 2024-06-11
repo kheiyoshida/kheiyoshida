@@ -25,6 +25,14 @@ export function resetNotes(context: GeneratorContext, notes?: SequenceNoteMap) {
   assignNotes(context)
 }
 
+export function adjustNotes(context: GeneratorContext, fixedNotes?: SequenceNoteMap) {
+  assignInitialNotes(context, fixedNotes)
+  removeNotesOutOfLength(context.sequence)
+  removeNotesOutOfCapacity(context)
+  adjustPitch(context)
+  assignNotes(context)
+}
+
 export function assignInitialNotes(context: GeneratorContext, initialNotes?: SequenceNoteMap) {
   if (!initialNotes) return
   Sequence.iteratePosition(initialNotes, (position) => {
