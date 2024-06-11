@@ -77,6 +77,7 @@ export const createMusic = (sceneGrid: SceneGrid) => {
       max: -12,
       min: -40,
     },
+    effects: [new Tone.Filter(50, 'highpass'), new Tone.PingPongDelay('2n', 0.1)],
   })
   const drumsCh = mixer.createInstChannel({
     inst: instruments.beatDrums(),
@@ -90,6 +91,7 @@ export const createMusic = (sceneGrid: SceneGrid) => {
   mixer.connect(synCh, sendTrack, 0.2)
   mixer.connect(padCh, sendTrack, 0.5)
   mixer.connect(drumsCh, sendTrack, 0.2)
+  mixer.connect(droneBassCh, sendTrack, 0.2)
 
   const channels: Record<AvailableOutlets, InstChannel> = {
     synth: synCh,
@@ -112,7 +114,7 @@ export const createMusic = (sceneGrid: SceneGrid) => {
 
   function applyInitialTheme() {
     const makeScene = sceneGrid.getInitialScene()
-    const scene = makeScene(scale, 'right-bottom')
+    const scene = makeScene(scale, 'center-middle')
     const result = state.applyScene(scene, Tone.Transport.toSeconds('@4m'))
     Object.values(result.in).forEach((outlet) => {
       const ch = channels[outlet as AvailableOutlets]

@@ -15,7 +15,8 @@ const categoryTour: GridDirection[] = [
 ]
 
 
-const commandBuffer = createCommandBuffer(categoryTour
+const commandBuffer = createCommandBuffer(
+  categoryTour
   // ['up', 'up', 'up', // ambient
   //   'down', 'down', 'down', // nica
   //   'down', 'down', 'down', // dnb

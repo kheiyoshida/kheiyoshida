@@ -1,10 +1,6 @@
-import { DemoComponentMaker } from '../themes'
-import {
-  addHarmonyToLongSequence,
-  generateLongSequences,
-  randomBassline,
-  randomise,
-} from './patterns/generators'
+import { Range } from 'utils'
+import { DemoComponentMaker, Randomness, Saturation, translate } from '../themes'
+import { randomBassline, randomise } from './patterns/generators'
 
 export const defaultBass: DemoComponentMaker = (source, level) => {
   const scale = source.createScale({ range: { min: 20, max: 50 } })
@@ -27,23 +23,54 @@ export const defaultBass: DemoComponentMaker = (source, level) => {
   }
 }
 
-export const longDroneBass: DemoComponentMaker = (source, level) => {
-  const scale = source.createScale({ range: { min: 20, max: 45 }, pref: 'major' })
-  return {
-    outId: 'droneBass',
-    generators: [
-      {
-        generator: generateLongSequences(scale),
-        loops: 4,
-        onElapsed: (g) => g.mutate({ rate: 0.5, strategy: 'inPlace' }),
-        onEnded: () => undefined,
+export const longDroneBass =
+  (metaRandomness: Randomness): DemoComponentMaker =>
+  (source, alignment) => {
+    const { randomness, saturation } = translate(alignment)
+
+    const maxPitchMap: Record<Saturation, number> = {
+      thin: 36,
+      neutral: 48,
+      thick: 52,
+    }
+    const noteDurationMap: Record<Randomness, Range | number> = {
+      static: 4,
+      hybrid: {
+        min: 2,
+        max: 4,
       },
-      {
-        generator: addHarmonyToLongSequence(scale),
-        loops: 4,
-        onElapsed: (g) => g.mutate({ rate: 0.2, strategy: 'inPlace' }),
-        onEnded: () => undefined,
+      dynamic: {
+        min: 1,
+        max: 2,
       },
-    ],
+    }
+    const rateMap: Record<Randomness, number> = {
+      static: 0,
+      hybrid: 0.2,
+      dynamic: 0.5,
+    }
+    const scale = source.createScale({ range: { min: 24, max: maxPitchMap[saturation] } })
+    return {
+      outId: 'droneBass',
+      generators: [
+        {
+          generator: {
+            scale,
+            sequence: {
+              length: 4,
+              division: 1,
+              density: saturation === 'thin' ? 0.5 : 1,
+              polyphony: 'mono',
+            },
+            note: {
+              duration: noteDurationMap[metaRandomness],
+            },
+          },
+          loops: 4,
+          onElapsed: (g) =>
+            metaRandomness === 'dynamic' && g.mutate({ rate: 0.2, strategy: 'randomize' }),
+          onEnded: (g) => g.mutate({ rate: rateMap[randomness], strategy: 'inPlace' }),
+        },
+      ],
+    }
   }
-}
