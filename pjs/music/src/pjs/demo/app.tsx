@@ -5,13 +5,23 @@ import { fireByRate, randomItemFromArray } from 'utils'
 import { createCommandBuffer, createMusic } from './music'
 import { themeGrid } from './themes'
 
-const commandBuffer = createCommandBuffer(
-  ['up', 'up', 'up', // ambient
-    'down', 'down', 'down', // nica
-    'down', 'down', 'down', // dnb
-    'up', 'up', 'up', 
-    'down', 'down'
-  ]
+const categoryTour: GridDirection[] = [
+  'right',
+  'up', 'up', 'up','up', // thick
+  'left', 'left', // static
+  'down', 'down', 'down', 'down', 'down', 'down', 'down', 'down', // thin
+  'right',
+  'up', 'up', 'up','up', // neutral
+]
+
+
+const commandBuffer = createCommandBuffer(categoryTour
+  // ['up', 'up', 'up', // ambient
+  //   'down', 'down', 'down', // nica
+  //   'down', 'down', 'down', // dnb
+  //   'up', 'up', 'up', 
+  //   'down', 'down'
+  // ]
   // [...Array(50)].map(() =>
   //   randomItemFromArray(['down', 'up', 'right', 'left'] as GridDirection[])
   // )

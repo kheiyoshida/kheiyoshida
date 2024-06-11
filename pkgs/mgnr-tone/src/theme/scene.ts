@@ -53,5 +53,5 @@ export const injectSceneMakerDeps =
     )
   }
 
-const splitAlignment = (alignment: GridAlignment) =>
+export const splitAlignment = (alignment: GridAlignment) =>
   alignment.split('-') as [GridColumn, GridRow]

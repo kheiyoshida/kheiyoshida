@@ -32,22 +32,7 @@ export const addHarmonyToLongSequence = (scale: Scale): GeneratorConf => ({
   },
 })
 
-export const movingSequence = (scale: Scale): GeneratorConf => ({
-  scale,
-  sequence: {
-    length: 16,
-    division: 16,
-    density: 0.5,
-    polyphony: 'mono',
-    fillStrategy: 'fill',
-  },
-  note: {
-    duration: {
-      min: 1,
-      max: 4,
-    },
-  },
-})
+
 
 export const randomSequence = (scale: Scale, density: number): GeneratorConf => ({
   scale,

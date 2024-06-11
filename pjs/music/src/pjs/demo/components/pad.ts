@@ -1,30 +1,94 @@
-import { DemoComponentMaker } from '../themes'
-import {
-  addHarmonyToLongSequence,
-  generateLongSequences,
-  movingSequence,
-  randomise,
-} from './patterns/generators'
+import { Range } from 'utils'
+import { DemoComponentMaker, Randomness, Saturation, translate } from '../themes'
+import { addHarmonyToLongSequence, generateLongSequences } from './patterns/generators'
 
-export const movingPad: DemoComponentMaker = (source, { col, row }) => {
-  const scale =
-    row === 'middle'
-      ? source.createScale({ range: { min: 80, max: 120 } })
-      : source.createScale({ range: { min: 20, max: 80 } })
+export const movingPad = (metaRandomness: Randomness): DemoComponentMaker => (source, alignment) => {
+  const { randomness, saturation } = translate(alignment)
+  const scaleRange: Record<Saturation, Range> = {
+    thin: {
+      min: 80,
+      max: 100,
+    },
+    neutral: {
+      min: 70,
+      max: 90,
+    },
+    thick: {
+      min: 60,
+      max: 80,
+    },
+  }
+  const rateMap: Record<Randomness, number> = {
+    static: 0,
+    hybrid: 0.2,
+    dynamic: 0.4
+  }
+  const densityMap: Record<Saturation, number> = {
+    thin: 0.25,
+    neutral: 0.4,
+    thick: 0.5
+  }
+  const randomDensityAdjustMap: Record<Randomness, number> = {
+    static: 0.25,
+    hybrid: 0.15,
+    dynamic: 0
+  }
+  const noteDurationMap: Record<Randomness, number> = {
+    static: 1,
+    hybrid: 2,
+    dynamic: 4
+  }
+  const sequenceDurationMap: Record<Randomness, number> = {
+    static: 8,
+    hybrid: 12,
+    dynamic: 20
+  }
+
+  const rate = rateMap[randomness]
+  const scale = source.createScale({ range: scaleRange[saturation] })
   return {
     outId: 'pad',
     generators: [
       {
-        generator: movingSequence(scale),
+        generator: {
+          scale,
+          sequence: {
+            length: sequenceDurationMap[metaRandomness],
+            division: 16,
+            density: densityMap[saturation],
+            polyphony: 'mono',
+            fillStrategy: 'fill',
+          },
+          note: {
+            duration: {
+              min: 1,
+              max: noteDurationMap[metaRandomness],
+            },
+          },
+        },
         loops: 2,
-        onElapsed: (g) => g.mutate({ rate: 0.2, strategy: 'inPlace' }),
-        onEnded: (g) => g.mutate({ rate: 0.2, strategy: 'randomize' }),
+        onElapsed: (g) => g.mutate({ rate, strategy: 'inPlace' }),
+        onEnded: (g) => g.mutate({ rate, strategy: 'randomize' }),
       },
       {
-        generator: randomise(scale),
+        generator: {
+          scale,
+          sequence: {
+            length: 10,
+            division: 16,
+            density: densityMap[saturation] - randomDensityAdjustMap[randomness],
+            polyphony: 'mono',
+          },
+          note: {
+            duration: {
+              min: 1,
+              max: 2,
+            },
+          },
+        },
         loops: 2,
-        onElapsed: (g) => g.mutate({ rate: 0.2, strategy: 'randomize' }),
-        onEnded: (g) => g.mutate({ rate: 0.2, strategy: 'randomize' }),
+        onElapsed: (g) => g.mutate({ rate, strategy: 'randomize' }),
+        onEnded: (g) => g.mutate({ rate, strategy: 'randomize' }),
       },
     ],
   }

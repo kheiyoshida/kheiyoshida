@@ -1,15 +1,40 @@
-import { SceneComponentMaker, SceneMaker, createSceneGrid, injectSceneMakerDeps } from 'mgnr-tone'
+import {
+  GridColumn,
+  GridRow,
+  SceneComponentMaker,
+  SceneMaker,
+  createSceneGrid,
+  injectSceneMakerDeps,
+} from 'mgnr-tone'
 import * as cp from './components'
 
-export type Character = 'dark' | 'neutral' | 'bright'
+export type Saturation = 'thin' | 'neutral' | 'thick'
+export type Randomness = 'static' | 'hybrid' | 'dynamic'
+
+const saturationMap: Record<GridColumn, Saturation> = {
+  left: 'thin',
+  center: 'neutral',
+  right: 'thick',
+}
+
+const randomnessMap: Record<GridRow, Randomness> = {
+  top: 'static',
+  middle: 'hybrid',
+  bottom: 'dynamic',
+}
+
+export const translate = ({ col, row }: { col: GridColumn; row: GridRow }) => ({
+  saturation: saturationMap[col],
+  randomness: randomnessMap[row],
+})
 
 export type AvailableOutlets = 'synth' | 'pad' | 'drums' | 'bass' | 'droneBass'
 
 export type DemoComponentMaker = SceneComponentMaker<AvailableOutlets>
 export type DemoSceneMaker = SceneMaker<AvailableOutlets>
 
-const ambient: DemoSceneMaker = injectSceneMakerDeps({
-  top: cp.movingPad,
+const ambient = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
+  top: cp.movingPad(meta),
   // left: cp.longDroneBass,
   // right: cp.defaultSynth,
 })
@@ -17,30 +42,27 @@ const ambient: DemoSceneMaker = injectSceneMakerDeps({
 const electronica: DemoSceneMaker = injectSceneMakerDeps({
   top: cp.longPad,
   right: cp.defaultSynth,
-  bottom: cp.defaultDrums
+  bottom: cp.defaultDrums,
 })
 
-const dnb: DemoSceneMaker = injectSceneMakerDeps({
+const dnb = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
   left: cp.defaultBass,
-  top: cp.movingPad,
-  bottom: cp.dnbDrums
+  top: cp.movingPad(meta),
+  bottom: cp.dnbDrums,
 })
 
-const devScene: DemoSceneMaker = ambient
+const devScene: DemoSceneMaker = ambient('static')
 
 export const themeGrid = createSceneGrid({
-  // top
-  'left-top': ambient,
-  'center-top': ambient,
-  'right-top': ambient,
+  'left-top': ambient('static'),
+  'left-middle': ambient('hybrid'),
+  'left-bottom': ambient('dynamic'),
 
-  // middle
-  'left-middle': electronica,
-  'center-middle': devScene,
-  'right-middle': electronica,
+  'center-top': ambient('static'),
+  'center-middle': ambient('hybrid'),
+  'center-bottom': ambient('dynamic'),
 
-  // bottom
-  'left-bottom': dnb,
-  'center-bottom': dnb,
-  'right-bottom': dnb,
+  'right-top': dnb('static'),
+  'right-middle': dnb('hybrid'),
+  'right-bottom': dnb('dynamic'),
 })
