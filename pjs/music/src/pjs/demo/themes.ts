@@ -34,21 +34,21 @@ export type DemoComponentMaker = SceneComponentMaker<AvailableOutlets>
 export type DemoSceneMaker = SceneMaker<AvailableOutlets>
 
 const ambient = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
-  top: cp.movingPad(meta),
   left: cp.longDroneBass(meta),
+  center: cp.movingPad(meta),
   right: cp.defaultSynth(meta),
 })
 
 const electronica = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
-  top: cp.longPad(meta),
-  right: cp.defaultSynth(meta),
-  bottom: cp.defaultDrums(meta),
+  left: cp.defaultSynth(meta),
+  center: cp.longPad(meta),
+  right: cp.defaultDrums(meta),
 })
 
 const dnb = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
-  left: cp.defaultBass(meta),
-  top: cp.movingPad(meta),
-  bottom: cp.dnbDrums(meta),
+  left: cp.dnbDrums(meta),
+  center: cp.movingPad(meta),
+  right: cp.defaultBass(meta),
 })
 
 export const themeGrid = createSceneGrid({
