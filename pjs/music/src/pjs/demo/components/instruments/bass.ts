@@ -21,7 +21,7 @@ export const darkBass = () =>
     }),
     new Tone.MonoSynth({
       oscillator: {
-        type: 'triangle2',
+        type: 'triangle6',
       },
       envelope: {
         attack: 0.01,
@@ -30,10 +30,10 @@ export const darkBass = () =>
         release: 0.1,
       },
       volume: -10,
-      detune: -100,
+      detune: -60,
       filter: {
         type: 'lowpass',
-        frequency: 100,
+        frequency: 120,
       },
     })
   )

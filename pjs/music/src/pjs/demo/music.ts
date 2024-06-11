@@ -69,6 +69,7 @@ export const createMusic = (sceneGrid: SceneGrid) => {
       max: -12,
       min: -40,
     },
+    effects: [new Tone.Filter(50, 'highpass'), new Tone.PingPongDelay('2n', 0.1)],
   })
   const droneBassCh = mixer.createInstChannel({
     inst: instruments.droneBass(),
@@ -87,8 +88,7 @@ export const createMusic = (sceneGrid: SceneGrid) => {
       min: -40,
     },
     effects: [
-      new Tone.BitCrusher(16),
-      new Tone.Filter(100, 'highpass'),
+      new Tone.Filter(120, 'highpass'),
       new Tone.Filter(3000, 'lowshelf'),
     ],
   })

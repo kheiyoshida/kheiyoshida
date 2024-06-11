@@ -16,16 +16,16 @@ const categoryTour: GridDirection[] = [
 
 
 const commandBuffer = createCommandBuffer(
-  categoryTour
+  // categoryTour
   // ['up', 'up', 'up', // ambient
   //   'down', 'down', 'down', // nica
   //   'down', 'down', 'down', // dnb
   //   'up', 'up', 'up', 
   //   'down', 'down'
   // ]
-  // [...Array(50)].map(() =>
-  //   randomItemFromArray(['down', 'up', 'right', 'left'] as GridDirection[])
-  // )
+  [...Array(50)].map(() =>
+    randomItemFromArray(['down', 'up', 'right', 'left'] as GridDirection[])
+  )
 )
 
 const music = createMusic(themeGrid)
