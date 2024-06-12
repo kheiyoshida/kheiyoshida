@@ -14,7 +14,7 @@ import { makeFader } from 'mgnr-tone/src/theme/fade'
 import * as Tone from 'tone'
 import { randomItemFromArray } from 'utils'
 import * as instruments from './components/instruments'
-import { AvailableOutlets } from './themes'
+import { AvailableOutlets } from './scenes'
 
 export const createCommandBuffer = (initialCommands: GridDirection[] = []) => {
   let commands: GridDirection[] = initialCommands

@@ -1,5 +1,5 @@
 import { Range } from 'utils'
-import { DemoComponentMaker, Randomness, Saturation, translate } from '../themes'
+import { DemoComponentMaker, Randomness, Saturation, translate } from '../scenes'
 
 export const defaultBass =
   (metaRandomness: Randomness): DemoComponentMaker =>

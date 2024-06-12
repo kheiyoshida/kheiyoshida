@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import * as Tone from 'tone'
 import { fireByRate, randomItemFromArray } from 'utils'
 import { createCommandBuffer, createMusic } from './music'
-import { themeGrid } from './themes'
+import { themeGrid } from './scenes'
 
 const commandBuffer = createCommandBuffer(
   [...Array(50)].map(() => randomItemFromArray(['down', 'up', 'right', 'left'] as GridDirection[]))

@@ -1,6 +1,6 @@
 import { createScale } from 'mgnr-tone'
 import { fireByRate, randomIntInclusiveBetween } from 'utils'
-import { DemoComponentMaker, Randomness, Saturation, translate } from '../themes'
+import { DemoComponentMaker, Randomness, Saturation, translate } from '../scenes'
 import { dnb, fill, kick2, snare } from './patterns/sequences'
 
 const dmScale = createScale([30, 50, 90])
