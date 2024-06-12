@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react'
-import Demo from './pjs/demo/app'
+import { makeMusic } from './pjs/demo'
+import { makeMusicGrid } from './ui/grid'
 
 const Projects = {
-  demo: <Demo />,
+  demo: makeMusic,
 } as const
 
-export default () => {
+const App: React.FC = () => {
   const [pj, setPj] = useState(window.location.pathname)
   useEffect(() => {
     setPj(window.location.pathname.slice(1))
   }, [window.location.pathname])
   if (pj in Projects) {
-    return Projects[pj as keyof typeof Projects]
+    const makeMusic = Projects[pj as keyof typeof Projects]
+    const Ui = makeMusicGrid(makeMusic)
+    return <Ui />
   }
   return (
     <div>
@@ -23,3 +26,5 @@ export default () => {
     </div>
   )
 }
+
+export default App

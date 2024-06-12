@@ -1,10 +1,9 @@
 import * as Tone from 'tone'
-import { Duration } from "./fade"
 
 export const makeContextManager = (config: {
   bpm: number
   initialise: () => void
-  interval: Duration
+  interval: string
   onInterval: () => void
 }) => {
   const startContext = () => {
