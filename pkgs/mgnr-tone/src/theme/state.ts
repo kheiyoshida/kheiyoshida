@@ -87,7 +87,7 @@ export const overridePort = (port: ToneOutletPort<Middlewares>, spec: GeneratorS
 export const cancelPort = (port: ToneOutletPort<Middlewares>) => {
   Transport.scheduleOnce(() => {
     port.stopLoop()
-  }, '+8m')
+  }, '+24m')
 }
 
 export const createNewPortForOutlet = (
