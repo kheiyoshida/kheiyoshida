@@ -1,34 +1,44 @@
-import { GridDirection, GridPosition } from 'mgnr-tone'
+import { GridDirection, GridPosition, makeContextManager } from 'mgnr-tone'
 import { useEffect, useState } from 'react'
-import * as Tone from 'tone'
 import { fireByRate, randomItemFromArray } from 'utils'
-import { createCommandBuffer, createMusic } from './music'
-import { themeGrid } from './scenes'
+import { makeMusic } from './music'
+
+const createCommandBuffer = (initialCommands: GridDirection[] = []) => {
+  let commands: GridDirection[] = initialCommands
+  return {
+    get command(): GridDirection | null {
+      return commands.shift() || null
+    },
+    push(value: GridDirection) {
+      commands.push(value)
+    },
+    set(value: GridDirection) {
+      commands = [value]
+    },
+  }
+}
 
 const commandBuffer = createCommandBuffer(
   [...Array(50)].map(() => randomItemFromArray(['down', 'up', 'right', 'left'] as GridDirection[]))
 )
 
-const music = createMusic(themeGrid)
+const music = makeMusic()
 
-let started = false
+const context = makeContextManager({
+  bpm: 162,
+  initialise: () => music.applyInitialScene(),
+  interval: '16m',
+  onInterval: () => {
+    const command = commandBuffer.command
+    if (command) {
+      music.checkNextShift(command)
+    }
+  },
+})
 
 const play = () => {
-  if (Tone.context.state === 'suspended') {
-    Tone.start()
-  }
-  if (started) return
-  Tone.Transport.bpm.value = 162
-  Tone.Transport.start()
-  music.applyInitialTheme()
-  Tone.Transport.scheduleRepeat(
-    () => {
-      music.checkNextShift(commandBuffer.command)
-    },
-    '16m',
-    '16m'
-  )
-  started = true
+  context.startContext()
+  context.startPlaying()
 }
 
 export default () => {
@@ -66,8 +76,8 @@ const Grid = () => {
   useEffect(() => {
     setInterval(() => {
       if (fireByRate(0.5)) {
-        setPosition(themeGrid.current.grid)
-        setAlignment(themeGrid.current.theme)
+        setPosition(music.currentPosition.grid)
+        setAlignment(music.currentPosition.theme)
       } else {
         setPosition(null)
         setAlignment(null)

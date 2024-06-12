@@ -1,11 +1,11 @@
 import { createOutlet, createScaleSource, getMixer, pickRandomPitchName } from 'mgnr-tone'
 import { ToneOutlet } from 'mgnr-tone/src/Outlet'
 import { InstChannel } from 'mgnr-tone/src/mixer/Channel'
-import { makeFader } from 'mgnr-tone/src/theme/fade'
 import * as Tone from 'tone'
 import { randomItemFromArray } from 'utils'
 import * as instruments from './components/instruments'
 import { AvailableOutlets } from './scenes'
+import { makeFader } from 'mgnr-tone/src/theme/fade'
 
 export const createDefaultTheme = () => {
   const scaleSource = createScaleSource({
@@ -82,7 +82,7 @@ export const createDefaultTheme = () => {
     bass: bassCh,
     droneBass: droneBassCh,
   }
-  
+
   const outlets: Record<AvailableOutlets, ToneOutlet> = {
     synth: createOutlet(synCh.inst, Tone.Transport.toSeconds('16n')),
     pad: createOutlet(padCh.inst),
@@ -91,9 +91,12 @@ export const createDefaultTheme = () => {
     droneBass: createOutlet(droneBassCh.inst, Tone.Transport.toSeconds('16n')),
   }
 
+  const handlefade = makeFader(channels)
+
   return {
     scaleSource,
     channels,
     outlets,
+    handlefade,
   }
 }

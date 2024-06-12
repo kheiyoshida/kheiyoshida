@@ -1,2 +1,2 @@
-export { createMusic, createCommandBuffer } from './music'
-export { themeGrid } from './scenes'
+export { makeMusic as createMusic, createCommandBuffer } from './music'
+export { scenes as themeGrid } from './scenes'

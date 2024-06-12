@@ -51,7 +51,7 @@ const dnb = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
   right: cp.defaultBass(meta),
 })
 
-export const themeGrid = createSceneGrid({
+export const makeDefaultScenes = () => createSceneGrid({
   'left-top': ambient('static'),
   'left-middle': ambient('hybrid'),
   'left-bottom': ambient('dynamic'),
