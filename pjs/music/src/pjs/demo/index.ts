@@ -3,6 +3,7 @@ import {
   SceneGrid,
   SceneShiftInfo,
   createMusicState,
+  makeContextManager,
   pickRandomPitchName,
 } from 'mgnr-tone'
 import * as Tone from 'tone'

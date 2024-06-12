@@ -1,32 +1,24 @@
-import { demo } from 'music'
-import * as Tone from 'tone'
-import { TranslateMap, createMusicCommandBuffer } from './commands'
+import { demo, makeContextManager } from 'music'
 import { RenderHandler } from '../consumer'
+import { TranslateMap, createMusicCommandBuffer } from './commands'
 
 const buffer = createMusicCommandBuffer()
 
-const makeSetupMusic = (bpm = 162, checkInterval = '16m') => {
-  const music = demo.createMusic(demo.themeGrid)
-  let started = false
+const makeSetupMusic = () => {
+  const music = demo.makeMusic()
+  const context = makeContextManager({
+    ...music.config,
+    initialise: () => music.applyInitialScene(),
+    onInterval: () => {
+      const command = buffer.get()
+      if (command) {
+        music.checkNextShift(TranslateMap[command])
+      }
+    },
+  })
   return () => {
-    if (Tone.context.state === 'suspended') {
-      Tone.start()
-    }
-    if (started) return
-    Tone.Transport.bpm.value = bpm
-    Tone.Transport.start(0)
-    music.applyInitialTheme()
-    Tone.Transport.scheduleRepeat(
-      () => {
-        const command = buffer.get()
-        if (command) {
-          music.checkNextTheme(TranslateMap[command])
-        }
-      },
-      checkInterval,
-      0
-    )
-    started = true
+    context.startContext()
+    context.startPlaying()
   }
 }
 

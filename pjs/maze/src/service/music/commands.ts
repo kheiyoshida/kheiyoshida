@@ -1,4 +1,4 @@
-import { ThemeGridDirection } from 'mgnr-tone'
+import { GridDirection } from 'mgnr-tone'
 import { MusicAesthetics, MusicAlignment, MusicCommand } from '../../domain/translate'
 
 export const createMusicCommandBuffer = () => {
@@ -25,7 +25,7 @@ export const createMusicCommandBuffer = () => {
 
 export const TranslateMap: Record<
   Exclude<MusicAlignment | MusicAesthetics, null>,
-  ThemeGridDirection
+  GridDirection
 > = {
   law: 'up',
   chaos: 'down',
