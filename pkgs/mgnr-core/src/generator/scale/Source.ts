@@ -5,6 +5,7 @@ export interface ScaleSource {
   scales: Scale[]
   createScale: (conf?: Partial<ScaleConf>) => Scale
   modulateAll: typeof Scale.prototype.modulate
+  inModulation: boolean
 }
 
 export const createScaleSource = (sourceConf: ScaleConf): ScaleSource => {
@@ -17,11 +18,19 @@ export const createScaleSource = (sourceConf: ScaleConf): ScaleSource => {
     return scale
   }
   const modulateAll: typeof Scale.prototype.modulate = (conf, stages) => {
-    if (!inModulation()) {
-      sourceConf = { ...sourceConf, ...conf }
-    }
     cleanup()
-    scales.forEach((scale) => scale.modulate(conf, stages))
+    if (!inModulation()) {
+      // initiate new mod
+      sourceConf = { ...sourceConf, ...conf }
+      scales.forEach((scale) => scale.modulate(conf, stages))
+    } else {
+      // finish off ongoing modulations
+      scales.forEach((scale) => {
+        if (scale.inModulation) {
+          scale.modulate(conf, stages)
+        }
+      })
+    }
   }
   const inModulation = () => scales.some((s) => s.inModulation)
   return {
@@ -34,5 +43,8 @@ export const createScaleSource = (sourceConf: ScaleConf): ScaleSource => {
     },
     createScale,
     modulateAll,
+    get inModulation() {
+      return inModulation()
+    },
   }
 }

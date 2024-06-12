@@ -8,7 +8,7 @@ import {
 import * as Tone from 'tone'
 import { AvailableOutlets, makeDefaultScenes } from './scenes'
 import { createDefaultTheme } from './theme'
-import { randomItemFromArray } from 'utils'
+import { fireByRate, randomItemFromArray } from 'utils'
 
 export type Music = {
   applyInitialScene: () => void
@@ -38,10 +38,12 @@ export const makeMusic = (): Music => {
   }
 
   function checkNextShift(command: GridDirection) {
-    scaleSource.modulateAll(
-      { key: pickRandomPitchName(), pref: randomItemFromArray(['omit25', 'omit27', 'omit47']) },
-      4
-    )
+    if (scaleSource.inModulation || fireByRate(0.3)) {
+      scaleSource.modulateAll(
+        { key: pickRandomPitchName(), pref: randomItemFromArray(['omit25', 'omit27', 'omit47']) },
+        4
+      )
+    }
     const shift = scenes.move(command)
     fadeInNextTheme(shift)
   }
