@@ -21,7 +21,7 @@ export const closedHihat = () =>
       sustain: 1 / 100,
       release: 0,
     },
-    volume: -12,
+    volume: -10,
   })
 
 export const openHihat = () =>
@@ -48,7 +48,7 @@ export const explicitSnare = () =>
         sustain: 1 / 500,
         release: 0.1,
       },
-      volume: -24,
+      volume: -22,
     }),
     new Tone.NoiseSynth({
       envelope: {
@@ -69,7 +69,7 @@ export const explicitSnare = () =>
         sustain: 1 / 1000,
         release: 0.05,
       },
-      volume: -6,
+      volume: -3,
       noise: {
         type: 'pink',
       },

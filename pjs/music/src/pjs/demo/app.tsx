@@ -23,7 +23,7 @@ const play = () => {
   music.applyInitialTheme()
   Tone.Transport.scheduleRepeat(
     () => {
-      music.checkNextTheme(commandBuffer.command)
+      music.checkNextShift(commandBuffer.command)
     },
     '16m',
     '16m'
