@@ -1,26 +1,8 @@
-import { GridDirection, GridPosition, makeContextManager } from 'mgnr-tone'
+import { GridPosition, makeContextManager } from 'mgnr-tone'
 import { useEffect, useState } from 'react'
-import { fireByRate, randomItemFromArray } from 'utils'
+import { fireByRate } from 'utils'
 import { Music } from '../pjs/demo'
-
-const createCommandBuffer = (initialCommands: GridDirection[] = []) => {
-  let commands: GridDirection[] = initialCommands
-  return {
-    get command(): GridDirection | null {
-      return commands.shift() || null
-    },
-    push(value: GridDirection) {
-      commands.push(value)
-    },
-    set(value: GridDirection) {
-      commands = [value]
-    },
-  }
-}
-
-const commandBuffer = createCommandBuffer(
-  [...Array(50)].map(() => randomItemFromArray(['down', 'up', 'right', 'left'] as GridDirection[]))
-)
+import { Commands, Expressions, commandBuffer } from './buttons'
 
 export const makeMusicGrid = (makeMusic: () => Music): React.FC => {
   const music = makeMusic()
@@ -44,29 +26,11 @@ export const makeMusicGrid = (makeMusic: () => Music): React.FC => {
     return (
       <div style={style}>
         <Grid music={music} />
-        <div style={{ margin: 16 }}>
-          <button style={{ padding: 8, margin: 8 }} onClick={play}>
-            ▶︎ PLAY
-          </button>
-        </div>
-        {/* <Commands /> */}
+        <Expressions />
+        <Commands play={play} />
       </div>
     )
   }
-}
-
-const commands: GridDirection[] = ['up', 'down', 'right', 'left']
-
-const Commands = () => {
-  return (
-    <div style={{ margin: 16 }}>
-      {commands.map((c) => (
-        <button key={c} onClick={() => commandBuffer.set(c)}>
-          {c}
-        </button>
-      ))}
-    </div>
-  )
 }
 
 const Grid = ({ music }: { music: Music }) => {

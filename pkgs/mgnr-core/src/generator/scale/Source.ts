@@ -17,10 +17,13 @@ export const createScaleSource = (sourceConf: ScaleConf): ScaleSource => {
     return scale
   }
   const modulateAll: typeof Scale.prototype.modulate = (conf, stages) => {
-    sourceConf = { ...sourceConf, ...conf }
+    if (!inModulation()) {
+      sourceConf = { ...sourceConf, ...conf }
+    }
     cleanup()
     scales.forEach((scale) => scale.modulate(conf, stages))
   }
+  const inModulation = () => scales.some((s) => s.inModulation)
   return {
     get conf() {
       return sourceConf

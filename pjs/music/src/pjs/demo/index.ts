@@ -3,12 +3,12 @@ import {
   SceneGrid,
   SceneShiftInfo,
   createMusicState,
-  makeContextManager,
   pickRandomPitchName,
 } from 'mgnr-tone'
 import * as Tone from 'tone'
 import { AvailableOutlets, makeDefaultScenes } from './scenes'
 import { createDefaultTheme } from './theme'
+import { randomItemFromArray } from 'utils'
 
 export type Music = {
   applyInitialScene: () => void
@@ -38,7 +38,10 @@ export const makeMusic = (): Music => {
   }
 
   function checkNextShift(command: GridDirection) {
-    scaleSource.modulateAll({ key: pickRandomPitchName() }, 4)
+    scaleSource.modulateAll(
+      { key: pickRandomPitchName(), pref: randomItemFromArray(['omit25', 'omit27', 'omit47']) },
+      4
+    )
     const shift = scenes.move(command)
     fadeInNextTheme(shift)
   }
