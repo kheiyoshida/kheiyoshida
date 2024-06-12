@@ -52,9 +52,9 @@ const Grid = ({ music }: { music: Music }) => {
     <div
       style={{
         display: 'grid',
-        width: 272,
-        height: 272,
-        gap: 16,
+        width: 304,
+        height: 304,
+        gap: 20,
         gridTemplateColumns: '1fr 1fr 1fr',
       }}
     >
@@ -78,7 +78,7 @@ const MiniGrid = ({
         display: 'grid',
         width: '100%',
         height: '100%',
-        gap: 16,
+        gap: 20,
         gridTemplateColumns: '1fr 1fr 1fr',
       }}
     >

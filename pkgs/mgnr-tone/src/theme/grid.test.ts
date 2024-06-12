@@ -54,20 +54,19 @@ test(`${createGridPositionManager.name}`, () => {
   expect(manager.grid).toBe('left-bottom')
   expect(manager.theme).toBe('right-top')
 
-  // it can't go beyond grid's edge
+  // it can go to the opposite edge
   manager.move('down')
   manager.move('down')
   manager.move('down')
-  manager.move('down')
-  expect(manager.grid).toBe('left-bottom')
-  expect(manager.theme).toBe('right-bottom')
+  expect(manager.grid).toBe('left-top')
+  expect(manager.theme).toBe('right-top')
 })
 
 test(`${clampGridPositionIndex.name}`, () => {
-  expect(clampGridPositionIndex(0)).toBe(1)
+  expect(clampGridPositionIndex(0)).toBe(9)
   expect(clampGridPositionIndex(1)).toBe(1)
   expect(clampGridPositionIndex(9)).toBe(9)
-  expect(clampGridPositionIndex(10)).toBe(9)
+  expect(clampGridPositionIndex(10)).toBe(1)
 })
 
 test.each<[GridPositionIndex, GridPositionIndex, GridPosition]>([

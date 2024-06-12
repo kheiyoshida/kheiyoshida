@@ -58,8 +58,11 @@ export const createGridPositionManager = (
   }
 }
 
-export const clampGridPositionIndex = (number: number): GridPositionIndex =>
-  clamp(number, 1, 9) as GridPositionIndex
+export const clampGridPositionIndex = (number: number): GridPositionIndex => {
+  if (number < 1) return 9 as GridPositionIndex
+  if (number > 9) return 1 as GridPositionIndex
+  return clamp(number, 1, 9) as GridPositionIndex
+}
 
 export const translateGridPosition = (
   col: GridPositionIndex,
