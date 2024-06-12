@@ -38,7 +38,7 @@ export const Expressions = () => {
     }, 1000)
   }, [])
 
-  return <div ref={ref} style={{ minHeight: 48, margin: 16 }} />
+  return <div ref={ref} style={{ minHeight: 32, marginTop: 32, marginBottom: 24 }} />
 }
 
 export const commands: GridDirection[] = ['up', 'down', 'right', 'left']
@@ -53,7 +53,7 @@ export const commandExpressionMap: Record<GridDirection, string> = {
 export const Commands: React.FC<{ play: () => void }> = ({ play }) => {
   const Button = makeButton(play)
   return (
-    <div style={{ display: 'grid', width: 200, gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+    <div style={{ display: 'grid', gridTemplateColumns: '32px 32px 32px', gap: 16 }}>
       <Button row={2} col={2} onClick={() => commandBuffer.flush()} text="x" />
       <Button row={1} col={2} onClick={() => commandBuffer.push('up')} text="↑" />
       <Button row={2} col={1} onClick={() => commandBuffer.push('left')} text="←" />
@@ -80,11 +80,11 @@ const makeButton =
     const buttonStyle: React.CSSProperties = {
       padding: 8,
       color: hover ? 'black' : 'white',
-      border: '1px solid white',
-      backgroundColor: hover ? 'white' : 'black',
-      fontSize: 16,
+      border: '1px solid gray',
+      backgroundColor: hover ? 'gray' : 'black',
+      fontSize: 12,
       fontStyle: 'bold',
-      borderRadius: 8,
+      borderRadius: 4,
     }
 
     return (

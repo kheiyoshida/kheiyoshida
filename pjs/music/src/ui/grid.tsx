@@ -52,9 +52,9 @@ const Grid = ({ music }: { music: Music }) => {
     <div
       style={{
         display: 'grid',
-        width: 300,
-        height: 300,
-        gap: 18,
+        width: 272,
+        height: 272,
+        gap: 16,
         gridTemplateColumns: '1fr 1fr 1fr',
       }}
     >
@@ -78,7 +78,7 @@ const MiniGrid = ({
         display: 'grid',
         width: '100%',
         height: '100%',
-        gap: 20,
+        gap: 16,
         gridTemplateColumns: '1fr 1fr 1fr',
       }}
     >
@@ -114,7 +114,6 @@ const style: React.CSSProperties = {
   alignItems: 'center',
   flexDirection: 'column',
   color: 'white',
-  fontSize: 24,
   backgroundColor: 'black',
   zIndex: 20,
   position: 'fixed',
