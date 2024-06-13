@@ -88,4 +88,16 @@ export const ConvertModelMap: Record<RenderModel, ConvertModel> = {
   [RenderModel.FrontWall]: convertFrontWall,
   [RenderModel.Stair]: convertStairModel,
   [RenderModel.StairCeil]: convertStairCeil,
+  [RenderModel.BoxTop]: function (block: RenderBlock): GeometrySpec[] {
+    throw new Error('Function not implemented.')
+  },
+  [RenderModel.BoxMiddle]: function (block: RenderBlock): GeometrySpec[] {
+    throw new Error('Function not implemented.')
+  },
+  [RenderModel.BoxBottom]: function (block: RenderBlock): GeometrySpec[] {
+    throw new Error('Function not implemented.')
+  },
+  [RenderModel.BoxStair]: function (block: RenderBlock): GeometrySpec[] {
+    throw new Error('Function not implemented.')
+  },
 }

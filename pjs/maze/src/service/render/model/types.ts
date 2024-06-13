@@ -14,6 +14,10 @@ export enum RenderModel {
   FrontWall = 'FrontWall',
   Stair = 'Stair',
   StairCeil = 'StairCeil',
+  BoxTop = 'BoxTop',
+  BoxMiddle = 'BoxMiddle',
+  BoxBottom = 'BoxBottom',
+  BoxStair = 'BoxStair'
 }
 
 /**

@@ -1,7 +1,7 @@
 import { TerrainRenderStyle } from '../../../../domain/translate'
 import { RenderGrid } from '../../../../domain/translate/renderGrid/renderSpec'
 import { ModelGrid } from '../types'
-import { convertToNormalModelGrid } from './patterns/normal'
+import { convertToNormalModelGrid } from './converters/normal'
 
 export type GridConverter = (rendewrGrid: RenderGrid) => ModelGrid
 
