@@ -1,16 +1,17 @@
+import { Position3D } from 'p5utils/src/3d'
 import { draw3DGrid } from 'p5utils/src/3d/debug'
 import { loadFont } from 'p5utils/src/font'
+import { pushPop } from 'p5utils/src/render'
 import { applyConfig } from 'p5utils/src/utils/project'
+import { makePingpongNumberStore } from 'utils'
 import { P5Canvas } from '../../p5canvas'
 import { bindControl } from './control'
-import { cameraStore, geometryStore, sketchStore, skinStore } from './state'
-import { pushPop } from 'p5utils/src/render'
-import { Position3D } from 'p5utils/src/3d'
-import { makePingpongNumberStore } from 'utils'
+import { cameraStore, sketchStore } from './state'
+import { renderBlockCoords, renderModel } from './experiment'
+import p5 from 'p5'
+import { RenderModel } from 'maze/src/service/render/model/types'
 
-const preload = () => {
-  skinStore.lazyInit()
-}
+let image: p5.Image
 
 const setup = () => {
   // sketch
@@ -28,12 +29,14 @@ const setup = () => {
   // control
   bindControl(cameraStore)
 
-  // geo
-  geometryStore.lazyInit()
-
-  skinStore.updateImageAppearance()
-
   p.noStroke()
+
+  image = p.createImage(100, 100)
+  image.loadPixels()
+  for (let i = 0; i < image.pixels.length; i++) {
+    image.pixels[i] = 255
+  }
+  image.updatePixels()
 }
 
 const draw = () => {
@@ -46,36 +49,20 @@ const draw = () => {
 
   // render
   // p.lights()
+  // draw3DGrid(3, 2000, camera)
 
-  draw3DGrid(3, 2000, camera)
-
-  // p.texture(skinStore.current.img)
-  // geometryStore.render()]
-
-  zPos.renew()
+  
   p.lightFalloff(0, 1 / 300, 0)
-  p.pointLight(255, 255, 255, 0, 0, zPos.current)
+  p.pointLight(255, 255, 255, 0, 0, 0)
 
-  positions.forEach((position) => {
-    pushPop(() => {
-      p.translate(...position)
-      p.box(500)
-    })
-  })
+  p.texture(image)
+  renderBlockCoords()
+  renderModel(RenderModel.StairCeil)
 }
 
-const zPos = makePingpongNumberStore(() => 10, -1000, 1000, 0)
 
-const positions: Position3D[] = [
-  [0, -500, 0],
-  [500, 0, 0],
-  [-500, 0, 0],
-  [0, 500, 0],
-  [0, 0, -500],
-]
 
 export default P5Canvas({
-  preload,
   setup,
   draw,
 })
