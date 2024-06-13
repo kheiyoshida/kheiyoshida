@@ -3,8 +3,8 @@ import {
   RenderGrid,
   RenderPattern,
   RenderPosition,
-} from '../../../../domain/translate/renderGrid/renderSpec'
-import { CompoundRenderModel, ModelGrid, ModelGridLayer, RenderModel } from '../types'
+} from '../../../../../domain/translate/renderGrid/renderSpec'
+import { CompoundRenderModel, ModelGrid, ModelGridLayer, RenderModel } from '../../types'
 
 export const convertToNormalModelGrid = (renderGrid: RenderGrid): ModelGrid => {
   const modelGrid = renderGrid
