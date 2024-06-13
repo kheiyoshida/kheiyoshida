@@ -1,13 +1,17 @@
 import { Geometry } from 'p5'
+import { TerrainRenderStyle } from '../../../domain/translate'
 import { RenderGrid } from '../../../domain/translate/renderGrid/renderSpec'
 import { Scaffold } from '../scaffold'
-import { finalizeGeometries } from './finalize/finalize'
-import { convertToModelGrid } from './grid/modelGrid'
 import { convertToGeometrySpecList } from './coords/modelToCoords'
-import { TerrainRenderStyle } from '../../../domain/translate'
+import { finalizeGeometries } from './finalize/finalize'
+import { convertToModelGrid } from './grid'
 
-export const calculateGeometries = (renderGrid: RenderGrid, scaffold: Scaffold, terrainStyle: TerrainRenderStyle): Geometry[] => {
-  const modelGrid = convertToModelGrid(renderGrid)
+export const calculateGeometries = (
+  renderGrid: RenderGrid,
+  scaffold: Scaffold,
+  terrainStyle: TerrainRenderStyle
+): Geometry[] => {
+  const modelGrid = convertToModelGrid(renderGrid, terrainStyle)
   const coords = convertToGeometrySpecList(modelGrid, scaffold)
   return finalizeGeometries(coords)
 }

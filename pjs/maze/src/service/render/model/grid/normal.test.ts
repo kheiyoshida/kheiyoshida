@@ -2,16 +2,16 @@ import { ConcreteRenderLayer, RenderGrid, RenderPattern } from '../../../../doma
 import {
   convertCenterModel,
   convertSideModel,
-  convertToModelGrid,
+  convertToNormalModelGrid,
   convertToModelGridLayer,
   trimModelsHorizontal,
   trimModelsVertical,
-} from './modelGrid'
+} from './normal'
 import { ModelGrid, ModelGridLayer, RenderModel } from '../types'
 
-test(`${convertToModelGrid.name}`, () => {
+test(`${convertToNormalModelGrid.name}`, () => {
   const grid: RenderGrid = [null, null, [1, 1, 1], [0, 0, 1], [1, 0, 1], [1, 0, 0]]
-  const modelGrid = convertToModelGrid(grid)
+  const modelGrid = convertToNormalModelGrid(grid)
   expect(modelGrid).toHaveLength(4)
 })
 

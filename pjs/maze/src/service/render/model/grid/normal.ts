@@ -6,7 +6,7 @@ import {
 } from '../../../../domain/translate/renderGrid/renderSpec'
 import { CompoundRenderModel, ModelGrid, ModelGridLayer, RenderModel } from '../types'
 
-export const convertToModelGrid = (renderGrid: RenderGrid): ModelGrid => {
+export const convertToNormalModelGrid = (renderGrid: RenderGrid): ModelGrid => {
   const modelGrid = renderGrid
     .filter((layer): layer is ConcreteRenderLayer => layer !== null)
     .map(convertToModelGridLayer)
