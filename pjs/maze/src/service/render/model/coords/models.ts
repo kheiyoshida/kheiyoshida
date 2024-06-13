@@ -47,8 +47,8 @@ export const convertStairCeil: ConvertModel = ({ blockCoords }) => [
   },
 ]
 
-export const convertStairModel: ConvertModel = ({ blockCoords: renderBlock }) => {
-  const oneStairDownBlock = getAdjacentBlockY(renderBlock)
+export const convertStairModel: ConvertModel = ({ blockCoords }) => {
+  const oneStairDownBlock = getAdjacentBlockY(blockCoords)
   const corridorBlock = getAdjacentBlockZ(oneStairDownBlock, { z: -PathLength })
   const corridorBlock2 = getAdjacentBlockZ(corridorBlock, { z: -FloorLength })
   const corridorBlock3 = getAdjacentBlockZ(corridorBlock2, { z: -PathLength })

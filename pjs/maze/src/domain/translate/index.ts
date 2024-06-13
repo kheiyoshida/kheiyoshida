@@ -68,3 +68,14 @@ const getSanityCommand = (san: number): MusicAlignment =>
   san < 70 ? 'chaos' : san > 130 ? 'law' : null
 const getAestheticCommand = (aesthetics: number): MusicAesthetics =>
   aesthetics <= 3 ? 'dark' : aesthetics >= 7 ? 'bright' : null
+
+export type TerrainRenderStyle = 'normal' | 'boxes'
+
+export const getTerrainRenderStyle = (): TerrainRenderStyle => {
+  if (store.current.floor < 5) return 'normal'
+  else {
+    if (store.current.aesthetics <= 3) return 'boxes'
+    if (store.current.aesthetics >= 7) return 'boxes'
+    return 'normal'
+  }
+}

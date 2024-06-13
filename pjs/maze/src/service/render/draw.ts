@@ -1,14 +1,14 @@
 import { Geometry } from 'p5'
-import { TextureParams } from '../../domain/translate'
+import { TerrainRenderStyle, TextureParams } from '../../domain/translate'
 import { RenderGrid } from '../../domain/translate/renderGrid/renderSpec'
 import { LightColorManager } from './camera/light'
 import { calculateGeometries } from './model'
 import { ScaffoldValues, createScaffold } from './scaffold'
 import { SkinColorManager, SkinManager } from './texture'
 
-export const drawTerrain = (renderGrid: RenderGrid, values: ScaffoldValues): void => {
+export const drawTerrain = (renderGrid: RenderGrid, values: ScaffoldValues, terrainStyle: TerrainRenderStyle): void => {
   const scaffold = createScaffold(values)
-  const geos = calculateGeometries(renderGrid, scaffold)
+  const geos = calculateGeometries(renderGrid, scaffold, terrainStyle)
   drawGeometries(geos)
 }
 
