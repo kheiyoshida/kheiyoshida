@@ -5,14 +5,13 @@ import {
   getAdjacentLayerY,
   getBlockCenter,
   getBlockLayer,
-  makeGetRenderBlock,
+  getRenderBlock,
 } from './block'
 import { RenderBlockCoords, RenderBlockLayer } from '../types'
 
-test(`${makeGetRenderBlock.name}`, () => {
+test(`${getRenderBlock.name}`, () => {
   const scaffold = MockScaffold
-  const getRenderBlock = makeGetRenderBlock(scaffold)
-  const block = getRenderBlock({ x: RenderPosition.LEFT, z: 5 })
+  const block = getRenderBlock(scaffold, { x: RenderPosition.LEFT, z: 5 })
   expect(block.front).toMatchObject({
     tl: [-1500, -500, -4500],
     tr: [-500, -500, -4500],

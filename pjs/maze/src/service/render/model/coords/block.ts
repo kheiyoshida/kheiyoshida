@@ -3,9 +3,8 @@ import { RenderBlockCoords, RenderBlockLayer, RenderBlockPosition } from '../typ
 import { RenderPosition } from '../../../../domain/translate/renderGrid/renderSpec'
 import { Position3D, sumPosition3d } from 'p5utils/src/3d'
 
-export const makeGetRenderBlock =
-  (scaffold: Scaffold) =>
-  ({ x, z, y }: RenderBlockPosition): RenderBlockCoords => {
+export const getRenderBlock =
+  (scaffold: Scaffold, { x, z, y }: RenderBlockPosition): RenderBlockCoords => {
     if (z < 0) throw Error(`z is out of range: ${z}`)
     const block: RenderBlockCoords = {
       front: getBlockLayer(scaffold[z], x),

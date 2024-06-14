@@ -1,6 +1,6 @@
 import { Scaffold } from '../../scaffold'
 import { CompoundRenderModel, GeometrySpec, ModelGrid, RenderBlockPosition } from '../types'
-import { makeGetRenderBlock } from './block'
+import { getRenderBlock } from './block'
 import { ConvertModelMap } from './models'
 
 export const convertToGeometrySpecList = (
@@ -17,8 +17,7 @@ const convert = (
   compound: CompoundRenderModel,
   blockPosition: RenderBlockPosition
 ): GeometrySpec[] => {
-  const getRenderBlock = makeGetRenderBlock(scaffold)
-  const block = getRenderBlock(blockPosition)
+  const block = getRenderBlock(scaffold, blockPosition)
   return compound.flatMap((model) =>
     ConvertModelMap[model]({ blockCoords: block, position: blockPosition })
   )
