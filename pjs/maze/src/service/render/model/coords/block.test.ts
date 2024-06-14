@@ -6,6 +6,7 @@ import {
   getBlockCenter,
   getBlockLayer,
   getRenderBlock,
+  getSmallerBlock,
 } from './block'
 import { RenderBlockCoords, RenderBlockLayer } from '../types'
 
@@ -101,4 +102,36 @@ test(`${getBlockCenter.name}`, () => {
       -1000,
     ]
   `)
+})
+
+test(`${getSmallerBlock.name}`, () => {
+  const block: RenderBlockCoords = {
+    front: {
+      tl: [-1500, -500, -500],
+      tr: [-500, -500, -500],
+      bl: [-1500, 500, -500],
+      br: [-500, 500, -500],
+    },
+    rear: {
+      tl: [-1500, -500, -1500],
+      tr: [-500, -500, -1500],
+      bl: [-1500, 500, -1500],
+      br: [-500, 500, -1500],
+    },
+  }
+  const result = getSmallerBlock(block, 0.5)
+  expect(result).toEqual({
+    front: {
+      tl: [-1250, -250, -750],
+      tr: [-750, -250, -750],
+      bl: [-1250, 250, -750],
+      br: [-750, 250, -750],
+    },
+    rear: {
+      tl: [-1250, -250, -1250],
+      tr: [-750, -250, -1250],
+      bl: [-1250, 250, -1250],
+      br: [-750, 250, -1250],
+    },
+  })
 })
