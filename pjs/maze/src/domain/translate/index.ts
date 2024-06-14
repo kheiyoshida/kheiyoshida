@@ -72,7 +72,7 @@ const getAestheticCommand = (aesthetics: number): MusicAesthetics =>
 export type TerrainRenderStyle = 'normal' | 'boxes'
 
 export const getTerrainRenderStyle = (): TerrainRenderStyle => {
-  if (store.current.floor < 5) return 'normal'
+  if (store.current.floor < 5) return 'boxes'
   else {
     if (store.current.aesthetics <= 3) return 'boxes'
     if (store.current.aesthetics >= 7) return 'boxes'
