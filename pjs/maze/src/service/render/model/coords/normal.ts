@@ -19,7 +19,15 @@ export const toBlockCenter: GetNormal = (blockCoords) => getBlockCenter(blockCoo
 export const toFrontBlock: GetNormal = ({ front }) =>
   sumPosition3d(averagePosition3ds([front.bl, front.br, front.tl, front.tr]), [0, 0, 300])
 
-export const toBlockGround: GetNormal = ({ front, rear }) => {
+export const toRearBlock: GetNormal = ({ rear }) =>
+  sumPosition3d(averagePosition3ds([rear.bl, rear.br, rear.tl, rear.tr]), [0, 0, -300])
+
+export const toBlockAbove: GetNormal = ({ front, rear }) => {
+  const [x, y, z] = averagePosition3ds([front.tl, front.tr, rear.tl, rear.tr])
+  return [x, y - 300, z]
+}
+
+export const toBlockBelow: GetNormal = ({ front, rear }) => {
   const [x, y, z] = averagePosition3ds([front.bl, front.br, rear.bl, rear.br])
-  return [x, y + 100, z]
+  return [x, y + 300, z]
 }

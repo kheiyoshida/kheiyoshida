@@ -43,7 +43,7 @@ export const convertFrontWall: ConvertModel = ({ blockCoords }) => [
 export const convertStairCeil: ConvertModel = ({ blockCoords }) => [
   {
     coords: face.flatStair(blockCoords),
-    normalPosition: normal.toBlockGround(blockCoords),
+    normalPosition: normal.toBlockBelow(blockCoords),
   },
 ]
 
@@ -81,6 +81,33 @@ export const convertStairModel: ConvertModel = ({ blockCoords }) => {
   }
 }
 
+export const convertBox: ConvertModel = ({ blockCoords }) => [
+  {
+    coords: face.boxTop(blockCoords),
+    normalPosition: normal.toBlockAbove(blockCoords),
+  },
+  {
+    coords: face.boxBottom(blockCoords),
+    normalPosition: normal.toBlockBelow(blockCoords),
+  },
+  {
+    coords: face.boxRight(blockCoords),
+    normalPosition: normal.toRightBlock(blockCoords),
+  },
+  {
+    coords: face.boxLeft(blockCoords),
+    normalPosition: normal.toLeftBlock(blockCoords),
+  },
+  {
+    coords: face.boxFront(blockCoords),
+    normalPosition: normal.toFrontBlock(blockCoords),
+  },
+  {
+    coords: face.boxRear(blockCoords),
+    normalPosition: normal.toRearBlock(blockCoords),
+  },
+]
+
 export const ConvertModelMap: Record<RenderModel, ConvertModel> = {
   [RenderModel.Floor]: convertFloor,
   [RenderModel.Ceil]: convertCeil,
@@ -91,9 +118,7 @@ export const ConvertModelMap: Record<RenderModel, ConvertModel> = {
   [RenderModel.BoxTop]: function (block: RenderBlock): GeometrySpec[] {
     throw new Error('Function not implemented.')
   },
-  [RenderModel.BoxMiddle]: function (block: RenderBlock): GeometrySpec[] {
-    throw new Error('Function not implemented.')
-  },
+  [RenderModel.BoxMiddle]: convertBox,
   [RenderModel.BoxBottom]: function (block: RenderBlock): GeometrySpec[] {
     throw new Error('Function not implemented.')
   },
