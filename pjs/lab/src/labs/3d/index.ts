@@ -57,7 +57,7 @@ const draw = () => {
 
   p.texture(image)
   renderBlockCoords()
-  renderModel(RenderModel.Stair)
+  renderModel(RenderModel.BoxBottom)
 }
 
 

@@ -5,6 +5,7 @@ import {
   getAdjacentLayerY,
   getBlockCenter,
   getBlockLayer,
+  getReducedPointFromCenter,
   getRenderBlock,
   getSmallerBlock,
 } from './block'
@@ -134,4 +135,9 @@ test(`${getSmallerBlock.name}`, () => {
       br: [-750, 250, -1250],
     },
   })
+})
+
+test(`${getReducedPointFromCenter.name}`, () => {
+  const result = getReducedPointFromCenter([100, 100, 100], [150, 150, 100], 0.8)
+  expect(result).toEqual([140, 140, 100])
 })

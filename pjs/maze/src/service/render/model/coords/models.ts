@@ -6,7 +6,7 @@ import {
   RenderModel,
   ShapeCoordinates,
 } from '../types'
-import { getAdjacentBlockY, getAdjacentBlockZ, getBlockCenter } from './block'
+import { getAdjacentBlockY, getAdjacentBlockZ, getBlockCenter, getSmallerBlock } from './block'
 import * as face from './face'
 import * as normal from './normal'
 
@@ -81,32 +81,45 @@ export const convertStairModel: ConvertModel = ({ blockCoords }) => {
   }
 }
 
-export const convertBox: ConvertModel = ({ blockCoords }) => [
-  {
-    coords: face.boxTop(blockCoords),
-    normalPosition: normal.toBlockAbove(blockCoords),
-  },
-  {
-    coords: face.boxBottom(blockCoords),
-    normalPosition: normal.toBlockBelow(blockCoords),
-  },
-  {
-    coords: face.boxRight(blockCoords),
-    normalPosition: normal.toRightBlock(blockCoords),
-  },
-  {
-    coords: face.boxLeft(blockCoords),
-    normalPosition: normal.toLeftBlock(blockCoords),
-  },
-  {
-    coords: face.boxFront(blockCoords),
-    normalPosition: normal.toFrontBlock(blockCoords),
-  },
-  {
-    coords: face.boxRear(blockCoords),
-    normalPosition: normal.toRearBlock(blockCoords),
-  },
-]
+export const convertBox: ConvertModel = ({ blockCoords: original }) => {
+  const blockCoords = getSmallerBlock(original, 0.2)
+  return [
+    {
+      coords: face.boxTop(blockCoords),
+      normalPosition: normal.toBlockAbove(blockCoords),
+    },
+    {
+      coords: face.boxBottom(blockCoords),
+      normalPosition: normal.toBlockBelow(blockCoords),
+    },
+    {
+      coords: face.boxRight(blockCoords),
+      normalPosition: normal.toRightBlock(blockCoords),
+    },
+    {
+      coords: face.boxLeft(blockCoords),
+      normalPosition: normal.toLeftBlock(blockCoords),
+    },
+    {
+      coords: face.boxFront(blockCoords),
+      normalPosition: normal.toFrontBlock(blockCoords),
+    },
+    {
+      coords: face.boxRear(blockCoords),
+      normalPosition: normal.toRearBlock(blockCoords),
+    },
+  ]
+}
+
+export const convertBoxAbove: ConvertModel = ({ blockCoords, position }) => {
+  const blockAbove = getAdjacentBlockY(blockCoords, 'above')
+  return convertBox({ blockCoords: blockAbove, position })
+}
+
+export const convertBoxBelow: ConvertModel = ({ blockCoords, position }) => {
+  const blockBelow = getAdjacentBlockY(blockCoords, 'below')
+  return convertBox({ blockCoords: blockBelow, position })
+}
 
 export const ConvertModelMap: Record<RenderModel, ConvertModel> = {
   [RenderModel.Floor]: convertFloor,
@@ -115,13 +128,9 @@ export const ConvertModelMap: Record<RenderModel, ConvertModel> = {
   [RenderModel.FrontWall]: convertFrontWall,
   [RenderModel.Stair]: convertStairModel,
   [RenderModel.StairCeil]: convertStairCeil,
-  [RenderModel.BoxTop]: function (block: RenderBlock): GeometrySpec[] {
-    throw new Error('Function not implemented.')
-  },
+  [RenderModel.BoxTop]: convertBoxAbove,
   [RenderModel.BoxMiddle]: convertBox,
-  [RenderModel.BoxBottom]: function (block: RenderBlock): GeometrySpec[] {
-    throw new Error('Function not implemented.')
-  },
+  [RenderModel.BoxBottom]: convertBoxBelow,
   [RenderModel.BoxStair]: function (block: RenderBlock): GeometrySpec[] {
     throw new Error('Function not implemented.')
   },

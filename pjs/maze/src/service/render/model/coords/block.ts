@@ -39,23 +39,31 @@ const TranslateMap: Record<
   [RenderPosition.RIGHT]: [ScaffoldLayerCoordPosition.CR, ScaffoldLayerCoordPosition.RR],
 }
 
-/**
- * get one floor down block virtually
- * *doesn't support upper block for now
- */
-export const getAdjacentBlockY = (block: RenderBlockCoords) => {
+export const getAdjacentBlockY = (block: RenderBlockCoords, position: 'above' | 'below' = 'below') => {
+  if (position === 'below') 
   return {
-    front: getAdjacentLayerY(block.front),
-    rear: getAdjacentLayerY(block.rear),
+    front: getAdjacentLayerY(block.front, position),
+    rear: getAdjacentLayerY(block.rear, position),
+  }
+  else return {
+    front: getAdjacentLayerY(block.front, position),
+    rear: getAdjacentLayerY(block.rear, position),
   }
 }
 
-export const getAdjacentLayerY = (layer: RenderBlockLayer): RenderBlockLayer => {
+export const getAdjacentLayerY = (layer: RenderBlockLayer, position: 'above' | 'below' = 'below'): RenderBlockLayer => {
+  if (position === 'below')
   return {
     tl: layer.bl,
     tr: layer.br,
     bl: [layer.tl[0], layer.bl[1] + (layer.bl[1] - layer.tl[1]), layer.tl[2]],
     br: [layer.tr[0], layer.br[1] + (layer.br[1] - layer.tr[1]), layer.tr[2]],
+  }
+  else return {
+    tl: [layer.tl[0], layer.tl[1] - (layer.bl[1] - layer.tl[1]), layer.tl[2]],
+    tr: [layer.tr[0], layer.tr[1] - (layer.br[1] - layer.tr[1]), layer.tr[2]],
+    bl: layer.tl,
+    br: layer.tr,
   }
 }
 
