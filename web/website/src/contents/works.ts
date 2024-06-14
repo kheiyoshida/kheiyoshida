@@ -14,7 +14,7 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
     title: mandala.title,
     date: mandala.date,
     contents: mandala.sketch,
-    thumbnail: { images: makePathsWithLink(mandala.title, [...mandala.images])},
+    thumbnail: { images: makePathsWithLink(mandala.title, [mandala.thumbnail])},
     caption: mandala.caption,
   },
   {

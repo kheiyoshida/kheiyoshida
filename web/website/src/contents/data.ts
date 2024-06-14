@@ -26,8 +26,7 @@ export const ContentData = {
     title: 'mandala',
     date: '2024',
     sketch: Sketch.mandala,
-    images: ['not yet'],
-    thumbnail: resolveImagekitPath('works', 'surface-water', 'surface-water.png'),
+    thumbnail: thumbnailPath('mandala.png'),
     caption: 'auto generated music grid'
   },
   surfaceWater: {
