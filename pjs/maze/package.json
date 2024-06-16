@@ -12,14 +12,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mgnr-core": "workspace:^",
-    "mgnr-tone": "workspace:^",
-    "mgnr-tone-presets": "workspace:^",
     "p5": "^1.9.0",
     "p5utils": "workspace:^",
     "react": "18.2.0",
     "react-dom": "^18.2.0",
-    "tone": "^14.7.77",
     "utils": "workspace:^",
     "music": "workspace:^"
   },

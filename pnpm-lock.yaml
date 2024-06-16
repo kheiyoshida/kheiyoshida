@@ -175,15 +175,6 @@ importers:
 
   pjs/maze:
     dependencies:
-      mgnr-core:
-        specifier: workspace:^
-        version: link:../../pkgs/mgnr-core
-      mgnr-tone:
-        specifier: workspace:^
-        version: link:../../pkgs/mgnr-tone
-      mgnr-tone-presets:
-        specifier: workspace:^
-        version: link:../../pkgs/mgnr-tone-presets
       music:
         specifier: workspace:^
         version: link:../music
@@ -199,9 +190,6 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
-      tone:
-        specifier: ^14.7.77
-        version: 14.7.77
       utils:
         specifier: workspace:^
         version: link:../../pkgs/utils
