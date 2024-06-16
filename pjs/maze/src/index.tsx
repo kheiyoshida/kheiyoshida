@@ -3,7 +3,7 @@ import { FPS, FovyValue, wh, ww } from './config'
 import { P5Canvas } from './p5canvas'
 import { consumeFrame, initializeServices, setupRenderingCycle } from './service'
 import { Interface } from './service/interface'
-import { toneStart } from './service/sound'
+import { music } from './service/music'
 
 const setup = () => {
   p.createCanvas(ww, wh, p.WEBGL)
@@ -23,7 +23,7 @@ const VERSION = pjson.version
 let started = false
 
 const start = () => {
-  toneStart()
+  music.startContext()
   if (started) return
   started = true
   setupRenderingCycle()

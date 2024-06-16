@@ -5,14 +5,12 @@ import { consumeMessageQueue } from './consumer'
 import { bindControl } from './control'
 import { renderDebugText } from './interface/debug'
 import { RenderQueue } from './render/queue'
-import { oldMusic } from './sound/songs/demo'
-// import { setupMusic } from './music'
+import { music } from './music'
 import { FrameConsumer } from './time/frame'
 
 export const initializeServices = () => {
   bindControl()
-  oldMusic()
-  // setupMusic()
+  music.startPlaying()
 }
 
 export const setupRenderingCycle = () => {

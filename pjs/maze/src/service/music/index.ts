@@ -1,11 +1,11 @@
-import { demo, makeContextManager } from 'music'
+import { maze, makeContextManager } from 'music'
 import { RenderHandler } from '../consumer'
 import { TranslateMap, createMusicCommandBuffer } from './commands'
 
 const buffer = createMusicCommandBuffer()
 
-const makeSetupMusic = () => {
-  const music = demo.makeMusic()
+const setupMusic = () => {
+  const music = maze.makeMusic()
   const context = makeContextManager({
     ...music.config,
     initialise: () => music.applyInitialScene(),
@@ -16,13 +16,10 @@ const makeSetupMusic = () => {
       }
     },
   })
-  return () => {
-    context.startContext()
-    context.startPlaying()
-  }
+  return context
 }
 
-export const setupMusic = makeSetupMusic()
+export const music = setupMusic()
 
 export const updateMusicAesthetics: RenderHandler = (pack) => {
   buffer.update({ aesthetics: pack.music.aesthetics, alignment: null })
