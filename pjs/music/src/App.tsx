@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
-import { makeMusic } from './pjs/demo'
+import { makeMusic as demo } from './pjs/demo'
+import { makeMusic as maze } from './pjs/maze'
 import { makeMusicGrid } from './ui/grid'
 
 const Projects = {
-  demo: makeMusic,
+  demo,
+  maze
 } as const
 
 const App: React.FC = () => {
