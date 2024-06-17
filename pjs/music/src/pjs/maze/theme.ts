@@ -25,8 +25,8 @@ export const createDefaultTheme = () => {
   const mixer = getMixer()
 
   const synCh = mixer.createInstChannel({
-    inst: instruments.darkLead(),
-    effects: [new Tone.Filter(300, 'highpass'), new Tone.Filter(10000, 'lowpass')],
+    inst: instruments.brightLead(),
+    effects: [new Tone.Filter(10000, 'highpass'), new Tone.Filter(20000, 'lowpass')],
     initialVolume: -40,
     volumeRange: {
       max: -18,
@@ -40,7 +40,7 @@ export const createDefaultTheme = () => {
       max: -10,
       min: -40,
     },
-    effects: [new Tone.Filter(500, 'highpass')],
+    effects: [new Tone.Filter(1000, 'highpass')],
   })
   const bassCh = mixer.createInstChannel({
     inst: instruments.darkBass(),
@@ -60,25 +60,24 @@ export const createDefaultTheme = () => {
     },
     effects: [new Tone.Filter(50, 'highpass')],
   })
-  const drumsCh = mixer.createInstChannel({
-    inst: instruments.beatDrums(),
+  const noiseCh = mixer.createInstChannel({
+    inst: instruments.noise(),
     initialVolume: -40,
     volumeRange: {
       max: -12,
       min: -40,
     },
-    effects: [new Tone.Filter(120, 'highpass'), new Tone.Filter(10000, 'lowpass')],
+    effects: [new Tone.Filter(1000, 'highpass')],
   })
 
   mixer.connect(synCh, sendTrack, 0.8)
   mixer.connect(padCh, sendTrack, 1.2)
-  mixer.connect(drumsCh, sendTrack, 0.2)
   mixer.connect(droneBassCh, sendTrack, 0.2)
 
   const channels: Record<AvailableOutlets, InstChannel> = {
     synth: synCh,
     pad: padCh,
-    drums: drumsCh,
+    noise: noiseCh,
     bass: bassCh,
     droneBass: droneBassCh,
   }
@@ -86,7 +85,7 @@ export const createDefaultTheme = () => {
   const outlets: Record<AvailableOutlets, ToneOutlet> = {
     synth: createOutlet(synCh.inst, Tone.Transport.toSeconds('16n')),
     pad: createOutlet(padCh.inst),
-    drums: createOutlet(drumsCh.inst, Tone.Transport.toSeconds('16n')),
+    noise: createOutlet(noiseCh.inst, Tone.Transport.toSeconds('16n')),
     bass: createOutlet(bassCh.inst, Tone.Transport.toSeconds('16n')),
     droneBass: createOutlet(droneBassCh.inst, Tone.Transport.toSeconds('16n')),
   }

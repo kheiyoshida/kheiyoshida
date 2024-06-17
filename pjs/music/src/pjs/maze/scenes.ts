@@ -28,15 +28,15 @@ export const translate = ({ col, row }: { col: GridColumn; row: GridRow }) => ({
   randomness: randomnessMap[row],
 })
 
-export type AvailableOutlets = 'synth' | 'pad' | 'drums' | 'bass' | 'droneBass'
+export type AvailableOutlets = 'synth' | 'pad' | 'noise' | 'bass' | 'droneBass'
 
 export type DemoComponentMaker = SceneComponentMaker<AvailableOutlets>
 export type DemoSceneMaker = SceneMaker<AvailableOutlets>
 
 const ambient = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
-  left: cp.longDroneBass(meta),
-  center: cp.movingPad(meta),
-  top: cp.defaultSynth(meta),
+  // left: cp.longDroneBass(meta),
+  center: cp.defaultNoise,
+  top: cp.defaultPad(meta)
 })
 
 export const makeDefaultScenes = () => createSceneGrid({

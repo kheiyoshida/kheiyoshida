@@ -6,28 +6,7 @@ export const longDroneBass =
   (source, alignment) => {
     const { randomness, saturation } = translate(alignment)
 
-    const maxPitchMap: Record<Saturation, number> = {
-      thin: 36,
-      neutral: 48,
-      thick: 52,
-    }
-    const noteDurationMap: Record<Randomness, Range | number> = {
-      static: 4,
-      hybrid: {
-        min: 2,
-        max: 4,
-      },
-      dynamic: {
-        min: 1,
-        max: 2,
-      },
-    }
-    const rateMap: Record<Randomness, number> = {
-      static: 0,
-      hybrid: 0.2,
-      dynamic: 0.5,
-    }
-    const scale = source.createScale({ range: { min: 24, max: maxPitchMap[saturation] } })
+    const scale = source.createScale({ range: { min: 24, max: 52 } })
     return {
       outId: 'droneBass',
       generators: [
@@ -41,13 +20,14 @@ export const longDroneBass =
               polyphony: 'mono',
             },
             note: {
-              duration: noteDurationMap[metaRandomness],
+              duration: 4,
             },
           },
           loops: 4,
-          onElapsed: (g) =>
-            metaRandomness === 'dynamic' && g.mutate({ rate: 0.2, strategy: 'randomize' }),
-          onEnded: (g) => g.mutate({ rate: rateMap[randomness], strategy: 'inPlace' }),
+          onElapsed: (g) => {
+            metaRandomness === 'dynamic' && g.mutate({ rate: 0.2, strategy: 'randomize' })
+          },
+          onEnded: (g) => g.mutate({ rate: 0.2, strategy: 'inPlace' }),
         },
       ],
     }

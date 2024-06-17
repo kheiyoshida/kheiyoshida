@@ -1,52 +1,11 @@
-import { Range } from 'utils'
-import { DemoComponentMaker, Randomness, Saturation, translate } from '../scenes'
+import { DemoComponentMaker, Randomness, translate } from '../scenes'
 
-export const movingPad =
+export const defaultPad =
   (metaRandomness: Randomness): DemoComponentMaker =>
   (source, alignment) => {
     const { randomness, saturation } = translate(alignment)
-    const scaleRange: Record<Saturation, Range> = {
-      thin: {
-        min: 80,
-        max: 100,
-      },
-      neutral: {
-        min: 70,
-        max: 90,
-      },
-      thick: {
-        min: 60,
-        max: 80,
-      },
-    }
-    const rateMap: Record<Randomness, number> = {
-      static: 0,
-      hybrid: 0.2,
-      dynamic: 0.4,
-    }
-    const densityMap: Record<Saturation, number> = {
-      thin: 0.25,
-      neutral: 0.4,
-      thick: 0.5,
-    }
-    const randomDensityAdjustMap: Record<Randomness, number> = {
-      static: 0.25,
-      hybrid: 0.15,
-      dynamic: 0,
-    }
-    const noteDurationMap: Record<Randomness, number> = {
-      static: 1,
-      hybrid: 2,
-      dynamic: 4,
-    }
-    const sequenceDurationMap: Record<Randomness, number> = {
-      static: 8,
-      hybrid: 12,
-      dynamic: 20,
-    }
 
-    const rate = rateMap[randomness]
-    const scale = source.createScale({ range: scaleRange[saturation] })
+    const scale = source.createScale({ range: { min: 52, max: 72 } })
     return {
       outId: 'pad',
       generators: [
@@ -54,130 +13,45 @@ export const movingPad =
           generator: {
             scale,
             sequence: {
-              length: sequenceDurationMap[metaRandomness],
-              division: 16,
-              density: densityMap[saturation],
+              length: 8,
+              division: 1,
+              density: 1,
               polyphony: 'mono',
               fillStrategy: 'fill',
             },
             note: {
-              duration: {
-                min: 1,
-                max: noteDurationMap[metaRandomness],
-              },
-            },
-          },
-          loops: 2,
-          onElapsed: (g) => g.mutate({ rate, strategy: 'inPlace' }),
-          onEnded: (g) => g.mutate({ rate, strategy: 'randomize' }),
-        },
-        {
-          generator: {
-            scale,
-            sequence: {
-              length: 10,
-              division: 16,
-              density: densityMap[saturation] - randomDensityAdjustMap[randomness],
-              polyphony: 'mono',
-            },
-            note: {
-              duration: {
-                min: 1,
-                max: 2,
-              },
-            },
-          },
-          loops: 2,
-          onElapsed: (g) => g.mutate({ rate, strategy: 'randomize' }),
-          onEnded: (g) => g.mutate({ rate, strategy: 'randomize' }),
-        },
-      ],
-    }
-  }
-
-export const longPad =
-  (metaRandomness: Randomness): DemoComponentMaker =>
-  (source, alignment) => {
-    const { randomness, saturation } = translate(alignment)
-    const noteDurationMap: Record<Randomness, Range | number> = {
-      static: 2,
-      hybrid: {
-        min: 1,
-        max: 3,
-      },
-      dynamic: {
-        min: 1,
-        max: 2,
-      },
-    }
-    const rateMap: Record<Randomness, number> = {
-      static: 0,
-      hybrid: 0.2,
-      dynamic: 0.5,
-    }
-    const scaleRange: Record<Saturation, Range> = {
-      thin: {
-        min: 60,
-        max: 72,
-      },
-      neutral: {
-        min: 52,
-        max: 72,
-      },
-      thick: {
-        min: 42,
-        max: 80,
-      },
-    }
-    const densityMap: Record<Saturation, number> = {
-      thin: 0.2,
-      neutral: 0.4,
-      thick: 0.7,
-    }
-    const randomiseRate: Record<Randomness, number> = {
-      static: 0,
-      hybrid: 0.2,
-      dynamic: 0.5,
-    }
-    const scale = source.createScale({ range: scaleRange[saturation] })
-    return {
-      outId: 'pad',
-      generators: [
-        {
-          generator: {
-            scale,
-            sequence: {
-              length: 4,
-              division: 1,
-              density: densityMap[saturation],
-              polyphony: 'mono',
-            },
-            note: {
-              duration: noteDurationMap[metaRandomness],
+              duration: 4,
             },
           },
           loops: 4,
-          onElapsed: (g) =>
-            metaRandomness === 'dynamic' && g.mutate({ rate: 0.2, strategy: 'randomize' }),
-          onEnded: (g) => g.mutate({ rate: rateMap[randomness], strategy: 'inPlace' }),
+          onElapsed: (g) => {
+            g.mutate({ rate: 0.1, strategy: 'inPlace' })
+          },
+          onEnded: (g) => {
+            g.mutate({ rate: 0.1, strategy: 'randomize' })
+          },
         },
         {
           generator: {
             scale,
             sequence: {
               length: 12,
-              division: 2,
-              density: randomiseRate[metaRandomness],
+              division: 1,
+              density: 1,
               polyphony: 'mono',
+              fillStrategy: 'fill',
             },
             note: {
-              duration: 1,
+              duration: 6,
             },
           },
-          loops: 2,
-          onElapsed: (g) =>
-            metaRandomness === 'dynamic' && g.mutate({ rate: 0.2, strategy: 'randomize' }),
-          onEnded: (g) => g.mutate({ rate: rateMap[randomness], strategy: 'inPlace' }),
+          loops: 4,
+          onElapsed: (g) => {
+            g.mutate({ rate: 0.1, strategy: 'inPlace' })
+          },
+          onEnded: (g) => {
+            g.mutate({ rate: 0.1, strategy: 'randomize' })
+          },
         },
       ],
     }

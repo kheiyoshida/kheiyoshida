@@ -1,40 +1,16 @@
-import { Range } from 'utils'
-import { DemoComponentMaker, Randomness, Saturation, translate } from '../scenes'
+import { DemoComponentMaker, Randomness, translate } from '../scenes'
 
 export const defaultSynth =
   (metaRandomness: Randomness): DemoComponentMaker =>
   (source, alignment) => {
     const { randomness, saturation } = translate(alignment)
-    const densityMap: Record<Saturation, number> = {
-      thin: 0.3,
-      neutral: 0.5,
-      thick: 0.8,
-    }
-    const durationMap: Record<Randomness, number> = {
-      static: 1,
-      hybrid: 2,
-      dynamic: 4,
-    }
-    const sequenceLengthMap: Record<Randomness, number> = {
-      static: 8,
-      hybrid: 16,
-      dynamic: 11,
-    }
-    const pitchRangeMap: Record<Saturation, Range> = {
-      thin: {
-        min: 80,
-        max: 96,
+
+    const scale = source.createScale({
+      range: {
+        min: 100,
+        max: 112,
       },
-      neutral: {
-        min: 72,
-        max: 96,
-      },
-      thick: {
-        min: 60,
-        max: 100,
-      },
-    }
-    const scale = source.createScale({ range: pitchRangeMap[saturation] })
+    })
     return {
       outId: 'synth',
       generators: [
@@ -42,41 +18,18 @@ export const defaultSynth =
           generator: {
             scale,
             sequence: {
-              length: 16,
-              division: 16,
-              density: densityMap[saturation],
+              length: 3,
+              division: 8,
+              density: 1,
               polyphony: 'mono',
             },
             note: {
-              duration: {
-                min: 1,
-                max: durationMap[randomness],
-              },
+              duration: 1
             },
           },
-          loops: 4,
+          loops: 8,
           onElapsed: () => undefined,
-          onEnded: (g) => g.mutate({ rate: 0.2, strategy: 'randomize' }),
-        },
-        {
-          generator: {
-            scale,
-            sequence: {
-              length: sequenceLengthMap[metaRandomness] - 2,
-              division: 16,
-              density: metaRandomness !== 'static' ? 0.3 : 0,
-              polyphony: 'mono',
-            },
-            note: {
-              duration: {
-                min: 1,
-                max: durationMap[metaRandomness],
-              },
-            },
-          },
-          loops: 4,
-          onElapsed: () => undefined,
-          onEnded: (g) => g.mutate({ rate: 0.2, strategy: 'randomize' }),
+          onEnded: (g) => g.mutate({ rate: 0.2, strategy: 'inPlace' }),
         },
       ],
     }

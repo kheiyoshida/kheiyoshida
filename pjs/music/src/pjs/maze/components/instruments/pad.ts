@@ -8,66 +8,32 @@ export const darkPad = () =>
         type: 'sine',
       },
       envelope: {
-        attack: 0.4,
+        attack: 0.1,
         decay: 0.5,
         sustain: 0.5,
-        release: 1.5,
+        release: 0,
       },
       volume: -10,
-      detune: 10,
-    }),
-    new Tone.PolySynth(Tone.MonoSynth, {
-      oscillator: {
-        type: 'triangle2',
-      },
       detune: -10,
-      volume: -20,
-      envelope: {
-        attack: 0.4,
-        decay: 0.5,
-        sustain: 0.5,
-        release: 1.5,
-      },
       filter: {
         type: 'lowpass',
-        frequency: 1000,
-      },
-    })
-  )
-
-export const nuancePad = () =>
-  new mgnr.CompositeInstrument(
-    new Tone.PolySynth(Tone.MonoSynth, {
-      oscillator: {
-        type: 'sine',
-      },
-      envelope: {
-        attack: 0.2,
-        decay: 0.2,
-        sustain: 0.5,
-        release: 1.2,
-      },
-      volume: -6,
-      detune: -20,
-      filter: {
-        type: 'lowpass',
-        frequency: 1000,
+        frequency: 2000,
       },
     }),
     new Tone.PolySynth(Tone.MonoSynth, {
       oscillator: {
-        type: 'sawtooth',
+        type: 'sine2',
       },
+      detune: -20,
+      volume: -40,
       envelope: {
-        attack: 0.2,
-        decay: 0.2,
-        sustain: 0.5,
-        release: 0.8,
+        attack: 0.1,
+        decay: 0.5,
+        sustain: 0.2,
+        release: 0,
       },
-      volume: -12,
-      detune: 20,
       filter: {
-        type: 'bandpass',
+        type: 'lowpass',
         frequency: 1000,
       },
     })
