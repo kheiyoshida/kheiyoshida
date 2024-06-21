@@ -1,5 +1,4 @@
-import { Range } from 'utils'
-import { DemoComponentMaker, Randomness, Saturation, translate } from '../scenes'
+import { DemoComponentMaker, Randomness, translate } from '../scenes'
 
 export const longDroneBass =
   (metaRandomness: Randomness): DemoComponentMaker =>

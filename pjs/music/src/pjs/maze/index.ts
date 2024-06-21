@@ -8,7 +8,7 @@ import {
 import * as Tone from 'tone'
 import { AvailableOutlets, makeDefaultScenes } from './scenes'
 import { createDefaultTheme } from './theme'
-import { fireByRate, randomItemFromArray } from 'utils'
+import { fireByRate, randomIntInclusiveBetween, randomItemFromArray } from 'utils'
 
 export type Music = {
   applyInitialScene: () => void
@@ -63,7 +63,7 @@ export const makeMusic = (): Music => {
     },
     get config() {
       return {
-        bpm: 120,
+        bpm: randomIntInclusiveBetween(96, 110),
         interval: '16m',
       }
     },

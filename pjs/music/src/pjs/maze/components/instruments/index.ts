@@ -1,5 +1,4 @@
 export * from './bass'
-export * from './drums'
-export * from './pad'
-export * from './synth'
 export * from './noise'
+export * from './pad'
+

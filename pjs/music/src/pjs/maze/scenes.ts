@@ -28,7 +28,7 @@ export const translate = ({ col, row }: { col: GridColumn; row: GridRow }) => ({
   randomness: randomnessMap[row],
 })
 
-export type AvailableOutlets = 'synth' | 'pad' | 'noise' | 'bass' | 'droneBass'
+export type AvailableOutlets = 'pad' | 'noise' | 'droneBass'
 
 export type DemoComponentMaker = SceneComponentMaker<AvailableOutlets>
 export type DemoSceneMaker = SceneMaker<AvailableOutlets>
