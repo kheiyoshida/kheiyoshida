@@ -6,19 +6,23 @@ import { randomItemFromArray } from 'utils'
 import * as instruments from './components/instruments'
 import { AvailableOutlets } from './scenes'
 import { makeFader } from 'mgnr-tone/src/theme/fade'
+import { ScaleConf } from '../../../../../pkgs/mgnr-core/src/generator/scale/Scale'
+import { ScaleType } from '../../../../../pkgs/mgnr-core/src/generator/constants'
 
 export const createDefaultTheme = () => {
-  const scaleSource = createScaleSource({
+  const pickScaleConfig = (): Omit<ScaleConf, 'range'> => ({
     key: pickRandomPitchName(),
-    range: { min: 20, max: 100 },
-    pref: randomItemFromArray(['omit25', 'omit27', 'omit47']),
+    pref: randomItemFromArray<ScaleType>(['omit25', 'omit27', 'omit47']),
   })
+  const scaleSource = createScaleSource({ ...pickScaleConfig(), range: { min: 20, max: 100 } })
 
   const sendTrack = getMixer().createSendChannel({
     effects: [
-      new Tone.PingPongDelay('8n.', 0.1),
-      new Tone.Reverb(0.5),
-      new Tone.Filter(8000, 'lowpass'),
+      new Tone.PingPongDelay('8n.', 0.2),
+      new Tone.Reverb(0.1),
+      new Tone.Filter(400, 'lowshelf'),
+      new Tone.Filter(800, 'notch'),
+      new Tone.Filter(2000, 'lowpass'),
     ],
   })
 
@@ -31,7 +35,7 @@ export const createDefaultTheme = () => {
       max: -10,
       min: -40,
     },
-    effects: [new Tone.Filter(1000, 'highpass')],
+    effects: [new Tone.Filter(300, 'highpass'), new Tone.Filter(1000, 'highshelf')],
   })
 
   const droneBassCh = mixer.createInstChannel({
@@ -54,7 +58,7 @@ export const createDefaultTheme = () => {
   })
 
   mixer.connect(padCh, sendTrack, 1.2)
-  mixer.connect(droneBassCh, sendTrack, 0.2)
+  // mixer.connect(droneBassCh, sendTrack, 0.2)
 
   const channels: Record<AvailableOutlets, InstChannel> = {
     pad: padCh,
