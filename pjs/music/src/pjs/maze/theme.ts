@@ -20,7 +20,7 @@ export const createDefaultTheme = () => {
   const sendTrack = getMixer().createSendChannel({
     effects: [
       new Tone.PingPongDelay('8n.', 0.2),
-      new Tone.Reverb(0.1),
+      new Tone.Reverb(0.3),
       new Tone.Filter(400, 'lowshelf'),
       new Tone.Filter(800, 'notch'),
       new Tone.Filter(2000, 'lowpass'),
