@@ -11,8 +11,9 @@ import { ScaleType } from '../../../../../pkgs/mgnr-core/src/generator/constants
 
 export const createDefaultTheme = () => {
   const pickScaleConfig = (): Omit<ScaleConf, 'range'> => ({
-    key: pickRandomPitchName(),
-    pref: randomItemFromArray<ScaleType>(['omit25', 'omit27', 'omit47']),
+    key: 'C',
+    // key: pickRandomPitchName(),
+    pref: randomItemFromArray<ScaleType>(['omit25']),
   })
   const scaleSource = createScaleSource({ ...pickScaleConfig(), range: { min: 20, max: 100 } })
 

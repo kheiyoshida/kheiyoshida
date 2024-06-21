@@ -34,17 +34,17 @@ export const makeMusic = (): Music => {
     Object.values(result.in).forEach((outlet) => {
       const ch = channels[outlet as AvailableOutlets]
       if (!ch) throw Error(`channel not found: ${outlet}`)
-      ch.dynamicVolumeFade(ch.volumeRangeDiff, '4m')
+      ch.dynamicVolumeFade(ch.volumeRangeDiff, '2m')
     })
   }
 
   function checkNextShift(command: GridDirection) {
-    if (scaleSource.inModulation || fireByRate(0.3)) {
-      scaleSource.modulateAll(
-        { key: pickRandomPitchName(), pref: randomItemFromArray(['omit25', 'omit27', 'omit47']) },
-        4
-      )
-    }
+    // if (scaleSource.inModulation || fireByRate(0.3)) {
+    //   scaleSource.modulateAll(
+    //     { key: pickRandomPitchName(), pref: randomItemFromArray(['omit25', 'omit27', 'omit47']) },
+    //     4
+    //   )
+    // }
     const shift = scenes.move(command)
     fadeInNextTheme(shift)
   }

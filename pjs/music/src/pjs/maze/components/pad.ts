@@ -1,11 +1,18 @@
-import { DemoComponentMaker, Randomness, translate } from '../scenes'
+
+import { DemoComponentMaker, Randomness, Saturation, translate } from '../scenes'
+import { createScaleRange } from './utils/scale'
 
 export const defaultPad =
   (metaRandomness: Randomness): DemoComponentMaker =>
   (source, alignment) => {
     const { randomness, saturation } = translate(alignment)
 
-    const scale = source.createScale({ range: { min: 52, max: 72 } })
+    const CenterOctaveMap: Record<Saturation, [number, number]> = {
+      thin: [72, 1],
+      neutral: [60, 1.4],
+      thick: [64, 2.6]
+    }
+    const scale = source.createScale({range: createScaleRange(...CenterOctaveMap[saturation])})
     return {
       outId: 'pad',
       generators: [
