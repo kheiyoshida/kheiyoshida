@@ -28,27 +28,38 @@ export const translate = ({ col, row }: { col: GridColumn; row: GridRow }) => ({
   randomness: randomnessMap[row],
 })
 
-export type AvailableOutlets = 'pad' | 'noise' | 'droneBass'
+export type AvailableOutlets = 'pad' | 'noise' | 'droneBass' | 'synth'
 
 export type DemoComponentMaker = SceneComponentMaker<AvailableOutlets>
 export type DemoSceneMaker = SceneMaker<AvailableOutlets>
 
-const ambient = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
-  // left: cp.longDroneBass(meta),
-  // center: cp.defaultNoise,
-  top: cp.defaultPad(meta)
+const thin = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
+  left: cp.synth(meta),
+  center: cp.thinPad(meta),
+  bottom: meta === 'static' ? undefined : cp.defaultNoise(meta),
+})
+
+const neutral = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
+  center: cp.defaultPad(meta),
+  bottom: meta === 'static' ? undefined : cp.defaultNoise(meta),
+})
+
+const thick = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
+  right: cp.longDroneBass(meta),
+  center: cp.thickPad(meta),
+  bottom: meta === 'static' ? undefined : cp.defaultNoise(meta),
 })
 
 export const makeDefaultScenes = () => createSceneGrid({
-  'left-top': ambient('static'),
-  'left-middle': ambient('hybrid'),
-  'left-bottom': ambient('dynamic'),
+  'left-top': thin('static'),
+  'left-middle': thin('hybrid'),
+  'left-bottom': thin('dynamic'),
 
-  'center-top': ambient('static'),
-  'center-middle': ambient('hybrid'), // 
-  'center-bottom': ambient('dynamic'),
+  'center-top': neutral('static'),
+  'center-middle': neutral('hybrid'), //
+  'center-bottom': neutral('dynamic'),
 
-  'right-top': ambient('static'),
-  'right-middle': ambient('hybrid'),
-  'right-bottom': ambient('dynamic'),
+  'right-top': thick('static'),
+  'right-middle': thick('hybrid'),
+  'right-bottom': thick('dynamic'),
 })

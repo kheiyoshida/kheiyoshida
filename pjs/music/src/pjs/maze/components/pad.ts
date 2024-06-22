@@ -1,11 +1,24 @@
 import { Range } from 'utils'
 import { DemoComponentMaker, Randomness, Saturation, translate } from '../scenes'
 import { createScaleRange } from './utils/scale'
+import { convertRandomLevel } from './utils/randomness'
+
+export const thinPad =
+  (metaRandomness: Randomness): DemoComponentMaker =>
+  (source, alignment) => {
+    const { randomness, saturation } = translate(alignment)
+    const randomLevel = convertRandomLevel(metaRandomness, randomness)
+    return {
+      outId: 'pad',
+      generators: [],
+    }
+  }
 
 export const defaultPad =
   (metaRandomness: Randomness): DemoComponentMaker =>
   (source, alignment) => {
     const { randomness, saturation } = translate(alignment)
+    const randomLevel = convertRandomLevel(metaRandomness, randomness)
 
     // const randomness: Randomness = 'dynamic'
     // const saturation: Saturation = 'neutral'
@@ -13,26 +26,26 @@ export const defaultPad =
     const CenterOctaveMap: Record<Saturation, [number, number]> = {
       thin: [68, 1],
       neutral: [56, 1.4],
-      thick: [60, 2.6]
+      thick: [60, 2.6],
     }
-    const scale = source.createScale({range: createScaleRange(...CenterOctaveMap[saturation])})
+    const scale = source.createScale({ range: createScaleRange(...CenterOctaveMap[saturation]) })
     const SequenceLengthMap: Record<Randomness, number> = {
       static: 16,
       hybrid: 8,
-      dynamic: 8
+      dynamic: 8,
     }
-    const NoteLengthMap: Record<Randomness, number|Range> = {
+    const NoteLengthMap: Record<Randomness, number | Range> = {
       static: 8,
       hybrid: 4,
       dynamic: {
         min: 2,
-        max: 4
-      }
+        max: 4,
+      },
     }
     const MultiLayerDensityMap: Record<Randomness, number> = {
       static: 0.5,
       hybrid: 1,
-      dynamic: 1.5
+      dynamic: 1.5,
     }
     return {
       outId: 'pad',
@@ -82,5 +95,16 @@ export const defaultPad =
           },
         },
       ],
+    }
+  }
+
+export const thickPad =
+  (metaRandomness: Randomness): DemoComponentMaker =>
+  (source, alignment) => {
+    const { randomness, saturation } = translate(alignment)
+    const randomLevel = convertRandomLevel(metaRandomness, randomness)
+    return {
+      outId: 'pad',
+      generators: [],
     }
   }

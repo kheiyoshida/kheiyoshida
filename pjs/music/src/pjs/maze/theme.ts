@@ -29,6 +29,15 @@ export const createDefaultTheme = () => {
 
   const mixer = getMixer()
 
+  const synCh = mixer.createInstChannel({
+    inst: instruments.thinSynth(),
+    initialVolume: -40,
+    volumeRange: {
+      max: -10,
+      min: -40,
+    },
+    effects: [new Tone.Filter(300, 'highpass'), new Tone.Filter(1000, 'highshelf')],
+  })
   const padCh = mixer.createInstChannel({
     inst: instruments.darkPad(),
     initialVolume: -40,
@@ -59,15 +68,18 @@ export const createDefaultTheme = () => {
   })
 
   mixer.connect(padCh, sendTrack, 1.2)
-  // mixer.connect(droneBassCh, sendTrack, 0.2)
+  mixer.connect(droneBassCh, sendTrack, 0.2)
+  mixer.connect(synCh, sendTrack, 0.8)
 
   const channels: Record<AvailableOutlets, InstChannel> = {
+    synth: synCh,
     pad: padCh,
     noise: noiseCh,
     droneBass: droneBassCh,
   }
 
   const outlets: Record<AvailableOutlets, ToneOutlet> = {
+    synth: createOutlet(synCh.inst, Tone.Transport.toSeconds('16n')),
     pad: createOutlet(padCh.inst),
     noise: createOutlet(noiseCh.inst, Tone.Transport.toSeconds('16n')),
     droneBass: createOutlet(droneBassCh.inst, Tone.Transport.toSeconds('16n')),
