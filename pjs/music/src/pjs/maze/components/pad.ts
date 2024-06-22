@@ -11,9 +11,9 @@ export const defaultPad =
     // const saturation: Saturation = 'neutral'
 
     const CenterOctaveMap: Record<Saturation, [number, number]> = {
-      thin: [72, 1],
-      neutral: [60, 1.4],
-      thick: [64, 2.6]
+      thin: [68, 1],
+      neutral: [56, 1.4],
+      thick: [60, 2.6]
     }
     const scale = source.createScale({range: createScaleRange(...CenterOctaveMap[saturation])})
     const SequenceLengthMap: Record<Randomness, number> = {
