@@ -33,33 +33,37 @@ export type AvailableOutlets = 'pad' | 'noise' | 'droneBass' | 'synth'
 export type DemoComponentMaker = SceneComponentMaker<AvailableOutlets>
 export type DemoSceneMaker = SceneMaker<AvailableOutlets>
 
-const thin = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
-  left: cp.synth(meta),
-  center: cp.thinPad(meta),
-  bottom: meta === 'static' ? undefined : cp.defaultNoise(meta),
-})
+const thin = (meta: Randomness): DemoSceneMaker =>
+  injectSceneMakerDeps({
+    left: cp.synth(meta),
+    center: cp.thinPad(meta),
+    ...(meta === 'static' ? {} : { bottom: cp.defaultNoise(meta) }),
+  })
 
-const neutral = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
-  center: cp.defaultPad(meta),
-  bottom: meta === 'static' ? undefined : cp.defaultNoise(meta),
-})
+const neutral = (meta: Randomness): DemoSceneMaker =>
+  injectSceneMakerDeps({
+    center: cp.defaultPad(meta),
+    ...(meta === 'static' ? {} : { bottom: cp.defaultNoise(meta) }),
+  })
 
-const thick = (meta: Randomness): DemoSceneMaker => injectSceneMakerDeps({
-  right: cp.longDroneBass(meta),
-  center: cp.thickPad(meta),
-  bottom: meta === 'static' ? undefined : cp.defaultNoise(meta),
-})
+const thick = (meta: Randomness): DemoSceneMaker =>
+  injectSceneMakerDeps({
+    right: cp.longDroneBass(meta),
+    center: cp.thickPad(meta),
+    ...(meta === 'static' ? {} : { bottom: cp.defaultNoise(meta) }),
+  })
 
-export const makeDefaultScenes = () => createSceneGrid({
-  'left-top': thin('static'),
-  'left-middle': thin('hybrid'),
-  'left-bottom': thin('dynamic'),
+export const makeDefaultScenes = () =>
+  createSceneGrid({
+    'left-top': thin('static'),
+    'left-middle': thin('hybrid'),
+    'left-bottom': thin('dynamic'),
 
-  'center-top': neutral('static'),
-  'center-middle': neutral('hybrid'), //
-  'center-bottom': neutral('dynamic'),
+    'center-top': neutral('static'),
+    'center-middle': neutral('hybrid'), //
+    'center-bottom': neutral('dynamic'),
 
-  'right-top': thick('static'),
-  'right-middle': thick('hybrid'),
-  'right-bottom': thick('dynamic'),
-})
+    'right-top': thick('static'),
+    'right-middle': thick('hybrid'),
+    'right-bottom': thick('dynamic'),
+  })

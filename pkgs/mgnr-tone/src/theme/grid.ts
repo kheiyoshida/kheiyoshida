@@ -16,16 +16,16 @@ export type SceneShiftInfo = {
   sceneAlignment: GridAlignment
 }
 
-export const createSceneGrid = (themeMakers: { [position in GridPosition]: SceneMaker }) => {
+export const createSceneGrid = (sceneMakers: { [position in GridPosition]: SceneMaker }) => {
   const position = createGridPositionManager()
   return {
-    getInitialScene: () => {
-      return themeMakers['center-middle']
+    getInitialScene: (initialPos: GridPosition = 'center-middle') => {
+      return sceneMakers[initialPos]
     },
     move: (direction: GridDirection): SceneShiftInfo => {
       position.move(direction)
       return {
-        makeScene: themeMakers[position.grid],
+        makeScene: sceneMakers[position.grid],
         direction,
         sceneAlignment: position.theme,
       }

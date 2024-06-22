@@ -1,7 +1,8 @@
-import { Range } from 'utils'
+import { Range, clamp } from 'utils'
 import { DemoComponentMaker, Randomness, Saturation, translate } from '../scenes'
 import { createScaleRange } from './utils/scale'
-import { convertRandomLevel } from './utils/randomness'
+import { RandomLevel, convertRandomLevel } from './utils/randomness'
+import { SequenceConf } from 'mgnr-tone'
 
 export const thinPad =
   (metaRandomness: Randomness): DemoComponentMaker =>
@@ -19,10 +20,6 @@ export const defaultPad =
   (source, alignment) => {
     const { randomness, saturation } = translate(alignment)
     const randomLevel = convertRandomLevel(metaRandomness, randomness)
-
-    // const randomness: Randomness = 'dynamic'
-    // const saturation: Saturation = 'neutral'
-
     const CenterOctaveMap: Record<Saturation, [number, number]> = {
       thin: [68, 1],
       neutral: [56, 1.4],
@@ -34,18 +31,44 @@ export const defaultPad =
       hybrid: 8,
       dynamic: 8,
     }
-    const NoteLengthMap: Record<Randomness, number | Range> = {
-      static: 8,
-      hybrid: 4,
-      dynamic: {
+    const NoteLengthMap: Record<RandomLevel, number | Range> = {
+      1: 16,
+      2: 16,
+      3: 8,
+      4: 8,
+      5: 4,
+      6: {
         min: 2,
         max: 4,
       },
+      7: {
+        min: 1,
+        max: 4,
+      },
+      8: {
+        min: 1,
+        max: 3,
+      },
+      9: {
+        min: 1,
+        max: 2,
+      },
     }
     const MultiLayerDensityMap: Record<Randomness, number> = {
-      static: 0.5,
+      static: 1,
       hybrid: 1,
       dynamic: 1.5,
+    }
+    const divisionMap: Record<RandomLevel, SequenceConf['division']> = {
+      1: 1,
+      2: 1,
+      3: 1,
+      4: 1,
+      5: 1,
+      6: 1,
+      7: 2,
+      8: 4,
+      9: 4,
     }
     return {
       outId: 'pad',
@@ -54,22 +77,22 @@ export const defaultPad =
           generator: {
             scale,
             sequence: {
-              length: SequenceLengthMap[randomness],
-              division: 1,
+              length: SequenceLengthMap[metaRandomness],
+              division: divisionMap[randomLevel],
               density: 1,
               polyphony: 'mono',
               fillStrategy: 'fill',
             },
             note: {
-              duration: NoteLengthMap[randomness],
+              duration: NoteLengthMap[randomLevel],
             },
           },
           loops: 2,
           onElapsed: (g) => {
-            g.mutate({ rate: 0.1, strategy: 'inPlace' })
+            g.mutate({ rate: randomLevel / 10, strategy: 'inPlace' })
           },
           onEnded: (g) => {
-            g.mutate({ rate: 0.1, strategy: 'randomize' })
+            g.mutate({ rate: randomLevel / 10, strategy: 'randomize' })
           },
         },
         {
@@ -77,21 +100,24 @@ export const defaultPad =
             scale,
             sequence: {
               length: 12,
-              division: 1,
-              density: MultiLayerDensityMap[randomness],
+              division: divisionMap[randomLevel],
+              density: MultiLayerDensityMap[metaRandomness],
               polyphony: 'mono',
               fillStrategy: 'fill',
             },
             note: {
-              duration: NoteLengthMap[randomness],
+              duration:
+                typeof NoteLengthMap[randomLevel] === 'number'
+                  ? clamp(NoteLengthMap[randomLevel] as number, 1, 12)
+                  : NoteLengthMap[randomLevel],
             },
           },
           loops: 2,
           onElapsed: (g) => {
-            g.mutate({ rate: 0.1, strategy: 'inPlace' })
+            g.mutate({ rate: randomLevel / 10, strategy: 'inPlace' })
           },
           onEnded: (g) => {
-            g.mutate({ rate: 0.1, strategy: 'randomize' })
+            g.mutate({ rate: randomLevel / 10, strategy: 'randomize' })
           },
         },
       ],
