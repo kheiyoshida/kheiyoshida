@@ -3,25 +3,28 @@ import { createScale } from 'mgnr-tone'
 import { RandomLevel, convertRandomLevel } from './utils/randomness'
 import { Range } from 'utils'
 
-const noiseScale = createScale([30, 50, 70, 90])
-
 export const defaultNoise =
   (metaRandomness: Randomness): DemoComponentMaker =>
   (_, alignment) => {
-    metaRandomness = 'dynamic'
-    const randomness:Randomness = 'dynamic'
-    // const { randomness } = translate(alignment)
+    const { randomness } = translate(alignment)
     const randomLevel = convertRandomLevel(metaRandomness, randomness)
+    const noises = [30, 50, 70, 90]
+    const ScaleMap: Record<Randomness, number[]> = {
+      static: noises.slice(0, 2),
+      hybrid: noises.slice(0, 2),
+      dynamic: noises.slice(1, 4),
+    }
+    const noiseScale = createScale(ScaleMap[randomness])
     const DensityMap: Record<RandomLevel, number> = {
       1: 0,
       2: 0,
       3: 0,
-      4: 1 / 32,
-      5: 1 / 16,
-      6: 3 / 32,
+      4: 1 / 64,
+      5: 1 / 32,
+      6: 1 / 16,
       7: 1 / 8,
-      8: 1 / 4,
-      9: 1 / 3,
+      8: 1 / 6,
+      9: 1 / 4,
     }
     const NoteDurationMap: Record<RandomLevel, number | Range> = {
       1: 0,
@@ -55,7 +58,7 @@ export const defaultNoise =
           scale: noiseScale,
           generator: {
             sequence: {
-              length: 32,
+              length: 64,
               division: 16,
               density: DensityMap[randomLevel],
               polyphony: 'mono',
@@ -73,7 +76,7 @@ export const defaultNoise =
           scale: noiseScale,
           generator: {
             sequence: {
-              length: 10,
+              length: 24,
               division: 16,
               density: DensityMap[randomLevel],
               polyphony: 'mono',
