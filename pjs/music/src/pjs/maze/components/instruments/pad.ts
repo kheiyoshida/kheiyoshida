@@ -10,7 +10,7 @@ export const darkPad = () =>
       detune: -4,
       volume: -24,
       envelope: {
-        attack: 0.1,
+        attack: 0,
         decay: 0.5,
         sustain: 0.3,
         release: 0.1,
@@ -27,7 +27,7 @@ export const darkPad = () =>
       detune: -8,
       volume: -10,
       envelope: {
-        attack: 0.1,
+        attack: 0,
         decay: 0.3,
         sustain: 0.2,
         release: 0.1,

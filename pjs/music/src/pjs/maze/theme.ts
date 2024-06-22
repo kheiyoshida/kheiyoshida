@@ -64,7 +64,7 @@ export const createDefaultTheme = () => {
       max: -12,
       min: -40,
     },
-    effects: [new Tone.Filter(1000, 'highpass')],
+    effects: [new Tone.Filter(300, 'highpass'), new Tone.BitCrusher(8)],
   })
 
   mixer.connect(padCh, sendTrack, 1.2)
