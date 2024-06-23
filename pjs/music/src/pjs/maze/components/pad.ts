@@ -99,11 +99,6 @@ export const defaultPad =
       thick: [60, 2.6],
     }
     const scale = source.createScale({ range: createScaleRange(...CenterOctaveMap[saturation]) })
-    const SequenceLengthMap: Record<Randomness, number> = {
-      static: 8,
-      hybrid: 4,
-      dynamic: 4,
-    }
     const MultiLayerDensityMap: Record<Randomness, number> = {
       static: 1,
       hybrid: 1,
@@ -165,8 +160,67 @@ export const thickPad =
   (source, alignment) => {
     const { randomness, saturation } = translate(alignment)
     const randomLevel = convertRandomLevel(metaRandomness, randomness)
+    const CenterOctaveMap: Record<Saturation, [number, number]> = {
+      thin: [60, 2.6],
+      neutral: [60, 3],
+      thick: [66, 4],
+    }
+    const scale = source.createScale({ range: createScaleRange(...CenterOctaveMap[saturation]) })
+    const MultiLayerDensityMap: Record<Randomness, number> = {
+      static: 0.5,
+      hybrid: 1,
+      dynamic: 1.5,
+    }
     return {
       outId: 'pad',
-      generators: [],
+      generators: [
+        {
+          generator: {
+            scale,
+            sequence: {
+              length: SequenceLengthMap[metaRandomness],
+              division: divisionMap[randomLevel],
+              density: 2,
+              polyphony: 'mono',
+              fillStrategy: 'fill',
+            },
+            note: {
+              duration: NoteLengthMap[randomLevel],
+              harmonizer: {
+                degree: ['6']
+              }
+            },
+          },
+          loops: 1,
+          onElapsed: () => undefined,
+          onEnded: (g) => {
+            g.mutate({ rate: randomLevel / 10, strategy: 'inPlace' })
+            g.resetNotes()
+          },
+        },
+        {
+          generator: {
+            scale,
+            sequence: {
+              length: 6,
+              division: divisionMap[randomLevel],
+              density: MultiLayerDensityMap[metaRandomness],
+              polyphony: 'mono',
+              fillStrategy: 'fill',
+            },
+            note: {
+              duration:
+                typeof NoteLengthMap[randomLevel] === 'number'
+                  ? clamp(NoteLengthMap[randomLevel] as number, 1, 6)
+                  : NoteLengthMap[randomLevel],
+            },
+          },
+          loops: 1,
+          onElapsed: () => undefined,
+          onEnded: (g) => {
+            g.mutate({ rate: randomLevel / 10, strategy: 'randomize' })
+          },
+        },
+      ],
     }
   }
