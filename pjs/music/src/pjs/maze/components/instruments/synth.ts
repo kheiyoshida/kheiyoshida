@@ -5,15 +5,15 @@ export const thinSynth = () =>
   new mgnr.CompositeInstrument(
     new Tone.MonoSynth({
       oscillator: {
-        type: 'sine2',
+        type: 'sine',
       },
-      detune: -4,
-      volume: -24,
+      detune: -10,
+      volume: -10,
       envelope: {
-        attack: 0.1,
-        decay: 0.2,
-        sustain: 0,
-        release: 0.8,
+        attack: 0.05,
+        decay: 0.8,
+        sustain: 0.2,
+        release: 1.5,
       },
       filter: {
         type: 'lowpass',
@@ -22,15 +22,15 @@ export const thinSynth = () =>
     }),
     new Tone.MonoSynth({
       oscillator: {
-        type: 'sine',
+        type: 'triangle',
       },
       detune: -8,
-      volume: -10,
+      volume: -24,
       envelope: {
-        attack: 0.1,
-        decay: 0.2,
-        sustain: 0,
-        release: 0.8,
+        attack: 0.05,
+        decay: 0.5,
+        sustain: 0.2,
+        release: 1,
       },
       filter: {
         type: 'lowpass',
