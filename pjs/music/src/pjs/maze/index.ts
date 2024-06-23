@@ -12,7 +12,7 @@ import { fireByRate, randomIntInclusiveBetween, randomItemFromArray } from 'util
 
 export type Music = {
   applyInitialScene: () => void
-  checkNextShift: (command: GridDirection) => void
+  checkNextShift: (...commands: GridDirection[]) => void
   currentPosition: SceneGrid['current']
   config: {
     bpm: number
@@ -27,7 +27,7 @@ export const makeMusic = (): Music => {
   const state = createMusicState(outlets)
 
   function applyInitialScene() {
-    const makeScene = scenes.getInitialScene('center-top')
+    const makeScene = scenes.getInitialScene('center-middle')
     const scene = makeScene(scaleSource, 'center-middle')
     // const result = state.applyScene(scene, Tone.Transport.toSeconds('@4m'))
     const result = state.applyScene(scene, Tone.Transport.toSeconds('0:0:0'))
@@ -38,14 +38,16 @@ export const makeMusic = (): Music => {
     })
   }
 
-  function checkNextShift(command: GridDirection) {
+  function checkNextShift(...commands: GridDirection[]) {
     // if (scaleSource.inModulation || fireByRate(0.3)) {
     //   scaleSource.modulateAll(
     //     { key: pickRandomPitchName(), pref: randomItemFromArray(['omit25', 'omit27', 'omit47']) },
     //     4
     //   )
     // }
-    const shift = scenes.move(command)
+    console.log(commands)
+    const shift = commands.reduce((_, command) => scenes.move(command), {} as SceneShiftInfo)
+    console.log(shift)
     fadeInNextTheme(shift)
   }
 
@@ -64,7 +66,7 @@ export const makeMusic = (): Music => {
     get config() {
       return {
         bpm: randomIntInclusiveBetween(96, 110),
-        interval: '16m',
+        interval: '8m',
       }
     },
   }

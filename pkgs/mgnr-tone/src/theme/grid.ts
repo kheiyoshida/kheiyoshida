@@ -27,7 +27,7 @@ export const createSceneGrid = (sceneMakers: { [position in GridPosition]: Scene
       return {
         makeScene: sceneMakers[position.grid],
         direction,
-        sceneAlignment: position.theme,
+        sceneAlignment: position.sceneAlignment,
       }
     },
     get current() {
@@ -46,7 +46,7 @@ export const createGridPositionManager = (
     get grid(): GridPosition {
       return translateGridPosition(col, row)
     },
-    get theme(): GridPosition {
+    get sceneAlignment(): GridPosition {
       return translateThemeAlignment(col, row)
     },
     move: (direction: GridDirection) => {

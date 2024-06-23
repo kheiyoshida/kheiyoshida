@@ -10,9 +10,9 @@ const setupMusic = () => {
     ...music.config,
     initialise: () => music.applyInitialScene(),
     onInterval: () => {
-      const command = buffer.get()
-      if (command) {
-        music.checkNextShift(TranslateMap[command])
+      const commands = buffer.get()
+      if (commands.length) {
+        music.checkNextShift(...commands.map(c => TranslateMap[c]))
       }
     },
   })

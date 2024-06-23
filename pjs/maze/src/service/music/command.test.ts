@@ -1,4 +1,4 @@
-import { createMusicCommandBuffer } from "./commands";
+import { createMusicCommandBuffer } from './commands'
 
 describe(`${createMusicCommandBuffer.name}`, () => {
   it(`should store incoming command`, () => {
@@ -7,7 +7,7 @@ describe(`${createMusicCommandBuffer.name}`, () => {
       alignment: 'chaos',
       aesthetics: null,
     })
-    expect(buffer.get()).toBe('chaos')
+    expect(buffer.get()).toMatchObject(['chaos'])
   })
   it(`should flush after get()`, () => {
     const buffer = createMusicCommandBuffer()
@@ -15,31 +15,19 @@ describe(`${createMusicCommandBuffer.name}`, () => {
       alignment: 'chaos',
       aesthetics: null,
     })
-    expect(buffer.get()).toBe('chaos')
-    expect(buffer.get()).toBeNull()
+    expect(buffer.get()).toMatchObject(['chaos'])
+    expect(buffer.get()).toHaveLength(0)
   })
-  it(`should prefer aesthetics over alignment`, () => {
+  it(`should preserve aesthetics even when update occurs on alignment`, () => {
     const buffer = createMusicCommandBuffer()
     buffer.update({
       alignment: 'chaos',
       aesthetics: null,
     })
     buffer.update({
-      alignment: 'chaos',
+      alignment: null,
       aesthetics: 'dark',
     })
-    expect(buffer.get()).toBe('dark')
-  })
-  it(`should preserve aesthetics`, () => {
-    const buffer = createMusicCommandBuffer()
-    buffer.update({
-      alignment: 'chaos',
-      aesthetics: 'dark',
-    })
-    buffer.update({
-      alignment: 'chaos',
-      aesthetics: null,
-    })
-    expect(buffer.get()).toBe('dark')
+    expect(buffer.get()).toMatchObject(['dark', 'chaos'])
   })
 })

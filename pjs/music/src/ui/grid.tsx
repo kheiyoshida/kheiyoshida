@@ -40,7 +40,7 @@ const Grid = ({ music }: { music: Music }) => {
     setInterval(() => {
       if (fireByRate(0.5)) {
         setPosition(music.currentPosition.grid)
-        setAlignment(music.currentPosition.theme)
+        setAlignment(music.currentPosition.sceneAlignment)
       } else {
         setPosition(null)
         setAlignment(null)

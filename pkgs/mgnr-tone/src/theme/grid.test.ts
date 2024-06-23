@@ -37,29 +37,29 @@ test(`${createSceneGrid.name}`, () => {
 test(`${createGridPositionManager.name}`, () => {
   const manager = createGridPositionManager(4,4)
   expect(manager.grid).toBe('center-middle')
-  expect(manager.theme).toBe('left-bottom')
+  expect(manager.sceneAlignment).toBe('left-bottom')
 
   // move within theme
   manager.move('up')
   expect(manager.grid).toBe('center-middle')
-  expect(manager.theme).toBe('left-middle')
+  expect(manager.sceneAlignment).toBe('left-middle')
 
   // go beyond theme border
   manager.move('left')
   expect(manager.grid).toBe('left-middle')
-  expect(manager.theme).toBe('right-middle')
+  expect(manager.sceneAlignment).toBe('right-middle')
 
   manager.move('down')
   manager.move('down')
   expect(manager.grid).toBe('left-bottom')
-  expect(manager.theme).toBe('right-top')
+  expect(manager.sceneAlignment).toBe('right-top')
 
   // it can go to the opposite edge
   manager.move('down')
   manager.move('down')
   manager.move('down')
   expect(manager.grid).toBe('left-top')
-  expect(manager.theme).toBe('right-top')
+  expect(manager.sceneAlignment).toBe('right-top')
 })
 
 test(`${clampGridPositionIndex.name}`, () => {
