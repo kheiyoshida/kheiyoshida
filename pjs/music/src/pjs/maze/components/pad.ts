@@ -27,37 +27,32 @@ export const defaultPad =
     }
     const scale = source.createScale({ range: createScaleRange(...CenterOctaveMap[saturation]) })
     const SequenceLengthMap: Record<Randomness, number> = {
-      static: 16,
-      hybrid: 8,
-      dynamic: 8,
+      static: 8,
+      hybrid: 4,
+      dynamic: 4,
     }
     const NoteLengthMap: Record<RandomLevel, number | Range> = {
-      1: 16,
-      2: 16,
-      3: 8,
-      4: 8,
-      5: 4,
+      1: 4,
+      2: 4,
+      3: 2,
+      4: 2,
+      5: 2,
       6: {
-        min: 2,
-        max: 4,
-      },
-      7: {
-        min: 1,
-        max: 4,
-      },
-      8: {
-        min: 1,
-        max: 3,
-      },
-      9: {
         min: 1,
         max: 2,
       },
-    }
-    const MultiLayerDensityMap: Record<Randomness, number> = {
-      static: 1,
-      hybrid: 1,
-      dynamic: 1.5,
+      7: {
+        min: 2,
+        max: 3,
+      },
+      8: {
+        min: 1,
+        max: 4,
+      },
+      9: {
+        min: 1,
+        max: 4,
+      },
     }
     const divisionMap: Record<RandomLevel, SequenceConf['division']> = {
       1: 1,
@@ -68,7 +63,12 @@ export const defaultPad =
       6: 1,
       7: 2,
       8: 4,
-      9: 4,
+      9: 8,
+    }
+    const MultiLayerDensityMap: Record<Randomness, number> = {
+      static: 1,
+      hybrid: 1,
+      dynamic: 1.5,
     }
     return {
       outId: 'pad',
@@ -87,19 +87,18 @@ export const defaultPad =
               duration: NoteLengthMap[randomLevel],
             },
           },
-          loops: 2,
-          onElapsed: (g) => {
-            g.mutate({ rate: randomLevel / 10, strategy: 'inPlace' })
-          },
+          loops: 1,
+          onElapsed: () => undefined,
           onEnded: (g) => {
-            g.mutate({ rate: randomLevel / 10, strategy: 'randomize' })
+            g.mutate({ rate: randomLevel / 10, strategy: 'inPlace' })
+            g.resetNotes()
           },
         },
         {
           generator: {
             scale,
             sequence: {
-              length: 12,
+              length: 6,
               division: divisionMap[randomLevel],
               density: MultiLayerDensityMap[metaRandomness],
               polyphony: 'mono',
@@ -108,14 +107,12 @@ export const defaultPad =
             note: {
               duration:
                 typeof NoteLengthMap[randomLevel] === 'number'
-                  ? clamp(NoteLengthMap[randomLevel] as number, 1, 12)
+                  ? clamp(NoteLengthMap[randomLevel] as number, 1, 6)
                   : NoteLengthMap[randomLevel],
             },
           },
-          loops: 2,
-          onElapsed: (g) => {
-            g.mutate({ rate: randomLevel / 10, strategy: 'inPlace' })
-          },
+          loops: 1,
+          onElapsed: () => undefined,
           onEnded: (g) => {
             g.mutate({ rate: randomLevel / 10, strategy: 'randomize' })
           },
