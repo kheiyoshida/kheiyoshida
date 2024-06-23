@@ -54,16 +54,20 @@ const thick = (meta: Randomness): DemoSceneMaker =>
   })
 
 export const makeDefaultScenes = () =>
-  createSceneGrid({
-    'left-top': thin('static'),
-    'left-middle': thin('hybrid'),
-    'left-bottom': thin('dynamic'),
+  createSceneGrid(
+    {
+      'left-top': thin('static'),
+      'left-middle': thin('hybrid'),
+      'left-bottom': thin('dynamic'),
 
-    'center-top': neutral('static'),
-    'center-middle': neutral('hybrid'), //
-    'center-bottom': neutral('dynamic'),
+      'center-top': neutral('static'),
+      'center-middle': neutral('hybrid'), //
+      'center-bottom': neutral('dynamic'),
 
-    'right-top': thick('static'),
-    'right-middle': thick('hybrid'),
-    'right-bottom': thick('dynamic'),
-  })
+      'right-top': thick('static'),
+      'right-middle': thick('hybrid'),
+      'right-bottom': thick('dynamic'),
+    },
+    'center-middle',
+    'center-middle'
+  )

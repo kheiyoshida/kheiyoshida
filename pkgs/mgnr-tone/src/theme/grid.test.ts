@@ -5,7 +5,9 @@ import {
   createGridPositionManager,
   createSceneGrid,
   translateGridPosition,
-  translateThemeAlignment,
+  translatePosition,
+  translateToPositionIndex,
+  GridAlignment,
 } from './grid'
 
 test(`${createSceneGrid.name}`, () => {
@@ -35,7 +37,7 @@ test(`${createSceneGrid.name}`, () => {
 })
 
 test(`${createGridPositionManager.name}`, () => {
-  const manager = createGridPositionManager(4,4)
+  const manager = createGridPositionManager(4, 4)
   expect(manager.grid).toBe('center-middle')
   expect(manager.sceneAlignment).toBe('left-bottom')
 
@@ -54,19 +56,25 @@ test(`${createGridPositionManager.name}`, () => {
   expect(manager.grid).toBe('left-bottom')
   expect(manager.sceneAlignment).toBe('right-top')
 
-  // it can go to the opposite edge
+  // it can not go to the opposite edge (when overflow=false)
   manager.move('down')
   manager.move('down')
   manager.move('down')
-  expect(manager.grid).toBe('left-top')
-  expect(manager.sceneAlignment).toBe('right-top')
+  expect(manager.grid).toBe('left-bottom')
+  expect(manager.sceneAlignment).toBe('right-bottom')
 })
 
 test(`${clampGridPositionIndex.name}`, () => {
-  expect(clampGridPositionIndex(0)).toBe(9)
-  expect(clampGridPositionIndex(1)).toBe(1)
-  expect(clampGridPositionIndex(9)).toBe(9)
-  expect(clampGridPositionIndex(10)).toBe(1)
+  const clampOverflow = clampGridPositionIndex(true)
+  expect(clampOverflow(0)).toBe(9)
+  expect(clampOverflow(1)).toBe(1)
+  expect(clampOverflow(9)).toBe(9)
+  expect(clampOverflow(10)).toBe(1)
+  const normalClamp = clampGridPositionIndex(false)
+  expect(normalClamp(0)).toBe(1)
+  expect(normalClamp(1)).toBe(1)
+  expect(normalClamp(9)).toBe(9)
+  expect(normalClamp(10)).toBe(9)
 })
 
 test.each<[GridPositionIndex, GridPositionIndex, GridPosition]>([
@@ -84,6 +92,16 @@ test.each<[GridPositionIndex, GridPositionIndex, GridPosition]>([
   [2, 2, 'center-middle'],
   [3, 3, 'right-top'],
   [4, 4, 'left-bottom'],
-])(`${translateThemeAlignment.name} (%i, %i)`, (col, row, expected) => {
-  expect(translateThemeAlignment(col, row)).toBe(expected)
+])(`${translatePosition.name} (%i, %i)`, (col, row, expected) => {
+  expect(translatePosition(col, row)).toBe(expected)
+})
+
+test.each<[GridPosition, GridAlignment, number, number]>(
+  [
+    ['center-bottom', 'left-top', 4, 3],
+    ['left-bottom', 'right-bottom', 3, 1],
+    ['right-top', 'right-top', 9, 9],
+  ]
+)(`${translateToPositionIndex.name}`, (grid, alignment, col, row) => {
+  expect(translateToPositionIndex(grid, alignment)).toMatchObject([col, row])
 })
