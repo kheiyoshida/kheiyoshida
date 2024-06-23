@@ -45,7 +45,10 @@ export const createDefaultTheme = () => {
       max: -10,
       min: -40,
     },
-    effects: [new Tone.Filter(300, 'highpass'), new Tone.Filter(1000, 'highshelf')],
+    effects: [
+      new Tone.Filter(300, 'highpass'),
+      new Tone.Filter(1000, 'highshelf'),
+    ],
   })
 
   const droneBassCh = mixer.createInstChannel({

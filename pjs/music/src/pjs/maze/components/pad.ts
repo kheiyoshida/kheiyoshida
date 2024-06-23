@@ -4,14 +4,87 @@ import { createScaleRange } from './utils/scale'
 import { RandomLevel, convertRandomLevel } from './utils/randomness'
 import { SequenceConf } from 'mgnr-tone'
 
+const NoteLengthMap: Record<RandomLevel, number | Range> = {
+  1: 4,
+  2: 4,
+  3: 2,
+  4: 2,
+  5: 2,
+  6: {
+    min: 1,
+    max: 2,
+  },
+  7: {
+    min: 2,
+    max: 3,
+  },
+  8: {
+    min: 1,
+    max: 4,
+  },
+  9: {
+    min: 1,
+    max: 4,
+  },
+}
+
+const divisionMap: Record<RandomLevel, SequenceConf['division']> = {
+  1: 1,
+  2: 1,
+  3: 1,
+  4: 1,
+  5: 1,
+  6: 1,
+  7: 2,
+  8: 4,
+  9: 8,
+}
+
+const SequenceLengthMap: Record<Randomness, number> = {
+  static: 8,
+  hybrid: 4,
+  dynamic: 4,
+}
+
 export const thinPad =
   (metaRandomness: Randomness): DemoComponentMaker =>
   (source, alignment) => {
     const { randomness, saturation } = translate(alignment)
     const randomLevel = convertRandomLevel(metaRandomness, randomness)
+    const CenterOctaveMap: Record<Saturation, [number, number]> = {
+      thin: [84, 1],
+      neutral: [80, 1.4],
+      thick: [74, 2],
+    }
+    const scale = source.createScale({ range: createScaleRange(...CenterOctaveMap[saturation]) })
     return {
       outId: 'pad',
-      generators: [],
+      generators: [
+        {
+          generator: {
+            scale,
+            sequence: {
+              length: SequenceLengthMap[metaRandomness],
+              division: divisionMap[randomLevel],
+              density: 2,
+              polyphony: 'mono',
+              fillStrategy: 'fill',
+            },
+            note: {
+              duration: NoteLengthMap[randomLevel],
+              harmonizer: {
+                degree: ['6'],
+              }
+            },
+          },
+          loops: 1,
+          onElapsed: () => undefined,
+          onEnded: (g) => {
+            g.mutate({ rate: randomLevel / 10, strategy: 'inPlace' })
+            g.resetNotes()
+          },
+        },
+      ],
     }
   }
 
@@ -30,40 +103,6 @@ export const defaultPad =
       static: 8,
       hybrid: 4,
       dynamic: 4,
-    }
-    const NoteLengthMap: Record<RandomLevel, number | Range> = {
-      1: 4,
-      2: 4,
-      3: 2,
-      4: 2,
-      5: 2,
-      6: {
-        min: 1,
-        max: 2,
-      },
-      7: {
-        min: 2,
-        max: 3,
-      },
-      8: {
-        min: 1,
-        max: 4,
-      },
-      9: {
-        min: 1,
-        max: 4,
-      },
-    }
-    const divisionMap: Record<RandomLevel, SequenceConf['division']> = {
-      1: 1,
-      2: 1,
-      3: 1,
-      4: 1,
-      5: 1,
-      6: 1,
-      7: 2,
-      8: 4,
-      9: 8,
     }
     const MultiLayerDensityMap: Record<Randomness, number> = {
       static: 1,

@@ -24,7 +24,7 @@ export const darkPad = () =>
       oscillator: {
         type: 'sine',
       },
-      detune: -8,
+      detune: -16,
       volume: -10,
       envelope: {
         attack: 0,
