@@ -13,7 +13,7 @@ export const createDefaultTheme = () => {
   const pickScaleConfig = (): Omit<ScaleConf, 'range'> => ({
     key: 'C',
     // key: pickRandomPitchName(),
-    pref: randomItemFromArray<ScaleType>(['omit25']),
+    pref: randomItemFromArray<ScaleType>(['major']),
   })
   const scaleSource = createScaleSource({ ...pickScaleConfig(), range: { min: 20, max: 100 } })
 

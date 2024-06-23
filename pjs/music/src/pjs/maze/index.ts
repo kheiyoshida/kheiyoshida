@@ -28,7 +28,7 @@ export const makeMusic = (): Music => {
 
   function applyInitialScene() {
     const makeScene = scenes.getInitialScene('right-bottom')
-    const scene = makeScene(scaleSource, 'right-middle')
+    const scene = makeScene(scaleSource, 'center-middle')
     // const result = state.applyScene(scene, Tone.Transport.toSeconds('@4m'))
     const result = state.applyScene(scene, Tone.Transport.toSeconds('0:0:0'))
     Object.values(result.in).forEach((outlet) => {
