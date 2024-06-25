@@ -1,5 +1,5 @@
 {
-  "name": "music",
+  "name": "sound",
   "main": "src/index.ts",
   "scripts": {
     "dev": "vite --host",

@@ -1,8 +1,8 @@
-import { NoiseSynth } from 'tone'
+import { Channel, Filter, NoiseSynth } from 'tone'
 import { SoundEffectSource } from './types'
 
 export const makeWalkSoundSource = (): SoundEffectSource => {
-  const node = new NoiseSynth({
+  const noise = new NoiseSynth({
     noise: {
       type: 'brown',
     },
@@ -13,8 +13,12 @@ export const makeWalkSoundSource = (): SoundEffectSource => {
       release: 0.1,
     },
   })
+  const filter = new Filter(2400, 'lowpass')
+  const node = new Channel()
+  noise.connect(filter)
+  filter.connect(node)
   const play = () => {
-    node.triggerAttackRelease(0.1)
+    noise.triggerAttackRelease(0.1)
   }
   return {
     node,

@@ -9,6 +9,7 @@ import { DownstairsValues, getGoDeltaArray, getTurnLRDeltaArray } from './camera
 import { drawTerrain, updateAesthetics } from './draw'
 import { RenderQueue } from './queue'
 import { Distortion } from './scaffold/distortion'
+import { soundPack } from './sound'
 
 export const renderCurrentView: RenderHandler = ({ renderGrid, light, scaffoldValues }) => {
   const drawFrame = () => {
@@ -21,6 +22,9 @@ export const renderCurrentView: RenderHandler = ({ renderGrid, light, scaffoldVa
 export const renderGo: RenderHandler = ({ renderGrid, speed, scaffoldValues, light }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
+    if (i === 0) {
+      soundPack.playWalk()
+    }
     moveCamera({ zDelta }, scaffoldValues, light)
     drawTerrain(renderGrid, scaffoldValues)
     if (i === GoMoveMagValues.length - 1) {
@@ -50,6 +54,9 @@ export const renderTurn =
 
 export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffoldValues, light }) => {
   const drawFrameSequence = DownstairsValues.map((values, i) => () => {
+    if (i % 4 === 0) {
+      soundPack.playWalk()
+    }
     if (i === 0) {
       triggerFadeOut(DownstairsValues.length)
       eventBlockRequired()
@@ -68,6 +75,9 @@ export const renderProceedToNextFloor: RenderHandler = ({
 }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
+    if (i % 8 === 0) {
+      soundPack.playWalk()
+    }
     if (i === 0) {
       updateAesthetics(texture)
       eventBlockRequired()

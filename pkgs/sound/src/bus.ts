@@ -1,7 +1,7 @@
 import * as Tone from 'tone'
 import { SoundEffectSource } from './sounds'
 
-interface SoundEffectBus {
+export interface SoundEffectBus {
   volume: number
   echoLevel: Tone.Unit.Time
 }

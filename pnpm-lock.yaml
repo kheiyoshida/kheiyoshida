@@ -190,6 +190,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      sound:
+        specifier: workspace:^
+        version: link:../../pkgs/sound
       utils:
         specifier: workspace:^
         version: link:../../pkgs/utils
@@ -475,6 +478,19 @@ importers:
       test-utils:
         specifier: workspace:^
         version: link:../test-utils
+
+  pkgs/sound:
+    dependencies:
+      tone:
+        specifier: ^14.7.77
+        version: 14.7.77
+    devDependencies:
+      typescript:
+        specifier: ^4.8.4
+        version: 4.9.4
+      vite:
+        specifier: ^5.1.4
+        version: 5.1.4(@types/node@20.10.4)
 
   pkgs/stream:
     dependencies:
