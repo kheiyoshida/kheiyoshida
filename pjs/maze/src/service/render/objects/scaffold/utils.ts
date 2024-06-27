@@ -1,4 +1,4 @@
-import { LR } from '../../../utils/direction'
+import { LR } from '../../../../utils/direction'
 import {
   Scaffold,
   ScaffoldEntity,

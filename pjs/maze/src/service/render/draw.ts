@@ -2,7 +2,7 @@ import { Geometry } from 'p5'
 import { TerrainRenderStyle, TextureParams } from '../../domain/translate'
 import { RenderGrid } from '../../domain/translate/renderGrid/renderSpec'
 import { LightColorManager } from './camera/light'
-import { calculateGeometries } from './model'
+import { calculateGeometries } from './objects/model'
 import { ScaffoldValues, createScaffold } from './objects/scaffold'
 import { SkinColorManager, SkinManager } from './objects/texture'
 

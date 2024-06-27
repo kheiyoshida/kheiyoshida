@@ -1,5 +1,5 @@
 import { Position3D, averagePosition3ds, sumPosition3d } from 'p5utils/src/3d'
-import { RenderPosition } from '../../../../domain/translate/renderGrid/renderSpec'
+import { RenderPosition } from '../../../../../domain/translate/renderGrid/renderSpec'
 import { RenderBlockCoords, ShapeCoordinates } from '../types'
 import { getBlockCenter } from './block'
 

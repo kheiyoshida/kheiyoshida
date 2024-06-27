@@ -1,5 +1,5 @@
 import { Position3D } from 'p5utils/src/3d'
-import * as RenderSpec from '../../../domain/translate/renderGrid/renderSpec'
+import * as RenderSpec from '../../../../domain/translate/renderGrid/renderSpec'
 
 export type ModelGrid = ModelGridLayer[]
 

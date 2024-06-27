@@ -2,8 +2,7 @@ import {
   ConcreteRenderLayer,
   RenderGrid,
   RenderPattern,
-  RenderPosition,
-} from '../../../../../domain/translate/renderGrid/renderSpec'
+} from '../../../../../../domain/translate/renderGrid/renderSpec'
 import { CompoundRenderModel, ModelGrid, ModelGridLayer, RenderModel } from '../../types'
 
 export const convertToBoxesModelGrid = (renderGrid: RenderGrid): ModelGrid => {

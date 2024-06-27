@@ -1,4 +1,4 @@
-import { RenderGrid } from '../../../../../domain/translate/renderGrid/renderSpec'
+import { RenderGrid } from '../../../../../../domain/translate/renderGrid/renderSpec'
 import { RenderModel } from '../../types'
 import { convertToBoxesModelGrid, convertToModelGridLayer } from './boxes'
 

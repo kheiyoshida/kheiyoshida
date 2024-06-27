@@ -3,7 +3,7 @@ import {
   RenderGrid,
   RenderPattern,
   RenderPosition,
-} from '../../../../../domain/translate/renderGrid/renderSpec'
+} from '../../../../../../domain/translate/renderGrid/renderSpec'
 import { CompoundRenderModel, ModelGrid, ModelGridLayer, RenderModel } from '../../types'
 
 export const convertToNormalModelGrid = (renderGrid: RenderGrid): ModelGrid => {
@@ -41,10 +41,10 @@ export const convertSideModel = (pattern: RenderPattern): CompoundRenderModel =>
 
 export const trimModelsVertical = (modelGrid: ModelGrid): ModelGrid => {
   return modelGrid.map((modelLayer, i) => {
-    if (i === 0 ) return modelLayer
+    if (i === 0) return modelLayer
     return modelLayer.map((compound, position) => {
       if (position === RenderPosition.CENTER) return compound
-      if (modelGrid[i-1][position].includes(RenderModel.SideWall)) {
+      if (modelGrid[i - 1][position].includes(RenderModel.SideWall)) {
         return compound.filter((model) => model !== RenderModel.FrontWall)
       }
       return compound

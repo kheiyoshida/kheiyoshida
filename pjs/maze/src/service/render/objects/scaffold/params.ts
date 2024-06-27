@@ -4,8 +4,8 @@ import {
   MaxDistortionSpeed,
   PathLength,
   WallHeight,
-} from '../../../config'
-import { ScaffoldParams } from '../../../domain/translate'
+} from '../../../../config'
+import { ScaffoldParams } from '../../../../domain/translate'
 import { ScaffoldValues } from './types'
 
 export const calcConcreteScaffoldValues = (params: ScaffoldParams): ScaffoldValues => {

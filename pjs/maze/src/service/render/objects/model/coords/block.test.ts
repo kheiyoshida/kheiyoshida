@@ -1,4 +1,4 @@
-import { RenderPosition } from '../../../../domain/translate/renderGrid/renderSpec'
+import { RenderPosition } from '../../../../../domain/translate/renderGrid/renderSpec'
 import { MockScaffold } from '../__test__/mock'
 import {
   getAdjacentBlockZ,

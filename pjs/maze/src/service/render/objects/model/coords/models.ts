@@ -1,4 +1,4 @@
-import { FloorLength, PathLength } from '../../../../config'
+import { FloorLength, PathLength } from '../../../../../config'
 import {
   GeometrySpec,
   RenderBlock,

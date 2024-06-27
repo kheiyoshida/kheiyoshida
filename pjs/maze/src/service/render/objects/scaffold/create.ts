@@ -1,4 +1,4 @@
-import { WallHeight } from '../../../config'
+import { WallHeight } from '../../../../config'
 import { Distortion, applyDistortion } from './distortion'
 import {
   Scaffold,

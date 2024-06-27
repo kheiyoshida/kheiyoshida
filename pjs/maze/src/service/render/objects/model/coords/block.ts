@@ -1,6 +1,6 @@
 import { Scaffold, ScaffoldLayer, ScaffoldLayerCoordPosition } from '../../scaffold/types'
 import { RenderBlockCoords, RenderBlockLayer, RenderBlockPosition } from '../types'
-import { RenderPosition } from '../../../../domain/translate/renderGrid/renderSpec'
+import { RenderPosition } from '../../../../../domain/translate/renderGrid/renderSpec'
 import { Position3D, sumPosition3d } from 'p5utils/src/3d'
 import { Vector } from 'p5'
 
