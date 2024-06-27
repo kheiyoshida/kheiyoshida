@@ -8,7 +8,7 @@ import { triggerFadeOut } from './camera/light'
 import { DownstairsValues, getGoDeltaArray, getTurnLRDeltaArray } from './camera/movement'
 import { drawTerrain, updateAesthetics } from './draw'
 import { RenderQueue } from './queue'
-import { Distortion } from './scaffold/distortion'
+import { Distortion } from './objects/scaffold/distortion'
 
 export const renderCurrentView: RenderHandler = ({
   renderGrid,

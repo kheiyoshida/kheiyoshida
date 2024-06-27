@@ -1,5 +1,5 @@
 import { DomainIntention } from '../../domain'
-import { ScaffoldValues, calcConcreteScaffoldValues } from './scaffold'
+import { ScaffoldValues, calcConcreteScaffoldValues } from './objects/scaffold'
 
 export type RenderPack = Omit<DomainIntention, 'scaffold'> & {
   scaffoldValues: ScaffoldValues
