@@ -4,7 +4,13 @@ import { RenderGrid } from '../../domain/translate/renderGrid/renderSpec'
 import { LightColorManager } from './camera/light'
 import { calculateGeometries } from './objects/model'
 import { ScaffoldValues, createScaffold } from './objects/scaffold'
-import { SkinColorManager, SkinManager } from './objects/texture'
+import { makeColorManager } from './color'
+import { makeSkinManager } from './objects/texture/skin'
+import { Colors } from './color/colors'
+
+const SkinColorManager = makeColorManager(Colors.gray)
+
+const SkinManager = makeSkinManager(SkinColorManager)
 
 export const drawTerrain = (renderGrid: RenderGrid, values: ScaffoldValues, terrainStyle: TerrainRenderStyle): void => {
   const scaffold = createScaffold(values)
