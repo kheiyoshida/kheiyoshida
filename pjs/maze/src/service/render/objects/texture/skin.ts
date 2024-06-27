@@ -1,7 +1,7 @@
 import p5 from 'p5'
 import { loop, randomIntInclusiveBetween } from 'utils'
-import { SkinStrategy } from '../../../domain/translate'
-import { ColorManager, RGB } from '../color'
+import { SkinStrategy } from '../../../../domain/translate'
+import { ColorManager, RGB } from '../../color'
 
 const SkinSize = 200
 
