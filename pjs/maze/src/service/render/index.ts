@@ -6,7 +6,7 @@ import { RenderHandler } from '../consumer'
 import { cameraReset, moveCamera } from './camera'
 import { triggerFadeOut } from './camera/light'
 import { DownstairsValues, getGoDeltaArray, getTurnLRDeltaArray } from './camera/movement'
-import { drawTerrain, updateAesthetics } from './draw'
+import { drawTerrain, updateAesthetics } from './objects'
 import { RenderQueue } from './queue'
 import { Distortion } from './objects/scaffold/distortion'
 

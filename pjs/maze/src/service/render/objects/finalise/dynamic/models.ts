@@ -1,5 +1,5 @@
 import { FloorLength, PathLength } from '../../../../../config'
-import { GeometrySpec, RenderModel, ShapeCoordinates } from '../../model/types'
+import { DynamicModelCode } from '../../model/types'
 import {
   RenderBlock,
   RenderBlockCoords,
@@ -10,6 +10,7 @@ import {
 } from '../../scaffold'
 import * as face from './face'
 import * as normal from './normal'
+import { GeometrySpec, ShapeCoordinates } from './types'
 
 type ConvertModel = (block: RenderBlock) => GeometrySpec[]
 
@@ -122,17 +123,17 @@ export const convertBoxBelow: ConvertModel = ({ blockCoords, position }) => {
   return convertBox({ blockCoords: blockBelow, position })
 }
 
-export const ConvertModelMap: Record<RenderModel, ConvertModel> = {
-  [RenderModel.Floor]: convertFloor,
-  [RenderModel.Ceil]: convertCeil,
-  [RenderModel.SideWall]: convertSideWall,
-  [RenderModel.FrontWall]: convertFrontWall,
-  [RenderModel.Stair]: convertStairModel,
-  [RenderModel.StairCeil]: convertStairCeil,
-  [RenderModel.BoxTop]: convertBoxAbove,
-  [RenderModel.BoxMiddle]: convertBox,
-  [RenderModel.BoxBottom]: convertBoxBelow,
-  [RenderModel.BoxStair]: function (block: RenderBlock): GeometrySpec[] {
+export const ConvertModelMap: Record<DynamicModelCode, ConvertModel> = {
+  [DynamicModelCode.Floor]: convertFloor,
+  [DynamicModelCode.Ceil]: convertCeil,
+  [DynamicModelCode.SideWall]: convertSideWall,
+  [DynamicModelCode.FrontWall]: convertFrontWall,
+  [DynamicModelCode.Stair]: convertStairModel,
+  [DynamicModelCode.StairCeil]: convertStairCeil,
+  [DynamicModelCode.BoxTop]: convertBoxAbove,
+  [DynamicModelCode.BoxMiddle]: convertBox,
+  [DynamicModelCode.BoxBottom]: convertBoxBelow,
+  [DynamicModelCode.BoxStair]: function (block: RenderBlock): GeometrySpec[] {
     throw new Error('Function not implemented.')
   },
 }

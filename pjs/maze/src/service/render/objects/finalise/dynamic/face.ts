@@ -1,6 +1,6 @@
 import { RenderPosition } from '../../../../../domain/translate/renderGrid/renderSpec'
-import { ShapeCoordinates } from '../../model/types'
 import { RenderBlockCoords } from '../../scaffold/types'
+import { ShapeCoordinates } from './types'
 
 type GetFace = (block: RenderBlockCoords) => ShapeCoordinates
 

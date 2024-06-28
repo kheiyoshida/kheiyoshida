@@ -1,5 +1,5 @@
-import { RenderGrid } from '../../../../../../domain/translate/renderGrid/renderSpec'
-import { RenderModel } from '../../types'
+import { RenderGrid } from '../../../../../domain/translate/renderGrid/renderSpec'
+import { DynamicModelCode } from '../types'
 import { convertToBoxesModelGrid, convertToModelGridLayer } from './boxes'
 
 test(`${convertToBoxesModelGrid.name}`, () => {
@@ -11,8 +11,8 @@ test(`${convertToBoxesModelGrid.name}`, () => {
 test(`${convertToModelGridLayer.name}`, () => {
   const modelLayer = convertToModelGridLayer([0, 0, 1])
   expect(modelLayer).toEqual([
-    [RenderModel.BoxTop, RenderModel.BoxBottom],
-    [RenderModel.BoxTop, RenderModel.BoxBottom],
-    [RenderModel.BoxTop, RenderModel.BoxMiddle, RenderModel.BoxBottom],
+    [DynamicModelCode.BoxTop, DynamicModelCode.BoxBottom],
+    [DynamicModelCode.BoxTop, DynamicModelCode.BoxBottom],
+    [DynamicModelCode.BoxTop, DynamicModelCode.BoxMiddle, DynamicModelCode.BoxBottom],
   ])
 })

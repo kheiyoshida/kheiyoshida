@@ -1,7 +1,7 @@
 import p5 from 'p5'
 import { Position3D, sumPosition3d } from 'p5utils/src/3d'
 import { finalizeSurface } from 'p5utils/src/3dShape/finalize/surface'
-import { GeometrySpec, ShapeCoordinates } from '../../model/types'
+import { GeometrySpec, ShapeCoordinates } from './types'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type pExtended = p5 & { beginGeometry: any; endGeometry: any }

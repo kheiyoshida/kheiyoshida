@@ -1,12 +1,28 @@
-import { Position3D } from 'p5utils/src/3d'
+import type { RenderGrid } from '../../../../domain/translate/renderGrid/renderSpec'
+import type { RenderBlockPosition } from '../scaffold'
+
+export type GridConverter = (rendewrGrid: RenderGrid) => ModelGrid
+
+export type RenderModelType = 'dynamic' | 'static'
+
+export type RenderModel<T extends RenderModelType> = {
+  type: T
+  code: T extends 'dynamic' ? DynamicModelCode : StaticModelCode
+  position: RenderBlockPosition
+}
+
+export type DynamicModel = RenderModel<'dynamic'>
+export type StaticModel = RenderModel<'static'>
 
 export type ModelGrid = ModelGridLayer[]
 
 export type ModelGridLayer = [CompoundRenderModel, CompoundRenderModel, CompoundRenderModel]
 
-export type CompoundRenderModel = RenderModel[]
+export type CompoundRenderModel = ModelCode[]
 
-export enum RenderModel {
+export type ModelCode = DynamicModelCode | StaticModelCode
+
+export enum DynamicModelCode {
   Floor = 'Floor',
   Ceil = 'Ceil',
   SideWall = 'SideWall',
@@ -19,15 +35,6 @@ export enum RenderModel {
   BoxStair = 'BoxStair',
 }
 
-/**
- * geometry specifications to represent `RenderModel`
- */
-export type GeometrySpec = {
-  coords: ShapeCoordinates
-  normalPosition: Position3D
+export enum StaticModelCode {
+  Tree = 'Tree',
 }
-
-/**
- * rectangle coordinates
- */
-export type ShapeCoordinates = Position3D[]

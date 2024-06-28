@@ -3,8 +3,8 @@ import {
   RenderGrid,
   RenderPattern,
   RenderPosition,
-} from '../../../../../../domain/translate/renderGrid/renderSpec'
-import { CompoundRenderModel, ModelGrid, ModelGridLayer, RenderModel } from '../../types'
+} from '../../../../../domain/translate/renderGrid/renderSpec'
+import { CompoundRenderModel, ModelGrid, ModelGridLayer, DynamicModelCode } from '../types'
 
 export const convertToNormalModelGrid = (renderGrid: RenderGrid): ModelGrid => {
   const modelGrid = renderGrid
@@ -27,15 +27,15 @@ export const convertToModel = (
 }
 
 export const convertCenterModel = (pattern: RenderPattern): CompoundRenderModel => {
-  if (pattern === RenderPattern.FLOOR) return [RenderModel.Floor, RenderModel.Ceil]
-  if (pattern === RenderPattern.FILL) return [RenderModel.FrontWall]
-  if (pattern === RenderPattern.STAIR) return [RenderModel.Stair, RenderModel.StairCeil]
+  if (pattern === RenderPattern.FLOOR) return [DynamicModelCode.Floor, DynamicModelCode.Ceil]
+  if (pattern === RenderPattern.FILL) return [DynamicModelCode.FrontWall]
+  if (pattern === RenderPattern.STAIR) return [DynamicModelCode.Stair, DynamicModelCode.StairCeil]
   throw Error()
 }
 
 export const convertSideModel = (pattern: RenderPattern): CompoundRenderModel => {
-  if (pattern === RenderPattern.FLOOR) return [RenderModel.Floor, RenderModel.Ceil]
-  if (pattern === RenderPattern.FILL) return [RenderModel.FrontWall, RenderModel.SideWall]
+  if (pattern === RenderPattern.FLOOR) return [DynamicModelCode.Floor, DynamicModelCode.Ceil]
+  if (pattern === RenderPattern.FILL) return [DynamicModelCode.FrontWall, DynamicModelCode.SideWall]
   throw Error()
 }
 
@@ -44,8 +44,8 @@ export const trimModelsVertical = (modelGrid: ModelGrid): ModelGrid => {
     if (i === 0) return modelLayer
     return modelLayer.map((compound, position) => {
       if (position === RenderPosition.CENTER) return compound
-      if (modelGrid[i - 1][position].includes(RenderModel.SideWall)) {
-        return compound.filter((model) => model !== RenderModel.FrontWall)
+      if (modelGrid[i - 1][position].includes(DynamicModelCode.SideWall)) {
+        return compound.filter((model) => model !== DynamicModelCode.FrontWall)
       }
       return compound
     }) as ModelGridLayer
@@ -53,9 +53,9 @@ export const trimModelsVertical = (modelGrid: ModelGrid): ModelGrid => {
 }
 
 export const trimModelsHorizontal = (modelLayer: ModelGridLayer): ModelGridLayer => {
-  if (modelLayer.every((compound) => compound.includes(RenderModel.FrontWall))) {
+  if (modelLayer.every((compound) => compound.includes(DynamicModelCode.FrontWall))) {
     return modelLayer.map((compound) =>
-      compound.filter((model) => model !== RenderModel.SideWall)
+      compound.filter((model) => model !== DynamicModelCode.SideWall)
     ) as ModelGridLayer
   }
   return modelLayer
