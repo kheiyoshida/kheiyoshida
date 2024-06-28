@@ -1,12 +1,13 @@
 import { FloorLength, PathLength } from '../../../../../config'
+import { GeometrySpec, RenderModel, ShapeCoordinates } from '../../model/types'
 import {
-  GeometrySpec,
   RenderBlock,
   RenderBlockCoords,
-  RenderModel,
-  ShapeCoordinates,
-} from '../types'
-import { getAdjacentBlockY, getAdjacentBlockZ, getBlockCenter, getSmallerBlock } from './block'
+  getAdjacentBlockY,
+  getAdjacentBlockZ,
+  getBlockCenter,
+  getSmallerBlock,
+} from '../../scaffold'
 import * as face from './face'
 import * as normal from './normal'
 

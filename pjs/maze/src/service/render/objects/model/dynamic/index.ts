@@ -1,5 +1,5 @@
-import { TerrainRenderStyle } from '../../../../domain/translate'
-import { RenderGrid } from '../../../../domain/translate/renderGrid/renderSpec'
+import { TerrainRenderStyle } from '../../../../../domain/translate'
+import { RenderGrid } from '../../../../../domain/translate/renderGrid/renderSpec'
 import { ModelGrid } from '../types'
 import { convertToBoxesModelGrid } from './converters/boxes'
 import { convertToNormalModelGrid } from './converters/normal'

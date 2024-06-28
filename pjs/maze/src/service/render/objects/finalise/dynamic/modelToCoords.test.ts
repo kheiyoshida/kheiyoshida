@@ -1,5 +1,5 @@
-import { ModelGrid, RenderModel } from '../types'
-import { MockScaffold } from '../__test__/mock'
+import { ModelGrid, RenderModel } from '../../model'
+import { MockScaffold } from '../../scaffold/__test__/mock'
 import { convertToGeometrySpecList } from './modelToCoords'
 
 test(`${convertToGeometrySpecList.name}`, () => {

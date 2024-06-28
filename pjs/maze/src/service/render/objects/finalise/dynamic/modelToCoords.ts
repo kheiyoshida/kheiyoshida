@@ -1,6 +1,6 @@
-import { Scaffold } from '../../scaffold'
-import { CompoundRenderModel, GeometrySpec, ModelGrid, RenderBlockPosition } from '../types'
-import { getRenderBlock } from './block'
+import { CompoundRenderModel, GeometrySpec, ModelGrid } from '../../model'
+import { RenderBlockPosition, Scaffold, getRenderBlock } from '../../scaffold'
+
 import { ConvertModelMap } from './models'
 
 export const convertToGeometrySpecList = (

@@ -1,4 +1,4 @@
-import { Scaffold } from '../../scaffold'
+import { Scaffold } from '..'
 
 export const MockScaffold: Scaffold = [
   {

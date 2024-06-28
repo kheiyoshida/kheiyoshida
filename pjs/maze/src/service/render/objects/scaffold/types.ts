@@ -1,4 +1,5 @@
 import { Position3D } from 'p5utils/src/3d/types'
+import * as RenderSpec from '../../../../domain/translate/renderGrid/renderSpec'
 
 export type ScaffoldValues = {
   floor: number
@@ -45,4 +46,36 @@ export type ScaffoldKey = {
 export interface DistortionDelta {
   values: Position3D
   move(range: number, speed?: number): void
+}
+
+export type RenderBlock = {
+  blockCoords: RenderBlockCoords
+  position: RenderBlockPosition
+}
+
+export type RenderBlockPosition = {
+  z: number
+  x: RenderSpec.RenderPosition
+  y?: number // maybe y in the future
+}
+
+export type RenderBlockCoords = {
+  front: RenderBlockLayer
+  rear: RenderBlockLayer
+}
+
+/**
+ * defines the layer of render block's front or rear
+ *  tl         tr
+ *   '---------'
+ *   |         |
+ *   |         |
+ *   '---------'
+ *  bl         br
+ */
+export type RenderBlockLayer = {
+  tl: Position3D
+  tr: Position3D
+  bl: Position3D
+  br: Position3D
 }
