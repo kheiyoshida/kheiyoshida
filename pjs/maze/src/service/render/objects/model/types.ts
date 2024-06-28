@@ -1,24 +1,26 @@
 import type { RenderGrid } from '../../../../domain/translate/renderGrid/renderSpec'
 import type { RenderBlockPosition } from '../scaffold'
 
-export type GridConverter = (rendewrGrid: RenderGrid) => ModelGrid
+export type GridConverter = (rendewrGrid: RenderGrid) => ModelCodeGrid
 
 export type RenderModelType = 'dynamic' | 'static'
 
-export type RenderModel<T extends RenderModelType> = {
+export type RenderModel = DynamicModel | StaticModel
+
+type _RenderModel<T extends RenderModelType> = {
   type: T
   code: T extends 'dynamic' ? DynamicModelCode : StaticModelCode
   position: RenderBlockPosition
 }
 
-export type DynamicModel = RenderModel<'dynamic'>
-export type StaticModel = RenderModel<'static'>
+export type DynamicModel = _RenderModel<'dynamic'>
+export type StaticModel = _RenderModel<'static'>
 
-export type ModelGrid = ModelGridLayer[]
+export type ModelCodeGrid = ModelCodeGridLayer[]
 
-export type ModelGridLayer = [CompoundRenderModel, CompoundRenderModel, CompoundRenderModel]
+export type ModelCodeGridLayer = [CompoundModelCode, CompoundModelCode, CompoundModelCode]
 
-export type CompoundRenderModel = ModelCode[]
+export type CompoundModelCode = ModelCode[]
 
 export type ModelCode = DynamicModelCode | StaticModelCode
 

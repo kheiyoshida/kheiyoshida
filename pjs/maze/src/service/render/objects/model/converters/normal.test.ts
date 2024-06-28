@@ -7,7 +7,7 @@ import {
   trimModelsHorizontal,
   trimModelsVertical,
 } from './normal'
-import { ModelGrid, ModelGridLayer, DynamicModelCode } from '../types'
+import { ModelCodeGrid, ModelCodeGridLayer, DynamicModelCode } from '../types'
 
 test(`${convertToNormalModelGrid.name}`, () => {
   const grid: RenderGrid = [null, null, [1, 1, 1], [0, 0, 1], [1, 0, 1], [1, 0, 0]]
@@ -32,7 +32,7 @@ test(`${trimModelsVertical.name}`, () => {
    * F F W
    * front
    */
-  const modelGrid: ModelGrid = [
+  const modelGrid: ModelCodeGrid = [
     [
       convertSideModel(RenderPattern.FLOOR),
       convertCenterModel(RenderPattern.FLOOR),
@@ -49,7 +49,7 @@ test(`${trimModelsVertical.name}`, () => {
 })
 
 test(`${trimModelsHorizontal.name}`, () => {
-  const modelLayer: ModelGridLayer = [
+  const modelLayer: ModelCodeGridLayer = [
     convertSideModel(RenderPattern.FILL),
     convertCenterModel(RenderPattern.FILL),
     convertSideModel(RenderPattern.FILL),

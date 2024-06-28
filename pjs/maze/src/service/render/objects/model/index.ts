@@ -2,7 +2,7 @@ import { TerrainRenderStyle } from '../../../../domain/translate'
 import { RenderGrid } from '../../../../domain/translate/renderGrid/renderSpec'
 import { convertToBoxesModelGrid } from './converters/boxes'
 import { convertToNormalModelGrid } from './converters/normal'
-import { GridConverter, ModelGrid } from './types'
+import { GridConverter, ModelCodeGrid } from './types'
 
 const ConverterMap: Record<TerrainRenderStyle, GridConverter> = {
   normal: convertToNormalModelGrid,
@@ -12,7 +12,7 @@ const ConverterMap: Record<TerrainRenderStyle, GridConverter> = {
 export const convertToModelGrid = (
   renderGrid: RenderGrid,
   style: TerrainRenderStyle
-): ModelGrid => {
+): ModelCodeGrid => {
   return ConverterMap[style](renderGrid)
 }
 

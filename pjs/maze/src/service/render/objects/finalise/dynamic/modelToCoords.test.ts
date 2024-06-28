@@ -1,9 +1,9 @@
-import { DynamicModelCode, ModelGrid } from '../../model'
+import { DynamicModelCode, ModelCodeGrid } from '../../model'
 import { MockScaffold } from '../../scaffold/__test__/mock'
 import { convertToGeometrySpecList } from './modelToCoords'
 
 test(`${convertToGeometrySpecList.name}`, () => {
-  const modelGrid: ModelGrid = [
+  const modelGrid: ModelCodeGrid = [
     [
       [DynamicModelCode.Floor, DynamicModelCode.Ceil],
       [DynamicModelCode.Floor, DynamicModelCode.Ceil],

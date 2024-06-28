@@ -1,10 +1,10 @@
-import { CompoundRenderModel, DynamicModelCode, ModelGrid } from '../../model'
+import { CompoundModelCode, DynamicModelCode, ModelCodeGrid } from '../../model'
 import { RenderBlockPosition, Scaffold, getRenderBlock } from '../../scaffold'
 import { ConvertModelMap } from './models'
 import { GeometrySpec } from './types'
 
 export const convertToGeometrySpecList = (
-  modelGrid: ModelGrid,
+  modelGrid: ModelCodeGrid,
   scaffold: Scaffold
 ): GeometrySpec[] => {
   return modelGrid.flatMap((modelLayer, z) =>
@@ -14,7 +14,7 @@ export const convertToGeometrySpecList = (
 
 const convert = (
   scaffold: Scaffold,
-  compound: CompoundRenderModel,
+  compound: CompoundModelCode,
   blockPosition: RenderBlockPosition
 ): GeometrySpec[] => {
   const block = getRenderBlock(scaffold, blockPosition)
