@@ -8,25 +8,36 @@ import { triggerFadeOut } from './camera/light'
 import { DownstairsValues, getGoDeltaArray, getTurnLRDeltaArray } from './camera/movement'
 import { drawTerrain, updateAesthetics } from './draw'
 import { RenderQueue } from './queue'
-import { Distortion } from './scaffold/distortion'
+import { Distortion } from './draw/scaffold/distortion'
 import { soundPack } from './sound'
 
-export const renderCurrentView: RenderHandler = ({ renderGrid, light, scaffoldValues }) => {
+export const renderCurrentView: RenderHandler = ({
+  renderGrid,
+  light,
+  scaffoldValues,
+  terrainStyle,
+}) => {
   const drawFrame = () => {
     cameraReset(light)
-    drawTerrain(renderGrid, scaffoldValues)
+    drawTerrain(renderGrid, scaffoldValues, terrainStyle)
   }
   RenderQueue.push(drawFrame)
 }
 
-export const renderGo: RenderHandler = ({ renderGrid, speed, scaffoldValues, light }) => {
+export const renderGo: RenderHandler = ({
+  renderGrid,
+  speed,
+  scaffoldValues,
+  light,
+  terrainStyle,
+}) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
     if (i === 0) {
       soundPack.playWalk()
     }
     moveCamera({ zDelta }, scaffoldValues, light)
-    drawTerrain(renderGrid, scaffoldValues)
+    drawTerrain(renderGrid, scaffoldValues, terrainStyle)
     if (i === GoMoveMagValues.length - 1) {
       Distortion.slideGo()
     }
@@ -36,7 +47,7 @@ export const renderGo: RenderHandler = ({ renderGrid, speed, scaffoldValues, lig
 
 export const renderTurn =
   (direction: LR): RenderHandler =>
-  ({ renderGrid, speed, scaffoldValues, light }) => {
+  ({ renderGrid, speed, scaffoldValues, light, terrainStyle }) => {
     const LRDeltaValues = getTurnLRDeltaArray(speed)
     const drawFrameSequence = LRDeltaValues.map((turnDelta, i) => () => {
       moveCamera(
@@ -44,7 +55,7 @@ export const renderTurn =
         scaffoldValues,
         light
       )
-      drawTerrain(renderGrid, scaffoldValues)
+      drawTerrain(renderGrid, scaffoldValues, terrainStyle)
       if (i === LRDeltaValues.length - 1) {
         Distortion.slideTurn(direction)
       }
@@ -52,7 +63,12 @@ export const renderTurn =
     RenderQueue.update(drawFrameSequence)
   }
 
-export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffoldValues, light }) => {
+export const renderGoDownstairs: RenderHandler = ({
+  renderGrid,
+  scaffoldValues,
+  light,
+  terrainStyle,
+}) => {
   const drawFrameSequence = DownstairsValues.map((values, i) => () => {
     if (i % 4 === 0) {
       soundPack.playWalk()
@@ -62,7 +78,7 @@ export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffoldValues, 
       eventBlockRequired()
     }
     moveCamera(values, scaffoldValues, light)
-    drawTerrain(renderGrid, scaffoldValues)
+    drawTerrain(renderGrid, scaffoldValues, terrainStyle)
   })
   RenderQueue.push(...drawFrameSequence)
 }
@@ -72,6 +88,7 @@ export const renderProceedToNextFloor: RenderHandler = ({
   scaffoldValues,
   light,
   texture,
+  terrainStyle,
 }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
@@ -83,7 +100,7 @@ export const renderProceedToNextFloor: RenderHandler = ({
       eventBlockRequired()
     }
     moveCamera({ zDelta }, scaffoldValues, light)
-    drawTerrain(corridorToNextFloor, scaffoldValues)
+    drawTerrain(corridorToNextFloor, scaffoldValues, terrainStyle)
     if (i === GoMoveMagValues.length - 1) {
       unblockEvents()
     }
@@ -92,14 +109,14 @@ export const renderProceedToNextFloor: RenderHandler = ({
 }
 
 const DieFrames = 48
-export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, light }) => {
+export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, light, terrainStyle }) => {
   const dieSequence = [...Array(DieFrames)].map((_, i) => () => {
     if (i === 0) {
       triggerFadeOut(DieFrames)
       eventBlockRequired()
     }
     cameraReset(light)
-    drawTerrain(renderGrid, scaffoldValues)
+    drawTerrain(renderGrid, scaffoldValues, terrainStyle)
     if (i === DieFrames - 1) {
       resurrectEvent()
     }
@@ -108,7 +125,13 @@ export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, light }) 
   logger.log(RenderQueue.length)
 }
 
-export const renderResurrect: RenderHandler = ({ speed, scaffoldValues, light, texture }) => {
+export const renderResurrect: RenderHandler = ({
+  speed,
+  scaffoldValues,
+  light,
+  texture,
+  terrainStyle,
+}) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
     if (i === 0) {
@@ -116,7 +139,7 @@ export const renderResurrect: RenderHandler = ({ speed, scaffoldValues, light, t
       eventBlockRequired()
     }
     moveCamera({ zDelta }, scaffoldValues, light)
-    drawTerrain(corridorToNextFloor, scaffoldValues)
+    drawTerrain(corridorToNextFloor, scaffoldValues, terrainStyle)
     if (i === GoMoveMagValues.length - 1) {
       unblockEvents()
     }

@@ -13,6 +13,8 @@
             "**/dist": true
         },
         "typescript.preferences.importModuleSpecifier": "relative",
-        "typescript.tsdk": "node_modules/typescript/lib"
+        "typescript.tsdk": "node_modules/typescript/lib",
+        "javascript.updateImportsOnFileMove.enabled": "always",
+        "typescript.updateImportsOnFileMove.enabled": "always"
     }
   }

@@ -44,20 +44,20 @@ const draw = () => {
   sketchStore.paint()
 
   // camera
-  // cameraStore.turnCamera()
-  // cameraStore.moveCamera()
+  cameraStore.turnCamera()
+  cameraStore.moveCamera()
 
   // render
   // p.lights()
-  // draw3DGrid(3, 2000, camera)
+  draw3DGrid(3, 2000, camera)
 
   
   p.lightFalloff(0, 1 / 300, 0)
-  p.pointLight(255, 255, 255, 0, 0, 0)
+  p.pointLight(255, 255, 255, 0, 2000, 2000)
 
   p.texture(image)
   renderBlockCoords()
-  renderModel(RenderModel.StairCeil)
+  renderModel(RenderModel.BoxBottom)
 }
 
 
