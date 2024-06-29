@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { RenderGrid } from '../../../../domain/translate/renderGrid/renderSpec'
 import type { RenderBlockPosition } from '../scaffold'
 
@@ -40,3 +41,15 @@ export enum DynamicModelCode {
 export enum StaticModelCode {
   Tree = 'Tree',
 }
+
+type Incl = {
+  includes: (arg: ModelCode) => boolean
+}
+
+export const dynamicModelCodes = Object.entries(DynamicModelCode).map(
+  ([_, val]) => val
+) as DynamicModelCode[] & Incl
+
+export const staticModelCodes = Object.entries(StaticModelCode).map(
+  ([_, val]) => val
+) as StaticModelCode[] & Incl
