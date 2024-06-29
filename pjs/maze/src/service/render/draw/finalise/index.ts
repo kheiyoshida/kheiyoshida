@@ -1,6 +1,7 @@
 import { RenderModel } from '../model'
 import { Scaffold } from '../scaffold'
 import { convertDynamicModelsToDrawables } from './dynamic'
+import { convertStaticModelsToDrawables } from './static'
 import { DrawableObject } from './types'
 
 export const finaliseModelsAsDrawables = (
@@ -11,7 +12,7 @@ export const finaliseModelsAsDrawables = (
     if (model.type === 'dynamic') {
       return convertDynamicModelsToDrawables(model, scaffold)
     } else {
-      throw Error('not implemented')
+      return convertStaticModelsToDrawables(model, scaffold)
     }
   })
 }

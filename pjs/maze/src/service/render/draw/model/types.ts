@@ -39,7 +39,7 @@ export enum DynamicModelCode {
 }
 
 export enum StaticModelCode {
-  Tree = 'Tree',
+  Pole = 'Pole'
 }
 
 type Incl = {

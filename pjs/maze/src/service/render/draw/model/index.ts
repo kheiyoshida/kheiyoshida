@@ -1,13 +1,15 @@
 import { TerrainRenderStyle } from '../../../../domain/translate'
 import { RenderGrid } from '../../../../domain/translate/renderGrid/renderSpec'
-import { convertToBoxesModelGrid } from './converters/boxes'
+import { convertToBoxesModelGrid } from './converters/poles'
 import { convertToNormalModelGrid } from './converters/normal'
 import { injectGridPositionToModels } from './inject'
 import { GridConverter, RenderModel } from './types'
+import { objectFloor } from './converters/objectFloor'
 
 const ConverterMap: Record<TerrainRenderStyle, GridConverter> = {
   normal: convertToNormalModelGrid,
-  boxes: convertToBoxesModelGrid,
+  poles: convertToBoxesModelGrid,
+  objectFloor,
 }
 
 export const convertToModelGrid = (

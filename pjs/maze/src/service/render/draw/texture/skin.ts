@@ -12,12 +12,13 @@ export const makeSkinManager = (color: ColorManager) => {
     if (!skin) {
       skin = p.createImage(SkinSize, SkinSize)
       skinFactory = makeSkinFactory()
-      skin = loadGraphics(skin, skinFactory.simple(color.currentRGB))
+      skin = loadGraphics(skin, skinFactory.none(color.currentRGB))
     }
   }
   return {
     renew: (strategy: SkinStrategy, ...args: number[]) => {
       init()
+      strategy = 'none' // drop skin patterns as it should be specific to each object
       skin = loadGraphics(skin, skinFactory[strategy](color.currentRGB, ...args))
       return skin
     },
@@ -46,7 +47,13 @@ const makeSkinFactory = (): Record<SkinStrategy, CreateSkin> => {
   return {
     random: makeRandomSkin(graphics),
     simple: makeSimpleSkin(graphics),
+    none: makeNoneSkin(graphics),
   }
+}
+
+const makeNoneSkin = (g: p5.Graphics) => (color: RGB) => {
+  g.background(color)
+  return g
 }
 
 const makeSimpleSkin = (g: p5.Graphics) => (color: RGB) => {

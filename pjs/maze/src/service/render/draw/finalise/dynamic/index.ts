@@ -1,9 +1,9 @@
 import { DynamicModel } from '../../model'
 import { Scaffold, getRenderBlock } from '../../scaffold'
 import { DrawableObject } from '../types'
-import { finalizeGeometries } from './finalize'
+import { finalizeGeometries } from '../geometry/finalize'
 import { ConvertModelMap } from './models'
-import { GeometrySpec } from './types'
+import { GeometrySpec } from '../geometry/types'
 
 export const convertDynamicModelsToDrawables = (
   model: DynamicModel,

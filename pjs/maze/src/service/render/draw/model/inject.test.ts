@@ -23,9 +23,9 @@ test(`${detectModelType.name}`, () => {
     type: 'dynamic',
     position: pos,
   })
-  const res2 = detectModelType(StaticModelCode.Tree, pos)
+  const res2 = detectModelType(StaticModelCode.Pole, pos)
   expect(res2).toEqual({
-    code: StaticModelCode.Tree,
+    code: StaticModelCode.Pole,
     type: 'static',
     position: pos,
   })

@@ -10,7 +10,7 @@ import {
 } from '../../scaffold'
 import * as face from './face'
 import * as normal from './normal'
-import { GeometrySpec, ShapeCoordinates } from './types'
+import { GeometrySpec, ShapeCoordinates } from '../geometry/types'
 
 type ConvertModel = (block: RenderBlock) => GeometrySpec[]
 
@@ -84,7 +84,7 @@ export const convertStairModel: ConvertModel = ({ blockCoords }) => {
 }
 
 export const convertBox: ConvertModel = ({ blockCoords: original }) => {
-  const blockCoords = getSmallerBlock(original, 0.2)
+  const blockCoords = getSmallerBlock(original, 0.1)
   return [
     {
       coords: face.boxTop(blockCoords),

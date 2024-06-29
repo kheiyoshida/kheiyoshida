@@ -31,7 +31,7 @@ export const getWalkSpeedFromCurrentState = () => {
 
 const calcSpeed = createDecreasingParameter(0, 1, 80)
 
-export type SkinStrategy = 'simple' | 'random'
+export type SkinStrategy = 'simple' | 'random' | 'none'
 export type TextureParams = {
   skin: [SkinStrategy, ...number[]]
   color: ColorOperationParams
@@ -69,13 +69,14 @@ const getSanityCommand = (san: number): MusicAlignment =>
 const getAestheticCommand = (aesthetics: number): MusicAesthetics =>
   aesthetics <= 3 ? 'dark' : aesthetics >= 7 ? 'bright' : null
 
-export type TerrainRenderStyle = 'normal' | 'boxes'
+export type TerrainRenderStyle = 'normal' | 'poles' | 'objectFloor'
 
 export const getTerrainRenderStyle = (): TerrainRenderStyle => {
+  return 'poles'
   if (store.current.floor < 5) return 'normal'
   else {
-    if (store.current.aesthetics <= 3) return 'boxes'
-    if (store.current.aesthetics >= 7) return 'boxes'
+    if (store.current.aesthetics <= 3) return 'poles'
+    if (store.current.aesthetics >= 7) return 'poles'
     return 'normal'
   }
 }
