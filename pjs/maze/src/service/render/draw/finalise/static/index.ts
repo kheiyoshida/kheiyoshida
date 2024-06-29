@@ -3,13 +3,14 @@ import { averagePosition3ds } from 'p5utils/src/3d'
 import { StaticModel, StaticModelCode } from '../../model'
 import { Scaffold, getRenderBlock } from '../../scaffold'
 import { DrawableObject } from '../types'
-import { createPole } from './pole'
+import { createPole, createTile } from './pole'
 
 const geometrieCollection = (() => {
   let geometries: Record<StaticModelCode, Geometry[]>
   const init = () => {
     geometries = {
       [StaticModelCode.Pole]: createPole(),
+      [StaticModelCode.Tile]: createTile()
     }
   }
   return {

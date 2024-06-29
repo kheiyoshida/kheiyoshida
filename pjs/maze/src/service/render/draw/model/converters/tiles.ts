@@ -3,9 +3,9 @@ import {
   RenderGrid,
   RenderPattern,
 } from '../../../../../domain/translate/renderGrid/renderSpec'
-import { CompoundModelCode, ModelCodeGrid, ModelCodeGridLayer, DynamicModelCode } from '../types'
+import { CompoundModelCode, ModelCodeGrid, ModelCodeGridLayer, DynamicModelCode, StaticModelCode } from '../types'
 
-export const objectFloor = (renderGrid: RenderGrid): ModelCodeGrid => {
+export const tiles = (renderGrid: RenderGrid): ModelCodeGrid => {
   const modelGrid = renderGrid
     .filter((layer): layer is ConcreteRenderLayer => layer !== null)
     .map(convertToModelGridLayer)
@@ -18,8 +18,8 @@ const convertToModelGridLayer = (renderLayer: ConcreteRenderLayer): ModelCodeGri
 
 const ModelMap: Record<RenderPattern, CompoundModelCode> = {
   [RenderPattern.FILL]: [],
-  [RenderPattern.FLOOR]: [DynamicModelCode.Floor,],
-  [RenderPattern.STAIR]: [DynamicModelCode.Stair, DynamicModelCode.BoxTop],
+  [RenderPattern.FLOOR]: [StaticModelCode.Tile],
+  [RenderPattern.STAIR]: [DynamicModelCode.BoxTop],
 }
 
 const convertToModel = (renderPattern: RenderPattern): CompoundModelCode => {
