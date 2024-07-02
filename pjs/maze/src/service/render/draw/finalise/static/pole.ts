@@ -4,6 +4,8 @@ import { FloorPathAvgLength, WallHeight } from '../../../../../config'
 import { finalizeGeometries } from '../geometry/finalize'
 import { GeometrySpec } from '../geometry/types'
 
+
+
 export const createPole = (w = FloorPathAvgLength / 3, h = WallHeight * 2): Geometry[] => {
   const p1: Position3D = [w, 0, 0]
   const p2: Position3D = [0, 0, w]

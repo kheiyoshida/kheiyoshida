@@ -10,6 +10,8 @@ import { drawTerrain, updateAesthetics } from './draw'
 import { RenderQueue } from './queue'
 import { Distortion } from './draw/scaffold/distortion'
 import { soundPack } from './sound'
+import { fireByRate } from 'utils'
+import { eraseGeometriesInMemory, updateStaticModelLevels } from './draw/finalise'
 
 export const renderCurrentView: RenderHandler = ({
   renderGrid,
@@ -20,6 +22,10 @@ export const renderCurrentView: RenderHandler = ({
   const drawFrame = () => {
     cameraReset(light)
     drawTerrain(renderGrid, scaffoldValues, terrainStyle)
+
+    if (fireByRate(0.5) ){
+      updateStaticModelLevels()
+    }
   }
   RenderQueue.push(drawFrame)
 }
@@ -92,12 +98,13 @@ export const renderProceedToNextFloor: RenderHandler = ({
 }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
-    if (i % 8 === 0) {
-      soundPack.playWalk()
-    }
     if (i === 0) {
       updateAesthetics(texture)
+      eraseGeometriesInMemory()
       eventBlockRequired()
+    }
+    if (i % 8 === 0) {
+      soundPack.playWalk()
     }
     moveCamera({ zDelta }, scaffoldValues, light)
     drawTerrain(corridorToNextFloor, scaffoldValues, terrainStyle)

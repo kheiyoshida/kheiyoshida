@@ -16,7 +16,15 @@ export const finalizeGeometry = (geoSpec: GeometrySpec): p5.Geometry => {
   return (p as pExtended).endGeometry()
 }
 
-const finalizeShape = ({ coords, normalPosition }: GeometrySpec): void => {
+const finalizeShape = (spec: GeometrySpec): void => {
+  if (spec.coords.length < 4) {
+    finalizeTriangle(spec)
+  } else {
+    finalizeRect(spec)
+  }
+}
+
+const finalizeRect =  ({ coords, normalPosition }: GeometrySpec): void => {
   if (coords.length < 4) throw Error(`must be coords of four or more`)
   const blockCenter = new p5.Vector(...normalPosition)
   const shapeCenter = new p5.Vector(...calcAverage(coords))
@@ -25,6 +33,13 @@ const finalizeShape = ({ coords, normalPosition }: GeometrySpec): void => {
   triangles.forEach((tri) => {
     finalizeSurface(tri, blockCenter, 'same')
   })
+}
+
+const finalizeTriangle = ({ coords, normalPosition }: GeometrySpec): void => {
+  if (coords.length !== 3) throw Error(`must be coords of three`)
+  const blockCenter = new p5.Vector(...normalPosition)
+  const vectors = coords.map((c) => new p5.Vector(...c))
+  finalizeSurface(vectors, blockCenter, 'same')
 }
 
 const calcAverage = (coords: ShapeCoordinates): Position3D => {

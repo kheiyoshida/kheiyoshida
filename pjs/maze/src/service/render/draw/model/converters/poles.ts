@@ -25,7 +25,7 @@ export const convertToModelGridLayer = (renderLayer: ConcreteRenderLayer): Model
 const ModelMap: Record<RenderPattern, CompoundModelCode> = {
   [RenderPattern.FILL]: [DynamicModelCode.Floor, StaticModelCode.Pole],
   [RenderPattern.FLOOR]: [DynamicModelCode.Floor],
-  [RenderPattern.STAIR]: [DynamicModelCode.BoxTop, DynamicModelCode.Stair],
+  [RenderPattern.STAIR]: [DynamicModelCode.Floor, StaticModelCode.Octahedron],
 }
 
 const convertToModel = (renderPattern: RenderPattern): CompoundModelCode => {
