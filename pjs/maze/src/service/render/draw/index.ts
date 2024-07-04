@@ -26,9 +26,9 @@ export const drawTerrain = (
 
 const drawGeometries = (drawables: DrawableObject[]): void => {
   p.background(0)
-  p.texture(SkinManager.current)
   drawables.forEach((obj) => {
     p.push()
+    p.texture(obj.texture || SkinManager.current)
     p.translate(...obj.position)
     p.model(obj.geometry)
     p.pop()

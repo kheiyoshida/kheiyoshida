@@ -3,9 +3,10 @@ import * as sounds from './sounds'
 
 export const makeSoundEffectPack = (busConf?: SoundEffectBus) => {
   const walk = sounds.makeWalkSoundSource()
-  const bus = makeSoundEffectBus([walk], busConf)
+  const stairs = sounds.makeStairsSoundSource()
+  makeSoundEffectBus([walk, stairs], busConf)
   return {
-    bus,
-    playWalk: () => walk.play()
+    playWalk: () => walk.play(),
+    playStairs: () => stairs.play()
   }
 }

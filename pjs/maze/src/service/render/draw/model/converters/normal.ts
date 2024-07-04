@@ -4,7 +4,7 @@ import {
   RenderPattern,
   RenderPosition,
 } from '../../../../../domain/translate/renderGrid/renderSpec'
-import { CompoundModelCode, ModelCodeGrid, ModelCodeGridLayer, DynamicModelCode } from '../types'
+import { CompoundModelCode, ModelCodeGrid, ModelCodeGridLayer, DynamicModelCode, StaticModelCode } from '../types'
 
 export const convertToNormalModelGrid = (renderGrid: RenderGrid): ModelCodeGrid => {
   const modelGrid = renderGrid
@@ -29,7 +29,7 @@ export const convertToModel = (
 export const convertCenterModel = (pattern: RenderPattern): CompoundModelCode => {
   if (pattern === RenderPattern.FLOOR) return [DynamicModelCode.Floor, DynamicModelCode.Ceil]
   if (pattern === RenderPattern.FILL) return [DynamicModelCode.FrontWall]
-  if (pattern === RenderPattern.STAIR) return [DynamicModelCode.Stair, DynamicModelCode.StairCeil]
+  if (pattern === RenderPattern.STAIR) return [DynamicModelCode.Floor, StaticModelCode.Octahedron]
   throw Error()
 }
 

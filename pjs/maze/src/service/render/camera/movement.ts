@@ -16,14 +16,18 @@ export const getStairUpDown = (i: number, toggleInterval = 2): boolean => {
   return false
 }
 
-export const DownstairsValues: CameraMoveValues[] = [...Array(DownFramesLength)].map(
-  (_, i) => {
-    const forward = 0.3
-    const zDelta = (forward * (i + 1)) / DownFramesLength
-    const upDown = ((getStairUpDown(i, 2) ? 1 : 0.88) * (i + 1)) / DownFramesLength
-    return {zDelta, upDown}
-  }
-)
+export const DownstairsValues: CameraMoveValues[] = [...Array(DownFramesLength)].map((_, i) => {
+  const forward = 0.3
+  const zDelta = (forward * (i + 1)) / DownFramesLength
+  const upDown = ((getStairUpDown(i, 2) ? 1 : 0.88) * (i + 1)) / DownFramesLength
+  return { zDelta, upDown }
+})
+
+export const StairAnimationFrameValues: CameraMoveValues[] = [...Array(DownFramesLength)].map((_, i) => {
+  const forward = 0.01
+  const zDelta = (forward * (i + 1)) / DownFramesLength
+  return { zDelta }
+})
 
 export const createSinArray = (length: number, max = 0.5) =>
   [...Array(length)].map((_, i) => Math.sin(max * Math.PI * ((i + 1) / length)))
@@ -39,4 +43,3 @@ export const createAccumulatedDistanceArray = (length: number): number[] => {
   const normalized = distArray.map((dist) => dist / total)
   return normalized
 }
-

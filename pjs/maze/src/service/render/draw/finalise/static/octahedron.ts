@@ -1,11 +1,11 @@
 import { Geometry } from 'p5'
-import { averagePosition3ds } from 'p5utils/src/3d'
-import { RenderBlockCoords } from '../../scaffold'
 import { Position3D } from 'p5utils/src/3d'
 import { StaticModelEmitter } from '.'
 import { FloorPathAvgLength } from '../../../../../config'
+import { getBlockCenter } from '../../scaffold'
 import { finalizeGeometries } from '../geometry/finalize'
 import { GeometrySpec } from '../geometry/types'
+import { ObjectSkinFactory } from '../geometry/texture'
 
 export const createOcta = (w = FloorPathAvgLength / 2, h = FloorPathAvgLength / 2): Geometry[] => {
   const p1: Position3D = [w, 0, 0]
@@ -54,15 +54,12 @@ export const createOcta = (w = FloorPathAvgLength / 2, h = FloorPathAvgLength / 
 }
 
 export const makeOctaEmitter = (level: number): StaticModelEmitter => {
-  const size = (FloorPathAvgLength / 2) * level
+  const size = (FloorPathAvgLength / 4) * level
   const geometries = createOcta(size, size)
-  const placement = (block: RenderBlockCoords) =>
-    averagePosition3ds([block.front.bl, block.front.br, block.rear.bl, block.rear.br])
-  return (blockcoords) => {
-    const groundPosition = placement(blockcoords)
-    return geometries.map((geometry) => ({
+  return (blockcoords) =>
+    geometries.map((geometry) => ({
       geometry,
-      position: [groundPosition[0], groundPosition[1] - size, groundPosition[2]],
+      position: getBlockCenter(blockcoords),
+      texture: ObjectSkinFactory.getSkin(),
     }))
-  }
 }

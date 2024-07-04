@@ -1,17 +1,18 @@
 import { LR } from 'src/utils/direction'
+import { fireByRate } from 'utils'
 import { eventBlockRequired, resurrectEvent, unblockEvents } from '../../domain/events'
 import { corridorToNextFloor } from '../../domain/translate/renderGrid/scenes'
 import { logger } from '../../utils/logger'
 import { RenderHandler } from '../consumer'
 import { cameraReset, moveCamera } from './camera'
 import { triggerFadeOut } from './camera/light'
-import { DownstairsValues, getGoDeltaArray, getTurnLRDeltaArray } from './camera/movement'
+import { StairAnimationFrameValues, getGoDeltaArray, getTurnLRDeltaArray } from './camera/movement'
 import { drawTerrain, updateAesthetics } from './draw'
-import { RenderQueue } from './queue'
-import { Distortion } from './draw/scaffold/distortion'
-import { soundPack } from './sound'
-import { fireByRate } from 'utils'
 import { eraseGeometriesInMemory, updateStaticModelLevels } from './draw/finalise'
+import { ObjectSkinFactory } from './draw/finalise/geometry/texture'
+import { Distortion } from './draw/scaffold/distortion'
+import { RenderQueue } from './queue'
+import { soundPack } from './sound'
 
 export const renderCurrentView: RenderHandler = ({
   renderGrid,
@@ -25,6 +26,9 @@ export const renderCurrentView: RenderHandler = ({
 
     if (fireByRate(0.5) ){
       updateStaticModelLevels()
+    }
+    if (fireByRate(0.3)) {
+      ObjectSkinFactory.renew()
     }
   }
   RenderQueue.push(drawFrame)
@@ -75,15 +79,14 @@ export const renderGoDownstairs: RenderHandler = ({
   light,
   terrainStyle,
 }) => {
-  const drawFrameSequence = DownstairsValues.map((values, i) => () => {
-    if (i % 4 === 0) {
-      soundPack.playWalk()
-    }
+  const drawFrameSequence = StairAnimationFrameValues.map((values, i) => () => {
     if (i === 0) {
-      triggerFadeOut(DownstairsValues.length)
+      soundPack.playStairs()
+      triggerFadeOut(StairAnimationFrameValues.length)
       eventBlockRequired()
     }
     moveCamera(values, scaffoldValues, light)
+    ObjectSkinFactory.renew()
     drawTerrain(renderGrid, scaffoldValues, terrainStyle)
   })
   RenderQueue.push(...drawFrameSequence)
