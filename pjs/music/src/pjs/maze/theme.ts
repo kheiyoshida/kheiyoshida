@@ -12,13 +12,13 @@ import { ScaleType } from '../../../../../pkgs/mgnr-core/src/generator/constants
 export const createDefaultTheme = () => {
   const pickScaleConfig = (): Omit<ScaleConf, 'range'> => ({
     key: pickRandomPitchName(),
-    pref: randomItemFromArray<ScaleType>(['omit25', 'omit27', 'omit47', 'major']),
+    pref: randomItemFromArray<ScaleType>(['omit25', 'major']),
   })
   const scaleSource = createScaleSource({ ...pickScaleConfig(), range: { min: 20, max: 100 } })
 
   const sendTrack = getMixer().createSendChannel({
     effects: [
-      new Tone.PingPongDelay('8n.', 0.2),
+      new Tone.PingPongDelay('8n.', 0.33),
       new Tone.Reverb(0.3),
       new Tone.Filter(400, 'lowshelf'),
       new Tone.Filter(800, 'notch'),

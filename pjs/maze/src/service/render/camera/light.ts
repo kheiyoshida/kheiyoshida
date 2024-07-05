@@ -41,7 +41,7 @@ export const handleLight = (
     ...pointLightColor,
     cameraPosition[0],
     cameraPosition[1],
-    cameraPosition[2] - randomIntInAsymmetricRange(50)
+    cameraPosition[2] - randomIntInAsymmetricRange(20)
   )
 }
 
