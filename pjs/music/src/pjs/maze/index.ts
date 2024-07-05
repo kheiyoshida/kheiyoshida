@@ -4,16 +4,18 @@ import {
   SceneShiftInfo,
   createMusicState,
   nthDegreeTone,
-  pickRandomPitchName,
 } from 'mgnr-tone'
 import * as Tone from 'tone'
+import { randomItemFromArray } from 'utils'
 import { AvailableOutlets, makeDefaultScenes } from './scenes'
 import { createDefaultTheme } from './theme'
-import { fireByRate, randomIntInclusiveBetween, randomItemFromArray } from 'utils'
+
+export type MusicDestination = GridDirection
 
 export type Music = {
   applyInitialScene: () => void
   checkNextShift: (...commands: GridDirection[]) => void
+  moveToDest: (dest: Parameters<SceneGrid['moveTowards']>[0]) => void
   currentPosition: SceneGrid['current']
   config: {
     bpm: number
@@ -38,9 +40,23 @@ export const makeMusic = (): Music => {
     })
   }
 
+  function moveToDest(dest: Parameters<SceneGrid['moveTowards']>[0]) {
+    const shift = scenes.moveTowards(dest)
+    if (!shift) return
+    fadeInNextTheme(shift)
+    if (scaleSource.inModulation || scenes.current.isOnEdge) {
+      scaleSource.modulateAll(
+        {
+          key: nthDegreeTone(scaleSource.conf.key, randomItemFromArray(['4', '5', '6'])),
+          pref: randomItemFromArray(['omit25', 'omit27', 'omit47', 'major']),
+        },
+        2
+      )
+    }
+  }
+
   function checkNextShift(...commands: GridDirection[]) {
     const shift = commands.reduce((_, command) => scenes.move(command), {} as SceneShiftInfo)
-    console.log(shift)
     fadeInNextTheme(shift)
     if (scaleSource.inModulation || scenes.current.isOnEdge) {
       scaleSource.modulateAll(
@@ -62,12 +78,13 @@ export const makeMusic = (): Music => {
   return {
     applyInitialScene,
     checkNextShift,
+    moveToDest,
     get currentPosition() {
       return scenes.current
     },
     get config() {
       return {
-        bpm: randomIntInclusiveBetween(96, 110),
+        bpm: 100,
         interval: '8m',
       }
     },

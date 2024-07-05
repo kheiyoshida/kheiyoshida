@@ -1,8 +1,8 @@
-import { maze, makeContextManager } from 'music'
+import { makeContextManager, maze } from 'music'
 import { RenderHandler } from '../consumer'
-import { TranslateMap, createMusicCommandBuffer } from './commands'
+import { MusicRange } from '../../domain/translate'
 
-const buffer = createMusicCommandBuffer()
+let buffer: [MusicRange,MusicRange]
 
 const setupMusic = () => {
   const music = maze.makeMusic()
@@ -10,10 +10,8 @@ const setupMusic = () => {
     ...music.config,
     initialise: () => music.applyInitialScene(),
     onInterval: () => {
-      const commands = buffer.get()
-      if (commands.length) {
-        music.checkNextShift(...commands.map(c => TranslateMap[c]))
-      }
+      console.log(buffer)
+      music.moveToDest(buffer)
     },
   })
   return context
@@ -21,10 +19,6 @@ const setupMusic = () => {
 
 export const music = setupMusic()
 
-export const updateMusicAesthetics: RenderHandler = (pack) => {
-  buffer.update({ aesthetics: pack.music.aesthetics, alignment: null })
-}
-
-export const updateMusicAlignment: RenderHandler = (pack) => {
-  buffer.update({ aesthetics: null, alignment: pack.music.alignment })
+export const updateMusicDest: RenderHandler = (pack) => {
+  buffer = [pack.music.aesthetics, pack.music.alignment]
 }

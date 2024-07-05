@@ -1,7 +1,7 @@
 import { MessageQueue, RenderSignal } from '../domain/messages'
 import { showFloor } from './interface/handlers'
 import { closeMap, renderMap } from './interface/map'
-import { updateMusicAesthetics, updateMusicAlignment } from './music'
+import { updateMusicDest } from './music'
 import {
   renderCurrentView,
   renderDie,
@@ -27,8 +27,7 @@ export const MessageResolutionMap: Record<RenderSignal, RenderHandler> = {
   [RenderSignal.ShowFloor]: showFloor,
   [RenderSignal.Die]: renderDie,
   [RenderSignal.Resurrect]: renderResurrect,
-  [RenderSignal.UpdateMusicAlignment]: updateMusicAlignment,
-  [RenderSignal.UpdateMusicAesthetics]: updateMusicAesthetics
+  [RenderSignal.UpdateMusicDest]: updateMusicDest,
 }
 
 export const consumeMessageQueue = () => {

@@ -26,7 +26,7 @@ export const recurringConstantStatusEvent = () => {
   if (store.current.mapOpen) return
   updateStats('constant')
 
-  MessageQueue.push(RenderSignal.UpdateMusicAlignment)
+  MessageQueue.push(RenderSignal.UpdateMusicDest)
 
   if (statusStore.current.sanity <= 0) {
     MessageQueue.push(RenderSignal.Die)
@@ -67,7 +67,7 @@ export const goDownstairsEvent = () => {
   updateStats('downstairs')
   updateAesthetics()
 
-  MessageQueue.push(RenderSignal.UpdateMusicAesthetics)
+  MessageQueue.push(RenderSignal.UpdateMusicDest)
   MessageQueue.push(RenderSignal.ProceedToNextFloor)
   MessageQueue.push(RenderSignal.CurrentView)
   MessageQueue.push(RenderSignal.ShowFloor)

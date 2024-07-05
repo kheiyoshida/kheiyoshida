@@ -17,19 +17,19 @@ export const updateStats = (pattern: StatsUpdatePattern) => {
 
 const StatusEventValues: Record<StatsUpdatePattern, { sanity: number; stamina: number }> = {
   walk: {
-    sanity: 4,
-    stamina: -3,
+    sanity: 10,
+    stamina: -50,
   },
   turn: {
     sanity: 0,
     stamina: 0,
   },
   constant: {
-    sanity: -1.5,
-    stamina: 1,
+    sanity: -10,
+    stamina: 20,
   },
   downstairs: {
-    sanity: 50,
+    sanity: 10 * 2 * 40, // + 40 seconds
     stamina: 0,
   },
 }

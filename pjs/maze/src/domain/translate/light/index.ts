@@ -1,6 +1,7 @@
-import { clamp, makeWeightedRandomPicker, toFloatPercent } from 'utils'
+import { clamp, makeWeightedRandomPicker } from 'utils'
 import { statusStore, store } from '../../../store'
 import { ColorOperationParams, ColorOperationPattern } from '../color/types'
+import { MAX_STATUS_VALUE } from '../../../config'
 
 export type LightVariables = {
   visibility: number
@@ -12,22 +13,24 @@ export const getLightColorIntention = (): LightVariables => ({
   colorParams: getLightColor(),
 })
 
+const DarkenThreshold = 1000
+
 export const getVisibilityFromCurrentState = (): number => {
   const floor = store.current.floor
-  if (floor < 5) return toFloatPercent(statusStore.current.stamina)
-  return Math.max(0.1, toFloatPercent(statusStore.current.stamina - floor))
+  if (floor < 5) return statusStore.current.stamina / DarkenThreshold
+  return Math.max(0.1, (statusStore.current.stamina - floor * 10) / DarkenThreshold)
 }
 
 export const getLightColor = (): ColorOperationParams => {
   const sanity = statusStore.current.sanity
   const pattern = pickPattern(sanity)
   if (pattern === 'gradation') return [pattern, ...getGradationRange(sanity)]
-  else if (pattern === 'return') return [pattern, sanity / 1000]
+  else if (pattern === 'return') return [pattern, sanity / 15000]
   return [pattern]
 }
 
 const pickPattern = (sanity: number) => {
-  if (sanity > 40) return sanePicker()
+  if (sanity > 0.4 * MAX_STATUS_VALUE) return sanePicker()
   else return insanePicker()
 }
 

@@ -23,17 +23,30 @@ export const createSceneGrid = (
 ) => {
   const [col, row] = translateToPositionIndex(initialPos, initialAlignment)
   const position = createGridPositionManager(col, row)
+  const move = (direction: GridDirection): SceneShiftInfo => {
+    position.move(direction)
+    return {
+      makeScene: sceneMakers[position.parentGridPosition],
+      direction,
+      sceneAlignment: position.childGridPosition,
+    }
+  }
   return {
-    getInitialScene: () => {
-      return sceneMakers[initialPos]
-    },
-    move: (direction: GridDirection): SceneShiftInfo => {
-      position.move(direction)
-      return {
-        makeScene: sceneMakers[position.grid],
-        direction,
-        sceneAlignment: position.sceneAlignment,
-      }
+    getInitialScene: () => sceneMakers[initialPos],
+    move,
+    moveTowards: ([destCol, destRow]: [GridPositionIndex, GridPositionIndex]) => {
+      const [currentCol, currentRow] = translateToPositionIndex(
+        position.parentGridPosition,
+        position.childGridPosition
+      )
+      const hori: GridDirection | undefined =
+        destCol > currentCol ? 'right' : destCol < currentCol ? 'left' : undefined
+      const vert: GridDirection | undefined =
+        destRow > currentRow ? 'up' : destRow < currentRow ? 'down' : undefined
+      return [hori, vert].reduce(
+        (p, c) => (c ? move(c) : p),
+        undefined as unknown as SceneShiftInfo | undefined
+      )
     },
     get current() {
       return position
@@ -50,11 +63,11 @@ export const createGridPositionManager = (
   let row: GridPositionIndex = initialRow
   const clamp = clampGridPositionIndex(allowOverflow)
   return {
-    get grid(): GridPosition {
-      return translateGridPosition(col, row)
+    get parentGridPosition(): GridPosition {
+      return translateParentGridPosition(col, row)
     },
-    get sceneAlignment(): GridPosition {
-      return translatePosition(col, row)
+    get childGridPosition(): GridPosition {
+      return translateChildGridPosition(col, row)
     },
     move: (direction: GridDirection) => {
       if (direction === 'up') row = clamp(row + 1)
@@ -65,7 +78,7 @@ export const createGridPositionManager = (
     get isOnEdge() {
       if (allowOverflow) return false
       return col === 1 || col === 9 || row === 1 || row === 9
-    }
+    },
   }
 }
 
@@ -77,30 +90,33 @@ export const clampGridPositionIndex =
     return clamp(number, 1, 9) as GridPositionIndex
   }
 
-export const translateGridPosition = (
+export const translateParentGridPosition = (
   col: GridPositionIndex,
   row: GridPositionIndex
 ): GridPosition => {
-  return `${translateGridColPosition(col)}-${translateGriwRowPosition(row)}`
+  return `${translateParentColPosition(col)}-${translateParentRowPosition(row)}`
 }
 
-const translateGridColPosition = (index: number): GridColumn => {
+const translateParentColPosition = (index: number): GridColumn => {
   if (index < 4) return 'left'
   if (index < 7) return 'center'
   return 'right'
 }
 
-const translateGriwRowPosition = (index: number): GridRow => {
+const translateParentRowPosition = (index: number): GridRow => {
   if (index < 4) return 'bottom'
   if (index < 7) return 'middle'
   return 'top'
 }
 
-export const translatePosition = (col: GridPositionIndex, row: GridPositionIndex): GridPosition => {
-  return `${translateColPosition(col)}-${translateRowPosition(row)}`
+export const translateChildGridPosition = (
+  col: GridPositionIndex,
+  row: GridPositionIndex
+): GridPosition => {
+  return `${translateChildColPosition(col)}-${translateChildRowPosition(row)}`
 }
 
-const translateColPosition = (index: number): GridColumn => {
+const translateChildColPosition = (index: number): GridColumn => {
   const i = (index - 1) % 3
   if (i === 0) return 'left'
   if (i === 1) return 'center'
@@ -108,7 +124,7 @@ const translateColPosition = (index: number): GridColumn => {
   throw Error(`unkwon index ${index}`)
 }
 
-const translateRowPosition = (index: number): GridRow => {
+const translateChildRowPosition = (index: number): GridRow => {
   const i = (index - 1) % 3
   if (i === 0) return 'bottom'
   if (i === 1) return 'middle'
@@ -117,11 +133,11 @@ const translateRowPosition = (index: number): GridRow => {
 }
 
 export const translateToPositionIndex = (
-  grid: GridPosition,
-  alignment: GridAlignment
+  parent: GridPosition,
+  child: GridAlignment
 ): [GridPositionIndex, GridPositionIndex] => {
-  const [gridCol, gridRow] = grid.split('-')
-  const [alignCol, alignRow] = alignment.split('-')
+  const [gridCol, gridRow] = parent.split('-')
+  const [alignCol, alignRow] = child.split('-')
   const cols: GridColumn[] = ['left', 'center', 'right']
   const rows: GridRow[] = ['bottom', 'middle', 'top']
   const col = cols.findIndex((c) => c === gridCol) * 3 + cols.findIndex((c) => c === alignCol) + 1

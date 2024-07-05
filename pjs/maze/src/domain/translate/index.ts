@@ -1,6 +1,8 @@
+import { IntRange } from 'utils'
 import { statusStore, store } from '../../store'
 import { ColorOperationParams } from './color/types'
 import { createDecreasingParameter, createIncreasingParameter } from './utils/params'
+import { MAX_STATUS_VALUE } from '../../config'
 
 export type ScaffoldParams = {
   corridorWidthLevel: number
@@ -20,16 +22,16 @@ export const getScaffoldParams = (): ScaffoldParams => {
   return params
 }
 
-const calcWidthLevel = createDecreasingParameter(0.2, 1, 75)
-const calcHeightLevel = createIncreasingParameter(1, 5, 100)
-const calcCorridorLengthLevel = createIncreasingParameter(1, 2, 75)
-const calcDistortion = createIncreasingParameter(0.05, 1, 125)
+const calcWidthLevel = createDecreasingParameter(0.2, 1, 1000)
+const calcHeightLevel = createIncreasingParameter(1, 5, 1000)
+const calcCorridorLengthLevel = createIncreasingParameter(1, 2, 1000)
+const calcDistortion = createIncreasingParameter(0.05, 1, 1500)
 
 export const getWalkSpeedFromCurrentState = () => {
   return calcSpeed(statusStore.current.stamina)
 }
 
-const calcSpeed = createDecreasingParameter(0, 1, 80)
+const calcSpeed = createDecreasingParameter(0.3, 1, MAX_STATUS_VALUE / 3)
 
 export type SkinStrategy = 'simple' | 'random' | 'none'
 export type TextureParams = {
@@ -52,22 +54,19 @@ const getTextureColor = (floor: number): ColorOperationParams => {
   return ['gradation', -20, 20]
 }
 
+export type MusicRange = IntRange<1, 10>
+
 export type MusicCommand = {
-  alignment: MusicAlignment
-  aesthetics: MusicAesthetics
+  alignment: MusicRange
+  aesthetics: MusicRange
 }
 export type MusicAlignment = 'law' | 'chaos' | null
 export type MusicAesthetics = 'dark' | 'bright' | null
 
 export const getMusicCommands = (): MusicCommand => ({
-  alignment: getSanityCommand(statusStore.current.sanity),
-  aesthetics: getAestheticCommand(store.current.aesthetics),
+  alignment: Math.ceil(9 * statusStore.current.sanity / MAX_STATUS_VALUE) as MusicRange,
+  aesthetics: store.current.aesthetics as MusicRange,
 })
-
-const getSanityCommand = (san: number): MusicAlignment =>
-  san < 70 ? 'chaos' : san > 130 ? 'law' : null
-const getAestheticCommand = (aesthetics: number): MusicAesthetics =>
-  aesthetics <= 3 ? 'dark' : aesthetics >= 7 ? 'bright' : null
 
 export type TerrainRenderStyle = 'normal' | 'poles' | 'tiles'
 
