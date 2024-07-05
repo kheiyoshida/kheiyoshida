@@ -39,8 +39,8 @@ const Grid = ({ music }: { music: Music }) => {
   useEffect(() => {
     setInterval(() => {
       if (fireByRate(0.5)) {
-        setPosition(music.currentPosition.grid)
-        setAlignment(music.currentPosition.sceneAlignment)
+        setPosition(music.currentPosition.parentGridPosition)
+        setAlignment(music.currentPosition.childGridPosition)
       } else {
         setPosition(null)
         setAlignment(null)

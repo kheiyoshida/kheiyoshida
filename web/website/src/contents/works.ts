@@ -1,8 +1,19 @@
 import { WithoutId, WorkPageInfo } from '../types'
 import { ContentData, insertSlug, worksLink } from './data'
 
-const { wasted, shinjuku, forest, tp4, maze, medwEP, gene, zen4computers, regrets, surfaceWater, mandala } =
-  ContentData
+const {
+  wasted,
+  shinjuku,
+  forest,
+  tp4,
+  maze,
+  medwEP,
+  gene,
+  zen4computers,
+  regrets,
+  surfaceWater,
+  mandala,
+} = ContentData
 
 const makePathsWithLink = (title: string, paths: string[], placeholderPath?: string) =>
   paths.map((p) => ({ path: p, link: worksLink(title), placeholderPath: placeholderPath || null }))
@@ -11,18 +22,18 @@ const makePathsWithoutLink = (paths: string[]) => paths.map((p) => ({ path: p })
 
 const _WorkEntities: WithoutId<WorkPageInfo>[] = [
   {
-    title: mandala.title,
-    date: mandala.date,
-    contents: mandala.sketch,
-    thumbnail: { images: makePathsWithLink(mandala.title, [mandala.thumbnail])},
-    caption: mandala.caption,
-  },
-  {
     title: maze.title,
     date: maze.date,
     contents: maze.sketch,
     thumbnail: { images: makePathsWithLink(maze.title, [...maze.images], maze.placeholder) },
     caption: maze.caption.join(` `),
+  },
+  {
+    title: mandala.title,
+    date: mandala.date,
+    contents: mandala.sketch,
+    thumbnail: { images: makePathsWithLink(mandala.title, [mandala.thumbnail]) },
+    caption: mandala.caption,
   },
   {
     title: surfaceWater.title,
