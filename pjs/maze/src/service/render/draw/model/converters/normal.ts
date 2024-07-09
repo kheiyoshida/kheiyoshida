@@ -29,7 +29,7 @@ export const convertToModel = (
 export const convertCenterModel = (pattern: RenderPattern): CompoundModelCode => {
   if (pattern === RenderPattern.FLOOR) return [DynamicModelCode.Floor, DynamicModelCode.Ceil]
   if (pattern === RenderPattern.FILL) return [DynamicModelCode.FrontWall]
-  if (pattern === RenderPattern.STAIR) return [DynamicModelCode.Floor, StaticModelCode.Octahedron]
+  if (pattern === RenderPattern.STAIR) return [DynamicModelCode.Floor, StaticModelCode.Octahedron, DynamicModelCode.Ceil]
   throw Error()
 }
 
