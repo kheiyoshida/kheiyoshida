@@ -1,6 +1,6 @@
 import { LR } from 'src/utils/direction'
 import { fireByRate } from 'utils'
-import { eventBlockRequired, resurrectEvent, unblockEvents } from '../../domain/events'
+import { blockControlRequired, blockStatusChangeRequired, resurrectEvent, unblockControlRequired, unblockStatusChangeRequired } from '../../domain/events'
 import { corridorToNextFloor } from '../../domain/translate/renderGrid/scenes'
 import { logger } from '../../utils/logger'
 import { RenderHandler } from '../consumer'
@@ -24,7 +24,7 @@ export const renderCurrentView: RenderHandler = ({
     cameraReset(light)
     drawTerrain(renderGrid, scaffoldValues, terrainStyle)
 
-    if (fireByRate(0.5) ){
+    if (fireByRate(0.5)) {
       updateStaticModelLevels()
     }
     if (fireByRate(0.3)) {
@@ -45,9 +45,13 @@ export const renderGo: RenderHandler = ({
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
     if (i === 0) {
       soundPack.playWalk()
+      blockControlRequired()
     }
     moveCamera({ zDelta }, scaffoldValues, light)
     drawTerrain(renderGrid, scaffoldValues, terrainStyle)
+    if (i === Math.floor((GoMoveMagValues.length * 3) / 4)) {
+      unblockControlRequired()
+    }
     if (i === GoMoveMagValues.length - 1) {
       Distortion.slideGo()
     }
@@ -60,12 +64,18 @@ export const renderTurn =
   ({ renderGrid, speed, scaffoldValues, light, terrainStyle }) => {
     const LRDeltaValues = getTurnLRDeltaArray(speed)
     const drawFrameSequence = LRDeltaValues.map((turnDelta, i) => () => {
+      if (i === 0) {
+        blockControlRequired()
+      }
       moveCamera(
         { turnDelta: direction === 'right' ? turnDelta : -turnDelta },
         scaffoldValues,
         light
       )
       drawTerrain(renderGrid, scaffoldValues, terrainStyle)
+      if (i === Math.floor((LRDeltaValues.length * 3) / 4)) {
+        unblockControlRequired()
+      }
       if (i === LRDeltaValues.length - 1) {
         Distortion.slideTurn(direction)
       }
@@ -83,11 +93,16 @@ export const renderGoDownstairs: RenderHandler = ({
     if (i === 0) {
       soundPack.playStairs()
       triggerFadeOut(StairAnimationFrameValues.length)
-      eventBlockRequired()
+      blockControlRequired()
+      blockStatusChangeRequired()
     }
     moveCamera(values, scaffoldValues, light)
     ObjectSkinFactory.renew()
     drawTerrain(renderGrid, scaffoldValues, terrainStyle)
+    if (i === StairAnimationFrameValues.length - 1) {
+      unblockControlRequired()
+      unblockStatusChangeRequired()
+    }
   })
   RenderQueue.push(...drawFrameSequence)
 }
@@ -104,7 +119,8 @@ export const renderProceedToNextFloor: RenderHandler = ({
     if (i === 0) {
       updateAesthetics(texture)
       eraseGeometriesInMemory()
-      eventBlockRequired()
+      blockControlRequired()
+      blockStatusChangeRequired()
     }
     if (i % 8 === 0) {
       soundPack.playWalk()
@@ -112,7 +128,8 @@ export const renderProceedToNextFloor: RenderHandler = ({
     moveCamera({ zDelta }, scaffoldValues, light)
     drawTerrain(corridorToNextFloor, scaffoldValues, terrainStyle)
     if (i === GoMoveMagValues.length - 1) {
-      unblockEvents()
+      unblockControlRequired()
+      unblockStatusChangeRequired()
     }
   })
   RenderQueue.push(...drawFrameSequence)
@@ -123,7 +140,8 @@ export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, light, te
   const dieSequence = [...Array(DieFrames)].map((_, i) => () => {
     if (i === 0) {
       triggerFadeOut(DieFrames)
-      eventBlockRequired()
+      blockControlRequired()
+      blockStatusChangeRequired()
     }
     cameraReset(light)
     drawTerrain(renderGrid, scaffoldValues, terrainStyle)
@@ -132,7 +150,6 @@ export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, light, te
     }
   })
   RenderQueue.update(dieSequence)
-  logger.log(RenderQueue.length)
 }
 
 export const renderResurrect: RenderHandler = ({
@@ -146,12 +163,14 @@ export const renderResurrect: RenderHandler = ({
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
     if (i === 0) {
       updateAesthetics(texture)
-      eventBlockRequired()
+      blockControlRequired()
+      blockStatusChangeRequired()
     }
     moveCamera({ zDelta }, scaffoldValues, light)
     drawTerrain(corridorToNextFloor, scaffoldValues, terrainStyle)
     if (i === GoMoveMagValues.length - 1) {
-      unblockEvents()
+      unblockControlRequired()
+      unblockStatusChangeRequired()
     }
   })
   RenderQueue.update(drawFrameSequence)

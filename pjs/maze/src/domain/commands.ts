@@ -3,7 +3,7 @@ import { closeMapEvent, goDownstairsEvent, openMapEvent, turnEvent, walkEvent } 
 import * as validaters from './translate/validaters'
 
 export const go = () => {
-  if (!validaters.isAccepting()) return
+  if (!validaters.isAcceptingControl()) return
   if (validaters.canGo()) {
     walkEvent()
     if (validaters.shouldGoDownstairs()) {
@@ -13,7 +13,7 @@ export const go = () => {
 }
 
 const turn = (dir: LR) => () => {
-  if (!validaters.isAccepting()) return
+  if (!validaters.isAcceptingControl()) return
   turnEvent(dir)
 }
 
@@ -21,7 +21,7 @@ export const turnRight = turn('right')
 export const turnLeft = turn('left')
 
 export const callMap = () => {
-  if (!validaters.isAccepting()) return
+  if (!validaters.isAcceptingControl()) return
   if (validaters.canOpenMap()) {
     openMapEvent()
   } else {

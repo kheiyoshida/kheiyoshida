@@ -31,7 +31,7 @@ export const getWalkSpeedFromCurrentState = () => {
   return calcSpeed(statusStore.current.stamina)
 }
 
-const calcSpeed = createDecreasingParameter(0.3, 1, MAX_STATUS_VALUE / 3)
+const calcSpeed = createDecreasingParameter(0, 1, MAX_STATUS_VALUE / 2)
 
 export type SkinStrategy = 'simple' | 'random' | 'none'
 export type TextureParams = {

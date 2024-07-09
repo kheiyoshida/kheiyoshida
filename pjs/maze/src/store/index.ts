@@ -15,8 +15,9 @@ export type MazeState = {
   direction: Direction
   grid: Grid
   mapOpen: boolean
-  acceptCommand: boolean
   aesthetics: number
+  blockControl: boolean
+  blockStatusChange: boolean
 }
 
 const initialState: MazeState = {
@@ -27,8 +28,9 @@ const initialState: MazeState = {
   direction: 'n',
   grid: [],
   mapOpen: false,
-  acceptCommand: true,
-  aesthetics: 5
+  aesthetics: 5,
+  blockControl: false,
+  blockStatusChange: false
 }
 
 const reducers = {
@@ -75,9 +77,13 @@ const reducers = {
   },
 
   // render
-  updateAcceptCommand: (s) => (acceptCommand: boolean) => {
-    s.acceptCommand = acceptCommand
+  updateBlockControl: (s) => (blockControl: boolean) => {
+    s.blockControl = blockControl
   },
+  updateBlockStatusChange: s => (blockStatusChange: boolean) => {
+    s.blockStatusChange = blockStatusChange
+  }
+  
 } satisfies ReducerMap<MazeState>
 
 const makeMazeStore = () => makeStoreV2<MazeState>(initialState)(reducers)

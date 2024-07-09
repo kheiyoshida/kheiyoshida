@@ -3,7 +3,9 @@ import * as maze from '../interface/maze'
 
 type Validator = () => boolean
 
-export const isAccepting: Validator = () => store.current.acceptCommand
+export const isAcceptingControl: Validator = () => store.current.blockControl === false
+
+export const isAcceptingStatusChange: Validator = () => store.current.blockStatusChange === false
 
 export const canGo: Validator = () => maze.query.canProceed && statusStore.current.stamina !== 0
 

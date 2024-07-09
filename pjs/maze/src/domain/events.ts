@@ -13,17 +13,25 @@ export const initializeEvent = () => {
   MessageQueue.push(RenderSignal.ShowFloor)
 }
 
-export const eventBlockRequired = () => {
-  store.updateAcceptCommand(false)
+export const blockControlRequired = () => {
+  store.updateBlockControl(true)
 }
 
-export const unblockEvents = () => {
-  store.updateAcceptCommand(true)
+export const unblockControlRequired = () => {
+  store.updateBlockControl(false)
+}
+
+export const blockStatusChangeRequired = () => {
+  store.updateBlockStatusChange(true)
+}
+
+export const unblockStatusChangeRequired = () => {
+  store.updateBlockStatusChange(false)
 }
 
 export const recurringConstantStatusEvent = () => {
-  if (!store.current.acceptCommand) return
   if (store.current.mapOpen) return
+  if (store.current.blockStatusChange) return
   updateStats('constant')
 
   MessageQueue.push(RenderSignal.UpdateMusicDest)
@@ -34,7 +42,7 @@ export const recurringConstantStatusEvent = () => {
 }
 
 export const resurrectEvent = () => {
-  store.updateAcceptCommand(true)
+  store.updateBlockControl(true)
   store.setFloor(1)
   statusStore.resetStatus()
   initializeEvent()

@@ -10,7 +10,6 @@ const setupMusic = () => {
     ...music.config,
     initialise: () => music.applyInitialScene(),
     onInterval: () => {
-      console.log(buffer)
       music.moveToDest(buffer)
     },
   })
