@@ -1,12 +1,14 @@
-import { Geometry } from 'p5'
 import { Position3D } from 'p5utils/src/3d'
-import { FloorPathAvgLength, WallHeight } from '../../../../../config'
-import { finalizeGeometries } from '../geometry/finalize'
-import { GeometrySpec } from '../geometry/types'
+import { FloorPathAvgLength, WallHeight } from '../../../../../../config'
+import { finalizeGeometries } from '../../geometry/finalize'
+import { GeometrySpec } from '../../geometry/types'
+import { CreateGeometry } from '../collection'
 
+export const createPole: CreateGeometry = (alignment, randomAdjustValue) => {
+  const base = FloorPathAvgLength / 3
+  const w = base + base / 2 / alignment
+  const h = WallHeight * 2
 
-
-export const createPole = (w = FloorPathAvgLength / 3, h = WallHeight * 2): Geometry[] => {
   const p1: Position3D = [w, 0, 0]
   const p2: Position3D = [0, 0, w]
   const p3: Position3D = [-w, 0, 0]
@@ -37,7 +39,11 @@ export const createPole = (w = FloorPathAvgLength / 3, h = WallHeight * 2): Geom
   return finalizeGeometries([face1, face2, face3, face4])
 }
 
-export const createTile = (w = FloorPathAvgLength/2, h = WallHeight / 5): Geometry[] => {
+export const createTile: CreateGeometry = (alignment, randomAdjustValue) => {
+  const base = FloorPathAvgLength / 2
+  const w = base - (base / 2) * (1 / alignment)
+  const h = WallHeight / 5
+
   const p1: Position3D = [w, 0, 0]
   const p2: Position3D = [0, 0, w]
   const p3: Position3D = [-w, 0, 0]

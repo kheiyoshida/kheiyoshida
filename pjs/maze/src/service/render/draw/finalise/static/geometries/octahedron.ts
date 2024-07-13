@@ -1,13 +1,13 @@
-import { Geometry } from 'p5'
 import { Position3D } from 'p5utils/src/3d'
-import { StaticModelEmitter } from '.'
-import { FloorPathAvgLength } from '../../../../../config'
-import { getBlockCenter } from '../../scaffold'
-import { finalizeGeometries } from '../geometry/finalize'
-import { GeometrySpec } from '../geometry/types'
-import { ObjectSkinFactory } from '../geometry/texture'
+import { FloorPathAvgLength } from '../../../../../../config'
+import { finalizeGeometries } from '../../geometry/finalize'
+import { GeometrySpec } from '../../geometry/types'
+import { CreateGeometry } from '../collection'
 
-export const createOcta = (w = FloorPathAvgLength / 2, h = FloorPathAvgLength / 2): Geometry[] => {
+export const createOcta: CreateGeometry = (alignment, randomAdjustValue) => {
+  const w = FloorPathAvgLength / 2
+  const h = FloorPathAvgLength / 2
+
   const p1: Position3D = [w, 0, 0]
   const p2: Position3D = [0, 0, w]
   const p3: Position3D = [-w, 0, 0]
@@ -51,15 +51,4 @@ export const createOcta = (w = FloorPathAvgLength / 2, h = FloorPathAvgLength / 
   }
 
   return finalizeGeometries([face1, face2, face3, face4, face5, face6, face7, face8])
-}
-
-export const makeOctaEmitter = (level: number): StaticModelEmitter => {
-  const size = (FloorPathAvgLength / 4) * level
-  const geometries = createOcta(size, size)
-  return (blockcoords) =>
-    geometries.map((geometry) => ({
-      geometry,
-      position: getBlockCenter(blockcoords),
-      texture: ObjectSkinFactory.getSkin(),
-    }))
 }

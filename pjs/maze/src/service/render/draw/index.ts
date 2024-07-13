@@ -1,4 +1,4 @@
-import { TerrainRenderStyle, TextureParams } from '../../../domain/translate'
+import { ObjectDrawParams, TerrainRenderStyle, TextureParams } from '../../../domain/translate'
 import { RenderGrid } from '../../../domain/translate/renderGrid/renderSpec'
 import { LightColorManager } from '../camera/light'
 import { makeColorManager } from '../color'
@@ -16,11 +16,12 @@ const SkinManager = makeSkinManager(SkinColorManager)
 export const drawTerrain = (
   renderGrid: RenderGrid,
   values: ScaffoldValues,
-  terrainStyle: TerrainRenderStyle
+  terrainStyle: TerrainRenderStyle,
+  { alignment }: ObjectDrawParams
 ): void => {
   const scaffold = createScaffold(values)
   const modelGrid = convertToModelGrid(renderGrid, terrainStyle)
-  const drawables = finaliseModelsAsDrawables(modelGrid, scaffold)
+  const drawables = finaliseModelsAsDrawables(modelGrid, scaffold, alignment)
   drawGeometries(drawables)
 }
 

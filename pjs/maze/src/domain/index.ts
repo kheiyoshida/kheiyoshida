@@ -3,10 +3,12 @@ import { StatusState } from '../store/status'
 import { MapInfo, getMapInfoFromCurrentState } from './interface/mapper'
 import {
   MusicCommand,
+  ObjectDrawParams,
   ScaffoldParams,
   TerrainRenderStyle,
   TextureParams,
   getMusicCommands,
+  getObjectParams,
   getScaffoldParams,
   getTerrainRenderStyle,
   getTextureParams,
@@ -25,6 +27,7 @@ export type DomainIntention = {
   texture: TextureParams
   music: MusicCommand
   terrainStyle: TerrainRenderStyle
+  objectParams: ObjectDrawParams
 }
 
 export type ListenableState = Pick<MazeState, 'floor'> & StatusState
@@ -38,6 +41,7 @@ export const getDomainIntention = (): DomainIntention => {
     scaffold: getScaffoldParams(),
     texture: getTextureParams(),
     music: getMusicCommands(),
-    terrainStyle: getTerrainRenderStyle()
+    terrainStyle: getTerrainRenderStyle(),
+    objectParams: getObjectParams()
   }
 }
