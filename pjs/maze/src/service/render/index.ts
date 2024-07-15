@@ -101,8 +101,8 @@ export const renderGoDownstairs: RenderHandler = ({
       blockControlRequired()
       blockStatusChangeRequired()
     }
-    moveCamera(values, scaffoldValues, light)
     ObjectSkinFactory.renew()
+    moveCamera(values, scaffoldValues, light)
     drawTerrain(renderGrid, scaffoldValues, terrainStyle, objectParams)
     if (i === StairAnimationFrameValues.length - 1) {
       unblockControlRequired()

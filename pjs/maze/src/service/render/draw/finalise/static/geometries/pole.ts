@@ -5,9 +5,9 @@ import { GeometrySpec } from '../../geometry/types'
 import { CreateGeometry } from '../collection'
 
 export const createPole: CreateGeometry = (alignment, randomAdjustValue) => {
-  const base = FloorPathAvgLength / 3
-  const w = base + base / 2 / alignment
-  const h = WallHeight * 2
+  const wBase = FloorPathAvgLength / 3
+  const w = wBase + wBase / 2 / alignment
+  const h = WallHeight * 4 * (0.5 + randomAdjustValue)
 
   const p1: Position3D = [w, 0, 0]
   const p2: Position3D = [0, 0, w]
@@ -42,7 +42,8 @@ export const createPole: CreateGeometry = (alignment, randomAdjustValue) => {
 export const createTile: CreateGeometry = (alignment, randomAdjustValue) => {
   const base = FloorPathAvgLength / 2
   const w = base - (base / 2) * (1 / alignment)
-  const h = WallHeight / 5
+  const hBase = WallHeight / 5
+  const h = hBase * 2 * randomAdjustValue
 
   const p1: Position3D = [w, 0, 0]
   const p2: Position3D = [0, 0, w]
