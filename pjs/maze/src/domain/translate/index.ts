@@ -71,7 +71,6 @@ export const getMusicCommands = (): MusicCommand => ({
 export type TerrainRenderStyle = 'normal' | 'poles' | 'tiles'
 
 export const getTerrainRenderStyle = (): TerrainRenderStyle => {
-  return 'poles'
   if (store.current.aesthetics <= 3) return 'poles'
   if (store.current.aesthetics >= 7) return 'tiles'
   return 'normal'
