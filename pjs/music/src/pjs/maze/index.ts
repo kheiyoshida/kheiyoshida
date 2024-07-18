@@ -36,7 +36,7 @@ export const makeMusic = (): Music => {
     Object.values(result.in).forEach((outlet) => {
       const ch = channels[outlet as AvailableOutlets]
       if (!ch) throw Error(`channel not found: ${outlet}`)
-      ch.dynamicVolumeFade(ch.volumeRangeDiff, '2m')
+      ch.dynamicVolumeFade(ch.volumeRangeDiff, '6m')
     })
   }
 

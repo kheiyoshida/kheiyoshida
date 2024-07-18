@@ -13,7 +13,7 @@ export const makeWalkSoundSource = (): SoundEffectSource => {
       release: 0.1,
     },
   })
-  const filter = new Filter(2400, 'lowpass')
+  const filter = new Filter(2600, 'lowpass')
   const node = new Channel()
   noise.connect(filter)
   filter.connect(node)

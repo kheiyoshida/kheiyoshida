@@ -31,14 +31,14 @@ export const defaultNoise =
       2: 0,
       3: 0,
       4: 1,
-      5: 1,
-      6: 1,
+      5: 2,
+      6: 2,
       7: {
-        min: 1,
-        max: 2,
+        min: 2,
+        max: 3,
       },
       8: {
-        min: 2,
+        min: 3,
         max: 4,
       },
       9: {

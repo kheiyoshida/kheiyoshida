@@ -18,11 +18,10 @@ export const createDefaultTheme = () => {
 
   const sendTrack = getMixer().createSendChannel({
     effects: [
-      new Tone.PingPongDelay('8n.', 0.33),
-      new Tone.Reverb(0.3),
-      new Tone.Filter(400, 'lowshelf'),
-      new Tone.Filter(800, 'notch'),
-      new Tone.Filter(2000, 'lowpass'),
+      new Tone.Filter(500, 'lowshelf'),
+      new Tone.Filter(670, 'notch'),
+      new Tone.Filter(3000, 'lowpass'),
+      new Tone.Compressor(-6, 8),
     ],
   })
 
@@ -46,6 +45,7 @@ export const createDefaultTheme = () => {
     },
     effects: [
       new Tone.Filter(300, 'highpass'),
+      new Tone.Filter(800, 'notch'),
       new Tone.Filter(1000, 'highshelf'),
     ],
   })
@@ -68,8 +68,7 @@ export const createDefaultTheme = () => {
     },
     effects: [
       new Tone.Filter(300, 'highpass'),
-      new Tone.Filter(1000, 'lowshelf'),
-      new Tone.BitCrusher(8),
+      new Tone.Filter(1000, 'lowpass'),
     ],
   })
 
