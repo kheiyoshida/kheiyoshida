@@ -3,11 +3,12 @@ import { FloorPathAvgLength, WallHeight } from '../../../../../../config'
 import { finalizeGeometries } from '../../geometry/finalize'
 import { GeometrySpec } from '../../geometry/types'
 import { CreateGeometry } from '../collection'
+import { clamp } from 'utils'
 
 export const createPole: CreateGeometry = (alignment, randomAdjustValue) => {
   const wBase = FloorPathAvgLength / 3
-  const w = wBase + wBase / 2 / alignment
-  const h = WallHeight * 4 * (0.5 + randomAdjustValue)
+  const w = wBase + wBase / alignment
+  const h = WallHeight * 4 * clamp(0.5 + randomAdjustValue, 0.3, 1.2)
 
   const p1: Position3D = [w, 0, 0]
   const p2: Position3D = [0, 0, w]
@@ -41,9 +42,9 @@ export const createPole: CreateGeometry = (alignment, randomAdjustValue) => {
 
 export const createTile: CreateGeometry = (alignment, randomAdjustValue) => {
   const base = FloorPathAvgLength / 2
-  const w = base - (base / 2) * (1 / alignment)
+  const w = base - (base * 3 / 4) * (1 / alignment)
   const hBase = WallHeight / 5
-  const h = hBase * 2 * randomAdjustValue
+  const h = hBase * 2 * clamp(0.5 + randomAdjustValue, 0.3, 1.2)
 
   const p1: Position3D = [w, 0, 0]
   const p2: Position3D = [0, 0, w]
