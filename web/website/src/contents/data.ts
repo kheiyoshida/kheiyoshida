@@ -119,8 +119,7 @@ export const ContentData = {
     date: '2023-2024',
     sketch: Sketch.maze,
     caption: [
-      `Explore the maze that never allows you to reach the goal.`,
-      // '*Play with arrow key, WASD (PC) or buttons on screen (mobile)'
+      `ever-changing music that watches you`,
     ],
     images: [thumbnailPath('maze.webp')],
     placeholder: thumbnailPath('maze.png'),
