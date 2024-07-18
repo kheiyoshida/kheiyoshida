@@ -25,8 +25,6 @@ export const makeSkinFactory = () => {
   }
 }
 
-export const ObjectSkinFactory = makeSkinFactory()
-
 const loadGraphics = (skin: p5.Image, graphics: p5.Graphics) => {
   graphics.loadPixels()
   skin.loadPixels()

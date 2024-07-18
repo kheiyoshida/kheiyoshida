@@ -1,5 +1,4 @@
 import { LR } from 'src/utils/direction'
-import { fireByRate } from 'utils'
 import {
   blockControlRequired,
   blockStatusChangeRequired,
@@ -14,7 +13,6 @@ import { triggerFadeOut } from './camera/light'
 import { StairAnimationFrameValues, getGoDeltaArray, getTurnLRDeltaArray } from './camera/movement'
 import { drawTerrain, updateAesthetics } from './draw'
 import { eraseGeometriesInMemory } from './draw/finalise'
-import { ObjectSkinFactory } from './draw/finalise/geometry/texture'
 import { Distortion } from './draw/scaffold/distortion'
 import { RenderQueue } from './queue'
 import { soundPack } from './sound'
@@ -29,10 +27,6 @@ export const renderCurrentView: RenderHandler = ({
   const drawFrame = () => {
     cameraReset(light)
     drawTerrain(renderGrid, scaffoldValues, terrainStyle, objectParams)
-
-    if (fireByRate(0.3)) {
-      ObjectSkinFactory.renew()
-    }
   }
   RenderQueue.push(drawFrame)
 }
@@ -101,7 +95,6 @@ export const renderGoDownstairs: RenderHandler = ({
       blockControlRequired()
       blockStatusChangeRequired()
     }
-    ObjectSkinFactory.renew()
     moveCamera(values, scaffoldValues, light)
     drawTerrain(renderGrid, scaffoldValues, terrainStyle, objectParams)
     if (i === StairAnimationFrameValues.length - 1) {

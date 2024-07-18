@@ -1,10 +1,9 @@
-import { randomFloatBetween } from 'utils'
+import { ObjectAlignmentValue } from '../../../../domain/translate'
 import { RenderModel } from '../model'
 import { Scaffold } from '../scaffold'
 import { convertDynamicModelsToDrawables } from './dynamic'
 import { convertStaticModelsToDrawables, staticObjectEmitterPool } from './static'
 import { DrawableObject } from './types'
-import { ObjectAlignmentValue } from '../../../../domain/translate'
 
 export const finaliseModelsAsDrawables = (
   models: RenderModel[],

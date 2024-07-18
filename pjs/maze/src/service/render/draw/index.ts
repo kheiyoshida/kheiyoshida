@@ -31,6 +31,10 @@ const drawGeometries = (drawables: DrawableObject[]): void => {
     p.push()
     p.texture(obj.texture || SkinManager.current)
     p.translate(...obj.position)
+    if (obj.rotation) {
+      p.rotateY(obj.rotation.theta)
+      p.rotateX(obj.rotation.phi)
+    }
     p.model(obj.geometry)
     p.pop()
   })

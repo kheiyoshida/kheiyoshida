@@ -8,7 +8,7 @@ export const paramBuild = (floor: number): BuildMatrixParams => {
   return [size, fill, conn]
 }
 
-export const InitialFloorSize = 8
+export const InitialFloorSize = 6
 const MaxFloorSize = 13
 
 export const getFloorSize = (floor: number): number => {

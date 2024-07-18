@@ -5,7 +5,8 @@ import { GeometrySpec } from '../../geometry/types'
 import { CreateGeometry } from '../collection'
 
 export const createOcta: CreateGeometry = (alignment, randomAdjustValue) => {
-  const w = randomAdjustValue * FloorPathAvgLength / 2 / alignment
+  const wBase = FloorPathAvgLength / 4
+  const w = wBase + wBase / alignment
   const h = w
 
   const p1: Position3D = [w, 0, 0]
