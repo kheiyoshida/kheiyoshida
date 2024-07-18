@@ -1,5 +1,5 @@
 import { averagePosition3ds } from 'p5utils/src/3d'
-import { fireByRate, randomIntInclusiveBetween } from 'utils'
+import { randomIntInclusiveBetween } from 'utils'
 import { ObjectAlignmentValue } from '../../../../../domain/translate'
 import { getBlockCenter, RenderBlockCoords } from '../../scaffold'
 import { makeRotate } from '../geometry/rotate'
@@ -31,9 +31,6 @@ export const makeOctaEmitter: EmitterMaker = (collection) => {
   const rotate = makeRotate(0, 360)
   return (blockcoords, alignment) => {
     const geometries = collection.getGeometries(alignment)
-    if (fireByRate(0.1)) {
-      ObjectSkinFactory.renew()
-    }
     rotate.increment(randomIntInclusiveBetween(0, 10))
     return geometries.map((geometry) => ({
       geometry,
