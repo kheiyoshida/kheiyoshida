@@ -1,5 +1,5 @@
 import { Range } from 'utils'
-import { MidiNum } from './constants'
+import { MidiNum } from '../source/constants'
 import { Sequence, SequenceNoteMap } from './Sequence'
 
 type RANDOM = 'random'

@@ -7,7 +7,7 @@ import {
   SCALES,
   SemitonesInScale,
   WHOLE_OCTAVES,
-} from '../constants'
+} from './constants'
 import { ScaleConf } from './Scale'
 
 export function constructScalePitchesFromConf(conf: ScaleConf) {

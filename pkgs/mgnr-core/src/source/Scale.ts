@@ -1,6 +1,6 @@
 import { findNearestNumberInArray, randomItemFromArray } from 'utils'
 import { Range } from 'utils'
-import { MidiNum, PitchName, ROOT_TONE_MAP, ScaleType } from '../constants'
+import { MidiNum, PitchName, ROOT_TONE_MAP, ScaleType } from './constants'
 import { Modulation } from './Modulation'
 import { constructScalePitches, constructScalePitchesFromConf } from './construct'
 import {

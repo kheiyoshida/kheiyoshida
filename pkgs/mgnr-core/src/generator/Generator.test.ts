@@ -1,8 +1,8 @@
 import * as utils from 'utils'
 import { buildGenerator, defaultMiddlewares } from './Generator'
-import { fillNoteConf, harmonizeNote } from './generator/NotePicker'
-import { Sequence, SequenceNoteMap } from './generator/Sequence'
-import { Scale } from './generator/scale/Scale'
+import { fillNoteConf, harmonizeNote } from './NotePicker'
+import { Sequence, SequenceNoteMap } from './Sequence'
+import { Scale } from '../source/Scale'
 
 jest.mock('utils', () => ({
   __esModule: true,

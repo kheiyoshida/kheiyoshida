@@ -1,5 +1,5 @@
-import { NotePickerConf } from './generator/NotePicker'
-import { Sequence, SequenceConf } from './generator/Sequence'
+import { NotePickerConf } from './NotePicker'
+import { Sequence, SequenceConf } from './Sequence'
 import {
   adjustNotes,
   adjustPitch,
@@ -10,7 +10,7 @@ import {
   resetNotes,
   updateConfig,
 } from './middlewares'
-import { Scale } from './generator/scale/Scale'
+import { Scale } from '../source/Scale'
 
 import type { Tail } from 'utils'
 

@@ -1,6 +1,6 @@
 import { getHarmonicPitch, harmonize } from './Harmonizer'
 import { Note } from './Note'
-import { Scale } from './scale/Scale'
+import { Scale } from '../source/Scale'
 
 describe(`${harmonize.name}`, () => {
   it(`can harmonize a note by degrees`, () => {

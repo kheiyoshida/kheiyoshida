@@ -1,7 +1,7 @@
 import { GeneratorContext } from './Generator'
-import { fillNoteConf } from './generator/NotePicker'
-import { Sequence } from './generator/Sequence'
-import { Scale } from './generator/scale/Scale'
+import { fillNoteConf } from './NotePicker'
+import { Sequence } from './Sequence'
+import { Scale } from '../source/Scale'
 import { pingpongSequenceLength, removeNotesOutOfCapacity } from './middlewares'
 
 test(`${pingpongSequenceLength.name}`, () => {

@@ -1,5 +1,5 @@
 import * as mgnr from './commands'
-import { Scale } from './generator/scale/Scale'
+import { Scale } from './source/Scale'
 
 test(`${mgnr.createScale.name}`, () => {
   expect(() => mgnr.createScale('C')).not.toThrow()

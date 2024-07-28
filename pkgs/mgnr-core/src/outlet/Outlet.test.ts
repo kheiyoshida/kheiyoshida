@@ -1,6 +1,6 @@
 import { Outlet, OutletPort } from './Outlet'
-import { createGenerator } from './commands'
-import { Middlewares, SequenceGenerator } from './Generator'
+import { createGenerator } from '../commands'
+import { Middlewares, SequenceGenerator } from '../generator/Generator'
 
 class MockInst {
   triggerNote(...args: unknown[]) {}

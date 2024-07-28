@@ -1,8 +1,7 @@
 import { fireByRate } from 'utils'
-import { MutateSpec } from './types'
 import { GeneratorConf, GeneratorContext } from './Generator'
-import { adjustNotePitch, changeNotePitch, harmonizeNote, pickHarmonizedNotes } from './generator/NotePicker'
-import { Sequence, SequenceNoteMap } from './generator/Sequence'
+import { adjustNotePitch, changeNotePitch, harmonizeNote, pickHarmonizedNotes } from './NotePicker'
+import { Sequence, SequenceNoteMap } from './Sequence'
 
 export function updateConfig(context: GeneratorContext, config: Partial<GeneratorConf>) {
   if (config.scale) {
@@ -160,5 +159,10 @@ export function mutateNotesPitches({ sequence, scale }: GeneratorContext, rate: 
       changeNotePitch(n, scale)
     }
   })
+}
+export type MutateStrategy = 'randomize' | 'move' | 'inPlace' | 'recursion'
+export type MutateSpec = {
+  rate: number
+  strategy: MutateStrategy
 }
 

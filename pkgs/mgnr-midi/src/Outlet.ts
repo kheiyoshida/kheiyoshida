@@ -46,7 +46,7 @@ export class MidiOutlet extends Outlet<MidiChannel> {
     })
   }
 
-  private sendNote(note: Note, position: number) {
+  public sendNote(note: Note, position: number) {
     const concreteNote = convertToConcreteNote(this.generator.scale, note)
     const startInMeasure = position / this.generator.sequence.division
     const endInMeasure = (position + concreteNote.dur) / this.generator.sequence.division
