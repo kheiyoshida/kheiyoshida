@@ -2,15 +2,15 @@ import { SequenceNoteMap, createGenerator } from 'mgnr-core'
 import * as Tone from 'tone'
 import { ToneOutlet } from './Outlet'
 import { ToneOutletPort } from './OutletPort'
-import { mockScheduleLoop } from './__tests__/mock'
-import * as wrapperUtil from './tone-wrapper/utils'
+import { mockScheduleLoop } from '../__tests__/mock'
+import * as wrapperUtil from '../tone-wrapper/utils'
 
 jest.mock('tone')
 
 export const FIXED_SECONDS_PER_MEASURE = 1
-jest.mock('./tone-wrapper/Transport', () => ({
-  ...jest.createMockFromModule<typeof import('./tone-wrapper/Transport')>(
-    './tone-wrapper/Transport'
+jest.mock('../tone-wrapper/Transport', () => ({
+  ...jest.createMockFromModule<typeof import('../tone-wrapper/Transport')>(
+    '../tone-wrapper/Transport'
   ),
   toSeconds: () => FIXED_SECONDS_PER_MEASURE,
 }))

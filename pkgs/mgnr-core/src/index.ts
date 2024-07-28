@@ -1,5 +1,4 @@
 export * from './commands'
-export * from './generator/middlewares'
 export * from './generator/Generator'
 export { Outlet, OutletPort } from './outlet/Outlet'
 export { Scale } from './source/Scale'

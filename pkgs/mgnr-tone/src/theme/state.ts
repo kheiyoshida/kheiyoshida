@@ -1,7 +1,7 @@
 import { Middlewares, SequenceGenerator, createGenerator } from 'mgnr-core'
 import * as Transport from '../tone-wrapper/Transport'
-import { ToneOutlet } from '../Outlet'
-import { ToneOutletPort } from '../OutletPort'
+import { ToneOutlet } from '../outlet/Outlet'
+import { ToneOutletPort } from '../outlet/OutletPort'
 import { GeneratorSpec, Scene, SceneComponent, SceneComponentPosition } from './scene'
 import { InOut } from './fade'
 

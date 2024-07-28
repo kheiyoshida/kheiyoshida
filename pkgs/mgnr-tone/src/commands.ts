@@ -1,4 +1,4 @@
-import { LayeredOutlet, MonoOutlet, ToneOutlet } from './Outlet'
+import { LayeredOutlet, MonoOutlet, ToneOutlet } from './outlet/Outlet'
 import { LayeredInstrument } from './instrument'
 import { InstChannel } from './mixer/Channel'
 import { MasterChannelConf } from './mixer/Master'

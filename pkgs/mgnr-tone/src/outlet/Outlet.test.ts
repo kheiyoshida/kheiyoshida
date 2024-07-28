@@ -1,6 +1,6 @@
 import * as Tone from 'tone'
 import { LayeredOutlet, MonoOutlet, ToneOutlet } from './Outlet'
-import { LayeredInstrument } from './instrument'
+import { LayeredInstrument } from '../instrument'
 
 beforeEach(() => jest.useFakeTimers())
 afterEach(() => jest.useRealTimers())
@@ -11,9 +11,9 @@ jest.mock('tone', () => ({
   NoiseSynth: class {}
 }))
 
-jest.mock('./tone-wrapper/Transport', () => ({
-  ...jest.createMockFromModule<typeof import('./tone-wrapper/Transport')>(
-    './tone-wrapper/Transport'
+jest.mock('../tone-wrapper/Transport', () => ({
+  ...jest.createMockFromModule<typeof import('../tone-wrapper/Transport')>(
+    '../tone-wrapper/Transport'
   ),
   scheduleRepeat: (cb: (time: number) => void, bufferTimeFrame: number) => {
     let t = 0

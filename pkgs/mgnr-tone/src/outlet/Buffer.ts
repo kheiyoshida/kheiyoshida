@@ -1,5 +1,5 @@
 import { Range } from "utils"
-import { findWithinRangeItem } from "./instrument"
+import { findWithinRangeItem } from "../instrument"
 
 export type BufferedNote = {
   pitch: number

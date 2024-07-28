@@ -1,5 +1,5 @@
 import { Middlewares, SequenceGenerator } from '../generator/Generator'
-import { LoopEvent, SequenceLoopHandler } from 'src/LoopEventKey'
+import { LoopEvent, SequenceLoopHandler } from './types'
 
 export abstract class Outlet<Inst = unknown> {
   constructor(protected inst: Inst) {}
