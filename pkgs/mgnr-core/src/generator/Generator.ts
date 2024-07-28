@@ -9,7 +9,7 @@ import {
   mutate,
   resetNotes,
   updateConfig,
-} from './middlewares'
+} from './middleware'
 import { Scale } from '../source/Scale'
 
 import type { Tail } from 'utils'

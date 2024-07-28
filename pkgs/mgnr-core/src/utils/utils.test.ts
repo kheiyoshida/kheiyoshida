@@ -1,12 +1,4 @@
-import { createPitchNameListInScale, getSemitoneDiffBetweenPitches } from "./utils"
-
-describe('makeToneList', () => {
-  it('can make ToneName list from scale constructor', () => {
-    const res = createPitchNameListInScale('D', 'major')
-    expect(res.length).toBe(7)
-    expect(res).toMatchObject(['D', 'E', 'F#', 'G', 'A', 'B', 'C#'])
-  })
-})
+import { getSemitoneDiffBetweenPitches } from './utils'
 
 describe('keyDiff', () => {
   it('should be able to calculate degree of note from the provided root', () => {

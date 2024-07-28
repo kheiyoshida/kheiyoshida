@@ -1,11 +1,16 @@
-import { createOutlet, createScaleSource, getMixer, pickRandomPitchName } from 'mgnr-tone'
-import { ToneOutlet } from 'mgnr-tone/src/Outlet'
+import {
+  createOutlet,
+  createScaleSource,
+  getMixer,
+  pickRandomPitchName,
+  ToneOutlet,
+} from 'mgnr-tone'
 import { InstChannel } from 'mgnr-tone/src/mixer/Channel'
+import { makeFader } from 'mgnr-tone/src/theme/fade'
 import * as Tone from 'tone'
 import { randomItemFromArray } from 'utils'
 import * as instruments from './components/instruments'
 import { AvailableOutlets } from './scenes'
-import { makeFader } from 'mgnr-tone/src/theme/fade'
 
 export const createDefaultTheme = () => {
   const scaleSource = createScaleSource({

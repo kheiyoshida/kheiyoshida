@@ -1,13 +1,18 @@
-import { createOutlet, createScaleSource, getMixer, pickRandomPitchName } from 'mgnr-tone'
-import { ToneOutlet } from 'mgnr-tone/src/Outlet'
+import {
+  createOutlet,
+  createScaleSource,
+  getMixer,
+  pickRandomPitchName,
+  ScaleConf,
+  ScaleType,
+  ToneOutlet,
+} from 'mgnr-tone'
 import { InstChannel } from 'mgnr-tone/src/mixer/Channel'
+import { makeFader } from 'mgnr-tone/src/theme/fade'
 import * as Tone from 'tone'
 import { randomItemFromArray } from 'utils'
 import * as instruments from './components/instruments'
 import { AvailableOutlets } from './scenes'
-import { makeFader } from 'mgnr-tone/src/theme/fade'
-import { ScaleConf } from '../../../../../pkgs/mgnr-core/src/generator/scale/Scale'
-import { ScaleType } from '../../../../../pkgs/mgnr-core/src/generator/constants'
 
 export const createDefaultTheme = () => {
   const pickScaleConfig = (): Omit<ScaleConf, 'range'> => ({
@@ -66,10 +71,7 @@ export const createDefaultTheme = () => {
       max: -12,
       min: -40,
     },
-    effects: [
-      new Tone.Filter(300, 'highpass'),
-      new Tone.Filter(1000, 'lowpass'),
-    ],
+    effects: [new Tone.Filter(300, 'highpass'), new Tone.Filter(1000, 'lowpass')],
   })
 
   mixer.connect(padCh, sendTrack, 1.2)

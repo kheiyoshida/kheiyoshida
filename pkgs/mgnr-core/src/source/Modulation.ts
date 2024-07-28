@@ -2,7 +2,7 @@ import { SemitonesInScale, SCALES, Semitone } from './constants'
 import Logger from 'js-logger'
 import { removeItemFromArray} from 'utils'
 import { ScaleConf } from './Scale'
-import { getSemitoneDiffBetweenPitches } from './utils'
+import { getSemitoneDiffBetweenPitches } from '../utils/utils'
 
 interface ModulationQueueItem {
   add?: Semitone[]

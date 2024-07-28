@@ -1,7 +1,7 @@
 import { overrideDefault } from 'utils'
 import { Note } from './Note'
 import { Degree, MidiNum, OCTAVE, Semitone } from '../source/constants'
-import { convertDegreeToSemitone } from './convert'
+import { convertDegreeToSemitone } from '../utils/convert'
 
 export type HarmonizerConf = {
   degree: (Degree | Semitone)[]

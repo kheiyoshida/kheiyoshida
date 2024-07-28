@@ -2,7 +2,7 @@ import { GeneratorContext } from './Generator'
 import { fillNoteConf } from './NotePicker'
 import { Sequence } from './Sequence'
 import { Scale } from '../source/Scale'
-import { pingpongSequenceLength, removeNotesOutOfCapacity } from './middlewares'
+import { pingpongSequenceLength, removeNotesOutOfCapacity } from './middleware'
 
 test(`${pingpongSequenceLength.name}`, () => {
   const sequence = new Sequence({ length: 8, lenRange: { min: 2, max: 12 } })

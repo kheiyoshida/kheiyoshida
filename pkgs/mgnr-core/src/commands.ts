@@ -3,7 +3,7 @@ import { fillNoteConf } from './generator/NotePicker'
 import { Sequence, SequenceNoteMap } from './generator/Sequence'
 import { MidiNum } from './source/constants'
 import { Scale, ScaleConf } from './source/Scale'
-import { constructNotes } from './generator/middlewares'
+import { constructNotes } from './generator/middleware'
 
 export function createScale(pitches: MidiNum[]): Scale
 export function createScale(
