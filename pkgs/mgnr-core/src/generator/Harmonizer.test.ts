@@ -1,5 +1,5 @@
 import { getHarmonicPitch, harmonize } from './Harmonizer'
-import { Note } from './Note'
+import { Note } from '../entities/Note'
 import { Scale } from '../source/Scale'
 
 describe(`${harmonize.name}`, () => {

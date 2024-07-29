@@ -1,7 +1,6 @@
 import Logger from 'js-logger'
 import { removeItemFromArray } from 'utils'
-import { Semitone } from '../pitch/constants'
-import { getSemitoneDiffBetweenPitches } from '../pitch/utils'
+import { getSemitoneDiffBetweenPitches, Semitone } from '../entities/pitch'
 import { ScaleConf } from './Scale'
 import { SCALES, SemitonesInScale } from './scaleTypes'
 

@@ -1,4 +1,4 @@
-import { Semitone } from '../pitch/constants'
+import { Semitone } from '../entities/pitch'
 
 export type ScaleType = keyof typeof SCALES
 export type SemitonesInScale = readonly Semitone[]

@@ -1,7 +1,6 @@
 export * from './commands'
+export * from './entities'
 export * from './generator/Generator'
-export * from './generator/Note'
-export * from './generator/Sequence'
 export { Outlet, OutletPort } from './outlet/Outlet'
-export * from './pitch'
 export * from './source'
+

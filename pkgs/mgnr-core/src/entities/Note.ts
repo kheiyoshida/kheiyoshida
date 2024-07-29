@@ -1,6 +1,6 @@
 import { Range } from 'utils'
-import { MidiNum } from '../pitch/constants'
-import { Sequence, SequenceNoteMap } from './Sequence'
+import { MidiNum } from '../entities/pitch/constants'
+import { Sequence, SequenceNoteMap } from '../entities/Sequence'
 
 type RANDOM = 'random'
 

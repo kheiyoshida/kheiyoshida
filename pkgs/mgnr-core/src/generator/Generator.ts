@@ -1,5 +1,5 @@
 import { NotePickerConf } from './NotePicker'
-import { Sequence, SequenceConf } from './Sequence'
+import { Sequence, SequenceConf } from '../entities/Sequence'
 import {
   adjustNotes,
   adjustPitch,

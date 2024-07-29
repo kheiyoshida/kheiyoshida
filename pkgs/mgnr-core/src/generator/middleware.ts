@@ -1,7 +1,7 @@
 import { fireByRate } from 'utils'
 import { GeneratorConf, GeneratorContext } from './Generator'
 import { adjustNotePitch, changeNotePitch, harmonizeNote, pickHarmonizedNotes } from './NotePicker'
-import { Sequence, SequenceNoteMap } from './Sequence'
+import { Sequence, SequenceNoteMap } from '../entities'
 
 export function updateConfig(context: GeneratorContext, config: Partial<GeneratorConf>) {
   if (config.scale) {

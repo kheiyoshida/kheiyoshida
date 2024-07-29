@@ -1,6 +1,6 @@
 import { GeneratorContext } from './Generator'
 import { fillNoteConf } from './NotePicker'
-import { Sequence } from './Sequence'
+import { Sequence } from '../entities/Sequence'
 import { Scale } from '../source/Scale'
 import { pingpongSequenceLength, removeNotesOutOfCapacity } from './middleware'
 

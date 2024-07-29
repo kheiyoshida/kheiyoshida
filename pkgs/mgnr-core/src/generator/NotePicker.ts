@@ -1,6 +1,6 @@
 import { Range, overrideDefault, pickRange } from 'utils'
 import { HarmonizerConf, harmonize } from './Harmonizer'
-import { Note } from './Note'
+import { Note } from '../entities/Note'
 import { Scale } from '../source/Scale'
 
 type VelocityConf = {
