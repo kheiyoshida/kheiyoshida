@@ -1,6 +1,6 @@
 export * from './commands'
 export * from './entities'
 export * from './generator/Generator'
+export { pingpongSequenceLength } from './generator/middleware'
 export { Outlet, OutletPort } from './outlet/Outlet'
 export * from './source'
-

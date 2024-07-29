@@ -1,6 +1,5 @@
+import { DEGREES, nthDegreeTone, pickRandomPitchName, SCALES, ScaleType } from 'mgnr-core'
 import { filterDelay, reverb } from 'mgnr-tone-presets'
-import { DEGREES, SCALES, ScaleType } from 'mgnr-core/src/generator/constants'
-import { nthDegreeTone, pickRandomPitchName } from 'mgnr-core/src/generator/utils'
 import * as mgnr from 'mgnr-tone/src'
 import { Transport } from 'tone'
 import { randomIntInclusiveBetween, randomItemFromArray } from 'utils'
