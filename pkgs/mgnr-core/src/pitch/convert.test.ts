@@ -1,4 +1,4 @@
-import { C1 } from '../source/constants'
+import { C1 } from './constants'
 import { convertMidiToNoteName, convertNoteNameToMidi } from './convert'
 
 describe(`${convertMidiToNoteName.name}`, () => {

@@ -1,5 +1,5 @@
 import { randomIntBetween } from 'utils'
-import { Degree, DEGREE_NUM_MAP, PITCH_NAMES, PitchName, Semitone } from '../source/constants'
+import { Degree, DEGREE_NUM_MAP, PITCH_NAMES, PitchName, Semitone } from './constants'
 
 export function nthDegreeTone(root: PitchName, degree: Degree): PitchName {
   const degreeInSemitone = DEGREE_NUM_MAP[degree]

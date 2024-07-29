@@ -1,7 +1,7 @@
 import { GeneratorConf, Middlewares, SequenceGenerator, buildGenerator } from './generator/Generator'
 import { fillNoteConf } from './generator/NotePicker'
 import { Sequence, SequenceNoteMap } from './generator/Sequence'
-import { MidiNum } from './source/constants'
+import { MidiNum } from './pitch/constants'
 import { Scale, ScaleConf } from './source/Scale'
 import { constructNotes } from './generator/middleware'
 

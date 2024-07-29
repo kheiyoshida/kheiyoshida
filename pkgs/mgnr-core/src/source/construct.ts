@@ -1,20 +1,17 @@
-import { NumRange } from 'utils'
-import { Range } from 'utils'
-import {
-  MidiNum,
-  OCTAVE,
-  ROOT_TONE_MAP,
-  SCALES,
-  SemitonesInScale,
-  WHOLE_OCTAVES,
-} from './constants'
+import { NumRange, Range } from 'utils'
+import { MidiNum, OCTAVE, ROOT_TONE_MAP, WHOLE_OCTAVES } from '../pitch/constants'
 import { ScaleConf } from './Scale'
+import { SCALES, SemitonesInScale } from './scaleTypes'
 
 export function constructScalePitchesFromConf(conf: ScaleConf) {
   return constructScalePitches(SCALES[conf.pref], ROOT_TONE_MAP[conf.key], conf.range)
 }
 
-export function constructScalePitches(degreeList: SemitonesInScale, lowestPitch: number, pitchRange: Range) {
+export function constructScalePitches(
+  degreeList: SemitonesInScale,
+  lowestPitch: number,
+  pitchRange: Range
+) {
   if (!degreeList.length) {
     throw Error(`constructNotes called without degreeList`)
   }

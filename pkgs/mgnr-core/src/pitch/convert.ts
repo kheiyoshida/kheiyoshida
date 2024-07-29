@@ -7,7 +7,7 @@ import {
   MidiNum,
   NoteName,
   Semitone,
-} from '../source/constants'
+} from './constants'
 
 export const convertMidiToNoteName = (midiNum: MidiNum): NoteName => {
   if (!midiNum) {
