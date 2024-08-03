@@ -1,5 +1,5 @@
+import { SequenceNoteMap } from 'mgnr-core'
 import * as core from 'mgnr-core/src'
-import { SequenceNoteMap } from 'mgnr-core/src/generator/Sequence'
 import { MidiChannel } from './Channel'
 import { MidiOutlet } from './Outlet'
 import { MidiPort } from './Port'
@@ -21,10 +21,13 @@ describe(`${MidiOutlet.name}`, () => {
     const ch = new MidiChannel(port, 1)
     const outlet = new MidiOutlet(ch)
     const generator = core.createGenerator({
-      fillStrategy: 'fixed',
-      division: 8,
+      sequence: {
+        fillStrategy: 'fixed',
+        division: 8,
+      }
     })
-    generator.feedOutlet(outlet)
+    const outletPort = outlet.assignGenerator(generator)
+    
     const noteMap: SequenceNoteMap = {
       0: [
         {
@@ -43,8 +46,8 @@ describe(`${MidiOutlet.name}`, () => {
     }
     generator.constructNotes(noteMap)
     const spySendNote = jest.spyOn(ch, 'sendNote').mockImplementation()
-    outlet.loopSequence()
-    jest.runAllTimers()
+    outletPort.loopSequence()
+    jest.advanceTimersByTime(0)
     expect(spySendNote).toHaveBeenCalledTimes(2)
     expect(spySendNote).toHaveBeenCalledWith(noteMap[0][0], 0, 1 / 8)
     expect(spySendNote).toHaveBeenCalledWith(noteMap[3][0], 3 / 8, 5 / 8)
@@ -54,11 +57,13 @@ describe(`${MidiOutlet.name}`, () => {
     const ch = new MidiChannel(port, 1)
     const outlet = new MidiOutlet(ch)
     const generator = core.createGenerator({
-      fillStrategy: 'fixed',
-      division: 8,
-      length: 8,
+      sequence: {
+        fillStrategy: 'fixed',
+        division: 8,
+        length: 8,
+      }
     })
-    generator.feedOutlet(outlet)
+    const outletPort = outlet.assignGenerator(generator)
     const noteMap: SequenceNoteMap = {
       0: [
         {
@@ -72,7 +77,7 @@ describe(`${MidiOutlet.name}`, () => {
     const spySendNote = jest.spyOn(ch, 'sendNote').mockImplementation()
     const elapsedHandler = jest.fn()
     const endedHandler = jest.fn()
-    outlet.loopSequence(2).onElapsed(elapsedHandler).onEnded(endedHandler)
+    outletPort.loopSequence(2).onElapsed(elapsedHandler).onEnded(endedHandler)
     // 1st loop
     jest.advanceTimersByTime(0)
     expect(spySendNote).toHaveBeenCalledTimes(1)
@@ -84,7 +89,7 @@ describe(`${MidiOutlet.name}`, () => {
     // loop ended
     jest.advanceTimersByTime(2000)
     expect(spySendNote).toHaveBeenCalledTimes(2)
-    expect(elapsedHandler).toHaveBeenCalledTimes(3) // is this ok? 
-    expect(endedHandler).toHaveBeenCalled()
+    expect(elapsedHandler).toHaveBeenCalledTimes(2) // is this ok? 
+    expect(endedHandler).toHaveBeenCalledTimes(1)
   })
 })

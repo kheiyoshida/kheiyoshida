@@ -1,11 +1,13 @@
-import { Note } from 'mgnr-core/src/generator/Note'
+import { Note } from 'mgnr-core'
 import { ConcreteNote, MidiChannelNumber, MidiNote } from './types'
 import { Scale } from 'mgnr-core/src'
 import { pickRange } from 'utils'
 
 export function convertToConcreteNote(scale: Scale, note: Note): ConcreteNote {
+  const concretePitch = note.pitch === 'random' ? scale.pickRandomPitch() : note.pitch
+  if (!concretePitch) throw Error(`pitch could not be defined`)
   return {
-    pitch: note.pitch === 'random' ? scale.pickRandomPitch() : note.pitch,
+    pitch: concretePitch,
     dur: pickRange(note.dur),
     vel: pickRange(note.vel),
   }

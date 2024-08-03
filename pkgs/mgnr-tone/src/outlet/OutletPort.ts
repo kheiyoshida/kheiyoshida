@@ -46,7 +46,6 @@ export class ToneOutletPort<MW extends Middlewares> extends OutletPort<ToneOutle
    * @note loopNth starts from 1
    */
   private checkEvent(totalNumOfLoops: number, loopNth: number, loopStartedAt: number) {
-    
     if (loopNth === totalNumOfLoops) this.handleEnded(totalNumOfLoops, loopNth, loopStartedAt)
     else this.handleElapsed(loopNth)
   }

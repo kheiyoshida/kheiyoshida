@@ -1,33 +1,22 @@
-import { Outlet } from 'mgnr-core/src'
-import { Note } from 'mgnr-core/src/generator/Note'
+import { Note } from 'mgnr-core'
+import { Middlewares, Outlet, OutletPort, SequenceGenerator } from 'mgnr-core/src'
 import { MidiChannel } from './Channel'
 import { convertToConcreteNote } from './convert'
 import { scheduleRepeat } from './timeEvent'
 
 export class MidiOutlet extends Outlet<MidiChannel> {
+  sendNote(...args: Parameters<MidiChannel['sendNote']>): void {
+    this.inst.sendNote(...args)
+  }
+  assignGenerator<MW extends Middlewares>(generator: SequenceGenerator<MW>) {
+    return new MidiOutletPort(this, generator)
+  }
   get midiCh() {
     return this.inst
   }
+}
 
-  private checkEvent(totalNumOfLoops: number, loopNth: number) {
-    if (this.events.elapsed) {
-      this.events.elapsed({
-        out: this,
-        loop: loopNth,
-        endTime: 0, //
-      })
-    }
-    if (loopNth === totalNumOfLoops) {
-      this.events.ended &&
-        this.events.ended({
-          out: this,
-          loop: totalNumOfLoops,
-          endTime: 0, //
-          repeatLoop: () => this.loopSequence(totalNumOfLoops),
-        })
-    }
-  }
-
+export class MidiOutletPort<MW extends Middlewares> extends OutletPort<MidiOutlet, MW> {
   public loopSequence(numOfLoops = 1) {
     const intervalMs = this.sequenceDuration
     scheduleRepeat(intervalMs, numOfLoops, (loopNth) => {
@@ -40,21 +29,38 @@ export class MidiOutlet extends Outlet<MidiChannel> {
     return this
   }
 
+  private checkEvent(totalNumOfLoops: number, loopNth: number) {
+    if (loopNth === totalNumOfLoops) this.handleEnded(totalNumOfLoops, loopNth)
+    else this.handleElapsed(loopNth)
+  }
+
+  private handleElapsed(loopNth: number) {
+    if (!this.events.elapsed) return
+    this.events.elapsed(this.generator, loopNth)
+  }
+
+  private handleEnded(totalNumOfLoops: number, loopNth: number) {
+    if (this.events.ended) {
+      this.events.ended(this.generator, loopNth)
+    }
+    this.loopSequence(this.numOfLoops)
+  }
+
   private sendSequence() {
     this.generator.sequence.iterateEachNote((note, position) => {
       this.sendNote(note, position)
     })
   }
 
-  public sendNote(note: Note, position: number) {
+  private sendNote(note: Note, position: number) {
     const concreteNote = convertToConcreteNote(this.generator.scale, note)
     const startInMeasure = position / this.generator.sequence.division
     const endInMeasure = (position + concreteNote.dur) / this.generator.sequence.division
-    this.midiCh.sendNote(concreteNote, startInMeasure, endInMeasure)
+    this.outlet.sendNote(concreteNote, startInMeasure, endInMeasure)
   }
 
   private get secsPerMeasure() {
-    return this.midiCh.port.msPerMeasure
+    return this.outlet.midiCh.port.msPerMeasure
   }
   private get sequenceDuration() {
     return this.generator.sequence.numOfMeasures * this.secsPerMeasure

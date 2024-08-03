@@ -1,4 +1,4 @@
-import { Note } from 'mgnr-core/src/generator/Note'
+import { Note } from 'mgnr-core'
 import { convertToConcreteNote, convertToMidiNote } from './convert'
 import { Scale } from 'mgnr-core/src'
 import { NumRange } from 'utils'

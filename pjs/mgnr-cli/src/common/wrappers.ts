@@ -1,7 +1,14 @@
-import { Scale } from 'mgnr-core/src'
-import { GeneratorConf, SequenceGenerator } from 'mgnr-core/src/generator/Generator'
-import { HarmonizerConf } from 'mgnr-core/src/generator/Harmonizer'
-import { ScaleConf } from 'mgnr-core/src/generator/scale/Scale'
+import {
+  createGenerator,
+  GeneratorConf,
+  Middleware,
+  Scale,
+  ScaleConf,
+  SequenceConf,
+  SequenceGenerator,
+} from 'mgnr-core'
+import { updateConfig } from 'mgnr-core/src/generator/middleware'
+import { NotePickerConf } from 'mgnr-core/src/generator/NotePicker'
 import { LogItem } from 'stream/src/types'
 import { Range } from 'utils'
 
@@ -37,24 +44,33 @@ export class CliScale extends Scale {
       _: this.logName,
       k: this.key,
       p: this._conf.pref,
-      r: `${this.pitchRange.min}-${this.pitchRange.max}`
+      r: `${this.pitchRange.min}-${this.pitchRange.max}`,
     }
   }
 }
 
+export const createCliGenerator = (conf: Parameters<typeof createGenerator>[0]) => {
+  return createGenerator({...conf, middlewares: cliMiddlewares })
+}
+
+const cliMiddlewares  = {
+  updateDensity: (ctx, density: SequenceConf['density']) => {
+    updateConfig(ctx, { sequence: { density } })
+  },
+  updateDur: (ctx, duration: NotePickerConf['duration']) => {
+    updateConfig(ctx, { note: { duration } })
+  },
+  useMono: (ctx) => {
+    updateConfig(ctx, { sequence: { polyphony: 'mono' } })
+  },
+  usePoly: (ctx) => {
+    updateConfig(ctx, { sequence: { polyphony: 'poly' } })
+  },
+  
+} satisfies Record<string, Middleware>
+
 export class CliSequenceGenerator extends SequenceGenerator {
-  updateDensity(density: GeneratorConf['density']) {
-    this.updateConfig({ density })
-  }
-  useMono() {
-    this.updateConfig({ fillPref: 'mono' })
-  }
-  usePoly() {
-    this.updateConfig({ fillPref: 'allowPoly' })
-  }
-  updateDur(noteDur: GeneratorConf['noteDur']) {
-    this.updateConfig({ noteDur })
-  }
+  
   updateVel(veloPref: GeneratorConf['veloPref']) {
     this.updateConfig({ veloPref })
   }
@@ -68,13 +84,13 @@ export class CliSequenceGenerator extends SequenceGenerator {
     this.updateConfig({ fillStrategy: 'random' })
   }
   randomize(rate: number) {
-    this.mutate({rate, strategy: 'randomize'})
+    this.mutate({ rate, strategy: 'randomize' })
   }
   shuffle(rate: number) {
-    this.mutate({rate, strategy: 'move'})
+    this.mutate({ rate, strategy: 'move' })
   }
   inPlace(rate: number) {
-    this.mutate({rate, strategy: 'inPlace'})
+    this.mutate({ rate, strategy: 'inPlace' })
   }
   reset() {
     this.resetNotes()
