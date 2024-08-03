@@ -1,6 +1,6 @@
-import { Scale } from 'mgnr-core/src/generator/scale/Scale'
-import * as mgnr from 'mgnr-tone/src'
+import { Scale } from 'mgnr-tone'
 import { defaultPad } from 'mgnr-tone-presets'
+import * as mgnr from 'mgnr-tone/src'
 import { randomFloatBetween, randomIntInclusiveBetween } from 'utils'
 
 export const setupPadCh = (scale: Scale) => {

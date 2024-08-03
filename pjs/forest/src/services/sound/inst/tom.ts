@@ -1,7 +1,6 @@
-import * as mgnr from 'mgnr-tone/src'
 import { defaultTom, kickFactory } from 'mgnr-tone-presets'
+import * as mgnr from 'mgnr-tone/src'
 import { randomFloatBetween } from 'utils'
-import { changeNotePitch } from 'mgnr-core/src/generator/NotePicker'
 
 export const setupTom = () => {
   const mixer = mgnr.getMixer()

@@ -1,6 +1,6 @@
+import * as mgnr from 'mgnr-tone'
+import { Scale } from 'mgnr-tone'
 import { fmSynth, registerTremolo } from 'mgnr-tone-presets'
-import { Scale } from 'mgnr-core/src/generator/scale/Scale'
-import * as mgnr from 'mgnr-tone/src'
 
 export const setupSynCh = (scale: Scale) => {
   const mixer = mgnr.getMixer()

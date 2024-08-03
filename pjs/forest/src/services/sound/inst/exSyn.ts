@@ -1,6 +1,6 @@
+import * as mgnr from 'mgnr-tone'
+import { Scale } from 'mgnr-tone'
 import { fmSynth } from 'mgnr-tone-presets'
-import { Scale } from 'mgnr-core/src'
-import * as mgnr from 'mgnr-tone/src'
 import { randomFloatBetween, randomIntInclusiveBetween } from 'utils'
 
 export const setupExtraSynCh = (scale: Scale) => {
