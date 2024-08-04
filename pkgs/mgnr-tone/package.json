@@ -1,5 +1,5 @@
 {
-  "name": "mgnr-tone",
+  "name": "@mgnr/tone",
   "description": "music generator for WebAudio/Tone.js/node",
   "version": "0.0.1",
   "main": "src/index.ts",
@@ -19,7 +19,7 @@
   "author": "Katsumi Yoshida",
   "license": "ISC",
   "dependencies": {
-    "mgnr-core": "workspace:^",
+    "mgnr-core": "npm:@mgnr/core@^0.0.2",
     "js-logger": "^1.6.1",
     "tone": "^14.7.77",
     "utils": "workspace:^"

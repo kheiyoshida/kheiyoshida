@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mgnr-tone": "workspace:^",
+    "mgnr-tone": "workspace:@mgnr/tone@^",
     "utils": "workspace:^",
     "tone": "^14.7.77"
   }

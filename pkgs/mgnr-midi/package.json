@@ -1,5 +1,5 @@
 {
-  "name": "mgnr-midi",
+  "name": "@mgnr/midi",
   "version": "0.0.1",
   "main": "index.js",
   "files": [
@@ -19,7 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "easymidi": "^3.1.0",
-    "mgnr-core": "workspace:^",
+    "mgnr-core": "workspace:@mgnr/core@^",
     "utils": "workspace:^"
   },
   "devDependencies": {

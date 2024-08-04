@@ -54,7 +54,7 @@ importers:
   pjs/forest:
     dependencies:
       mgnr-tone:
-        specifier: workspace:^
+        specifier: workspace:@mgnr/tone@^
         version: link:../../pkgs/mgnr-tone
       mgnr-tone-presets:
         specifier: workspace:^
@@ -115,7 +115,7 @@ importers:
         specifier: workspace:^
         version: link:../maze
       mgnr-tone:
-        specifier: workspace:^
+        specifier: workspace:@mgnr/tone@^
         version: link:../../pkgs/mgnr-tone
       mgnr-tone-presets:
         specifier: workspace:^
@@ -228,10 +228,10 @@ importers:
   pjs/mgnr-cli:
     dependencies:
       mgnr-core:
-        specifier: workspace:^
+        specifier: workspace:@mgnr/core@^
         version: link:../../pkgs/mgnr-core
       mgnr-midi:
-        specifier: workspace:^
+        specifier: workspace:@mgnr/midi@^
         version: link:../../pkgs/mgnr-midi
       stream:
         specifier: workspace:^
@@ -317,7 +317,7 @@ importers:
   pjs/music:
     dependencies:
       mgnr-tone:
-        specifier: workspace:^
+        specifier: workspace:@mgnr/tone@^
         version: link:../../pkgs/mgnr-tone
       react:
         specifier: 18.2.0
@@ -416,7 +416,7 @@ importers:
         specifier: ^3.1.0
         version: 3.1.0
       mgnr-core:
-        specifier: workspace:^
+        specifier: workspace:@mgnr/core@^
         version: link:../mgnr-core
       utils:
         specifier: workspace:^
@@ -432,7 +432,7 @@ importers:
         specifier: ^1.6.1
         version: 1.6.1
       mgnr-core:
-        specifier: workspace:^
+        specifier: npm:@mgnr/core@^0.0.2
         version: link:../mgnr-core
       tone:
         specifier: ^14.7.77
@@ -448,7 +448,7 @@ importers:
   pkgs/mgnr-tone-presets:
     dependencies:
       mgnr-tone:
-        specifier: workspace:^
+        specifier: workspace:@mgnr/tone@^
         version: link:../mgnr-tone
       tone:
         specifier: ^14.7.77
