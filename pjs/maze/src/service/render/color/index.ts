@@ -2,6 +2,8 @@ import p5 from 'p5'
 import { ColorOperationParams } from '../../../domain/translate/color/types'
 import { ColorOperationMap, createOperationMap } from './operations'
 
+// TODO: replace p5.color with custom color manager
+
 export interface ColorManager {
   current: p5.Color
   currentRGB: RGB

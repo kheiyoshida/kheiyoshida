@@ -3,7 +3,6 @@ import { randomIntInclusiveBetween } from 'utils'
 import { ObjectAlignmentValue } from '../../../../../domain/translate'
 import { getBlockCenter, RenderBlockCoords } from '../../scaffold'
 import { makeRotate } from '../geometry/rotate'
-import { makeSkinFactory } from '../geometry/texture'
 import { DrawableObject } from '../types'
 import { GeometryCollection } from './collection'
 
@@ -27,7 +26,6 @@ export const makeSimpleEmitter: EmitterMaker = (collection) => {
 }
 
 export const makeOctaEmitter: EmitterMaker = (collection) => {
-  const ObjectSkinFactory = makeSkinFactory()
   const rotate = makeRotate(0, 360)
   return (blockcoords, alignment) => {
     const geometries = collection.getGeometries(alignment)
@@ -35,7 +33,6 @@ export const makeOctaEmitter: EmitterMaker = (collection) => {
     return geometries.map((geometry) => ({
       geometry,
       position: getBlockCenter(blockcoords),
-      texture: ObjectSkinFactory.getSkin(),
       rotation: {
         theta: rotate.current,
         phi: 0,

@@ -32,5 +32,5 @@ export const setupRenderingCycle = () => {
 }
 
 export const consumeFrame = () => {
-  FrameConsumer.consumeFrame(p.frameCount)
+  FrameConsumer.consumeFrame(p.frameCount) // TODO: replace with native frame manager
 }
