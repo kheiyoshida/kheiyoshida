@@ -4,7 +4,7 @@ import { getButtons } from './interface/buttons'
 
 export const bindControl = () => {
   if (ww < MobileWidth) smallScreen()
-  else wideScreen()
+  else setupKeyboardControl()
 }
 
 const smallScreen = () => {
@@ -15,27 +15,23 @@ const smallScreen = () => {
   left.ontouchstart = commands.turnLeft
 }
 
-const wideScreen = () => {
+const setupKeyboardControl = () => {
   const keyCodeMap = {
-    [p.UP_ARROW]: commands.go,
-    [p.RIGHT_ARROW]: commands.turnRight,
-    [p.LEFT_ARROW]: commands.turnLeft,
-    [p.DOWN_ARROW]: commands.callMap,
-    [p.ENTER]: commands.callMap,
-  } as const
-  const keyMap = {
+    ArrowUp: commands.go,
+    ArrowRight: commands.turnRight,
+    ArrowLeft: commands.turnLeft,
+    ArrowDown: commands.callMap,
+    Enter: commands.callMap,
     m: commands.callMap,
     w: commands.go,
     a: commands.turnLeft,
     s: commands.callMap,
     d: commands.turnRight,
   } as const
-  p.keyPressed = () => {
-    if (p.keyCode in keyCodeMap) {
-      keyCodeMap[p.keyCode]()
+
+  window.addEventListener('keydown', (event) => {
+    if (event.key in keyCodeMap) {
+      keyCodeMap[event.key as keyof typeof keyCodeMap]()
     }
-    if (p.key in keyMap) {
-      keyMap[p.key as keyof typeof keyMap]()
-    }
-  }
+  })
 }
