@@ -97,6 +97,11 @@ const JestConfig: Config = {
       displayName: 'test-utils',
       rootDir: './pkgs/test-utils',
     },
+    {
+      ...RootConfig,
+      displayName: 'maze-gl',
+      rootDir: './pkgs/maze-gl',
+    },
   ],
 }
 export default JestConfig

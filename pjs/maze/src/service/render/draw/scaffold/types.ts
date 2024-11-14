@@ -10,7 +10,7 @@ export type ScaffoldValues = {
 }
 
 /**
- * collection of consistant Positon3D
+ * collection of consistent Position3D
  * each RenderBlock should get the concrete value from this
  * currently supports 7 layers (=RenderGrid.length + 1)
  */

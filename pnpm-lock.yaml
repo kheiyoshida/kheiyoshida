@@ -397,6 +397,25 @@ importers:
         specifier: ^5.1.4
         version: 5.1.4(@types/node@20.10.4)
 
+  pkgs/maze-gl:
+    dependencies:
+      gl-matrix:
+        specifier: ^3.4.3
+        version: 3.4.3
+      utils:
+        specifier: workspace:^
+        version: link:../utils
+    devDependencies:
+      '@types/gl-matrix':
+        specifier: ^3.2.0
+        version: 3.2.0
+      typescript:
+        specifier: ^4.8.4
+        version: 4.9.4
+      vite:
+        specifier: ^5.1.4
+        version: 5.1.4(@types/node@20.10.4)
+
   pkgs/mgnr-core:
     dependencies:
       js-logger:
@@ -3303,6 +3322,13 @@ packages:
       '@types/serve-static': 1.15.5
     dev: true
 
+  /@types/gl-matrix@3.2.0:
+    resolution: {integrity: sha512-CY4JAtSOGQX7rVgqVuOk7ZfaLv8VeadDMPj3smMOy8Hp/YiHONa3Mr0mEUgbo0eEwV7+Owpf6BwspcA7hv4NXg==}
+    deprecated: This is a stub types definition. gl-matrix provides its own type definitions, so you do not need this installed.
+    dependencies:
+      gl-matrix: 3.4.3
+    dev: true
+
   /@types/graceful-fs@4.1.9:
     resolution: {integrity: sha512-olP3sd1qOEe5dXTSaFvQG+02VdRXcdytWLAZsAq1PecU8uqQAhkrnbli7DagjtXKW/Bl7YJbUsa8MPcuc8LHEQ==}
     dependencies:
@@ -6100,6 +6126,9 @@ packages:
     resolution: {integrity: sha512-wuMsz4leaj5hbGgg4IvDU0bqJagpftG5l5cXIAvo8uZrqn0NJqwtfupTN00VnkQJPcIRrxYrm1Ue24btpCha2A==}
     dependencies:
       resolve-pkg-maps: 1.0.0
+
+  /gl-matrix@3.4.3:
+    resolution: {integrity: sha512-wcCp8vu8FT22BnvKVPjXa/ICBWRq/zjFfdofZy1WSpQZpphblv12/bOQLBC1rMM7SGOFS9ltVmKOHil5+Ml7gA==}
 
   /glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
