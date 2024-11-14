@@ -53,7 +53,7 @@ const draw = () => {
 
   cameraReachedEdgeEvent(cameraStore.current.camera, variableStore, objectStore)
 
-  // render
+  // index.ts
   const { fillColor } = sketchStore.current
   p.background(fillColor)
   p.lights()

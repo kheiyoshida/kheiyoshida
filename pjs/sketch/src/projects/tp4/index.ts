@@ -77,7 +77,7 @@ const draw = () => {
     )
   )
 
-  // render
+  // index.ts
   p.background(fillColor)
   p.directionalLight(p.color(200), p.createVector(0, 0, 800))
   renderGraph(nodes)

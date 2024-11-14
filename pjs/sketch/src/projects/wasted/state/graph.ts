@@ -108,7 +108,7 @@ const makeRandomizer =
 
 const calcNodeEdgeGeometries = (node: TreeNode): p5.Geometry[] => {
   return node.edges.map((edge) => {
-    if (node.growIndex === 0) return createNodeGeometry(1, 4) // don't render
+    if (node.growIndex === 0) return createNodeGeometry(1, 4) // don't index.ts
     const dist = distanceBetweenPositions(node.position, edge.position)
     const geo = createEdgeGeometry(dist, 500 / Math.pow(node.growIndex, 1.8))
     return geo

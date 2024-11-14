@@ -83,7 +83,7 @@ const draw = () => {
   cameraStore.turnCamera()
   cameraStore.moveCamera()
 
-  // render
+  // index.ts
   p.texture(skinStore.current.img)
   p.lights()
   render(graphStore.current, freqData)

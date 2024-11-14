@@ -1,12 +1,9 @@
 import { glMatrix } from 'gl-matrix'
 
+export * from './load'
+export * from './models'
+export * from './render'
+
 // TODO: consider if this makes things faster
 glMatrix.setMatrixArrayType(Array)
 
-export const loadModel = () => {}
-
-export const loadScaffold = () => {}
-
-export const updateScaffold = () => {}
-
-export const renderObject = () => {}

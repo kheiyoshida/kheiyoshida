@@ -20,7 +20,7 @@ const nextConfig = {
       test: /\.ttf$/i,
       use: [
         {
-          loader: 'file-loader',
+          loader: 'file-parser',
         },
       ],
     })

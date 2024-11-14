@@ -47,7 +47,7 @@ const draw = () => {
   cameraStore.turnCamera()
   cameraStore.moveCamera()
 
-  // render
+  // index.ts
   // p.lights()
   draw3DGrid(3, 2000, camera)
 

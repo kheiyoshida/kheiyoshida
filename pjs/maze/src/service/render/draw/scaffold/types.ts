@@ -65,7 +65,7 @@ export type RenderBlockCoords = {
 }
 
 /**
- * defines the layer of render block's front or rear
+ * defines the layer of index.ts block's front or rear
  *  tl         tr
  *   '---------'
  *   |         |

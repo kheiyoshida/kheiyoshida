@@ -25,7 +25,7 @@ const config: Configuration = {
         test: /\.(ts|js)?$/,
         exclude: /node_modules/,
         use: {
-          loader: require.resolve("babel-loader"),
+          loader: require.resolve("babel-parser"),
           options: {
             presets: ["@babel/preset-env", "@babel/preset-typescript"],
           },
@@ -34,7 +34,7 @@ const config: Configuration = {
       {
         test: /\.js$/,
         enforce: 'pre',
-        use: [require.resolve('source-map-loader')],
+        use: [require.resolve('source-map-parser')],
       },
       {
         test: /\.(wav|mp3|mov|mp4)$/,

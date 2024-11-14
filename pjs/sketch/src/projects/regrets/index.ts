@@ -55,7 +55,7 @@ const draw = () => {
     d += data
   })
 
-  // render
+  // index.ts
   cameraStore.moveCamera()
   if (p.frameCount % 2 === 0 ) {
     sketchStore.paintBackGround()
