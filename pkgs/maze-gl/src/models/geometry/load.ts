@@ -1,5 +1,5 @@
-import { GeometrySpec } from '../models'
-import { getGL } from '../webgl'
+import { GeometrySpec } from '../'
+import { getGL } from '../../webgl'
 
 /**
  * the reference to the data (indices range) of a geometry in the array buffer
@@ -10,9 +10,14 @@ export type DrawRef = {
   end: number
 }
 
+// TODO: move somewhere
 const AttributeLoc = {
   aPosition: 0,
+  aNormal: 1,
+  aTexCoords: 2,
 }
+
+const fBytes = (n: number) => n * Float32Array.BYTES_PER_ELEMENT
 
 /**
  * load the given geometry & make it ready to be drawn
@@ -29,16 +34,15 @@ export const loadGeometry = (spec: GeometrySpec): DrawRef => {
   gl.bindBuffer(gl.ARRAY_BUFFER, modelVBO)
   gl.bufferData(gl.ARRAY_BUFFER, dataSource, gl.STATIC_DRAW)
 
-  const shaderPositionAttribLoc = AttributeLoc.aPosition
-  gl.vertexAttribPointer(
-    shaderPositionAttribLoc,
-    3,
-    gl.FLOAT,
-    false,
-    3 * Float32Array.BYTES_PER_ELEMENT,
-    0
-  )
-  gl.enableVertexAttribArray(shaderPositionAttribLoc)
+  const aPositionLoc = AttributeLoc.aPosition
+  gl.vertexAttribPointer(aPositionLoc, 3, gl.FLOAT, false, fBytes(6), 0)
+  gl.enableVertexAttribArray(aPositionLoc)
+
+  const aNormalLoc = AttributeLoc.aNormal
+  gl.vertexAttribPointer(aNormalLoc, 3, gl.FLOAT, false, fBytes(6), fBytes(3))
+  gl.enableVertexAttribArray(aNormalLoc)
+
+  // TODO: add texCoords
 
   gl.bindVertexArray(null)
 
@@ -47,7 +51,7 @@ export const loadGeometry = (spec: GeometrySpec): DrawRef => {
   return {
     vao: modelVAO,
     start: 0,
-    end: dataSource.length / 3, // TODO: fix when applying normals and other attributes
+    end: dataSource.length / 6, // TODO: fix when applying normals and other attributes
   }
 }
 
@@ -62,7 +66,8 @@ const parseGeometrySpecToArray = (spec: GeometrySpec): Float32Array => {
         throw Error(`insufficient vertex or normal`)
       }
       arr.push(...vertex)
-      // arr.push(...normal);
+      arr.push(...normal);
+      // TODO: add texCoords here
     }
   }
 

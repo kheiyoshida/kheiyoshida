@@ -5,7 +5,7 @@ type UniformValues = Record<string, unknown>
 
 export abstract class Material<U extends UniformValues = UniformValues> {
   constructor(
-    protected shader: Shader,
+    readonly shader: Shader,
     protected uniforms: U,
     private id = generateRandomNumber()
   ) {}
@@ -15,7 +15,7 @@ export abstract class Material<U extends UniformValues = UniformValues> {
   /**
    * apply this material to the geometries drawn after this call
    */
-  use() {
+  apply() {
     if (Material.currentMaterialId === this.id) return
     this.shader.use()
     this.applyUniforms()

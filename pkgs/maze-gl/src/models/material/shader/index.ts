@@ -6,6 +6,7 @@ export class Shader {
   private readonly program: WebGLProgram
 
   private gl: WebGL2RenderingContext
+
   constructor(
     vertSource: string,
     fragSource: string,
@@ -63,6 +64,24 @@ export class Shader {
 
   #getUniformLoc(uniformValueName: string) {
     return this.gl.getUniformLocation(this.program, uniformValueName)
+  }
+
+  static nextBindingPoint = 0
+  static reserveBindingPoint() {
+    const reserved = Number(Shader.nextBindingPoint);
+    this.nextBindingPoint++;
+    return reserved
+  }
+
+  bindUniformBlock(uniformBlockName: string, bindingPoint: number): void {
+    const blockIndex = this.gl.getUniformBlockIndex(this.program, uniformBlockName)
+    this.gl.uniformBlockBinding(this.program, blockIndex, bindingPoint)
+  }
+
+  static bindPointToUBO(ubo: WebGLBuffer | null, bindingPoint: number) {
+    if (!ubo) throw Error(`ubo is null`)
+    const gl = getGL()
+    gl.bindBufferBase(gl.UNIFORM_BUFFER, bindingPoint, ubo)
   }
 }
 
