@@ -1,18 +1,20 @@
 import type { mat3, mat4, vec3, vec4 } from 'gl-matrix'
 import { generateRandomNumber } from '../../../utils/id'
+import { getGL } from '../../../webgl'
 
 export class Shader {
   private readonly program: WebGLProgram
 
+  private gl: WebGL2RenderingContext
   constructor(
-    private gl: WebGL2RenderingContext,
     vertSource: string,
     fragSource: string,
     private id = generateRandomNumber()
   ) {
-    const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertSource)
-    const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragSource)
-    this.program = createProgram(gl, vertexShader, fragmentShader)
+    this.gl = getGL()
+    const vertexShader = createShader(this.gl, this.gl.VERTEX_SHADER, vertSource)
+    const fragmentShader = createShader(this.gl, this.gl.FRAGMENT_SHADER, fragSource)
+    this.program = createProgram(this.gl, vertexShader, fragmentShader)
   }
 
   static currentShaderId: number

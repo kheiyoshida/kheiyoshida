@@ -43,4 +43,5 @@ export const resizeCanvas = (
     'style',
     `width: ${clientWidth.toString()}px; height: ${clientHeight.toString()}px;`
   )
+  getGL().viewport(0, 0, canvas.width, canvas.height)
 }
