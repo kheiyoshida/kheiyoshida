@@ -1,11 +1,9 @@
-import p5 from 'p5'
 import { ColorOperationParams } from '../../../domain/translate/color/types'
 import { ColorOperationMap, createOperationMap } from './operations'
-
-// TODO: replace p5.color with custom color manager
+import { blue, green, red } from './colorUtil.ts'
 
 export interface ColorManager {
-  current: p5.Color
+  current: Color
   currentRGB: RGB
   resolve: (params: ColorOperationParams) => void
   setFixedOperation: (operationParams: ColorOperationParams, ttl: number) => void
@@ -14,16 +12,22 @@ export interface ColorManager {
 
 export type RGB = [number, number, number]
 
+/**
+ * used to be p5.Color,
+ * We use RGB for now, but we might introduce alpha in the future
+ */
+export type Color = RGB
+
 export const makeColorManager = (
   defaultRGB: RGB,
   changeDefaultColor?: (rgb: RGB) => RGB,
   operationMap: ColorOperationMap = createOperationMap(defaultRGB)
 ): ColorManager => {
-  let current: p5.Color
+  let current: Color
   let fixedOp: ColorOperationParams | null = null
   let fixedOpTTL = 0
   const init = () => {
-    current = p.color(...defaultRGB)
+    current = defaultRGB
   }
   return {
     get current() {
@@ -32,7 +36,7 @@ export const makeColorManager = (
     },
     get currentRGB() {
       if (!current) init()
-      return [p.red(current), p.green(current), p.blue(current)] as RGB
+      return [red(current), green(current), blue(current)] as RGB
     },
     resolve([pattern, ...args]) {
       if (!current) {
@@ -62,6 +66,6 @@ export const makeColorManager = (
         defaultRGB = changeDefaultColor(defaultRGB)
         operationMap = createOperationMap(defaultRGB)
       }
-    }
+    },
   }
 }
