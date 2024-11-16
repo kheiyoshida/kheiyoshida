@@ -1,27 +1,14 @@
-import { mat4, vec3, vec4 } from 'gl-matrix'
 import { BindingPoint, setUBOValue } from '../models/uniformBlock'
 import { RenderUnit, Scene } from '../models'
-import { getGL } from '../webgl'
 import { positionToNDC } from './scale'
+import { convertEyeValuesToMatrices } from './eye'
 
 const uPad = 0.0
 
 export const renderScene = ({ eye, units }: Scene) => {
-  const gl = getGL()
 
-  // get view matrix
-  const view = mat4.create()
-  const position = vec3.fromValues(...eye.position)
-  const direction = vec3.fromValues(...eye.direction)
-  const lookAtTarget = vec3.create()
-  vec3.add(lookAtTarget, position, direction)
-  const up = vec3.fromValues(0, 1, 0)
-  mat4.lookAt(view, position, lookAtTarget, up)
-
-  // get projection matrix
-  const projection = mat4.create()
-  mat4.perspective(projection, eye.fov, gl.canvas.width / gl.canvas.height, 0.1, eye.sight)
-
+  // scene-level uniform values
+  const [view, projection] = convertEyeValuesToMatrices(eye)
   const uboData = new Float32Array([...projection, ...view])
   setUBOValue(BindingPoint.Eye, uboData)
 
@@ -29,6 +16,8 @@ export const renderScene = ({ eye, units }: Scene) => {
 }
 
 export const renderUnit = (unit: RenderUnit) => {
+
+  // unit-level uniform values
   const uboData = new Float32Array([
     ...positionToNDC(unit.box.FBL), uPad,
     ...positionToNDC(unit.box.FBR), uPad,

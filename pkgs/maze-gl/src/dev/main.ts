@@ -7,20 +7,13 @@ import {
   RenderUnit,
   Scene,
   Shader,
-  Vector,
 } from '../'
 
 import vertShaderSource from './dev.vert?raw'
 import fragShaderSource from './dev.frag?raw'
 import fragShaderSource2 from './dev2.frag?raw'
 import objUrl from './cube.obj?url'
-import {
-  gameSizeDeformedBox2,
-  gameSizeDeformedBox3,
-  triangleSpec,
-  triangleSpec2,
-} from './geometries'
-import { vec3 } from 'gl-matrix'
+import { gameSizeDeformedBox2, gameSizeDeformedBox3 } from './geometries'
 import { makeRenderer } from '../frame'
 
 const objSpec = await buildGeometrySpecFromObj(objUrl)
@@ -44,8 +37,6 @@ const material2 = new ColorMaterial(shader2, {
 })
 
 const boxMesh = new Mesh(material1, objSpec)
-const triangleMesh = new Mesh(material2, triangleSpec)
-const triangleMesh2 = new Mesh(material2, triangleSpec2)
 
 const unit1: RenderUnit = {
   meshes: [boxMesh],
@@ -57,20 +48,18 @@ const unit2: RenderUnit = {
   box: gameSizeDeformedBox2,
 }
 
-function frame() {
+function frame(frameCount: number) {
   gl.clearColor(0.1, 0.1, 0.1, 1.0)
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-
-  const direction = vec3.fromValues(0, 0, -1)
-  // vec3.rotateY(direction, vec3.fromValues(0, 0, 1), direction, performance.now() * 0.001 * Math.PI)
 
   const scene: Scene = {
     units: [unit1, unit2],
     eye: {
-      sight: 60.0,
-      fov: 4 / Math.PI,
-      position: [0, 0, 500 / 1000], // TODO: pass in-game position, not NDC
-      direction: direction as Vector,
+      sight: 8000,
+      fov: 5 / Math.PI,
+      position: [0, 0, 1000],
+      direction: frameCount,
+      aspectRatio: window.innerWidth / window.innerHeight,
     },
   }
 

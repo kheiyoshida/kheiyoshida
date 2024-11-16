@@ -12,16 +12,21 @@ export type Eye = {
    */
   position: Vector
   /**
-   * in-game logical direction in degrees
-   * (front = 0, in range of +-90)
+   * in-game logical direction in degrees (front = 0 degree)
+   * pass in positive values to turn right
    */
-  direction: Vector
+  direction: number
   /**
-   * in radians
+   * field of view angle in radians
    */
   fov: number
   /**
-   * in distance
+   * the end of sight in in-game logical distance
    */
   sight: number
+
+  /**
+   * usually width/height, but can be adjusted
+   */
+  aspectRatio: number
 }
