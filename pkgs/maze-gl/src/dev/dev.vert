@@ -6,7 +6,7 @@ layout (location = 1) in vec3 aNormal;
 
 uniform mat4 model;
 
-layout (std140) uniform Matrices
+layout (std140) uniform Eye
 {
     mat4 projection;
     mat4 view;

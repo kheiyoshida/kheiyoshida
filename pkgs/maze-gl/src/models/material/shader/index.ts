@@ -1,11 +1,12 @@
 import type { mat3, mat4, vec3, vec4 } from 'gl-matrix'
 import { generateRandomNumber } from '../../../utils/id'
 import { getGL } from '../../../webgl'
+import { UniformNameBPMap } from '../../uniformBlock'
 
 export class Shader {
   private readonly program: WebGLProgram
 
-  private gl: WebGL2RenderingContext
+  private readonly gl: WebGL2RenderingContext
 
   constructor(
     vertSource: string,
@@ -16,6 +17,12 @@ export class Shader {
     const vertexShader = createShader(this.gl, this.gl.VERTEX_SHADER, vertSource)
     const fragmentShader = createShader(this.gl, this.gl.FRAGMENT_SHADER, fragSource)
     this.program = createProgram(this.gl, vertexShader, fragmentShader)
+
+    // bind all the UBOs - can be selective in the future based on shader type?
+    Object.entries(UniformNameBPMap).forEach(([uniformName, bp]) => {
+      const blockIndex = this.gl.getUniformBlockIndex(this.program, uniformName)
+      this.gl.uniformBlockBinding(this.program, blockIndex, bp)
+    })
   }
 
   static currentShaderId: number
@@ -64,24 +71,6 @@ export class Shader {
 
   #getUniformLoc(uniformValueName: string) {
     return this.gl.getUniformLocation(this.program, uniformValueName)
-  }
-
-  static nextBindingPoint = 0
-  static reserveBindingPoint() {
-    const reserved = Number(Shader.nextBindingPoint);
-    this.nextBindingPoint++;
-    return reserved
-  }
-
-  bindUniformBlock(uniformBlockName: string, bindingPoint: number): void {
-    const blockIndex = this.gl.getUniformBlockIndex(this.program, uniformBlockName)
-    this.gl.uniformBlockBinding(this.program, blockIndex, bindingPoint)
-  }
-
-  static bindPointToUBO(ubo: WebGLBuffer | null, bindingPoint: number) {
-    if (!ubo) throw Error(`ubo is null`)
-    const gl = getGL()
-    gl.bindBufferBase(gl.UNIFORM_BUFFER, bindingPoint, ubo)
   }
 }
 

@@ -6,6 +6,7 @@ import fragShaderSource from './dev.frag?raw'
 import fragShaderSource2 from './dev2.frag?raw'
 import objUrl from './cube.obj?url'
 import { mat4, vec3 } from 'gl-matrix'
+import { BindingPoint, setUBOValue } from '../models/uniformBlock'
 
 const objSpec = await buildGeometrySpecFromObj(objUrl)
 
@@ -77,35 +78,18 @@ mat4.lookAt(view, position, lookAtTarget, up);
 const projection = mat4.create();
 mat4.perspective(projection, Math.PI / 4, gl.canvas.width / gl.canvas.height, 0.1, 60.0);
 
-const ubo = gl.createBuffer()
-gl.bindBuffer(gl.UNIFORM_BUFFER, ubo)
-const uboData = new Float32Array([
-  ...projection,
-  ...view,
-])
-gl.bufferData(gl.UNIFORM_BUFFER, uboData, gl.STATIC_DRAW);
-
-const bindingPoint = Shader.reserveBindingPoint()
-shader.bindUniformBlock('Matrices', bindingPoint)
-shader2.bindUniformBlock('Matrices', bindingPoint)
-Shader.bindPointToUBO(ubo, bindingPoint)
-
-const ubo2 = gl.createBuffer()
-gl.bindBuffer(gl.UNIFORM_BUFFER, ubo2)
-const uboData2 = new Float32Array([...mat4.create(), ...mat4.create()])
-gl.bufferData(gl.UNIFORM_BUFFER, uboData2, gl.STATIC_DRAW);
-
-const bp2 = Shader.reserveBindingPoint()
-
-shader2.bindUniformBlock('DeformedBox', bp2)
-Shader.bindPointToUBO(ubo2, bp2)
-
 function render() {
   gl.clearColor(0.1, 0.1, 0.1, 1.0)
   gl.clear(gl.COLOR_BUFFER_BIT)
 
+  const uboData = new Float32Array([...projection, ...view,])
+  setUBOValue(BindingPoint.Eye, uboData)
+
+  const uboData2 = new Float32Array([...mat4.create(), ...mat4.create()])
+  setUBOValue(BindingPoint.DeformedBox, uboData2)
+
   mesh1.uniforms.rotateY = performance.now() * 0.05
-  // mesh2.uniforms.rotateY = performance.now() * 0.05
+  mesh2.uniforms.rotateY = performance.now() * 0.05
   mesh1.render()
   mesh2.render()
 
