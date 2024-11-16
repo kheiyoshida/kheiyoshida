@@ -2,7 +2,7 @@
 import type { RenderGrid } from '../../../../domain/translate/renderGrid/renderSpec'
 import type { RenderBlockPosition } from '../scaffold'
 
-export type GridConverter = (rendewrGrid: RenderGrid) => ModelCodeGrid
+export type GridConverter = (renderGrid: RenderGrid) => ModelCodeGrid
 
 export type RenderModelType = 'dynamic' | 'static'
 

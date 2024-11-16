@@ -5,17 +5,16 @@ import {
 } from '../../../../../domain/translate/renderGrid/renderSpec'
 import {
   CompoundModelCode,
+  DynamicModelCode,
   ModelCodeGrid,
   ModelCodeGridLayer,
-  DynamicModelCode,
   StaticModelCode,
 } from '../types'
 
 export const convertToBoxesModelGrid = (renderGrid: RenderGrid): ModelCodeGrid => {
-  const modelGrid = renderGrid
+  return renderGrid
     .filter((layer): layer is ConcreteRenderLayer => layer !== null)
     .map(convertToModelGridLayer)
-  return modelGrid
 }
 
 export const convertToModelGridLayer = (renderLayer: ConcreteRenderLayer): ModelCodeGridLayer => {

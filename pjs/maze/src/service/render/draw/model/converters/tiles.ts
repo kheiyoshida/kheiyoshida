@@ -6,10 +6,9 @@ import {
 import { CompoundModelCode, ModelCodeGrid, ModelCodeGridLayer, StaticModelCode } from '../types'
 
 export const tiles = (renderGrid: RenderGrid): ModelCodeGrid => {
-  const modelGrid = renderGrid
+  return renderGrid
     .filter((layer): layer is ConcreteRenderLayer => layer !== null)
     .map(convertToModelGridLayer)
-  return modelGrid
 }
 
 const convertToModelGridLayer = (renderLayer: ConcreteRenderLayer): ModelCodeGridLayer => {

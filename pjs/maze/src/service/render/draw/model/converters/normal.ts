@@ -4,7 +4,13 @@ import {
   RenderPattern,
   RenderPosition,
 } from '../../../../../domain/translate/renderGrid/renderSpec'
-import { CompoundModelCode, ModelCodeGrid, ModelCodeGridLayer, DynamicModelCode, StaticModelCode } from '../types'
+import {
+  CompoundModelCode,
+  ModelCodeGrid,
+  ModelCodeGridLayer,
+  DynamicModelCode,
+  StaticModelCode,
+} from '../types'
 
 export const convertToNormalModelGrid = (renderGrid: RenderGrid): ModelCodeGrid => {
   const modelGrid = renderGrid
@@ -29,7 +35,12 @@ export const convertToModel = (
 export const convertCenterModel = (pattern: RenderPattern): CompoundModelCode => {
   if (pattern === RenderPattern.FLOOR) return [DynamicModelCode.Floor, DynamicModelCode.Ceil]
   if (pattern === RenderPattern.FILL) return [DynamicModelCode.FrontWall]
-  if (pattern === RenderPattern.STAIR) return [DynamicModelCode.Floor, StaticModelCode.Octahedron, DynamicModelCode.Ceil]
+  if (pattern === RenderPattern.STAIR)
+    return [
+      // DynamicModelCode.Floor,
+      // StaticModelCode.Octahedron, We can't render this legacy static model for now
+      DynamicModelCode.Ceil,
+    ]
   throw Error()
 }
 

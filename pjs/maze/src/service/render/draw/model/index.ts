@@ -6,6 +6,10 @@ import { tiles } from './converters/tiles'
 import { injectGridPositionToModels } from './inject'
 import { GridConverter, RenderModel } from './types'
 
+/**
+ * We're not using this to suppress legacy 'static' models,
+ * but we'll eventually come back and introduce patterns with dynamic deformed box + relative-positioned geometries
+ */
 const ConverterMap: Record<TerrainRenderStyle, GridConverter> = {
   normal: convertToNormalModelGrid,
   poles: convertToBoxesModelGrid,
@@ -16,7 +20,7 @@ export const convertToModelGrid = (
   renderGrid: RenderGrid,
   style: TerrainRenderStyle
 ): RenderModel[] => {
-  const modelCodeGrid = ConverterMap[style](renderGrid)
+  const modelCodeGrid = convertToNormalModelGrid(renderGrid)
   return injectGridPositionToModels(modelCodeGrid)
 }
 
