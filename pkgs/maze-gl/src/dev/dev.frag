@@ -10,5 +10,5 @@ uniform vec3 diffuse;
 
 void main() {
     vec3 color = mix(vNormal, diffuse, 0.5);
-    fragColor = vec4(vColor, 1.0);
+    fragColor = vec4(color, 1.0);
 }

@@ -14,8 +14,7 @@ layout (std140) uniform Eye
 
 layout (std140) uniform DeformedBox
 {
-    vec3 FBL;
-    vec3 FBR;
+    vec3 FBL, FBR, FTL, FTR, BBL, BBR, BTL, BTR;
 };
 
 out vec3 vNormal;
@@ -23,8 +22,19 @@ out vec3 vColor;
 
 void main() {
     vNormal = aNormal;
+    vColor = vec3(0.0, 1.0, 0.5);
 
-    vColor = FBL;
+    vec3 normalizedPosition = (aPosition + vec3(1.0)) * 0.5;
 
-    gl_Position = projection * view * model * vec4(aPosition, 1.0);
+    vec3 transformedPosition =
+    (1.0 - normalizedPosition.x) * (1.0 - normalizedPosition.y) * (1.0 - normalizedPosition.z) * FBL +
+    normalizedPosition.x * (1.0 - normalizedPosition.y) * (1.0 - normalizedPosition.z) * FBR +
+    (1.0 - normalizedPosition.x) * normalizedPosition.y * (1.0 - normalizedPosition.z) * FTL +
+    normalizedPosition.x * normalizedPosition.y * (1.0 - normalizedPosition.z) * FTR +
+    (1.0 - normalizedPosition.x) * (1.0 - normalizedPosition.y) * normalizedPosition.z * BBL +
+    normalizedPosition.x * (1.0 - normalizedPosition.y) * normalizedPosition.z * BBR +
+    (1.0 - normalizedPosition.x) * normalizedPosition.y * normalizedPosition.z * BTL +
+    normalizedPosition.x * normalizedPosition.y * normalizedPosition.z * BTR;
+
+    gl_Position = projection * view * model * vec4(transformedPosition, 1.0);
 }

@@ -7,7 +7,14 @@ export type Scene = {
 }
 
 export type Eye = {
+  /**
+   * in-game logical position
+   */
   position: Vector
+  /**
+   * in-game logical direction in degrees
+   * (front = 0, in range of +-90)
+   */
   direction: Vector
   /**
    * in radians

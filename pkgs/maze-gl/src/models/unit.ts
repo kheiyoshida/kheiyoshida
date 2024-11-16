@@ -9,7 +9,10 @@ export type RenderUnit = {
 export type DeformedBox = {
   FBL: Vector
   FBR: Vector
+  FTL: Vector
+  FTR: Vector
+  BBL: Vector
+  BBR: Vector
+  BTL: Vector
+  BTR: Vector
 }
-
-
-

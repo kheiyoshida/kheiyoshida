@@ -2,62 +2,32 @@ import { getGL, resizeCanvas } from '../webgl'
 import {
   buildGeometrySpecFromObj,
   ColorMaterial,
-  GeometrySpec,
   Mesh,
   renderScene,
+  RenderUnit,
+  Scene,
   Shader,
+  Vector,
 } from '../'
 
 import vertShaderSource from './dev.vert?raw'
 import fragShaderSource from './dev.frag?raw'
 import fragShaderSource2 from './dev2.frag?raw'
 import objUrl from './cube.obj?url'
-import { RenderUnit } from '../models/unit'
-import { Scene } from '../models/scene'
+import {
+  gameSizeDeformedBox2,
+  gameSizeDeformedBox3,
+  triangleSpec,
+  triangleSpec2,
+} from './geometries'
+import { vec3 } from 'gl-matrix'
+import { makeRenderer } from '../frame'
 
 const objSpec = await buildGeometrySpecFromObj(objUrl)
 
-const spec: GeometrySpec = {
-  faces: [
-    {
-      vertexIndices: [0, 1, 2],
-      normalIndices: [0, 1, 2],
-    },
-  ],
-  normals: [
-    [1.0, 0.0, 0.0],
-    [-1.0, 0.0, 0.0],
-    [0.0, 1.0, 0.0],
-  ],
-  vertices: [
-    [1.0, 0.0, 1.0],
-    [-1.0, 0.0, 1.0],
-    [0.0, 1.0, 1.1],
-  ],
-}
-
-const spec2: GeometrySpec = {
-  faces: [
-    {
-      vertexIndices: [0, 1, 2],
-      normalIndices: [0, 1, 2],
-    },
-  ],
-  normals: [
-    [1.0, 0.0, 0.0],
-    [-1.0, 0.0, 0.0],
-    [0.0, 1.0, 0.0],
-  ],
-  vertices: [
-    [1.0, 0.0, 1.0],
-    [-1.0, 0.0, 1.1],
-    [0.0, -1.0, 1.0],
-  ],
-}
-
 const gl = getGL()
 gl.enable(gl.DEPTH_TEST)
-resizeCanvas(800, 800, 800, 800)
+resizeCanvas(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight)
 
 const shader = new Shader(vertShaderSource, fragShaderSource)
 const shader2 = new Shader(vertShaderSource, fragShaderSource2)
@@ -73,45 +43,39 @@ const material2 = new ColorMaterial(shader2, {
   shininess: 0.0,
 })
 
-const mesh1 = new Mesh(material1, objSpec)
-const mesh2 = new Mesh(material2, spec2)
+const boxMesh = new Mesh(material1, objSpec)
+const triangleMesh = new Mesh(material2, triangleSpec)
+const triangleMesh2 = new Mesh(material2, triangleSpec2)
 
 const unit1: RenderUnit = {
-  meshes: [mesh1],
-  box: {
-    FBL: [0.0, 1.0, 0.0],
-    FBR: [0.0, 1.0, 0.0],
-  },
+  meshes: [boxMesh],
+  box: gameSizeDeformedBox3,
 }
 
 const unit2: RenderUnit = {
-  meshes: [mesh2],
-  box: {
-    FBL: [1.0, 1.0, 0.0],
-    FBR: [1.0, 1.0, 0.0],
-  },
+  meshes: [boxMesh],
+  box: gameSizeDeformedBox2,
 }
 
-function render() {
+function frame() {
   gl.clearColor(0.1, 0.1, 0.1, 1.0)
-  gl.clear(gl.COLOR_BUFFER_BIT)
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+
+  const direction = vec3.fromValues(0, 0, -1)
+  // vec3.rotateY(direction, vec3.fromValues(0, 0, 1), direction, performance.now() * 0.001 * Math.PI)
 
   const scene: Scene = {
     units: [unit1, unit2],
     eye: {
       sight: 60.0,
       fov: 4 / Math.PI,
-      position: [0, 0, Math.sin(performance.now() * 0.0005) * 10],
-      direction: [0, 0, -1],
+      position: [0, 0, 500 / 1000], // TODO: pass in-game position, not NDC
+      direction: direction as Vector,
     },
   }
 
-  mesh1.uniforms.rotateY = performance.now() * 0.05
-  mesh2.uniforms.rotateY = performance.now() * 0.05
-
   renderScene(scene)
-
-  requestAnimationFrame(render)
 }
 
-requestAnimationFrame(render)
+const renderer = makeRenderer(30)
+renderer.start(frame)
