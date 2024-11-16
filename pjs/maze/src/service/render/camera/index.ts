@@ -1,7 +1,6 @@
 import { Position3D } from 'p5utils/src/3d'
 import { CameraLookAhead, CameraZ, FloorLength } from '../../../config'
 import { LightVariables } from '../../../domain/translate/light'
-import { handleLight } from './light'
 import { CameraMoveValues } from './types'
 import { ScaffoldValues } from '../draw/scaffold'
 
@@ -27,5 +26,4 @@ const cameraWithLight = (
   light: LightVariables
 ) => {
   p.camera(...cameraPosition, ...directionalPosition)
-  handleLight(cameraPosition, directionalPosition, light)
 }

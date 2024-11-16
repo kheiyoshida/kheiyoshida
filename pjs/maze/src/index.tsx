@@ -12,7 +12,7 @@ const setup = () => {
   p.perspective(FovyValue, ww / wh, 10, 8000)
   p.frameRate(FPS)
   p.fill(120)
-  p.stroke(120)
+  p.stroke(0)
 
   // TODO: replace with native event
   p.mouseClicked = start

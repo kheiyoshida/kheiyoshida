@@ -18,6 +18,9 @@ export const triggerFadeOut = (frames: number) => {
   LightColorManager.setFixedOperation(['fadeout', frames], frames)
 }
 
+/**
+ * @deprecated we don't use this anymore as we migrate to MazeGL from p5
+ */
 export const handleLight = (
   cameraPosition: Position3D,
   directionalPosition: Position3D,
