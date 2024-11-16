@@ -1,12 +1,19 @@
 import { getGL, resizeCanvas } from '../webgl'
-import { buildGeometrySpecFromObj, ColorMaterial, GeometrySpec, Mesh, Shader } from '../'
+import {
+  buildGeometrySpecFromObj,
+  ColorMaterial,
+  GeometrySpec,
+  Mesh,
+  renderScene,
+  Shader,
+} from '../'
 
 import vertShaderSource from './dev.vert?raw'
 import fragShaderSource from './dev.frag?raw'
 import fragShaderSource2 from './dev2.frag?raw'
 import objUrl from './cube.obj?url'
-import { mat4, vec3 } from 'gl-matrix'
-import { BindingPoint, setUBOValue } from '../models/uniformBlock'
+import { RenderUnit } from '../models/unit'
+import { Scene } from '../models/scene'
 
 const objSpec = await buildGeometrySpecFromObj(objUrl)
 
@@ -69,29 +76,40 @@ const material2 = new ColorMaterial(shader2, {
 const mesh1 = new Mesh(material1, objSpec)
 const mesh2 = new Mesh(material2, spec2)
 
-const view = mat4.create()
-const position = vec3.fromValues(0, 0, 5)
-const lookAtTarget = vec3.fromValues(0, 0, 0)
-const up = vec3.fromValues(0, 1, 0)
-mat4.lookAt(view, position, lookAtTarget, up);
+const unit1: RenderUnit = {
+  meshes: [mesh1],
+  box: {
+    FBL: [0.0, 1.0, 0.0],
+    FBR: [0.0, 1.0, 0.0],
+  },
+}
 
-const projection = mat4.create();
-mat4.perspective(projection, Math.PI / 4, gl.canvas.width / gl.canvas.height, 0.1, 60.0);
+const unit2: RenderUnit = {
+  meshes: [mesh2],
+  box: {
+    FBL: [1.0, 1.0, 0.0],
+    FBR: [1.0, 1.0, 0.0],
+  },
+}
 
 function render() {
   gl.clearColor(0.1, 0.1, 0.1, 1.0)
   gl.clear(gl.COLOR_BUFFER_BIT)
 
-  const uboData = new Float32Array([...projection, ...view,])
-  setUBOValue(BindingPoint.Eye, uboData)
-
-  const uboData2 = new Float32Array([...mat4.create(), ...mat4.create()])
-  setUBOValue(BindingPoint.DeformedBox, uboData2)
+  const scene: Scene = {
+    units: [unit1, unit2],
+    eye: {
+      sight: 60.0,
+      fov: 4 / Math.PI,
+      position: [0, 0, Math.sin(performance.now() * 0.0005) * 10],
+      direction: [0, 0, -1],
+    },
+  }
 
   mesh1.uniforms.rotateY = performance.now() * 0.05
   mesh2.uniforms.rotateY = performance.now() * 0.05
-  mesh1.render()
-  mesh2.render()
+
+  renderScene(scene)
 
   requestAnimationFrame(render)
 }

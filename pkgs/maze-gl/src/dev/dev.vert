@@ -14,14 +14,17 @@ layout (std140) uniform Eye
 
 layout (std140) uniform DeformedBox
 {
-    mat4 FBL;
-    mat4 FBR;
+    vec3 FBL;
+    vec3 FBR;
 };
 
 out vec3 vNormal;
+out vec3 vColor;
 
 void main() {
     vNormal = aNormal;
+
+    vColor = FBL;
 
     gl_Position = projection * view * model * vec4(aPosition, 1.0);
 }
