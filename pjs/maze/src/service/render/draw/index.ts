@@ -6,12 +6,9 @@ import { Colors } from '../color/colors'
 import { finaliseModelsAsDrawables } from './finalise'
 import { DrawableObject } from './finalise/types'
 import { convertToModelGrid } from './model'
-import { ScaffoldValues, createScaffold } from './scaffold'
-import { makeSkinManager } from './texture/skin'
+import { createScaffold, ScaffoldValues } from './scaffold'
 
 const SkinColorManager = makeColorManager(Colors.gray)
-
-const SkinManager = makeSkinManager(SkinColorManager)
 
 export const drawTerrain = (
   renderGrid: RenderGrid,
@@ -29,7 +26,6 @@ const drawGeometries = (drawables: DrawableObject[]): void => {
   p.background(0)
   drawables.forEach((obj) => {
     p.push()
-    p.texture(obj.texture || SkinManager.current)
     p.translate(...obj.position)
     if (obj.rotation) {
       p.rotateY(obj.rotation.theta)
@@ -43,5 +39,4 @@ const drawGeometries = (drawables: DrawableObject[]): void => {
 export const updateAesthetics = (texture: TextureParams) => {
   LightColorManager.changeDefaultColor()
   SkinColorManager.resolve(texture.color)
-  SkinManager.renew(...texture.skin)
 }
