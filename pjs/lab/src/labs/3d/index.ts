@@ -9,7 +9,7 @@ import { bindControl } from './control'
 import { cameraStore, sketchStore } from './state'
 import { renderBlockCoords, renderModel } from './experiment'
 import p5 from 'p5'
-import { UnitSpec } from 'pjs/maze/src/service/render/unit/model/types.ts'
+import { UnitSpec } from 'pjs/maze/src/service/render/unit/geometry/types.ts'
 
 let image: p5.Image
 

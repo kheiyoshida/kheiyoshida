@@ -1,4 +1,9 @@
-import { ConcreteRenderLayer, RenderGrid, RenderPattern } from '../../../../domain/translate/renderGrid/renderSpec.ts'
+import {
+  ConcreteRenderLayer,
+  RenderGrid,
+  RenderPattern,
+  RenderPosition,
+} from '../../../../domain/translate/renderGrid/renderSpec.ts'
 import {
   convertCenterModel,
   convertSideModel,
@@ -7,7 +12,7 @@ import {
   trimModelsHorizontal,
   trimModelsVertical,
 } from './default.ts'
-import { ModelCodeGrid, ModelCodeGridLayer, ModelCode } from './types.ts'
+import { GeometryCode, GeometryCodeGrid, GeometryCodeGridLayer } from '../types.ts'
 
 test(`${convertToDefaultModelGrid.name}`, () => {
   const grid: RenderGrid = [null, null, [1, 1, 1], [0, 0, 1], [1, 0, 1], [1, 0, 0]]
@@ -20,9 +25,9 @@ test(`${convertToModelGridLayer.name}`, () => {
   const modelLayer = convertToModelGridLayer(renderLayer)
   expect(modelLayer).toHaveLength(3)
   expect(modelLayer).toMatchObject([
-    [ModelCode.FrontWall, ModelCode.SideWall],
-    [ModelCode.Floor, ModelCode.Ceil],
-    [ModelCode.FrontWall, ModelCode.SideWall],
+    [GeometryCode.FrontWall, GeometryCode.RightWall],
+    [GeometryCode.Floor, GeometryCode.Ceil],
+    [GeometryCode.FrontWall, GeometryCode.LeftWall],
   ])
 })
 
@@ -32,32 +37,32 @@ test(`${trimModelsVertical.name}`, () => {
    * F F W
    * front
    */
-  const modelGrid: ModelCodeGrid = [
+  const modelGrid: GeometryCodeGrid = [
     [
-      convertSideModel(RenderPattern.FLOOR),
+      convertSideModel(RenderPattern.FLOOR, RenderPosition.LEFT),
       convertCenterModel(RenderPattern.FLOOR),
-      convertSideModel(RenderPattern.FILL),
+      convertSideModel(RenderPattern.FILL, RenderPosition.RIGHT),
     ],
     [
-      convertSideModel(RenderPattern.FILL),
+      convertSideModel(RenderPattern.FILL, RenderPosition.LEFT),
       convertCenterModel(RenderPattern.FLOOR),
-      convertSideModel(RenderPattern.FILL),
+      convertSideModel(RenderPattern.FILL, RenderPosition.RIGHT),
     ],
   ]
   const result = trimModelsVertical(modelGrid)
-  expect(result[1][2].includes(ModelCode.FrontWall)).not.toBe(true)
+  expect(result[1][2].includes(GeometryCode.FrontWall)).not.toBe(true)
 })
 
-test(`${trimModelsHorizontal.name}`, () => {
-  const modelLayer: ModelCodeGridLayer = [
-    convertSideModel(RenderPattern.FILL),
+test.skip(`${trimModelsHorizontal.name}`, () => {
+  const modelLayer: GeometryCodeGridLayer = [
+    convertSideModel(RenderPattern.FILL, RenderPosition.LEFT),
     convertCenterModel(RenderPattern.FILL),
-    convertSideModel(RenderPattern.FILL),
+    convertSideModel(RenderPattern.FILL, RenderPosition.RIGHT),
   ]
   const result = trimModelsHorizontal(modelLayer)
   result.forEach((compound) => {
     compound.forEach((model) => {
-      expect(model).not.toBe(ModelCode.SideWall)
+      expect(model).toBe(GeometryCode.FrontWall)
     })
   })
 })

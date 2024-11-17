@@ -1,7 +1,7 @@
-import { ModelCode, ModelCodeGrid } from './model/types.ts'
-import type { MeshKey, UnitSpec } from './types.ts'
+import { GeometryCode, GeometryCodeGrid } from './geometry/types.ts'
+import { MeshKey, UnitSpec } from './types.ts'
 
-export const injectGridPositionToModels = (grid: ModelCodeGrid): UnitSpec[] =>
+export const injectGridPositionToModels = (grid: GeometryCodeGrid): UnitSpec[] =>
   grid.flatMap((layer, z) =>
     layer.flatMap((compound, x) => ({
       keys: compound.map(convertModelCodeToMeshKey),
@@ -9,4 +9,4 @@ export const injectGridPositionToModels = (grid: ModelCodeGrid): UnitSpec[] =>
     }))
   )
 
-const convertModelCodeToMeshKey = (code: ModelCode): MeshKey => code
+const convertModelCodeToMeshKey = (code: GeometryCode): MeshKey => code

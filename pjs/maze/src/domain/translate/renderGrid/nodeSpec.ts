@@ -1,7 +1,7 @@
 import { Direction, getTurnedDirection } from '../../../utils/direction'
 import { Node } from '../../../store/entities/matrix/node'
 
-export type PathSpec = [PathNode, PathNode, PathNode]
+export type PathSpec = [n0: PathNode, n1: PathNode, n2: PathNode]
 export type PathNode = NodeSpec | null
 export type NodeSpec = {
   terrain: Terrain
@@ -25,8 +25,7 @@ export const toPathSpec =
   (nodes: Node[]): PathSpec =>
     Array(3)
       .fill(null)
-      .map((n, i) => (nodes[i] ? toNodeSpec(direction)(nodes[i]) : n))
-      .reverse() as PathSpec
+      .map((n, i) => (nodes[i] ? toNodeSpec(direction)(nodes[i]) : n)) as PathSpec
 
 export const toNodeSpec =
   (direction: Direction) =>

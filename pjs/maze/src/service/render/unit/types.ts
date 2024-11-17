@@ -1,13 +1,23 @@
 import type { RenderBlockPosition } from '../scaffold'
-import { ModelCode } from './model/types.ts'
 
 export type UnitSpec = {
-  keys: MeshKey[]
+  codes: GeometryCode[]
   position: RenderBlockPosition
 }
 
+export type GeometryCodeGrid = GeometryCodeGridLayer[]
+export type GeometryCodeGridLayer = [GeometryCode[], GeometryCode[], GeometryCode[]]
+
 /**
- * for now, mesh key and model code have 1-1 relationship
- * we might introduce variations in meshes for a model code based on other variant
+ * Code to represent which geometry to render.
+ * Since there can be multiple meshes for a geometry,
+ * it is not a unique key
  */
-export type MeshKey = ModelCode
+export enum GeometryCode {
+  Floor = 'Floor',
+  Ceil = 'Ceil',
+  RightWall = 'RightWall',
+  LeftWall = 'LeftWall',
+  FrontWall = 'FrontWall',
+  Stair = 'Stair',
+}

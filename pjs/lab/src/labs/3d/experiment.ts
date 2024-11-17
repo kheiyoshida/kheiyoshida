@@ -5,7 +5,7 @@ import {
   RenderBlockCoords,
   RenderBlockPosition,
   UnitSpec,
-} from 'pjs/maze/src/service/render/unit/model/types.ts'
+} from 'pjs/maze/src/service/render/unit/geometry/types.ts'
 import { pushPop } from 'p5utils/src/render'
 
 export const renderBlock: RenderBlockCoords = {

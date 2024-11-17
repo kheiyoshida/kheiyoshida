@@ -1,5 +1,5 @@
 import { FloorLength, PathLength } from '../../../../../config'
-import { DynamicModelCode } from '../../../unit/model/types.ts'
+import { DynamicModelCode } from '../../../unit/geometry/types.ts'
 import {
   RenderBlock,
   RenderBlockCoords,

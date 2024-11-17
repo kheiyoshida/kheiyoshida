@@ -1,8 +1,8 @@
 import { Node } from '../../../store/entities/matrix/node'
 import { toNodeSpec, toPathSpec } from './nodeSpec'
 
-describe(`toNodeSpec`, () => {
-  it(`should emit rendeirng spec based on direction`, () => {
+describe(`${toNodeSpec.name}`, () => {
+  it(`should emit rendering spec based on direction`, () => {
     const node = new Node([0, 0], { n: true })
     expect(toNodeSpec('n')(node).terrain).toMatchObject({
       left: 'wall',
@@ -31,12 +31,46 @@ describe(`toNodeSpec`, () => {
     node.setStair()
     expect(toNodeSpec('n')(node).stair).toBe(true)
   })
+})
 
+describe(`${toPathSpec.name}`, () => {
   it(`should convert node path to PathSpec`, () => {
     const path: Node[] = [
-      new Node([3, 0], { n: true, e: true }),
-      new Node([2, 0], { n: true }),
-      new Node([1, 0], { n: true }),
+      new Node([3, 0], { n: true, e: true }), // z=0
+      new Node([2, 0], { n: true, w: true }), // z=1
+      new Node([1, 0], { e: true }), // z=2
+    ]
+    expect(toPathSpec('n')(path)).toMatchObject([
+      {
+        stair: false,
+        terrain: {
+          left: 'wall',
+          front: 'corridor',
+          right: 'corridor',
+        },
+      },
+      {
+        stair: false,
+        terrain: {
+          left: 'corridor',
+          front: 'corridor',
+          right: 'wall',
+        },
+      },
+      {
+        stair: false,
+        terrain: {
+          left: 'wall',
+          front: 'wall',
+          right: 'corridor',
+        },
+      },
+    ])
+  })
+  it(`should fill with null if front node isn't approachable`, () => {
+    const path: Node[] = [
+      new Node([3, 0], { n: true, e: true }), // z=0
+      new Node([2, 0], { n: true }), // z=1
     ]
     expect(toPathSpec('n')(path)).toMatchObject([
       {
@@ -44,47 +78,18 @@ describe(`toNodeSpec`, () => {
         terrain: {
           front: 'corridor',
           left: 'wall',
-          right: 'wall',
-        },
-      },
-      {
-        stair: false,
-        terrain: {
-          front: 'corridor',
-          left: 'wall',
-          right: 'wall',
-        },
-      },
-      {
-        stair: false,
-        terrain: {
-          front: 'corridor',
-          left: 'wall',
           right: 'corridor',
         },
       },
-    ])
-  })
-  it(`should fill with null if front node isn't approachable`, () => {
-    const path: Node[] = [new Node([3, 0], { n: true, e: true }), new Node([2, 0], { n: true })]
-    expect(toPathSpec('n')(path)).toMatchObject([
+      {
+        stair: false,
+        terrain: {
+          front: 'corridor',
+          left: 'wall',
+          right: 'wall',
+        },
+      },
       null,
-      {
-        stair: false,
-        terrain: {
-          front: 'corridor',
-          left: 'wall',
-          right: 'wall',
-        },
-      },
-      {
-        stair: false,
-        terrain: {
-          front: 'corridor',
-          left: 'wall',
-          right: 'corridor',
-        },
-      },
     ])
   })
 })

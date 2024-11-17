@@ -1,7 +1,7 @@
 import { PathSpec } from './nodeSpec'
-import { RenderGrid, _convertToRenderGrid } from './renderSpec'
+import { convertToRenderGrid, RenderGrid } from './renderSpec'
 
-describe(`conversion to render specs`, () => {
+describe(`${convertToRenderGrid.name}`, () => {
   it(`should convert to render specs`, () => {
     /**
      * * \       ___
@@ -13,14 +13,6 @@ describe(`conversion to render specs`, () => {
      * * /
      */
     const specs: PathSpec = [
-      null,
-      {
-        terrain: {
-          left: 'corridor',
-          front: 'wall',
-          right: 'wall',
-        },
-      },
       {
         terrain: {
           left: 'wall',
@@ -28,14 +20,35 @@ describe(`conversion to render specs`, () => {
           right: 'corridor',
         },
       },
+      {
+        terrain: {
+          left: 'corridor',
+          front: 'wall',
+          right: 'wall',
+        },
+      },
+      null,
     ]
-    const expectResult: RenderGrid = [null, null, [1, 1, 1], [0, 0, 1], [1, 0, 1], [1, 0, 0]]
-    expect(_convertToRenderGrid(specs)).toMatchObject(expectResult)
+    const expectResult: RenderGrid = [
+      null,
+      null, //
+      [1, 1, 1],
+      [0, 0, 1],
+      [1, 0, 1],
+      [1, 0, 0],
+    ]
+    expect(convertToRenderGrid(specs)).toMatchObject(expectResult)
   })
 
   it(`should include stair`, () => {
     const specs: PathSpec = [
-      null,
+      {
+        terrain: {
+          left: 'corridor',
+          front: 'corridor',
+          right: 'wall',
+        },
+      },
       {
         terrain: {
           left: 'wall',
@@ -44,15 +57,16 @@ describe(`conversion to render specs`, () => {
         },
         stair: true,
       },
-      {
-        terrain: {
-          left: 'corridor',
-          front: 'corridor',
-          right: 'wall',
-        },
-      },
+      null,
     ]
-    const expectResult: RenderGrid = [null, null, [1, 1, 1], [1, 2, 1], [1, 0, 1], [0, 0, 1]]
-    expect(_convertToRenderGrid(specs)).toMatchObject(expectResult)
+    const expectResult: RenderGrid = [
+      null,
+      null,
+      [1, 1, 1],
+      [1, 2, 1], // <- stair
+      [1, 0, 1],
+      [0, 0, 1],
+    ]
+    expect(convertToRenderGrid(specs)).toMatchObject(expectResult)
   })
 })

@@ -5,7 +5,7 @@ import { makeColorManager } from '../color'
 import { Colors } from '../color/colors'
 import { finaliseModelsAsDrawables } from './finalise'
 import { DrawableObject } from './finalise/types'
-import { convertToModelGrid } from '../unit'
+import { convertRenderGridToUnitSpecList } from '../unit'
 import { createScaffold, ScaffoldValues } from '../scaffold'
 
 const SkinColorManager = makeColorManager(Colors.gray)

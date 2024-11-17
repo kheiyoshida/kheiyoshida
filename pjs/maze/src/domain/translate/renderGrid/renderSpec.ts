@@ -1,5 +1,9 @@
 import { NodeSpec, PathSpec, TerrainPattern } from './nodeSpec'
 
+/**
+ * 6 * 3 grid of rendering patterns
+ * note that layer at index 0 is the furthest from the player's position,
+ */
 export type RenderGrid = [
   RenderLayer,
   RenderLayer,
@@ -11,15 +15,6 @@ export type RenderGrid = [
 
 export type RenderLayer = ConcreteRenderLayer | null
 export type ConcreteRenderLayer = [left: RenderPattern, center: RenderPattern, right: RenderPattern]
-
-type TupleIndices<T extends readonly any[]> = Extract<
-  keyof T,
-  `${number}`
-> extends `${infer N extends number}`
-  ? N
-  : never
-
-export type RenderLayerIndex = TupleIndices<RenderGrid>
 
 export enum RenderPosition {
   LEFT = 0,
@@ -33,21 +28,19 @@ export enum RenderPattern {
   STAIR = 2,
 }
 
-export const convertToRenderGrid = (path: PathSpec): RenderGrid => _convertToRenderGrid(path).reverse() as RenderGrid
-
-export const _convertToRenderGrid = (path: PathSpec): RenderGrid =>
-  path.flatMap((nodeSpec) =>
+// We reverse the array for the data's readability in test code so it represents the terrain in sight
+export const convertToRenderGrid = (path: PathSpec): RenderGrid =>
+  path.reverse().flatMap((nodeSpec) =>
     nodeSpec ? convertToRenderLayer(nodeSpec) : [null, null]
   ) as RenderGrid
 
 const convertToRenderLayer = (nodeSpec: NodeSpec): RenderLayer[] => [
+  // prettier-ignore
   [RenderPattern.FILL, detectPattern(nodeSpec.terrain.front), RenderPattern.FILL],
-  [
-    detectPattern(nodeSpec.terrain.left),
-    nodeSpec.stair ? RenderPattern.STAIR : RenderPattern.FLOOR,
-    detectPattern(nodeSpec.terrain.right),
-  ],
+  [detectPattern(nodeSpec.terrain.left), center(nodeSpec), detectPattern(nodeSpec.terrain.right)],
 ]
 
-export const detectPattern = (tp: TerrainPattern) =>
+const center = (nodeSpec: NodeSpec) => (nodeSpec.stair ? RenderPattern.STAIR : RenderPattern.FLOOR)
+
+const detectPattern = (tp: TerrainPattern) =>
   tp === 'corridor' ? RenderPattern.FLOOR : RenderPattern.FILL
