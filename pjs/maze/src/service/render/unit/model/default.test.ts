@@ -2,16 +2,16 @@ import { ConcreteRenderLayer, RenderGrid, RenderPattern } from '../../../../doma
 import {
   convertCenterModel,
   convertSideModel,
-  convertToNormalModelGrid,
+  convertToDefaultModelGrid,
   convertToModelGridLayer,
   trimModelsHorizontal,
   trimModelsVertical,
-} from './normal.ts'
-import { ModelCodeGrid, ModelCodeGridLayer, DynamicModelCode } from '../types.ts'
+} from './default.ts'
+import { ModelCodeGrid, ModelCodeGridLayer, ModelCode } from './types.ts'
 
-test(`${convertToNormalModelGrid.name}`, () => {
+test(`${convertToDefaultModelGrid.name}`, () => {
   const grid: RenderGrid = [null, null, [1, 1, 1], [0, 0, 1], [1, 0, 1], [1, 0, 0]]
-  const modelGrid = convertToNormalModelGrid(grid)
+  const modelGrid = convertToDefaultModelGrid(grid)
   expect(modelGrid).toHaveLength(4)
 })
 
@@ -20,9 +20,9 @@ test(`${convertToModelGridLayer.name}`, () => {
   const modelLayer = convertToModelGridLayer(renderLayer)
   expect(modelLayer).toHaveLength(3)
   expect(modelLayer).toMatchObject([
-    [DynamicModelCode.FrontWall, DynamicModelCode.SideWall],
-    [DynamicModelCode.Floor, DynamicModelCode.Ceil],
-    [DynamicModelCode.FrontWall, DynamicModelCode.SideWall],
+    [ModelCode.FrontWall, ModelCode.SideWall],
+    [ModelCode.Floor, ModelCode.Ceil],
+    [ModelCode.FrontWall, ModelCode.SideWall],
   ])
 })
 
@@ -45,7 +45,7 @@ test(`${trimModelsVertical.name}`, () => {
     ],
   ]
   const result = trimModelsVertical(modelGrid)
-  expect(result[1][2].includes(DynamicModelCode.FrontWall)).not.toBe(true)
+  expect(result[1][2].includes(ModelCode.FrontWall)).not.toBe(true)
 })
 
 test(`${trimModelsHorizontal.name}`, () => {
@@ -57,7 +57,7 @@ test(`${trimModelsHorizontal.name}`, () => {
   const result = trimModelsHorizontal(modelLayer)
   result.forEach((compound) => {
     compound.forEach((model) => {
-      expect(model).not.toBe(DynamicModelCode.SideWall)
+      expect(model).not.toBe(ModelCode.SideWall)
     })
   })
 })

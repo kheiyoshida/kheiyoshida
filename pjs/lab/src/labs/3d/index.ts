@@ -9,7 +9,7 @@ import { bindControl } from './control'
 import { cameraStore, sketchStore } from './state'
 import { renderBlockCoords, renderModel } from './experiment'
 import p5 from 'p5'
-import { RenderModel } from 'maze/src/service/render/unit/types'
+import { UnitSpec } from 'pjs/maze/src/service/render/unit/model/types.ts'
 
 let image: p5.Image
 
@@ -57,7 +57,7 @@ const draw = () => {
 
   p.texture(image)
   renderBlockCoords()
-  renderModel(RenderModel.BoxBottom)
+  renderModel(UnitSpec.BoxBottom)
 }
 
 

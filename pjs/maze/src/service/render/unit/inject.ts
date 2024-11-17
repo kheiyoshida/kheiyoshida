@@ -1,38 +1,12 @@
-import { RenderBlockPosition } from '../scaffold'
-import {
-  CompoundModelCode,
-  DynamicModelCode,
-  ModelCode,
-  ModelCodeGrid,
-  RenderModel,
-  StaticModelCode,
-  staticModelCodes,
-} from './types.ts'
+import { ModelCode, ModelCodeGrid } from './model/types.ts'
+import type { MeshKey, UnitSpec } from './types.ts'
 
-export const injectGridPositionToModels = (grid: ModelCodeGrid): RenderModel[] =>
+export const injectGridPositionToModels = (grid: ModelCodeGrid): UnitSpec[] =>
   grid.flatMap((layer, z) =>
-    layer.flatMap((compound, x) => mapPositionToModels(compound, { x, z }))
+    layer.flatMap((compound, x) => ({
+      keys: compound.map(convertModelCodeToMeshKey),
+      position: { x, z },
+    }))
   )
 
-export const mapPositionToModels = (
-  compound: CompoundModelCode,
-  position: RenderBlockPosition
-): RenderModel[] => compound.map((model) => detectModelType(model, position))
-
-export const detectModelType = (
-  modelCode: ModelCode,
-  position: RenderBlockPosition
-): RenderModel => {
-  if (staticModelCodes.includes(modelCode))
-    return {
-      type: 'static',
-      code: modelCode as StaticModelCode,
-      position,
-    }
-  else
-    return {
-      type: 'dynamic',
-      code: modelCode as DynamicModelCode,
-      position,
-    }
-}
+const convertModelCodeToMeshKey = (code: ModelCode): MeshKey => code

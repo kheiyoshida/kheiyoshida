@@ -1,12 +1,12 @@
 import { ObjectAlignmentValue } from '../../../../domain/translate'
-import { DynamicModel, RenderModel } from '../../unit'
+import { DynamicModel, UnitSpec } from '../../unit'
 import { Scaffold } from '../../scaffold'
 import { convertDynamicModelsToDrawables } from './dynamic'
 import { staticObjectEmitterPool } from './static'
 import { DrawableObject } from './types'
 
 export const finaliseModelsAsDrawables = (
-  models: RenderModel[],
+  models: UnitSpec[],
   scaffold: Scaffold,
   alignment: ObjectAlignmentValue
 ): DrawableObject[] => {

@@ -4,9 +4,9 @@ import {
   RenderPattern,
   RenderPosition,
 } from '../../../../domain/translate/renderGrid/renderSpec.ts'
-import { CompoundModelCode, DynamicModelCode, ModelCodeGrid, ModelCodeGridLayer } from '../types.ts'
+import { ModelCode, ModelCodeGrid, ModelCodeGridLayer } from './types.ts'
 
-export const convertToNormalModelGrid = (renderGrid: RenderGrid): ModelCodeGrid => {
+export const convertToDefaultModelGrid = (renderGrid: RenderGrid): ModelCodeGrid => {
   const modelGrid = renderGrid
     .filter((layer): layer is ConcreteRenderLayer => layer !== null)
     .map(convertToModelGridLayer)
@@ -21,26 +21,21 @@ export const convertToModelGridLayer = (renderLayer: ConcreteRenderLayer): Model
 export const convertToModel = (
   renderPattern: RenderPattern,
   position: RenderPosition
-): CompoundModelCode => {
+): ModelCode[] => {
   if (position === RenderPosition.CENTER) return convertCenterModel(renderPattern)
   else return convertSideModel(renderPattern)
 }
 
-export const convertCenterModel = (pattern: RenderPattern): CompoundModelCode => {
-  if (pattern === RenderPattern.FLOOR) return [DynamicModelCode.Floor, DynamicModelCode.Ceil]
-  if (pattern === RenderPattern.FILL) return [DynamicModelCode.FrontWall]
-  if (pattern === RenderPattern.STAIR)
-    return [
-      // DynamicModelCode.Floor,
-      // StaticModelCode.Octahedron, We can't render this legacy static unit for now
-      DynamicModelCode.Ceil,
-    ]
+export const convertCenterModel = (pattern: RenderPattern): ModelCode[] => {
+  if (pattern === RenderPattern.FLOOR) return [ModelCode.Floor, ModelCode.Ceil]
+  if (pattern === RenderPattern.FILL) return [ModelCode.FrontWall]
+  if (pattern === RenderPattern.STAIR) return [ModelCode.Floor, ModelCode.Stair, ModelCode.Ceil]
   throw Error()
 }
 
-export const convertSideModel = (pattern: RenderPattern): CompoundModelCode => {
-  if (pattern === RenderPattern.FLOOR) return [DynamicModelCode.Floor, DynamicModelCode.Ceil]
-  if (pattern === RenderPattern.FILL) return [DynamicModelCode.FrontWall, DynamicModelCode.SideWall]
+export const convertSideModel = (pattern: RenderPattern): ModelCode[] => {
+  if (pattern === RenderPattern.FLOOR) return [ModelCode.Floor, ModelCode.Ceil]
+  if (pattern === RenderPattern.FILL) return [ModelCode.FrontWall, ModelCode.SideWall]
   throw Error()
 }
 
@@ -49,8 +44,8 @@ export const trimModelsVertical = (modelGrid: ModelCodeGrid): ModelCodeGrid => {
     if (i === 0) return modelLayer
     return modelLayer.map((compound, position) => {
       if (position === RenderPosition.CENTER) return compound
-      if (modelGrid[i - 1][position].includes(DynamicModelCode.SideWall)) {
-        return compound.filter((model) => model !== DynamicModelCode.FrontWall)
+      if (modelGrid[i - 1][position].includes(ModelCode.SideWall)) {
+        return compound.filter((model) => model !== ModelCode.FrontWall)
       }
       return compound
     }) as ModelCodeGridLayer
@@ -58,9 +53,9 @@ export const trimModelsVertical = (modelGrid: ModelCodeGrid): ModelCodeGrid => {
 }
 
 export const trimModelsHorizontal = (modelLayer: ModelCodeGridLayer): ModelCodeGridLayer => {
-  if (modelLayer.every((compound) => compound.includes(DynamicModelCode.FrontWall))) {
+  if (modelLayer.every((compound) => compound.includes(ModelCode.FrontWall))) {
     return modelLayer.map((compound) =>
-      compound.filter((model) => model !== DynamicModelCode.SideWall)
+      compound.filter((model) => model !== ModelCode.SideWall)
     ) as ModelCodeGridLayer
   }
   return modelLayer

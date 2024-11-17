@@ -4,8 +4,8 @@ import { finalizeGeometries } from 'maze/src/service/render/unit/finalize/finali
 import {
   RenderBlockCoords,
   RenderBlockPosition,
-  RenderModel,
-} from 'maze/src/service/render/unit/types'
+  UnitSpec,
+} from 'pjs/maze/src/service/render/unit/model/types.ts'
 import { pushPop } from 'p5utils/src/render'
 
 export const renderBlock: RenderBlockCoords = {
@@ -39,7 +39,7 @@ export const renderBlockCoords = () => {
 }
 
 export const renderModel = (
-  model: RenderModel = RenderModel.Stair,
+  model: UnitSpec = UnitSpec.Stair,
   position: RenderBlockPosition = { x: RenderPosition.CENTER, y: 0, z: 0 }
 ) => {
   const spec = ConvertModelMap[model]({ blockCoords: renderBlock, position })

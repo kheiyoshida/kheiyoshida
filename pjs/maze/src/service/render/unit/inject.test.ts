@@ -1,32 +1,61 @@
-import { RenderPosition } from '../../../domain/translate/renderGrid/renderSpec.ts'
-import { detectModelType, injectGridPositionToModels } from './inject.ts'
-import { DynamicModelCode, ModelCodeGrid, StaticModelCode } from './types.ts'
+import { injectGridPositionToModels } from './inject.ts'
+import { ModelCode, ModelCodeGrid } from './model/types.ts'
 
 test(`${injectGridPositionToModels.name}`, () => {
   const modelGrid: ModelCodeGrid = [
     [
-      [DynamicModelCode.Floor, DynamicModelCode.Ceil],
-      [DynamicModelCode.Floor, DynamicModelCode.Ceil],
-      [DynamicModelCode.Floor, DynamicModelCode.Ceil],
+      [ModelCode.Floor, ModelCode.Ceil],
+      [ModelCode.Floor, ModelCode.Ceil],
+      [ModelCode.Floor, ModelCode.Ceil],
     ],
-    [[DynamicModelCode.FrontWall], [DynamicModelCode.FrontWall], [DynamicModelCode.FrontWall]],
+    [[ModelCode.FrontWall], [ModelCode.FrontWall], [ModelCode.FrontWall]],
   ]
   const models = injectGridPositionToModels(modelGrid)
-  expect(models).toHaveLength(9)
-})
 
-test(`${detectModelType.name}`, () => {
-  const pos = { x: RenderPosition.CENTER, z: 1 }
-  const res = detectModelType(DynamicModelCode.Floor, pos)
-  expect(res).toEqual({
-    code: DynamicModelCode.Floor,
-    type: 'dynamic',
-    position: pos,
-  })
-  const res2 = detectModelType(StaticModelCode.Pole, pos)
-  expect(res2).toEqual({
-    code: StaticModelCode.Pole,
-    type: 'static',
-    position: pos,
-  })
+  expect(models).toEqual(
+    [
+      {
+        keys: ['Floor', 'Ceil'],
+        position: {
+          x: 0,
+          z: 0,
+        },
+      },
+      {
+        keys: ['Floor', 'Ceil'],
+        position: {
+          x: 1,
+          z: 0,
+        },
+      },
+      {
+        keys: ['Floor', 'Ceil'],
+        position: {
+          x: 2,
+          z: 0,
+        },
+      },
+      {
+        keys: ['FrontWall'],
+        position: {
+          x: 0,
+          z: 1,
+        },
+      },
+      {
+        keys: ['FrontWall'],
+        position: {
+          x: 1,
+          z: 1,
+        },
+      },
+      {
+        keys: ['FrontWall'],
+        position: {
+          x: 2,
+          z: 1,
+        },
+      },
+    ],
+  )
 })
