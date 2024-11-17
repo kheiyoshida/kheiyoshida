@@ -9,7 +9,7 @@ import { bindControl } from './control'
 import { cameraStore, sketchStore } from './state'
 import { renderBlockCoords, renderModel } from './experiment'
 import p5 from 'p5'
-import { RenderModel } from 'maze/src/service/render/model/types'
+import { RenderModel } from 'maze/src/service/render/unit/types'
 
 let image: p5.Image
 

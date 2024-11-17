@@ -1,7 +1,7 @@
-import { Scaffold } from '../types'
-import { iterateScaffold, retrieveScaffoldEntity } from '../utils'
-import { applyDistortion } from '.'
-import { createDistortionScaffold } from './scaffold'
+import { Scaffold } from '../types.ts'
+import { iterateScaffold, retrieveScaffoldEntity } from '../utils.ts'
+import { applyDistortion } from './index.ts'
+import { createDistortionScaffold } from './scaffold.ts'
 
 test(`${applyDistortion.name}`, () => {
   const original: Scaffold = [

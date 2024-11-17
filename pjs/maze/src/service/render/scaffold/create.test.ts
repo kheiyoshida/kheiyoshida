@@ -5,8 +5,8 @@ import {
   getLayerZValue,
   makeGetScaffoldXValue,
   makegetLayerYValue,
-} from './create'
-import { ScaffoldLayerCoordPosition, ScaffoldValues } from './types'
+} from './create.ts'
+import { ScaffoldLayerCoordPosition, ScaffoldValues } from './types.ts'
 
 const defaultValues: ScaffoldValues = {
   floor: 400,

@@ -2,14 +2,14 @@ import {
   ConcreteRenderLayer,
   RenderGrid,
   RenderPattern,
-} from '../../../../../domain/translate/renderGrid/renderSpec'
+} from '../../../../domain/translate/renderGrid/renderSpec.ts'
 import {
   CompoundModelCode,
   DynamicModelCode,
   ModelCodeGrid,
   ModelCodeGridLayer,
   StaticModelCode,
-} from '../types'
+} from '../types.ts'
 
 export const convertToBoxesModelGrid = (renderGrid: RenderGrid): ModelCodeGrid => {
   return renderGrid

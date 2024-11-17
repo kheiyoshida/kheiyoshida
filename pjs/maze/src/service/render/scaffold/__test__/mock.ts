@@ -1,4 +1,4 @@
-import { Scaffold } from '..'
+import { Scaffold } from '../index.ts'
 
 export const MockScaffold: Scaffold = [
   {

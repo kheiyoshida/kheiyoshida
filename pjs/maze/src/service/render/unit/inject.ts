@@ -7,7 +7,7 @@ import {
   RenderModel,
   StaticModelCode,
   staticModelCodes,
-} from './types'
+} from './types.ts'
 
 export const injectGridPositionToModels = (grid: ModelCodeGrid): RenderModel[] =>
   grid.flatMap((layer, z) =>

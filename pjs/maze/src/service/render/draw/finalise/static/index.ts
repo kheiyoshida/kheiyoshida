@@ -1,6 +1,6 @@
 import { ObjectAlignmentValue } from '../../../../../domain/translate'
-import { StaticModel, StaticModelCode } from '../../model'
-import { Scaffold, getRenderBlock } from '../../scaffold'
+import { StaticModel, StaticModelCode } from '../../../unit'
+import { Scaffold, getRenderBlock } from '../../../scaffold'
 import { DrawableObject } from '../types'
 import { octaCollection, poleCollection, tileCollection } from './collection'
 import { DrawableObjectEmitter, makeOctaEmitter, makeSimpleEmitter } from './emitter'

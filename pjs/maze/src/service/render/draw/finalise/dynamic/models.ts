@@ -1,5 +1,5 @@
 import { FloorLength, PathLength } from '../../../../../config'
-import { DynamicModelCode } from '../../model/types'
+import { DynamicModelCode } from '../../../unit/types'
 import {
   RenderBlock,
   RenderBlockCoords,
@@ -7,7 +7,7 @@ import {
   getAdjacentBlockZ,
   getBlockCenter,
   getSmallerBlock,
-} from '../../scaffold'
+} from '../../../scaffold'
 import * as face from './face'
 import * as normal from './normal'
 import { GeometrySpec, ShapeCoordinates } from '../geometry/types'

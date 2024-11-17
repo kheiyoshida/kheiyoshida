@@ -26,7 +26,7 @@ export class Mesh {
 
   render() {
     this.material.apply()
-    this.material.shader.setMat4('model', rotateY(this.uniforms.rotateY))
+    this.material.shader.setMat4('unit', rotateY(this.uniforms.rotateY))
     drawGeometry(this.#drawRef)
   }
 }

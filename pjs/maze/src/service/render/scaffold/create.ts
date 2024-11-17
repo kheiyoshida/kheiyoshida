@@ -1,4 +1,4 @@
-import { WallHeight } from '../../../../config'
+import { WallHeight } from '../../../config'
 import { Distortion, applyDistortion } from './distortion'
 import {
   Scaffold,
@@ -7,7 +7,7 @@ import {
   ScaffoldLayerPart,
   ScaffoldLayerPartLength,
   ScaffoldValues,
-} from './types'
+} from './types.ts'
 
 export const NumOfScaffoldLayers = 7
 

@@ -1,7 +1,7 @@
 import { Vector } from 'p5'
-import { Position3D } from 'p5utils/src/3d'
-import { DistortionDelta } from '../types'
+import { DistortionDelta } from '../types.ts'
 import { randomFloatAsymmetricrange } from 'utils'
+import { Position3D } from 'p5utils/src/3d/types.ts'
 
 export const createDistortionDelta = (delta: Vector = new Vector()): DistortionDelta => {
   return {

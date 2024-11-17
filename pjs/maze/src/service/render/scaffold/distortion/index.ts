@@ -1,6 +1,6 @@
-import { Scaffold } from '../types'
-import { iterateScaffold, retrieveScaffoldEntity } from '../utils'
-import { DistortionScaffold, createDistortionScaffold } from './scaffold'
+import { Scaffold } from '../types.ts'
+import { iterateScaffold, retrieveScaffoldEntity } from '../utils.ts'
+import { DistortionScaffold, createDistortionScaffold } from './scaffold.ts'
 
 export const Distortion = createDistortionScaffold()
 

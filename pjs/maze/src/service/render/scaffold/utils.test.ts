@@ -1,5 +1,5 @@
-import { Scaffold } from './types'
-import { slideScaffoldLayers, turnScaffold } from './utils'
+import { Scaffold } from './types.ts'
+import { slideScaffoldLayers, turnScaffold } from './utils.ts'
 
 test(`${slideScaffoldLayers.name}`, () => {
   const layer0 = {

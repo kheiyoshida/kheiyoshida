@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { RenderGrid } from '../../../../domain/translate/renderGrid/renderSpec'
+import type { RenderGrid } from '../../../domain/translate/renderGrid/renderSpec.ts'
 import type { RenderBlockPosition } from '../scaffold'
 
 export type GridConverter = (renderGrid: RenderGrid) => ModelCodeGrid

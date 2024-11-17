@@ -2,8 +2,8 @@ import {
   ConcreteRenderLayer,
   RenderGrid,
   RenderPattern,
-} from '../../../../../domain/translate/renderGrid/renderSpec'
-import { CompoundModelCode, ModelCodeGrid, ModelCodeGridLayer, StaticModelCode } from '../types'
+} from '../../../../domain/translate/renderGrid/renderSpec.ts'
+import { CompoundModelCode, ModelCodeGrid, ModelCodeGridLayer, StaticModelCode } from '../types.ts'
 
 export const tiles = (renderGrid: RenderGrid): ModelCodeGrid => {
   return renderGrid

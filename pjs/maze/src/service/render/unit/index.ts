@@ -1,10 +1,10 @@
-import { TerrainRenderStyle } from '../../../../domain/translate'
-import { RenderGrid } from '../../../../domain/translate/renderGrid/renderSpec'
-import { convertToNormalModelGrid } from './converters/normal'
-import { convertToBoxesModelGrid } from './converters/poles'
-import { tiles } from './converters/tiles'
-import { injectGridPositionToModels } from './inject'
-import { GridConverter, RenderModel } from './types'
+import { TerrainRenderStyle } from '../../../domain/translate'
+import { RenderGrid } from '../../../domain/translate/renderGrid/renderSpec.ts'
+import { convertToNormalModelGrid } from './converters/normal.ts'
+import { convertToBoxesModelGrid } from './converters/poles.ts'
+import { tiles } from './converters/tiles.ts'
+import { injectGridPositionToModels } from './inject.ts'
+import { GridConverter, RenderModel } from './types.ts'
 
 /**
  * We're not using this to suppress legacy 'static' models,
@@ -24,4 +24,4 @@ export const convertToModelGrid = (
   return injectGridPositionToModels(modelCodeGrid)
 }
 
-export * from './types'
+export * from './types.ts'

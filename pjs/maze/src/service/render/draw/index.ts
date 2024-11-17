@@ -5,8 +5,8 @@ import { makeColorManager } from '../color'
 import { Colors } from '../color/colors'
 import { finaliseModelsAsDrawables } from './finalise'
 import { DrawableObject } from './finalise/types'
-import { convertToModelGrid } from './model'
-import { createScaffold, ScaffoldValues } from './scaffold'
+import { convertToModelGrid } from '../unit'
+import { createScaffold, ScaffoldValues } from '../scaffold'
 
 const SkinColorManager = makeColorManager(Colors.gray)
 
@@ -16,10 +16,10 @@ export const drawTerrain = (
   terrainStyle: TerrainRenderStyle,
   { alignment }: ObjectDrawParams
 ): void => {
-  const scaffold = createScaffold(values)
-  const modelGrid = convertToModelGrid(renderGrid, terrainStyle)
-  const drawables = finaliseModelsAsDrawables(modelGrid, scaffold, alignment)
-  drawGeometries(drawables)
+  // const scaffold = createScaffold(values)
+  // const modelGrid = convertToModelGrid(renderGrid, terrainStyle)
+  // const drawables = finaliseModelsAsDrawables(modelGrid, scaffold, alignment)
+  // drawGeometries(drawables)
 }
 
 const drawGeometries = (drawables: DrawableObject[]): void => {

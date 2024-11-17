@@ -18,7 +18,8 @@
     "react-dom": "^18.2.0",
     "utils": "workspace:^",
     "music": "workspace:^",
-    "sound": "workspace:^"
+    "sound": "workspace:^",
+    "maze-gl": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "^20.10.4",

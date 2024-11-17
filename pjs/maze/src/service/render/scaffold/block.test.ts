@@ -1,6 +1,6 @@
-import { RenderPosition } from '../../../../domain/translate/renderGrid/renderSpec'
-import { MockScaffold } from './__test__/mock'
-import { RenderBlockCoords, RenderBlockLayer } from './types'
+import { RenderPosition } from '../../../domain/translate/renderGrid/renderSpec.ts'
+import { MockScaffold } from './__test__/mock.ts'
+import { RenderBlockCoords, RenderBlockLayer } from './types.ts'
 
 import {
   getAdjacentBlockZ,
@@ -10,7 +10,7 @@ import {
   getReducedPointFromCenter,
   getRenderBlock,
   getSmallerBlock,
-} from './block'
+} from './block.ts'
 
 
 test(`${getRenderBlock.name}`, () => {

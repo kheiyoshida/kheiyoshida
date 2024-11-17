@@ -1,5 +1,5 @@
-import { DynamicModel } from '../../model'
-import { Scaffold, getRenderBlock } from '../../scaffold'
+import { DynamicModel } from '../../../unit'
+import { Scaffold, getRenderBlock } from '../../../scaffold'
 import { DrawableObject } from '../types'
 import { finalizeGeometries } from '../geometry/finalize'
 import { ConvertModelMap } from './models'

@@ -1,11 +1,11 @@
 import { RenderPosition } from 'maze/src/domain/translate/renderGrid/renderSpec'
-import { ConvertModelMap } from 'maze/src/service/render/model/coords/models'
-import { finalizeGeometries } from 'maze/src/service/render/model/finalize/finalize'
+import { ConvertModelMap } from 'maze/src/service/render/unit/coords/models'
+import { finalizeGeometries } from 'maze/src/service/render/unit/finalize/finalize'
 import {
   RenderBlockCoords,
   RenderBlockPosition,
   RenderModel,
-} from 'maze/src/service/render/model/types'
+} from 'maze/src/service/render/unit/types'
 import { pushPop } from 'p5utils/src/render'
 
 export const renderBlock: RenderBlockCoords = {

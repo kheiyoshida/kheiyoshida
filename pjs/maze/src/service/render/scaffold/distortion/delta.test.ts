@@ -1,6 +1,6 @@
 import { Vector } from 'p5'
-import { createDistortionDelta, restrainVectorWithinRange } from './delta'
-import * as distortion from './delta'
+import { createDistortionDelta, restrainVectorWithinRange } from './delta.ts'
+import * as distortion from './delta.ts'
 
 describe(`DistortionDelta`, () => {
   it(`should hold the delta values`, () => {

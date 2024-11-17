@@ -1,7 +1,7 @@
 import { averagePosition3ds } from 'p5utils/src/3d'
 import { randomIntInclusiveBetween } from 'utils'
 import { ObjectAlignmentValue } from '../../../../../domain/translate'
-import { getBlockCenter, RenderBlockCoords } from '../../scaffold'
+import { getBlockCenter, RenderBlockCoords } from '../../../scaffold'
 import { makeRotate } from '../geometry/rotate'
 import { DrawableObject } from '../types'
 import { GeometryCollection } from './collection'

@@ -13,7 +13,7 @@ import { triggerFadeOut } from './camera/light'
 import { StairAnimationFrameValues, getGoDeltaArray, getTurnLRDeltaArray } from './camera/movement'
 import { drawTerrain, updateAesthetics } from './draw'
 import { eraseGeometriesInMemory } from './draw/finalise'
-import { Distortion } from './draw/scaffold/distortion'
+import { Distortion } from './scaffold/distortion'
 import { RenderQueue } from './queue'
 import { soundPack } from './sound'
 

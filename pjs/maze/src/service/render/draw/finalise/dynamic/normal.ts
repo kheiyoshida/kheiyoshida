@@ -1,7 +1,7 @@
 import { Position3D, averagePosition3ds, sumPosition3d } from 'p5utils/src/3d'
 import { RenderPosition } from '../../../../../domain/translate/renderGrid/renderSpec'
 import { ShapeCoordinates } from '../geometry/types'
-import { RenderBlockCoords, getBlockCenter } from '../../scaffold'
+import { RenderBlockCoords, getBlockCenter } from '../../../scaffold'
 
 type GetNormal = (blockCoords: RenderBlockCoords, modelCoords?: ShapeCoordinates) => Position3D
 

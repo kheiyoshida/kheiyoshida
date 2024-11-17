@@ -1,9 +1,9 @@
-import { Position3D } from 'p5utils/src/3d'
-import { NumOfScaffoldLayers } from '../create'
-import { DistortionDelta } from '../types'
-import * as delta from './delta'
-import { createDistortionScaffold, turnDistortionDelta } from './scaffold'
-import { LR } from '../../../../../utils/direction'
+import { NumOfScaffoldLayers } from '../create.ts'
+import { DistortionDelta } from '../types.ts'
+import * as delta from './delta.ts'
+import { createDistortionScaffold, turnDistortionDelta } from './scaffold.ts'
+import { LR } from '../../../../utils/direction.ts'
+import { Position3D } from 'p5utils/src/3d/types.ts'
 
 describe(`${createDistortionScaffold.name}`, () => {
   it(`should create initial scaffold`, () => {

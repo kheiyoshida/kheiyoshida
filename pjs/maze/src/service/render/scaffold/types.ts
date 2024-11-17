@@ -1,5 +1,5 @@
-import { Position3D } from 'p5utils/src/3d/types'
-import * as RenderSpec from '../../../../domain/translate/renderGrid/renderSpec'
+import { Position3D } from 'p5utils/src/3d/types.ts'
+import * as RenderSpec from '../../../domain/translate/renderGrid/renderSpec.ts'
 
 export type ScaffoldValues = {
   floor: number

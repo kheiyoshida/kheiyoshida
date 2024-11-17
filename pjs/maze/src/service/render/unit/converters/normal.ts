@@ -3,14 +3,8 @@ import {
   RenderGrid,
   RenderPattern,
   RenderPosition,
-} from '../../../../../domain/translate/renderGrid/renderSpec'
-import {
-  CompoundModelCode,
-  ModelCodeGrid,
-  ModelCodeGridLayer,
-  DynamicModelCode,
-  StaticModelCode,
-} from '../types'
+} from '../../../../domain/translate/renderGrid/renderSpec.ts'
+import { CompoundModelCode, DynamicModelCode, ModelCodeGrid, ModelCodeGridLayer } from '../types.ts'
 
 export const convertToNormalModelGrid = (renderGrid: RenderGrid): ModelCodeGrid => {
   const modelGrid = renderGrid
@@ -38,7 +32,7 @@ export const convertCenterModel = (pattern: RenderPattern): CompoundModelCode =>
   if (pattern === RenderPattern.STAIR)
     return [
       // DynamicModelCode.Floor,
-      // StaticModelCode.Octahedron, We can't render this legacy static model for now
+      // StaticModelCode.Octahedron, We can't render this legacy static unit for now
       DynamicModelCode.Ceil,
     ]
   throw Error()

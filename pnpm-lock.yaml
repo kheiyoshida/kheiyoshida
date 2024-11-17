@@ -172,6 +172,9 @@ importers:
 
   pjs/maze:
     dependencies:
+      maze-gl:
+        specifier: workspace:^
+        version: link:../../pkgs/maze-gl
       music:
         specifier: workspace:^
         version: link:../music

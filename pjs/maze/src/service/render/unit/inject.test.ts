@@ -1,6 +1,6 @@
-import { RenderPosition } from '../../../../domain/translate/renderGrid/renderSpec'
-import { detectModelType, injectGridPositionToModels } from './inject'
-import { DynamicModelCode, ModelCodeGrid, StaticModelCode } from './types'
+import { RenderPosition } from '../../../domain/translate/renderGrid/renderSpec.ts'
+import { detectModelType, injectGridPositionToModels } from './inject.ts'
+import { DynamicModelCode, ModelCodeGrid, StaticModelCode } from './types.ts'
 
 test(`${injectGridPositionToModels.name}`, () => {
   const modelGrid: ModelCodeGrid = [

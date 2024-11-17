@@ -1,13 +1,13 @@
-import { LR } from 'src/utils/direction'
+import { LR } from 'src/utils/direction.ts'
 import {
   DistortionDelta,
   Scaffold,
   ScaffoldLayer,
   ScaffoldLayerPart,
   ScaffoldLayerPartLength,
-} from '../types'
-import { iterateScaffold, slideScaffoldLayers, turnScaffold } from '../utils'
-import { createDistortionDelta } from './delta'
+} from '../types.ts'
+import { iterateScaffold, slideScaffoldLayers, turnScaffold } from '../utils.ts'
+import { createDistortionDelta } from './delta.ts'
 
 export type DeltaScaffold = Scaffold<DistortionDelta>
 

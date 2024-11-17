@@ -1,4 +1,4 @@
-import { ConcreteRenderLayer, RenderGrid, RenderPattern } from '../../../../../domain/translate/renderGrid/renderSpec'
+import { ConcreteRenderLayer, RenderGrid, RenderPattern } from '../../../../domain/translate/renderGrid/renderSpec.ts'
 import {
   convertCenterModel,
   convertSideModel,
@@ -6,8 +6,8 @@ import {
   convertToModelGridLayer,
   trimModelsHorizontal,
   trimModelsVertical,
-} from './normal'
-import { ModelCodeGrid, ModelCodeGridLayer, DynamicModelCode } from '../types'
+} from './normal.ts'
+import { ModelCodeGrid, ModelCodeGridLayer, DynamicModelCode } from '../types.ts'
 
 test(`${convertToNormalModelGrid.name}`, () => {
   const grid: RenderGrid = [null, null, [1, 1, 1], [0, 0, 1], [1, 0, 1], [1, 0, 0]]

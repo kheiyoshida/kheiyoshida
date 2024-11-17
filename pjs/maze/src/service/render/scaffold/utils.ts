@@ -1,11 +1,11 @@
-import { LR } from '../../../../utils/direction'
+import { LR } from '../../../utils/direction.ts'
 import {
   Scaffold,
   ScaffoldEntity,
   ScaffoldKey,
   ScaffoldLayer,
   ScaffoldLayerCoordPosition,
-} from './types'
+} from './types.ts'
 
 export const iterateScaffold = <T extends ScaffoldEntity>(
   scaffold: Scaffold<T>,

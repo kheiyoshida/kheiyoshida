@@ -1,6 +1,6 @@
 import { ObjectAlignmentValue } from '../../../../domain/translate'
-import { DynamicModel, RenderModel } from '../model'
-import { Scaffold } from '../scaffold'
+import { DynamicModel, RenderModel } from '../../unit'
+import { Scaffold } from '../../scaffold'
 import { convertDynamicModelsToDrawables } from './dynamic'
 import { staticObjectEmitterPool } from './static'
 import { DrawableObject } from './types'
