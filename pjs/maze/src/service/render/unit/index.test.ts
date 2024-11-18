@@ -26,22 +26,22 @@ describe(`${convertRenderGridToUnitSpecList.name}`, () => {
     expect(result).toEqual([
       //
       {
-        // keys: [GeometryCode.RightWall], doesn't have to include FrontWall
-        keys: [GeometryCode.FrontWall, GeometryCode.RightWall],
+        // codes: [GeometryCode.RightWall], doesn't have to include FrontWall
+        codes: [GeometryCode.FrontWall, GeometryCode.RightWall],
         position: {
           x: 0,
           z: 0,
         },
       },
       {
-        keys: [GeometryCode.Floor, GeometryCode.Ceil],
+        codes: [GeometryCode.Floor, GeometryCode.Ceil],
         position: {
           x: 1,
           z: 0,
         },
       },
       {
-        keys: [GeometryCode.Floor, GeometryCode.Ceil],
+        codes: [GeometryCode.Floor, GeometryCode.Ceil],
         position: {
           x: 2,
           z: 0,
@@ -50,22 +50,22 @@ describe(`${convertRenderGridToUnitSpecList.name}`, () => {
 
       //
       {
-        // keys: [GeometryCode.RightWall], // doesn't have to include FrontWall
-        keys: [GeometryCode.FrontWall, GeometryCode.RightWall],
+        // codes: [GeometryCode.RightWall], // doesn't have to include FrontWall
+        codes: [GeometryCode.FrontWall, GeometryCode.RightWall],
         position: {
           x: 0,
           z: 1,
         },
       },
       {
-        keys: [GeometryCode.Floor, GeometryCode.Ceil],
+        codes: [GeometryCode.Floor, GeometryCode.Ceil],
         position: {
           x: 1,
           z: 1,
         },
       },
       {
-        keys: [GeometryCode.FrontWall, GeometryCode.LeftWall], // should have FrontWall since there's nothing hiding this
+        codes: [GeometryCode.FrontWall, GeometryCode.LeftWall], // should have FrontWall since there's nothing hiding this
         position: {
           x: 2,
           z: 1,
@@ -74,22 +74,22 @@ describe(`${convertRenderGridToUnitSpecList.name}`, () => {
 
       //
       {
-        keys: [GeometryCode.Floor, GeometryCode.Ceil],
+        codes: [GeometryCode.Floor, GeometryCode.Ceil],
         position: {
           x: 0,
           z: 2,
         },
       },
       {
-        keys: [GeometryCode.Floor, GeometryCode.Ceil],
+        codes: [GeometryCode.Floor, GeometryCode.Ceil],
         position: {
           x: 1,
           z: 2,
         },
       },
       {
-        // keys: [GeometryCode.LeftWall], // shouldn't have FrontWall
-        keys: [GeometryCode.FrontWall, GeometryCode.LeftWall],
+        // codes: [GeometryCode.LeftWall], // shouldn't have FrontWall
+        codes: [GeometryCode.FrontWall, GeometryCode.LeftWall],
         position: {
           x: 2,
           z: 2,
@@ -98,23 +98,23 @@ describe(`${convertRenderGridToUnitSpecList.name}`, () => {
 
       // dead end
       {
-        // keys: [GeometryCode.FrontWall], // shouldn't have RightWall
-        keys: [GeometryCode.FrontWall, GeometryCode.RightWall],
+        // codes: [GeometryCode.FrontWall], // shouldn't have RightWall
+        codes: [GeometryCode.FrontWall, GeometryCode.RightWall],
         position: {
           x: 0,
           z: 3,
         },
       },
       {
-        keys: [GeometryCode.FrontWall],
+        codes: [GeometryCode.FrontWall],
         position: {
           x: 1,
           z: 3,
         },
       },
       {
-        // keys: [], // shouldn't have LeftWall and FrontWall
-        keys: [GeometryCode.FrontWall, GeometryCode.LeftWall],
+        // codes: [], // shouldn't have LeftWall and FrontWall
+        codes: [GeometryCode.FrontWall, GeometryCode.LeftWall],
         position: {
           x: 2,
           z: 3,

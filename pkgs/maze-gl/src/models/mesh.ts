@@ -45,6 +45,6 @@ const rotateY = (angles: number) => {
 const drawGeometry = (ref: DrawRef): void => {
   const gl = getGL()
   gl.bindVertexArray(ref.vao)
-  gl.drawArrays(gl.LINE_STRIP, ref.start, ref.end)
+  gl.drawArrays(gl.TRIANGLES , ref.start, ref.end)
   gl.bindVertexArray(null)
 }

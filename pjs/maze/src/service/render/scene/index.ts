@@ -6,8 +6,8 @@ import { getMesh } from '../mesh'
 // TODO: make this dynamic in eye module
 const eye: Eye = {
   sight: 8000,
-  fov: 5 / Math.PI,
-  position: [0, 0, 1000],
+  fov: 6 / Math.PI,
+  position: [0, 0, 0],
   direction: 0,
   aspectRatio: window.innerWidth / window.innerHeight,
 }
@@ -33,6 +33,7 @@ export const composeScene = (scaffold: Scaffold, specList: UnitSpec[]): Scene =>
     box: getDeformedBox(scaffold, spec.position),
     meshes: spec.codes.map(getMesh),
   }))
+
   return {
     eye,
     units,

@@ -38,8 +38,8 @@ export const convertCenterModel = (pattern: RenderPattern): GeometryCode[] => {
 export const convertSideModel = (pattern: RenderPattern, position: RenderPosition): GeometryCode[] => {
   if (pattern === RenderPattern.FLOOR) return [GeometryCode.Floor, GeometryCode.Ceil]
   if (pattern === RenderPattern.FILL) {
-    if (position === RenderPosition.LEFT) return [GeometryCode.FrontWall, GeometryCode.RightWall]
-    if (position === RenderPosition.RIGHT) return [GeometryCode.FrontWall, GeometryCode.LeftWall]
+    if (position === RenderPosition.LEFT) return [GeometryCode.FrontWall, GeometryCode.LeftWall]
+    if (position === RenderPosition.RIGHT) return [GeometryCode.FrontWall, GeometryCode.RightWall]
   } 
   throw Error()
 }

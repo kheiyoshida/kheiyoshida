@@ -2,10 +2,14 @@ import { BindingPoint, setUBOValue } from '../models/uniformBlock'
 import { RenderUnit, Scene } from '../models'
 import { positionToNDC } from './scale'
 import { convertEyeValuesToMatrices } from './eye'
+import { getGL } from '../webgl'
 
 const uPad = 0.0
 
 export const renderScene = ({ eye, units }: Scene) => {
+  const gl = getGL()
+  gl.clearColor(0.1, 0.1, 0.1, 1.0)
+  gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT)
 
   // scene-level uniform values
   const [view, projection] = convertEyeValuesToMatrices(eye)
