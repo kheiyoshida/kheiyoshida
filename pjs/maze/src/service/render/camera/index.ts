@@ -25,5 +25,5 @@ const cameraWithLight = (
   directionalPosition: Position3D,
   light: LightVariables
 ) => {
-  p.camera(...cameraPosition, ...directionalPosition)
+  // p.camera(...cameraPosition, ...directionalPosition)
 }

@@ -10,9 +10,8 @@ import { corridorToNextFloor } from '../../domain/translate/renderGrid/scenes'
 import { RenderHandler } from '../consumer'
 import { cameraReset, moveCamera } from './camera'
 import { triggerFadeOut } from './camera/light'
-import { StairAnimationFrameValues, getGoDeltaArray, getTurnLRDeltaArray } from './camera/movement'
-import { drawTerrain, updateAesthetics } from './draw'
-import { eraseGeometriesInMemory } from './draw/finalise'
+import { getGoDeltaArray, getTurnLRDeltaArray, StairAnimationFrameValues } from './camera/movement'
+import { drawTerrain } from './draw'
 import { Distortion } from './scaffold/distortion'
 import { RenderQueue } from './queue'
 import { soundPack } from './sound'
@@ -116,8 +115,6 @@ export const renderProceedToNextFloor: RenderHandler = ({
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
     if (i === 0) {
-      updateAesthetics(texture)
-      eraseGeometriesInMemory()
       blockControlRequired()
       blockStatusChangeRequired()
     }
@@ -168,7 +165,6 @@ export const renderResurrect: RenderHandler = ({
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
     if (i === 0) {
-      updateAesthetics(texture)
       blockControlRequired()
       blockStatusChangeRequired()
     }

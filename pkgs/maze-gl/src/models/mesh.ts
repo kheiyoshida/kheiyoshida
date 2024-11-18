@@ -26,7 +26,7 @@ export class Mesh {
 
   render() {
     this.material.apply()
-    this.material.shader.setMat4('unit', rotateY(this.uniforms.rotateY))
+    this.material.shader.setMat4('model', rotateY(this.uniforms.rotateY))
     drawGeometry(this.#drawRef)
   }
 }
@@ -45,6 +45,6 @@ const rotateY = (angles: number) => {
 const drawGeometry = (ref: DrawRef): void => {
   const gl = getGL()
   gl.bindVertexArray(ref.vao)
-  gl.drawArrays(gl.TRIANGLES, ref.start, ref.end)
+  gl.drawArrays(gl.LINE_STRIP, ref.start, ref.end)
   gl.bindVertexArray(null)
 }

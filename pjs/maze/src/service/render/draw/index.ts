@@ -1,14 +1,9 @@
-import { ObjectDrawParams, TerrainRenderStyle, TextureParams } from '../../../domain/translate'
+import { ObjectDrawParams, TerrainRenderStyle } from '../../../domain/translate'
 import { RenderGrid } from '../../../domain/translate/renderGrid/renderSpec'
-import { LightColorManager } from '../camera/light'
-import { makeColorManager } from '../color'
-import { Colors } from '../color/colors'
-import { finaliseModelsAsDrawables } from './finalise'
-import { DrawableObject } from './finalise/types'
-import { convertRenderGridToUnitSpecList } from '../unit'
 import { createScaffold, ScaffoldValues } from '../scaffold'
-
-const SkinColorManager = makeColorManager(Colors.gray)
+import { convertRenderGridToUnitSpecList } from '../unit'
+import { composeScene } from '../scene'
+import { renderScene } from 'maze-gl'
 
 export const drawTerrain = (
   renderGrid: RenderGrid,
@@ -16,27 +11,8 @@ export const drawTerrain = (
   terrainStyle: TerrainRenderStyle,
   { alignment }: ObjectDrawParams
 ): void => {
-  // const scaffold = createScaffold(values)
-  // const modelGrid = convertToModelGrid(renderGrid, terrainStyle)
-  // const drawables = finaliseModelsAsDrawables(modelGrid, scaffold, alignment)
-  // drawGeometries(drawables)
-}
-
-const drawGeometries = (drawables: DrawableObject[]): void => {
-  p.background(0)
-  drawables.forEach((obj) => {
-    p.push()
-    p.translate(...obj.position)
-    if (obj.rotation) {
-      p.rotateY(obj.rotation.theta)
-      p.rotateX(obj.rotation.phi)
-    }
-    p.model(obj.geometry)
-    p.pop()
-  })
-}
-
-export const updateAesthetics = (texture: TextureParams) => {
-  LightColorManager.changeDefaultColor()
-  SkinColorManager.resolve(texture.color)
+  const scaffold = createScaffold(values)
+  const specList = convertRenderGridToUnitSpecList(renderGrid)
+  const scene = composeScene(scaffold, specList)
+  renderScene(scene)
 }
