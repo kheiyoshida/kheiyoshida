@@ -36,7 +36,7 @@ describe(`${convertToRenderGrid.name}`, () => {
       [0, 0, 1],
       [1, 0, 1],
       [1, 0, 0],
-    ]
+    ].reverse() as RenderGrid // reverse for readability
     expect(convertToRenderGrid(specs)).toMatchObject(expectResult)
   })
 
@@ -66,7 +66,7 @@ describe(`${convertToRenderGrid.name}`, () => {
       [1, 2, 1], // <- stair
       [1, 0, 1],
       [0, 0, 1],
-    ]
+    ].reverse() as RenderGrid // reverse for readability
     expect(convertToRenderGrid(specs)).toMatchObject(expectResult)
   })
 })

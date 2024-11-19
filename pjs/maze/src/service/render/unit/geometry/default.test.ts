@@ -25,9 +25,9 @@ test(`${convertToModelGridLayer.name}`, () => {
   const modelLayer = convertToModelGridLayer(renderLayer)
   expect(modelLayer).toHaveLength(3)
   expect(modelLayer).toMatchObject([
-    [GeometryCode.FrontWall, GeometryCode.RightWall],
-    [GeometryCode.Floor, GeometryCode.Ceil],
     [GeometryCode.FrontWall, GeometryCode.LeftWall],
+    [GeometryCode.Floor, GeometryCode.Ceil],
+    [GeometryCode.FrontWall, GeometryCode.RightWall],
   ])
 })
 

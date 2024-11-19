@@ -7,6 +7,7 @@ import { statusStore } from '../store'
 import { trackTime } from '../utils/time.ts'
 import { consumeMessageQueue } from './consumer.ts'
 import { RenderQueue } from './render/queue.ts'
+import { setupMazeGL } from 'maze-gl/src/webgl.ts'
 
 const renderer = makeRenderer(FPS)
 
@@ -17,6 +18,8 @@ export const initializeServices = () => {
 
 export const setupRenderingCycle = () => {
   initializeEvent()
+
+  setupMazeGL()
 
   renderer.start((frameCount) => {
     if (frameCount % 9 === 0) {

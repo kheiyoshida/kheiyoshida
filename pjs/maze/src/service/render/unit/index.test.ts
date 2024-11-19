@@ -18,7 +18,7 @@ describe(`${convertRenderGridToUnitSpecList.name}`, () => {
       [0, 0, 1],
       [1, 0, 1],
       [1, 0, 0],
-    ] // TODO: reverse() this test data after removing reverse() in the pipeline
+    ].reverse() as RenderGrid
 
     const result = convertRenderGridToUnitSpecList(renderGrid)
 
@@ -26,8 +26,8 @@ describe(`${convertRenderGridToUnitSpecList.name}`, () => {
     expect(result).toEqual([
       //
       {
-        // codes: [GeometryCode.RightWall], doesn't have to include FrontWall
-        codes: [GeometryCode.FrontWall, GeometryCode.RightWall],
+        // codes: [GeometryCode.LeftWall], doesn't have to include FrontWall
+        codes: [GeometryCode.FrontWall, GeometryCode.LeftWall],
         position: {
           x: 0,
           z: 0,
@@ -51,7 +51,7 @@ describe(`${convertRenderGridToUnitSpecList.name}`, () => {
       //
       {
         // codes: [GeometryCode.RightWall], // doesn't have to include FrontWall
-        codes: [GeometryCode.FrontWall, GeometryCode.RightWall],
+        codes: [GeometryCode.FrontWall, GeometryCode.LeftWall],
         position: {
           x: 0,
           z: 1,
@@ -65,7 +65,7 @@ describe(`${convertRenderGridToUnitSpecList.name}`, () => {
         },
       },
       {
-        codes: [GeometryCode.FrontWall, GeometryCode.LeftWall], // should have FrontWall since there's nothing hiding this
+        codes: [GeometryCode.FrontWall, GeometryCode.RightWall], // should have FrontWall since there's nothing hiding this
         position: {
           x: 2,
           z: 1,
@@ -89,7 +89,7 @@ describe(`${convertRenderGridToUnitSpecList.name}`, () => {
       },
       {
         // codes: [GeometryCode.LeftWall], // shouldn't have FrontWall
-        codes: [GeometryCode.FrontWall, GeometryCode.LeftWall],
+        codes: [GeometryCode.FrontWall, GeometryCode.RightWall],
         position: {
           x: 2,
           z: 2,
@@ -99,7 +99,7 @@ describe(`${convertRenderGridToUnitSpecList.name}`, () => {
       // dead end
       {
         // codes: [GeometryCode.FrontWall], // shouldn't have RightWall
-        codes: [GeometryCode.FrontWall, GeometryCode.RightWall],
+        codes: [GeometryCode.FrontWall, GeometryCode.LeftWall],
         position: {
           x: 0,
           z: 3,
@@ -114,7 +114,7 @@ describe(`${convertRenderGridToUnitSpecList.name}`, () => {
       },
       {
         // codes: [], // shouldn't have LeftWall and FrontWall
-        codes: [GeometryCode.FrontWall, GeometryCode.LeftWall],
+        codes: [GeometryCode.FrontWall, GeometryCode.RightWall],
         position: {
           x: 2,
           z: 3,

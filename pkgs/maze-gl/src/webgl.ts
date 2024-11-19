@@ -45,3 +45,8 @@ export const resizeCanvas = (
   )
   getGL().viewport(0, 0, canvas.width, canvas.height)
 }
+
+export const setupMazeGL = () => {
+  const gl = getGL()
+  gl.enable(gl.DEPTH_TEST)
+}

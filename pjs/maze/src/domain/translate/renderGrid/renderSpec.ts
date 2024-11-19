@@ -28,16 +28,16 @@ export enum RenderPattern {
   STAIR = 2,
 }
 
-// We reverse the array for the data's readability in test code so it represents the terrain in sight
 export const convertToRenderGrid = (path: PathSpec): RenderGrid =>
-  path.reverse().flatMap((nodeSpec) =>
+  path.flatMap((nodeSpec) =>
     nodeSpec ? convertToRenderLayer(nodeSpec) : [null, null]
   ) as RenderGrid
 
+// note the order is closer to further since index 0 is the player's position
 const convertToRenderLayer = (nodeSpec: NodeSpec): RenderLayer[] => [
   // prettier-ignore
-  [RenderPattern.FILL, detectPattern(nodeSpec.terrain.front), RenderPattern.FILL],
   [detectPattern(nodeSpec.terrain.left), center(nodeSpec), detectPattern(nodeSpec.terrain.right)],
+  [RenderPattern.FILL, detectPattern(nodeSpec.terrain.front), RenderPattern.FILL],
 ]
 
 const center = (nodeSpec: NodeSpec) => (nodeSpec.stair ? RenderPattern.STAIR : RenderPattern.FLOOR)
