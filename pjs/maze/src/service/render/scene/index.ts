@@ -1,23 +1,31 @@
-import { getRenderBlock, RenderBlockPosition, Scaffold } from '../scaffold'
-import { UnitSpec } from '../unit'
-import { DeformedBox, Eye, RenderUnit, Scene } from 'maze-gl'
+import {
+  createScaffold,
+  getRenderBlock,
+  RenderBlockPosition,
+  Scaffold,
+  ScaffoldValues,
+} from '../scaffold'
+import { convertRenderGridToUnitSpecList } from '../unit'
+import { DeformedBox, RenderUnit } from 'maze-gl'
 import { getMesh } from '../mesh'
+import { RenderGrid } from '../../../domain/translate/renderGrid/renderSpec.ts'
 
-export const composeScene = (scaffold: Scaffold, specList: UnitSpec[], eye: Eye): Scene => {
-  const units: RenderUnit[] = specList.map((spec) => ({
+export const getUnits = (
+  renderGrid: RenderGrid,
+  values: ScaffoldValues,
+): RenderUnit[] => {
+  const scaffold = createScaffold(values)
+  const specList = convertRenderGridToUnitSpecList(renderGrid)
+  return specList.map((spec) => ({
     box: getDeformedBox(scaffold, spec.position),
     meshes: spec.codes.map(getMesh),
   }))
-
-  return {
-    eye,
-    units,
-  }
 }
 
 const getDeformedBox = (scaffold: Scaffold, position: RenderBlockPosition): DeformedBox => {
   const block = getRenderBlock(scaffold, position)
   return {
+    // TODO: y values inverted.
     FBL: block.front.bl,
     FBR: block.front.br,
     FTL: block.front.tl,

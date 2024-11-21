@@ -46,14 +46,14 @@ export const Floor = completeSpec({
   vertices: [FBR, FBL, BBL, BBR],
 })
 
-export const FrontWall = completeSpec({
-  normals: [NFront],
-  vertices: [BBR, BBL, BTL, BTR],
-})
-
 //
 // specs below are seen from the "outside" of the box
 //
+
+export const FrontWall = completeSpec({
+  normals: [NFront],
+  vertices: [FBR, FBL, FTL, FTR],
+})
 
 export const RightWall = completeSpec({
   normals: [NLeft],

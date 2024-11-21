@@ -1,9 +1,16 @@
 import { RenderUnit } from './unit'
 import { Vector } from './geometry'
+import { PointLightValues, SpotLightValues } from './light'
 
 export type Scene = {
   units: RenderUnit[]
   eye: Eye
+  lights: SceneLights
+}
+
+export type SceneLights = {
+  pointLights: [PointLightValues, PointLightValues]
+  spotLight: SpotLightValues
 }
 
 export type Eye = {

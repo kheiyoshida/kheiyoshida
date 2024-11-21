@@ -15,7 +15,8 @@ export const getScaffoldParams = (): ScaffoldParams => {
   const { stamina, sanity } = statusStore.current
   const params = {
     corridorWidthLevel: calcWidthLevel(sanity),
-    wallHeightLevel: calcHeightLevel(sanity / 2 + stamina),
+    // wallHeightLevel: calcHeightLevel(sanity / 2 + stamina),
+    wallHeightLevel: 1, // use 1 until we fix inverted y value
     corridorLengthLevel: calcCorridorLengthLevel(stamina),
     distortionLevel: calcDistortion(sanity),
   }

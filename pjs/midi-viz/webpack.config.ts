@@ -8,7 +8,7 @@ interface Configuration extends WebpackConfig {
 }
 
 const config: Configuration = {
-  entry: "./src/index.ts",
+  entry: "./src/light.ts",
   plugins: [
     new DefinePlugin({
       'process.env.PROJECT': JSON.stringify(process.env.PROJECT)

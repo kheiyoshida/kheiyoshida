@@ -27,7 +27,7 @@ const JestConfig: Config = {
     '!**/node_modules/**',
     '!**/dist/**',
     '!**/*.config.ts',
-    '!**/index.ts',
+    '!**/light.ts',
   ],
   coverageThreshold: {
     global: {

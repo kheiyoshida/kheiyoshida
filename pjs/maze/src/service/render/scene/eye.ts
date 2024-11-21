@@ -1,5 +1,5 @@
 import { CameraZ, FOV } from '../../../config'
-import { CameraMoveValues } from './types'
+import { CameraMoveValues } from './types.ts'
 import { ScaffoldValues } from '../scaffold'
 import { Eye } from 'maze-gl'
 import { toRadians } from 'p5utils/src/3d'

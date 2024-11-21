@@ -76,7 +76,7 @@ const reducers = {
     s.aesthetics = aesthetics
   },
 
-  // index.ts
+  // light.ts
   updateBlockControl: (s) => (blockControl: boolean) => {
     s.blockControl = blockControl
   },

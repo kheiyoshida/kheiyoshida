@@ -1,4 +1,4 @@
-import { createAccumulatedDistanceArray, createSinArray } from './movement'
+import { createAccumulatedDistanceArray, createSinArray } from './movement.ts'
 
 test(`${createSinArray.name}`, () => {
   const result = createSinArray(4, 0.5)

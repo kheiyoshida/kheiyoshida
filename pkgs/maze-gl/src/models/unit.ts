@@ -16,3 +16,14 @@ export type DeformedBox = {
   BTL: Vector
   BTR: Vector
 }
+
+export type DeformedBoxNormals = {
+  normalFBL: Vector
+  normalFBR: Vector
+  normalFTL: Vector
+  normalFTR: Vector
+  normalBBL: Vector
+  normalBBR: Vector
+  normalBTL: Vector
+  normalBTR: Vector
+}

@@ -1,5 +1,5 @@
 import { DefaultGoFrames, DefaultTurnFrames, DownFramesLength } from '../../../config'
-import { CameraMoveValues } from './types'
+import { CameraMoveValues } from './types.ts'
 
 export const getGoDeltaArray = (speed: number) => {
   const frameNumber = Math.floor(DefaultGoFrames / speed)

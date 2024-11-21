@@ -6,7 +6,7 @@ process.chdir(`${workspaceDir}/src`)
 const subModules = fs.readdirSync('.')
 
 subModules
-  .filter(sm => sm !== 'index.ts') // entry file
+  .filter(sm => sm !== 'light.ts') // entry file
   .forEach(sm => {
     const testMatch = new RegExp(`[^].test.ts`)
     const indexMatch = new RegExp(`index.ts`)

@@ -34,8 +34,8 @@ export type ColorMaterialUniforms = {
 
 export class ColorMaterial extends Material<ColorMaterialUniforms> {
   applyUniforms(): void {
-    this.shader.setVec3('diffuse', this.uniforms.diffuse)
-    this.shader.setVec3('specular', this.uniforms.specular)
-    this.shader.setFloat('shininess', this.uniforms.shininess)
+    this.shader.setVec3('material.diffuse', this.uniforms.diffuse)
+    this.shader.setVec3('material.specular', this.uniforms.specular)
+    this.shader.setFloat('material.shininess', this.uniforms.shininess)
   }
 }

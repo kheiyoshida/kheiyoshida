@@ -49,22 +49,25 @@ const testDeformedBox: DeformedBox = {
   BTR: [1, 1, -1],
 }
 
+const boxSize = 1000
+const halfBox = boxSize * 0.5
+
 export const gameSizeDeformedBox = Object.fromEntries(
   Object.entries(testDeformedBox).map(([k, v]) => {
-    return [k, v.map((n) => n * 500)]
+    return [k, v.map((n) => n * halfBox)]
   })
 ) as DeformedBox
 
 export const gameSizeDeformedBox2 = Object.fromEntries(
   Object.entries(testDeformedBox).map(([k, v]) => {
-    const scaled = v.map((n) => n * 500)
-    return [k, [scaled[0] + 1000, scaled[1], scaled[2]]]
+    const scaled = v.map((n) => n * halfBox)
+    return [k, [scaled[0] + boxSize, scaled[1], scaled[2]+ boxSize] ]
   })
 ) as DeformedBox
 
 export const gameSizeDeformedBox3 = Object.fromEntries(
   Object.entries(testDeformedBox).map(([k, v]) => {
-    const scaled = v.map((n) => n * 500)
-    return [k, [scaled[0], scaled[1], scaled[2] - 1000]]
+    const scaled = v.map((n) => n * halfBox)
+    return [k, [scaled[0], scaled[1], scaled[2] - boxSize]]
   })
 ) as DeformedBox
