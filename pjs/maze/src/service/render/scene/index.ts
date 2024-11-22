@@ -25,7 +25,6 @@ export const getUnits = (
 const getDeformedBox = (scaffold: Scaffold, position: RenderBlockPosition): DeformedBox => {
   const block = getRenderBlock(scaffold, position)
   return {
-    // TODO: y values inverted.
     FBL: block.front.bl,
     FBR: block.front.br,
     FTL: block.front.tl,

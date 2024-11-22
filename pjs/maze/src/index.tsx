@@ -12,7 +12,7 @@ const start = () => {
 
   const gl = getGL()
   gl.enable(gl.DEPTH_TEST)
-  resizeCanvas(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight)
+  resizeCanvas(window.innerWidth/2, window.innerHeight/2, window.innerWidth, window.innerHeight)
 
   if (started) return
   started = true

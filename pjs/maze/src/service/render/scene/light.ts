@@ -1,12 +1,12 @@
-import { Position3D } from 'p5utils/src/3d'
+import { Position3D, toRadians } from 'p5utils/src/3d'
 import { randomIntInAsymmetricRange, randomIntInclusiveBetween } from 'utils'
 import { LightVariables } from '../../../domain/translate/light'
 import { makeColorManager, RGB } from '../color'
 import { Colors } from '../color/colors.ts'
-import { Eye, PointLightValues, Scene, SpotLightValues } from 'maze-gl'
+import { Eye, PointLightValues, Scene, SpotLightValues, Vector } from 'maze-gl'
 
 const MinFallOff = 50
-const DefaultFallOff = 250
+const DefaultFallOff = 50
 
 export const LightColorManager = makeColorManager(Colors.white, () => [
   randomIntInclusiveBetween(200, 250),
@@ -23,13 +23,11 @@ export const getLights = (
   light: LightVariables
 ): Scene['lights'] => {
   LightColorManager.resolve(light.colorParams)
-  // const linearFallOff = calcLightFalloff(light.visibility)
-  const linearFallOff = 1.0
-  console.log(linearFallOff)
+  const linearFallOff = calcLightFalloff(light.visibility)
 
   const diffuseColor = LightColorManager.currentRGB.map(v => v/255 / 10) as RGB
   // const diffuseColor = [0.1, 0.1, 0.1] as RGB
-  const ambientColor = [0.1, 0.1, 0.1] as RGB
+  const ambientColor = [0.01, 0.01, 0.01] as RGB
   const specularColor = [0.01, 0.01, 0.01] as RGB
 
   const pointLight1: PointLightValues = {
@@ -39,9 +37,9 @@ export const getLights = (
     diffuse: diffuseColor,
     specular: specularColor,
 
-    constant: 0.8,
+    constant: 0.5,
     linear: linearFallOff,
-    quadratic: 0.0001,
+    quadratic: 0.4,
   }
 
   const pointLight2: PointLightValues = {
@@ -51,18 +49,18 @@ export const getLights = (
 
   const spotLight: SpotLightValues = {
     position: position,
-    direction: [0.0, 0.0, -1.0], // TODO: calculate directional vector
+    direction: calcDirectionalVector(direction),
 
     ambient: ambientColor,
     diffuse: diffuseColor,
-    specular: specularColor,
+    specular: [0.1,0.1,0.1],
 
-    cutOff: 19,
-    outerCutOff: 30,
+    cutOff: 2,
+    outerCutOff: 50,
 
-    constant: 0.1,
-    linear: linearFallOff,
-    quadratic: 0.001,
+    constant: 1.0,
+    linear: 1.0,
+    quadratic: 0.1,
   }
 
   return {
@@ -102,5 +100,10 @@ export const handleLight = (
 }
 
 const calcLightFalloff = (visibility = 1.0) => {
-  return 1 / (MinFallOff + DefaultFallOff * visibility)
+  return 50 / (MinFallOff + DefaultFallOff * visibility)
+}
+
+const calcDirectionalVector = (delta: number): Vector => {
+  const theta = Math.PI/2 - toRadians(delta)
+  return [Math.cos(theta), 0, -Math.sin(theta)]
 }

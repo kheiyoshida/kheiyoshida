@@ -4,6 +4,7 @@ import { positionToNDC } from './scale'
 import { toRadians } from '../utils/calc'
 
 const vec3pad = (v: Vector) => [...v, 0.0]
+const floatPad = (f: number) => [f, 0.0, 0.0, 0.0]
 
 // TODO: test ubo layout140 constraints
 
@@ -39,20 +40,20 @@ const formatSpotLight = (light: SpotLightValues): number[] => {
 
     ...vec3pad(light.ambient),
     ...vec3pad(light.diffuse),
+    ...vec3pad(light.specular),
 
-    ...light.specular,
-    toRadians(light.cutOff), // it gets chucked into the space behind specular (12bytes)
+    ...floatPad(toRadians(light.cutOff)),
+    ...floatPad(toRadians(light.outerCutOff)),
 
-    toRadians(light.outerCutOff),
-    light.constant,
-    light.linear,
-    light.quadratic,
+    ...floatPad(light.constant),
+    ...floatPad(light.linear),
+    ...floatPad(light.quadratic),
   ]
 }
 
 export const debugUBOData = (lightsUBOData: ReturnType<typeof convertLightsToUboData>) => {
   let debug = ``
-  for(let i = 0; i < lightsUBOData.length; i++) {
+  for (let i = 0; i < lightsUBOData.length; i++) {
     if (i % 4 === 0) {
       debug += `\n`
     }

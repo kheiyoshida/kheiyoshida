@@ -4,7 +4,7 @@ import {
   createScaffoldLayerPart,
   getLayerZValue,
   makeGetScaffoldXValue,
-  makegetLayerYValue,
+  makGetLayerYValue,
 } from './create.ts'
 import { ScaffoldLayerCoordPosition, ScaffoldValues } from './types.ts'
 
@@ -39,12 +39,12 @@ test.each([
 })
 
 test.each([
-  [400, -200],
-  [800, -600],
-  [1200, -1000],
-])(`${makegetLayerYValue.name} (%i)`, (height, expected) => {
-  const getY = makegetLayerYValue(height, defaultValues.wall)
-  expect(getY('lower')).toBe(defaultValues.wall / 2)
+  [400, 200],
+  [800, 600],
+  [1200, 1000],
+])(`${makGetLayerYValue.name} (%i)`, (height, expected) => {
+  const getY = makGetLayerYValue(height, defaultValues.wall)
+  expect(getY('lower')).toBe(-defaultValues.wall / 2)
   expect(getY('upper')).toBe(expected)
 })
 

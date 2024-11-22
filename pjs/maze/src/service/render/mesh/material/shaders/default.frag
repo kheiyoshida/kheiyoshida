@@ -32,7 +32,7 @@ struct SpotLight {
 
     vec3 ambient;
     vec3 diffuse;
-    vec3 specular;
+    vec4 specular; // vec4 to make sure the last 4 bytes pad
 
     float cutOff;
     float outerCutOff;
@@ -92,45 +92,20 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     // combine results
     vec3 ambient = light.ambient * material.diffuse;
     vec3 diffuse = light.diffuse * diff * material.diffuse;
-    vec3 specular = light.specular * spec * material.specular;
+    vec3 specular = light.specular.xyz * spec * material.specular;
     ambient *= attenuation * intensity;
     diffuse *= attenuation * intensity;
     specular *= attenuation * intensity;
     return (ambient + diffuse + specular);
 }
 
-// Hardcoded default values for testing
-PointLight defaultPointLight = PointLight(
-vec3(0.0, 0.0, 1.0), // position
-
-vec3(0.3), // ambient
-vec3(1.0), // diffuse
-vec3(0.1), // specular
-
-0.5, // constant
-0.03, // linear
-0.0001// quadratic
-);
-
-SpotLight defaultSpotLight = SpotLight(
-vec3(0.0, 0.0, 0.6), // position
-vec3(0.0, 0.0, -1.0), // direction
-vec3(0.1), // ambient
-vec3(0.8), // diffuse
-vec3(0.8), // specular
-0.00, // inner 30 degrees
-1.0,
-0.4, // constant
-0.007, // linear
-0.32// quadratic
-);
-
 void main()
 {
-    vec3 norm = normalize(vNormal);
+//    fragColor =vec4(vNormal, 1.0);
+//    fragColor =vec4((vNormal + 1.0) / 2.0, 1.0);
+//    return;
 
-//    fragColor = vec4((norm + 1.0) /2.0, 1.0);
-//    fragColor = vec4(norm, 1.0);
+    vec3 norm = normalize(vNormal);
 
     vec3 viewDir = normalize(viewPos - fragPos);
 

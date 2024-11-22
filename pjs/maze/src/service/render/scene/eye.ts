@@ -1,11 +1,11 @@
-import { CameraZ, FOV } from '../../../config'
+import { CameraZ, FOV, MaxVisibleLength } from '../../../config'
 import { CameraMoveValues } from './types.ts'
 import { ScaffoldValues } from '../scaffold'
 import { Eye } from 'maze-gl'
 import { toRadians } from 'p5utils/src/3d'
 
 const defaultEye: Eye = {
-  sight: 8000,
+  sight: MaxVisibleLength,
   fov: toRadians(FOV),
   position: [0, 0, CameraZ],
   direction: 0,

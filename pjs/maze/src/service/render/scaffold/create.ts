@@ -22,7 +22,7 @@ export const createScaffold = (values: ScaffoldValues): Scaffold => {
 
 export const createScaffoldLayer = (layerIndex: number, values: ScaffoldValues): ScaffoldLayer => {
   const zValue = getLayerZValue(layerIndex, values.floor, values.path)
-  const getY = makegetLayerYValue(values.wall)
+  const getY = makGetLayerYValue(values.wall)
   const [lower, upper] = ['lower', 'upper'].map((k) =>
     createScaffoldLayerPart(getY(k as keyof ScaffoldLayer), zValue, values)
   )
@@ -40,11 +40,11 @@ export const getLayerZValue = (layerIndex: number, floorLength: number, pathLeng
   return halfFloor - length
 }
 
-export const makegetLayerYValue =
+export const makGetLayerYValue =
   (height: number, defaultWallHeight = WallHeight) =>
   (part: keyof ScaffoldLayer): number => {
-    if (part === 'lower') return defaultWallHeight / 2
-    if (part === 'upper') return defaultWallHeight / 2 - height
+    if (part === 'lower') return -defaultWallHeight / 2
+    if (part === 'upper') return height - defaultWallHeight / 2
     throw Error()
   }
 
