@@ -23,7 +23,6 @@ export const UniformNameBPMap: Record<string, BindingPoint> = {
  */
 const initUBOMap = () => {
   const gl = getGL()
-
   const uboMap = new Map<BindingPoint, WebGLBuffer>()
   for (let bp = 0; bp < NUM_OF_BP; bp++) {
     const ubo = gl.createBuffer()
@@ -36,10 +35,12 @@ const initUBOMap = () => {
 }
 
 export const setUBOValue = (() => {
-  const uboMap = initUBOMap()
-  const gl = getGL()
-
+  let uboMap: ReturnType<typeof initUBOMap>
   return (bp: BindingPoint, data: Float32Array) => {
+    if (!uboMap) {
+      uboMap = initUBOMap()
+    }
+    const gl = getGL()
     const ubo = uboMap.get(bp)
     if (!ubo) throw Error(`ubo is null`)
     gl.bindBuffer(gl.UNIFORM_BUFFER, ubo)

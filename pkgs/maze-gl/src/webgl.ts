@@ -18,8 +18,14 @@ const getWebglContext = (canvas: HTMLCanvasElement) => {
  * get a persistent WebGL context on the default canvas
  */
 export const getGL = (() => {
-  const canvas = getCanvasElement()
-  return () => getWebglContext(canvas)
+  let gl: WebGL2RenderingContext;
+  return () => {
+    if (!gl) {
+      const canvas = getCanvasElement()
+      gl = getWebglContext(canvas)
+    }
+    return gl;
+  }
 })()
 
 /**

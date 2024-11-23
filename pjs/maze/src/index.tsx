@@ -16,14 +16,14 @@ const start = () => {
 
   if (started) return
   started = true
-  setupRenderingCycle()
   initializeServices()
+  setupRenderingCycle()
 }
 
 export default () => {
   return (
     <>
-      {/*<Maze />*/}
+      <canvas id={'canvas'} />
       <Interface version={VERSION} start={start} />
     </>
   )
