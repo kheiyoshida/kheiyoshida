@@ -99,6 +99,13 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     return (ambient + diffuse + specular);
 }
 
+uniform float uTime;
+uniform vec3 resolution;
+
+float random(vec2 st) {
+    return fract(sin(dot(st.xy, vec2(12.9898, 78.233)) + uTime) * 43758.5453123);
+}
+
 void main()
 {
 //    fragColor =vec4(vNormal, 1.0);
@@ -113,6 +120,11 @@ void main()
     result += CalcPointLight(pointLights[0], norm, fragPos, viewDir);
     result += CalcPointLight(pointLights[1], norm, fragPos, viewDir);
     result += CalcSpotLight(spotLight, norm, fragPos, viewDir);
+
+    float rnd = random(fract(gl_FragCoord.xy / 1.5));
+    float rnd2 = random(fract(gl_FragCoord.xy / rnd));
+//    float rnd3 = random(fract(gl_FragCoord.xy / rnd2));
+    result += vec3(rnd, rnd2, 0) * 0.05;
 
     fragColor = vec4(result, 1.0);
 }

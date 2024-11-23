@@ -19,7 +19,13 @@ import { Distortion } from './scaffold/distortion'
 import { RenderQueue } from './queue'
 import { soundPack } from './sound'
 import { getUnits } from './scene'
-import { renderScene } from 'maze-gl'
+import { renderScene as rs, Scene } from 'maze-gl'
+import { updateRandomValues } from './mesh/material'
+
+const renderScene = (scene: Scene) => {
+  updateRandomValues()
+  rs(scene)
+}
 
 export const renderCurrentView: RenderHandler = ({ renderGrid, scaffoldValues, light }) => {
   const drawFrame = () => {
@@ -139,15 +145,16 @@ export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, light }) 
   RenderQueue.update(dieSequence)
 }
 
-export const renderResurrect: RenderHandler = ({ speed, scaffoldValues, light }) => {
+export const renderResurrect: RenderHandler = ({ speed, scaffoldValues, light, renderGrid }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
     if (i === 0) {
       blockControlRequired()
       blockStatusChangeRequired()
     }
-    const eye = getMovementEye({ move: zDelta }, scaffoldValues)
-    const units = getUnits(corridorToNextFloor, scaffoldValues)
+    // const eye = getMovementEye({ move: zDelta }, scaffoldValues)
+    const eye = getDefaultEye()
+    const units = getUnits(renderGrid, scaffoldValues)
     const lights = getLights(eye, light)
     renderScene({ units, eye, lights })
     if (i === GoMoveMagValues.length - 1) {

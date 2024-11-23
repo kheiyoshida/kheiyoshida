@@ -1,9 +1,10 @@
 import { Shader } from 'maze-gl'
-// import vert from './default.vert?raw'
-// import frag from './default.frag?raw'
-import vert from './default.vert'
-import frag from './default.frag'
-// import { vert, frag } from './deploy'
+
+// swap import statement when deploying
+import vert from './default.vert?raw'
+import frag from './default.frag?raw'
+// import vert from './default.vert'
+// import frag from './default.frag'
 
 export type ShaderType = 'default'
 

@@ -37,6 +37,9 @@ export const getLayerZValue = (layerIndex: number, floorLength: number, pathLeng
   const floorPlusPathLength = Math.floor(layerIndex / 2) * (floorLength + pathLength)
   const floorOnlyLength = (layerIndex % 2) * floorLength
   const length = floorPlusPathLength + floorOnlyLength
+  if (layerIndex === 0) {
+    return halfFloor - length + 1000 // adjust temporarily
+  }
   return halfFloor - length
 }
 

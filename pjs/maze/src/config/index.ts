@@ -9,7 +9,7 @@ export const IsMobile = window.innerWidth < MobileWidth
 
 export const mapSizing = IsMobile ? 0.88 : 0.6
 
-export const FOV = IsMobile ? 125 : 100
+export const FOV = IsMobile ? 120 : 80
 
 export const FloorLength = 400
 export const PathLength = 600

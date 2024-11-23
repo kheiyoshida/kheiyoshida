@@ -48,7 +48,7 @@ void main() {
     vec3 normalizedPosition = (aPosition + vec3(1.0)) * 0.5;
 
     vec3 interpolatedNormal = trilinearInterpolateNormal(normalizedPosition);
-    vNormal = mix(aNormal, interpolatedNormal, 0.2); // adjust the mix ratio
+    vNormal = mix(aNormal, interpolatedNormal, 0.05); // adjust the mix ratio
 
     vec3 transformedPosition =
     (1.0 - normalizedPosition.x) * (1.0 - normalizedPosition.y) * (normalizedPosition.z) * FBL +

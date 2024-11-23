@@ -76,7 +76,6 @@ export const goDownstairsEvent = () => {
   updateAesthetics()
 
   MessageQueue.push(RenderSignal.UpdateMusicDest)
-  MessageQueue.push(RenderSignal.ProceedToNextFloor)
   MessageQueue.push(RenderSignal.CurrentView)
   MessageQueue.push(RenderSignal.ShowFloor)
 }
