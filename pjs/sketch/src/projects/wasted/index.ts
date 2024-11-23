@@ -1,4 +1,3 @@
-import { loadFont } from 'p5utils/src/font'
 import { applyConfig } from 'p5utils/src/utils/project'
 import { randomFloatBetween, randomIntInclusiveBetween } from 'utils'
 import { Config } from './config'
@@ -21,7 +20,7 @@ const setup = () => {
   p.fill(sketchStore.current.strokeColor)
   p.noStroke()
   p.textureMode(p.NORMAL)
-  loadFont()
+  // loadFont()
 
   // sound
   const soundStart = bindPlayEvent()

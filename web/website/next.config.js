@@ -24,6 +24,12 @@ const nextConfig = {
         },
       ],
     })
+
+    // to load GLSL files
+    config.module.rules.push({
+      test: /\.(frag|vert)$/,
+      use: 'raw-loader',
+    })
     return config
   },
   eslint: {

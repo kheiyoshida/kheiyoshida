@@ -12,7 +12,7 @@ const start = () => {
 
   const gl = getGL()
   gl.enable(gl.DEPTH_TEST)
-  resizeCanvas(window.innerWidth/2, window.innerHeight/2, window.innerWidth, window.innerHeight)
+  resizeCanvas(window.innerWidth/3, window.innerHeight/3, window.innerWidth, window.innerHeight)
 
   if (started) return
   started = true
@@ -22,9 +22,27 @@ const start = () => {
 
 export default () => {
   return (
-    <>
+    <div style={styles.canvasContainer}>
       <canvas id={'canvas'} />
       <Interface version={VERSION} start={start} />
-    </>
+    </div>
   )
+}
+
+const styles: Record<string, React.CSSProperties> = {
+  canvasContainer: {
+    zIndex: 10,
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100vw',
+    height: '100dvh',
+    overflow: 'hidden',
+    backgroundColor: 'black',
+    margin: '0 auto',
+    touchAction: 'manipulation',
+    overflowX: 'hidden',
+    overflowY: 'hidden',
+    overscrollBehavior: 'none',
+  },
 }
