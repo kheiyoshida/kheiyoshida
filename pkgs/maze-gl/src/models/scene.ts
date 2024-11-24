@@ -1,5 +1,5 @@
 import { RenderUnit } from './unit'
-import { Vector } from './geometry'
+import { Vector3D } from './geometry'
 import { PointLightValues, SpotLightValues } from './light'
 
 export type Scene = {

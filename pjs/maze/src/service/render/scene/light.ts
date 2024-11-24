@@ -3,7 +3,7 @@ import { randomIntInAsymmetricRange, randomIntInclusiveBetween } from 'utils'
 import { LightVariables } from '../../../domain/translate/light'
 import { makeColorManager, RGB } from '../color'
 import { Colors } from '../color/colors.ts'
-import { Eye, PointLightValues, Scene, SpotLightValues, Vector } from 'maze-gl'
+import { Eye, PointLightValues, Scene, SpotLightValues, Vector3D } from 'maze-gl'
 
 const MinFallOff = 50
 const DefaultFallOff = 50

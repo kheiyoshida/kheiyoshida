@@ -1,6 +1,6 @@
 import { computeOutwardNormals } from './box'
-import { DeformedBox, DeformedBoxNormals, Vector } from '../models'
-import { vec3 } from 'gl-matrix'
+import { DeformedBox, DeformedBoxNormals } from '../models'
+import { mix, Vector3D } from '../vector'
 
 describe(`${computeOutwardNormals.name}`, () => {
   const deformedBox: DeformedBox = {
@@ -31,7 +31,7 @@ describe(`${computeOutwardNormals.name}`, () => {
 
   // not about the function itself, but we use this logic in GLSL
   it(`can be used to interpolate normal`, () => {
-    const trilinearInterpolateNormal = (point: Vector, normals: DeformedBoxNormals) => {
+    const trilinearInterpolateNormal = (point: Vector3D, normals: DeformedBoxNormals) => {
       const [x, y, z] = point
 
       const NFrontBottom = mix(normals.normalFBL, normals.normalFBR, x)
@@ -44,10 +44,7 @@ describe(`${computeOutwardNormals.name}`, () => {
 
       return mix(NBottom, NFront, y)
     }
-    const mix = (a: Vector, b: Vector, amt: number): Vector => {
-      return vec3.lerp(vec3.create(), a, b, amt) as Vector
-    }
-    const normalisePosition = (p: Vector): Vector => [
+    const normalisePosition = (p: Vector3D): Vector3D => [
       (p[0] + 1.0) / 2,
       (p[1] + 1.0) / 2,
       (p[2] + 1.0) / 2,

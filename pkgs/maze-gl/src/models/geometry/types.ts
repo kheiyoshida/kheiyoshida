@@ -1,11 +1,10 @@
+import { Vector3D } from '../../vector'
+
 export type GeometrySpec = {
-  vertices: Vector[]
-  normals: Vector[]
+  vertices: Vector3D[]
+  normals: Vector3D[]
   faces: TriangleIndexData[]
 }
-
-export type Vector = [number, number, number]
-// export type UV = [number, number]
 
 /**
  * unsigned int index
@@ -15,5 +14,4 @@ export type Index = number
 export type TriangleIndexData = {
   vertexIndices: Index[]
   normalIndices: Index[]
-  // uvIndices: Index[]
 }

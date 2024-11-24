@@ -1,5 +1,7 @@
 import { Shader } from './shader'
-import { generateRandomNumber } from '../../utils/id'
+
+import { generateRandomNumber } from '../../utils/calc'
+import { Color } from '../../vector'
 
 type UniformValues = Record<string, unknown>
 
@@ -25,7 +27,6 @@ export abstract class Material<U extends UniformValues = UniformValues> {
   abstract applyUniforms(): void
 }
 
-export type Color = [number, number, number]
 export type ColorMaterialUniforms = {
   shininess: number
   diffuse: Color

@@ -1,6 +1,7 @@
 import { mat4, vec3 } from 'gl-matrix'
 import { Eye } from '../models'
-import { toRadians } from '../utils/calc'
+import { toRadians} from '../utils/calc'
+import { Vec3, Vector3D } from '../vector'
 import { ndcScale, positionToNDC } from './scale'
 
 const up = vec3.fromValues(0, 1, 0)
@@ -9,12 +10,10 @@ export const convertEyeValuesToMatrices = (eye: Eye): [view: mat4, projection: m
   const ndcPosition = positionToNDC(eye.position)
 
   // get view matrix
-  const direction = vec3.create()
   const yaw = toRadians(eye.direction)
-  vec3.set(direction, Math.sin(yaw), 0, -Math.cos(yaw))
+  const direction: Vector3D = [Math.sin(yaw), 0, -Math.cos(yaw)]
 
-  const lookAtTarget = vec3.create()
-  vec3.add(lookAtTarget, ndcPosition, direction)
+  const lookAtTarget = Vec3.sum(ndcPosition, direction)
 
   const view = mat4.create()
   mat4.lookAt(view, ndcPosition, lookAtTarget, up)

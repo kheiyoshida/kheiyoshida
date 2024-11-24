@@ -1,7 +1,7 @@
 import type { mat3, mat4, vec3, vec4 } from 'gl-matrix'
-import { generateRandomNumber } from '../../../utils/id'
 import { getGL } from '../../../webgl'
 import { UniformNameBPMap } from '../../uniformBlock'
+import { generateRandomNumber } from '../../../utils/calc'
 
 export class Shader {
   private readonly program: WebGLProgram

@@ -1,14 +1,17 @@
-import { PointLightValues, SpotLightValues } from '../models/light'
-import { Scene, Vector } from '../models'
+import { PointLightValues, Scene, SpotLightValues } from '../models'
 import { positionToNDC } from './scale'
 import { toRadians } from '../utils/calc'
+import { Vector3D } from '../vector'
 
-const vec3pad = (v: Vector) => [...v, 0.0]
+const vec3pad = (v: Vector3D) => [...v, 0.0]
 const floatPad = (f: number) => [f, 0.0, 0.0, 0.0]
 
 // TODO: test ubo layout140 constraints
 
-export const convertLightsToUboData = (lights: Scene['lights'], viewPos: Vector): Float32Array => {
+export const convertLightsToUboData = (
+  lights: Scene['lights'],
+  viewPos: Vector3D
+): Float32Array => {
   return new Float32Array([
     ...formatPointLight(lights.pointLights[0]),
     ...formatPointLight(lights.pointLights[1]),

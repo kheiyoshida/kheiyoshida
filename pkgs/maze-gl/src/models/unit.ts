@@ -1,5 +1,5 @@
 import { Mesh } from './mesh'
-import { Vector } from './geometry'
+import { Vector3D } from './geometry'
 
 export type RenderUnit = {
   meshes: Mesh[]

@@ -1,4 +1,4 @@
-import { GeometrySpec, Index, TriangleIndexData, Vector } from '../types'
+import { GeometrySpec, Index, TriangleIndexData, Vector3D } from '../types'
 
 export const parseObjData = (objText: string): GeometrySpec => {
   const vertices: Vector[] = []

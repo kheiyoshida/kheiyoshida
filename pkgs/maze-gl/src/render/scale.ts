@@ -1,4 +1,4 @@
-import { Vector } from '../models'
+import { Vector3D } from '../models'
 
 /**
  * logical units width screen should be showing

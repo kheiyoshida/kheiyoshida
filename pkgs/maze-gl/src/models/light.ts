@@ -1,7 +1,4 @@
-import { Vector } from './geometry'
-
-// TODO: move this type somewhere appropriate
-type Color = Vector
+import { Vector3D, Color } from '../vector'
 
 export type LightValues = {
   constant: number
@@ -14,19 +11,19 @@ export type LightValues = {
 }
 
 export type PointLightValues = {
-  position: Vector
+  position: Vector3D
 } & LightValues
 
 export type SpotLightValues = {
   /**
    * in-game logical position
    */
-  position: Vector
+  position: Vector3D
 
   /**
    * direction of spotlight
    */
-  direction: Vector
+  direction: Vector3D
 
   /**
    * inner cone, in degrees
