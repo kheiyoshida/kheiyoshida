@@ -2,20 +2,10 @@ import { RenderPosition } from '../../../domain/translate/renderGrid/renderSpec.
 import { MockScaffold } from './__test__/mock.ts'
 import { RenderBlockCoords, RenderBlockLayer } from './types.ts'
 
-import {
-  getAdjacentBlockZ,
-  getAdjacentLayerY,
-  getBlockCenter,
-  getBlockLayer,
-  getReducedPointFromCenter,
-  getRenderBlock,
-  getSmallerBlock,
-} from './block.ts'
-
+import { getAdjacentBlockZ, getAdjacentLayerY, getBlockLayer, getRenderBlock } from './block.ts'
 
 test(`${getRenderBlock.name}`, () => {
-  const scaffold = MockScaffold
-  const block = getRenderBlock(scaffold, { x: RenderPosition.LEFT, z: 5 })
+  const block = getRenderBlock(MockScaffold, { x: RenderPosition.LEFT, z: 5 })
   expect(block.front).toMatchObject({
     tl: [-1500, -500, -4500],
     tr: [-500, -500, -4500],
@@ -80,66 +70,4 @@ test(`${getAdjacentBlockZ.name}`, () => {
     const original = block.rear[k as keyof RenderBlockLayer]
     expect(z).toBe(original[2] - 1000)
   })
-})
-
-test(`${getBlockCenter.name}`, () => {
-  const block: RenderBlockCoords = {
-    front: {
-      tl: [-1500, -500, -500],
-      tr: [-500, -500, -500],
-      bl: [-1500, 500, -500],
-      br: [-500, 500, -500],
-    },
-    rear: {
-      tl: [-1500, -500, -1500],
-      tr: [-500, -500, -1500],
-      bl: [-1500, 500, -1500],
-      br: [-500, 500, -1500],
-    },
-  }
-  const result = getBlockCenter(block)
-  expect(result).toMatchInlineSnapshot(`
-    [
-      -1000,
-      0,
-      -1000,
-    ]
-  `)
-})
-
-test(`${getSmallerBlock.name}`, () => {
-  const block: RenderBlockCoords = {
-    front: {
-      tl: [-1500, -500, -500],
-      tr: [-500, -500, -500],
-      bl: [-1500, 500, -500],
-      br: [-500, 500, -500],
-    },
-    rear: {
-      tl: [-1500, -500, -1500],
-      tr: [-500, -500, -1500],
-      bl: [-1500, 500, -1500],
-      br: [-500, 500, -1500],
-    },
-  }
-  const result = getSmallerBlock(block, 0.5)
-  expect(result).toEqual({
-    front: {
-      tl: [-1250, -250, -750],
-      tr: [-750, -250, -750],
-      bl: [-1250, 250, -750],
-      br: [-750, 250, -750],
-    },
-    rear: {
-      tl: [-1250, -250, -1250],
-      tr: [-750, -250, -1250],
-      bl: [-1250, 250, -1250],
-      br: [-750, 250, -1250],
-    },
-  })
-})
-
-test(`${getReducedPointFromCenter.name}`, () => {
-  const result = getReducedPointFromCenter([100, 100, 100], [150, 150, 100], 0.8)
-  expect(result).toEqual([140, 140, 100])
 })

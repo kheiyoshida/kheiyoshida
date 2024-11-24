@@ -1,5 +1,5 @@
-import { Position3D } from 'p5utils/src/3d/types.ts'
 import * as RenderSpec from '../../../domain/translate/renderGrid/renderSpec.ts'
+import { Vector3D } from 'maze-gl'
 
 export type ScaffoldValues = {
   floor: number
@@ -14,19 +14,19 @@ export type ScaffoldValues = {
  * each RenderBlock should get the concrete value from this
  * currently supports 7 layers (=RenderGrid.length + 1)
  */
-export type Scaffold<T extends ScaffoldEntity = Position3D> = ScaffoldLayer<T>[]
+export type Scaffold<T extends ScaffoldEntity = Vector3D> = ScaffoldLayer<T>[]
 
-export type ScaffoldEntity = Position3D | DistortionDelta | unknown
+export type ScaffoldEntity = Vector3D | DistortionDelta | unknown
 
 export type ScaffoldLayerPartKey = 'upper' | 'lower'
-export type ScaffoldLayer<T extends ScaffoldEntity = Position3D> = {
+export type ScaffoldLayer<T extends ScaffoldEntity = Vector3D> = {
   [k in ScaffoldLayerPartKey]: ScaffoldLayerPart<T>
 }
 
 /**
  * index with `ScaffoldLayerCoordPosition`
  */
-export type ScaffoldLayerPart<T extends ScaffoldEntity = Position3D> = T[]
+export type ScaffoldLayerPart<T extends ScaffoldEntity = Vector3D> = T[]
 
 export const ScaffoldLayerPartLength = 4
 
@@ -44,7 +44,8 @@ export type ScaffoldKey = {
 }
 
 export interface DistortionDelta {
-  values: Position3D
+  values: Vector3D
+
   move(range: number, speed?: number): void
 }
 
@@ -74,8 +75,8 @@ export type RenderBlockCoords = {
  *  bl         br
  */
 export type RenderBlockLayer = {
-  tl: Position3D
-  tr: Position3D
-  bl: Position3D
-  br: Position3D
+  tl: Vector3D
+  tr: Vector3D
+  bl: Vector3D
+  br: Vector3D
 }

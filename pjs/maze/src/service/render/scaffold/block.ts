@@ -1,4 +1,3 @@
-import { Vector } from 'p5'
 import { RenderPosition } from '../../../domain/translate/renderGrid/renderSpec.ts'
 import {
   RenderBlockCoords,
@@ -8,7 +7,6 @@ import {
   ScaffoldLayer,
   ScaffoldLayerCoordPosition,
 } from './types.ts'
-import { Position3D, sumPosition3d } from 'p5utils/src/3d'
 
 export const getRenderBlock = (
   scaffold: Scaffold,
@@ -103,36 +101,4 @@ const addValueToLBlockLayer = (
       [x + (delta.x || 0), y + (delta.y || 0), z + (delta.z || 0)],
     ])
   ) as RenderBlockLayer
-}
-
-export const getBlockCenter = (block: RenderBlockCoords): Position3D => {
-  return sumPosition3d(...Object.values(block.front), ...Object.values(block.rear)).map(
-    (v) => v / 8
-  ) as Position3D
-}
-
-export const getSmallerBlock = (block: RenderBlockCoords, ratio = 0.8): RenderBlockCoords => {
-  const center = getBlockCenter(block)
-  return {
-    front: getSmallerLayer(center, block.front, ratio),
-    rear: getSmallerLayer(center, block.rear, ratio),
-  }
-}
-
-export const getSmallerLayer = (
-  center: Position3D,
-  layer: RenderBlockLayer,
-  ratio: number
-): RenderBlockLayer => {
-  const smaller: RenderBlockLayer = Object.fromEntries(
-    Object.entries(layer).map(([k, v]) => [k, getReducedPointFromCenter(v, center, ratio)])
-  ) as RenderBlockLayer
-  return smaller
-}
-
-export const getReducedPointFromCenter = (center: Position3D, point: Position3D, ratio: number) => {
-  const c = new Vector(...center)
-  const v = new Vector(...point)
-  const len = v.sub(c).mult(ratio)
-  return len.array().map((n, i) => center[i] + n) as Position3D
 }

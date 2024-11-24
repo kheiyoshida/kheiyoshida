@@ -14,10 +14,23 @@ import { Vector3D } from './types'
 glMatrix.setMatrixArrayType(Array)
 
 /**
- * creates a new vector tuple for the sum of given 2 vectors
+ * creates a new vector for the sum of given 2 vectors
  */
-export const sum = (v1: Vector3D, v2: Vector3D): Vector3D => {
+export const sum2 = (v1: Vector3D, v2: Vector3D): Vector3D => {
   return vec3.add(vec3.create(), v1, v2) as Vector3D
+}
+
+/**
+ * create a new vector for the sum of given multiple vectors of arbitrary number.
+ *
+ * use `sum2` when summing up 2 vectors
+ */
+export const sum = (...vectors: Vector3D[]): Vector3D => {
+  const result = vec3.create()
+  for (let i = 0; i < vectors.length; i++) {
+    vec3.add(result, result, vectors[i])
+  }
+  return result as Vector3D
 }
 
 /**
@@ -59,8 +72,16 @@ export const scale = (v: Vector3D, amount: number): void => {
  */
 export const mix = (a: Vector3D, b: Vector3D, ratio: number): Vector3D => {
   return [
-    a[0] * ratio + b[0] * (1 - ratio),
-    a[1] * ratio + b[1] * (1 - ratio),
-    a[2] * ratio + b[2] * (1 - ratio),
+    a[0] * (1 - ratio) + b[0] * ratio,
+    a[1] * (1 - ratio) + b[1] * ratio,
+    a[2] * (1 - ratio) + b[2] * ratio,
   ]
+}
+
+/**
+ * creates a new vector that represents the average of given vectors
+ */
+export const avg = (...vectors: Vector3D[]): Vector3D => {
+  const s = sum(...vectors)
+  return [s[0] / vectors.length, s[1] / vectors.length, s[2] / vectors.length]
 }

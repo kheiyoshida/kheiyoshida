@@ -1,13 +1,24 @@
 import { Vector3D } from './types'
 import * as Vec3 from './vector'
 
-test(`${Vec3.sum.name}`, () => {
+test(`${Vec3.sum2.name}`, () => {
   const a: Vector3D = [1, 0, 1]
   const b: Vector3D = [0, 1, -1]
 
-  expect(Vec3.sum(a, b)).toEqual([1, 1, 0])
+  expect(Vec3.sum2(a, b)).toEqual([1, 1, 0])
   expect(a).toEqual([1, 0, 1])
   expect(b).toEqual([0, 1, -1])
+})
+
+test(`${Vec3.sum.name}`, () => {
+  const a: Vector3D = [1, 0, 1]
+  const b: Vector3D = [0, 1, -1]
+  const c: Vector3D = [1, -1, 0]
+
+  expect(Vec3.sum(a, b, c)).toEqual([2, 0, 0])
+  expect(a).toEqual([1, 0, 1])
+  expect(b).toEqual([0, 1, -1])
+  expect(c).toEqual([1, -1, 0])
 })
 
 test(`${Vec3.sub.name}`, () => {
@@ -47,8 +58,19 @@ test(`${Vec3.mix.name}`, () => {
   const b: Vector3D = [0, 1, -1]
 
   const mixed = Vec3.mix(a, b, 0.1)
-  expect(mixed).toEqual([0.1, 0.9, -0.8])
+  expect(mixed).toEqual([0.9, 0.1, 0.8])
 
   expect(a).toEqual([1, 0, 1])
   expect(b).toEqual([0, 1, -1])
+})
+
+test(`${Vec3.avg.name}`, () => {
+  const a: Vector3D = [1, 0, 1]
+  const b: Vector3D = [0, 1, -1]
+  const c: Vector3D = [2, -1, 0]
+
+  expect(Vec3.avg(a, b, c)).toEqual([1, 0, 0])
+  expect(a).toEqual([1, 0, 1])
+  expect(b).toEqual([0, 1, -1])
+  expect(c).toEqual([2, -1, 0])
 })

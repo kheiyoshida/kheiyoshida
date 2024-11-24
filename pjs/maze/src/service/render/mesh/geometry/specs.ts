@@ -1,19 +1,19 @@
 import { GeometrySpec, Vector3D } from 'maze-gl'
 
-const FBL: Vector = [-1, -1, 1] // front-bottom-left
-const FBR: Vector = [1, -1, 1] // front-bottom-right
-const FTL: Vector = [-1, 1, 1] // front-top-left
-const FTR: Vector = [1, 1, 1] // front-top-right
-const BBL: Vector = [-1, -1, -1] // back-bottom-left
-const BBR: Vector = [1, -1, -1] // back-bottom-right
-const BTL: Vector = [-1, 1, -1] // back-top-left
-const BTR: Vector = [1, 1, -1] // back-top-right
+const FBL: Vector3D = [-1, -1, 1] // front-bottom-left
+const FBR: Vector3D = [1, -1, 1] // front-bottom-right
+const FTL: Vector3D = [-1, 1, 1] // front-top-left
+const FTR: Vector3D = [1, 1, 1] // front-top-right
+const BBL: Vector3D = [-1, -1, -1] // back-bottom-left
+const BBR: Vector3D = [1, -1, -1] // back-bottom-right
+const BTL: Vector3D = [-1, 1, -1] // back-top-left
+const BTR: Vector3D = [1, 1, -1] // back-top-right
 
-const NUp: Vector = [0, 1, 0]
-const NDown: Vector = [0, -1, 0]
-const NRight: Vector = [1, 0, 0]
-const NLeft: Vector = [-1, 0, 0]
-const NFront: Vector = [0, 0, 1]
+const NUp: Vector3D = [0, 1, 0]
+const NDown: Vector3D = [0, -1, 0]
+const NRight: Vector3D = [1, 0, 0]
+const NLeft: Vector3D = [-1, 0, 0]
+const NFront: Vector3D = [0, 0, 1]
 
 const completeSpec = ({ normals, vertices }: Omit<GeometrySpec, 'faces'>): GeometrySpec => ({
   faces: [

@@ -1,6 +1,6 @@
 import { computeOutwardNormals } from './box'
 import { DeformedBox, DeformedBoxNormals } from '../models'
-import { mix, Vector3D } from '../vector'
+import { Vector3D, Vec3 } from '../vector'
 
 describe(`${computeOutwardNormals.name}`, () => {
   const deformedBox: DeformedBox = {
@@ -34,15 +34,15 @@ describe(`${computeOutwardNormals.name}`, () => {
     const trilinearInterpolateNormal = (point: Vector3D, normals: DeformedBoxNormals) => {
       const [x, y, z] = point
 
-      const NFrontBottom = mix(normals.normalFBL, normals.normalFBR, x)
-      const NBackBottom = mix(normals.normalBBL, normals.normalBBR, x)
-      const NFrontTop = mix(normals.normalFTL, normals.normalFTR, x)
-      const NBackTop = mix(normals.normalBTL, normals.normalBTR, x)
+      const NFrontBottom = Vec3.mix(normals.normalFBL, normals.normalFBR, x)
+      const NBackBottom = Vec3.mix(normals.normalBBL, normals.normalBBR, x)
+      const NFrontTop = Vec3.mix(normals.normalFTL, normals.normalFTR, x)
+      const NBackTop = Vec3.mix(normals.normalBTL, normals.normalBTR, x)
 
-      const NBottom = mix(NBackBottom, NFrontBottom, z)
-      const NFront = mix(NBackTop, NFrontTop, z)
+      const NBottom = Vec3.mix(NBackBottom, NFrontBottom, z)
+      const NTop = Vec3.mix(NBackTop, NFrontTop, z)
 
-      return mix(NBottom, NFront, y)
+      return Vec3.mix(NBottom, NTop, y)
     }
     const normalisePosition = (p: Vector3D): Vector3D => [
       (p[0] + 1.0) / 2,
