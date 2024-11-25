@@ -1,5 +1,5 @@
 import { RenderUnit } from './unit'
-import { Vector3D } from './geometry'
+import { Vector3D } from '../vector'
 import { PointLightValues, SpotLightValues } from './light'
 
 export type Scene = {
@@ -17,7 +17,7 @@ export type Eye = {
   /**
    * in-game logical position
    */
-  position: Vector
+  position: Vector3D
   /**
    * in-game logical direction in degrees (front = 0 degree)
    * pass in positive values to turn right

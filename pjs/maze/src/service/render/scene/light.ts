@@ -1,5 +1,4 @@
-import { toRadians } from 'p5utils/src/3d'
-import { randomIntInAsymmetricRange, randomIntInclusiveBetween } from 'utils'
+import { randomIntInAsymmetricRange, randomIntInclusiveBetween, toRadians } from 'utils'
 import { LightVariables } from '../../../domain/translate/light'
 import { makeColorManager, RGB } from '../color'
 import { Colors } from '../color/colors.ts'
@@ -70,7 +69,7 @@ const calcLightFalloff = (visibility = 1.0) => {
   return 50 / (MinFallOff + DefaultFallOff * visibility)
 }
 
-const calcDirectionalVector = (delta: number): Vector => {
+const calcDirectionalVector = (delta: number): Vector3D => {
   const theta = Math.PI / 2 - toRadians(delta)
   return [Math.cos(theta), 0, -Math.sin(theta)]
 }

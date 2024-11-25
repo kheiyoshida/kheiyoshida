@@ -26,7 +26,7 @@ export const randomIntInAsymmetricRange = (range: number) => {
   return randomIntInclusiveBetween(-range, range)
 }
 
-export const randomFloatAsymmetricrange = (range: number) => {
+export const randomFloatInAsymmetricRange = (range: number) => {
   return randomFloatBetween(-range, range)
 }
 

@@ -2,7 +2,14 @@ import p5 from 'p5'
 import { SphericalAngles } from './types'
 import { loop2D, randomIntInclusiveBetween } from 'utils'
 
+/**
+ * @deprecated use the one from `utils`
+ */
 export const toRadians = (degree: number) => degree * (Math.PI / 180)
+
+/**
+ * @deprecated use the one from `utils`
+ */
 export const toDegrees = (radians: number) => radians / (Math.PI / 180)
 
 /**

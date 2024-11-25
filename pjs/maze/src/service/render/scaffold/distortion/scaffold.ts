@@ -11,28 +11,28 @@ import { createDistortionDelta } from './delta.ts'
 
 export type DeltaScaffold = Scaffold<DistortionDelta>
 
-export interface DistortionScaffold {
+export type ScaffoldDistortion = {
   deltas: DeltaScaffold
   slideGo(): void
   slideTurn(direction: LR): void
   updateDeltas(range: number, speed: number): void
 }
 
-export const createDistortionScaffold = (): DistortionScaffold => {
-  let scaffold = createDeltaScaffold()
+export const createScaffoldDistortion = (): ScaffoldDistortion => {
+  let deltaScaffold = createDeltaScaffold()
   return {
     get deltas() {
-      return scaffold
+      return deltaScaffold
     },
     slideGo: () => {
-      scaffold = slideScaffoldLayers(scaffold, 2, createScaffoldLayer)
+      deltaScaffold = slideScaffoldLayers(deltaScaffold, 2, createScaffoldLayer)
     },
     slideTurn: (lr: LR) => {
-      scaffold = turnScaffold(scaffold, lr, createScaffoldLayer)
-      iterateScaffold(scaffold, (entity) => turnDistortionDelta(entity.values, lr))
+      deltaScaffold = turnScaffold(deltaScaffold, lr, createScaffoldLayer)
+      iterateScaffold(deltaScaffold, (entity) => turnDistortionDelta(entity.values, lr))
     },
     updateDeltas: (range, speed) => {
-      iterateScaffold(scaffold, (entity) => entity.move(range, speed))
+      iterateScaffold(deltaScaffold, (delta) => delta.move(range, speed))
     },
   }
 }

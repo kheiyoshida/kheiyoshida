@@ -1,6 +1,6 @@
 import { RenderPosition } from '../../../domain/translate/renderGrid/renderSpec.ts'
 import { MockScaffold } from './__test__/mock.ts'
-import { RenderBlockCoords, RenderBlockLayer } from './types.ts'
+import { RenderBlock, RenderBlockLayer } from './types.ts'
 
 import { getAdjacentBlockZ, getAdjacentLayerY, getBlockLayer, getRenderBlock } from './block.ts'
 
@@ -47,7 +47,7 @@ test(`${getAdjacentLayerY.name}`, () => {
 })
 
 test(`${getAdjacentBlockZ.name}`, () => {
-  const block: RenderBlockCoords = {
+  const block: RenderBlock = {
     front: {
       tl: [-1500, -500, -4500],
       tr: [-500, -500, -4500],

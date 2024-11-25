@@ -1,8 +1,9 @@
-import { GeometrySpec, Index, TriangleIndexData, Vector3D } from '../types'
+import { GeometrySpec, Index, TriangleIndexData } from '../types'
+import { Vector3D } from '../../../vector'
 
 export const parseObjData = (objText: string): GeometrySpec => {
-  const vertices: Vector[] = []
-  const normals: Vector[] = []
+  const vertices: Vector3D[] = []
+  const normals: Vector3D[] = []
   const faces: TriangleIndexData[] = []
 
   // Split text by lines and iterate over each line

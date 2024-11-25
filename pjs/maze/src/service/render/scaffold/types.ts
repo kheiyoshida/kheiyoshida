@@ -43,15 +43,10 @@ export type ScaffoldKey = {
   position: ScaffoldLayerCoordPosition
 }
 
-export interface DistortionDelta {
+export type DistortionDelta = {
   values: Vector3D
 
   move(range: number, speed?: number): void
-}
-
-export type RenderBlock = {
-  blockCoords: RenderBlockCoords
-  position: RenderBlockPosition
 }
 
 export type RenderBlockPosition = {
@@ -60,7 +55,7 @@ export type RenderBlockPosition = {
   y?: number // maybe y in the future
 }
 
-export type RenderBlockCoords = {
+export type RenderBlock = {
   front: RenderBlockLayer
   rear: RenderBlockLayer
 }

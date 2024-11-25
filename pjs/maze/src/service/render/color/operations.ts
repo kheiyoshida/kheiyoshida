@@ -1,4 +1,3 @@
-import { ColorVector } from 'p5utils/src/render'
 import { clamp, randomIntInclusiveBetween } from 'utils'
 import { Color, RGB } from '.'
 import { ColorOperationPattern } from '../../../domain/translate/color/types'
@@ -26,7 +25,7 @@ const slideColor = (c: Color, min: number, max: number) => {
 /**
  * ported from p5utils
  */
-const moveColor = (original: Color, colorVector: ColorVector): Color => {
+const moveColor = (original: Color, colorVector: RGB): Color => {
   const [c1, c2, c3] = colorVector.map((v) => randomIntInclusiveBetween(0, v))
   return [red(original) + c1, green(original) + c2, blue(original) + c3]
 }

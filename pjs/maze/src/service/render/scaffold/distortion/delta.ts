@@ -1,26 +1,20 @@
-import { Vector } from 'p5'
 import { DistortionDelta } from '../types.ts'
-import { randomFloatAsymmetricrange } from 'utils'
-import { Vector3D } from 'maze-gl'
+import { Vec3, Vector3D } from 'maze-gl'
 
-export const createDistortionDelta = (delta: Vector = new Vector()): DistortionDelta => {
+export const createDistortionDelta = (delta: Vector3D = Vec3.create()): DistortionDelta => {
   return {
     get values() {
-      return delta.array() as Vector3D
+      return delta
     },
     move(range, speed = 1) {
-      delta.add(getMovementValues(speed))
+      Vec3.add(delta, Vec3.random(-speed, speed))
       restrainVectorWithinRange(delta, range)
     },
   }
 }
 
-export const getMovementValues = (speed: number): Vector3D => {
-  return [...Array(3)].map(() => randomFloatAsymmetricrange(speed)) as Vector3D
-}
-
-export const restrainVectorWithinRange = (vector: Vector, range: number): void => {
-  if (vector.mag() > range) {
-    vector.setMag(range)
+export const restrainVectorWithinRange = (vector: Vector3D, range: number): void => {
+  if (Vec3.mag(vector) > range) {
+    Vec3.normalize(vector, range)
   }
 }

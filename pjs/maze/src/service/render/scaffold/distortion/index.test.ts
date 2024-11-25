@@ -1,7 +1,7 @@
 import { Scaffold } from '../types.ts'
 import { iterateScaffold, retrieveScaffoldEntity } from '../utils.ts'
 import { applyDistortion } from './index.ts'
-import { createDistortionScaffold } from './scaffold.ts'
+import { createScaffoldDistortion } from './scaffold.ts'
 
 test(`${applyDistortion.name}`, () => {
   const original: Scaffold = [
@@ -35,7 +35,7 @@ test(`${applyDistortion.name}`, () => {
     },
   ]
   const scaffold = JSON.parse(JSON.stringify(original))
-  const distScaffold = createDistortionScaffold()
+  const distScaffold = createScaffoldDistortion()
   distScaffold.updateDeltas(100, 1)
   applyDistortion(scaffold, distScaffold)
   iterateScaffold(scaffold, (entity, key) => {

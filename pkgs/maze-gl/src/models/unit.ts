@@ -1,5 +1,5 @@
 import { Mesh } from './mesh'
-import { Vector3D } from './geometry'
+import { Vector3D } from '../vector'
 
 export type RenderUnit = {
   meshes: Mesh[]
@@ -7,23 +7,23 @@ export type RenderUnit = {
 }
 
 export type DeformedBox = {
-  FBL: Vector
-  FBR: Vector
-  FTL: Vector
-  FTR: Vector
-  BBL: Vector
-  BBR: Vector
-  BTL: Vector
-  BTR: Vector
+  FBL: Vector3D
+  FBR: Vector3D
+  FTL: Vector3D
+  FTR: Vector3D
+  BBL: Vector3D
+  BBR: Vector3D
+  BTL: Vector3D
+  BTR: Vector3D
 }
 
 export type DeformedBoxNormals = {
-  normalFBL: Vector
-  normalFBR: Vector
-  normalFTL: Vector
-  normalFTR: Vector
-  normalBBL: Vector
-  normalBBR: Vector
-  normalBTL: Vector
-  normalBTR: Vector
+  normalFBL: Vector3D
+  normalFBR: Vector3D
+  normalFTL: Vector3D
+  normalFTR: Vector3D
+  normalBBL: Vector3D
+  normalBBR: Vector3D
+  normalBTL: Vector3D
+  normalBTR: Vector3D
 }

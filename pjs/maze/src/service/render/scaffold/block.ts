@@ -1,6 +1,6 @@
 import { RenderPosition } from '../../../domain/translate/renderGrid/renderSpec.ts'
 import {
-  RenderBlockCoords,
+  RenderBlock,
   RenderBlockLayer,
   RenderBlockPosition,
   Scaffold,
@@ -11,9 +11,9 @@ import {
 export const getRenderBlock = (
   scaffold: Scaffold,
   { x, z, y }: RenderBlockPosition
-): RenderBlockCoords => {
+): RenderBlock => {
   if (z < 0) throw Error(`z is out of range: ${z}`)
-  const block: RenderBlockCoords = {
+  const block: RenderBlock = {
     front: getBlockLayer(scaffold[z], x),
     rear: getBlockLayer(scaffold[z + 1], x),
   }
@@ -46,7 +46,7 @@ const TranslateMap: Record<
 }
 
 export const getAdjacentBlockY = (
-  block: RenderBlockCoords,
+  block: RenderBlock,
   position: 'above' | 'below' = 'below'
 ) => {
   if (position === 'below')
@@ -82,9 +82,9 @@ export const getAdjacentLayerY = (
 }
 
 export const getAdjacentBlockZ = (
-  block: RenderBlockCoords,
+  block: RenderBlock,
   delta: { z: number }
-): RenderBlockCoords => {
+): RenderBlock => {
   return {
     front: { ...block.rear },
     rear: addValueToLBlockLayer(block.rear, delta),
