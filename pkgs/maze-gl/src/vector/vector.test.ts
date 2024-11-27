@@ -1,6 +1,5 @@
 import { Vector3D } from './types'
 import * as Vec3 from './vector'
-import { vec3 } from 'gl-matrix'
 
 test(`${Vec3.sum2.name}`, () => {
   const a: Vector3D = [1, 0, 1]

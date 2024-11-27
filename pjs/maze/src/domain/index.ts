@@ -1,22 +1,24 @@
 import { MazeState } from '../store'
 import { StatusState } from '../store/status'
-import { MapInfo, getMapInfoFromCurrentState } from './interface/mapper'
+import { getMapInfoFromCurrentState, MapInfo } from './interface/mapper'
 import {
-  MusicCommand,
-  ObjectDrawParams,
-  ScaffoldParams,
-  TerrainRenderStyle,
-  TextureParams,
   getMusicCommands,
-  getObjectParams,
   getScaffoldParams,
-  getTerrainRenderStyle,
   getTextureParams,
   getWalkSpeedFromCurrentState,
+  MusicCommand,
+  ScaffoldParams,
+  TextureParams,
 } from './translate'
-import { LightVariables, getLightColorIntention } from './translate/light'
+import { getLightColorIntention, LightVariables } from './translate/light'
 import { getRenderGridFromCurrentState } from './translate/renderGrid'
 import { RenderGrid } from './translate/renderGrid/renderSpec'
+import {
+  getObjectParams,
+  getTerrainRenderStyle,
+  ObjectDrawParams,
+  TerrainRenderStyle,
+} from './translate/object.ts'
 
 export type DomainIntention = {
   renderGrid: RenderGrid
@@ -42,6 +44,6 @@ export const getDomainIntention = (): DomainIntention => {
     texture: getTextureParams(),
     music: getMusicCommands(),
     terrainStyle: getTerrainRenderStyle(),
-    objectParams: getObjectParams()
+    objectParams: getObjectParams(),
   }
 }
