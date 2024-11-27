@@ -1,12 +1,14 @@
 import { GeometryCode } from '../../unit'
 import { GeometrySpec } from 'maze-gl'
-import * as specs from './specs.ts'
+import * as rectangles from './rectangles.ts'
+import * as objects from './objects.ts'
 
 export const GeometrySpecDict: Record<GeometryCode, GeometrySpec> = {
-  [GeometryCode.Ceil]: specs.Ceil,
-  [GeometryCode.Floor]: specs.Floor,
-  [GeometryCode.FrontWall]: specs.FrontWall,
-  [GeometryCode.LeftWall]: specs.LeftWall,
-  [GeometryCode.RightWall]: specs.RightWall,
-  [GeometryCode.Stair]: specs.Floor, // TODO: implement stair
+  [GeometryCode.Ceil]: rectangles.Ceil,
+  [GeometryCode.Floor]: rectangles.Floor,
+  [GeometryCode.FrontWall]: rectangles.FrontWall,
+  [GeometryCode.LeftWall]: rectangles.LeftWall,
+  [GeometryCode.RightWall]: rectangles.RightWall,
+  [GeometryCode.Stair]: rectangles.Floor, // TODO: implement stair
+  [GeometryCode.Pole]: objects.Pole,
 }

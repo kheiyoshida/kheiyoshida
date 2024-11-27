@@ -1,17 +1,21 @@
 import type { RenderBlockPosition } from '../scaffold'
+import { RenderGrid } from '../../../domain/translate/renderGrid/renderSpec.ts'
 
 export type UnitSpec = {
   codes: GeometryCode[]
   position: RenderBlockPosition
 }
 
+/**
+ * converts render grid into layers of geometry codes
+ */
+export type GeometryCodeConverter = (renderGrid: RenderGrid) => GeometryCodeGrid
+
 export type GeometryCodeGrid = GeometryCodeGridLayer[]
 export type GeometryCodeGridLayer = [GeometryCode[], GeometryCode[], GeometryCode[]]
 
 /**
- * Code to represent which geometry to render.
- * Since there can be multiple meshes for a geometry,
- * it is not a unique key
+ * represents which geometry to render
  */
 export enum GeometryCode {
   Floor = 'Floor',
@@ -20,4 +24,5 @@ export enum GeometryCode {
   LeftWall = 'LeftWall',
   FrontWall = 'FrontWall',
   Stair = 'Stair',
+  Pole = 'Pole',
 }

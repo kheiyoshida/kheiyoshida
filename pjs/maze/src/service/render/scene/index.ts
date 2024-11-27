@@ -9,13 +9,15 @@ import { convertRenderGridToUnitSpecList } from '../unit'
 import { DeformedBox, RenderUnit } from 'maze-gl'
 import { getMesh } from '../mesh'
 import { RenderGrid } from '../../../domain/translate/renderGrid/renderSpec.ts'
+import { TerrainRenderStyle } from '../../../domain/translate/object.ts'
 
 export const getUnits = (
   renderGrid: RenderGrid,
   values: ScaffoldValues,
+  style: TerrainRenderStyle
 ): RenderUnit[] => {
   const scaffold = createScaffold(values)
-  const specList = convertRenderGridToUnitSpecList(renderGrid)
+  const specList = convertRenderGridToUnitSpecList(renderGrid, style)
   return specList.map((spec) => ({
     box: getDeformedBox(scaffold, spec.position),
     meshes: spec.codes.map(getMesh),

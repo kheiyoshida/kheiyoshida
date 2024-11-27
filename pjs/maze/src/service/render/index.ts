@@ -10,11 +10,7 @@ import { corridorToNextFloor } from '../../domain/translate/renderGrid/scenes'
 import { RenderHandler } from '../consumer'
 import { getDefaultEye, getMovementEye } from './scene/eye.ts'
 import { getLights, triggerFadeOut } from './scene/light.ts'
-import {
-  getGoDeltaArray,
-  getTurnLRDeltaArray,
-  StairAnimationFrameValues,
-} from './scene/movement.ts'
+import { getGoDeltaArray, getTurnLRDeltaArray, StairAnimationFrameValues } from './scene/movement.ts'
 import { Distortion } from './scaffold/distortion'
 import { RenderQueue } from './queue'
 import { soundPack } from './sound'
@@ -27,17 +23,17 @@ const renderScene = (scene: Scene) => {
   rs(scene)
 }
 
-export const renderCurrentView: RenderHandler = ({ renderGrid, scaffoldValues, light }) => {
+export const renderCurrentView: RenderHandler = ({ renderGrid, scaffoldValues, light, terrainStyle }) => {
   const drawFrame = () => {
     const eye = getDefaultEye()
-    const units = getUnits(renderGrid, scaffoldValues)
+    const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
     const lights = getLights(eye, light)
     renderScene({ units, eye, lights })
   }
   RenderQueue.push(drawFrame)
 }
 
-export const renderGo: RenderHandler = ({ renderGrid, speed, scaffoldValues, light }) => {
+export const renderGo: RenderHandler = ({ renderGrid, speed, scaffoldValues, light, terrainStyle }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
     if (i === 0) {
@@ -45,7 +41,7 @@ export const renderGo: RenderHandler = ({ renderGrid, speed, scaffoldValues, lig
       blockControlRequired()
     }
     const eye = getMovementEye({ move: zDelta }, scaffoldValues)
-    const units = getUnits(renderGrid, scaffoldValues)
+    const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
     const lights = getLights(eye, light)
     renderScene({ units, eye, lights })
     if (i === Math.floor((GoMoveMagValues.length * 3) / 4)) {
@@ -60,17 +56,14 @@ export const renderGo: RenderHandler = ({ renderGrid, speed, scaffoldValues, lig
 
 export const renderTurn =
   (direction: LR): RenderHandler =>
-  ({ renderGrid, speed, scaffoldValues, light }) => {
+  ({ renderGrid, speed, scaffoldValues, light, terrainStyle }) => {
     const LRDeltaValues = getTurnLRDeltaArray(speed)
     const drawFrameSequence = LRDeltaValues.map((turnDelta, i) => () => {
       if (i === 0) {
         blockControlRequired()
       }
-      const eye = getMovementEye(
-        { turn: direction === 'right' ? turnDelta : -turnDelta },
-        scaffoldValues
-      )
-      const units = getUnits(renderGrid, scaffoldValues)
+      const eye = getMovementEye({ turn: direction === 'right' ? turnDelta : -turnDelta }, scaffoldValues)
+      const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
       const lights = getLights(eye, light)
       renderScene({ units, eye, lights })
       if (i === Math.floor((LRDeltaValues.length * 3) / 4)) {
@@ -83,7 +76,7 @@ export const renderTurn =
     RenderQueue.update(drawFrameSequence)
   }
 
-export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffoldValues, light }) => {
+export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffoldValues, light, terrainStyle }) => {
   const drawFrameSequence = StairAnimationFrameValues.map((values, i) => () => {
     if (i === 0) {
       soundPack.playStairs()
@@ -92,7 +85,7 @@ export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffoldValues, 
       blockStatusChangeRequired()
     }
     const eye = getMovementEye(values, scaffoldValues)
-    const units = getUnits(renderGrid, scaffoldValues)
+    const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
     const lights = getLights(eye, light)
     renderScene({ units, eye, lights })
     if (i === StairAnimationFrameValues.length - 1) {
@@ -103,7 +96,7 @@ export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffoldValues, 
   RenderQueue.push(...drawFrameSequence)
 }
 
-export const renderProceedToNextFloor: RenderHandler = ({ speed, scaffoldValues, light }) => {
+export const renderProceedToNextFloor: RenderHandler = ({ speed, scaffoldValues, light, terrainStyle }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
     if (i === 0) {
@@ -114,7 +107,7 @@ export const renderProceedToNextFloor: RenderHandler = ({ speed, scaffoldValues,
       soundPack.playWalk()
     }
     const eye = getMovementEye({ move: zDelta }, scaffoldValues)
-    const units = getUnits(corridorToNextFloor, scaffoldValues)
+    const units = getUnits(corridorToNextFloor, scaffoldValues, terrainStyle)
     const lights = getLights(eye, light)
     renderScene({ units, eye, lights })
     if (i === GoMoveMagValues.length - 1) {
@@ -126,7 +119,7 @@ export const renderProceedToNextFloor: RenderHandler = ({ speed, scaffoldValues,
 }
 
 const DieFrames = 48
-export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, light }) => {
+export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, light, terrainStyle }) => {
   const dieSequence = [...Array(DieFrames)].map((_, i) => () => {
     if (i === 0) {
       triggerFadeOut(DieFrames)
@@ -134,7 +127,7 @@ export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, light }) 
       blockStatusChangeRequired()
     }
     const eye = getDefaultEye()
-    const units = getUnits(renderGrid, scaffoldValues)
+    const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
     const lights = getLights(eye, light)
     renderScene({ units, eye, lights })
 
@@ -145,7 +138,13 @@ export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, light }) 
   RenderQueue.update(dieSequence)
 }
 
-export const renderResurrect: RenderHandler = ({ speed, scaffoldValues, light, renderGrid }) => {
+export const renderResurrect: RenderHandler = ({
+  speed,
+  scaffoldValues,
+  light,
+  renderGrid,
+  terrainStyle,
+}) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
     if (i === 0) {
@@ -154,7 +153,7 @@ export const renderResurrect: RenderHandler = ({ speed, scaffoldValues, light, r
     }
     // const eye = getMovementEye({ move: zDelta }, scaffoldValues)
     const eye = getDefaultEye()
-    const units = getUnits(renderGrid, scaffoldValues)
+    const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
     const lights = getLights(eye, light)
     renderScene({ units, eye, lights })
     if (i === GoMoveMagValues.length - 1) {

@@ -1,4 +1,5 @@
-import { GeometrySpec, Vec3, Vector3D } from 'maze-gl'
+import { GeometrySpec, Vec3 } from 'maze-gl'
+import { Vector3D } from 'maze-gl'
 
 const FBL: Vector3D = [-1, -1, 1] // front-bottom-left
 const FBR: Vector3D = [1, -1, 1] // front-bottom-right
@@ -15,7 +16,10 @@ const NRight: Vector3D = [1, 0, 0]
 const NLeft: Vector3D = [-1, 0, 0]
 const NFront: Vector3D = [0, 0, 1]
 
-const completeSpec = ({ normals, vertices }: Omit<GeometrySpec, 'faces'>): GeometrySpec => ({
+// note: we work with right-hand coordinate system in WebGL.
+// face triangle should be drawing edges in clock-wise direction when seen
+
+export const completeRectSpec = ({ normals, vertices }: Omit<GeometrySpec, 'faces'>): GeometrySpec => ({
   faces: [
     {
       vertexIndices: [0, 1, 4],
@@ -38,18 +42,15 @@ const completeSpec = ({ normals, vertices }: Omit<GeometrySpec, 'faces'>): Geome
   vertices: [...vertices, Vec3.avg(...vertices)],
 })
 
-// note: we work with right-hand coordinate system in WebGL.
-// face triangle should be drawing edges in clock-wise direction when seen
-
 //
 // specs below are seen from the "inside" of the box
 //
-export const Ceil = completeSpec({
+export const Ceil = completeRectSpec({
   normals: [NDown],
   vertices: [FTL, FTR, BTR, BTL],
 })
 
-export const Floor = completeSpec({
+export const Floor = completeRectSpec({
   normals: [NUp],
   vertices: [FBR, FBL, BBL, BBR],
 })
@@ -58,18 +59,17 @@ export const Floor = completeSpec({
 // specs below are seen from the "outside" of the box
 //
 
-export const FrontWall = completeSpec({
+export const FrontWall = completeRectSpec({
   normals: [NFront],
   vertices: [FBR, FBL, FTL, FTR],
 })
 
-export const RightWall = completeSpec({
+export const RightWall = completeRectSpec({
   normals: [NLeft],
   vertices: [FBL, BBL, BTL, FTL],
 })
 
-export const LeftWall = completeSpec({
+export const LeftWall = completeRectSpec({
   normals: [NRight],
   vertices: [FBR, FTR, BTR, BBR],
 })
-
