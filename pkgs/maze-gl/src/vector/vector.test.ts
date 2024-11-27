@@ -1,5 +1,6 @@
 import { Vector3D } from './types'
 import * as Vec3 from './vector'
+import { vec3 } from 'gl-matrix'
 
 test(`${Vec3.sum2.name}`, () => {
   const a: Vector3D = [1, 0, 1]
@@ -58,6 +59,12 @@ test(`${Vec3.scale.name}`, () => {
   expect(v).toEqual([1, 1, 1])
 })
 
+test(`${Vec3.scale.name}`, () => {
+  const v = Vec3.create(10)
+  expect(Vec3.createScaled(v, 1/10)).toEqual([1,1,1])
+  expect(v).toEqual([10,10,10])
+})
+
 test(`${Vec3.mix.name}`, () => {
   const a: Vector3D = [1, 0, 1]
   const b: Vector3D = [0, 1, -1]
@@ -102,4 +109,41 @@ test(`${Vec3.normalize.name}`, () => {
   expect(v[0]).toBeCloseTo(1)
   expect(v[1]).toBeCloseTo(0)
   expect(v[2]).toBeCloseTo(1)
+})
+
+test(`${Vec3.dot.name}`, () => {
+  const a: Vector3D = [1, 0, 1]
+  const b: Vector3D = [1, 0, -1]
+  expect(Vec3.dot(a, b)).toBeCloseTo(0)
+
+
+})
+
+test(`${Vec3.cross.name}`, () => {
+  const p1: Vector3D = [-1, 0, 0]
+  const p2: Vector3D = [0, 1, 0]
+  const p3: Vector3D = [1, 0, 0]
+
+  // note that we're in right-handed coordinate system
+  // clockwise order - it points away from you
+  expect(Vec3.cross(
+    Vec3.sub(p2, p1),
+    Vec3.sub(p3, p2),
+  )).toEqual([0, 0, -2])
+
+  // counterclockwise order - points towards you
+  expect(Vec3.cross(
+    Vec3.sub(p3, p2),
+    Vec3.sub(p2, p1),
+  )).toEqual([-0, 0, 2])
+
+  // appendix
+  const a: Vector3D = [-1, 0, 0]
+  const b: Vector3D = [0, 0, 1]
+  const c: Vector3D = [1, 0, 0]
+
+  expect(Vec3.cross(
+    Vec3.sub(b, a),
+    Vec3.sub(c, b),
+  )).toEqual([-0, 2, 0])
 })

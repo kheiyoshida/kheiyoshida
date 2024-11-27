@@ -23,10 +23,10 @@ export const getScaffoldParams = (): ScaffoldParams => {
   return params
 }
 
-const calcWidthLevel = createDecreasingParameter(0.2, 1, 1000)
+const calcWidthLevel = createDecreasingParameter(0.3, 1, 1000)
 const calcHeightLevel = createIncreasingParameter(1, 5, 1000)
 const calcCorridorLengthLevel = createIncreasingParameter(1, 2, 1000)
-const calcDistortion = createIncreasingParameter(0.05, 1, 1500)
+const calcDistortion = createIncreasingParameter(0.05, 2, 2000)
 
 export const getWalkSpeedFromCurrentState = () => {
   return calcSpeed(statusStore.current.stamina)

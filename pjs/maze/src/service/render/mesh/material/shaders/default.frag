@@ -124,7 +124,7 @@ void main()
     float rnd = random(fract(gl_FragCoord.xy / 1.5));
     float rnd2 = random(fract(gl_FragCoord.xy / rnd));
 //    float rnd3 = random(fract(gl_FragCoord.xy / rnd2));
-    result += vec3(rnd, rnd2, 0) * 0.05;
+    result += vec3(rnd2, rnd, 0.0) * 0.001;
 
     fragColor = vec4(result, 1.0);
 }

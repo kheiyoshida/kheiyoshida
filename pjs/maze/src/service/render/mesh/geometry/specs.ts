@@ -1,4 +1,4 @@
-import { GeometrySpec, Vector3D } from 'maze-gl'
+import { GeometrySpec, Vec3, Vector3D } from 'maze-gl'
 
 const FBL: Vector3D = [-1, -1, 1] // front-bottom-left
 const FBR: Vector3D = [1, -1, 1] // front-bottom-right
@@ -18,16 +18,24 @@ const NFront: Vector3D = [0, 0, 1]
 const completeSpec = ({ normals, vertices }: Omit<GeometrySpec, 'faces'>): GeometrySpec => ({
   faces: [
     {
-      vertexIndices: [0, 1, 2],
+      vertexIndices: [0, 1, 4],
       normalIndices: [0, 0, 0],
     },
     {
-      vertexIndices: [2, 3, 0],
+      vertexIndices: [1, 2, 4],
+      normalIndices: [0, 0, 0],
+    },
+    {
+      vertexIndices: [2, 3, 4],
+      normalIndices: [0, 0, 0],
+    },
+    {
+      vertexIndices: [3, 0, 4],
       normalIndices: [0, 0, 0],
     },
   ],
   normals,
-  vertices,
+  vertices: [...vertices, Vec3.avg(...vertices)],
 })
 
 // note: we work with right-hand coordinate system in WebGL.
@@ -64,3 +72,4 @@ export const LeftWall = completeSpec({
   normals: [NRight],
   vertices: [FBR, FTR, BTR, BBR],
 })
+

@@ -1,4 +1,5 @@
 import { DeformedBox, GeometrySpec } from '../models'
+import { Vector3D } from '../vector'
 
 export const triangleSpec: GeometrySpec = {
   faces: [
@@ -49,25 +50,14 @@ const testDeformedBox: DeformedBox = {
   BTR: [1, 1, -1],
 }
 
-const boxSize = 1000
-const halfBox = boxSize * 0.5
+export const boxSize = 1000
+export const halfBox = boxSize * 0.5
 
-export const gameSizeDeformedBox = Object.fromEntries(
-  Object.entries(testDeformedBox).map(([k, v]) => {
-    return [k, v.map((n) => n * halfBox)]
-  })
-) as DeformedBox
-
-export const gameSizeDeformedBox2 = Object.fromEntries(
-  Object.entries(testDeformedBox).map(([k, v]) => {
-    const scaled = v.map((n) => n * halfBox)
-    return [k, [scaled[0] + boxSize, scaled[1], scaled[2]+ boxSize] ]
-  })
-) as DeformedBox
-
-export const gameSizeDeformedBox3 = Object.fromEntries(
-  Object.entries(testDeformedBox).map(([k, v]) => {
-    const scaled = v.map((n) => n * halfBox)
-    return [k, [scaled[0], scaled[1], scaled[2] - boxSize]]
-  })
-) as DeformedBox
+export const getDeformedBox = (...disposition: Vector3D) => {
+  return Object.fromEntries(
+    Object.entries(testDeformedBox).map(([k, v]) => {
+      const scaled = v.map((n) => n * halfBox)
+      return [k, [scaled[0] + disposition[0], scaled[1] + disposition[1], scaled[2] + disposition[2]]]
+    })
+  ) as DeformedBox
+}

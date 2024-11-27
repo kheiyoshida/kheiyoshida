@@ -21,10 +21,10 @@ export const getLights = ({ position, direction }: Eye, light: LightVariables): 
   LightColorManager.resolve(light.colorParams)
   const linearFallOff = calcLightFalloff(light.visibility)
 
-  const diffuseColor = LightColorManager.currentRGB.map((v) => v / 255 / 10) as RGB
-  // const diffuseColor = [0.1, 0.1, 0.1] as RGB
+  // const diffuseColor = LightColorManager.currentRGB.map((v) => v / 255 / 10) as RGB
+  const diffuseColor = [0.1, 0.1, 0.1] as RGB
   const ambientColor = [0.01, 0.01, 0.01] as RGB
-  const specularColor = [0.01, 0.01, 0.01] as RGB
+  const specularColor = [0.0, 0.01, 0.0] as RGB
 
   const pointLight1: PointLightValues = {
     position,

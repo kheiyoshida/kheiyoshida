@@ -1,18 +1,19 @@
-import { computeOutwardNormals } from './box'
-import { DeformedBox, DeformedBoxNormals } from '../models'
+import { calcFaceNormal, calcFaceNormalsOfBox, computeOutwardNormals, blendBoxNormalsForAVertex } from './box'
+import { DeformedBox, DeformedBoxNormals, DeformedBoxNormalsV2 } from '../models'
 import { Vector3D, Vec3 } from '../vector'
 
+const deformedBox: DeformedBox = {
+  FBL: [-1, -1, 1],
+  FBR: [1, -1, 1],
+  FTL: [-1, 1, 1],
+  FTR: [1, 1, 1],
+  BBL: [-1, -1, -1],
+  BBR: [1, -1, -1],
+  BTL: [-1, 1, -1],
+  BTR: [1, 1, -1],
+}
+
 describe(`${computeOutwardNormals.name}`, () => {
-  const deformedBox: DeformedBox = {
-    FBL: [-1, -1, 1],
-    FBR: [1, -1, 1],
-    FTL: [-1, 1, 1],
-    FTR: [1, 1, 1],
-    BBL: [-1, -1, -1],
-    BBR: [1, -1, -1],
-    BTL: [-1, 1, -1],
-    BTR: [1, 1, -1],
-  }
   it(`should calculate the normals that point from the center of the box to each vertex`, () => {
     const result = computeOutwardNormals(deformedBox)
 
@@ -57,6 +58,84 @@ describe(`${computeOutwardNormals.name}`, () => {
 
     expect([interpolatedNormal[0], interpolatedNormal[1], interpolatedNormal[2]]).toEqual(
       outwardNormals.normalFTR
+    )
+  })
+})
+
+describe(`${calcFaceNormal.name}`, () => {
+  it(`calculates face normal for 4 vertices face`, () => {
+    const expected: Vector3D = [0, 0, 4]
+    const normal = calcFaceNormal(
+      // points in face in counterclockwise order
+      deformedBox.FBR,
+      deformedBox.FTR,
+      deformedBox.FTL,
+      deformedBox.FBL
+    )
+    expect(normal).toEqual(expected)
+  })
+  it(`calculates face normal for 3 vertices face`, () => {
+    const expected: Vector3D = [0, -0, 4]
+    const normal = calcFaceNormal(deformedBox.FBR, deformedBox.FTR, deformedBox.FTL)
+    expect(normal).toEqual(expected)
+  })
+  it(`blends the 2 triangle's normals`, () => {
+    const normal = calcFaceNormal(
+      deformedBox.FBR,
+      deformedBox.FTR,
+      deformedBox.FTL,
+      [-1, -1, 0.5] // disposition-ed FBL
+    )
+    expect(normal).not.toEqual([0, -0, 4])
+    expect(normal).toEqual([-0.5, -0.5, 4])
+  })
+})
+
+describe(`${calcFaceNormalsOfBox.name}`, () => {
+  it(`calculates face normals for 6 faces of the given box`, () => {
+    const expected: DeformedBoxNormalsV2 = {
+      normalFront: [0, 0, 4],
+      normalBack: [0, 0, -4],
+      normalLeft: [-4, 0, 0],
+      normalRight: [4, 0, 0],
+      normalBottom: [0, -4, 0],
+      normalTop: [0, 4, 0],
+    }
+    const result = calcFaceNormalsOfBox(deformedBox)
+    expect(result).toEqual(expected)
+  })
+})
+
+describe(`${blendBoxNormalsForAVertex.name}`, () => {
+  it(`should return the vertex's closest face's normal`, () => {
+    const boxNormals = calcFaceNormalsOfBox(deformedBox)
+    const vertex: Vector3D = [0.0, 0.99999, 0.0] // close to top
+    const result = blendBoxNormalsForAVertex(vertex, deformedBox, boxNormals)
+
+    expect(result[0]).toBeCloseTo(0)
+    expect(result[1]).toBeCloseTo(1)
+    expect(result[2]).toBeCloseTo(0)
+  })
+  it.only(`should return the vertex's closest face's normal (double check)`, () => {
+    const boxNormals = calcFaceNormalsOfBox(deformedBox)
+    const vertex: Vector3D = [-0.999, 0.0, 0.0] // close to left
+    const result = blendBoxNormalsForAVertex(vertex, deformedBox, boxNormals)
+
+    expect(result[0]).toBeCloseTo(-1)
+    expect(result[1]).toBeCloseTo(0)
+    expect(result[2]).toBeCloseTo(0)
+  })
+  it(`should blend the result if vertex is equally close to multiple faces`, () => {
+    const boxNormals = calcFaceNormalsOfBox(deformedBox)
+    const vertex: Vector3D = [0.9999, 0.9999, 0.0] // close to top and right
+    const result = blendBoxNormalsForAVertex(vertex, deformedBox, boxNormals)
+
+    expect(result).toEqual(
+      [
+        0.7071067780278051,
+        0.7071067780278051,
+        0.00009452128110086504,
+      ]
     )
   })
 })

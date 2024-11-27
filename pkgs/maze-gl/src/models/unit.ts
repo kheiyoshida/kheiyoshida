@@ -27,3 +27,12 @@ export type DeformedBoxNormals = {
   normalBTL: Vector3D
   normalBTR: Vector3D
 }
+
+export type DeformedBoxNormalsV2 = {
+  normalTop: Vector3D
+  normalBottom: Vector3D
+  normalRight: Vector3D
+  normalLeft: Vector3D
+  normalFront: Vector3D
+  normalBack: Vector3D
+}

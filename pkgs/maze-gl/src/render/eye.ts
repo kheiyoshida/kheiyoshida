@@ -20,7 +20,7 @@ export const convertEyeValuesToMatrices = (eye: Eye): [view: mat4, projection: m
 
   // get projection matrix
   const projection = mat4.create()
-  mat4.perspective(projection, eye.fov, eye.aspectRatio, 0.1, ndcScale(eye.sight))
+  mat4.perspective(projection, eye.fov, eye.aspectRatio, 0.01, ndcScale(eye.sight))
 
   return [view, projection]
 }

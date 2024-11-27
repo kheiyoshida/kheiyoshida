@@ -72,6 +72,13 @@ export const scale = (v: Vector3D, amount: number): void => {
 }
 
 /**
+ * create a scaled vector based on original vector and scale amount
+ */
+export const createScaled = (v: Vector3D, amount: number): Vector3D => {
+  return vec3.scale(vec3.create(), v, amount) as Vector3D
+}
+
+/**
  * creates a mix of vectors applying the given ratio
  * same operation as GLSL's mix() function
  * @param a
@@ -120,4 +127,21 @@ export const normalize = (v: Vector3D, length: number): void => {
   v[0] *= scale
   v[1] *= scale
   v[2] *= scale
+}
+
+/**
+ * calculate dot product for given 2 vectors.
+ * if the result is 0, the 2 vectors are perpendicular.
+ */
+export const dot = (v1: Vector3D, v2: Vector3D): number => {
+  return vec3.dot(v1, v2)
+}
+
+/**
+ * calculate the cross product for given 2 vectors
+ */
+export const cross = (v1: Vector3D, v2: Vector3D): Vector3D => {
+  const result = vec3.create()
+  vec3.cross(result, v1, v2)
+  return result as Vector3D
 }

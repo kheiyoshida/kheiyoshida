@@ -4,7 +4,7 @@ import { positionToNDC } from './scale'
 import { convertEyeValuesToMatrices } from './eye'
 import { getGL } from '../webgl'
 import { convertLightsToUboData } from './lights'
-import { computeOutwardNormals } from './box'
+import { calcFaceNormal, calcFaceNormalsOfBox, computeOutwardNormals } from './box'
 
 const uPad = 0.0
 
@@ -31,7 +31,8 @@ export const renderScene = ({ eye, units, lights }: Scene) => {
 
 export const renderUnit = (unit: RenderUnit) => {
 
-  const boxNormals = computeOutwardNormals(unit.box)
+  // const boxNormals = computeOutwardNormals(unit.box)
+  const boxNormals = calcFaceNormalsOfBox(unit.box)
 
   // unit-level uniform values
   const uboData = new Float32Array([
@@ -43,14 +44,23 @@ export const renderUnit = (unit: RenderUnit) => {
     ...positionToNDC(unit.box.BBR), uPad,
     ...positionToNDC(unit.box.BTL), uPad,
     ...positionToNDC(unit.box.BTR), uPad,
-    ...positionToNDC(boxNormals.normalFBL), uPad,
-    ...positionToNDC(boxNormals.normalFBR), uPad,
-    ...positionToNDC(boxNormals.normalFTL), uPad,
-    ...positionToNDC(boxNormals.normalFTR), uPad,
-    ...positionToNDC(boxNormals.normalBBL), uPad,
-    ...positionToNDC(boxNormals.normalBBR), uPad,
-    ...positionToNDC(boxNormals.normalBTL), uPad,
-    ...positionToNDC(boxNormals.normalBTR), uPad,
+
+    // ...boxNormals.normalFBL, uPad,
+    // ...boxNormals.normalFBR, uPad,
+    // ...boxNormals.normalFTL, uPad,
+    // ...boxNormals.normalFTR, uPad,
+    // ...boxNormals.normalBBL, uPad,
+    // ...boxNormals.normalBBR, uPad,
+    // ...boxNormals.normalBTL, uPad,
+    // ...boxNormals.normalBTR, uPad,
+
+
+    ...boxNormals.normalTop, uPad,
+    ...boxNormals.normalBottom, uPad,
+    ...boxNormals.normalRight, uPad,
+    ...boxNormals.normalLeft, uPad,
+    ...boxNormals.normalFront, uPad,
+    ...boxNormals.normalBack, uPad,
   ])
   setUBOValue(BindingPoint.DeformedBox, uboData)
 
