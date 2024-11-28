@@ -31,7 +31,7 @@ export const convertToCode = (
 export const convertCenter = (pattern: RenderPattern): GeometryCode[] => {
   if (pattern === RenderPattern.FLOOR) return [GeometryCode.Floor, GeometryCode.Ceil]
   if (pattern === RenderPattern.FILL) return [GeometryCode.FrontWall]
-  if (pattern === RenderPattern.STAIR) return [GeometryCode.Floor, GeometryCode.Stair, GeometryCode.Ceil]
+  if (pattern === RenderPattern.STAIR) return [GeometryCode.Floor, GeometryCode.Octahedron, GeometryCode.Ceil]
   throw Error()
 }
 

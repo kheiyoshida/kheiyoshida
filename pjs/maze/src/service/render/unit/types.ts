@@ -23,6 +23,7 @@ export enum GeometryCode {
   RightWall = 'RightWall',
   LeftWall = 'LeftWall',
   FrontWall = 'FrontWall',
-  Stair = 'Stair',
+  Octahedron = 'Octahedron',
   Pole = 'Pole',
+  Tile = 'Tile',
 }

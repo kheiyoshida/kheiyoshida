@@ -121,6 +121,8 @@ void main()
     result += CalcPointLight(pointLights[1], norm, fragPos, viewDir);
     result += CalcSpotLight(spotLight, norm, fragPos, viewDir);
 
+    result = vec3(result);
+
     float rnd = random(fract(gl_FragCoord.xy / 1.5));
     float rnd2 = random(fract(gl_FragCoord.xy / rnd));
 //    float rnd3 = random(fract(gl_FragCoord.xy / rnd2));

@@ -101,7 +101,10 @@ bool isVertexOnEdge(vec3 vertex) {
 }
 
 void main() {
-    vec3 normalizedPosition = (aPosition + vec3(1.0)) * 0.5;
+    vec3 modelTransformedPosition = vec3(model * vec4(aPosition, 1.0));
+
+    vec3 normalizedPosition = (modelTransformedPosition + vec3(1.0)) * 0.5;
+
     vec3 transformedPosition =
     (1.0 - normalizedPosition.x) * (1.0 - normalizedPosition.y) * (normalizedPosition.z) * FBL +
     normalizedPosition.x * (1.0 - normalizedPosition.y) * (normalizedPosition.z) * FBR +
@@ -120,10 +123,10 @@ void main() {
         if (positionsFaceNormal != dNone) {
             vNormal = normalize(positionsFaceNormal);
         } else {
-            vNormal = blendBoxNormalsForAVertex(normalizedPosition);
+            vNormal = mix(aNormal, blendBoxNormalsForAVertex(normalizedPosition), 0.5);
         }
     }
 
-    fragPos = vec3(model * vec4(transformedPosition, 1.0));
+    fragPos = vec3(transformedPosition);
     gl_Position = projection * view * vec4(fragPos, 1.0);
 }

@@ -11,7 +11,7 @@ import {
   convertToCodeGridLayer,
   trimModelsHorizontal,
   trimModelsVertical,
-} from './classic.ts'
+} from './default.ts'
 import { GeometryCode, GeometryCodeGrid, GeometryCodeGridLayer } from '../types.ts'
 
 test(`${convertToClassicGeometryCodes.name}`, () => {

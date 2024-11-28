@@ -29,7 +29,7 @@ test(`${createScaffoldLayer.name}`, () => {
 })
 
 test.each([
-  [0, 300 + 1000], // adjusted
+  [0, 300],
   [1, -300],
   [2, -1300],
   [3, -1900],

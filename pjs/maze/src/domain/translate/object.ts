@@ -5,10 +5,10 @@ import { MAX_STATUS_VALUE } from '../../config'
 export const getTerrainRenderStyle = (): TerrainRenderStyle => {
   if (store.current.aesthetics <= 3) return 'poles'
   if (store.current.aesthetics >= 7) return 'tiles'
-  return 'classic'
+  return 'default_'
 }
 
-export type TerrainRenderStyle = 'classic' | 'poles' | 'tiles'
+export type TerrainRenderStyle = 'default_' | 'poles' | 'tiles'
 
 export const ObjectAlignmentValues = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const
 

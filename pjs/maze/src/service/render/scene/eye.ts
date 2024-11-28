@@ -1,13 +1,15 @@
-import { CameraZ, FOV, MaxVisibleLength } from '../../../config'
+import { CameraZ, FOV, MaxVisibleLength, WallHeight } from '../../../config'
 import { CameraMoveValues } from './types.ts'
 import { ScaffoldValues } from '../scaffold'
 import { Eye } from 'maze-gl'
 import { toRadians } from 'utils'
 
+const eyeElevation =WallHeight/100
+
 const defaultEye: Eye = {
   sight: MaxVisibleLength,
   fov: toRadians(FOV),
-  position: [0, 0, CameraZ],
+  position: [0, eyeElevation, CameraZ],
   direction: 0,
   aspectRatio: window.innerWidth / window.innerHeight,
 }
@@ -25,7 +27,7 @@ export const getMovementEye = (
   const direction = turn ? turn * 90 : 0
   return {
     ...defaultEye,
-    position: [0, 0, finalZ],
+    position: [0, eyeElevation, finalZ],
     direction,
   }
 }

@@ -20,7 +20,7 @@ describe(`${convertRenderGridToUnitSpecList.name}`, () => {
       [1, 0, 0],
     ].reverse() as RenderGrid
 
-    const result = convertRenderGridToUnitSpecList(renderGrid, 'classic')
+    const result = convertRenderGridToUnitSpecList(renderGrid, 'default_')
 
     // TODO: adjust expected codes after performance tuning
     expect(result).toEqual([

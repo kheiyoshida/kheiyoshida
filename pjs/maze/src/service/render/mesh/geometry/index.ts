@@ -9,6 +9,7 @@ export const GeometrySpecDict: Record<GeometryCode, GeometrySpec> = {
   [GeometryCode.FrontWall]: rectangles.FrontWall,
   [GeometryCode.LeftWall]: rectangles.LeftWall,
   [GeometryCode.RightWall]: rectangles.RightWall,
-  [GeometryCode.Stair]: rectangles.Floor, // TODO: implement stair
+  [GeometryCode.Octahedron]: objects.Octahedron,
   [GeometryCode.Pole]: objects.Pole,
+  [GeometryCode.Tile]: objects.Tile,
 }
