@@ -1,29 +1,22 @@
-import { randomIntInAsymmetricRange, randomIntInclusiveBetween, toRadians } from 'utils'
+import { randomIntInAsymmetricRange, toRadians } from 'utils'
 import { LightVariables } from '../../../domain/translate/light'
-import { makeColorManager, RGB } from '../color'
-import { Colors } from '../color/colors.ts'
-import { Eye, PointLightValues, Scene, SpotLightValues, Vector3D } from 'maze-gl'
+import { RGB } from '../color'
+import { Color, Eye, PointLightValues, Scene, SpotLightValues, Vector3D } from 'maze-gl'
 
 const MinFallOff = 50
 const DefaultFallOff = 50
 
-export const LightColorManager = makeColorManager(Colors.white, () => [
-  randomIntInclusiveBetween(200, 250),
-  randomIntInclusiveBetween(200, 250),
-  randomIntInclusiveBetween(200, 250),
-])
-
 export const triggerFadeOut = (frames: number) => {
-  LightColorManager.setFixedOperation(['fadeout', frames], frames)
+  // LightColorManager.setFixedOperation(['fadeout', frames], frames)
 }
 
-export const getLights = ({ position, direction }: Eye, light: LightVariables): Scene['lights'] => {
-  LightColorManager.resolve(light.colorParams)
-  const linearFallOff = calcLightFalloff(light.visibility)
+export const getLights = ({ position, direction }: Eye, lightColor: Color, light: LightVariables): Scene['lights'] => {
 
-  const diffuseColor = LightColorManager.currentRGB.map((v) => v / 255 / 10) as RGB
-  const ambientColor = [0.05, 0.05, 0.05] as RGB
-  const specularColor = [0.0, 0.01, 0.0] as RGB
+  const diffuseColor = lightColor.normalizedRGB
+  const specularColor = lightColor.clone().fixLightness(lightColor.lightness - 0.1).normalizedRGB
+
+  lightColor.lightness = 0.01
+  const ambientColor = lightColor.normalizedRGB
 
   const pointLight1: PointLightValues = {
     position,
@@ -32,9 +25,10 @@ export const getLights = ({ position, direction }: Eye, light: LightVariables): 
     diffuse: diffuseColor,
     specular: specularColor,
 
+    // TODO: calculate falloff values based on light variables
     constant: 0.5,
-    linear: linearFallOff,
-    quadratic: 0.4,
+    linear: 0.5,
+    quadratic: 0.8,
   }
 
   const pointLight2: PointLightValues = {
@@ -62,10 +56,6 @@ export const getLights = ({ position, direction }: Eye, light: LightVariables): 
     pointLights: [pointLight1, pointLight2],
     spotLight,
   }
-}
-
-const calcLightFalloff = (visibility = 1.0) => {
-  return 50 / (MinFallOff + DefaultFallOff * visibility)
 }
 
 const calcDirectionalVector = (delta: number): Vector3D => {

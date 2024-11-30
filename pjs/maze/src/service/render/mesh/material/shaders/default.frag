@@ -32,7 +32,7 @@ struct SpotLight {
 
     vec3 ambient;
     vec3 diffuse;
-    vec4 specular; // vec4 to make sure the last 4 bytes pad
+    vec4 specular;// vec4 to make sure the last 4 bytes pad
 
     float cutOff;
     float outerCutOff;
@@ -44,9 +44,14 @@ struct SpotLight {
 
 layout (std140) uniform Lights
 {
+    vec4 viewPos;
     PointLight pointLights[2];
     SpotLight spotLight;
-    vec3 viewPos;
+};
+
+layout (std140) uniform Color
+{
+    vec3 unlitColor;
 };
 
 #define NR_POINT_LIGHTS 2
@@ -55,21 +60,30 @@ layout (std140) uniform Lights
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
     vec3 lightDir = normalize(light.position - fragPos);
+
     // diffuse shading
     float diff = max(dot(normal, lightDir), 0.0);
+
     // specular shading
     vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    float spec = pow(
+        max(dot(viewDir, reflectDir), 0.0),
+        material.shininess
+    );
+
     // attenuation
     float distance = length(light.position - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
+
     // combine results
     vec3 ambient = light.ambient * material.diffuse;
     vec3 diffuse = light.diffuse * diff * material.diffuse;
     vec3 specular = light.specular * spec * material.specular;
+
     ambient *= attenuation;
     diffuse *= attenuation;
     specular *= attenuation;
+
     return (ambient + diffuse + specular);
 }
 
@@ -108,25 +122,25 @@ float random(vec2 st) {
 
 void main()
 {
-//    fragColor =vec4(vNormal, 1.0);
-//    fragColor =vec4((vNormal + 1.0) / 2.0, 1.0);
-//    return;
-
     vec3 norm = normalize(vNormal);
 
-    vec3 viewDir = normalize(viewPos - fragPos);
+    vec3 viewDir = normalize(viewPos.xyz - fragPos);
 
     vec3 result = vec3(0.0);
     result += CalcPointLight(pointLights[0], norm, fragPos, viewDir);
     result += CalcPointLight(pointLights[1], norm, fragPos, viewDir);
     result += CalcSpotLight(spotLight, norm, fragPos, viewDir);
 
-    result = vec3(result);
+    if (unlitColor.x > 0.5 && unlitColor.y > 0.5 && unlitColor.z > 0.5) {
+        result = unlitColor - result;
+    } else {
+        result = unlitColor + result;
+    }
 
-    float rnd = random(fract(gl_FragCoord.xy / 1.5));
-    float rnd2 = random(fract(gl_FragCoord.xy / rnd));
-//    float rnd3 = random(fract(gl_FragCoord.xy / rnd2));
-    result += vec3(rnd2, rnd, 0.0) * 0.001;
+    //    float rnd = random(fract(gl_FragCoord.xy / 1.5));
+    //    float rnd2 = random(fract(gl_FragCoord.xy / rnd));
+    //    float rnd3 = random(fract(gl_FragCoord.xy / rnd2));
+    //    result += vec3(rnd2, rnd, 0.0) * 0.001;
 
     fragColor = vec4(result, 1.0);
 }

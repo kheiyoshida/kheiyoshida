@@ -8,13 +8,7 @@ const makeConverter =
   (renderGrid) => {
     return renderGrid
       .filter((layer): layer is ConcreteRenderLayer => layer !== null)
-      .map(
-        (layer, i) =>
-          layer.map((pattern, j) => {
-            // if (i === 0 && j === 1) return [...patternCodeMap[pattern], GeometryCode.Floor]
-            return patternCodeMap[pattern]
-          }) as GeometryCodeGridLayer
-      )
+      .map((layer) => layer.map((pattern) => patternCodeMap[pattern]) as GeometryCodeGridLayer)
   }
 
 export const convertToPoles = makeConverter({

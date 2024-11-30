@@ -1,35 +1,22 @@
 import { ColorMaterial, Material } from 'maze-gl'
 import { getShader } from './shaders'
 import { getGL } from 'maze-gl/src/webgl'
+import { DefaultMaterial, DistinctMaterial } from './materials.ts'
 
 export type MaterialType = 'default' | 'octahedron'
 
 export const MaterialMap = new Map<MaterialType, Material>()
 
 export const initMaterialMap = () => {
-  MaterialMap.set(
-    'default',
-    new ColorMaterial(getShader('default'), {
-      diffuse: [0.25, 0.24, 0.25],
-      shininess: 0.5,
-      specular: [0.05, 0.05, 0.05],
-    })
-  )
-  MaterialMap.set(
-    'octahedron',
-    new ColorMaterial(getShader('default'), {
-      diffuse: [0.8, 0.24, 0.25],
-      shininess: 0.2,
-      specular: [0, 0, 0],
-    })
-  )
+  MaterialMap.set('default', new DefaultMaterial())
+  MaterialMap.set('octahedron', new DistinctMaterial())
 }
 
-export const getMaterial = (type: MaterialType) => {
+export const getColorMaterial = (type: MaterialType): ColorMaterial => {
   if (!MaterialMap.has(type)) {
     throw Error(`material map was not initialized`)
   }
-  return MaterialMap.get(type) as Material
+  return MaterialMap.get(type) as ColorMaterial
 }
 
 export const updateRandomValues = () => {

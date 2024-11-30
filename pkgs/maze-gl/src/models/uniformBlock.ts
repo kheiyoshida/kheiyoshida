@@ -1,11 +1,13 @@
 import { getGL } from '../webgl'
 
-const NUM_OF_BP = 3
+// remember to change this number every time you add a binding point!!
+const NUM_OF_BP = 4
 
 export enum BindingPoint {
   DeformedBox,
   Eye,
   Lights,
+  Color
 }
 
 /**
@@ -16,6 +18,7 @@ export const UniformNameBPMap: Record<string, BindingPoint> = {
   DeformedBox: BindingPoint.DeformedBox,
   Eye: BindingPoint.Eye,
   Lights: BindingPoint.Lights,
+  Color: BindingPoint.Color,
 }
 
 /**

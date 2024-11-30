@@ -17,6 +17,7 @@ import { soundPack } from './sound'
 import { getUnits } from './scene'
 import { renderScene as rs, Scene } from 'maze-gl'
 import { updateRandomValues } from './mesh/material'
+import { resolveColor } from './color_new'
 
 const renderScene = (scene: Scene) => {
   updateRandomValues()
@@ -25,10 +26,11 @@ const renderScene = (scene: Scene) => {
 
 export const renderCurrentView: RenderHandler = ({ renderGrid, scaffoldValues, light, terrainStyle }) => {
   const drawFrame = () => {
+    const { lightColor, unlitColor } = resolveColor()
     const eye = getDefaultEye()
     const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
-    const lights = getLights(eye, light)
-    renderScene({ units, eye, lights })
+    const lights = getLights(eye, lightColor, light)
+    renderScene({ units, eye, lights, unlitColor })
   }
   RenderQueue.push(drawFrame)
 }
@@ -40,10 +42,11 @@ export const renderGo: RenderHandler = ({ renderGrid, speed, scaffoldValues, lig
       soundPack.playWalk()
       blockControlRequired()
     }
+    const { lightColor, unlitColor } = resolveColor()
     const eye = getMovementEye({ move: zDelta }, scaffoldValues)
     const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
-    const lights = getLights(eye, light)
-    renderScene({ units, eye, lights })
+    const lights = getLights(eye, lightColor, light)
+    renderScene({ units, eye, lights, unlitColor })
     if (i === Math.floor((GoMoveMagValues.length * 3) / 4)) {
       unblockControlRequired()
     }
@@ -62,10 +65,11 @@ export const renderTurn =
       if (i === 0) {
         blockControlRequired()
       }
+      const { lightColor, unlitColor } = resolveColor()
       const eye = getMovementEye({ turn: direction === 'right' ? turnDelta : -turnDelta }, scaffoldValues)
       const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
-      const lights = getLights(eye, light)
-      renderScene({ units, eye, lights })
+      const lights = getLights(eye, lightColor, light)
+      renderScene({ units, eye, lights, unlitColor })
       if (i === Math.floor((LRDeltaValues.length * 3) / 4)) {
         unblockControlRequired()
       }
@@ -84,10 +88,11 @@ export const renderGoDownstairs: RenderHandler = ({ renderGrid, scaffoldValues, 
       blockControlRequired()
       blockStatusChangeRequired()
     }
+    const { lightColor, unlitColor } = resolveColor()
     const eye = getMovementEye(values, scaffoldValues)
     const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
-    const lights = getLights(eye, light)
-    renderScene({ units, eye, lights })
+    const lights = getLights(eye, lightColor, light)
+    renderScene({ units, eye, lights, unlitColor })
     if (i === StairAnimationFrameValues.length - 1) {
       unblockControlRequired()
       unblockStatusChangeRequired()
@@ -106,10 +111,11 @@ export const renderProceedToNextFloor: RenderHandler = ({ speed, scaffoldValues,
     if (i % 8 === 0) {
       soundPack.playWalk()
     }
+    const { lightColor, unlitColor } = resolveColor()
     const eye = getMovementEye({ move: zDelta }, scaffoldValues)
     const units = getUnits(corridorToNextFloor, scaffoldValues, terrainStyle)
-    const lights = getLights(eye, light)
-    renderScene({ units, eye, lights })
+    const lights = getLights(eye, lightColor, light)
+    renderScene({ units, eye, lights, unlitColor })
     if (i === GoMoveMagValues.length - 1) {
       unblockControlRequired()
       unblockStatusChangeRequired()
@@ -126,10 +132,11 @@ export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, light, te
       blockControlRequired()
       blockStatusChangeRequired()
     }
+    const { lightColor, unlitColor } = resolveColor()
     const eye = getDefaultEye()
     const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
-    const lights = getLights(eye, light)
-    renderScene({ units, eye, lights })
+    const lights = getLights(eye, lightColor, light)
+    renderScene({ units, eye, lights, unlitColor })
 
     if (i === DieFrames - 1) {
       resurrectEvent()
@@ -151,11 +158,12 @@ export const renderResurrect: RenderHandler = ({
       blockControlRequired()
       blockStatusChangeRequired()
     }
+    const { lightColor, unlitColor } = resolveColor()
     // const eye = getMovementEye({ move: zDelta }, scaffoldValues)
     const eye = getDefaultEye()
     const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
-    const lights = getLights(eye, light)
-    renderScene({ units, eye, lights })
+    const lights = getLights(eye, lightColor, light)
+    renderScene({ units, eye, lights, unlitColor })
     if (i === GoMoveMagValues.length - 1) {
       unblockControlRequired()
       unblockStatusChangeRequired()

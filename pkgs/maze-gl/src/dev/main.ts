@@ -18,6 +18,7 @@ import { boxSize, getDeformedBox, halfBox } from './geometries'
 import { makeRenderer } from '../frame'
 import { PointLightValues, SpotLightValues } from '../models'
 import { toRadians } from '../utils/calc'
+import { Color } from '../color'
 
 const objSpec = await buildGeometrySpecFromObj(objUrl)
 
@@ -27,9 +28,19 @@ resizeCanvas(window.innerWidth, window.innerHeight, window.innerWidth, window.in
 
 const shader = new Shader(vertShaderSource, fragShaderSource)
 
+
+const baseColor = new Color(240, 0.5, 0.0)
+
+const unlitColor = baseColor.clone()
+unlitColor.lightness = 0.9
+
+const lightColor = baseColor.clone()
+lightColor.saturation = 0
+lightColor.lightness = 0.3
+
 const material1 = new ColorMaterial(shader, {
-  diffuse: [0.1, 0.1, 0.1],
-  specular: [0.1, 0.1, 0.1],
+  diffuse: unlitColor.clone().fixLightness(0.3).normalizedRGB,
+  specular: unlitColor.clone().fixLightness(0.3).normalizedRGB,
   shininess: 1.0,
 })
 
@@ -46,15 +57,15 @@ const unit2: RenderUnit = {
 }
 
 const pointLight1: PointLightValues = {
-  position: [0.0, 0.0, halfBox + halfBox],
+  position: [-halfBox * 1.5, 0.0, halfBox],
 
-  ambient: Vec3.create(0.3),
-  diffuse: Vec3.create(0.3),
-  specular: Vec3.create(0.1),
+  ambient: [0, 0, 0],
+  diffuse: lightColor.normalizedRGB,
+  specular: lightColor.normalizedRGB,
 
-  constant: 0.3,
-  linear: 0.0003,
-  quadratic: 0.0003,
+  constant: 1.0,
+  linear: 0.000008,
+  quadratic: 0.00000088,
 }
 
 const pointLight2: PointLightValues = {
@@ -83,8 +94,11 @@ const spotLight: SpotLightValues = {
   quadratic: 0.32, // Quadratic attenuation
 }
 
+
 function frame(frameCount: number) {
+
   const scene: Scene = {
+    unlitColor: unlitColor,
     lights: {
       pointLights: [pointLight1, pointLight2],
       spotLight,

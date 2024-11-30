@@ -8,9 +8,9 @@ import { calcFaceNormalsOfBox } from './box'
 
 const uPad = 0.0
 
-export const renderScene = ({ eye, units, lights }: Scene) => {
+export const renderScene = ({ eye, units, lights, unlitColor }: Scene) => {
   const gl = getGL()
-  gl.clearColor(0.0, 0.0, 0.0, 1.0) // TODO: we wanna be able to change the background color on demand
+  gl.clearColor(...unlitColor.normalizedRGB, 1.0)
   gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT)
 
   // scene-level uniform values
@@ -20,6 +20,9 @@ export const renderScene = ({ eye, units, lights }: Scene) => {
     ...view,
   ])
   setUBOValue(BindingPoint.Eye, uboData)
+
+  const colorUboData = new Float32Array([...unlitColor.normalizedRGB, uPad])
+  setUBOValue(BindingPoint.Color, colorUboData)
 
   // apply lights
   const lightsUBOData = convertLightsToUboData(lights, eye.position)

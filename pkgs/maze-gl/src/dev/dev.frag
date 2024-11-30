@@ -49,6 +49,11 @@ layout (std140) uniform Lights
     vec3 viewPos;
 };
 
+layout (std140) uniform Color
+{
+    vec3 unlitColor;
+};
+
 #define NR_POINT_LIGHTS 2
 
 // calculates the color when using a point light.
@@ -108,6 +113,12 @@ void main()
     result += CalcPointLight(pointLights[0], norm, fragPos, viewDir);
     result += CalcPointLight(pointLights[1], norm, fragPos, viewDir);
     result += CalcSpotLight(spotLight, norm, fragPos, viewDir);
+
+    if (unlitColor.x > 0.8 && unlitColor.y > 0.8 && unlitColor.z > 0.8) {
+        result = unlitColor - result;
+    } else {
+        result = unlitColor + result;
+    }
 
     fragColor = vec4(result, 1.0);
 }

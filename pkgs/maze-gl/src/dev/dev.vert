@@ -84,7 +84,7 @@ void main() {
     normalizedPosition.x * normalizedPosition.y * (1.0 - normalizedPosition.z) * BTR;
 
     vec3 blendedNormal = blendBoxNormalsForAVertex(transformedPosition);
-    vNormal = mix(aNormal, blendedNormal, 0.12); // adjust the mix ratio
+    vNormal = mix(aNormal, blendedNormal, 0.0); // adjust the mix ratio
 
     fragPos = vec3(model * vec4(transformedPosition, 1.0));
     gl_Position = projection * view * vec4(fragPos, 1.0);

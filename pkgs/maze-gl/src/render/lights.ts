@@ -13,10 +13,10 @@ export const convertLightsToUboData = (
   viewPos: Vector3D
 ): Float32Array => {
   return new Float32Array([
+    ...vec3pad(positionToNDC(viewPos)),
     ...formatPointLight(lights.pointLights[0]),
     ...formatPointLight(lights.pointLights[1]),
     ...formatSpotLight(lights.spotLight),
-    ...vec3pad(positionToNDC(viewPos)),
   ])
 }
 

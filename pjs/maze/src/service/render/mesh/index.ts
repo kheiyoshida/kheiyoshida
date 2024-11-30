@@ -1,14 +1,14 @@
 import { Mesh } from 'maze-gl'
 import { GeometrySpecDict } from './geometry'
 import { GeometryCode } from '../unit'
-import { getMaterial } from './material'
+import { getColorMaterial } from './material'
 import { randomFloatBetween } from 'utils'
 
 const meshMap = new Map<GeometryCode, Mesh>()
 
 export const getMesh = (code: GeometryCode): Mesh => {
   if (!meshMap.has(code)) {
-    const material = code === GeometryCode.Octahedron ? getMaterial('octahedron') : getMaterial('default')
+    const material = code === GeometryCode.Octahedron ? getColorMaterial('octahedron') : getColorMaterial('default')
     const mesh = new Mesh(material, GeometrySpecDict[code])
 
     // set initial state
@@ -35,7 +35,6 @@ export const getMesh = (code: GeometryCode): Mesh => {
 const sideEffects = (code: GeometryCode, mesh: Mesh): void => {
   if (code === GeometryCode.Octahedron) {
     mesh.state.scale = randomFloatBetween(0.2, 0.4)
-    console.log(mesh.state)
-    mesh.state.incrementRotation(randomFloatBetween(0.2, 3.0))
+    // mesh.state.incrementRotation(randomFloatBetween(0.2, 3.0))
   }
 }

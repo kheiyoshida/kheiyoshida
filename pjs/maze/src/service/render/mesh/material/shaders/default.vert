@@ -127,6 +127,6 @@ void main() {
         }
     }
 
-    fragPos = vec3(transformedPosition);
-    gl_Position = projection * view * vec4(fragPos, 1.0);
+    fragPos = transformedPosition;
+    gl_Position = projection * view * vec4(transformedPosition, 1.0);
 }

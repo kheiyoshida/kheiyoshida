@@ -1,13 +1,14 @@
-import { Vector3D, Color } from '../vector'
+import { Vector3D } from '../vector'
+import { RGB } from '../color'
 
 export type LightValues = {
   constant: number
   linear: number
   quadratic: number
 
-  ambient: Color
-  diffuse: Color
-  specular: Color
+  ambient: RGB
+  diffuse: RGB
+  specular: RGB
 }
 
 export type PointLightValues = {
