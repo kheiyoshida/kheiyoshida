@@ -1,6 +1,6 @@
 {
   "name": "maze",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "",
   "main": "src/index.tsx",
   "scripts": {
@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "test": "cd ../.. && jest --selectProjects maze"
   },
-  "author": "",
+  "author": "Katsumi Yoshida",
   "license": "ISC",
   "dependencies": {
     "react": "18.2.0",
