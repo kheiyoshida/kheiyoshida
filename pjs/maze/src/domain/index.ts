@@ -1,24 +1,22 @@
-import { MazeState } from '../store'
-import { StatusState } from '../store/status'
-import { getMapInfoFromCurrentState, MapInfo } from './interface/mapper'
+import { getMapInfoFromCurrentState, MapInfo } from './mutate/mapper'
 import {
   getMusicCommands,
   getScaffoldParams,
-  getTextureParams,
   getWalkSpeedFromCurrentState,
   MusicCommand,
   ScaffoldParams,
-  TextureParams,
-} from './translate'
-import { getLightColorIntention, LightVariables } from './translate/light'
-import { getRenderGridFromCurrentState } from './translate/renderGrid'
-import { RenderGrid } from './translate/renderGrid/renderSpec'
+} from './query'
+import { getLightColorIntention, LightVariables } from './query/light'
+import { getRenderGridFromCurrentState } from './query/renderGrid'
+import { RenderGrid } from './query/renderGrid/renderSpec'
 import {
   getObjectParams,
   getTerrainRenderStyle,
   ObjectDrawParams,
   TerrainRenderStyle,
-} from './translate/object.ts'
+} from './query/object.ts'
+import { ColorParams } from './query/color/types.ts'
+import { getColorParams } from './query/color'
 
 export type DomainIntention = {
   renderGrid: RenderGrid
@@ -26,13 +24,11 @@ export type DomainIntention = {
   map: MapInfo
   scaffold: ScaffoldParams
   light: LightVariables
-  texture: TextureParams
+  color: ColorParams
   music: MusicCommand
   terrainStyle: TerrainRenderStyle
   objectParams: ObjectDrawParams
 }
-
-export type ListenableState = Pick<MazeState, 'floor'> & StatusState
 
 export const getDomainIntention = (): DomainIntention => {
   return {
@@ -41,7 +37,7 @@ export const getDomainIntention = (): DomainIntention => {
     map: getMapInfoFromCurrentState(),
     light: getLightColorIntention(),
     scaffold: getScaffoldParams(),
-    texture: getTextureParams(),
+    color: getColorParams(),
     music: getMusicCommands(),
     terrainStyle: getTerrainRenderStyle(),
     objectParams: getObjectParams(),

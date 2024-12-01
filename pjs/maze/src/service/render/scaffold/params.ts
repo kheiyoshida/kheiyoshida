@@ -5,7 +5,7 @@ import {
   PathLength,
   WallHeight,
 } from '../../../config'
-import { ScaffoldParams } from '../../../domain/translate'
+import { ScaffoldParams } from '../../../domain/query'
 import { ScaffoldValues } from './types.ts'
 
 export const calcConcreteScaffoldValues = (params: ScaffoldParams): ScaffoldValues => {

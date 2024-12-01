@@ -4,7 +4,7 @@ import { Direction } from '../../../utils/direction'
 import { toPathSpec } from './nodeSpec'
 import { RenderGrid, convertToRenderGrid } from './renderSpec'
 import { store } from '../../../store'
-import { getPath } from '../../interface/maze'
+import { getPath } from '../../mutate/maze'
 
 export const getRenderGridFromCurrentState = () => {
   return composeRenderGrid(getPath(), store.current.direction)

@@ -1,6 +1,6 @@
 import { clamp } from 'utils'
 
-export const createDecreasingParameter =
+export const makeDecreasingParameter =
   (min: number, max: number, threshold: number = 100) =>
   (status: number) => {
     const diff = max - min
@@ -8,7 +8,7 @@ export const createDecreasingParameter =
     return clamp(min + ratio * diff, min, max)
   }
 
-export const createIncreasingParameter =
+export const makeIncreasingParameter =
   (min: number, max: number, threshold: number = 100) =>
   (status: number) => {
     const diff = max - min

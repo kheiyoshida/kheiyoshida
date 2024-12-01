@@ -1,6 +1,6 @@
 import { makeColorScheme } from './scheme.ts'
 import { getColorMaterial } from '../mesh/material'
-import { randomFloatInAsymmetricRange } from 'utils'
+import { FloorColorParams, FrameColorParams } from '../../../domain/query/color/types.ts'
 
 export * from './types'
 
@@ -11,18 +11,18 @@ export const applyMaterialColor = () => {
   getColorMaterial('octahedron').setColor(ColorScheme.materialColor)
 }
 
-// TODO: pass in domain intention here
-export const resolveColor = (...colorValues: unknown[]) => {
+export const resolveFloorColor = (params: FloorColorParams) => {
+  ColorScheme.moveLightnessRange(params.lightnessMoveDelta)
+  ColorScheme.increaseSaturation(params.saturationDelta, params.maxSaturation)
+}
 
-  // do something with the color values
+export const resolveFrameColor = (params: FrameColorParams) => {
 
-  ColorScheme.rotateHue(1)
+  // hue
+  ColorScheme.rotateHue(params.hueDelta * 180)
 
-  const delta = randomFloatInAsymmetricRange(0.05)
-  ColorScheme.increaseLitLevel(delta)
-
-  // const delta2 = randomFloatInAsymmetricRange(0.01)
-  // ColorScheme.moveLightnessRange(0.01)
+  // lightness
+  ColorScheme.setLightLevel(params.litLevel * 0.4)
 
   // apply material color
   applyMaterialColor()

@@ -7,13 +7,19 @@ const defaultSaturation = 0.0 // 0.0
 
 // lit
 const defaultUnlitLightness = 0.0 // 0.0
-const defaultLitDelta = 0.3 // 0.1
-const materialLightness = 0.1 // 0.1
-
+const lightnessRangeToAvoid = {
+  min: 0.35,
+  max: 0.65,
+}
 const litInversionThreshold = 0.5
+
+const defaultLitDelta = 0.1 // 0.1
+const materialLightness = 0.1 // 0.1
 
 const minLightnessSum = 0.1
 const maxLightnessSum = 0.6
+
+Color.MaxSaturation = 0.8
 
 export const makeColorScheme = (): IColorScheme => {
   const unlitColor = new Color(defaultHue, defaultSaturation, defaultUnlitLightness)
@@ -24,16 +30,23 @@ export const makeColorScheme = (): IColorScheme => {
     unlitColor.lightness += delta
     const minLightness = Math.max(minLightnessSum - unlitLightnessLevel(), 0.01)
     lightColor.lightness = clamp(lightColor.lightness - delta, minLightness, 1.0)
+
+    if (
+      unlitColor.lightness > lightnessRangeToAvoid.min &&
+      unlitColor.lightness < lightnessRangeToAvoid.max
+    ) {
+      moveLightnessRange(delta)
+    }
   }
 
   const unlitLightnessLevel = () =>
     unlitColor.lightness > litInversionThreshold ? 1 - unlitColor.lightness : unlitColor.lightness
 
-  const increaseLitLevel = (delta: number): void => {
+  const setLightLevel = (lightness: number): void => {
     const availableLightness =
-      maxLightnessSum - unlitLightnessLevel() - materialColor.lightness - lightColor.saturation /2
+      maxLightnessSum - unlitLightnessLevel() - materialColor.lightness - lightColor.saturation / 2
     const minLightness = Math.max(minLightnessSum - unlitLightnessLevel(), 0.01)
-    lightColor.lightness = clamp(lightColor.lightness + delta, minLightness, availableLightness)
+    lightColor.lightness = clamp(lightness, minLightness, availableLightness)
   }
 
   const isLitInverted = () => unlitColor.normalizedRGB.every((v) => v > litInversionThreshold)
@@ -67,12 +80,6 @@ export const makeColorScheme = (): IColorScheme => {
     increaseSaturation,
     moveLightnessRange,
     rotateHue,
-    increaseLitLevel,
-    fadeInLight(): void {
-      // TODO: implement
-    },
-    fadeOutLight(): void {
-      // TODO: implement
-    },
+    setLightLevel,
   }
 }

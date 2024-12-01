@@ -1,4 +1,4 @@
-import { RenderPosition } from '../../../domain/translate/renderGrid/renderSpec.ts'
+import { RenderPosition } from '../../../domain/query/renderGrid/renderSpec.ts'
 import {
   RenderBlock,
   RenderBlockLayer,

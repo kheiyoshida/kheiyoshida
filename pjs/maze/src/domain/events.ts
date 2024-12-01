@@ -1,10 +1,11 @@
 import { statusStore, store } from '../store'
-import { LR } from "src/utils/direction"
-import * as mapper from './interface/mapper'
-import * as maze from './interface/maze'
-import { updateStats } from './interface/status'
+import { LR } from 'src/utils/direction'
+import * as mapper from './mutate/mapper'
+import * as maze from './mutate/maze'
+import { updateStats } from './mutate/status'
 import { MessageQueue, RenderSignal } from './messages'
-import { updateAesthetics } from './interface/aesthetics'
+import { updateAesthetics } from './mutate/aesthetics'
+import { lightnessMoveDirection } from './query/color'
 
 export const initializeEvent = () => {
   maze.generateMaze()
@@ -75,7 +76,12 @@ export const goDownstairsEvent = () => {
   updateStats('downstairs')
   updateAesthetics()
 
+  if (store.current.floor >= 15 && store.current.floor % 5 === 0) {
+    lightnessMoveDirection.update()
+  }
+
   MessageQueue.push(RenderSignal.UpdateMusicDest)
+  MessageQueue.push(RenderSignal.ProceedToNextFloor)
   MessageQueue.push(RenderSignal.CurrentView)
   MessageQueue.push(RenderSignal.ShowFloor)
 }

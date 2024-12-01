@@ -3,7 +3,7 @@ import {
   RenderGrid,
   RenderPattern,
   RenderPosition,
-} from '../../../../domain/translate/renderGrid/renderSpec.ts'
+} from '../../../../domain/query/renderGrid/renderSpec.ts'
 import {
   convertCenter,
   convertSide,

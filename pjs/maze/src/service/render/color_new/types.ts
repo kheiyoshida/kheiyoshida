@@ -43,14 +43,7 @@ export type IColorScheme = {
   moveLightnessRange(delta: number): void
 
   /**
-   * increase the lightness of light color
+   * set the lightness of light color
    */
-  increaseLitLevel(delta: number): void
-
-  /**
-   * fade out light color.
-   * when fading in again, call fadeInLight()
-   */
-  fadeOutLight(): void
-  fadeInLight(): void
+  setLightLevel(lightness: number): void
 }

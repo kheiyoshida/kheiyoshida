@@ -8,8 +8,8 @@ import {
 import { convertRenderGridToUnitSpecList } from '../unit'
 import { DeformedBox, RenderUnit } from 'maze-gl'
 import { getMesh } from '../mesh'
-import { RenderGrid } from '../../../domain/translate/renderGrid/renderSpec.ts'
-import { TerrainRenderStyle } from '../../../domain/translate/object.ts'
+import { RenderGrid } from '../../../domain/query/renderGrid/renderSpec.ts'
+import { TerrainRenderStyle } from '../../../domain/query/object.ts'
 
 export const getUnits = (
   renderGrid: RenderGrid,

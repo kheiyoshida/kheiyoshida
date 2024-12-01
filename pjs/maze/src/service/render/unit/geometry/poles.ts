@@ -1,5 +1,5 @@
 import { GeometryCode, GeometryCodeConverter, GeometryCodeGridLayer } from '../types.ts'
-import { ConcreteRenderLayer, RenderPattern } from '../../../../domain/translate/renderGrid/renderSpec.ts'
+import { ConcreteRenderLayer, RenderPattern } from '../../../../domain/query/renderGrid/renderSpec.ts'
 
 type PatternCodeMap = Record<RenderPattern, GeometryCode[]>
 

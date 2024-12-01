@@ -18,7 +18,8 @@ export const createAccumulatedDistanceArray = (length: number): number[] => {
 }
 
 export const getTurnLRDeltaArray = (speed: number) => {
-  const frameNumber = Math.floor(DefaultTurnFrames / speed)
+  // const frameNumber = Math.floor(DefaultTurnFrames / speed)
+  const frameNumber = DefaultTurnFrames
   return createSinArray(frameNumber, 0.15)
 }
 

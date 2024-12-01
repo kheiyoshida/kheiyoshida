@@ -1,5 +1,5 @@
 import { convertRenderGridToUnitSpecList } from './index'
-import { RenderGrid } from '../../../domain/translate/renderGrid/renderSpec.ts'
+import { RenderGrid } from '../../../domain/query/renderGrid/renderSpec.ts'
 import { GeometryCode } from './types.ts'
 
 describe(`${convertRenderGridToUnitSpecList.name}`, () => {

@@ -1,4 +1,4 @@
-import { createDecreasingParameter, createIncreasingParameter } from './params'
+import { makeDecreasingParameter, makeIncreasingParameter } from './params'
 
 test.each([
   [
@@ -12,8 +12,8 @@ test.each([
     ],
   ],
   
-])(`${createDecreasingParameter.name}`, (args, cases) => {
-  const param = createDecreasingParameter(...(args as Parameters<typeof createDecreasingParameter>))
+])(`${makeDecreasingParameter.name}`, (args, cases) => {
+  const param = makeDecreasingParameter(...(args as Parameters<typeof makeDecreasingParameter>))
   for (const [v, e] of cases) {
     expect(param(v)).toBe(e)
   }
@@ -30,8 +30,8 @@ test.each([
       [0, 3],
     ],
   ],
-])(`${createIncreasingParameter.name}`, (args, cases) => {
-  const param = createIncreasingParameter(...(args as Parameters<typeof createIncreasingParameter>))
+])(`${makeIncreasingParameter.name}`, (args, cases) => {
+  const param = makeIncreasingParameter(...(args as Parameters<typeof makeIncreasingParameter>))
   for (const [v, e] of cases) {
     expect(param(v)).toBe(e)
   }

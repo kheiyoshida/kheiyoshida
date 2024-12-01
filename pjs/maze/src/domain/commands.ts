@@ -1,6 +1,6 @@
 import { LR } from "src/utils/direction"
 import { closeMapEvent, goDownstairsEvent, openMapEvent, turnEvent, walkEvent } from './events'
-import * as validaters from './translate/validaters'
+import * as validaters from './query/validaters'
 
 export const go = () => {
   if (!validaters.isAcceptingControl()) return

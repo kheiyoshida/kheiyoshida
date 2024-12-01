@@ -16,7 +16,7 @@ export const callContext = (() => {
 })()
 
 /**
- * create an interface object to control sound buffer
+ * create an mutate object to control sound buffer
  */
 export const createSoundSource: CreateSoundSource = (fileLocation) => {
   const context = callContext()
@@ -31,7 +31,7 @@ export const createSoundSource: CreateSoundSource = (fileLocation) => {
 }
 
 /**
- * create an interface object to control WebAudioAPI analyzer node
+ * create an mutate object to control WebAudioAPI analyzer node
  */
 export const createAnalyzer: CreateAnalyzer = (source, fftSize, smoothing = 0.6) => {
   const context = callContext()

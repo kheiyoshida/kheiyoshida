@@ -1,34 +1,53 @@
 import { randomIntInAsymmetricRange, toRadians } from 'utils'
-import { LightVariables } from '../../../domain/translate/light'
-import { RGB } from '../color'
+import { LightVariables } from '../../../domain/query/light'
 import { Color, Eye, PointLightValues, Scene, SpotLightValues, Vector3D } from 'maze-gl'
 
-const MinFallOff = 50
-const DefaultFallOff = 50
-
-export const triggerFadeOut = (frames: number) => {
-  // LightColorManager.setFixedOperation(['fadeout', frames], frames)
+type Fade = {
+  in?: number
+  out?: number
 }
 
-export const getLights = ({ position, direction }: Eye, lightColor: Color, light: LightVariables): Scene['lights'] => {
+export const getLights = (
+  { position, direction }: Eye,
+  lightColor: Color,
+  light: LightVariables,
+  fade?: Fade
+): Scene['lights'] => {
+  // colors
+  const diffuseColor = lightColor.clone()
+  const specularColor = lightColor.clone()
+  const ambientColor = lightColor.clone()
 
-  const diffuseColor = lightColor.normalizedRGB
-  const specularColor = lightColor.clone().fixLightness(lightColor.lightness - 0.1).normalizedRGB
+  // set specific lightness for each component
+  specularColor.lightness -= 0.1
+  ambientColor.lightness = 0.01
 
-  lightColor.lightness = 0.01
-  const ambientColor = lightColor.normalizedRGB
+
+  // get concrete rgb values for shader
+  const diffuseRGB = diffuseColor.normalizedRGB
+  const specularRGB = specularColor.normalizedRGB
+  const ambientRGB = ambientColor.normalizedRGB
+
+  // light
+  const lightness = lightColor.lightness
+
+  const maxFalloff = Math.max(lightness, 0.1)
+  const linearFalloff = maxFalloff * (1 - light.nearVisibility)
+
+  const minConstant = Math.max(lightness, 0.3)
+  const maxConstant = minConstant + 0.2
+  const constantFalloff = minConstant + light.farVisibility * (maxConstant - minConstant)
+  const constant =fade ? calcFadeInOut(fade, constantFalloff) : constantFalloff
 
   const pointLight1: PointLightValues = {
     position,
+    ambient: ambientRGB,
+    diffuse: diffuseRGB,
+    specular: specularRGB,
 
-    ambient: ambientColor,
-    diffuse: diffuseColor,
-    specular: specularColor,
-
-    // TODO: calculate falloff values based on light variables
-    constant: 0.5,
-    linear: 0.5,
-    quadratic: 0.8,
+    constant: constant,
+    linear: linearFalloff,
+    quadratic: 0.01,
   }
 
   const pointLight2: PointLightValues = {
@@ -40,14 +59,14 @@ export const getLights = ({ position, direction }: Eye, lightColor: Color, light
     position: position,
     direction: calcDirectionalVector(direction),
 
-    ambient: ambientColor,
-    diffuse: diffuseColor,
+    ambient: ambientRGB,
+    diffuse: diffuseRGB,
     specular: [0.1, 0.1, 0.1],
 
     cutOff: 2,
     outerCutOff: 50,
 
-    constant: 1.0,
+    constant: constant,
     linear: 1.5,
     quadratic: 0.48,
   }
@@ -61,4 +80,16 @@ export const getLights = ({ position, direction }: Eye, lightColor: Color, light
 const calcDirectionalVector = (delta: number): Vector3D => {
   const theta = Math.PI / 2 - toRadians(delta)
   return [Math.cos(theta), 0, -Math.sin(theta)]
+}
+
+const darkConstantFalloff = 30.0
+const calcFadeInOut = (fade: Fade, constant: number): number => {
+  const diff = Math.abs(darkConstantFalloff - constant)
+  if (fade.in !== undefined) {
+    return darkConstantFalloff - fade.in * diff
+  }
+  if (fade.out !== undefined) {
+    return constant + fade.out * diff
+  }
+  throw Error(`unexpected`)
 }

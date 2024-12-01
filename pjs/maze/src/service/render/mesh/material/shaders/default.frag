@@ -128,8 +128,8 @@ void main()
 
     vec3 result = vec3(0.0);
     result += CalcPointLight(pointLights[0], norm, fragPos, viewDir);
-    result += CalcPointLight(pointLights[1], norm, fragPos, viewDir);
-    result += CalcSpotLight(spotLight, norm, fragPos, viewDir);
+//    result += CalcPointLight(pointLights[1], norm, fragPos, viewDir);
+//    result += CalcSpotLight(spotLight, norm, fragPos, viewDir);
 
     if (unlitColor.x > 0.5 && unlitColor.y > 0.5 && unlitColor.z > 0.5) {
         result = unlitColor - result;

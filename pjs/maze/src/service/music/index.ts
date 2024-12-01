@@ -1,6 +1,6 @@
 import { makeContextManager, maze } from 'music'
 import { RenderHandler } from '../consumer'
-import { MusicRange } from '../../domain/translate'
+import { MusicRange } from '../../domain/query'
 
 let buffer: [MusicRange,MusicRange]
 
