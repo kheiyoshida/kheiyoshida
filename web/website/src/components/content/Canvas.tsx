@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Sketch } from '../../contents/data'
 
 export const Canvas = ({ sketch }: { sketch: Sketch }) => {
@@ -7,7 +7,7 @@ export const Canvas = ({ sketch }: { sketch: Sketch }) => {
   useEffect(preventScroll, [])
   return (
     <>
-      <CnavasLoader />
+      {/*<CanvasLoader />*/}
       <SketchComponent />
     </>
   )
@@ -39,7 +39,7 @@ const preventScroll = () => {
   document.body.style.top = '0'
 }
 
-const CnavasLoader = () => (
+const CanvasLoader = () => (
   <div style={loader}>
     <div style={text}>loading...</div>
   </div>

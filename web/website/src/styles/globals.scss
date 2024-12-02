@@ -37,6 +37,7 @@ body {
 a {
   color: vars.$text-color;
   text-decoration: none;
+
   &:hover {
     @include animation.hover;
   }
@@ -49,17 +50,18 @@ canvas {
 .container {
   width: 100%;
   padding: vars.$space;
+
   &__body {
     width: min(vars.$max-width, 100%);
-    margin: 0 auto;
-    margin-bottom: 5 * vars.$space;
+    margin: 0 auto 5 * vars.$space;
   }
 
   @media screen and (max-width: vars.$sp-width) {
+    width: 100vw;
     margin-top: 2 * vars.$space + vars.$txt-small; // menu text + margin around that
     &__body {
       width: 100%;
-      margin: 0;
+      margin-top: 0;
       margin-bottom: 5 * vars.$space;
     }
   }

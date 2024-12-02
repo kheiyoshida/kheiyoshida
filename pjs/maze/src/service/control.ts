@@ -9,6 +9,7 @@ export const bindControl = () => {
 
 const smallScreen = () => {
   const { map, up, right, left } = getButtons()
+
   map.ontouchstart = commands.callMap
   up.ontouchstart = commands.go
   right.ontouchstart = commands.turnRight

@@ -1,4 +1,5 @@
 import { wh, ww } from '../../config'
+import React from 'react'
 
 export const getButtons = () => {
   const map = document.getElementById(Map.id)
