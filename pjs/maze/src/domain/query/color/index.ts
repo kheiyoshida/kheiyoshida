@@ -1,6 +1,6 @@
 import { ColorParams, FloorColorParams, FrameColorParams } from './types.ts'
 import { statusStore, store } from '../../../store'
-import { fireByRate, randomFloatBetween, randomFloatInAsymmetricRange } from 'utils'
+import { fireByRate, makeConstrainedRandomEmitter, randomFloatBetween, randomFloatInAsymmetricRange } from 'utils'
 import { StatusState } from '../../../store/status.ts'
 import { makeDecreasingParameter, makeIncreasingParameter } from '../utils/params.ts'
 
@@ -22,12 +22,13 @@ const MaxSaturationLevel = 0.8
  */
 export const lightnessMoveDirection = (() => {
   let val: boolean = true
+  const updateSign = makeConstrainedRandomEmitter(() => fireByRate(0.5), (v, p) => v === p, 3)
   return {
     get currentSign(): 1 | -1 {
       return val ? 1 : -1
     },
     update() {
-      val = fireByRate(0.5)
+      val = updateSign()
     },
   }
 })()

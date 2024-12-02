@@ -46,4 +46,9 @@ export type IColorScheme = {
    * set the lightness of light color
    */
   setLightLevel(lightness: number): void
+
+  /**
+   * reset colors to default starting values
+   */
+  resetColors(): void
 }

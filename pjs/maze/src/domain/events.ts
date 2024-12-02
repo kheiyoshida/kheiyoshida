@@ -76,7 +76,7 @@ export const goDownstairsEvent = () => {
   updateStats('downstairs')
   updateAesthetics()
 
-  if (store.current.floor >= 15 && store.current.floor % 5 === 0) {
+  if (store.current.floor >= 12 && store.current.floor % 3 === 0) {
     lightnessMoveDirection.update()
   }
 

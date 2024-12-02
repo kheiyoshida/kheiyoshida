@@ -16,7 +16,7 @@ import { soundPack } from './sound'
 import { getUnits } from './scene'
 import { renderScene as rs, Scene } from 'maze-gl'
 import { updateRandomValues } from './mesh/material'
-import { resolveFloorColor, resolveFrameColor } from './color_new'
+import { resetColors, resolveFloorColor, resolveFrameColor } from './color'
 import { DownFramesLength } from '../../config'
 
 const renderScene = (scene: Scene) => {
@@ -179,6 +179,7 @@ export const renderResurrect: RenderHandler = ({
 }) => {
   const drawFrameSequence = [...Array(ResurrectFrames)].map((_, i) => () => {
     if (i === 0) {
+      resetColors()
       blockControlRequired()
       blockStatusChangeRequired()
     }

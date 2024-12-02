@@ -26,6 +26,15 @@ export const makeColorScheme = (): IColorScheme => {
   const lightColor = new Color(defaultHue, defaultSaturation, defaultLitDelta)
   const materialColor = new Color(defaultHue, defaultSaturation, materialLightness)
 
+  const resetColors = () => {
+    unlitColor.saturation = defaultSaturation
+    unlitColor.lightness = defaultUnlitLightness
+    lightColor.saturation = defaultSaturation
+    lightColor.lightness = defaultLitDelta
+    materialColor.saturation = defaultSaturation
+    materialColor.lightness = materialLightness
+  }
+
   const moveLightnessRange = (delta: number): void => {
     unlitColor.lightness += delta
     const minLightness = Math.max(minLightnessSum - unlitLightnessLevel(), 0.01)
@@ -81,5 +90,6 @@ export const makeColorScheme = (): IColorScheme => {
     moveLightnessRange,
     rotateHue,
     setLightLevel,
+    resetColors,
   }
 }

@@ -17,7 +17,6 @@ export const resolveFloorColor = (params: FloorColorParams) => {
 }
 
 export const resolveFrameColor = (params: FrameColorParams) => {
-
   // hue
   ColorScheme.rotateHue(params.hueDelta * 180)
 
@@ -32,3 +31,5 @@ export const resolveFrameColor = (params: FrameColorParams) => {
     unlitColor: ColorScheme.unlitColor,
   }
 }
+
+export const resetColors = () => ColorScheme.resetColors()

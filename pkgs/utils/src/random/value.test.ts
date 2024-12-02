@@ -1,4 +1,5 @@
 import {
+  makeConstrainedRandomEmitter,
   fireByRate,
   randomFloatBetween,
   randomIntBetween,
@@ -7,11 +8,7 @@ import {
 
 describe(`${fireByRate.name}`, () => {
   it(`should get boolean value based on provided rate`, () => {
-    jest
-      .spyOn(Math, 'random')
-      .mockReturnValueOnce(0.2)
-      .mockReturnValueOnce(0.9)
-      .mockReturnValueOnce(0.5)
+    jest.spyOn(Math, 'random').mockReturnValueOnce(0.2).mockReturnValueOnce(0.9).mockReturnValueOnce(0.5)
     expect(fireByRate(0.5)).toBe(true)
     expect(fireByRate(0.5)).toBe(false)
     expect(fireByRate(0.5)).toBe(true)
@@ -33,11 +30,7 @@ describe(`${randomFloatBetween.name}`, () => {
 
 describe(`${randomIntBetween.name}`, () => {
   it(`should get random int value between provided values`, () => {
-    jest
-      .spyOn(Math, 'random')
-      .mockReturnValueOnce(0.33)
-      .mockReturnValueOnce(0.88)
-      .mockReturnValueOnce(0.999)
+    jest.spyOn(Math, 'random').mockReturnValueOnce(0.33).mockReturnValueOnce(0.88).mockReturnValueOnce(0.999)
     expect(randomIntBetween(0, 10)).toBe(3)
     expect(randomIntBetween(0, 10)).toBe(8)
     expect(randomIntBetween(0, 10)).toBe(9)
@@ -46,13 +39,42 @@ describe(`${randomIntBetween.name}`, () => {
 
 describe(`${randomIntInclusiveBetween.name}`, () => {
   it(`should get random int value inclusively between provided values`, () => {
-    jest
-      .spyOn(Math, 'random')
-      .mockReturnValueOnce(0.2)
-      .mockReturnValueOnce(0.77)
-      .mockReturnValueOnce(0.999)
+    jest.spyOn(Math, 'random').mockReturnValueOnce(0.2).mockReturnValueOnce(0.77).mockReturnValueOnce(0.999)
     expect(randomIntInclusiveBetween(0, 4)).toBe(1)
     expect(randomIntInclusiveBetween(0, 4)).toBe(3)
     expect(randomIntInclusiveBetween(0, 4)).toBe(4)
+  })
+})
+
+describe(`${makeConstrainedRandomEmitter.name}`, () => {
+  it(`should constrain "same" random values`, () => {
+    const random = jest.fn()
+    ;[1, 1, 1, 1, 2].forEach((value) => {
+      random.mockReturnValueOnce(value)
+    })
+
+    const constrainedEmitter = makeConstrainedRandomEmitter(random as () => number, (v, p) => v === p, 3)
+
+    expect(constrainedEmitter()).toBe(1) // 1st
+    expect(constrainedEmitter()).toBe(1) // 2nd
+    expect(constrainedEmitter()).toBe(1) // 3rd
+    expect(constrainedEmitter()).toBe(2) // 1 for the 4th time is not allowed
+  })
+  it(`should reset the count when it gets different values`, () => {
+    const random = jest.fn()
+    ;[1, 1, 1, 2, 2, 2, 1, 1].forEach((value) => {
+      random.mockReturnValueOnce(value)
+    })
+
+    const constrainedEmitter = makeConstrainedRandomEmitter(random as () => number, (v, p) => v === p, 3)
+
+    expect(constrainedEmitter()).toBe(1)
+    expect(constrainedEmitter()).toBe(1)
+    expect(constrainedEmitter()).toBe(1)
+    expect(constrainedEmitter()).toBe(2)
+    expect(constrainedEmitter()).toBe(2)
+    expect(constrainedEmitter()).toBe(2)
+    expect(constrainedEmitter()).toBe(1)
+    expect(constrainedEmitter()).toBe(1)
   })
 })

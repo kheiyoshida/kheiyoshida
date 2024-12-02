@@ -67,8 +67,8 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     // specular shading
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(
-        max(dot(viewDir, reflectDir), 0.0),
-        material.shininess
+    max(dot(viewDir, reflectDir), 0.0),
+    material.shininess
     );
 
     // attenuation
@@ -128,8 +128,8 @@ void main()
 
     vec3 result = vec3(0.0);
     result += CalcPointLight(pointLights[0], norm, fragPos, viewDir);
-//    result += CalcPointLight(pointLights[1], norm, fragPos, viewDir);
-//    result += CalcSpotLight(spotLight, norm, fragPos, viewDir);
+    result += CalcPointLight(pointLights[1], norm, fragPos, viewDir);
+    result += CalcSpotLight(spotLight, norm, fragPos, viewDir);
 
     if (unlitColor.x > 0.5 && unlitColor.y > 0.5 && unlitColor.z > 0.5) {
         result = unlitColor - result;
@@ -137,10 +137,10 @@ void main()
         result = unlitColor + result;
     }
 
-    //    float rnd = random(fract(gl_FragCoord.xy / 1.5));
-    //    float rnd2 = random(fract(gl_FragCoord.xy / rnd));
-    //    float rnd3 = random(fract(gl_FragCoord.xy / rnd2));
-    //    result += vec3(rnd2, rnd, 0.0) * 0.001;
+//    float rnd = random(fract(gl_FragCoord.xy /1.5));
+//    float rnd2 = random(fract(vec2(rnd)));
+//
+//    result += vec3(rnd2) * 0.01;
 
     fragColor = vec4(result, 1.0);
 }

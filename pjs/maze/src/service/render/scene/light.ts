@@ -22,7 +22,6 @@ export const getLights = (
   specularColor.lightness -= 0.1
   ambientColor.lightness = 0.01
 
-
   // get concrete rgb values for shader
   const diffuseRGB = diffuseColor.normalizedRGB
   const specularRGB = specularColor.normalizedRGB
