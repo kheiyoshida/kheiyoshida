@@ -1,19 +1,8 @@
-import { Instrument, InstrumentOptions } from 'tone/build/esm/instrument/Instrument'
 import { removeItemFromArray } from 'utils/src/utils/mutate'
-import {
-  Channel,
-  FadeValues,
-  InstChConf,
-  InstChannel,
-  MuteValue,
-  SendChConf,
-  SendChannel,
-} from './Channel'
+import { Channel, FadeValues, InstChannel, InstChConf, MuteValue, SendChannel, SendChConf } from './Channel'
 import { MasterChannel, MasterChannelConf } from './Master'
 import { Send } from './Send'
 import { ToneInst } from '../types'
-
-export type Inst = Instrument<InstrumentOptions>
 
 export class Mixer {
   readonly channels: Channel[] = []
@@ -47,7 +36,7 @@ export class Mixer {
 
   private registerChannel(channel: Channel) {
     if (this.channels.includes(channel)) {
-      throw Error(`channel ${channel} alredy registered`)
+      throw Error(`channel ${channel} already registered`)
     }
     channel.last.connect(this.master.chNode)
     this.channels.push(channel)

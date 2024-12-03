@@ -1,20 +1,26 @@
-import Logger from 'js-logger'
 import * as Tone from 'tone'
 import { overrideDefault } from 'utils'
 
 export interface MasterChannelConf {
-  limitThreashold?: number
+  limitThreshold?: number
   autoLimit?: boolean
   targetRMS?: number
-  comp?: Tone.Compressor
+  comp?: {
+    threshold: number,
+    ratio: number,
+  }
 }
 
 export class MasterChannel {
   static getDefault() {
     return {
-      limitThreashold: -6,
+      limitThreshold: -6,
       autoLimit: true,
       targetRMS: -6,
+      comp: {
+        threshold: -10,
+        ratio: 2,
+      }
     }
   }
 
@@ -26,20 +32,20 @@ export class MasterChannel {
   readonly vol: Tone.Volume
 
   constructor(options: MasterChannelConf = {}) {
-    const { limitThreashold, autoLimit, targetRMS } = overrideDefault(
+    const { limitThreshold, autoLimit, targetRMS, comp } = overrideDefault(
       MasterChannel.getDefault(),
       options
     )
     this.chNode = new Tone.Channel()
+    this.comp = new Tone.Compressor(comp.threshold, comp.ratio)
     this.gainNode = new Tone.Gain(4)
-    this.comp = new Tone.Compressor({ threshold: 0 })
-    this.limiter = new Tone.Limiter(limitThreashold)
+    this.limiter = new Tone.Limiter(limitThreshold)
     this.meter = new Tone.Meter()
-    this.vol = new Tone.Volume(-6)
+    this.vol = new Tone.Volume(-1)
     const dest = Tone.getDestination()
     this.chNode.chain(
-      this.gainNode,
       this.comp,
+      this.gainNode,
       this.limiter,
       this.meter,
       this.vol,
@@ -54,9 +60,9 @@ export class MasterChannel {
     setInterval(() => {
       const r = this.meter.getValue() as number
       if (r > targetRMS) {
-        Logger.warn('RMS exceeded threashold. adjusting...')
+        console.warn('RMS exceeded threshold. adjusting...')
         this.limiter.threshold.value -= 1
-        this.gainNode.gain.rampTo(this.gainNode.gain.value - 1, 1)
+        this.gainNode.gain.rampTo(this.gainNode.gain.value - 1, '4m')
       }
     }, 100)
   }

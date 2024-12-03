@@ -129,7 +129,7 @@ void main()
     vec3 result = vec3(0.0);
     result += CalcPointLight(pointLights[0], norm, fragPos, viewDir);
     result += CalcPointLight(pointLights[1], norm, fragPos, viewDir);
-    result += CalcSpotLight(spotLight, norm, fragPos, viewDir);
+//    result += CalcSpotLight(spotLight, norm, fragPos, viewDir);
 
     if (unlitColor.x > 0.5 && unlitColor.y > 0.5 && unlitColor.z > 0.5) {
         result = unlitColor - result;
@@ -137,10 +137,9 @@ void main()
         result = unlitColor + result;
     }
 
-//    float rnd = random(fract(gl_FragCoord.xy /1.5));
-//    float rnd2 = random(fract(vec2(rnd)));
-//
-//    result += vec3(rnd2) * 0.01;
+    float rnd = random(fract(gl_FragCoord.xy /1.5));
+    float rnd2 = random(fract(vec2(rnd)));
+    result += vec3(rnd2, rnd, rnd2) * 0.03;
 
     fragColor = vec4(result, 1.0);
 }

@@ -10,8 +10,6 @@ import { randomItemFromArray } from 'utils'
 import { AvailableOutlets, makeDefaultScenes } from './scenes'
 import { createDefaultTheme } from './theme'
 
-export type MusicDestination = GridDirection
-
 export type Music = {
   applyInitialScene: () => void
   checkNextShift: (...commands: GridDirection[]) => void
@@ -32,7 +30,8 @@ export const makeMusic = (): Music => {
   function applyInitialScene() {
     const makeScene = scenes.getInitialScene()
     const scene = makeScene(scaleSource, 'center-middle')
-    const result = state.applyScene(scene, Tone.Transport.toSeconds('@4m'))
+    const result = state.applyScene(scene, Tone.Transport.toSeconds('@1m')) // @4m
+    // const result = state.applyScene(scene, 0) // why can't start at 0?
     Object.values(result.in).forEach((outlet) => {
       const ch = channels[outlet as AvailableOutlets]
       if (!ch) throw Error(`channel not found: ${outlet}`)

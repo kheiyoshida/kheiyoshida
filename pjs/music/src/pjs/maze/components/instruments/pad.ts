@@ -22,7 +22,7 @@ export const darkPad = () =>
     }),
     new Tone.PolySynth(Tone.MonoSynth, {
       oscillator: {
-        type: 'sine',
+        type: 'sine2',
       },
       detune: -16,
       volume: -10,

@@ -69,5 +69,5 @@ export const makeDefaultScenes = () =>
       'right-bottom': thick('dynamic'),
     },
     'center-middle',
-    'center-middle'
+    'center-middle',
   )

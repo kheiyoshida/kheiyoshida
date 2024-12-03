@@ -1,5 +1,6 @@
 import * as mgnr from 'mgnr-tone'
 import * as Tone from 'tone'
+import { tightDrums } from '../../../demo/components/instruments'
 
 const pinkNoise = () =>
   new Tone.NoiseSynth({

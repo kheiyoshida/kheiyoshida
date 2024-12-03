@@ -34,9 +34,9 @@ const divisionMap: Record<RandomLevel, SequenceConf['division']> = {
   3: 1,
   4: 1,
   5: 1,
-  6: 1,
-  7: 2,
-  8: 4,
+  6: 2,
+  7: 4,
+  8: 8,
   9: 8,
 }
 
@@ -53,7 +53,7 @@ export const thinPad =
     const randomLevel = convertRandomLevel(metaRandomness, randomness)
     const CenterOctaveMap: Record<Saturation, [number, number]> = {
       thin: [84, 1],
-      neutral: [80, 1.4],
+      neutral: [76, 1.4],
       thick: [74, 2],
     }
     const scale = source.createScale({ range: createScaleRange(...CenterOctaveMap[saturation]) })

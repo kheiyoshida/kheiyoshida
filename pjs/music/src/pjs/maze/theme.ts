@@ -21,12 +21,18 @@ export const createDefaultTheme = () => {
   })
   const scaleSource = createScaleSource({ ...pickScaleConfig(), range: { min: 20, max: 100 } })
 
-  const sendTrack = getMixer().createSendChannel({
+  const sendTrack = getMixer({
+    comp: {
+      threshold: -6,
+      ratio: 12,
+    }
+  }).createSendChannel({
     effects: [
-      new Tone.Filter(500, 'lowshelf'),
-      new Tone.Filter(670, 'notch'),
-      new Tone.Filter(3000, 'lowpass'),
-      new Tone.Compressor(-6, 8),
+      new Tone.Filter(300, 'highpass', -48),
+      new Tone.Reverb(0.1),
+      new Tone.PingPongDelay('32hz', 0.3),
+      new Tone.Distortion(0.02),
+      new Tone.Filter(2400, 'lowpass', -24),
     ],
   })
 
@@ -39,7 +45,10 @@ export const createDefaultTheme = () => {
       max: -10,
       min: -40,
     },
-    effects: [new Tone.Filter(300, 'highpass'), new Tone.Filter(1000, 'highshelf')],
+    effects: [
+      new Tone.Filter(300, 'highpass', -12),
+      new Tone.Filter(1400, 'highshelf', -96),
+    ],
   })
   const padCh = mixer.createInstChannel({
     inst: instruments.darkPad(),
@@ -49,9 +58,11 @@ export const createDefaultTheme = () => {
       min: -40,
     },
     effects: [
-      new Tone.Filter(300, 'highpass'),
-      new Tone.Filter(800, 'notch'),
-      new Tone.Filter(1000, 'highshelf'),
+      new Tone.Filter(800, 'highpass', -12),
+      new Tone.Filter(960, 'notch', -12),
+      new Tone.Filter(1200, 'highshelf', -48),
+      new Tone.Compressor(-20, 6),
+      new Tone.Gain(4),
     ],
   })
 
@@ -64,31 +75,32 @@ export const createDefaultTheme = () => {
     },
     effects: [new Tone.Filter(50, 'highpass')],
   })
-  const noiseCh = mixer.createInstChannel({
+  const drumsCh = mixer.createInstChannel({
     inst: instruments.noise(),
     initialVolume: -40,
     volumeRange: {
-      max: -12,
+      max: -8,
       min: -40,
     },
-    effects: [new Tone.Filter(300, 'highpass'), new Tone.Filter(1000, 'lowpass')],
+    effects: [new Tone.Filter(300, 'highpass'), new Tone.Filter(3000, 'lowpass', -48)],
   })
 
-  mixer.connect(padCh, sendTrack, 1.2)
+  mixer.connect(padCh, sendTrack, 0.6)
   mixer.connect(droneBassCh, sendTrack, 0.2)
   mixer.connect(synCh, sendTrack, 0.8)
+  mixer.connect(drumsCh, sendTrack, 1.0)
 
   const channels: Record<AvailableOutlets, InstChannel> = {
     synth: synCh,
     pad: padCh,
-    noise: noiseCh,
+    noise: drumsCh,
     droneBass: droneBassCh,
   }
 
   const outlets: Record<AvailableOutlets, ToneOutlet> = {
     synth: createOutlet(synCh.inst, Tone.Transport.toSeconds('16n')),
     pad: createOutlet(padCh.inst),
-    noise: createOutlet(noiseCh.inst, Tone.Transport.toSeconds('16n')),
+    noise: createOutlet(drumsCh.inst, Tone.Transport.toSeconds('16n')),
     droneBass: createOutlet(droneBassCh.inst, Tone.Transport.toSeconds('16n')),
   }
 
