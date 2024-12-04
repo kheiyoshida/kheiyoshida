@@ -3,6 +3,7 @@ import pjson from '../package.json'
 import { initializeServices, setupRenderingCycle } from './service'
 import { Interface } from './service/interface'
 import { music } from './service/music'
+import { logicalHeight, logicalWidth } from './config'
 
 const VERSION = pjson.version
 let started = false
@@ -12,14 +13,8 @@ const start = () => {
 
   const gl = getGL()
   gl.enable(gl.DEPTH_TEST)
-  const logicalWidth = Math.max(480, window.innerWidth/3)
-  const logicalHeight = logicalWidth * window.innerWidth/window.innerHeight
-  resizeCanvas(
-    logicalWidth,
-    logicalHeight,
-    window.innerWidth,
-    window.innerHeight
-  )
+
+  resizeCanvas(logicalWidth, logicalHeight, window.innerWidth, window.innerHeight)
 
   if (started) return
   started = true

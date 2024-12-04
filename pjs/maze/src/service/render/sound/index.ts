@@ -1,6 +1,6 @@
 import { makeSoundEffectPack } from 'sound'
 
 export const soundPack = makeSoundEffectPack({
-  volume: -8,
+  volume: -6,
   echoLevel: 0.2,
 })

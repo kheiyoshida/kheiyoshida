@@ -39,15 +39,15 @@ export class Color {
     this.values[0] = value
   }
 
-
   get saturation(): number {
     return this.values[1]
   }
 
   static MinSaturation = 0.0
   static MaxSaturation = 1.0
+
   set saturation(value: number) {
-    this.values[1] = clamp(value, Color.MinSaturation, Color.MaxSaturation);
+    this.values[1] = clamp(value, Color.MinSaturation, Color.MaxSaturation)
   }
 
   get lightness(): number {
@@ -56,8 +56,9 @@ export class Color {
 
   static MinLightness = 0.01
   static MaxLightness = 1.0
+
   set lightness(value: number) {
-    this.values[2] = clamp(value, Color.MinLightness, Color.MaxLightness);
+    this.values[2] = clamp(value, Color.MinLightness, Color.MaxLightness)
   }
 
   /**

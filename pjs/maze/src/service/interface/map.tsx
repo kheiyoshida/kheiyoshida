@@ -1,7 +1,7 @@
 import { loop2D } from 'utils'
 import { mapSizing, wh, ww } from '../../config'
 import { NESW } from '../../utils/direction'
-import { MapInfo } from 'src/domain/mutate/mapper'
+import { MapInfo } from '../../domain/mutate/mapper'
 import { RenderPack } from '../render/pack'
 
 const mapSize = Math.floor(Math.min(ww, wh) * mapSizing)

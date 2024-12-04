@@ -1,6 +1,6 @@
 import { MessageQueue, RenderSignal } from '../domain/messages'
 import { showFloor } from './interface/handlers'
-import { closeMap, renderMap } from './interface/map'
+import { closeMap, renderMap } from './interface/map_new'
 import { updateMusicDest } from './music'
 import {
   renderCurrentView,

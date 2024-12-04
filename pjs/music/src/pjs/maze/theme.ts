@@ -22,6 +22,8 @@ export const createDefaultTheme = () => {
   const scaleSource = createScaleSource({ ...pickScaleConfig(), range: { min: 20, max: 100 } })
 
   const sendTrack = getMixer({
+    limitThreshold: -3,
+    targetRMS: -3,
     comp: {
       threshold: -6,
       ratio: 12,
@@ -42,7 +44,7 @@ export const createDefaultTheme = () => {
     inst: instruments.thinSynth(),
     initialVolume: -40,
     volumeRange: {
-      max: -10,
+      max: -6,
       min: -40,
     },
     effects: [
@@ -59,9 +61,9 @@ export const createDefaultTheme = () => {
     },
     effects: [
       new Tone.Filter(800, 'highpass', -12),
-      new Tone.Filter(960, 'notch', -12),
+      new Tone.Filter(840, 'notch', -24),
       new Tone.Filter(1200, 'highshelf', -48),
-      new Tone.Compressor(-20, 6),
+      new Tone.Compressor(-20, 4),
       new Tone.Gain(4),
     ],
   })
@@ -76,7 +78,7 @@ export const createDefaultTheme = () => {
     effects: [new Tone.Filter(50, 'highpass')],
   })
   const drumsCh = mixer.createInstChannel({
-    inst: instruments.noise(),
+    inst: instruments.drums(),
     initialVolume: -40,
     volumeRange: {
       max: -8,

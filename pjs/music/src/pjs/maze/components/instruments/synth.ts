@@ -11,7 +11,7 @@ export const thinSynth = () =>
       volume: -10,
       envelope: {
         attack: 0.05,
-        decay: 0.8,
+        decay: 0.7,
         sustain: 0.2,
         release: 1.5,
       },

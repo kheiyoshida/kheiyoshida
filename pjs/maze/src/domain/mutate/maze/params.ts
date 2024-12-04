@@ -1,5 +1,6 @@
 import { clamp, randomFloatBetween, randomIntInclusiveBetween } from 'utils'
 import { BuildMatrixParams } from '../../../store/entities/matrix'
+import { MaxFloorSize } from '../../../config'
 
 export const paramBuild = (floor: number): BuildMatrixParams => {
   const size = getFloorSize(floor)
@@ -9,7 +10,6 @@ export const paramBuild = (floor: number): BuildMatrixParams => {
 }
 
 export const InitialFloorSize = 6
-const MaxFloorSize = 13
 
 export const getFloorSize = (floor: number): number => {
   if (floor < MaxFloorSize - InitialFloorSize) {

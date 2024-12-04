@@ -46,7 +46,7 @@ export const getLights = (
 
     constant: constant,
     linear: linearFalloff,
-    quadratic: 0.01,
+    quadratic: 0.5,
   }
 
   const pointLight2: PointLightValues = {

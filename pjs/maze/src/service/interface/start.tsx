@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { MobileWidth } from '../../config';
 
 export const Start = ({ version, start }: { version: string; start: () => void }) => {
@@ -36,8 +36,8 @@ const Instruction = () => window.innerWidth > MobileWidth ? (
 
 const styles: Record<string, React.CSSProperties> = {
   container: {
-    width: '100%',
-    height: '100%',
+    // width: '100%',
+    // height: '100%',
     color: 'rgba(255, 255, 255)',
     backgroundColor: 'rgba(0, 0, 0)',
     display: 'flex',
