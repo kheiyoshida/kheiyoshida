@@ -1,26 +1,29 @@
-export const Floor: React.FC = () => {
-  return (
-    <div
-      id="floor"
-      style={{
-        position: 'fixed',
-        top: 'calc(50vh - 3rem)',
-        left: 'calc(50vw - 1.5rem)',
-        visibility: 'hidden',
-        fontSize: '1.5rem',
-        color: 'white',
-        opacity: 0,
-      }}
-    ></div>
-  )
-}
+import { getUIRenderer } from './renderer'
+import { IsMobile, logicalCenterY } from '../../config'
 
 const interval = 100
 
+const fontSize = IsMobile ? 24 : 10
+
+let currentFloor = 'B1F'
+
+const drawFloor = (opacity = 1.0) => {
+  const renderer = getUIRenderer()
+  renderer.lock('floor')
+  renderer.changeFillColor([0, 0, 1.0])
+  renderer.clearCanvas('floor')
+  renderer.drawText({
+    positionX: fontSize * 4,
+    positionY: logicalCenterY,
+    text: currentFloor,
+    fontSize,
+    alpha: opacity,
+    id: 'floor'
+  })
+}
+
 export const renderFloor = (floor: number) => {
-  const floorDiv = document.getElementById('floor')!
-  floorDiv.innerText = `BF${floor}`
-  floorDiv.style.visibility = 'visible'
+  currentFloor = `B${floor}F`
   fadeIn()
 }
 
@@ -28,8 +31,7 @@ const fadeIn = (durationMS = 2000) => {
   let timeElapsed = 0
   const timer = setInterval(() => {
     timeElapsed += interval
-    const floorDiv = document.getElementById('floor')!
-    floorDiv.style.opacity = `${timeElapsed / durationMS}`
+    drawFloor(timeElapsed / durationMS)
     if (timeElapsed >= durationMS) {
       clearInterval(timer)
       fadeOut(durationMS)
@@ -41,8 +43,7 @@ const fadeOut = (durationMS = 1000) => {
   let timeLeft = Number(durationMS)
   const timer = setInterval(() => {
     timeLeft -= interval
-    const floorDiv = document.getElementById('floor')!
-    floorDiv.style.opacity = `${timeLeft / durationMS}`
+    drawFloor(timeLeft / durationMS)
     if (timeLeft <= 0) {
       hideFloor()
       clearInterval(timer)
@@ -51,6 +52,7 @@ const fadeOut = (durationMS = 1000) => {
 }
 
 const hideFloor = () => {
-  const floorDiv = document.getElementById('floor')!
-  floorDiv.style.visibility = 'hidden'
+  const renderer = getUIRenderer()
+  renderer.unlock('floor')
+  renderer.clearCanvas()
 }

@@ -18,6 +18,7 @@ import { renderScene as rs, Scene } from 'maze-gl'
 import { updateRandomValues } from './mesh/material'
 import { resetColors, resolveFloorColor, resolveFrameColor } from './color'
 import { DownFramesLength } from '../../config'
+import { drawButtons, hideButtons } from '../interface/buttons'
 
 const renderScene = (scene: Scene) => {
   updateRandomValues()
@@ -32,6 +33,7 @@ export const renderCurrentView: RenderHandler = ({
   color,
 }) => {
   const drawFrame = () => {
+    drawButtons()
     const { lightColor, unlitColor } = resolveFrameColor(color.frame)
     const eye = getDefaultEye()
     const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
@@ -55,6 +57,7 @@ export const renderGo: RenderHandler = ({
       soundPack.playWalk()
       blockControlRequired()
     }
+    drawButtons(i === 0 ? 'up' : undefined)
     const { lightColor, unlitColor } = resolveFrameColor(color.frame)
     const eye = getMovementEye({ move: zDelta }, scaffoldValues)
     const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
@@ -77,6 +80,7 @@ export const renderTurn =
     const drawFrameSequence = LRDeltaValues.map((turnDelta, i) => () => {
       if (i === 0) {
         blockControlRequired()
+        drawButtons(i === 0 ? direction : undefined)
       }
       const { lightColor, unlitColor } = resolveFrameColor(color.frame)
       const eye = getMovementEye({ turn: direction === 'right' ? turnDelta : -turnDelta }, scaffoldValues)
@@ -102,6 +106,7 @@ export const renderGoDownstairs: RenderHandler = ({
 }) => {
   const drawFrameSequence = [...Array(DownFramesLength)].map((_, i) => () => {
     if (i === 0) {
+      hideButtons()
       soundPack.playStairs()
       blockControlRequired()
       blockStatusChangeRequired()
@@ -130,6 +135,7 @@ export const renderProceedToNextFloor: RenderHandler = ({
 }) => {
   const drawFrameSequence = [...Array(nextFloorFadeInFrames)].map((_, i) => () => {
     if (i === 0) {
+      hideButtons()
       blockControlRequired()
       blockStatusChangeRequired()
     }
@@ -152,6 +158,7 @@ const DieFrames = 48
 export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, light, terrainStyle, color }) => {
   const dieSequence = [...Array(DieFrames)].map((_, i) => () => {
     if (i === 0) {
+      hideButtons()
       blockControlRequired()
       blockStatusChangeRequired()
     }
@@ -180,6 +187,7 @@ export const renderResurrect: RenderHandler = ({
   const drawFrameSequence = [...Array(ResurrectFrames)].map((_, i) => () => {
     if (i === 0) {
       resetColors()
+      hideButtons()
       blockControlRequired()
       blockStatusChangeRequired()
     }

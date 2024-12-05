@@ -4,7 +4,7 @@ export * from './status'
 export const ww = window.innerWidth
 export const wh = window.innerHeight
 
-export const logicalWidth = Math.floor(Math.max(480, window.innerWidth / 3))
+export const logicalWidth = Math.floor(Math.max(480, window.innerWidth / 2.5))
 export const logicalHeight = Math.floor(logicalWidth * (window.innerHeight / window.innerWidth))
 
 export const logicalCenterX = logicalWidth / 2

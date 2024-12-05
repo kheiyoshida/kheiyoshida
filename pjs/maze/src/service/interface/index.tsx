@@ -1,22 +1,27 @@
 import { IsMobile, wh, ww } from '../../config'
-import { Buttons } from './buttons'
+import { PhysicalButtons } from './buttons'
 import { Debug } from './debug'
-import { Floor } from './floor'
-
 import { Start } from './start'
-import React, { useEffect } from 'react'
-import { getUIRenderer } from './renderer'
+import React from 'react'
 
 export const Interface = ({ version, start }: { version: string; start: () => void }) => {
   return (
     <div style={style}>
-      <Start version={version} start={start} />
-      {IsMobile ? <Buttons /> : null}
-      {/*<Map />*/}
-      <Floor />
       <Debug />
+      <Start version={version} start={start} />
+      {IsMobile ? <PhysicalButtons /> : null}
 
-      <UserInterfaceLayer />
+      <div
+        id="interface"
+        style={{
+          width: ww,
+          height: wh,
+        }}
+      >
+        <canvas id="ui-canvas" width={ww} height={wh} style={{
+
+        }}/>
+      </div>
     </div>
   )
 }
@@ -36,32 +41,4 @@ const style: React.CSSProperties = {
   overflowY: 'hidden',
   overscrollBehavior: 'none',
   fontFamily: 'Courier New, Courier, monospace',
-}
-
-const UserInterfaceLayer = () => {
-
-  const draw = () => {
-    const renderer = getUIRenderer()
-    renderer.drawRect({
-      centerX: 0,
-      centerY: 0,
-      width: 100,
-      height: 100,
-    })
-  }
-
-  useEffect(() => {
-    draw()
-  }, [])
-  return (
-    <div
-      id="interface"
-      style={{
-        width: ww,
-        height: wh,
-      }}
-    >
-      <canvas id="ui-canvas" width={ww} height={wh}></canvas>
-    </div>
-  )
 }

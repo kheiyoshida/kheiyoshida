@@ -22,6 +22,4 @@ const resizeCanvas = (ctx: CanvasRenderingContext2D) => {
     'style',
     `width: ${ww.toString()}px; height: ${wh.toString()}px;`
   )
-
-  console.log(ctx.canvas.width, ctx.canvas.height)
 }

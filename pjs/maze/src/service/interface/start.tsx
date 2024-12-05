@@ -1,72 +1,81 @@
-import React, { useState } from 'react'
-import { MobileWidth } from '../../config';
+import React, { useEffect, useState } from 'react'
+import { IsMobile, logicalCenterY } from '../../config'
+import { getUIRenderer } from './renderer'
+
+let titleLoop: NodeJS.Timeout
+
+const fontSize = IsMobile ? 36 : 20
+const drawTitle = (version: string) => {
+  if (titleLoop) return
+
+  const renderer = getUIRenderer()
+
+  titleLoop = setInterval(() => {
+    renderer.clearCanvas()
+
+    renderer.drawText({
+      positionX: fontSize + 1,
+      positionY: logicalCenterY + 1,
+      fontSize,
+      text: 'MAZE ' + version,
+      temporaryFillColor: [0, 0, 0.3],
+    })
+    renderer.drawText({
+      positionX: fontSize,
+      positionY: logicalCenterY,
+      fontSize,
+      text: 'MAZE',
+      temporaryFillColor: [0, 0, 1],
+    })
+
+    // renderer.drawText({
+    //   positionX: fontSize,
+    //   positionY: logicalCenterY + fontSize,
+    //   fontSize: Math.max(10, fontSize / 2),
+    //   text: 'CLICK/TAP TO PLAY',
+    //   temporaryFillColor: [0, 0, 0.5],
+    // })
+  }, 100)
+}
+
+const clearTitle = () => {
+  getUIRenderer().clearCanvas()
+  clearInterval(titleLoop)
+}
 
 export const Start = ({ version, start }: { version: string; start: () => void }) => {
   const [started, setStarted] = useState(false)
+  useEffect(() => {
+    if (started) return
+    drawTitle(version)
+  }, [])
   return !started ? (
     <div
       style={styles.container}
       onClick={() => {
-        start()
+        clearTitle()
         setStarted(true)
+        start()
       }}
     >
-      <div style={styles.textbox}>
-        <div style={styles.title}>MAZE</div>
-        <div style={styles.version}>{version}</div>
-        <Instruction />
-      </div>
+      <div style={styles.version}>version: {version}</div>
     </div>
   ) : null
 }
 
-const Instruction = () => window.innerWidth > MobileWidth ? (
-  <div style={styles.instruction}>
-    <div>Click to start (*plays sound*)</div>
-    <div>Move with arrow keys</div>
-    <div>Open map with 'M' or '↓'</div>
-  </div>
-) : (
-  <div style={styles.instruction}>
-    <div>Click to start (*plays sound*)</div>
-    <div>Move with arrow buttons</div>
-    <div>Open map with 'M'</div>
-  </div>
-)
-
 const styles: Record<string, React.CSSProperties> = {
   container: {
-    // width: '100%',
-    // height: '100%',
-    color: 'rgba(255, 255, 255)',
-    backgroundColor: 'rgba(0, 0, 0)',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  textbox: {
-    border: '1px solid rgba(255, 255, 255)',
-    padding: 16,
-  },
-  title: {
     width: '100%',
-    textAlign: 'center',
-    margin: 'auto',
-    fontSize: 32,
+    height: '100%',
+    position: 'fixed',
+    top: 0,
+    left: 0,
   },
   version: {
-    width: '100%',
-    textAlign: 'center',
-    margin: 'auto',
-    fontSize: 16,
-  },
-  instruction: {
-    width: '100%',
-    textAlign: 'center',
-    letterSpacing: 1.5,
-    lineHeight: 1.5,
-    margin: '16px auto',
-    fontSize: 16,
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    color: 'white',
+    backgroundColor: 'grey',
   },
 }

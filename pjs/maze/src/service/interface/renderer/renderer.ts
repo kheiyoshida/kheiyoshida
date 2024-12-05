@@ -1,4 +1,13 @@
-import { CircleSpec, RectSpec, ShapeSpec, SquareSpec, TextSpec, TriangleSpec, UIRenderer } from './types.ts'
+import {
+  CircleSpec,
+  LineShapeSpec,
+  RectSpec,
+  ShapeSpec,
+  SquareSpec,
+  TextSpec,
+  TriangleSpec,
+  UIRenderer,
+} from './types.ts'
 import { getUICanvasContext } from './context.ts'
 import { HSL } from 'maze-gl'
 import { logicalHeight, logicalWidth } from '../../../config'
@@ -13,7 +22,12 @@ export const getUIRenderer = (): UIRenderer => {
 
 const makeUIRenderer = (): UIRenderer => {
   const ctx = getUICanvasContext()
-  const clearCanvas = () => ctx.clearRect(0, 0, logicalWidth, logicalHeight)
+  const lock = makeLock()
+
+  const clearCanvas = (id?: string) => {
+    if (!lock.validate(id)) return;
+    ctx.clearRect(0, 0, logicalWidth, logicalHeight)
+  }
 
   let fillColor: HSL = [0, 0.0, 1.0]
   let strokeColor: HSL = [0, 0, 0.0]
@@ -30,8 +44,10 @@ const makeUIRenderer = (): UIRenderer => {
   applyFillColor(fillColor)
   applyStrokeColor(strokeColor)
 
-  const drawWithColor = <S extends ShapeSpec>(cb: (s: S) => void) => {
+  const draw = <S extends ShapeSpec>(cb: (s: S) => void) => {
     return (spec: S) => {
+      if(!lock.validate(spec.id)) return;
+
       // apply temporary colors
       if (spec.temporaryFillColor) {
         applyFillColor(spec.temporaryFillColor)
@@ -41,6 +57,9 @@ const makeUIRenderer = (): UIRenderer => {
       }
       if (spec.alpha) {
         ctx.globalAlpha = spec.alpha
+      }
+      if (spec.lineWidth) {
+        ctx.lineWidth = spec.lineWidth
       }
 
       // exec callback
@@ -56,10 +75,13 @@ const makeUIRenderer = (): UIRenderer => {
       if (spec.alpha) {
         ctx.globalAlpha = 1.0
       }
+      if (spec.lineWidth) {
+        ctx.lineWidth = 1.0
+      }
     }
   }
 
-  const drawRect = drawWithColor((spec: RectSpec) => {
+  const drawRect = draw((spec: RectSpec) => {
     if (!spec.omitFill) {
       ctx.fillRect(
         // spec.centerX - spec.width / 2, spec.centerY - spec.height / 2, spec.width, spec.height
@@ -86,29 +108,55 @@ const makeUIRenderer = (): UIRenderer => {
     ctx.setTransform(1, 0, 0, 1, 0, 0)
   }
 
-  const drawTriangle = drawWithColor((spec: TriangleSpec) => {
+  const drawTriangle = draw((spec: TriangleSpec) => {
     withContext(() => {
+
       ctx.translate(spec.position.x, spec.position.y)
       ctx.rotate(spec.rotation)
       ctx.beginPath()
       ctx.moveTo(spec.points[0].x, spec.points[0].y)
       ctx.lineTo(spec.points[1].x, spec.points[1].y)
       ctx.lineTo(spec.points[2].x, spec.points[2].y)
-      ctx.fill()
+      if (!spec.omitStroke) {
+        ctx.stroke()
+      }
+      if (!spec.omitFill) {
+        ctx.fill()
+      }
     })
   })
 
-  const drawCircle = drawWithColor((spec: CircleSpec) => {
+  const drawCircle = draw((spec: CircleSpec) => {
     ctx.beginPath()
     ctx.arc(...roundArgs(spec.centerX, spec.centerY, spec.size), 0, 2 * Math.PI)
-    ctx.fill()
-    ctx.stroke()
+    if (!spec.omitStroke) {
+      ctx.stroke()
+    }
+    if (!spec.omitFill) {
+      ctx.fill()
+    }
   })
 
-  const drawText = drawWithColor((spec: TextSpec) => {
+  const drawLineShape = draw((spec: LineShapeSpec) => {
+    ctx.beginPath()
+    ctx.moveTo(spec.points[0].x, spec.points[0].y)
+    for(let i = 1; i < spec.points.length; i++) {
+      ctx.lineTo(spec.points[i].x, spec.points[i].y)
+    }
+    if (!spec.omitStroke) {
+      ctx.stroke()
+    }
+    if (!spec.omitFill) {
+      ctx.fill()
+    }
+  })
+
+  const drawText = draw((spec: TextSpec) => {
     ctx.font = `${spec.fontSize}px sans-serif`
     ctx.fillText(spec.text, ...roundArgs(spec.positionX, spec.positionY))
   })
+  
+  
 
   return {
     changeFillColor(hsl: HSL) {
@@ -124,9 +172,34 @@ const makeUIRenderer = (): UIRenderer => {
     drawTriangle,
     drawCircle,
     drawText,
+    drawLineShape,
     clearCanvas,
     get context() {
       return ctx
     },
+    lock(id: string) {
+      lock.acquire(id)
+    },
+    unlock(id: string) {
+      lock.unlock(id)
+    }
+  }
+}
+
+const makeLock = () => {
+  let currentAdminId: string|null = null; 
+  return {
+    acquire(id: string) {
+      if (currentAdminId) return;
+      currentAdminId = id
+    },
+    validate(id?: string) {
+      if (!currentAdminId) return true;
+      return currentAdminId === id
+    },
+    unlock (id: string) {
+      if (currentAdminId !== id) return;
+      currentAdminId = null
+    }
   }
 }

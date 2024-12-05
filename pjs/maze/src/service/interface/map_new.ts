@@ -20,6 +20,7 @@ const cellSize = IsMobile ? 16 : 8
 const mapSize = maxNumOfCells * cellSize
 
 export const renderMap = ({ map: { grid, current, direction, floor } }: RenderPack) => {
+  console.log('renderMap')
   const renderer = getUIRenderer()
   const playerDir = NESW.indexOf(direction)
 

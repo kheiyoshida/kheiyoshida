@@ -1,5 +1,6 @@
 import { HSL } from 'maze-gl'
 
+
 export type UIRenderer = {
   changeFillColor(hsl: HSL): void
   changeStrokeColor(hsl: HSL): void
@@ -8,12 +9,20 @@ export type UIRenderer = {
   drawSquare(spec: SquareSpec): void
   drawTriangle(spec: TriangleSpec): void
   drawCircle(spec: CircleSpec): void
+  drawLineShape(spec: LineShapeSpec): void
 
   drawText(spec: TextSpec): void
 
-  clearCanvas(): void
+  clearCanvas(id?: string): void
 
   context: CanvasRenderingContext2D
+
+  /**
+   * prevent renderer from drawing other shapes
+   * @id
+   */
+  lock(id: string): void
+  unlock(id: string): void
 }
 
 export type ShapeSpec = {
@@ -22,6 +31,8 @@ export type ShapeSpec = {
   omitStroke?: true
   omitFill?: true
   alpha?: number
+  lineWidth?: number
+  id?: string
 }
 
 export type RectSpec = ShapeSpec & {
@@ -62,4 +73,8 @@ export type TextSpec = ShapeSpec & {
   positionY: number,
   text: string,
   fontSize: number,
+}
+
+export type LineShapeSpec = ShapeSpec & {
+  points: PointSpec[],
 }
