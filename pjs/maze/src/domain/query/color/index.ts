@@ -35,8 +35,8 @@ export const lightnessMoveDirection = (() => {
 
 const getFloorColorParams = (floor: number): FloorColorParams => {
   return {
-    maxSaturation: Math.min(floor / 16, MaxSaturationLevel),
-    saturationDelta: randomFloatInAsymmetricRange(0.05),
+    maxSaturation: Math.min(floor / 12, MaxSaturationLevel),
+    saturationDelta: randomFloatInAsymmetricRange(0.1),
     lightnessMoveDelta: lightnessMoveDirection.currentSign * randomFloatBetween(0.0, 0.01),
   }
 }

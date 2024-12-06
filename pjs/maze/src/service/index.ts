@@ -27,7 +27,7 @@ export const setupRenderingCycle = () => {
   setupMazeGL()
 
   renderer.start((frameCount) => {
-    if (frameCount % 9 === 0) {
+    if (frameCount % 10 === 0) {
       recurringConstantStatusEvent()
     }
     renderDebugText({ ...statusStore.current, time: trackTime() })

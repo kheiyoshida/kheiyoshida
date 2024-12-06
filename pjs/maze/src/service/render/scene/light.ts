@@ -30,12 +30,12 @@ export const getLights = (
   // light
   const lightness = lightColor.lightness
 
-  const maxFalloff = Math.max(lightness, 0.1)
+  const maxFalloff = Math.max(lightness, 0.1) + 0.5
   const linearFalloff = maxFalloff * (1 - light.nearVisibility)
 
   const minConstant = Math.max(lightness, 0.3)
-  const maxConstant = minConstant + 0.2
-  const constantFalloff = minConstant + light.farVisibility * (maxConstant - minConstant)
+  const maxConstant = minConstant + 3.0
+  const constantFalloff = minConstant + (1 - light.farVisibility) * (maxConstant - minConstant)
   const constant = fade ? calcFadeInOut(fade, constantFalloff) : constantFalloff
 
   const pointLight1: PointLightValues = {

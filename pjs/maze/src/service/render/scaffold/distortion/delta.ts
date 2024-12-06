@@ -7,7 +7,7 @@ export const createDistortionDelta = (delta: Vector3D = Vec3.create()): Distorti
       return delta
     },
     move(range, speed = 1) {
-      Vec3.add(delta, Vec3.random(-speed, speed))
+      Vec3.add(delta, Vec3.random(-speed/2, speed/2))
       restrainVectorWithinRange(delta, range)
     },
   }

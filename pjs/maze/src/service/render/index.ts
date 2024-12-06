@@ -1,7 +1,7 @@
 import { LR } from 'src/utils/direction'
 import {
   blockControlRequired,
-  blockStatusChangeRequired,
+  blockStatusChangeRequired, idleStatusChangeRequired,
   resurrectEvent,
   unblockControlRequired,
   unblockStatusChangeRequired,
@@ -34,6 +34,7 @@ export const renderCurrentView: RenderHandler = ({
 }) => {
   const drawFrame = () => {
     drawButtons()
+    idleStatusChangeRequired()
     const { lightColor, unlitColor } = resolveFrameColor(color.frame)
     const eye = getDefaultEye()
     const units = getUnits(renderGrid, scaffoldValues, terrainStyle)

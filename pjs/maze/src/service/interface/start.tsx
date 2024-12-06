@@ -27,14 +27,6 @@ const drawTitle = (version: string) => {
       text: 'MAZE',
       temporaryFillColor: [0, 0, 1],
     })
-
-    // renderer.drawText({
-    //   positionX: fontSize,
-    //   positionY: logicalCenterY + fontSize,
-    //   fontSize: Math.max(10, fontSize / 2),
-    //   text: 'CLICK/TAP TO PLAY',
-    //   temporaryFillColor: [0, 0, 0.5],
-    // })
   }, 100)
 }
 
@@ -57,9 +49,7 @@ export const Start = ({ version, start }: { version: string; start: () => void }
         setStarted(true)
         start()
       }}
-    >
-      <div style={styles.version}>version: {version}</div>
-    </div>
+    />
   ) : null
 }
 
@@ -70,12 +60,5 @@ const styles: Record<string, React.CSSProperties> = {
     position: 'fixed',
     top: 0,
     left: 0,
-  },
-  version: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    color: 'white',
-    backgroundColor: 'grey',
   },
 }

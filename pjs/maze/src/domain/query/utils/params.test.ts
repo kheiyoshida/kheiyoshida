@@ -1,8 +1,8 @@
 import { makeDecreasingParameter, makeIncreasingParameter } from './params'
 
-test.each([
+test.each<[params: Parameters<typeof makeDecreasingParameter>, cases: [status: number, result: number][]]>([
   [
-    [0.5, 1, 80],
+    [0.5, 1, 80, 0],
     [
       [100, 1],
       [90, 1],
@@ -11,7 +11,17 @@ test.each([
       [0, 0.5],
     ],
   ],
-  
+  [
+    [0.5, 1, 1500, 500],
+    [
+      [2000, 1],
+      [1500, 1],
+      [1000, 0.75],
+      [500, 0.5],
+      [0, 0.5],
+    ],
+  ],
+
 ])(`${makeDecreasingParameter.name}`, (args, cases) => {
   const param = makeDecreasingParameter(...(args as Parameters<typeof makeDecreasingParameter>))
   for (const [v, e] of cases) {

@@ -9,16 +9,16 @@ export type LightVariables = {
 }
 
 // decrease visibility when stamina is low
-const nearVisibilityParameter = makeDecreasingParameter(0, 1, 1500)
+const visibilityParam = makeDecreasingParameter(0, 1, 2500, 300)
 
 export const getLightColorIntention = (): LightVariables => {
   const floor = store.current.floor
   const stamina = statusStore.current.stamina
 
   return {
-    nearVisibility: nearVisibilityParameter(stamina),
+    // decrease visibility as the game progresses
+    nearVisibility: clamp(4 / floor, 0, 1),
 
-    // decrease far visibility as the game progresses
-    farVisibility: clamp(4 / floor, 0, 1),
+    farVisibility: visibilityParam(stamina),
   }
 }

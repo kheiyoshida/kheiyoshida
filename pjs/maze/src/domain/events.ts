@@ -30,16 +30,19 @@ export const unblockStatusChangeRequired = () => {
   store.updateBlockStatusChange(false)
 }
 
-export const recurringConstantStatusEvent = () => {
-  if (store.current.mapOpen) return
+export const idleStatusChangeRequired = () => {
   if (store.current.blockStatusChange) return
-  updateStats('constant')
-
-  MessageQueue.push(RenderSignal.UpdateMusicDest)
+  updateStats('idle')
 
   if (statusStore.current.sanity <= 0) {
     MessageQueue.push(RenderSignal.Die)
   }
+}
+
+export const recurringConstantStatusEvent = () => {
+  if (store.current.blockStatusChange) return
+  if (store.current.mapOpen) return
+  updateStats('constant')
 }
 
 export const resurrectEvent = () => {
@@ -55,6 +58,7 @@ export const constantEvent = () => {
   if (MessageQueue.isEmpty) {
     MessageQueue.push(RenderSignal.CurrentView)
   }
+  MessageQueue.push(RenderSignal.UpdateMusicDest)
 }
 
 export const walkEvent = () => {
@@ -76,7 +80,7 @@ export const goDownstairsEvent = () => {
   updateStats('downstairs')
   updateAesthetics()
 
-  if (store.current.floor >= 12 && store.current.floor % 3 === 0) {
+  if (store.current.floor >= 6 && store.current.floor % 3 === 0) {
     lightnessMoveDirection.update()
   }
 

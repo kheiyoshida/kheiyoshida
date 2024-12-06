@@ -85,6 +85,7 @@ export const makeMusic = (): Music => {
       return {
         bpm: 100,
         interval: '8m',
+        // -> 16 seconds interval
       }
     },
   }
