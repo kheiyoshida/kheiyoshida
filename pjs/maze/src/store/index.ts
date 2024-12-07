@@ -28,7 +28,7 @@ const initialState: MazeState = {
   direction: 'n',
   grid: [],
   mapOpen: false,
-  aesthetics: 2,
+  aesthetics: 5,
   blockControl: false,
   blockStatusChange: false
 }
