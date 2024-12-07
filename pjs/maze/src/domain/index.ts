@@ -1,5 +1,6 @@
 import { getMapInfoFromCurrentState, MapInfo } from './mutate/mapper'
 import {
+  EffectParams, getEffectParams,
   getMusicCommands,
   getScaffoldParams,
   getWalkSpeedFromCurrentState,
@@ -28,6 +29,7 @@ export type DomainIntention = {
   music: MusicCommand
   terrainStyle: TerrainRenderStyle
   objectParams: ObjectDrawParams
+  effectParams: EffectParams
 }
 
 export const getDomainIntention = (): DomainIntention => {
@@ -41,5 +43,6 @@ export const getDomainIntention = (): DomainIntention => {
     music: getMusicCommands(),
     terrainStyle: getTerrainRenderStyle(),
     objectParams: getObjectParams(),
+    effectParams: getEffectParams(),
   }
 }

@@ -2,12 +2,14 @@ import { RenderUnit } from './unit'
 import { Vector3D } from '../vector'
 import { PointLightValues, SpotLightValues } from './light'
 import { Color } from '../color'
+import { Effect } from './effect'
 
 export type Scene = {
   unlitColor: Color
   units: RenderUnit[]
   eye: Eye
   lights: SceneLights
+  effect: Effect
 }
 
 export type SceneLights = {

@@ -36,7 +36,7 @@ export const getWalkSpeedFromCurrentState = () => {
   return calcSpeed(statusStore.current.stamina)
 }
 
-const calcSpeed = makeDecreasingParameter(0, 1, (MAX_STATUS_VALUE * 3) / 4, MAX_STATUS_VALUE/4)
+const calcSpeed = makeDecreasingParameter(0, 1, (MAX_STATUS_VALUE * 3) / 4, MAX_STATUS_VALUE / 4)
 
 //
 // music
@@ -65,4 +65,15 @@ export const calcMusicAlignment = (sanity: number): MusicRange => {
   if (sanity >= 600) return 2
   if (sanity >= 300) return 1
   return 1
+}
+
+export type EffectParams = {
+  fogLevel: number
+}
+// decrease visibility when stamina is low
+const visibilityParam = makeDecreasingParameter(0, 1, 2500, 1000)
+export const getEffectParams = (): EffectParams => {
+  return {
+    fogLevel: visibilityParam(statusStore.current.stamina),
+  }
 }

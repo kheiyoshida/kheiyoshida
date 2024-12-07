@@ -19,6 +19,7 @@ import { updateRandomValues } from './mesh/material'
 import { resetColors, resolveFloorColor, resolveFrameColor } from './color'
 import { DownFramesLength } from '../../config'
 import { drawButtons, hideButtons } from '../interface/buttons'
+import { getEffect } from './scene/effect.ts'
 
 const renderScene = (scene: Scene) => {
   updateRandomValues()
@@ -31,6 +32,7 @@ export const renderCurrentView: RenderHandler = ({
   light,
   terrainStyle,
   color,
+  effectParams,
 }) => {
   const drawFrame = () => {
     drawButtons()
@@ -39,7 +41,8 @@ export const renderCurrentView: RenderHandler = ({
     const eye = getDefaultEye()
     const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
     const lights = getLights(eye, lightColor, light)
-    renderScene({ units, eye, lights, unlitColor })
+    const effect = getEffect(effectParams)
+    renderScene({ units, eye, lights, unlitColor, effect })
   }
   RenderQueue.push(drawFrame)
 }
@@ -51,6 +54,7 @@ export const renderGo: RenderHandler = ({
   light,
   terrainStyle,
   color,
+  effectParams,
 }) => {
   const GoMoveMagValues = getGoDeltaArray(speed)
   const drawFrameSequence = GoMoveMagValues.map((zDelta, i) => () => {
@@ -63,7 +67,8 @@ export const renderGo: RenderHandler = ({
     const eye = getMovementEye({ move: zDelta }, scaffoldValues)
     const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
     const lights = getLights(eye, lightColor, light)
-    renderScene({ units, eye, lights, unlitColor })
+    const effect = getEffect(effectParams)
+    renderScene({ units, eye, lights, unlitColor, effect })
     if (i === Math.floor((GoMoveMagValues.length * 3) / 4)) {
       unblockControlRequired()
     }
@@ -76,7 +81,7 @@ export const renderGo: RenderHandler = ({
 
 export const renderTurn =
   (direction: LR): RenderHandler =>
-  ({ renderGrid, speed, scaffoldValues, light, terrainStyle, color }) => {
+  ({ renderGrid, speed, scaffoldValues, light, terrainStyle, color, effectParams }) => {
     const LRDeltaValues = getTurnLRDeltaArray(speed)
     const drawFrameSequence = LRDeltaValues.map((turnDelta, i) => () => {
       if (i === 0) {
@@ -87,7 +92,8 @@ export const renderTurn =
       const eye = getMovementEye({ turn: direction === 'right' ? turnDelta : -turnDelta }, scaffoldValues)
       const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
       const lights = getLights(eye, lightColor, light)
-      renderScene({ units, eye, lights, unlitColor })
+      const effect = getEffect(effectParams)
+      renderScene({ units, eye, lights, unlitColor, effect })
       if (i === Math.floor((LRDeltaValues.length * 3) / 4)) {
         unblockControlRequired()
       }
@@ -104,6 +110,7 @@ export const renderGoDownstairs: RenderHandler = ({
   light,
   terrainStyle,
   color,
+  effectParams,
 }) => {
   const drawFrameSequence = [...Array(DownFramesLength)].map((_, i) => () => {
     if (i === 0) {
@@ -117,7 +124,8 @@ export const renderGoDownstairs: RenderHandler = ({
     const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
     const fadeOutStage = (i + 1) / DownFramesLength
     const lights = getLights(eye, lightColor, light, { out: fadeOutStage })
-    renderScene({ units, eye, lights, unlitColor })
+    const effect = getEffect(effectParams)
+    renderScene({ units, eye, lights, unlitColor, effect })
     if (i === StairAnimationFrameValues.length - 1) {
       unblockControlRequired()
       unblockStatusChangeRequired()
@@ -133,6 +141,7 @@ export const renderProceedToNextFloor: RenderHandler = ({
   light,
   terrainStyle,
   color,
+  effectParams,
 }) => {
   const drawFrameSequence = [...Array(nextFloorFadeInFrames)].map((_, i) => () => {
     if (i === 0) {
@@ -146,7 +155,8 @@ export const renderProceedToNextFloor: RenderHandler = ({
     const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
     const fadeInStage = (i + 1) / nextFloorFadeInFrames
     const lights = getLights(eye, lightColor, light, { in: fadeInStage })
-    renderScene({ units, eye, lights, unlitColor })
+    const effect = getEffect(effectParams)
+    renderScene({ units, eye, lights, unlitColor, effect })
     if (i === nextFloorFadeInFrames - 1) {
       unblockControlRequired()
       unblockStatusChangeRequired()
@@ -156,7 +166,7 @@ export const renderProceedToNextFloor: RenderHandler = ({
 }
 
 const DieFrames = 48
-export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, light, terrainStyle, color }) => {
+export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, light, terrainStyle, color, effectParams }) => {
   const dieSequence = [...Array(DieFrames)].map((_, i) => () => {
     if (i === 0) {
       hideButtons()
@@ -168,7 +178,8 @@ export const renderDie: RenderHandler = ({ renderGrid, scaffoldValues, light, te
     const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
     const fadeOutStage = (i + 1) / DieFrames
     const lights = getLights(eye, lightColor, light, { out: fadeOutStage })
-    renderScene({ units, eye, lights, unlitColor })
+    const effect = getEffect(effectParams)
+    renderScene({ units, eye, lights, unlitColor, effect })
 
     if (i === DieFrames - 1) {
       resurrectEvent()
@@ -184,6 +195,7 @@ export const renderResurrect: RenderHandler = ({
   renderGrid,
   terrainStyle,
   color,
+  effectParams,
 }) => {
   const drawFrameSequence = [...Array(ResurrectFrames)].map((_, i) => () => {
     if (i === 0) {
@@ -197,7 +209,8 @@ export const renderResurrect: RenderHandler = ({
     const units = getUnits(renderGrid, scaffoldValues, terrainStyle)
     const fadeInStage = (i + 1) / ResurrectFrames
     const lights = getLights(eye, lightColor, light, { in: fadeInStage })
-    renderScene({ units, eye, lights, unlitColor })
+    const effect = getEffect(effectParams)
+    renderScene({ units, eye, lights, unlitColor, effect })
     if (i === ResurrectFrames - 1) {
       unblockControlRequired()
       unblockStatusChangeRequired()

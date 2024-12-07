@@ -33,9 +33,7 @@ export const getLights = (
   const maxFalloff = Math.max(lightness, 0.1) + 0.5
   const linearFalloff = maxFalloff * (1 - light.nearVisibility)
 
-  const minConstant = Math.max(lightness, 0.3)
-  const maxConstant = minConstant + 3.0
-  const constantFalloff = minConstant + (1 - light.farVisibility) * (maxConstant - minConstant)
+  const constantFalloff = 0.5
   const constant = fade ? calcFadeInOut(fade, constantFalloff) : constantFalloff
 
   const pointLight1: PointLightValues = {
@@ -44,9 +42,9 @@ export const getLights = (
     diffuse: diffuseRGB,
     specular: specularRGB,
 
-    constant: constant,
+    constant,
     linear: linearFalloff,
-    quadratic: 0.5,
+    quadratic: 1.5,
   }
 
   const pointLight2: PointLightValues = {
