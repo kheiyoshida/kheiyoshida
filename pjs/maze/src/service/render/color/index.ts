@@ -14,16 +14,7 @@ export const applyMaterialColor = () => {
 export const resolveFloorColor = (params: FloorColorParams) => {
   ColorScheme.moveLightnessRange(params.lightnessMoveDelta)
   ColorScheme.increaseSaturation(params.saturationDelta, params.maxSaturation)
-
- console.log(ColorScheme.unlitColor.values)
 }
-
-const params: FloorColorParams = {
-  lightnessMoveDelta: 0.2,
-  maxSaturation: 0.8,
-  saturationDelta: 0.1,
-}
-resolveFloorColor(params)
 
 export const resolveFrameColor = (params: FrameColorParams) => {
   // hue
