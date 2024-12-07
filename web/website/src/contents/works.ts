@@ -26,7 +26,7 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
     date: maze.date,
     contents: maze.sketch,
     thumbnail: { images: makePathsWithLink(maze.title, [...maze.images], maze.placeholder) },
-    caption: maze.caption.join(` `),
+    caption: `This is the maze of experience.\nControl: Touch the buttons (mobile) / Arrow or WASD keys (desktop). \nTurn on the sound of your device when playing.`,
   },
   {
     title: mandala.title,

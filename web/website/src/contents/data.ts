@@ -27,16 +27,14 @@ export const ContentData = {
     date: '2024',
     sketch: Sketch.mandala,
     thumbnail: thumbnailPath('mandala.png'),
-    caption: 'auto generated music grid'
+    caption: 'A matrix of generative music. You can control the direction of musical changes by pressing the buttons',
   },
   surfaceWater: {
     title: 'Surface Water',
     date: '2024',
     thumbnail: resolveImagekitPath('works', 'surface-water', 'surface-water.png'),
     trackList: ['profit', 'shinjuku', 'wasted', '018th', 'regrets', 'platonic', 'divec'],
-    message: [
-      `Album with 7 songs. Available on Bandcamp and streaming services.`,
-    ],
+    message: [`Album with 7 songs. Available on Bandcamp and streaming services.`],
     caption: [
       `Music is an interface. It's the interface to connect to something obscure and vague within yourself, which existence you need a "clue" to assume. Some music helps. It's like the water on the surface, which actually comes from the earth's underground even though all you can see are the waves on the surface. I made that kind of music through the experiments of music-generating programs, layered rhythms, and randomization of sound.`,
     ],
@@ -44,8 +42,9 @@ export const ContentData = {
       Bandcamp: 'https://kheiyoshida.bandcamp.com/album/surface-water',
       Spotify: 'https://open.spotify.com/album/1YUjiO1HmUdDfJ2tfwY2bF?si=hVPRjfnwRXWBJhXLZAoLGA',
       AppleMusic: 'https://music.apple.com/us/album/surface-water/1734791802',
-      YoutubeMusic: 'https://www.youtube.com/watch?v=TtL2PsZoia4&list=OLAK5uy_mDv_uD1d2fLE1p2oO01T-DeoAGRZExZC8',
-    }
+      YoutubeMusic:
+        'https://www.youtube.com/watch?v=TtL2PsZoia4&list=OLAK5uy_mDv_uD1d2fLE1p2oO01T-DeoAGRZExZC8',
+    },
   },
   wasted: {
     title: 'wasted',
@@ -83,18 +82,14 @@ export const ContentData = {
       `Walk through your virtual forest that never ends.`,
       `This forest is where the music is also the one who listens. As you play the game, the music pattern changes based on your actions.`,
     ],
-    caution: [
-      `* If you're in an In-app browsers (Instagram's etc), open the link in an external browser.`,
-    ],
+    caution: [`* If you're in an In-app browsers (Instagram's etc), open the link in an external browser.`],
     comments: [
       `I implemented this interactive project as an ambient video game that tries to provide a place where you will be the only character in the narrative, yet you still have a subtle sense of being seen, heard, or judged.`,
       `This is initially developed as a playground for my in-development music project "mgnr", a library to programmatically generate music.`,
     ],
     thumbnail: thumbnailPath('forest.gif'),
     placeholder: thumbnailPath('forest.png'),
-    screenshots: [...Array(8)].map((_, i) =>
-      resolveImagekitPath('works', 'forest', `forest${i + 1}.png`)
-    ),
+    screenshots: [...Array(8)].map((_, i) => resolveImagekitPath('works', 'forest', `forest${i + 1}.png`)),
   },
   tp4: {
     title: 'tp4',
@@ -115,11 +110,19 @@ export const ContentData = {
     placeholder: thumbnailPath('regrets.png'),
   },
   maze: {
-    title: 'maze',
+    title: 'MAZE',
     date: '2023-2024',
     sketch: Sketch.maze,
     caption: [
-      `ever-changing music that watches you`,
+      `This is the maze of experience.`,
+      `You make progress as you walk through the Maze, but it doesn't necessarily mean you're in control. You walk. You turn. You stop. You make decisions. The Maze watches you. It changes its shape, music, and colours based on your actions. It forms an infinite matrix of experience, which still requires your input.`,
+    ],
+    changeLog: [
+      '[v0.5] Migrated the graphics rendering to WebGL / Polished the aesthetics and the gameplay',
+      '[v0.4] Introduced generative music that changes based on the game state',
+      '[v0.3] Migrated the graphics from pseudo-3D to actual 3D rendering',
+      '[v0.2] Added some scripted music using Tone.js',
+      '[v0.1] The original version was built on a weekend',
     ],
     images: [thumbnailPath('maze.webp')],
     placeholder: thumbnailPath('maze.png'),
@@ -150,8 +153,8 @@ export const ContentData = {
   zen4computers: {
     title: 'Zen 4 Computers',
     date: '2022',
-    images: ['bonsai1.png', 'bonsai2.png', 'bonsai3.png', 'bonsai4.png', 'bonsai5.png'].map(
-      (name) => resolveImagekitPath('works', '221125', name)
+    images: ['bonsai1.png', 'bonsai2.png', 'bonsai3.png', 'bonsai4.png', 'bonsai5.png'].map((name) =>
+      resolveImagekitPath('works', '221125', name)
     ),
     imageLayout: 'grid',
   },

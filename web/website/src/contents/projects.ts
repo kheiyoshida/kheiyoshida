@@ -5,6 +5,27 @@ const { wasted, shinjuku, forest, tp4, maze, medwEP, surfaceWater, regrets } = C
 
 const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
   {
+    title: 'MAZE',
+    date: maze.date,
+    contents: [
+      {
+        image: {
+          images: maze.images.map((img) => ({ path: img, link: worksLink(maze.title) })),
+        },
+      },
+      {
+        text: `<a href="${worksLink(maze.title)}">Click here to play</a>`,
+      },
+      ...maze.caption.map((text) => ({ text })),
+      {
+        text: '--ChangeLog--',
+      },
+      {
+        text: maze.changeLog.join(`\n`),
+      },
+    ],
+  },
+  {
     title: surfaceWater.title,
     date: surfaceWater.date,
     contents: [
@@ -84,21 +105,6 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
           layout: 'grid',
         },
       },
-    ],
-  },
-  {
-    title: 'maze',
-    date: maze.date,
-    contents: [
-      {
-        image: {
-          images: maze.images.map((img) => ({ path: img, link: worksLink(maze.title) })),
-        },
-      },
-      {
-        text: `<a href="${worksLink(maze.title)}">Click here to play</a>`,
-      },
-      ...maze.caption.map((text) => ({ text })),
     ],
   },
   {
