@@ -6,19 +6,24 @@ import {
   renderScene,
   RenderUnit,
   Scene,
-  Shader,
   Vec3,
   Vector3D,
 } from '../'
 
 import vertShaderSource from './dev.vert?raw'
 import fragShaderSource from './dev.frag?raw'
+
+import screenVert from './screen.vert?raw'
+import screenFrag from './screen.frag?raw'
+
 import objUrl from './cube.obj?url'
 import { boxSize, getDeformedBox, halfBox } from './geometries'
 import { makeRenderer } from '../frame'
 import { PointLightValues, SpotLightValues } from '../models'
 import { toRadians } from '../utils/calc'
 import { Color } from '../color'
+import { MaterialShader, ScreenShader } from '../models/material/shader/shaders'
+import { ScreenEffect } from '../render/offscreen/effect'
 
 const objSpec = await buildGeometrySpecFromObj(objUrl)
 
@@ -26,21 +31,23 @@ const gl = getGL()
 gl.enable(gl.DEPTH_TEST)
 resizeCanvas(window.innerWidth, window.innerHeight, window.innerWidth, window.innerHeight)
 
-const shader = new Shader(vertShaderSource, fragShaderSource)
+const shader = new MaterialShader(vertShaderSource, fragShaderSource)
 
-
-const baseColor = new Color(240, 0.5, 0.0)
+const baseColor = new Color(0, 0.0, 0.0)
 
 const unlitColor = baseColor.clone()
-unlitColor.lightness = 0.9
+unlitColor.lightness = 0.1
 
 const lightColor = baseColor.clone()
-lightColor.saturation = 0
-lightColor.lightness = 0.3
+lightColor.saturation = 0.0
+lightColor.lightness = 0.5
+
+const materialColor = baseColor.clone()
+materialColor.lightness = 0.3
 
 const material1 = new ColorMaterial(shader, {
-  diffuse: unlitColor.clone().fixLightness(0.3).normalizedRGB,
-  specular: unlitColor.clone().fixLightness(0.3).normalizedRGB,
+  diffuse: materialColor.normalizedRGB,
+  specular: materialColor.normalizedRGB,
   shininess: 1.0,
 })
 
@@ -48,7 +55,7 @@ const boxMesh = new Mesh(material1, objSpec)
 
 const unit1: RenderUnit = {
   meshes: [boxMesh],
-  box: getDeformedBox(boxSize, 0, 0),
+  box: getDeformedBox(0, 0, 0),
 }
 
 const unit2: RenderUnit = {
@@ -56,8 +63,12 @@ const unit2: RenderUnit = {
   box: getDeformedBox(boxSize, 0, boxSize),
 }
 
+//
+// lights
+//
+
 const pointLight1: PointLightValues = {
-  position: [-halfBox * 1.5, 0.0, halfBox],
+  position: [0, 0, halfBox * 4],
 
   ambient: [0, 0, 0],
   diffuse: lightColor.normalizedRGB,
@@ -72,12 +83,10 @@ const pointLight2: PointLightValues = {
   ...pointLight1,
   position: [200000, 0, 80000], // Change position for the second light
 }
-
 const calcDirectionalVector = (delta: number): Vector3D => {
   const theta = Math.PI / 2 - toRadians(delta)
   return [Math.cos(theta), 0, -Math.sin(theta)]
 }
-
 const spotLight: SpotLightValues = {
   position: [-400.0, 0.0, halfBox * 12.01], // forget spotlight for now
   direction: calcDirectionalVector(180), // I don't know why this is inverted only in dev environment
@@ -94,19 +103,21 @@ const spotLight: SpotLightValues = {
   quadratic: 0.32, // Quadratic attenuation
 }
 
+//
+// offscreen frame buffer
+//
+
+const screenShader = new ScreenShader(screenVert, screenFrag)
+const effect = new ScreenEffect(screenShader)
 
 function frame(frameCount: number) {
-
   const scene: Scene = {
     unlitColor: unlitColor,
     lights: {
       pointLights: [pointLight1, pointLight2],
       spotLight,
     },
-    units: [
-      unit1,
-      unit2
-    ],
+    units: [unit1, unit2],
     eye: {
       sight: 8000,
       fov: toRadians(60),
@@ -114,9 +125,17 @@ function frame(frameCount: number) {
       direction: 0,
       aspectRatio: window.innerWidth / window.innerHeight,
     },
+    effect: {
+      fogLevel: 0.0,
+    },
   }
-
+  effect.enable()
   renderScene(scene)
+  effect.disable()
+
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  screenShader.use();
+  effect.applyToScreen()
 }
 
 const renderer = makeRenderer(30)

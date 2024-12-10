@@ -44,14 +44,19 @@ struct SpotLight {
 
 layout (std140) uniform Lights
 {
+    vec4 viewPos;
     PointLight pointLights[2];
     SpotLight spotLight;
-    vec3 viewPos;
 };
 
 layout (std140) uniform Color
 {
     vec3 unlitColor;
+};
+
+layout (std140) uniform Effect
+{
+    float fogLevel;
 };
 
 #define NR_POINT_LIGHTS 2
@@ -106,15 +111,23 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 
 void main()
 {
+    vec3 normalizedNormal = normalize(vNormal);
+
+    // output the normal as RGBA
+    fragColor = vec4(normalizedNormal * 0.5 + 0.5, 1.0); // transform to [0,1] range
+    return;
+
     vec3 norm = normalize(vNormal);
-    vec3 viewDir = normalize(viewPos - fragPos);
+
+    vec3 viewPosToFragment = viewPos.xyz - fragPos;
+    vec3 viewDir = normalize(viewPosToFragment);
 
     vec3 result = vec3(0.0);
     result += CalcPointLight(pointLights[0], norm, fragPos, viewDir);
     result += CalcPointLight(pointLights[1], norm, fragPos, viewDir);
-    result += CalcSpotLight(spotLight, norm, fragPos, viewDir);
+    //    result += CalcSpotLight(spotLight, norm, fragPos, viewDir);
 
-    if (unlitColor.x > 0.8 && unlitColor.y > 0.8 && unlitColor.z > 0.8) {
+    if (unlitColor.x > 0.5 && unlitColor.y > 0.5 && unlitColor.z > 0.5) {
         result = unlitColor - result;
     } else {
         result = unlitColor + result;

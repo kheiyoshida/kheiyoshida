@@ -44,8 +44,9 @@ vec3 blendBoxNormalsForAVertex(vec3 vertex) {
     faceNormals[5] = normalBack;
 
     float faceDistances[6];
-    faceDistances[0] = calcDistanceFromVertexToPlane(vertex, FTR, normalTop);
-    faceDistances[1] = calcDistanceFromVertexToPlane(vertex, FBR, normalBottom);
+    faceDistances[0] = calcDistanceFromVertexToPlane(vertex, FBR, normalTop); // swap FBR & FTR for now
+    faceDistances[1] = calcDistanceFromVertexToPlane(vertex, FTR, normalBottom);
+
     faceDistances[2] = calcDistanceFromVertexToPlane(vertex, BBR, normalRight);
     faceDistances[3] = calcDistanceFromVertexToPlane(vertex, BTL, normalLeft);
     faceDistances[4] = calcDistanceFromVertexToPlane(vertex, FBL, normalFront);
@@ -71,8 +72,39 @@ vec3 blendBoxNormalsForAVertex(vec3 vertex) {
     return normalize(result);
 }
 
+// normal direction identifiers
+const vec3 dTop = vec3(0.0, 1.0, 0.0);
+const vec3 dBottom = vec3(0.0, -1.0, 0.0);
+const vec3 dRight = vec3(1.0, 0.0, 0.0);
+const vec3 dLeft = vec3(-1.0, 0.0, 0.0);
+const vec3 dFront = vec3(0.0, 0.0, 1.0);
+const vec3 dBack = vec3(0.0, 0.0, -1.0);
+const vec3 dNone = vec3(0.0);
+
+vec3 determineFaceNormal(vec3 vertexNormal) {
+    if (vertexNormal == dTop) return normalTop;
+    if (vertexNormal == dBottom) return normalBottom;
+    if (vertexNormal == dRight) return normalRight;
+    if (vertexNormal == dLeft) return normalLeft;
+    if (vertexNormal == dFront) return normalFront;
+    if (vertexNormal == dBack) return normalBack;
+    return dNone;
+}
+
+bool isVertexOnEdge(vec3 vertex) {
+    for(int i = 0; i < 3; i++) {
+        if (vertex[i] != 1.0 && vertex[i] != -1.0) {
+            return false;
+        }
+    }
+    return true;
+}
+
 void main() {
-    vec3 normalizedPosition = (aPosition + vec3(1.0)) * 0.5;
+    vec3 modelTransformedPosition = vec3(model * vec4(aPosition, 1.0));
+
+    vec3 normalizedPosition = (modelTransformedPosition + vec3(1.0)) * 0.5;
+
     vec3 transformedPosition =
     (1.0 - normalizedPosition.x) * (1.0 - normalizedPosition.y) * (normalizedPosition.z) * FBL +
     normalizedPosition.x * (1.0 - normalizedPosition.y) * (normalizedPosition.z) * FBR +
@@ -83,9 +115,18 @@ void main() {
     (1.0 - normalizedPosition.x) * normalizedPosition.y * (1.0-normalizedPosition.z) * BTL +
     normalizedPosition.x * normalizedPosition.y * (1.0 - normalizedPosition.z) * BTR;
 
-    vec3 blendedNormal = blendBoxNormalsForAVertex(transformedPosition);
-    vNormal = mix(aNormal, blendedNormal, 0.0); // adjust the mix ratio
+    bool isPositionOnEdge = isVertexOnEdge(aPosition);
+    if (isPositionOnEdge) {
+        vNormal = aNormal;
+    } else {
+        vec3 positionsFaceNormal = determineFaceNormal(aNormal);
+        if (positionsFaceNormal != dNone) {
+            vNormal = normalize(positionsFaceNormal);
+        } else {
+            vNormal = mix(aNormal, blendBoxNormalsForAVertex(normalizedPosition), 0.5);
+        }
+    }
 
-    fragPos = vec3(model * vec4(transformedPosition, 1.0));
-    gl_Position = projection * view * vec4(fragPos, 1.0);
+    fragPos = transformedPosition;
+    gl_Position = projection * view * vec4(transformedPosition, 1.0);
 }

@@ -18,7 +18,7 @@ export abstract class Material<U extends UniformValues = UniformValues> {
    * apply this material to the geometries drawn after this call
    */
   apply() {
-    if (Material.currentMaterialId === this.id) return
+    // if (Material.currentMaterialId === this.id) return
     this.shader.use()
     this.applyUniforms()
     Material.currentMaterialId = this.id
