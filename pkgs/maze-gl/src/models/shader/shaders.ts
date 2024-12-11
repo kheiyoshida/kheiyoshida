@@ -1,5 +1,5 @@
 import { Shader } from './base'
-import { UniformNameBPMap } from '../../uniformBlock'
+import { UniformNameBPMap } from '../uniformBlock'
 
 export class MaterialShader extends Shader {
   constructor(...params: ConstructorParameters<typeof Shader>) {

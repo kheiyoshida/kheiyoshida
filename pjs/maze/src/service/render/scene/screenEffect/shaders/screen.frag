@@ -2,17 +2,16 @@
 
 precision highp float;
 
-uniform sampler2D ColorTexture;
-uniform sampler2D NormalTexture;
-uniform sampler2D DepthTexture;
-
 out vec4 fragColor;
 
 in vec2 TexCoords;
 
+uniform sampler2D ColorTexture;
+uniform sampler2D NormalTexture;
+uniform sampler2D DepthTexture;
 
-const vec4 drawColor = vec4(0.0, 0.0, 0.0, 1.0);
-const vec4 bgColor = vec4(1.0, 1.0, 1.0, 1.0);
+const vec4 bgColor = vec4(0.0, 0.0, 0.0, 1.0);
+const vec4 drawColor = vec4(1.0, 1.0, 1.0, 1.0);
 
 float random(vec2 p) {
     return fract(sin(dot(p.xy, vec2(12.9898, 78.233))) * 43758.5453);
@@ -23,12 +22,16 @@ vec3 convertNormalToOriginalRange(vec4 normalSample) {
     return normalSample.rgb * 2.0 - 1.0;
 }
 
+float luminance(vec3 color) {
+    return dot(color, vec3(0.2126, 0.7152, 0.0722));
+}
+
 void main() {
     vec4 normalSample = texture(NormalTexture, TexCoords);
 
-    //        float noiseVal = random(vec2(gl_FragCoord.x, gl_FragCoord.y));
+//    float noiseVal = random(vec2(gl_FragCoord.x, gl_FragCoord.y));
     float noiseVal = 0.0;
-    float offset = (1.0 + noiseVal) / 800.0;// Adjust based on your depth texture resolution
+    float offset = (1.0 + noiseVal) / 691.0; // depth texture resolution = canvas.width
 
     // sample the color value off color texture(i.e. offscreen buffer)
     vec3 normalCenter = convertNormalToOriginalRange(texture(NormalTexture, TexCoords));
@@ -37,7 +40,7 @@ void main() {
     vec3 normalAbove  = convertNormalToOriginalRange(texture(NormalTexture, TexCoords + vec2(0.0, offset)));
     vec3 normalBelow  = convertNormalToOriginalRange(texture(NormalTexture, TexCoords + vec2(0.0, -offset)));
 
-    float edgeThreshold = 0.3;//
+    float edgeThreshold = 0.3; //
     bool isCreaseEdgeRendered = (
     dot(normalCenter, normalLeft)  < edgeThreshold ||
     dot(normalCenter, normalRight) < edgeThreshold ||
@@ -45,13 +48,17 @@ void main() {
     dot(normalCenter, normalBelow) < edgeThreshold
     );
 
+    // color diff
+//    bool isCreaseEdgeRendered = (
+//    abs(luminance(normalCenter) - luminance(normalLeft))  > edgeThreshold ||
+//    abs(luminance(normalCenter) - luminance(normalRight)) > edgeThreshold ||
+//    abs(luminance(normalCenter) - luminance(normalAbove)) > edgeThreshold ||
+//    abs(luminance(normalCenter) - luminance(normalBelow)) > edgeThreshold
+//    );
+
     if (isCreaseEdgeRendered) {
         fragColor = drawColor;
     } else {
-//                fragColor = vec4(1.0, 0.0, 0.0, 1.0);
-        fragColor = vec4(texture(ColorTexture, TexCoords).rgb, 1.0);
-        return;
-        //    return;
 
         // Sample the depth value of the current pixel
         float depthCenter = texture(DepthTexture, TexCoords).r;
@@ -70,7 +77,12 @@ void main() {
         abs(depthCenter - depthBelow) > edgeThreshold);
 
         // Set fragment color based on whether it's an edge or not
-        fragColor = isEdge ? drawColor : bgColor;
+
+        if (isEdge) {
+            fragColor = drawColor;
+        } else {
+            fragColor = texture(ColorTexture, TexCoords);
+        }
     }
 }
 

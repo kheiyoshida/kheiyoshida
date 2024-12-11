@@ -1,7 +1,7 @@
-import { Shader } from '../../models'
+import { Shader } from '../index'
 import { getGL } from '../../webgl'
-import { DepthTexture, NormalTexture } from './texture'
-import { FrameBuffer } from './frameBuffer'
+import { ColorTexture, DepthTexture, NormalTexture } from './texture'
+import { FrameBuffer, NormalColorDepthFrameBuffer } from './frameBuffer'
 
 export class ScreenEffect {
   private readonly gl: WebGL2RenderingContext
@@ -12,16 +12,24 @@ export class ScreenEffect {
     this.gl = getGL()
     this.screenPlaneVAO = setupPlaneVAO(this.gl, this.screenShader)
 
-    const depthTexture = new DepthTexture(this.gl)
+    const colorTexture = new ColorTexture(this.gl)
     const normalTexture = new NormalTexture(this.gl)
-    this.frameBuffer = new FrameBuffer(this.gl, normalTexture, depthTexture)
+    const depthTexture = new DepthTexture(this.gl)
+    this.frameBuffer = new NormalColorDepthFrameBuffer(this.gl, normalTexture, colorTexture, depthTexture)
+    this.frameBuffer.initialize()
   }
 
-  enable() {
+  startDraw() {
     this.frameBuffer.startDrawToBuffer()
+
+    const gl = this.gl
+    const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+    if (status !== gl.FRAMEBUFFER_COMPLETE) {
+      console.error('Framebuffer incomplete after rendering:', status);
+    }
   }
 
-  disable() {
+  endDraw() {
     this.frameBuffer.endDrawToBuffer()
   }
 
@@ -29,6 +37,9 @@ export class ScreenEffect {
    * render the drawn framebuffer to the screen
    */
   applyToScreen() {
+    this.gl.clearColor(0.0, 0.0, 0.0, 1.0)
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
+    this.screenShader.use()
     this.frameBuffer.drawOffscreenFrame(this.screenShader, () => {
       this.gl.bindVertexArray(this.screenPlaneVAO)
       this.gl.drawArrays(this.gl.TRIANGLES, 0, 6)
@@ -36,7 +47,6 @@ export class ScreenEffect {
     })
   }
 }
-
 
 const setupPlaneVAO = (gl: WebGL2RenderingContext, screenShader: Shader): WebGLVertexArrayObject => {
   // set up buffer for quad plane screen

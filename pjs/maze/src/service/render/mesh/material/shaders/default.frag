@@ -1,7 +1,8 @@
 #version 300 es
-precision mediump float;
+precision highp float;
 
-out vec4 fragColor;
+layout (location=0) out vec4 fragColor;// To COLOR_ATTACHMENT0
+layout (location=1) out vec4 fragNormal;// To COLOR_ATTACHMENT1
 
 struct Material {
     vec3 diffuse;
@@ -133,13 +134,16 @@ void main()
 {
     vec3 norm = normalize(vNormal);
 
+//    fragColor = vec4(norm * 0.5 + 0.5, 1.0);// transform to [0, 1] range
+//    return;
+
     vec3 viewPosToFragment = viewPos.xyz - fragPos;
     vec3 viewDir = normalize(viewPosToFragment);
 
     vec3 result = vec3(0.0);
     result += CalcPointLight(pointLights[0], norm, fragPos, viewDir);
     result += CalcPointLight(pointLights[1], norm, fragPos, viewDir);
-//    result += CalcSpotLight(spotLight, norm, fragPos, viewDir);
+    //    result += CalcSpotLight(spotLight, norm, fragPos, viewDir);
 
     float rnd = abs(random(fract(gl_FragCoord.xy /1.5)));
     float rnd2 = abs(random(fract(vec2(rnd))));
@@ -157,7 +161,10 @@ void main()
     float fogFar = minFogFar + fogLevel * fogFarRange;
     float fogFactor = clamp((distance - fogNear) / (fogFar - fogNear), 0.0, 1.0);
 
+    result = material.diffuse;
     vec3 finalColor = mix(result, unlitColor, fogFactor);
 
     fragColor = vec4(finalColor, 1.0);
+
+    fragNormal = vec4(norm * 0.5 + 0.5, 1.0);
 }

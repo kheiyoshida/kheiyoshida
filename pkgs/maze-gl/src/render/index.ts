@@ -8,8 +8,11 @@ import { calcFaceNormalsOfBox } from './box'
 
 const uPad = 0.0
 
-export const renderScene = ({ eye, units, lights, unlitColor, effect }: Scene) => {
+export const renderScene = ({ eye, units, lights, unlitColor, effect, screenEffect }: Scene) => {
   const gl = getGL()
+
+  screenEffect?.startDraw()
+
   gl.clearColor(...unlitColor.normalizedRGB, 1.0)
   gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT)
 
@@ -32,6 +35,10 @@ export const renderScene = ({ eye, units, lights, unlitColor, effect }: Scene) =
   setUBOValue(BindingPoint.Effect, new Float32Array([effect.fogLevel, uPad, uPad, uPad]))
 
   units.forEach(renderUnit)
+
+  screenEffect?.endDraw()
+
+  screenEffect?.applyToScreen()
 }
 
 export const renderUnit = (unit: RenderUnit) => {

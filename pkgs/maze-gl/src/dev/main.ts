@@ -22,8 +22,8 @@ import { makeRenderer } from '../frame'
 import { PointLightValues, SpotLightValues } from '../models'
 import { toRadians } from '../utils/calc'
 import { Color } from '../color'
-import { MaterialShader, ScreenShader } from '../models/material/shader/shaders'
-import { ScreenEffect } from '../render/offscreen/effect'
+import { MaterialShader, ScreenShader } from '../models/shader/shaders'
+import { ScreenEffect } from '../models/screenEffect/screenEffect'
 
 const objSpec = await buildGeometrySpecFromObj(objUrl)
 
@@ -110,6 +110,13 @@ const spotLight: SpotLightValues = {
 const screenShader = new ScreenShader(screenVert, screenFrag)
 const effect = new ScreenEffect(screenShader)
 
+if (!gl.getExtension('EXT_color_buffer_float')) {
+  console.error('EXT_color_buffer_float not supported');
+}
+if (!gl.getExtension('OES_texture_float')) {
+  console.error('OES_texture_float not supported');
+}
+
 function frame(frameCount: number) {
   const scene: Scene = {
     unlitColor: unlitColor,
@@ -128,14 +135,10 @@ function frame(frameCount: number) {
     effect: {
       fogLevel: 0.0,
     },
+    screenEffect: effect,
   }
-  effect.enable()
-  renderScene(scene)
-  effect.disable()
 
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  screenShader.use();
-  effect.applyToScreen()
+  renderScene(scene)
 }
 
 const renderer = makeRenderer(30)

@@ -20,10 +20,11 @@ import { resetColors, resolveFloorColor, resolveFrameColor } from './color'
 import { DownFramesLength } from '../../config'
 import { drawButtons, hideButtons } from '../interface/buttons'
 import { getEffect } from './scene/effect.ts'
+import { getScreenEffect } from './scene/screenEffect'
 
 const renderScene = (scene: Scene) => {
   updateRandomValues()
-  rs(scene)
+  rs({ ...scene, screenEffect: getScreenEffect('edge') })
 }
 
 export const renderCurrentView: RenderHandler = ({

@@ -1,12 +1,11 @@
-import { Shader } from './shader'
-
+import { Shader } from '../shader'
 import { generateRandomNumber } from '../../utils/calc'
-import { RGB, Color } from '../../color'
+import { Color, RGB } from '../../color'
 
 type UniformValues = Record<string, unknown>
 
 export abstract class Material<U extends UniformValues = UniformValues> {
-  constructor(
+  protected constructor(
     readonly shader: Shader,
     protected uniforms: U,
     private id = generateRandomNumber()
@@ -18,17 +17,14 @@ export abstract class Material<U extends UniformValues = UniformValues> {
    * apply this material to the geometries drawn after this call
    */
   apply() {
-    // if (Material.currentMaterialId === this.id) return
     this.shader.use()
-    this.applyUniforms()
-    Material.currentMaterialId = this.id
+    if (Material.currentMaterialId !== this.id) {
+      this.applyUniforms()
+      Material.currentMaterialId = this.id
+    }
   }
 
   abstract applyUniforms(): void
-
-  setUniforms(uniforms: U): void {
-    this.uniforms = uniforms
-  }
 }
 
 export type ColorMaterialUniforms = {

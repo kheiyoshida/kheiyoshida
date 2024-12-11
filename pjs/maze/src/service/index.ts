@@ -11,6 +11,7 @@ import { setupMazeGL } from 'maze-gl/src/webgl.ts'
 import { music } from './music'
 import { initShaders } from './render/mesh/material/shaders'
 import { initMaterialMap } from './render/mesh/material'
+import { initScreenEffects } from './render/scene/screenEffect'
 
 const renderer = makeRenderer(FPS)
 
@@ -19,6 +20,7 @@ export const initializeServices = () => {
   music.startPlaying()
   initShaders()
   initMaterialMap()
+  initScreenEffects()
 }
 
 export const setupRenderingCycle = () => {

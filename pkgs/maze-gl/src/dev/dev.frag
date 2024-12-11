@@ -1,7 +1,8 @@
 #version 300 es
 precision mediump float;
 
-out vec4 fragColor;
+layout(location=0) out vec4 fragColor;
+layout(location=1) out vec4 fragNormal;
 
 struct Material {
     vec3 diffuse;
@@ -32,7 +33,7 @@ struct SpotLight {
 
     vec3 ambient;
     vec3 diffuse;
-    vec4 specular; // vec4 to make sure the last 4 bytes pad
+    vec4 specular;// vec4 to make sure the last 4 bytes pad
 
     float cutOff;
     float outerCutOff;
@@ -113,9 +114,7 @@ void main()
 {
     vec3 normalizedNormal = normalize(vNormal);
 
-    // output the normal as RGBA
-    fragColor = vec4(normalizedNormal * 0.5 + 0.5, 1.0); // transform to [0,1] range
-    return;
+    fragNormal = vec4(normalizedNormal * 0.5 + 0.5, 1.0);// transform to [0,1] range
 
     vec3 norm = normalize(vNormal);
 

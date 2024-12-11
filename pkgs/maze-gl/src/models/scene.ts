@@ -3,6 +3,7 @@ import { Vector3D } from '../vector'
 import { PointLightValues, SpotLightValues } from './light'
 import { Color } from '../color'
 import { Effect } from './effect'
+import { ScreenEffect } from './screenEffect/screenEffect'
 
 export type Scene = {
   unlitColor: Color
@@ -10,6 +11,7 @@ export type Scene = {
   eye: Eye
   lights: SceneLights
   effect: Effect
+  screenEffect?: ScreenEffect
 }
 
 export type SceneLights = {
