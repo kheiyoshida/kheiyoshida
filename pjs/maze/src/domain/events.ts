@@ -5,7 +5,7 @@ import * as maze from './mutate/maze'
 import { updateStats } from './mutate/status'
 import { MessageQueue, RenderSignal } from './messages'
 import { updateAesthetics } from './mutate/aesthetics'
-import { lightnessMoveDirection } from './query/color'
+import { lightnessMoveDirection } from './query/vision/color'
 
 export const initializeEvent = () => {
   maze.generateMaze()

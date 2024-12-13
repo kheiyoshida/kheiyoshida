@@ -1,4 +1,4 @@
-import { NodeSpec, PathSpec, TerrainPattern } from './nodeSpec'
+import { NodeSpec, PathSpec, TerrainPattern } from './nodeSpec.ts'
 
 /**
  * 6 * 3 grid of rendering patterns

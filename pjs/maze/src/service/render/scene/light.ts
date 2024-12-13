@@ -1,5 +1,5 @@
 import { randomIntInAsymmetricRange, toRadians } from 'utils'
-import { LightVariables } from '../../../domain/query/light'
+import { LightVariables } from '../../../domain/query/vision/light.ts'
 import { Color, Eye, PointLightValues, Scene, SpotLightValues, Vector3D } from 'maze-gl'
 
 type Fade = {

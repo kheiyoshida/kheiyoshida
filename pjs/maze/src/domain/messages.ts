@@ -1,4 +1,4 @@
-import { DomainIntention, getDomainIntention } from '.'
+import { DomainIntention, getDomainIntention } from './query'
 
 export enum RenderSignal {
   CurrentView = 'CurrentView',

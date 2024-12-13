@@ -1,4 +1,4 @@
-import * as RenderSpec from '../../../domain/query/renderGrid/renderSpec.ts'
+import * as RenderSpec from '../../../domain/query/structure/renderGrid/renderSpec.ts'
 import { Vector3D } from 'maze-gl'
 
 export type ScaffoldValues = {

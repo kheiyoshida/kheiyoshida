@@ -22,11 +22,12 @@ export const MessageResolutionMap: Record<RenderSignal, RenderHandler> = {
   [RenderSignal.TurnLeft]: renderTurn('left'),
   [RenderSignal.GoDownStairs]: renderGoDownstairs,
   [RenderSignal.ProceedToNextFloor]: renderProceedToNextFloor,
+  [RenderSignal.Die]: renderDie,
+  [RenderSignal.Resurrect]: renderResurrect,
+
   [RenderSignal.OpenMap]: renderMap,
   [RenderSignal.CloseMap]: closeMap,
   [RenderSignal.ShowFloor]: showFloor,
-  [RenderSignal.Die]: renderDie,
-  [RenderSignal.Resurrect]: renderResurrect,
   [RenderSignal.UpdateMusicDest]: updateMusicDest,
 }
 

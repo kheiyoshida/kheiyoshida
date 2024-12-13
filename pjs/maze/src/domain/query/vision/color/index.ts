@@ -1,8 +1,8 @@
 import { ColorParams, FloorColorParams, FrameColorParams } from './types.ts'
-import { statusStore, store } from '../../../store'
+import { statusStore, store } from '../../../../store'
 import { fireByRate, makeConstrainedRandomEmitter, randomFloatBetween, randomFloatInAsymmetricRange } from 'utils'
-import { StatusState } from '../../../store/status.ts'
-import { makeDecreasingParameter, makeIncreasingParameter } from '../utils/params.ts'
+import { StatusState } from '../../../../store/status.ts'
+import { makeDecreasingParameter, makeIncreasingParameter } from '../../utils/params.ts'
 
 export const getColorParams = (): ColorParams => {
   const floor = store.current.floor

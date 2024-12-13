@@ -1,4 +1,4 @@
-import { Level } from '../types.ts'
+import { Level } from '../utils/types.ts'
 import { store } from '../../../store'
 import { clamp } from 'utils'
 

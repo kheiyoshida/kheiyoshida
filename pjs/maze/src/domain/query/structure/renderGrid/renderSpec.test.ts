@@ -1,5 +1,5 @@
-import { PathSpec } from './nodeSpec'
-import { convertToRenderGrid, RenderGrid } from './renderSpec'
+import { PathSpec } from './nodeSpec.ts'
+import { convertToRenderGrid, RenderGrid } from './renderSpec.ts'
 
 describe(`${convertToRenderGrid.name}`, () => {
   it(`should convert to render specs`, () => {

@@ -1,5 +1,5 @@
-import { statusStore, store } from '../../store'
-import * as maze from '../mutate/maze'
+import { statusStore, store } from '../store'
+import * as maze from './mutate/maze'
 
 type Validator = () => boolean
 

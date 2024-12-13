@@ -1,5 +1,5 @@
-import { Direction, getTurnedDirection } from '../../../utils/direction'
-import { Node } from '../../../store/entities/matrix/node'
+import { Direction, getTurnedDirection } from '../../../../utils/direction.ts'
+import { Node } from '../../../../store/entities/matrix/node.ts'
 
 export type PathSpec = [n0: PathNode, n1: PathNode, n2: PathNode]
 export type PathNode = NodeSpec | null

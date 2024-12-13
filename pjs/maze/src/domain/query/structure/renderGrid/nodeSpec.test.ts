@@ -1,5 +1,5 @@
-import { Node } from '../../../store/entities/matrix/node'
-import { toNodeSpec, toPathSpec } from './nodeSpec'
+import { Node } from '../../../../store/entities/matrix/node.ts'
+import { toNodeSpec, toPathSpec } from './nodeSpec.ts'
 
 describe(`${toNodeSpec.name}`, () => {
   it(`should emit rendering spec based on direction`, () => {

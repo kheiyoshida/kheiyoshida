@@ -1,6 +1,6 @@
 import { makeColorScheme } from './scheme.ts'
 import { getColorMaterial } from '../mesh/material'
-import { FloorColorParams, FrameColorParams } from '../../../domain/query/color/types.ts'
+import { FloorColorParams, FrameColorParams } from '../../../domain/query/vision/color/types.ts'
 
 export * from './types'
 

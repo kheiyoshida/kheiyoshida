@@ -161,7 +161,7 @@ void main()
     float fogFar = minFogFar + fogLevel * fogFarRange;
     float fogFactor = clamp((distance - fogNear) / (fogFar - fogNear), 0.0, 1.0);
 
-    result = material.diffuse;
+//    result = material.diffuse; // no lit
     vec3 finalColor = mix(result, unlitColor, fogFactor);
 
     fragColor = vec4(finalColor, 1.0);

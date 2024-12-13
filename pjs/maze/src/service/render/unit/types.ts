@@ -1,5 +1,5 @@
 import type { RenderBlockPosition } from '../scaffold'
-import { RenderGrid } from '../../../domain/query/renderGrid/renderSpec.ts'
+import { RenderGrid } from '../../../domain/query/structure/renderGrid/renderSpec.ts'
 
 export type UnitSpec = {
   codes: GeometryCode[]

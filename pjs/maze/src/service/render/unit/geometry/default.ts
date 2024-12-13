@@ -3,7 +3,7 @@ import {
   RenderGrid,
   RenderPattern,
   RenderPosition,
-} from '../../../../domain/query/renderGrid/renderSpec.ts'
+} from '../../../../domain/query/structure/renderGrid/renderSpec.ts'
 import { GeometryCode, GeometryCodeConverter, GeometryCodeGrid, GeometryCodeGridLayer } from '../types.ts'
 
 export const convertToClassicGeometryCodes: GeometryCodeConverter = (renderGrid) => {
