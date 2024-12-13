@@ -4,12 +4,13 @@ import * as mapper from './mutate/mapper'
 import * as maze from './mutate/maze'
 import { updateStats } from './mutate/status'
 import { MessageQueue, RenderSignal } from './messages'
-import { updateAesthetics } from './mutate/aesthetics'
 import { lightnessMoveDirection } from './query/vision/color'
+import { initStages } from './mutate/stage.ts'
 
 export const initializeEvent = () => {
   maze.generateMaze()
   mapper.resetMap()
+  initStages()
 
   MessageQueue.push(RenderSignal.ShowFloor)
 }
@@ -78,7 +79,6 @@ export const goDownstairsEvent = () => {
   maze.goDownStairs()
   mapper.resetMap()
   updateStats('downstairs')
-  updateAesthetics()
 
   if (store.current.floor >= 6 && store.current.floor % 3 === 0) {
     lightnessMoveDirection.update()

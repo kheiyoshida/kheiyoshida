@@ -6,6 +6,7 @@ import { makeStatusStore } from './status'
 import { BuildMatrixParams, buildMatrix } from './entities/matrix'
 import { Node } from './entities/matrix/node'
 import { Grid, _track, buildGrid } from './entities/map'
+import { Stage } from './stage.ts'
 
 export type MazeState = {
   matrix: Matrix
@@ -15,9 +16,9 @@ export type MazeState = {
   direction: Direction
   grid: Grid
   mapOpen: boolean
-  aesthetics: number
   blockControl: boolean
   blockStatusChange: boolean
+  stageQueue: Stage[]
 }
 
 const initialState: MazeState = {
@@ -28,9 +29,9 @@ const initialState: MazeState = {
   direction: 'n',
   grid: [],
   mapOpen: false,
-  aesthetics: 5,
   blockControl: false,
-  blockStatusChange: false
+  blockStatusChange: false,
+  stageQueue: []
 }
 
 const reducers = {
@@ -72,16 +73,24 @@ const reducers = {
   setFloor: (s) => (floor: number) => {
     s.floor = floor
   },
-  setAesthetics: (s) => (aesthetics: number) => {
-    s.aesthetics = aesthetics
-  },
 
-  // light.ts
   updateBlockControl: (s) => (blockControl: boolean) => {
     s.blockControl = blockControl
   },
   updateBlockStatusChange: s => (blockStatusChange: boolean) => {
     s.blockStatusChange = blockStatusChange
+  },
+
+  setStageQueue: (s) => (stageQueue: Stage[]) => {
+    s.stageQueue = stageQueue
+  },
+  getStage: s => () => {
+    const floor = s.floor
+    const index = s.stageQueue.findIndex(stage => stage.startFloor <= floor && floor <= stage.endFloor)
+    return {
+      current: s.stageQueue[index],
+      next: s.stageQueue[index + 1],
+    }
   }
   
 } satisfies ReducerMap<MazeState>

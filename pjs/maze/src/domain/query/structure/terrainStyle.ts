@@ -1,8 +1,9 @@
 import { store } from '../../../store'
 
 export const getTerrainRenderStyle = (): TerrainRenderStyle => {
-  if (store.current.aesthetics <= 3) return 'poles'
-  if (store.current.aesthetics >= 7) return 'tiles'
+  const style = store.getStage().current.style
+  if (style <= 3) return 'poles'
+  if (style >= 7) return 'tiles'
   return 'default_'
 }
 
