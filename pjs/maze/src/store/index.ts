@@ -1,12 +1,12 @@
-import { ReducerMap, makeStoreV2 } from 'utils'
+import { makeStoreV2, ReducerMap } from 'utils'
 import { Matrix } from './entities/matrix/matrix'
 import { Direction } from '../utils/direction'
 import { Position } from '../utils/position'
 import { makeStatusStore } from './status'
-import { BuildMatrixParams, buildMatrix } from './entities/matrix'
+import { buildMatrix, BuildMatrixParams } from './entities/matrix'
 import { Node } from './entities/matrix/node'
-import { Grid, _track, buildGrid } from './entities/map'
-import { Stage } from './stage.ts'
+import { _track, buildGrid, Grid } from './entities/map'
+import { FloorStage, StageContext } from './stage.ts'
 
 export type MazeState = {
   matrix: Matrix
@@ -18,7 +18,7 @@ export type MazeState = {
   mapOpen: boolean
   blockControl: boolean
   blockStatusChange: boolean
-  stageQueue: Stage[]
+  stageQueue: FloorStage[]
 }
 
 const initialState: MazeState = {
@@ -31,7 +31,7 @@ const initialState: MazeState = {
   mapOpen: false,
   blockControl: false,
   blockStatusChange: false,
-  stageQueue: []
+  stageQueue: [],
 }
 
 const reducers = {
@@ -77,22 +77,21 @@ const reducers = {
   updateBlockControl: (s) => (blockControl: boolean) => {
     s.blockControl = blockControl
   },
-  updateBlockStatusChange: s => (blockStatusChange: boolean) => {
+  updateBlockStatusChange: (s) => (blockStatusChange: boolean) => {
     s.blockStatusChange = blockStatusChange
   },
 
-  setStageQueue: (s) => (stageQueue: Stage[]) => {
+  setStageQueue: (s) => (stageQueue: FloorStage[]) => {
     s.stageQueue = stageQueue
   },
-  getStage: s => () => {
-    const floor = s.floor
-    const index = s.stageQueue.findIndex(stage => stage.startFloor <= floor && floor <= stage.endFloor)
+  getStageContext: (s) => (): StageContext => {
+    // TODO: handle the case when stages run out
     return {
-      current: s.stageQueue[index],
-      next: s.stageQueue[index + 1],
+      prev: s.stageQueue[s.floor - 2] || null,
+      current: s.stageQueue[s.floor - 1], // B1F = index:0
+      next: s.stageQueue[s.floor] || null,
     }
-  }
-  
+  },
 } satisfies ReducerMap<MazeState>
 
 const makeMazeStore = () => makeStoreV2<MazeState>(initialState)(reducers)

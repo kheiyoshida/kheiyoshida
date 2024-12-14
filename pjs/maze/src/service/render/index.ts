@@ -21,6 +21,7 @@ import { resetColors, resolveFloorColor, resolveFrameColor } from './color'
 import { DownFramesLength } from '../../config'
 import { drawButtons, hideButtons } from '../interface/buttons'
 import { getEffect } from './scene/effect.ts'
+import { store } from '../../store'
 
 const renderScene = (scene: Scene) => {
   updateRandomValues()

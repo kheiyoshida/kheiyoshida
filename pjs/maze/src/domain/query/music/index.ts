@@ -9,7 +9,7 @@ export type MusicCommand = {
 
 export const getMusicCommands = (): MusicCommand => ({
   alignment: calcMusicAlignment(statusStore.current.sanity),
-  aesthetics: store.getStage().current.style as MusicRange,
+  aesthetics: store.getStageContext().current.style as MusicRange,
 })
 
 export const calcMusicAlignment = (sanity: number): MusicRange => {

@@ -1,14 +1,14 @@
 import { getScaffoldParams, ScaffoldParams } from './scaffold.ts'
 import { getRenderGridFromCurrentState, RenderGrid } from './renderGrid'
-import { getTerrainRenderStyle, TerrainRenderStyle } from './terrainStyle.ts'
+import { getTerrainRenderStyle, TerrainStyle } from './terrainStyle.ts'
 
 export * from './renderGrid'
-export type { ScaffoldParams, TerrainRenderStyle }
+export type { ScaffoldParams, TerrainStyle }
 
 export type Structure = {
   scaffold: ScaffoldParams
   renderGrid: RenderGrid
-  terrainStyle: TerrainRenderStyle
+  terrainStyle: TerrainStyle
 }
 
 export const getStructure = (): Structure => ({
