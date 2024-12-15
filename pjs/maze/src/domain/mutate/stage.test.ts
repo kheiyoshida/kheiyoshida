@@ -1,5 +1,5 @@
-import { buildStages, mapStagesToFloors } from './stage.ts'
-import { FloorStage, Stage } from '../../store/stage.ts'
+import { buildStages, mapStagesToFloors, stageModeMap } from './stage.ts'
+import { FloorStage, RenderingMode, Stage } from '../../store/stage.ts'
 
 describe(`${buildStages.name}`, () => {
   test(`each stage lasts for 2-3 floors`, () => {
@@ -26,11 +26,23 @@ describe(`${buildStages.name}`, () => {
       }
     }
   )
-  test(`it should change modes every 2 stages, but can only shift to the "adjacent" one`, () => {
-    //
-  })
-  test(`the mode should be selected based on the progress`, () => {
-    //
+  test(`it should change modes every 2 stages, but can only shift to the "adjacent" one in the range`, () => {
+    const stages = buildStages()
+    const modes = stages.map((stage) => stage.mode)
+
+    let prev: RenderingMode | undefined
+    for (let i = 0; i < modes.length; i += 2) {
+      expect(modes[i]).toBe(modes[i + 1])
+
+      const range = stageModeMap.get(i)
+      expect(modes[i]).toBeGreaterThanOrEqual(range[0])
+      expect(modes[i]).toBeLessThanOrEqual(range[1])
+
+      if (prev) {
+        expect(Math.abs(prev - modes[i])).toBe(1)
+      }
+      prev = modes[i]
+    }
   })
 })
 
@@ -41,54 +53,54 @@ test(`${mapStagesToFloors.name}`, () => {
       startFloor: 1,
       endFloor: 2,
       style: 2, // poles
-      mode: 'atmospheric',
+      mode: RenderingMode.atmospheric,
     },
     {
       number: 2,
       startFloor: 3,
       endFloor: 5,
       style: 5, // default
-      mode: 'atmospheric',
+      mode: RenderingMode.atmospheric,
     },
     {
       number: 3,
       startFloor: 6,
       endFloor: 7,
       style: 8, // tiles
-      mode: 'smooth',
+      mode: RenderingMode.smooth,
     },
   ]
   const expected: FloorStage[] = [
     // 1 - 2
     {
       style: 2,
-      mode: 'atmospheric',
+      mode: RenderingMode.atmospheric,
     },
     {
       style: 2,
-      mode: 'atmospheric',
+      mode: RenderingMode.atmospheric,
     },
     // 3 - 5
     {
       style: 5,
-      mode: 'atmospheric',
+      mode: RenderingMode.atmospheric,
     },
     {
       style: 5,
-      mode: 'atmospheric',
+      mode: RenderingMode.atmospheric,
     },
     {
       style: 5,
-      mode: 'atmospheric',
+      mode: RenderingMode.atmospheric,
     },
     // 6 - 7
     {
       style: 8,
-      mode: 'smooth',
+      mode: RenderingMode.smooth,
     },
     {
       style: 8,
-      mode: 'smooth',
+      mode: RenderingMode.smooth,
     },
   ]
   const floorStages = mapStagesToFloors(stages)

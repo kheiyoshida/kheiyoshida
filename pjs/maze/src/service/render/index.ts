@@ -123,8 +123,7 @@ export const renderGoDownstairs: RenderHandler = ({ structure, vision, movement 
     const { lightColor, unlitColor } = resolveFrameColor(vision.color.frame)
 
     const eye = getMovementEye(movement, structure.scaffold)
-    const units = getUnits({ ...structure, renderGrid: debugStairClose })
-    // const units = getUnits(structure)
+    const units = getUnits(structure)
 
     const halfFrames = movementValueArray.length / 2
     const fadeOutStage = i > halfFrames ? calcSmoothValue(i - halfFrames, halfFrames) : 0
@@ -167,7 +166,7 @@ export const renderProceedToNextFloor: RenderHandler = ({ structure, vision, mov
       renderGrid: animation === 'still' ? structure.renderGrid : corridorToNextFloor,
     })
 
-    const fadeInStage = calcSmoothValue(i, movementValueArray.length)
+    const fadeInStage = i >= movementValueArray.length / 2 ? 1 : calcSmoothValue(i, movementValueArray.length / 2)
     const lights = getLights(eye, lightColor, vision.light, { in: fadeInStage })
 
     const effect = getEffect(vision.effectParams)

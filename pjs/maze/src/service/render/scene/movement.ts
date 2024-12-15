@@ -55,8 +55,8 @@ const LiftMovementValueArray: EyeMovementValues[] = [...Array(GoDownstairsFrames
 })
 
 const getProceedMovementValueArray = (speed: number): EyeMovementValues[] => {
-  return getGoDeltaArray(speed).map((zDelta) => ({
-    move: zDelta,
+  return getGoDeltaArray(speed / 2).map((zDelta) => ({
+    move: zDelta * 2, // proceed 2 cells
   }))
 }
 
