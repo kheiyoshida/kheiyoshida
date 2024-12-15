@@ -86,6 +86,8 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float distance = length(light.position - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
+    attenuation = clamp(attenuation, 0.01, 3.0); // prevent objects from being lit too much in close distance
+
     ambient *= attenuation;
     diffuse *= attenuation;
     specular *= attenuation;
@@ -134,8 +136,8 @@ void main()
 {
     vec3 norm = normalize(vNormal);
 
-//    fragColor = vec4(norm * 0.5 + 0.5, 1.0);// transform to [0, 1] range
-//    return;
+    //    fragColor = vec4(norm * 0.5 + 0.5, 1.0);// transform to [0, 1] range
+    //    return;
 
     vec3 viewPosToFragment = viewPos.xyz - fragPos;
     vec3 viewDir = normalize(viewPosToFragment);
@@ -161,7 +163,7 @@ void main()
     float fogFar = minFogFar + fogLevel * fogFarRange;
     float fogFactor = clamp((distance - fogNear) / (fogFar - fogNear), 0.0, 1.0);
 
-//    result = material.diffuse; // no lit
+    //    result = material.diffuse; // no lit
     vec3 finalColor = mix(result, unlitColor, fogFactor);
 
     fragColor = vec4(finalColor, 1.0);

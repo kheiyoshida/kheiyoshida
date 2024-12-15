@@ -2,11 +2,13 @@ import { pipe } from 'utils'
 import { Node } from '../../../../store/entities/matrix/node.ts'
 import { Direction } from '../../../../utils/direction.ts'
 import { toPathSpec } from './nodeSpec.ts'
-import { RenderGrid, convertToRenderGrid, RenderLayer, RenderPattern } from './renderSpec.ts'
+import { RenderGrid, convertToRenderGrid, RenderGridLayer } from './renderSpec.ts'
 import { store } from '../../../../store'
 import { getPath } from '../../../mutate/maze'
 
-export type { RenderGrid, RenderLayer, RenderPattern }
+export * from './grid.ts'
+export type { RenderGrid, RenderGridLayer }
+
 
 export const getRenderGridFromCurrentState = () => {
   return composeRenderGrid(getPath(), store.current.direction)

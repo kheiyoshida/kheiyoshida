@@ -1,9 +1,9 @@
-import { RenderGrid } from '../../../domain/query/structure/renderGrid/renderSpec.ts'
+import { RenderGrid, TerrainStyle } from '../../../domain/query'
 import { convertToClassicGeometryCodes } from './geometry/default.ts'
 import { GeometryCodeConverter, UnitSpec } from './types.ts'
 import { injectGridPositionToModels } from './inject.ts'
-import { TerrainStyle } from '../../../domain/query/structure/terrainStyle.ts'
-import { convertToPoles, convertToTiles } from './geometry/poles.ts'
+import { convertToPoles } from './geometry/poles.ts'
+import { convertToTiles } from './geometry/tiles.ts'
 
 const converters: Record<TerrainStyle, GeometryCodeConverter> = {
   default_: convertToClassicGeometryCodes,

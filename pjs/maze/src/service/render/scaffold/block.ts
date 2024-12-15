@@ -1,4 +1,4 @@
-import { RenderPosition } from '../../../domain/query/structure/renderGrid/renderSpec.ts'
+import { GPosX } from '../../../domain/query'
 import {
   RenderBlock,
   RenderBlockLayer,
@@ -8,16 +8,14 @@ import {
   ScaffoldLayerCoordPosition,
 } from './types.ts'
 
-export const getRenderBlock = (
-  scaffold: Scaffold,
-  { x, z, y }: RenderBlockPosition
-): RenderBlock => {
+export const getRenderBlock = (scaffold: Scaffold, { x, z, y }: RenderBlockPosition): RenderBlock => {
   if (z < 0) throw Error(`z is out of range: ${z}`)
   const block: RenderBlock = {
     front: getBlockLayer(scaffold[z], x),
     rear: getBlockLayer(scaffold[z + 1], x),
   }
-  if (y !== undefined && y === -1) {
+  if (y !== undefined) {
+    if (y !== -1) throw Error(`unsupported y value`)
     return getAdjacentBlockY(block)
   }
   return block
@@ -36,19 +34,13 @@ export const getBlockLayer = (
   }
 }
 
-const TranslateMap: Record<
-  RenderPosition,
-  [left: ScaffoldLayerCoordPosition, right: ScaffoldLayerCoordPosition]
-> = {
-  [RenderPosition.LEFT]: [ScaffoldLayerCoordPosition.LL, ScaffoldLayerCoordPosition.CL],
-  [RenderPosition.CENTER]: [ScaffoldLayerCoordPosition.CL, ScaffoldLayerCoordPosition.CR],
-  [RenderPosition.RIGHT]: [ScaffoldLayerCoordPosition.CR, ScaffoldLayerCoordPosition.RR],
+const TranslateMap: Record<GPosX, [left: ScaffoldLayerCoordPosition, right: ScaffoldLayerCoordPosition]> = {
+  [GPosX.LEFT]: [ScaffoldLayerCoordPosition.LL, ScaffoldLayerCoordPosition.CL],
+  [GPosX.CENTER]: [ScaffoldLayerCoordPosition.CL, ScaffoldLayerCoordPosition.CR],
+  [GPosX.RIGHT]: [ScaffoldLayerCoordPosition.CR, ScaffoldLayerCoordPosition.RR],
 }
 
-export const getAdjacentBlockY = (
-  block: RenderBlock,
-  position: 'above' | 'below' = 'below'
-) => {
+export const getAdjacentBlockY = (block: RenderBlock, position: 'above' | 'below' = 'below') => {
   if (position === 'below')
     return {
       front: getAdjacentLayerY(block.front, position),
@@ -81,20 +73,14 @@ export const getAdjacentLayerY = (
     }
 }
 
-export const getAdjacentBlockZ = (
-  block: RenderBlock,
-  delta: { z: number }
-): RenderBlock => {
+export const getAdjacentBlockZ = (block: RenderBlock, delta: { z: number }): RenderBlock => {
   return {
     front: { ...block.rear },
     rear: addValueToLBlockLayer(block.rear, delta),
   }
 }
 
-const addValueToLBlockLayer = (
-  layer: RenderBlockLayer,
-  delta: { x?: number; y?: number; z?: number }
-) => {
+const addValueToLBlockLayer = (layer: RenderBlockLayer, delta: { x?: number; y?: number; z?: number }) => {
   return Object.fromEntries(
     Object.entries(layer).map(([k, [x, y, z]]) => [
       k,

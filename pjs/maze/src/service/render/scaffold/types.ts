@@ -1,5 +1,5 @@
-import * as RenderSpec from '../../../domain/query/structure/renderGrid/renderSpec.ts'
 import { Vector3D } from 'maze-gl'
+import { GPosX } from '../../../domain/query'
 
 export type ScaffoldValues = {
   floor: number
@@ -51,7 +51,7 @@ export type DistortionDelta = {
 
 export type RenderBlockPosition = {
   z: number
-  x: RenderSpec.RenderPosition
+  x: GPosX
   y?: number // maybe y in the future
 }
 

@@ -19,3 +19,9 @@ export type PartialRequired<R extends Record<string, unknown>, K extends keyof R
 
 export type Head<T extends unknown[]> = T extends [infer H, ...unknown[]] ? H : never
 export type Tail<T extends unknown[]> = T extends [unknown, ...infer R] ? R : never
+
+export type Tuple<
+  ItemType,
+  Length extends number,
+  Result extends ItemType[] = [],
+> = Result['length'] extends Length ? Result : Tuple<ItemType, Length, [...Result, ItemType]>

@@ -73,3 +73,62 @@ export const LeftWall = completeRectSpec({
   normals: [NRight],
   vertices: [FBR, FTR, BTR, BBR],
 })
+
+//
+// stair
+//
+const NFrontBottom: Vector3D = [0, -1, 1]
+const NBackTop: Vector3D = [0, 1, -1]
+
+const yLayerDown = ([x, y, z]: Vector3D): Vector3D => [x, y - 2, z]
+
+export const StairCeil = completeRectSpec({
+  normals: [NFrontBottom],
+  vertices: [FTL, FTR, BBR, BBL],
+})
+
+export const StairSteps = completeRectSpec({
+  normals: [NBackTop],
+  vertices: [FBR, FBL, yLayerDown(BBL), yLayerDown(BBR)],
+})
+
+export const StairRightWall = completeRectSpec({
+  normals: [NLeft],
+  vertices: [FTR, FBR, yLayerDown(BBR), BBR],
+})
+
+export const StairLeftWall = completeRectSpec({
+  normals: [NRight],
+  vertices: [FTL, BBL, yLayerDown(BBL), FBL],
+})
+
+const zBack = (num: number, [x, y, z]: Vector3D): Vector3D => [x, y, z - 2 * num]
+
+const stairCorridor = {
+  FTR: BBR,
+  FTL: BBL,
+  FBR: yLayerDown(BBR),
+  FBL: yLayerDown(BBL),
+
+  BTR: zBack(4, BBR),
+  BTL: zBack(4, BBL),
+  BBR: zBack(4, yLayerDown(BBR)),
+  BBL: zBack(4, yLayerDown(BBL)),
+}
+
+export const StairCorridorRightWall = completeRectSpec({
+  normals: [NLeft],
+  vertices: [stairCorridor.FTR, stairCorridor.FBR, stairCorridor.BBR, stairCorridor.BTR],
+})
+export const StairCorridorLeftWall = completeRectSpec({
+  normals: [NRight],
+  vertices: [stairCorridor.FTL, stairCorridor.BTL, stairCorridor.BBL, stairCorridor.FBL],
+})
+export const StairCorridorCeil = completeRectSpec({
+  normals: [NDown],
+  vertices: [stairCorridor.FTL, stairCorridor.FTR, stairCorridor.BTR, stairCorridor.BTL],
+})
+export const StairCorridorFloor = completeRectSpec({
+  normals: [NUp],
+  vertices: [stairCorridor.FBR, stairCorridor.FBL, stairCorridor.BBL, stairCorridor.BBR],
+})

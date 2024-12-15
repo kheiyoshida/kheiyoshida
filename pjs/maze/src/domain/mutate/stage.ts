@@ -4,13 +4,15 @@ import { store } from '../../store'
 
 export const InitialNumOfStages = 20
 
-const InitialStyle = 5
+const InitialStyle = 8
 
 export const initStages = (): void => {
   store.setStageQueue(mapStagesToFloors(buildStages()))
 }
 
 export const buildStages = (): Stage[] => {
+  // return fixedStages
+
   const stages: Stage[] = []
   let currentFloor = 1
 

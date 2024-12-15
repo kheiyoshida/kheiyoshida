@@ -8,7 +8,7 @@ const ColorScheme = makeColorScheme()
 
 export const applyMaterialColor = () => {
   getColorMaterial('default').setColor(ColorScheme.materialColor)
-  getColorMaterial('octahedron').setColor(ColorScheme.materialColor)
+  getColorMaterial('distinct').setColor(ColorScheme.materialColor)
 }
 
 export const resolveFloorColor = (params: FloorColorParams) => {

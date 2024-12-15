@@ -30,13 +30,14 @@ describe(`${convertToRenderGrid.name}`, () => {
       null,
     ]
     const expectResult: RenderGrid = [
-      null,
-      null, //
+      [null, null, null],
+      [null, null, null],
       [1, 1, 1],
       [0, 0, 1],
       [1, 0, 1],
       [1, 0, 0],
-    ].reverse() as RenderGrid // reverse for readability
+    ].reverse() as RenderGrid // for readability
+
     expect(convertToRenderGrid(specs)).toMatchObject(expectResult)
   })
 
@@ -55,13 +56,13 @@ describe(`${convertToRenderGrid.name}`, () => {
           front: 'wall',
           right: 'wall',
         },
-        stair: true,
+        stair: 'stair',
       },
       null,
     ]
     const expectResult: RenderGrid = [
-      null,
-      null,
+      [null, null, null],
+      [null, null, null],
       [1, 1, 1],
       [1, 2, 1], // <- stair
       [1, 0, 1],

@@ -32,7 +32,7 @@ export const MaxVisibleLength = FloorPathAvgLength * (ModelGridLength)
 
 export const DefaultGoFrames = 8
 export const DefaultTurnFrames = 4
-export const DownFramesLength = 32
+export const GoDownstairsFramesLength = 32
 
 /**
  * the maximum rooms in a row/col in a floor

@@ -1,24 +1,32 @@
-import { GeometryCode, GeometryCodeConverter, GeometryCodeGridLayer } from '../types.ts'
-import { ConcreteRenderLayer, RenderPattern } from '../../../../domain/query/structure/renderGrid/renderSpec.ts'
+import { GeometryCodeConverter, GeometryCodeGrid } from '../types.ts'
+import { RenderPattern } from '../../../../domain/query/structure/renderGrid/renderSpec.ts'
+import { buildInitialGrid, GLayer, GPosX, iterateGrid } from '../../../../domain/query'
 
-type PatternCodeMap = Record<RenderPattern, GeometryCode[]>
+export const convertToPoles: GeometryCodeConverter = (renderGrid) => {
+  const codeGrid = buildInitialGrid<GeometryCodeGrid>(() => [])
+  let stairPos: [GLayer, GPosX] | undefined
 
-const makeConverter =
-  (patternCodeMap: PatternCodeMap): GeometryCodeConverter =>
-  (renderGrid) => {
-    return renderGrid
-      .filter((layer): layer is ConcreteRenderLayer => layer !== null)
-      .map((layer) => layer.map((pattern) => patternCodeMap[pattern]) as GeometryCodeGridLayer)
+  iterateGrid((layer, pos) => {
+    const pattern = renderGrid[layer][pos]
+    if (pattern === RenderPattern.FILL) {
+      codeGrid[layer][pos].push('Pole')
+    }
+    if (pattern === RenderPattern.STAIR_WARP) {
+      codeGrid[layer][pos].push('Octahedron')
+    }
+    if (pattern === RenderPattern.STAIR) {
+      stairPos = [layer, pos]
+    }
+  })
+
+  if (stairPos) {
+    const [layer] = stairPos
+
+    // replace layers with corridor
+    for (let l = layer + 1; l < 6; l++) {
+      codeGrid[l] = [['Pole'], [], ['Pole']]
+    }
   }
 
-export const convertToPoles = makeConverter({
-  [RenderPattern.FILL]: [GeometryCode.Pole],
-  [RenderPattern.FLOOR]: [],
-  [RenderPattern.STAIR]: [GeometryCode.Octahedron],
-})
-
-export const convertToTiles = makeConverter({
-  [RenderPattern.FILL]: [],
-  [RenderPattern.FLOOR]: [GeometryCode.Tile],
-  [RenderPattern.STAIR]: [GeometryCode.Tile, GeometryCode.Octahedron],
-})
+  return { grid: codeGrid }
+}

@@ -1,29 +1,47 @@
 import type { RenderBlockPosition } from '../scaffold'
-import { RenderGrid } from '../../../domain/query/structure/renderGrid/renderSpec.ts'
+import { Grid, RenderGrid } from '../../../domain/query'
 
 export type UnitSpec = {
   codes: GeometryCode[]
   position: RenderBlockPosition
 }
 
+export type GeometryRenderingSpec = {
+  grid: GeometryCodeGrid
+  altGrid?: AltGeometryCodeGrid[]
+}
+
 /**
  * converts render grid into layers of geometry codes
  */
-export type GeometryCodeConverter = (renderGrid: RenderGrid) => GeometryCodeGrid
+export type GeometryCodeConverter = (renderGrid: RenderGrid) => GeometryRenderingSpec
 
-export type GeometryCodeGrid = GeometryCodeGridLayer[]
-export type GeometryCodeGridLayer = [GeometryCode[], GeometryCode[], GeometryCode[]]
+export type AltGeometryCodeGrid = {
+  yLayerOffset?: number
+  grid: GeometryCodeGrid
+}
+
+export type GeometryCodeGrid = Grid<GeometryCode[], GeometryCode[]>
 
 /**
  * represents which geometry to render
  */
-export enum GeometryCode {
-  Floor = 'Floor',
-  Ceil = 'Ceil',
-  RightWall = 'RightWall',
-  LeftWall = 'LeftWall',
-  FrontWall = 'FrontWall',
-  Octahedron = 'Octahedron',
-  Pole = 'Pole',
-  Tile = 'Tile',
-}
+export type GeometryCode =
+  | 'Floor'
+  | 'Ceil'
+  | 'RightWall'
+  | 'LeftWall'
+  | 'FrontWall'
+  | 'Octahedron'
+  | 'Pole'
+  | 'Tile'
+  | 'LowerTile'
+  | 'StairTile'
+  | 'StairCeil'
+  | 'StairSteps'
+  | 'StairRightWall'
+  | 'StairLeftWall'
+  | 'StairCorridorRightWall'
+  | 'StairCorridorLeftWall'
+  | 'StairCorridorCeil'
+  | 'StairCorridorFloor'

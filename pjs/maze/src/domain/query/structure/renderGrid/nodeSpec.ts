@@ -1,12 +1,15 @@
 import { Direction, getTurnedDirection } from '../../../../utils/direction.ts'
 import { Node } from '../../../../store/entities/matrix/node.ts'
+import { getStairAnimation } from '../../movement/stairs.ts'
 
 export type PathSpec = [n0: PathNode, n1: PathNode, n2: PathNode]
 export type PathNode = NodeSpec | null
 export type NodeSpec = {
   terrain: Terrain
-  stair?: boolean
+  stair?: StairType | null
 }
+
+type StairType = 'stair' | 'warp'
 
 export type Terrain = { [k in TerrainPerspective]: TerrainPattern }
 export type TerrainPerspective = 'left' | 'right' | 'front'
@@ -31,5 +34,9 @@ export const toNodeSpec =
   (direction: Direction) =>
   (node: Node): NodeSpec => ({
     terrain: getTerrain(direction, node),
-    stair: node.stair,
+    stair: node.stair ? getStairType() : null,
   })
+
+const getStairType = (): StairType => {
+  return getStairAnimation().goDownstairs === 'warp' ? 'warp' : 'stair'
+}

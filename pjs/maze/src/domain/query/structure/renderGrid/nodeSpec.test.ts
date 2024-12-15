@@ -1,5 +1,6 @@
 import { Node } from '../../../../store/entities/matrix/node.ts'
 import { toNodeSpec, toPathSpec } from './nodeSpec.ts'
+import * as stairs from '../../movement/stairs.ts'
 
 describe(`${toNodeSpec.name}`, () => {
   it(`should emit rendering spec based on direction`, () => {
@@ -27,9 +28,13 @@ describe(`${toNodeSpec.name}`, () => {
   })
 
   it(`should include stair flag if node is on the stair`, () => {
+    jest.spyOn(stairs, 'getStairAnimation').mockReturnValueOnce({
+      goDownstairs: 'descent',
+      proceedToNextFloor: 'corridor'
+    })
     const node = new Node([0, 0], { n: true })
     node.setStair()
-    expect(toNodeSpec('n')(node).stair).toBe(true)
+    expect(toNodeSpec('n')(node).stair).toBe('stair')
   })
 })
 
@@ -42,7 +47,7 @@ describe(`${toPathSpec.name}`, () => {
     ]
     expect(toPathSpec('n')(path)).toMatchObject([
       {
-        stair: false,
+        stair: null,
         terrain: {
           left: 'wall',
           front: 'corridor',
@@ -50,7 +55,7 @@ describe(`${toPathSpec.name}`, () => {
         },
       },
       {
-        stair: false,
+        stair: null,
         terrain: {
           left: 'corridor',
           front: 'corridor',
@@ -58,7 +63,7 @@ describe(`${toPathSpec.name}`, () => {
         },
       },
       {
-        stair: false,
+        stair: null,
         terrain: {
           left: 'wall',
           front: 'wall',
@@ -74,7 +79,7 @@ describe(`${toPathSpec.name}`, () => {
     ]
     expect(toPathSpec('n')(path)).toMatchObject([
       {
-        stair: false,
+        stair: null,
         terrain: {
           front: 'corridor',
           left: 'wall',
@@ -82,7 +87,7 @@ describe(`${toPathSpec.name}`, () => {
         },
       },
       {
-        stair: false,
+        stair: null,
         terrain: {
           front: 'corridor',
           left: 'wall',

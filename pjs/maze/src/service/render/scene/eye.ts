@@ -1,11 +1,11 @@
-import { CameraZ, FOV, MaxVisibleLength, PathLength, WallHeight } from '../../../config'
-import { CameraMoveValues } from './types.ts'
-import { getConcreteLengths, ScaffoldValues } from '../scaffold'
+import { CameraZ, FOV, MaxVisibleLength, WallHeight } from '../../../config'
+import { EyeMovementValues } from './types.ts'
+import { getConcreteLengths } from '../scaffold'
 import { Eye } from 'maze-gl'
 import { toRadians } from 'utils'
 import { ScaffoldParams } from '../../../domain/query'
 
-const eyeElevation =WallHeight/100
+const eyeElevation = WallHeight / 100
 
 const defaultEye: Eye = {
   sight: MaxVisibleLength,
@@ -19,17 +19,15 @@ export const getDefaultEye = (): Eye => {
   return defaultEye
 }
 
-export const getMovementEye = (
-  { move, turn }: CameraMoveValues,
-  params: ScaffoldParams,
-): Eye => {
-  const { floor, path } = getConcreteLengths(params)
+export const getMovementEye = ({ move, turn, descend }: EyeMovementValues, params: ScaffoldParams): Eye => {
+  const { floor, path, wall } = getConcreteLengths(params)
   const size = path + floor
   const finalZ = CameraZ + (move || 0) * -size
+  const finalY = eyeElevation - (descend || 0 ) * wall
   const direction = turn ? turn * 90 : 0
   return {
     ...defaultEye,
-    position: [0, eyeElevation, finalZ],
+    position: [0, finalY, finalZ],
     direction,
   }
 }

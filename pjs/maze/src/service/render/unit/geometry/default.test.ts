@@ -1,69 +1,118 @@
-import {
-  ConcreteRenderLayer,
-  RenderGrid,
-  RenderPattern,
-  RenderPosition,
-} from '../../../../domain/query/structure/renderGrid/renderSpec.ts'
-import {
-  convertCenter,
-  convertSide,
-  convertToClassicGeometryCodes,
-  convertToCodeGridLayer,
-  trimModelsHorizontal,
-  trimModelsVertical,
-} from './default.ts'
-import { GeometryCode, GeometryCodeGrid, GeometryCodeGridLayer } from '../types.ts'
+import { RenderGrid } from '../../../../domain/query'
+import { convertToClassicGeometryCodes } from './default.ts'
 
-test(`${convertToClassicGeometryCodes.name}`, () => {
-  const grid: RenderGrid = [null, null, [1, 1, 1], [0, 0, 1], [1, 0, 1], [1, 0, 0]]
-  const modelGrid = convertToClassicGeometryCodes(grid)
-  expect(modelGrid).toHaveLength(4)
-})
+describe(`${convertToClassicGeometryCodes.name}`, () => {
+  it(`converts render patterns to geometry codes in default style`, () => {
+    const grid: RenderGrid = [
+      [null, null, null],
+      [null, null, null],
+      [1, 1, 1],
+      [0, 0, 1],
+      [1, 0, 1],
+      [1, 0, 0],
+    ].reverse() as RenderGrid
 
-test(`${convertToCodeGridLayer.name}`, () => {
-  const renderLayer: ConcreteRenderLayer = [1, 0, 1]
-  const modelLayer = convertToCodeGridLayer(renderLayer)
-  expect(modelLayer).toHaveLength(3)
-  expect(modelLayer).toMatchObject([
-    [GeometryCode.FrontWall, GeometryCode.LeftWall],
-    [GeometryCode.Floor, GeometryCode.Ceil],
-    [GeometryCode.FrontWall, GeometryCode.RightWall],
-  ])
-})
+    const {grid: codeGrid} = convertToClassicGeometryCodes(grid)
+    expect(codeGrid).toEqual(
+      [
+        [[], [], []],
+        [[], [], []],
+        // TODO: remove unnecessary geometry codes
+        [['FrontWall', 'LeftWall'], ['FrontWall'], ['FrontWall', 'RightWall']],
+        [
+          ['Floor', 'Ceil'],
+          ['Floor', 'Ceil'],
+          ['FrontWall', 'RightWall'],
+        ],
+        [
+          ['FrontWall', 'LeftWall'],
+          ['Floor', 'Ceil'],
+          ['FrontWall', 'RightWall'],
+        ],
+        [
+          ['FrontWall', 'LeftWall'],
+          ['Floor', 'Ceil'],
+          ['Floor', 'Ceil'],
+        ],
+      ].reverse()
+    )
+  })
+  test(`stairs`, () => {
+    const grid: RenderGrid = [
+      [null, null, null],
+      [null, null, null],
+      [1, 1, 1],
+      [1, 2, 1], // stair
+      [1, 0, 1],
+      [1, 0, 0],
+    ].reverse() as RenderGrid
 
-// TODO: implement trimming
-test.skip(`${trimModelsVertical.name}`, () => {
-  /**
-   * W F W <- wall on right side doesn't need front wall cuz it's hidden anyway
-   * F F W
-   * front
-   */
-  const modelGrid: GeometryCodeGrid = [
-    [
-      convertSide(RenderPattern.FLOOR, RenderPosition.LEFT),
-      convertCenter(RenderPattern.FLOOR),
-      convertSide(RenderPattern.FILL, RenderPosition.RIGHT),
-    ],
-    [
-      convertSide(RenderPattern.FILL, RenderPosition.LEFT),
-      convertCenter(RenderPattern.FLOOR),
-      convertSide(RenderPattern.FILL, RenderPosition.RIGHT),
-    ],
-  ]
-  const result = trimModelsVertical(modelGrid)
-  expect(result[1][2].includes(GeometryCode.FrontWall)).not.toBe(true)
-})
+    const {grid: codeGrid} = convertToClassicGeometryCodes(grid)
+    expect(codeGrid).toEqual(
+      [
+        [[], [], []],
+        [[], [], []],
+        [['FrontWall', 'LeftWall'], ['FrontWall'], ['FrontWall', 'RightWall']],
+        [
+          ['FrontWall', 'LeftWall'],
+          [
+            'StairCeil',
+            'StairSteps',
+            'StairRightWall',
+            'StairLeftWall',
+            'StairCorridorRightWall',
+            'StairCorridorLeftWall',
+            'StairCorridorCeil',
+            'StairCorridorFloor',
+          ],
+          ['FrontWall', 'RightWall'],
+        ],
+        [
+          ['FrontWall', 'LeftWall'],
+          ['Floor', 'Ceil'],
+          ['FrontWall', 'RightWall'],
+        ],
+        [
+          ['FrontWall', 'LeftWall'],
+          ['Floor', 'Ceil'],
+          ['Floor', 'Ceil'],
+        ],
+      ].reverse()
+    )
+  })
 
-test.skip(`${trimModelsHorizontal.name}`, () => {
-  const modelLayer: GeometryCodeGridLayer = [
-    convertSide(RenderPattern.FILL, RenderPosition.LEFT),
-    convertCenter(RenderPattern.FILL),
-    convertSide(RenderPattern.FILL, RenderPosition.RIGHT),
-  ]
-  const result = trimModelsHorizontal(modelLayer)
-  result.forEach((compound) => {
-    compound.forEach((model) => {
-      expect(model).toBe(GeometryCode.FrontWall)
-    })
+  test(`stairs_warp`, () => {
+    const grid: RenderGrid = [
+      [null, null, null],
+      [null, null, null],
+      [1, 1, 1],
+      [1, 3, 1], // stair_warp
+      [1, 0, 1],
+      [1, 0, 0],
+    ].reverse() as RenderGrid
+
+    const {grid: codeGrid} = convertToClassicGeometryCodes(grid)
+    expect(codeGrid).toEqual(
+      [
+        [[], [], []],
+        [[], [], []],
+        [['FrontWall', 'LeftWall'], ['FrontWall'], ['FrontWall', 'RightWall']],
+        [
+          ['FrontWall', 'LeftWall'],
+          ['Octahedron', 'Floor', 'Ceil'],
+          ['FrontWall', 'RightWall'],
+        ],
+        [
+          ['FrontWall', 'LeftWall'],
+          ['Floor', 'Ceil'],
+          ['FrontWall', 'RightWall'],
+        ],
+        [
+          ['FrontWall', 'LeftWall'],
+          ['Floor', 'Ceil'],
+          ['Floor', 'Ceil'],
+        ],
+      ].reverse()
+    )
   })
 })

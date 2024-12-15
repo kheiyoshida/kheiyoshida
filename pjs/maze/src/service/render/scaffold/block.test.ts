@@ -1,11 +1,11 @@
-import { RenderPosition } from '../../../domain/query/structure/renderGrid/renderSpec.ts'
+import { GPosX } from '../../../domain/query'
 import { MockScaffold } from './__test__/mock.ts'
 import { RenderBlock, RenderBlockLayer } from './types.ts'
 
 import { getAdjacentBlockZ, getAdjacentLayerY, getBlockLayer, getRenderBlock } from './block.ts'
 
 test(`${getRenderBlock.name}`, () => {
-  const block = getRenderBlock(MockScaffold, { x: RenderPosition.LEFT, z: 5 })
+  const block = getRenderBlock(MockScaffold, { x: GPosX.LEFT, z: 5 })
   expect(block.front).toMatchObject({
     tl: [-1500, -500, -4500],
     tr: [-500, -500, -4500],

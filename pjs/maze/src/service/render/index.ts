@@ -10,7 +10,12 @@ import {
 import { RenderHandler } from '../consumer'
 import { getDefaultEye, getMovementEye } from './scene/eye.ts'
 import { getLights } from './scene/light.ts'
-import { getGoDeltaArray, getTurnLRDeltaArray, StairAnimationFrameValues } from './scene/movement.ts'
+import {
+  getGoDeltaArray,
+  getTurnLRDeltaArray,
+  GoDownstairsMovement,
+  ProceedToNextFloorMovement,
+} from './scene/movement.ts'
 import { Distortion } from './scaffold/distortion'
 import { RenderQueue } from './queue'
 import { soundPack } from './sound'
@@ -18,10 +23,13 @@ import { getUnits } from './scene'
 import { renderScene as rs, Scene } from 'maze-gl'
 import { updateRandomValues } from './mesh/material'
 import { resetColors, resolveFloorColor, resolveFrameColor } from './color'
-import { DownFramesLength } from '../../config'
 import { drawButtons, hideButtons } from '../interface/buttons'
 import { getEffect } from './scene/effect.ts'
-import { store } from '../../store'
+import {
+  corridorToNextFloor,
+  debugStair,
+  debugStairClose,
+} from '../../domain/query/structure/renderGrid/scenes.ts'
 
 const renderScene = (scene: Scene) => {
   updateRandomValues()
@@ -35,6 +43,7 @@ export const renderCurrentView: RenderHandler = ({ structure, vision }) => {
     idleStatusChangeRequired()
     const { lightColor, unlitColor } = resolveFrameColor(vision.color.frame)
     const eye = getDefaultEye()
+    // const units = getUnits({ ...structure, renderGrid: debugStairClose })
     const units = getUnits(structure)
     const lights = getLights(eye, lightColor, vision.light)
     const effect = getEffect(vision.effectParams)
@@ -90,22 +99,35 @@ export const renderTurn =
     RenderQueue.update(drawFrameSequence)
   }
 
-export const renderGoDownstairs: RenderHandler = ({ structure, vision }) => {
-  const drawFrameSequence = [...Array(DownFramesLength)].map((_, i) => () => {
+export const renderGoDownstairs: RenderHandler = ({ structure, vision, movement }) => {
+  const animation = movement.stairAnimation.goDownstairs
+  const movementValueArray = GoDownstairsMovement[animation](movement.speed)
+
+  const drawFrameSequence = movementValueArray.map((movement, i) => () => {
     if (i === 0) {
       hideButtons()
-      soundPack.playStairs()
+      soundPack.playStairs() // TODO: change sound based on animation type
       blockControlRequired()
       blockStatusChangeRequired()
     }
+
     const { lightColor, unlitColor } = resolveFrameColor(vision.color.frame)
-    const eye = getDefaultEye()
+
+    const eye = getMovementEye(movement, structure.scaffold)
+    // const units = getUnits({ ...structure, renderGrid: debugStairClose })
     const units = getUnits(structure)
-    const fadeOutStage = (i + 1) / DownFramesLength
-    const lights = getLights(eye, lightColor, vision.light, { out: fadeOutStage })
+
+    const fadeOutStage = Math.max(0, i + 1 - movementValueArray.length / 2) / (movementValueArray.length / 2)
+    const lights = getLights(
+      eye,
+      lightColor,
+      vision.light,
+      animation === 'lift' ? undefined : { out: fadeOutStage }
+    )
+
     const effect = getEffect(vision.effectParams)
     renderScene({ units, eye, lights, unlitColor, effect })
-    if (i === StairAnimationFrameValues.length - 1) {
+    if (i === movementValueArray.length - 1) {
       unblockControlRequired()
       unblockStatusChangeRequired()
     }
@@ -113,9 +135,10 @@ export const renderGoDownstairs: RenderHandler = ({ structure, vision }) => {
   RenderQueue.push(...drawFrameSequence)
 }
 
-const nextFloorFadeInFrames = 16
-export const renderProceedToNextFloor: RenderHandler = ({ structure, vision }) => {
-  const drawFrameSequence = [...Array(nextFloorFadeInFrames)].map((_, i) => () => {
+export const renderProceedToNextFloor: RenderHandler = ({ structure, vision, movement }) => {
+  const animation = movement.stairAnimation.proceedToNextFloor
+  const movementValueArray = ProceedToNextFloorMovement[animation](movement.speed)
+  const drawFrameSequence = movementValueArray.map((movement, i) => () => {
     if (i === 0) {
       hideButtons()
       blockControlRequired()
@@ -123,13 +146,19 @@ export const renderProceedToNextFloor: RenderHandler = ({ structure, vision }) =
     }
     resolveFloorColor(vision.color.floor) // 16x
     const { lightColor, unlitColor } = resolveFrameColor(vision.color.frame)
-    const eye = getDefaultEye()
-    const units = getUnits(structure)
-    const fadeInStage = (i + 1) / nextFloorFadeInFrames
+    const eye = getMovementEye(movement, structure.scaffold)
+
+    const units = getUnits({
+      ...structure,
+      renderGrid: animation === 'still' ? structure.renderGrid : corridorToNextFloor,
+    })
+
+    const fadeInStage = Math.min(1, (2 * (i + 1)) / movementValueArray.length)
     const lights = getLights(eye, lightColor, vision.light, { in: fadeInStage })
+
     const effect = getEffect(vision.effectParams)
     renderScene({ units, eye, lights, unlitColor, effect })
-    if (i === nextFloorFadeInFrames - 1) {
+    if (i === movementValueArray.length - 1) {
       unblockControlRequired()
       unblockStatusChangeRequired()
     }

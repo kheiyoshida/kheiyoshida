@@ -42,7 +42,7 @@ export const getLights = (
     diffuse: diffuseRGB,
     specular: specularRGB,
 
-    constant,
+    constant: 0,
     linear: linearFalloff,
     quadratic: 1.5,
   }

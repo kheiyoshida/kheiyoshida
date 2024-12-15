@@ -95,6 +95,17 @@ export const Tile: GeometrySpec = {
   ],
 }
 
+const yLayerDown = ([x, y, z]: Vector3D): Vector3D => [x, y - 4, z] // down by 2 floors
+export const LowerTile: GeometrySpec = {
+  ...Tile,
+  vertices: Tile.vertices.map(yLayerDown),
+}
+
+export const StairTile: GeometrySpec = {
+  ...Tile,
+  vertices: Tile.vertices.map(([x, y, z]) => [x, y + 2, z]),
+}
+
 // Middle
 const FrontMiddleMiddle: Vector3D = [0, 0, 1]
 const BackMiddleMiddle: Vector3D = [0, 0, -1]

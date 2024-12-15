@@ -1,5 +1,9 @@
-import { DefaultGoFrames, DefaultTurnFrames, DownFramesLength } from '../../../config'
-import { CameraMoveValues } from './types.ts'
+import { DefaultGoFrames, DefaultTurnFrames, GoDownstairsFramesLength } from '../../../config'
+import { EyeMovementValues } from './types.ts'
+import {
+  GoDownstairsAnimationType,
+  ProceedToNextFloorAnimationType,
+} from '../../../domain/query/movement/stairs.ts'
 
 export const getGoDeltaArray = (speed: number) => {
   const frameNumber = Math.floor(DefaultGoFrames / speed)
@@ -23,13 +27,52 @@ export const getTurnLRDeltaArray = (speed: number) => {
   return createSinArray(frameNumber, 0.15)
 }
 
-export const StairAnimationFrameValues: CameraMoveValues[] = [...Array(DownFramesLength)].map(
-  (_, i) => {
-    const forward = 0.01
-    const zDelta = (forward * (i + 1)) / DownFramesLength
-    return { move: zDelta }
-  }
-)
-
 export const createSinArray = (length: number, max = 0.5) =>
   [...Array(length)].map((_, i) => Math.sin(max * Math.PI * ((i + 1) / length)))
+
+//
+// stairs
+//
+
+const DescentMovementValueArray: EyeMovementValues[] = [...Array(GoDownstairsFramesLength)].map((_, i) => {
+  const percentage = (i + 1) / GoDownstairsFramesLength
+  const move = percentage / 3
+  // flip every 2 frames
+  const descend = (Math.floor(i / 2) % 2 === 0 ? 1 : 0.95) * percentage
+  return { move, descend }
+})
+
+const WarpMovementValueArray: EyeMovementValues[] = [...Array(GoDownstairsFramesLength)].map(() => ({
+  move: 0,
+}))
+
+const LiftMovementValueArray: EyeMovementValues[] = [...Array(GoDownstairsFramesLength)].map((_, i) => {
+  const percentage = (i + 1) / GoDownstairsFramesLength
+  const descend = percentage * 2 // go down by 2 floors
+  return { descend }
+})
+
+const getProceedMovementValueArray = (speed: number): EyeMovementValues[] => {
+  return getGoDeltaArray(speed).map((zDelta) => ({
+    move: zDelta,
+  }))
+}
+
+export const GoDownstairsMovement: Record<GoDownstairsAnimationType, (speed: number) => EyeMovementValues[]> =
+  {
+    descent: () => DescentMovementValueArray,
+    lift: () => LiftMovementValueArray,
+    proceed: getProceedMovementValueArray,
+    warp: () => WarpMovementValueArray,
+  }
+
+
+const stillMovementValueArray: EyeMovementValues[] = [...Array(16)].map(() => ({}))
+
+export const ProceedToNextFloorMovement: Record<
+  ProceedToNextFloorAnimationType,
+  (speed: number) => EyeMovementValues[]
+> = {
+  corridor: (speed) => getGoDeltaArray(speed / 2).map((delta) => ({ move: delta * 2 })), // proceed 2 cells
+  still: () => stillMovementValueArray,
+}

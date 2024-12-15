@@ -8,17 +8,17 @@ const meshMap = new Map<GeometryCode, Mesh>()
 
 export const getMesh = (code: GeometryCode): Mesh => {
   if (!meshMap.has(code)) {
-    const material = code === GeometryCode.Octahedron ? getColorMaterial('octahedron') : getColorMaterial('default')
+    const material = (code === 'Octahedron' || code === 'StairTile') ? getColorMaterial('distinct') : getColorMaterial('default')
     const mesh = new Mesh(material, GeometrySpecDict[code])
 
     // set initial state
-    if (code === GeometryCode.Octahedron) {
+    if (code === 'Octahedron') {
       mesh.state.scale = 0.3
     }
-    if (code === GeometryCode.Pole) {
+    if (code === 'Pole') {
       mesh.state.scale = 0.7
     }
-    if (code === GeometryCode.Tile) {
+    if (code === 'Tile') {
       mesh.state.scale = 0.9
     }
 
@@ -33,7 +33,7 @@ export const getMesh = (code: GeometryCode): Mesh => {
 }
 
 const sideEffects = (code: GeometryCode, mesh: Mesh): void => {
-  if (code === GeometryCode.Octahedron) {
+  if (code === 'Octahedron') {
     mesh.state.scale = randomFloatBetween(0.2, 0.4)
     // mesh.state.incrementRotation(randomFloatBetween(0.2, 3.0))
   }

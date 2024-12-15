@@ -3,13 +3,13 @@ import { getShader } from './shaders'
 import { getGL } from 'maze-gl/src/webgl'
 import { DefaultMaterial, DistinctMaterial } from './materials.ts'
 
-export type MaterialType = 'default' | 'octahedron'
+export type MaterialType = 'default' | 'distinct'
 
 export const MaterialMap = new Map<MaterialType, Material>()
 
 export const initMaterialMap = () => {
   MaterialMap.set('default', new DefaultMaterial())
-  MaterialMap.set('octahedron', new DistinctMaterial())
+  MaterialMap.set('distinct', new DistinctMaterial())
 }
 
 export const getColorMaterial = (type: MaterialType): ColorMaterial => {
