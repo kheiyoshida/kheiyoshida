@@ -2,7 +2,7 @@ import { Channel, Filter, MonoSynth, NoiseSynth } from 'tone'
 import { randomFloatBetween, randomIntInAsymmetricRange } from 'utils'
 import { SoundEffectSource } from './types'
 
-export const makeStairsSoundSource = (): SoundEffectSource => {
+export const makeWarpSoundSource = (): SoundEffectSource => {
   const syn = new MonoSynth({
     oscillator: {
       type: 'square10',
@@ -36,7 +36,7 @@ export const makeStairsSoundSource = (): SoundEffectSource => {
   }
 }
 
-const mapRandomPlayTime = (): [number, number][] => {
+export const mapRandomPlayTime = (): [number, number][] => {
   const randomFloats = [...Array(7)].map(() => randomFloatBetween(0.05, 0.1))
   const enumerated = randomFloats.reduce((p, c) => [...p, p[p.length - 1] + c], [0])
   return [

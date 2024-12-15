@@ -24,7 +24,7 @@ export const convertToTiles: GeometryCodeConverter = (renderGrid) => {
   const altGrid = buildInitialGrid<GeometryCodeGrid>(() => [])
   const [layer] = stairPos
 
-  for (let l = layer + 1; l < 6; l++) {
+  for (let l = layer; l < 6; l++) {
     altGrid[l] = [[], ['LowerTile'], []]
   }
 

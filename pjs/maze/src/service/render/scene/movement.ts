@@ -4,6 +4,7 @@ import {
   GoDownstairsAnimationType,
   ProceedToNextFloorAnimationType,
 } from '../../../domain/query/movement/stairs.ts'
+import { calcSmoothValue } from './light.ts'
 
 export const getGoDeltaArray = (speed: number) => {
   const frameNumber = Math.floor(DefaultGoFrames / speed)
@@ -48,7 +49,8 @@ const WarpMovementValueArray: EyeMovementValues[] = [...Array(GoDownstairsFrames
 
 const LiftMovementValueArray: EyeMovementValues[] = [...Array(GoDownstairsFramesLength)].map((_, i) => {
   const percentage = (i + 1) / GoDownstairsFramesLength
-  const descend = percentage * 2 // go down by 2 floors
+  const value = Math.cos(1.5 * Math.PI + percentage * Math.PI/2)
+  const descend = value * 2 // down by 2 floors
   return { descend }
 })
 

@@ -13,6 +13,7 @@ export const initializeEvent = () => {
   initStages()
 
   MessageQueue.push(RenderSignal.ShowFloor)
+  MessageQueue.push(RenderSignal.GoDownStairs)
 }
 
 export const blockControlRequired = () => {

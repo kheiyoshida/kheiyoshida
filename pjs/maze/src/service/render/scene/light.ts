@@ -1,5 +1,5 @@
 import { randomIntInAsymmetricRange, toRadians } from 'utils'
-import { LightVariables } from '../../../domain/query/vision/light.ts'
+import { LightVariables } from '../../../domain/query'
 import { Color, Eye, PointLightValues, Scene, SpotLightValues, Vector3D } from 'maze-gl'
 
 type Fade = {
@@ -42,7 +42,7 @@ export const getLights = (
     diffuse: diffuseRGB,
     specular: specularRGB,
 
-    constant: 0,
+    constant,
     linear: linearFalloff,
     quadratic: 1.5,
   }
@@ -91,3 +91,15 @@ const calcFadeInOut = (fade: Fade, constant: number): number => {
   }
   throw Error(`unexpected`)
 }
+
+/**
+ * get value in range of 0 - 1 with cosine curve
+ */
+export const calcSmoothValue = (frameNumber: number, animationFramesLength: number): number => {
+  const percentage = frameNumber / animationFramesLength
+  return (1 + Math.cos(Math.PI + percentage * Math.PI)) / 2
+}
+
+// ;[...Array(48)].forEach((_, i) => {
+//   console.log(calcFadeOutValue(i, 48))
+// })

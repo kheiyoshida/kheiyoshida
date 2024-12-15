@@ -6,7 +6,7 @@ const defaultHue = randomIntInclusiveBetween(0, 359)
 const defaultSaturation = 0.0 // 0.0
 
 // lit
-const defaultUnlitLightness = 0.0 // 0.0
+const defaultUnlitLightness = 0.1 // 0.0
 const lightnessRangeToAvoid = {
   min: 0.35,
   max: 0.65,

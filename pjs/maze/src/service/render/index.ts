@@ -9,7 +9,7 @@ import {
 } from '../../domain/events'
 import { RenderHandler } from '../consumer'
 import { getDefaultEye, getMovementEye } from './scene/eye.ts'
-import { getLights } from './scene/light.ts'
+import { calcSmoothValue, getLights } from './scene/light.ts'
 import {
   getGoDeltaArray,
   getTurnLRDeltaArray,
@@ -25,11 +25,7 @@ import { updateRandomValues } from './mesh/material'
 import { resetColors, resolveFloorColor, resolveFrameColor } from './color'
 import { drawButtons, hideButtons } from '../interface/buttons'
 import { getEffect } from './scene/effect.ts'
-import {
-  corridorToNextFloor,
-  debugStair,
-  debugStairClose,
-} from '../../domain/query/structure/renderGrid/scenes.ts'
+import { corridorToNextFloor, debugStairClose } from '../../domain/query/structure/renderGrid/scenes.ts'
 
 const renderScene = (scene: Scene) => {
   updateRandomValues()
@@ -106,24 +102,34 @@ export const renderGoDownstairs: RenderHandler = ({ structure, vision, movement 
   const drawFrameSequence = movementValueArray.map((movement, i) => () => {
     if (i === 0) {
       hideButtons()
-      soundPack.playStairs() // TODO: change sound based on animation type
       blockControlRequired()
       blockStatusChangeRequired()
+    }
+
+    if (animation === 'warp') {
+      if (i === 0) {
+        soundPack.playWarp()
+      }
+    } else if (animation === 'lift') {
+      if (i === 0) {
+        soundPack.playLift()
+      }
+    } else {
+      if (i % 12 === 0) {
+        soundPack.playWalk()
+      }
     }
 
     const { lightColor, unlitColor } = resolveFrameColor(vision.color.frame)
 
     const eye = getMovementEye(movement, structure.scaffold)
-    // const units = getUnits({ ...structure, renderGrid: debugStairClose })
-    const units = getUnits(structure)
+    const units = getUnits({ ...structure, renderGrid: debugStairClose })
+    // const units = getUnits(structure)
 
-    const fadeOutStage = Math.max(0, i + 1 - movementValueArray.length / 2) / (movementValueArray.length / 2)
-    const lights = getLights(
-      eye,
-      lightColor,
-      vision.light,
-      animation === 'lift' ? undefined : { out: fadeOutStage }
-    )
+    const halfFrames = movementValueArray.length / 2
+    const fadeOutStage = i > halfFrames ? calcSmoothValue(i - halfFrames, halfFrames) : 0
+
+    const lights = getLights(eye, lightColor, vision.light, { out: fadeOutStage })
 
     const effect = getEffect(vision.effectParams)
     renderScene({ units, eye, lights, unlitColor, effect })
@@ -144,7 +150,15 @@ export const renderProceedToNextFloor: RenderHandler = ({ structure, vision, mov
       blockControlRequired()
       blockStatusChangeRequired()
     }
-    resolveFloorColor(vision.color.floor) // 16x
+    if (animation === 'corridor') {
+      if (i % 12 === 0) {
+        soundPack.playWalk()
+      }
+    }
+    if (i < 16) {
+      resolveFloorColor(vision.color.floor) // 16x
+    }
+
     const { lightColor, unlitColor } = resolveFrameColor(vision.color.frame)
     const eye = getMovementEye(movement, structure.scaffold)
 
@@ -153,7 +167,7 @@ export const renderProceedToNextFloor: RenderHandler = ({ structure, vision, mov
       renderGrid: animation === 'still' ? structure.renderGrid : corridorToNextFloor,
     })
 
-    const fadeInStage = Math.min(1, (2 * (i + 1)) / movementValueArray.length)
+    const fadeInStage = calcSmoothValue(i, movementValueArray.length)
     const lights = getLights(eye, lightColor, vision.light, { in: fadeInStage })
 
     const effect = getEffect(vision.effectParams)
