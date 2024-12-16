@@ -5,6 +5,7 @@ export type Grid = Array<Array<Cell | null>>
 
 type Cell = {
   visited: boolean
+  stair?: boolean
 }
 
 export const _track = (grid: Grid, from: Position, dest: Position): Grid => {
@@ -30,6 +31,7 @@ export const buildGrid = (matrix: Matrix, matrixSize = matrix.length): Grid => {
       if (node) {
         grid[i * 2][j * 2] = {
           visited: false,
+          stair: node.stair,
         }
         if (node.edges.e) {
           grid[i * 2][j * 2 + 1] = {

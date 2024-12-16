@@ -20,10 +20,12 @@ export const makeDecreasingParameter =
   }
 
 export const makeIncreasingParameter =
-  (min: number, max: number, threshold: number = 100) =>
+  (min: number, max: number, changeStartThreshold: number, changeEndThreshold = 0) =>
   (status: number) => {
     const diff = max - min
-    const ratio = status >= threshold ? 0 : 1 - status / threshold
+    const ratio =
+      status >= changeStartThreshold
+        ? 0
+        : 1 - (status - changeEndThreshold) / (changeStartThreshold - changeEndThreshold)
     return clamp(min + ratio * diff, min, max)
   }
-

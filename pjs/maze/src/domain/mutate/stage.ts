@@ -4,17 +4,25 @@ import {
   fireByRate,
   makeConstrainedRandomEmitter,
   makeRangeMap,
-  randomIntInAsymmetricRange,
   randomIntInclusiveBetween,
 } from 'utils'
 import { store } from '../../store'
+import { debugRenderingMode, InitialStyle } from '../../config/debug.ts'
 
 export const InitialNumOfStages = 20
 
-const InitialStyle = 5
-
 export const initStages = (): void => {
-  store.setStageQueue(mapStagesToFloors(buildStages()))
+  const stages = buildStages()
+  console.log(stages)
+  const floorStages = mapStagesToFloors(stages)
+
+  if (process.env.DEBUG === 'true') {
+    floorStages[0].mode = debugRenderingMode
+    floorStages[1].mode = debugRenderingMode
+  }
+
+  console.log(floorStages)
+  store.setStageQueue(floorStages)
 }
 
 export const buildStages = (): Stage[] => {
@@ -36,7 +44,7 @@ export const buildStages = (): Stage[] => {
   let currentMode = RenderingMode.atmospheric
 
   for (let s = 0; s < InitialNumOfStages; s++) {
-    const floors = fireByRate(0.66) ? 2 : 3
+    const floors = fireByRate(0.8) ? 1 : 0
     const style = pickStyle()
 
     // update mode every 2 stages
@@ -67,15 +75,16 @@ const evalStyle = (s: RenderingStyle) => {
 
 type ModeRange = [min: RenderingMode, max: RenderingMode]
 
+// prettier-ignore
 export const stageModeMap = makeRangeMap<ModeRange>([
-  [[1, 2], [RenderingMode.atmospheric, RenderingMode.atmospheric]],
-  [[3, 4], [RenderingMode.atmospheric, RenderingMode.smooth]],
-  [[5, 6], [RenderingMode.smooth, RenderingMode.ambient]],
-  [[7, 8], [RenderingMode.ambient, RenderingMode.digital]],
-  [[9, 10], [RenderingMode.digital, RenderingMode.abstract]],
-  [[11, 12], [RenderingMode.digital, RenderingMode.abstract]],
-  [[11, 12], [RenderingMode.digital, RenderingMode.digital]],
-  [[13, 14], [RenderingMode.atmospheric, RenderingMode.digital]], // full range
+  [[0, 1], [RenderingMode.atmospheric, RenderingMode.atmospheric]],
+  [[2, 3], [RenderingMode.atmospheric, RenderingMode.smooth]],
+  [[4, 5], [RenderingMode.smooth, RenderingMode.ambient]],
+  [[6, 7], [RenderingMode.ambient, RenderingMode.digital]],
+  [[8, 9], [RenderingMode.digital, RenderingMode.abstract]],
+  [[10, 11], [RenderingMode.abstract, RenderingMode.abstract]],
+  [[12, 13], [RenderingMode.digital, RenderingMode.abstract]],
+  [[14, 15], [RenderingMode.atmospheric, RenderingMode.digital]], // full range
 ])
 
 export const mapStagesToFloors = (stages: Stage[]): FloorStage[] => {

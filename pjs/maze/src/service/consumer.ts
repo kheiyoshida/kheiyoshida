@@ -1,6 +1,6 @@
 import { MessageQueue, RenderSignal } from '../domain/messages'
 import { showFloor } from './interface/handlers'
-import { closeMap, renderMap } from './interface/map_new'
+import { closeMap, renderMap } from './interface/map'
 import { updateMusicDest } from './music'
 import {
   renderCurrentView,
@@ -11,7 +11,7 @@ import {
   renderResurrect,
   renderTurn,
 } from './render'
-import { RenderPack, packRenderingInfo } from './render/pack'
+import { packRenderingInfo, RenderPack } from './render/pack'
 
 export type RenderHandler = (pack: RenderPack) => void
 

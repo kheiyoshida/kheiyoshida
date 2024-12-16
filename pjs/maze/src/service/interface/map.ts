@@ -54,6 +54,16 @@ export const renderMap = ({ map: { grid, current, direction, floor } }: RenderPa
       size: cellSize / 1.2,
       omitStroke: true,
     })
+
+    if (process.env.DEBUG === 'true' && cell.stair) {
+      renderer.drawCircle({
+        centerX: logicalCenterX + offsetX,
+        centerY: logicalCenterY + offsetY,
+        size: cellSize/4,
+        omitStroke: true,
+        temporaryFillColor: [0, 1.0, 0.5],
+      })
+    }
   })
 
   // current position

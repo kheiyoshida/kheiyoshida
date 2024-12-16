@@ -1,4 +1,4 @@
-import { Stage } from '../../store/stage.ts'
+import { RenderingMode, Stage } from '../../store/stage.ts'
 
 export const fixedStages: Stage[] = [
   {
@@ -6,20 +6,20 @@ export const fixedStages: Stage[] = [
     startFloor: 1,
     endFloor: 2,
     style: 5, // poles
-    mode: 'atmospheric',
+    mode: RenderingMode.atmospheric,
   },
   {
     number: 2,
     startFloor: 3,
     endFloor: 5,
     style: 2, // default
-    mode: 'atmospheric',
+    mode: RenderingMode.atmospheric,
   },
   {
     number: 3,
     startFloor: 6,
     endFloor: 7,
     style: 5, // tiles
-    mode: 'atmospheric',
+    mode: RenderingMode.atmospheric,
   },
 ]

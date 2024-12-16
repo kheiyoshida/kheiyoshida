@@ -1,18 +1,41 @@
-import { ScreenEffect, ScreenShader } from 'maze-gl'
-import vert from './shaders/screen.vert?raw'
-import frag from './shaders/screen.frag?raw'
+import { RenderingMode } from '../../../../store/stage.ts'
+import {
+  AbstractEffect,
+  AmbientEffect,
+  AtmosphericEffect,
+  DigitalEffect,
+  MazeScreenEffect,
+  SmoothEffect,
+} from './effects.ts'
+import { ScreenEffectParams } from '../../../../domain/query'
+import { Color } from 'maze-gl'
 
-export type ScreenEffectType = 'edge'
+export type ScreenEffectType = 'atmospheric' | 'smooth' | 'ambient' | 'digital' | 'abstract'
 
-const ScreenEffectMap = new Map<ScreenEffectType, ScreenEffect>()
+const ScreenEffectMap = new Map<ScreenEffectType, MazeScreenEffect>()
 
 export const initScreenEffects = () => {
-  ScreenEffectMap.set('edge', new ScreenEffect(new ScreenShader(vert, frag)))
+  ScreenEffectMap.set('atmospheric', new AtmosphericEffect())
+  ScreenEffectMap.set('smooth', new SmoothEffect())
+  ScreenEffectMap.set('ambient', new AmbientEffect())
+  ScreenEffectMap.set('digital', new DigitalEffect())
+  ScreenEffectMap.set('abstract', new AbstractEffect())
 }
 
-export const getScreenEffect = (type: ScreenEffectType): ScreenEffect => {
+const modeEffectMap: Record<RenderingMode, ScreenEffectType> = {
+  [RenderingMode.atmospheric]: 'atmospheric',
+  [RenderingMode.smooth]: 'smooth',
+  [RenderingMode.ambient]: 'ambient',
+  [RenderingMode.digital]: 'digital',
+  [RenderingMode.abstract]: 'abstract',
+}
+
+export const getScreenEffect = (mode: RenderingMode, params: ScreenEffectParams, baseColor: Color, fade?: number): MazeScreenEffect => {
+  const type = modeEffectMap[mode]
   if (!ScreenEffectMap.has(type)) {
     throw Error(`screen effect map was not initialized`)
   }
-  return ScreenEffectMap.get(type) as ScreenEffect
+  const effect = ScreenEffectMap.get(type)!
+  effect.setParameters({ ...params, fadeoutPercentage: fade || 0, baseColor: baseColor.normalizedRGB })
+  return effect
 }

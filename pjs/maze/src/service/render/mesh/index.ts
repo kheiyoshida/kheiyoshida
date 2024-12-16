@@ -1,14 +1,25 @@
 import { Mesh } from 'maze-gl'
 import { GeometrySpecDict } from './geometry'
 import { GeometryCode } from '../unit'
-import { getColorMaterial } from './material'
+import { getMeshMaterial, MaterialType } from './material'
 import { randomFloatBetween } from 'utils'
+import { RenderingMode } from '../../../store/stage.ts'
 
-const meshMap = new Map<GeometryCode, Mesh>()
+type CompositeMeshKey = `${RenderingMode}:${GeometryCode}`
 
-export const getMesh = (code: GeometryCode): Mesh => {
-  if (!meshMap.has(code)) {
-    const material = (code === 'Octahedron' || code === 'StairTile') ? getColorMaterial('distinct') : getColorMaterial('default')
+const meshMap = new Map<CompositeMeshKey, Mesh>()
+
+const materialSpecificationMap: Partial<Record<GeometryCode, MaterialType>> = {
+  Octahedron: 'distinct',
+  StairTile: 'distinct',
+}
+
+export const getMesh = (code: GeometryCode, mode: RenderingMode): Mesh => {
+  const key: CompositeMeshKey = `${mode}:${code}`
+
+  if (!meshMap.has(key)) {
+    const materialType = materialSpecificationMap[code] || 'default'
+    const material = getMeshMaterial(materialType, mode)
     const mesh = new Mesh(material, GeometrySpecDict[code])
 
     // set initial state
@@ -22,10 +33,10 @@ export const getMesh = (code: GeometryCode): Mesh => {
       mesh.state.scale = 0.9
     }
 
-    meshMap.set(code, mesh)
+    meshMap.set(key, mesh)
   }
 
-  const mesh = meshMap.get(code)!
+  const mesh = meshMap.get(key)!
 
   sideEffects(code, mesh)
 

@@ -29,15 +29,26 @@ test.each<[params: Parameters<typeof makeDecreasingParameter>, cases: [status: n
   }
 })
 
-test.each([
+test.each<[params: Parameters<typeof makeIncreasingParameter>, cases: [status: number, result: number][]]>([
   [
-    [1, 3, 100],
+    [1, 3, 100, 0],
     [
       [200, 1],
       [150, 1],
       [100, 1],
       [50, 2],
       [0, 3],
+    ],
+  ],
+  [
+    [0, 1, 2500, 1500],
+    [
+      [3000, 0],
+      [2500, 0],
+      [2000, 0.5],
+      [1500, 1],
+      [1000, 1],
+      [0, 1],
     ],
   ],
 ])(`${makeIncreasingParameter.name}`, (args, cases) => {

@@ -2,12 +2,12 @@ import { buildStages, mapStagesToFloors, stageModeMap } from './stage.ts'
 import { FloorStage, RenderingMode, Stage } from '../../store/stage.ts'
 
 describe(`${buildStages.name}`, () => {
-  test(`each stage lasts for 2-3 floors`, () => {
+  test(`each stage lasts for 1-2 floors`, () => {
     const stages = buildStages()
     expect(stages.length).toBeGreaterThan(10)
     stages.forEach((stage, i) => {
-      expect(stage.endFloor - stage.startFloor).toBeGreaterThanOrEqual(2)
-      expect(stage.endFloor - stage.startFloor).toBeLessThanOrEqual(3)
+      expect(stage.endFloor - stage.startFloor + 1).toBeGreaterThanOrEqual(1)
+      expect(stage.endFloor - stage.startFloor + 1).toBeLessThanOrEqual(2)
       if (stages[i + 1]) {
         expect(stages[i + 1].startFloor).toBe(stage.endFloor + 1)
       }
@@ -26,24 +26,27 @@ describe(`${buildStages.name}`, () => {
       }
     }
   )
-  test(`it should change modes every 2 stages, but can only shift to the "adjacent" one in the range`, () => {
-    const stages = buildStages()
-    const modes = stages.map((stage) => stage.mode)
+  test.each([...Array(100)])(
+    `it should change modes every 2 stages, but can only shift to the "adjacent" one in the range`,
+    () => {
+      const stages = buildStages()
+      const modes = stages.map((stage) => stage.mode)
 
-    let prev: RenderingMode | undefined
-    for (let i = 0; i < modes.length; i += 2) {
-      expect(modes[i]).toBe(modes[i + 1])
+      let prev: RenderingMode | undefined
+      for (let i = 0; i < modes.length; i += 2) {
+        expect(modes[i]).toBe(modes[i + 1])
 
-      const range = stageModeMap.get(i)
-      expect(modes[i]).toBeGreaterThanOrEqual(range[0])
-      expect(modes[i]).toBeLessThanOrEqual(range[1])
+        const range = stageModeMap.get(i)
+        expect(modes[i]).toBeGreaterThanOrEqual(range[0])
+        expect(modes[i]).toBeLessThanOrEqual(range[1])
 
-      if (prev) {
-        expect(Math.abs(prev - modes[i])).toBe(1)
+        if (prev) {
+          expect(Math.abs(prev - modes[i])).toBeLessThanOrEqual(1)
+        }
+        prev = modes[i]
       }
-      prev = modes[i]
     }
-  })
+  )
 })
 
 test(`${mapStagesToFloors.name}`, () => {

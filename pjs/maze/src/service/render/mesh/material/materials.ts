@@ -1,10 +1,13 @@
 import { Color, ColorMaterial } from 'maze-gl'
-import { getShader } from './shaders'
+import { getShader, MaterialShaderType } from './shaders'
 
-export class DefaultMaterial extends ColorMaterial {
-  constructor() {
-    super(getShader('default'))
+export class MeshMaterial extends ColorMaterial {
+  constructor(materialShaderType: MaterialShaderType) {
+    super(getShader(materialShaderType))
   }
+}
+
+export class DefaultMaterial extends MeshMaterial {
   setColor(materialColor: Color) {
     this.uniforms.diffuse = materialColor.normalizedRGB
 
@@ -14,10 +17,7 @@ export class DefaultMaterial extends ColorMaterial {
   }
 }
 
-export class DistinctMaterial extends ColorMaterial {
-  constructor() {
-    super(getShader('default'))
-  }
+export class DistinctMaterial extends MeshMaterial {
   setColor(materialColor: Color) {
     // should be saturated
     materialColor.saturation += 0.5

@@ -107,8 +107,6 @@ export class NormalColorDepthFrameBuffer extends FrameBuffer {
   }
 
   drawOffscreenFrame(screenShader: Shader, drawScreen: () => void): void {
-    console.log(this.colorTexture.unit, this.normalTexture.unit, this.depthTexture.unit)
-
     this.colorTexture.activate()
     screenShader.setInt('ColorTexture', this.colorTexture.unit)
 

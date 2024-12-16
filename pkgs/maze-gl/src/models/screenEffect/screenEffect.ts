@@ -3,12 +3,16 @@ import { getGL } from '../../webgl'
 import { ColorTexture, DepthTexture, NormalTexture } from './texture'
 import { FrameBuffer, NormalColorDepthFrameBuffer } from './frameBuffer'
 
-export class ScreenEffect {
+type EffectParams = Record<string, unknown>
+
+export abstract class ScreenEffect<P extends EffectParams = EffectParams> {
   private readonly gl: WebGL2RenderingContext
   private readonly frameBuffer: FrameBuffer
   private readonly screenPlaneVAO: WebGLVertexArrayObject
 
-  constructor(private screenShader: Shader) {
+  protected effectParams: P
+
+  protected constructor(readonly screenShader: Shader, defaultParams: P) {
     this.gl = getGL()
     this.screenPlaneVAO = setupPlaneVAO(this.gl, this.screenShader)
 
@@ -17,6 +21,8 @@ export class ScreenEffect {
     const depthTexture = new DepthTexture(this.gl)
     this.frameBuffer = new NormalColorDepthFrameBuffer(this.gl, normalTexture, colorTexture, depthTexture)
     this.frameBuffer.initialize()
+
+    this.effectParams = defaultParams
   }
 
   startDraw() {
@@ -25,7 +31,7 @@ export class ScreenEffect {
     const gl = this.gl
     const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
     if (status !== gl.FRAMEBUFFER_COMPLETE) {
-      console.error('Framebuffer incomplete after rendering:', status);
+      throw Error(`Framebuffer incomplete after rendering: ${status}`);
     }
   }
 
@@ -40,12 +46,19 @@ export class ScreenEffect {
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0)
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
     this.screenShader.use()
+    this.applyParameters()
     this.frameBuffer.drawOffscreenFrame(this.screenShader, () => {
       this.gl.bindVertexArray(this.screenPlaneVAO)
       this.gl.drawArrays(this.gl.TRIANGLES, 0, 6)
       this.gl.bindVertexArray(null)
     })
   }
+
+  setParameters(params: Partial<P>) {
+    Object.assign(this.effectParams, params)
+  }
+
+  abstract applyParameters(): void
 }
 
 const setupPlaneVAO = (gl: WebGL2RenderingContext, screenShader: Shader): WebGLVertexArrayObject => {
