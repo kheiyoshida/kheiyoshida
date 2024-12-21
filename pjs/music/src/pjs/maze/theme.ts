@@ -106,12 +106,12 @@ export const createDefaultTheme = () => {
     droneBass: createOutlet(droneBassCh.inst, Tone.Transport.toSeconds('16n')),
   }
 
-  const handlefade = makeFader(channels)
+  const handleFade = makeFader(channels)
 
   return {
     scaleSource,
     channels,
     outlets,
-    handlefade,
+    handleFade,
   }
 }

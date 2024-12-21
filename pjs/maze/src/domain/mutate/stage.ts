@@ -13,7 +13,6 @@ export const InitialNumOfStages = 20
 
 export const initStages = (): void => {
   const stages = buildStages()
-  console.log(stages)
   const floorStages = mapStagesToFloors(stages)
 
   if (process.env.DEBUG === 'true') {
@@ -21,7 +20,6 @@ export const initStages = (): void => {
     floorStages[1].mode = debugRenderingMode
   }
 
-  console.log(floorStages)
   store.setStageQueue(floorStages)
 }
 
@@ -78,7 +76,7 @@ type ModeRange = [min: RenderingMode, max: RenderingMode]
 // prettier-ignore
 export const stageModeMap = makeRangeMap<ModeRange>([
   [[0, 1], [RenderingMode.atmospheric, RenderingMode.atmospheric]],
-  [[2, 3], [RenderingMode.atmospheric, RenderingMode.smooth]],
+  [[2, 3], [RenderingMode.smooth, RenderingMode.smooth]],
   [[4, 5], [RenderingMode.smooth, RenderingMode.ambient]],
   [[6, 7], [RenderingMode.ambient, RenderingMode.digital]],
   [[8, 9], [RenderingMode.digital, RenderingMode.abstract]],

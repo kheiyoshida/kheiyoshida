@@ -13,7 +13,7 @@ export const getColorParams = (): ColorParams => {
   }
 }
 
-const MaxSaturationLevel = 0.8
+const MaxSaturationLevel = 0.33
 
 /**
  * the direction of lightness change lightness range should follow:
@@ -35,8 +35,8 @@ export const lightnessMoveDirection = (() => {
 
 const getFloorColorParams = (floor: number): FloorColorParams => {
   return {
-    maxSaturation: Math.min(floor / 12, MaxSaturationLevel),
-    saturationDelta: randomFloatInAsymmetricRange(0.1),
+    maxSaturation: MaxSaturationLevel * Math.min(floor / 20, 1),
+    saturationDelta: randomFloatInAsymmetricRange(0.01),
     lightnessMoveDelta: lightnessMoveDirection.currentSign * randomFloatBetween(0.0, 0.01),
   }
 }

@@ -6,7 +6,7 @@ const defaultHue = randomIntInclusiveBetween(0, 359)
 const defaultSaturation = 0.0 // 0.0
 
 // lit
-const defaultUnlitLightness = 0.0 // 0.0
+const defaultUnlitLightness = 0.1 // 0.0
 const lightnessRangeToAvoid = {
   min: 0.35,
   max: 0.65,
@@ -19,7 +19,7 @@ const materialLightness = 0.1 // 0.1
 const minLightnessSum = 0.1
 const maxLightnessSum = 0.6
 
-Color.MaxSaturation = 0.8
+Color.MaxSaturation = 0.3
 
 export const makeColorScheme = (): IColorScheme => {
   const unlitColor = new Color(defaultHue, defaultSaturation, defaultUnlitLightness)
@@ -61,10 +61,10 @@ export const makeColorScheme = (): IColorScheme => {
   const isLitInverted = () => unlitColor.normalizedRGB.every((v) => v > litInversionThreshold)
 
   const increaseSaturation = (delta: number, max = 1.0): void => {
-    const saturation = clamp(delta, 0, max)
-    unlitColor.saturation = saturation
-    lightColor.saturation = saturation
-    materialColor.saturation = saturation
+    Color.MaxSaturation = max;
+    unlitColor.saturation += delta
+    lightColor.saturation += delta
+    materialColor.saturation += delta
   }
 
   const rotateHue = (degrees: number): void => {

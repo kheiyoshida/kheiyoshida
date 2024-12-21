@@ -1,5 +1,6 @@
 import {
   GridDirection,
+  ScaleType,
   SceneGrid,
   SceneShiftInfo,
   createMusicState,
@@ -14,6 +15,7 @@ export type Music = {
   applyInitialScene: () => void
   checkNextShift: (...commands: GridDirection[]) => void
   moveToDest: (dest: Parameters<SceneGrid['moveTowards']>[0]) => void
+  changeMode: () => void
   currentPosition: SceneGrid['current']
   config: {
     bpm: number
@@ -23,7 +25,7 @@ export type Music = {
 
 export const makeMusic = (): Music => {
   const scenes = makeDefaultScenes()
-  const { channels, scaleSource, outlets, handlefade } = createDefaultTheme()
+  const { channels, scaleSource, outlets, handleFade } = createDefaultTheme()
 
   const state = createMusicState(outlets)
 
@@ -43,41 +45,43 @@ export const makeMusic = (): Music => {
     const shift = scenes.moveTowards(dest)
     if (!shift) return
     fadeInNextTheme(shift)
-    if (scaleSource.inModulation || scenes.current.isOnEdge) {
-      scaleSource.modulateAll(
-        {
-          key: nthDegreeTone(scaleSource.conf.key, randomItemFromArray(['4', '5', '6'])),
-          pref: randomItemFromArray(['omit25', 'omit27', 'omit47', 'major']),
-        },
-        2
-      )
+    if (scaleSource.inModulation) {
+      _changeMode()
     }
+  }
+
+  function _changeMode() {
+    scaleSource.modulateAll(
+      {
+        key: nthDegreeTone(scaleSource.conf.key, randomItemFromArray(['4', '5', '6'])),
+        pref: randomItemFromArray(['omit25', 'omit27', 'omit47', 'major']),
+      },
+      2
+    )
   }
 
   function checkNextShift(...commands: GridDirection[]) {
     const shift = commands.reduce((_, command) => scenes.move(command), {} as SceneShiftInfo)
     fadeInNextTheme(shift)
     if (scaleSource.inModulation || scenes.current.isOnEdge) {
-      scaleSource.modulateAll(
-        {
-          key: nthDegreeTone(scaleSource.conf.key, randomItemFromArray(['4', '5', '6'])),
-          pref: randomItemFromArray(['omit25', 'omit27', 'omit47', 'major']),
-        },
-        2
-      )
+      _changeMode()
     }
   }
 
   function fadeInNextTheme({ makeScene, sceneAlignment, direction }: SceneShiftInfo) {
     const scene = makeScene!(scaleSource, sceneAlignment)
     const result = state.applyScene(scene)
-    handlefade(result, direction)
+    handleFade(result, direction)
   }
 
   return {
     applyInitialScene,
     checkNextShift,
     moveToDest,
+    changeMode: () => {
+      if (scaleSource.inModulation) return;
+      _changeMode()
+    },
     get currentPosition() {
       return scenes.current
     },

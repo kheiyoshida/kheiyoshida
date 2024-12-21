@@ -4,7 +4,7 @@ import { statusStore, store } from '../../../store'
 export type MusicRange = IntRange<1, 10>
 export type MusicCommand = {
   alignment: MusicRange
-  aesthetics: MusicRange
+  aesthetics: MusicRange,
 }
 
 export const getMusicCommands = (): MusicCommand => ({

@@ -2,14 +2,14 @@ import { getGL, resizeCanvas } from 'maze-gl/src/webgl'
 import pjson from '../package.json'
 import { initializeServices, setupRenderingCycle } from './service'
 import { Interface } from './service/interface'
-import { music } from './service/music'
+import { musicContext } from './service/music'
 import { logicalHeight, logicalWidth } from './config'
 
 const VERSION = pjson.version
 let started = false
 
 const start = () => {
-  music.startContext()
+  musicContext.startContext()
 
   const gl = getGL()
   gl.enable(gl.DEPTH_TEST)
