@@ -1,20 +1,20 @@
 import { makeStoreV2, ReducerMap } from 'utils'
-import { Matrix } from './entities/matrix/matrix'
+import { MazeLevel } from './entities/matrix/matrix'
 import { Direction } from '../utils/direction'
 import { Position } from '../utils/position'
 import { makeStatusStore } from './status'
-import { buildMatrix, BuildMatrixParams } from './entities/matrix'
+import { buildMatrix, MazeLevelParams } from './entities/matrix'
 import { Node } from './entities/matrix/node'
-import { _track, buildGrid, Grid } from './entities/map'
+import { trackMap, buildMap, Map } from './entities/map'
 import { FloorStage, StageContext } from './stage.ts'
 
 export type MazeState = {
-  matrix: Matrix
+  matrix: MazeLevel
   floor: number
   current: Position
   stairPos: number[]
   direction: Direction
-  grid: Grid
+  grid: Map
   mapOpen: boolean
   blockControl: boolean
   blockStatusChange: boolean
@@ -43,18 +43,18 @@ const reducers = {
     s.mapOpen = false
   },
   resetMap: (s) => () => {
-    s.grid = buildGrid(s.matrix)
+    s.grid = buildMap(s.matrix)
   },
   trackMap: (s) => (from: Position, to: Position) => {
     const oldGrid = s.grid.slice()
-    const newGrid = _track(oldGrid, from, to)
+    const newGrid = trackMap(oldGrid, from, to)
     store.updateMap(newGrid)
   },
-  updateMap: (s) => (newMap: Grid) => {
+  updateMap: (s) => (newMap: Map) => {
     s.grid = newMap
   },
   // maze
-  renewMatrix: (s) => (params: BuildMatrixParams) => {
+  renewMatrix: (s) => (params: MazeLevelParams) => {
     s.matrix = buildMatrix(params)
   },
   updateCurrent: (s) => (current: Position) => {

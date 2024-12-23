@@ -1,24 +1,24 @@
 import { fireByRate as random } from 'utils'
-import { Matrix, getAllAdjacentNodes } from './matrix'
-import { iterateEachNode } from './iterate'
+import { MazeLevel, getAllAdjacentNodes } from './matrix'
+import { iterateEachItem } from '../utils/grid.ts'
 import { connectNodes, makeShortestPath } from './path'
-import { Node } from './node'
+import { Block } from './block.ts'
 
-type NodeCluster = Set<Node>
+type BlockCluster = Set<Block>
 
-export const connect = (matrix: Matrix, connRate: number): Matrix => {
-  const clusters = clusterizeNodes(matrix, connRate)
+export const connect = (matrix: MazeLevel, connRate: number): MazeLevel => {
+  const clusters = clusterizeBlocks(matrix, connRate)
   connectClusters(matrix, clusters)
   randomConnect(matrix, connRate)
   return matrix
 }
 
 /**
- * connect nodes within adjacent nodes (=cluster)
+ * connect adjacent blocks as clusters
  */
-const clusterizeNodes = (matrix: Matrix, connRate: number): NodeCluster[] => {
-  const clusters: NodeCluster[] = []
-  iterateEachNode(matrix, (matrix, node) => {
+const clusterizeBlocks = (matrix: MazeLevel, connRate: number): BlockCluster[] => {
+  const clusters: BlockCluster[] = []
+  iterateEachItem(matrix, (matrix, node) => {
     const cluster = clusters.find((c) => c.has(node))
     if (!cluster) {
       clusters.push(new Set([node]))
@@ -37,7 +37,7 @@ const clusterizeNodes = (matrix: Matrix, connRate: number): NodeCluster[] => {
 /**
  * connect clusters by connecting distant nodes in different clusters
  */
-const connectClusters = (matrix: Matrix, clusters: NodeCluster[]): void => {
+const connectClusters = (matrix: MazeLevel, clusters: BlockCluster[]): void => {
   if (!clusters.length) throw Error(`empty clusters`)
   const mainCluster = clusters.pop()!
   while (clusters.length > 0) {
@@ -52,12 +52,12 @@ const connectClusters = (matrix: Matrix, clusters: NodeCluster[]): void => {
  * find the shortest path from a cluster to another
  */
 const shortestPathBetweenClusters = (
-  mainCluster: NodeCluster,
-  anotherCluster: NodeCluster
-): [Node, Node] => {
+  mainCluster: BlockCluster,
+  anotherCluster: BlockCluster
+): [Block, Block] => {
   let shortestDistance = Number.POSITIVE_INFINITY
-  let from: Node | undefined
-  let to: Node | undefined
+  let from: Block | undefined
+  let to: Block | undefined
   for (const mcNode of mainCluster) {
     for (const acNode of anotherCluster) {
       const distance = mcNode.distance(acNode)
@@ -71,9 +71,9 @@ const shortestPathBetweenClusters = (
   return [from!, to!]
 }
 
-const randomConnect = (matrix: Matrix, connRate: number) => {
-  iterateEachNode(matrix, (_, n1) => {
-    iterateEachNode(matrix, (_, n2) => {
+const randomConnect = (matrix: MazeLevel, connRate: number) => {
+  iterateEachItem(matrix, (_, n1) => {
+    iterateEachItem(matrix, (_, n2) => {
       if (n1 !== n2) {
         if (random(connRate) && n1.distance(n2) === 1) {
           connectNodes(n1, n2)

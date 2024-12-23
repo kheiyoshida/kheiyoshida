@@ -1,5 +1,5 @@
 import {
-  Matrix,
+  MazeLevel,
   adjacentPosition,
   getAllAdjacentNodes,
   getPositionNode,
@@ -7,12 +7,12 @@ import {
 } from './matrix'
 import { Position } from '../../../utils/position'
 import { Direction, getTurnedDirection } from '../../../utils/direction'
-import { Node } from './node'
+import { Block } from './block.ts'
 
 /**
  * BFS using position as arguments
  */
-export const seekPathByPosition = (matrix: Matrix, current: Position, dest: Position): Node[] => {
+export const seekPathByPosition = (matrix: MazeLevel, current: Position, dest: Position): Block[] => {
   const [startNode, destNode] = [current, dest].map((pos) => getPositionNode(matrix, pos))
   return seekPath(matrix, startNode, destNode)
 }
@@ -20,7 +20,7 @@ export const seekPathByPosition = (matrix: Matrix, current: Position, dest: Posi
 /**
  * BFS from node to node in matrix
  */
-export const seekPath = (matrix: Matrix, start: Node, dest: Node): Node[] => {
+export const seekPath = (matrix: MazeLevel, start: Block, dest: Block): Block[] => {
   const queue = [[start]]
   while (queue.length) {
     const currentPath = queue.shift()!
@@ -43,7 +43,7 @@ export const seekPath = (matrix: Matrix, start: Node, dest: Node): Node[] => {
 /**
  * connect adjacent nodes.
  */
-export const connectNodes = (node: Node, adjacent: Node, direction?: Direction): void => {
+export const connectNodes = (node: Block, adjacent: Block, direction?: Direction): void => {
   if (!node.isAdjacent(adjacent)) throw Error(`can only connect adjacent nodes`)
   const dir = direction || node.direction(adjacent)
   node.set({ [dir]: true })
@@ -54,7 +54,7 @@ export const connectNodes = (node: Node, adjacent: Node, direction?: Direction):
  * make a shortest path from a node to another,
  * connecting and putting nodes recursively
  */
-export const makeShortestPath = (matrix: Matrix, from: Node, to: Node): void => {
+export const makeShortestPath = (matrix: MazeLevel, from: Block, to: Block): void => {
   const dir = from.direction(to)
   const adjPos = adjacentPosition(dir, from.pos, matrix.length)!
   const adjNode = requireNodeAtPosition(matrix, adjPos)

@@ -1,5 +1,5 @@
 import * as utils from 'utils'
-import { Node } from './node'
+import { Block } from './block.ts'
 import { countMatrixNodes } from './matrix'
 import { initializeEmptyMatrix, seedNodes } from './seed'
 
@@ -33,16 +33,16 @@ describe(`${seedNodes.name}`, () => {
     )
     const matrix = initializeEmptyMatrix(3)
     expect(seedNodes(matrix, 1.0)).toMatchObject([
-      [expect.any(Node), null, expect.any(Node)],
-      [null, expect.any(Node), null],
-      [expect.any(Node), null, expect.any(Node)],
+      [expect.any(Block), null, expect.any(Block)],
+      [null, expect.any(Block), null],
+      [expect.any(Block), null, expect.any(Block)],
     ])
   })
   it(`should not put more nodes than defined max`, () => {
     const matrix = initializeEmptyMatrix(3)
     expect(seedNodes(matrix, 1.0, 4)).toMatchObject([
-      [expect.any(Node), expect.any(Node), expect.any(Node)],
-      [expect.any(Node), null, null],
+      [expect.any(Block), expect.any(Block), expect.any(Block)],
+      [expect.any(Block), null, null],
       [null, null, null],
     ])
   })

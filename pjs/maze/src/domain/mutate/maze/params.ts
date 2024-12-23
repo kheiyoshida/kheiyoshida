@@ -1,8 +1,8 @@
 import { clamp, randomFloatBetween, randomIntInclusiveBetween } from 'utils'
-import { BuildMatrixParams } from '../../../store/entities/matrix'
+import { MazeLevelParams } from '../../../store/entities/matrix'
 import { MaxFloorSize } from '../../../config'
 
-export const paramBuild = (floor: number): BuildMatrixParams => {
+export const paramBuild = (floor: number): MazeLevelParams => {
   const size = getFloorSize(floor)
   const fill = getFillRate(floor)
   const conn = getConnectionRate(floor)

@@ -1,14 +1,14 @@
 import { Position } from 'utils'
-import { Matrix } from '../matrix/matrix'
+import { MazeLevel } from '../matrix/matrix'
 
-export type Grid = Array<Array<Cell | null>>
+export type Map = Array<Array<MapCell | null>>
 
-type Cell = {
+type MapCell = {
   visited: boolean
   stair?: boolean
 }
 
-export const _track = (grid: Grid, from: Position, dest: Position): Grid => {
+export const trackMap = (grid: Map, from: Position, dest: Position): Map => {
   const [gi, gj] = [dest[0] * 2, dest[1] * 2]
   grid[gi][gj]!.visited = true
   if (from[0] !== dest[0]) {
@@ -21,9 +21,9 @@ export const _track = (grid: Grid, from: Position, dest: Position): Grid => {
   return grid
 }
 
-export const buildGrid = (matrix: Matrix, matrixSize = matrix.length): Grid => {
+export const buildMap = (matrix: MazeLevel, matrixSize = matrix.length): Map => {
   const gridSize = 2 * matrixSize - 1
-  const grid: Grid = Array.from(Array(gridSize), () => new Array(gridSize).fill(null))
+  const grid: Map = Array.from(Array(gridSize), () => new Array(gridSize).fill(null))
 
   for (let i = 0; i < matrixSize; i++) {
     for (let j = 0; j < matrixSize; j++) {

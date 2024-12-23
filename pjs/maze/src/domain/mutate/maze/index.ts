@@ -1,12 +1,12 @@
 import { fireByRate, randomItemFromArray } from 'utils'
 import { store } from '../../../store'
 import {
-  Matrix,
+  MazeLevel,
   getCorridorNodes,
   getDeadendNodes,
   getMatrixItem,
 } from '../../../store/entities/matrix/matrix'
-import { Node } from '../../../store/entities/matrix/node'
+import { Block as Node } from '../../../store/entities/matrix/block.ts'
 import { Position, reducePosition } from '../../../utils/position'
 import { getTurnedDirection, positionalDirection } from '../../../utils/direction'
 import { paramBuild } from './params'
@@ -23,7 +23,7 @@ export const generateMaze = () => {
   store.setStair(stairNode)
 }
 
-const retrieveInitialPositions = (matrix: Matrix) => {
+const retrieveInitialPositions = (matrix: MazeLevel) => {
   const deadEnds = getDeadendNodes(matrix)
   const corridorNodes = getCorridorNodes(matrix)
   const stairNode = randomItemFromArray(deadEnds)

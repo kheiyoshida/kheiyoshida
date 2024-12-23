@@ -3,6 +3,7 @@ export const Debug = () => (
 )
 
 export const renderDebugText = (json: Record<string, unknown>) => {
+  return;
   if (process.env.DEBUG === 'true') {
     const text = Object.entries(json).map(([key, value]) => `${key}: ${value}`).join('\n')
     document.getElementById('debug')!.innerText = text

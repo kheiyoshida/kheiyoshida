@@ -5,7 +5,7 @@ type Edges = {
   [k in Direction]: boolean
 }
 
-export class Node {
+export class Block {
   private _edges: Edges
   get edges() {
     return this._edges
@@ -56,16 +56,16 @@ export class Node {
     return Boolean(this.corridorDirection)
   }
 
-  public distance(other: Node) {
+  public distance(other: Block) {
     if (this === other) throw Error(`distance should be compared with another node`)
     return Math.abs(other.pos[0] - this.pos[0]) + Math.abs(other.pos[1] - this.pos[1])
   }
 
-  public isAdjacent(another: Node): boolean {
+  public isAdjacent(another: Block): boolean {
     return this.distance(another) === 1
   }
 
-  public direction(other: Node, prefer: 'ns' | 'ew' = 'ns'): Direction {
+  public direction(other: Block, prefer: 'ns' | 'ew' = 'ns'): Direction {
     let ns, ew
 
     if (this.pos[0] < other.pos[0]) {

@@ -1,6 +1,6 @@
-import { Matrix, countMatrixNodes, getAllAdjacentNodes } from './matrix'
+import { MazeLevel, countMatrixNodes, getAllAdjacentNodes } from './matrix'
 import { seekPathByPosition } from './path'
-import { Node } from './node'
+import { Block } from './block.ts'
 
 /**
  *   0   1   2   3
@@ -12,35 +12,35 @@ import { Node } from './node'
  *   |       |
  * 3 o   x   o - o
  */
-const originalMatrix: Matrix = [
+const originalMatrix: MazeLevel = [
   [
-    new Node([0, 0], { e: true, s: true }),
-    new Node([0, 1], { w: true, e: true, s: true }),
-    new Node([0, 2], { w: true, s: true }),
+    new Block([0, 0], { e: true, s: true }),
+    new Block([0, 1], { w: true, e: true, s: true }),
+    new Block([0, 2], { w: true, s: true }),
     null,
   ],
   [
-    new Node([1, 0], { n: true, e: true }),
-    new Node([1, 1], { w: true, n: true }),
-    new Node([1, 2], { n: true, s: true }),
+    new Block([1, 0], { n: true, e: true }),
+    new Block([1, 1], { w: true, n: true }),
+    new Block([1, 2], { n: true, s: true }),
     null,
   ],
   [
-    new Node([2, 0], { e: true, s: true }),
-    new Node([2, 1], { w: true, e: true }),
-    new Node([2, 2], { n: true, e: true, s: true, w: true }),
-    new Node([2, 3], { w: true }),
+    new Block([2, 0], { e: true, s: true }),
+    new Block([2, 1], { w: true, e: true }),
+    new Block([2, 2], { n: true, e: true, s: true, w: true }),
+    new Block([2, 3], { w: true }),
   ],
   [
-    new Node([3, 0], { n: true }),
+    new Block([3, 0], { n: true }),
     null,
-    new Node([3, 2], { n: true, e: true }),
-    new Node([3, 3], { w: true }),
+    new Block([3, 2], { n: true, e: true }),
+    new Block([3, 3], { w: true }),
   ],
 ]
 
 const matrixFaxtory = () =>
-  originalMatrix.map((row) => row.map((n) => (n ? new Node(n.pos, n.edges) : null)))
+  originalMatrix.map((row) => row.map((n) => (n ? new Block(n.pos, n.edges) : null)))
 
 it(`countNodes`, () => {
   const matrix = matrixFaxtory()
