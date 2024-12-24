@@ -1,5 +1,5 @@
 import { Position } from 'utils'
-import { MazeLevel } from '../matrix/matrix'
+import { MazeLevel } from '../maze/level.ts'
 
 export type Map = Array<Array<MapCell | null>>
 

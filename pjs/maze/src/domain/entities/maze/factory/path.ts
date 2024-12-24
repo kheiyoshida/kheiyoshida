@@ -1,12 +1,13 @@
+import { MazeLevel } from '../level.ts'
+import { Position } from '../../utils/position.ts'
+import { Direction, getTurnedDirection } from '../../utils/direction.ts'
+import { Block } from '../block.ts'
 import {
-  MazeLevel,
-  getAllAdjacentBlocks,
-  requireBlockAtPosition,
-} from './matrix'
-import { Position } from '../../../utils/position'
-import { Direction, getTurnedDirection } from '../../../utils/direction'
-import { Block } from './block.ts'
-import { adjacentPositionInMatrix, getConcreteMatrixItem } from '../utils/matrix.ts'
+  adjacentPositionInMatrix,
+  getAdjacentItem,
+  getConcreteMatrixItem,
+  getMatrixItem,
+} from '../../utils/matrix.ts'
 
 /**
  * BFS using position as arguments
@@ -62,3 +63,22 @@ export const makeShortestPath = (matrix: MazeLevel, from: Block, to: Block): voi
     makeShortestPath(matrix, adjNode, to)
   }
 }
+
+/**
+ * get all the adjacent nodes in the 4 adjacent positions
+ */
+export const getAllAdjacentBlocks = (level: MazeLevel, block: Block): Block[] =>
+  block.edgeList.map((d) => getAdjacentItem(level, block.pos, d)).filter((n): n is Block => n !== null)
+/**
+ * put a new block at position, and returns the new one
+ */
+export const putBlock = (level: MazeLevel, position: Position): Block => {
+  const newNode = new Block(position)
+  level[position[0]][position[1]] = newNode
+  return newNode
+}
+/**
+ * look up an item at position, put a block if empty
+ */
+export const requireBlockAtPosition = (level: MazeLevel, position: Position): Block =>
+  getMatrixItem(level, position) || putBlock(level, position)

@@ -1,10 +1,10 @@
-import { Node } from '../../../../store/entities/matrix/node.ts'
+import { Block } from '../../../entities/maze/block.ts'
 import { toNodeSpec, toPathSpec } from './nodeSpec.ts'
 import * as stairs from '../../movement/stairs.ts'
 
 describe(`${toNodeSpec.name}`, () => {
   it(`should emit rendering spec based on direction`, () => {
-    const node = new Node([0, 0], { n: true })
+    const node = new Block([0, 0], { n: true })
     expect(toNodeSpec('n')(node).terrain).toMatchObject({
       left: 'wall',
       right: 'wall',
@@ -30,9 +30,9 @@ describe(`${toNodeSpec.name}`, () => {
   it(`should include stair flag if node is on the stair`, () => {
     jest.spyOn(stairs, 'getStairAnimation').mockReturnValueOnce({
       goDownstairs: 'descent',
-      proceedToNextFloor: 'corridor'
+      proceedToNextFloor: 'corridor',
     })
-    const node = new Node([0, 0], { n: true })
+    const node = new Block([0, 0], { n: true })
     node.setStair()
     expect(toNodeSpec('n')(node).stair).toBe('stair')
   })
@@ -40,10 +40,10 @@ describe(`${toNodeSpec.name}`, () => {
 
 describe(`${toPathSpec.name}`, () => {
   it(`should convert node path to PathSpec`, () => {
-    const path: Node[] = [
-      new Node([3, 0], { n: true, e: true }), // z=0
-      new Node([2, 0], { n: true, w: true }), // z=1
-      new Node([1, 0], { e: true }), // z=2
+    const path: Block[] = [
+      new Block([3, 0], { n: true, e: true }), // z=0
+      new Block([2, 0], { n: true, w: true }), // z=1
+      new Block([1, 0], { e: true }), // z=2
     ]
     expect(toPathSpec('n')(path)).toMatchObject([
       {
@@ -73,9 +73,9 @@ describe(`${toPathSpec.name}`, () => {
     ])
   })
   it(`should fill with null if front node isn't approachable`, () => {
-    const path: Node[] = [
-      new Node([3, 0], { n: true, e: true }), // z=0
-      new Node([2, 0], { n: true }), // z=1
+    const path: Block[] = [
+      new Block([3, 0], { n: true, e: true }), // z=0
+      new Block([2, 0], { n: true }), // z=1
     ]
     expect(toPathSpec('n')(path)).toMatchObject([
       {

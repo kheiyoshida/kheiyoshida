@@ -1,12 +1,12 @@
 import { makeStoreV2, ReducerMap } from 'utils'
-import { MazeLevel } from './entities/matrix/matrix'
-import { Direction } from '../utils/direction'
-import { Position } from '../utils/position'
+import { MazeLevel } from '../domain/entities/maze/level.ts'
+import { Direction } from '../domain/entities/utils/direction.ts'
+import { Position } from '../domain/entities/utils/position.ts'
 import { makeStatusStore } from './status'
-import { buildMatrix, MazeLevelParams } from './entities/matrix'
-import { Node } from './entities/matrix/node'
-import { trackMap, buildMap, Map } from './entities/map'
-import { FloorStage, StageContext } from './stage.ts'
+import { buildMatrix, MazeLevelParams } from '../domain/entities/maze/factory'
+import { Block } from '../domain/entities/maze/block'
+import { trackMap, buildMap, Map } from '../domain/entities/map'
+import { FloorStage, StageContext } from '../domain/entities/stage.ts'
 
 export type MazeState = {
   matrix: MazeLevel
@@ -63,7 +63,7 @@ const reducers = {
   updateDirection: (s) => (direction: Direction) => {
     s.direction = direction
   },
-  setStair: (s) => (stairNode: Node) => {
+  setStair: (s) => (stairNode: Block) => {
     stairNode.setStair()
     s.stairPos = stairNode.pos
   },

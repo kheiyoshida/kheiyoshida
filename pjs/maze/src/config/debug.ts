@@ -1,4 +1,4 @@
-import { RenderingMode, RenderingStyle } from '../store/stage.ts'
+import { RenderingMode, RenderingStyle } from '../domain/entities/stage.ts'
 
 export const debugRenderingMode: RenderingMode = RenderingMode.abstract
 

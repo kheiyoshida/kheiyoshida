@@ -1,5 +1,5 @@
-import { Position, validatePosition } from '../../../utils/position.ts'
-import { adjacentInDirection, Direction } from '../../../utils/direction.ts'
+import { Position, validatePosition } from './position.ts'
+import { adjacentInDirection, Direction } from './direction.ts'
 
 /**
  * data structure for square matrix.

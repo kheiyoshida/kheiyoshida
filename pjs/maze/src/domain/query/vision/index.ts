@@ -2,7 +2,7 @@ import { getLightColorIntention, LightVariables } from './light.ts'
 import { EffectParams, getEffectParams } from './effect.ts'
 import { ColorParams } from './color/types.ts'
 import { getColorParams } from './color'
-import { RenderingMode } from '../../../store/stage.ts'
+import { RenderingMode } from '../../entities/stage.ts'
 import { store } from '../../../store'
 import { getScreenEffectParams, ScreenEffectParams } from './screenEffect.ts'
 

@@ -1,7 +1,7 @@
 import { getShader, MaterialShaderType, RenderingModeShaderTypeMap } from './shaders'
 import { getGL } from 'maze-gl/src/webgl'
 import { DefaultMaterial, DistinctMaterial, MeshMaterial } from './materials.ts'
-import { RenderingMode } from '../../../../store/stage.ts'
+import { RenderingMode } from '../../../../domain/entities/stage.ts'
 import { randomFloatBetween, randomFloatInAsymmetricRange } from 'utils'
 
 export type MaterialType = 'default' | 'distinct'

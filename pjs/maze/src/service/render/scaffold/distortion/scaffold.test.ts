@@ -2,7 +2,7 @@ import { NumOfScaffoldLayers } from '../create.ts'
 import { DistortionDelta } from '../types.ts'
 import * as delta from './delta.ts'
 import { createScaffoldDistortion, turnDistortionDelta } from './scaffold.ts'
-import { LR } from '../../../../utils/direction.ts'
+import { LR } from '../../../../domain/entities/utils/direction.ts'
 import { Vector3D } from 'maze-gl'
 
 describe(`${createScaffoldDistortion.name}`, () => {

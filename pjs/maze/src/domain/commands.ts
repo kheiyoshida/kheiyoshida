@@ -1,4 +1,4 @@
-import { LR } from "src/utils/direction"
+import { LR } from "src/domain/entities/utils/direction.ts"
 import { closeMapEvent, goDownstairsEvent, openMapEvent, turnEvent, walkEvent } from './events'
 import * as validaters from './validaters.ts'
 

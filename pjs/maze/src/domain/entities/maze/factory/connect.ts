@@ -1,8 +1,8 @@
 import { fireByRate as random } from 'utils'
-import { MazeLevel, getAllAdjacentBlocks } from './matrix'
-import { iterateEachItem } from '../utils/matrix.ts'
-import { connectNodes, makeShortestPath } from './path'
-import { Block } from './block.ts'
+import { MazeLevel } from '../level.ts'
+import { iterateEachItem } from '../../utils/matrix.ts'
+import { connectNodes, getAllAdjacentBlocks, makeShortestPath } from './path.ts'
+import { Block } from '../block.ts'
 
 type BlockCluster = Set<Block>
 

@@ -1,5 +1,5 @@
 import { clamp, randomFloatBetween, randomIntInclusiveBetween } from 'utils'
-import { MazeLevelParams } from '../../../store/entities/matrix'
+import { MazeLevelParams } from '../../entities/maze/factory'
 import { MaxFloorSize } from '../../../config'
 
 export const paramBuild = (floor: number): MazeLevelParams => {

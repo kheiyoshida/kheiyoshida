@@ -1,5 +1,5 @@
-import { Direction, getTurnedDirection } from '../../../../utils/direction.ts'
-import { Node } from '../../../../store/entities/matrix/node.ts'
+import { Direction, getTurnedDirection } from '../../../entities/utils/direction.ts'
+import { Block } from '../../../entities/maze/block.ts'
 import { getStairAnimation } from '../../movement/stairs.ts'
 
 export type PathSpec = [n0: PathNode, n1: PathNode, n2: PathNode]
@@ -17,7 +17,7 @@ export type TerrainPattern = 'wall' | 'corridor'
 
 const detectPathPattern = (reachable: boolean): TerrainPattern => (reachable ? 'corridor' : 'wall')
 
-const getTerrain = (direction: Direction, node: Node): Terrain => ({
+const getTerrain = (direction: Direction, node: Block): Terrain => ({
   front: detectPathPattern(node.edges[direction]),
   left: detectPathPattern(node.edges[getTurnedDirection('left', direction)]),
   right: detectPathPattern(node.edges[getTurnedDirection('right', direction)]),
@@ -25,14 +25,14 @@ const getTerrain = (direction: Direction, node: Node): Terrain => ({
 
 export const toPathSpec =
   (direction: Direction) =>
-  (nodes: Node[]): PathSpec =>
+  (nodes: Block[]): PathSpec =>
     Array(3)
       .fill(null)
       .map((n, i) => (nodes[i] ? toNodeSpec(direction)(nodes[i]) : n)) as PathSpec
 
 export const toNodeSpec =
   (direction: Direction) =>
-  (node: Node): NodeSpec => ({
+  (node: Block): NodeSpec => ({
     terrain: getTerrain(direction, node),
     stair: node.stair ? getStairType() : null,
   })

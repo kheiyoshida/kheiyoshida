@@ -3,7 +3,7 @@ import { GeometrySpecDict } from './geometry'
 import { GeometryCode } from '../unit'
 import { getMeshMaterial, MaterialType } from './material'
 import { randomFloatBetween } from 'utils'
-import { RenderingMode } from '../../../store/stage.ts'
+import { RenderingMode } from '../../../domain/entities/stage.ts'
 
 type CompositeMeshKey = `${RenderingMode}:${GeometryCode}`
 

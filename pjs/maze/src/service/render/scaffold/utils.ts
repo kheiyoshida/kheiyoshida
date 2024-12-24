@@ -1,4 +1,4 @@
-import { LR } from '../../../utils/direction.ts'
+import { LR } from '../../../domain/entities/utils/direction.ts'
 import {
   Scaffold,
   ScaffoldEntity,

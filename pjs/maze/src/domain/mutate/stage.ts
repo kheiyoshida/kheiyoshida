@@ -1,4 +1,4 @@
-import { FloorStage, RenderingMode, RenderingStyle, Stage } from '../../store/stage.ts'
+import { FloorStage, RenderingMode, RenderingStyle, Stage } from '../entities/stage.ts'
 import {
   clamp,
   fireByRate,

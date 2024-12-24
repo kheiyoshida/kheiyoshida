@@ -1,5 +1,5 @@
 import { statusStore, store } from '../store'
-import { LR } from 'src/utils/direction'
+import { LR } from 'src/domain/entities/utils/direction.ts'
 import * as mapper from './mutate/mapper'
 import * as maze from './mutate/maze'
 import { updateStats } from './mutate/status'

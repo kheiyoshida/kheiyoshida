@@ -1,24 +1,17 @@
 import { fireByRate, randomItemFromArray } from 'utils'
 import { store } from '../../../store'
-import {
-  MazeLevel,
-  getCorridorBlocks,
-  getDeadEndBlocks,
-
-} from '../../../store/entities/matrix/matrix'
-import { Block as Node } from '../../../store/entities/matrix/block.ts'
-import { Position, reducePosition } from '../../../utils/position'
-import { getTurnedDirection, positionalDirection } from '../../../utils/direction'
+import { getCorridorBlocks, getDeadEndBlocks, MazeLevel } from '../../entities/maze/level.ts'
+import { Block as Node } from '../../entities/maze/block.ts'
+import { Position, reducePosition } from '../../entities/utils/position.ts'
+import { getTurnedDirection, positionalDirection } from '../../entities/utils/direction.ts'
 import { paramBuild } from './params'
-import { LR } from "src/utils/direction"
-import { getMatrixItem } from '../../../store/entities/utils/matrix.ts'
+import { LR } from 'src/domain/entities/utils/direction.ts'
+import { getMatrixItem } from '../../entities/utils/matrix.ts'
 
 export const generateMaze = () => {
   const params = paramBuild(store.current.floor)
   store.renewMatrix(params)
-  const { stairNode, initialNode, initialDirection } = retrieveInitialPositions(
-    store.current.matrix
-  )
+  const { stairNode, initialNode, initialDirection } = retrieveInitialPositions(store.current.matrix)
   store.updateCurrent(initialNode.pos as Position)
   store.updateDirection(initialDirection)
   store.setStair(stairNode)

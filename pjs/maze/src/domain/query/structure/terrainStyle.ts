@@ -1,5 +1,5 @@
 import { store } from '../../../store'
-import { RenderingStyle } from '../../../store/stage.ts'
+import { RenderingStyle } from '../../entities/stage.ts'
 
 export const getTerrainRenderStyle = (): TerrainStyle => {
   const style = store.getStageContext().current.style

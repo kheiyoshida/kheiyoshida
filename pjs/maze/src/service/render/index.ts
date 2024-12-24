@@ -1,4 +1,4 @@
-import { LR } from 'src/utils/direction'
+import { LR } from 'src/domain/entities/utils/direction.ts'
 import {
   blockControlRequired,
   blockStatusChangeRequired,

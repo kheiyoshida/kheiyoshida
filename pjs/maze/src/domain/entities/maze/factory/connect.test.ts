@@ -1,8 +1,8 @@
-import { Block } from './block.ts'
-import { MazeLevel } from './matrix'
-import { iterateEachItem } from '../utils/matrix.ts'
-import { seekPath } from './path'
-import { connect } from './connect'
+import { Block } from '../block.ts'
+import { MazeLevel } from '../level.ts'
+import { iterateEachItem } from '../../utils/matrix.ts'
+import { seekPath } from './path.ts'
+import { connect } from './connect.ts'
 
 describe(`connect`, () => {
   /**

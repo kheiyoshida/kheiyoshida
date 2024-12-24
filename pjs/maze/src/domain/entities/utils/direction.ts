@@ -1,4 +1,4 @@
-import { Position, reducePosition } from './position'
+import { Position, reducePosition } from './position.ts'
 
 export type LR = 'left' | 'right'
 export type LRO = LR | 'opposite'

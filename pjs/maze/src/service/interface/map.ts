@@ -1,5 +1,5 @@
 import { RenderPack } from '../render/pack.ts'
-import { NESW } from '../../utils/direction.ts'
+import { NESW } from '../../domain/entities/utils/direction.ts'
 import { loop2D } from 'utils'
 import { getUIRenderer } from './renderer'
 import {

@@ -1,5 +1,5 @@
-import { Position } from '../../../utils/position'
-import { Direction } from '../../../utils/direction'
+import { Position } from '../utils/position.ts'
+import { Direction } from '../utils/direction.ts'
 
 type Edges = {
   [k in Direction]: boolean
@@ -37,7 +37,7 @@ export class Block {
   }
 
   get isDeadEnd() {
-    return Object.values(this._edges).filter((v) => v === true).length === 1
+    return Object.values(this._edges).filter((v) => v).length === 1
   }
 
   get corridorDirection(): Direction | undefined {
@@ -81,7 +81,7 @@ export class Block {
     }
 
     if (!ns && !ew) {
-      throw Error('directioin must be compared between two different nodes')
+      throw Error('direction must be compared between two different nodes')
     }
 
     if (prefer === 'ns') {

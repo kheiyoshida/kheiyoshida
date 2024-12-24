@@ -1,6 +1,7 @@
 import { fireByRate } from 'utils'
-import { MazeLevel, putBlock } from './matrix'
-import { countMatrixNodes, iterateByPosition } from '../utils/matrix.ts'
+import { MazeLevel } from '../level.ts'
+import { countMatrixNodes, iterateByPosition } from '../../utils/matrix.ts'
+import { putBlock } from './path.ts'
 
 export const initializeEmptyMatrix = (size: number): MazeLevel =>
   Array.from(Array(size), () => new Array(size).fill(null))
