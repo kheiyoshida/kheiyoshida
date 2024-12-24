@@ -1,6 +1,6 @@
 import { fireByRate } from 'utils'
-import { MazeLevel, countMatrixNodes, putNode } from './matrix'
-import { iterateByPosition } from '../utils/grid.ts'
+import { MazeLevel, putBlock } from './matrix'
+import { countMatrixNodes, iterateByPosition } from '../utils/matrix.ts'
 
 export const initializeEmptyMatrix = (size: number): MazeLevel =>
   Array.from(Array(size), () => new Array(size).fill(null))
@@ -22,7 +22,7 @@ const _seedNodes = (matrix: MazeLevel, fillRate: number, maxNodes = 100) => {
     if (fireByRate(fillRate)) {
       numOfNodes += 1
       if (numOfNodes <= maxNodes) {
-        putNode(matrix, pos)
+        putBlock(matrix, pos)
       } else {
         return true // break loop
       }

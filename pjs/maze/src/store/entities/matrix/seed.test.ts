@@ -1,7 +1,7 @@
 import * as utils from 'utils'
 import { Block } from './block.ts'
-import { countMatrixNodes } from './matrix'
 import { initializeEmptyMatrix, seedNodes } from './seed'
+import { countMatrixNodes } from '../utils/matrix.ts'
 
 jest.mock('utils', () => ({
   __esModule: true,

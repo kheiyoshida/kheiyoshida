@@ -1,6 +1,6 @@
 import { Block } from './block.ts'
 import { MazeLevel } from './matrix'
-import { iterateEachItem } from '../utils/grid.ts'
+import { iterateEachItem } from '../utils/matrix.ts'
 import { seekPath } from './path'
 import { connect } from './connect'
 

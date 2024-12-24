@@ -1,19 +1,18 @@
 import {
   MazeLevel,
-  adjacentPosition,
-  getAllAdjacentNodes,
-  getPositionNode,
-  requireNodeAtPosition,
+  getAllAdjacentBlocks,
+  requireBlockAtPosition,
 } from './matrix'
 import { Position } from '../../../utils/position'
 import { Direction, getTurnedDirection } from '../../../utils/direction'
 import { Block } from './block.ts'
+import { adjacentPositionInMatrix, getConcreteMatrixItem } from '../utils/matrix.ts'
 
 /**
  * BFS using position as arguments
  */
 export const seekPathByPosition = (matrix: MazeLevel, current: Position, dest: Position): Block[] => {
-  const [startNode, destNode] = [current, dest].map((pos) => getPositionNode(matrix, pos))
+  const [startNode, destNode] = [current, dest].map((pos) => getConcreteMatrixItem(matrix, pos))
   return seekPath(matrix, startNode, destNode)
 }
 
@@ -25,7 +24,7 @@ export const seekPath = (matrix: MazeLevel, start: Block, dest: Block): Block[] 
   while (queue.length) {
     const currentPath = queue.shift()!
     const lastNodeInPath = currentPath[currentPath.length - 1]
-    for (const adj of getAllAdjacentNodes(matrix, lastNodeInPath)) {
+    for (const adj of getAllAdjacentBlocks(matrix, lastNodeInPath)) {
       if (adj === dest) {
         return currentPath.concat(adj)
       } else {
@@ -56,8 +55,8 @@ export const connectNodes = (node: Block, adjacent: Block, direction?: Direction
  */
 export const makeShortestPath = (matrix: MazeLevel, from: Block, to: Block): void => {
   const dir = from.direction(to)
-  const adjPos = adjacentPosition(dir, from.pos, matrix.length)!
-  const adjNode = requireNodeAtPosition(matrix, adjPos)
+  const adjPos = adjacentPositionInMatrix(dir, from.pos, matrix.length)!
+  const adjNode = requireBlockAtPosition(matrix, adjPos)
   connectNodes(from, adjNode, dir)
   if (from.distance(to) !== 1) {
     makeShortestPath(matrix, adjNode, to)

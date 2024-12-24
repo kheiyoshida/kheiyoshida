@@ -1,6 +1,6 @@
 import { fireByRate as random } from 'utils'
-import { MazeLevel, getAllAdjacentNodes } from './matrix'
-import { iterateEachItem } from '../utils/grid.ts'
+import { MazeLevel, getAllAdjacentBlocks } from './matrix'
+import { iterateEachItem } from '../utils/matrix.ts'
 import { connectNodes, makeShortestPath } from './path'
 import { Block } from './block.ts'
 
@@ -23,7 +23,7 @@ const clusterizeBlocks = (matrix: MazeLevel, connRate: number): BlockCluster[] =
     if (!cluster) {
       clusters.push(new Set([node]))
     }
-    getAllAdjacentNodes(matrix, node).forEach((adj) => {
+    getAllAdjacentBlocks(matrix, node).forEach((adj) => {
       if (!random(connRate)) return
       connectNodes(node, adj)
       if (cluster && !cluster.has(adj)) {

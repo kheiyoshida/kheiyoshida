@@ -2,15 +2,16 @@ import { fireByRate, randomItemFromArray } from 'utils'
 import { store } from '../../../store'
 import {
   MazeLevel,
-  getCorridorNodes,
-  getDeadendNodes,
-  getMatrixItem,
+  getCorridorBlocks,
+  getDeadEndBlocks,
+
 } from '../../../store/entities/matrix/matrix'
 import { Block as Node } from '../../../store/entities/matrix/block.ts'
 import { Position, reducePosition } from '../../../utils/position'
 import { getTurnedDirection, positionalDirection } from '../../../utils/direction'
 import { paramBuild } from './params'
 import { LR } from "src/utils/direction"
+import { getMatrixItem } from '../../../store/entities/utils/matrix.ts'
 
 export const generateMaze = () => {
   const params = paramBuild(store.current.floor)
@@ -24,8 +25,8 @@ export const generateMaze = () => {
 }
 
 const retrieveInitialPositions = (matrix: MazeLevel) => {
-  const deadEnds = getDeadendNodes(matrix)
-  const corridorNodes = getCorridorNodes(matrix)
+  const deadEnds = getDeadEndBlocks(matrix)
+  const corridorNodes = getCorridorBlocks(matrix)
   const stairNode = randomItemFromArray(deadEnds)
   const initialNode = randomItemFromArray(corridorNodes)
   const initialDirection = getTurnedDirection(fireByRate(0.5) ? 'right' : 'left', initialNode.corridorDirection!)

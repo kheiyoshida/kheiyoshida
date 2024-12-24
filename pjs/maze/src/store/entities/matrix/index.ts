@@ -1,5 +1,5 @@
 import { connect } from './connect'
-import { MazeLevel, getCorridorNodes, getDeadendNodes } from './matrix'
+import { MazeLevel, getCorridorBlocks, getDeadEndBlocks } from './matrix'
 import { initializeEmptyMatrix, seedNodes } from './seed'
 
 export type MazeLevelParams = [size: number, fillRate: number, connRate: number]
@@ -21,9 +21,9 @@ const _buildMatrix = (...[size, fillRate, connRate]: MazeLevelParams): MazeLevel
 }
 
 const isValidMatrix = (matrix: MazeLevel) => {
-  const deadEnds = getDeadendNodes(matrix)
+  const deadEnds = getDeadEndBlocks(matrix)
   if (!deadEnds.length) return false
-  const corridorNodes = getCorridorNodes(matrix)
+  const corridorNodes = getCorridorBlocks(matrix)
   if (!corridorNodes.length) return false
   return true
 }

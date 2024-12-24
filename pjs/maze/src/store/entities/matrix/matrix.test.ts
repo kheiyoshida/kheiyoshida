@@ -1,6 +1,7 @@
-import { MazeLevel, countMatrixNodes, getAllAdjacentNodes } from './matrix'
+import { MazeLevel, getAllAdjacentBlocks } from './matrix'
 import { seekPathByPosition } from './path'
 import { Block } from './block.ts'
+import { countMatrixNodes } from '../utils/matrix.ts'
 
 /**
  *   0   1   2   3
@@ -63,11 +64,11 @@ it(`seekPath`, () => {
 
 it(`adjacentNodes`, () => {
   const matrix = matrixFaxtory()
-  expect(getAllAdjacentNodes(matrix, matrix[0][0]!).map((n) => n.pos)).toMatchObject([
+  expect(getAllAdjacentBlocks(matrix, matrix[0][0]!).map((n) => n.pos)).toMatchObject([
     [0, 1],
     [1, 0],
   ])
-  expect(getAllAdjacentNodes(matrix, matrix[0][1]!).map((n) => n.pos)).toMatchObject([
+  expect(getAllAdjacentBlocks(matrix, matrix[0][1]!).map((n) => n.pos)).toMatchObject([
     [0, 2],
     [1, 1],
     [0, 0],
