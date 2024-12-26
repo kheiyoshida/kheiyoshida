@@ -10,9 +10,8 @@ type MapCell = {
   stair?: boolean
 }
 
-export const resetMap = () => {
-  const matrix = store.current.matrix
-  store.updateMap(buildMap(matrix))
+const resetMap = (level: MazeLevel) => {
+  store.updateMap(buildMap(level))
 }
 
 const buildMap = (matrix: MazeLevel, matrixSize = matrix.length): Map => {
@@ -59,7 +58,7 @@ export const track = ({ from, dest }: { from: Position; dest: Position }) => {
   store.updateMap(grid)
 }
 
-export const mapper = {
+export const getMapper = () => ({
   resetMap,
   track,
   get map() {
@@ -68,4 +67,6 @@ export const mapper = {
   get isMapOpen() {
     return store.current.mapOpen
   }
-}
+})
+
+export type Mapper = ReturnType<typeof getMapper>

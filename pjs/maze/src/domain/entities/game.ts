@@ -4,21 +4,24 @@ import { Block } from './maze/block.ts'
 import { Position, sumPosition } from './utils/position.ts'
 import { getTurnedDirection, positionalDirection } from './utils/direction.ts'
 import { getMatrixItem } from './utils/matrix.ts'
-import { maze, player } from '../game/setup.ts'
 import { Player } from './player'
 import { Maze } from './maze'
+import { Mapper } from './map'
 
 export class Game {
   constructor(
     private maze: Maze,
-    private player: Player
+    private player: Player,
+    private mapper: Mapper
   ) {
     this.#setupNextLevel()
   }
 
   #setupNextLevel() {
-    const level = this.maze.currentLevel
-    const initialPlayerBlock = randomItemFromArray(getCorridorBlocks(level))
+    this.maze.setNextLevel()
+    this.mapper.resetMap(this.maze.currentLevel)
+
+    const initialPlayerBlock = randomItemFromArray(getCorridorBlocks(this.maze.currentLevel))
     this.player.position = initialPlayerBlock.position
     this.player.direction = getTurnedDirection(
       fireByRate(0.5) ? 'right' : 'left',
@@ -27,23 +30,21 @@ export class Game {
   }
 
   goDownStairs() {
-    player.proceedToNextFloor()
     this.#setupNextLevel()
   }
 
   movePlayerToFront() {
-    if (this.canPlayerProceed) {
-      const frontPosition = this.#getPlayerFrontPosition()
-      return player.walk(frontPosition)
-    }
+    const frontPosition = this.#getPlayerFrontPosition()
+    const res = this.player.walk(frontPosition)
+    this.mapper.track(res)
   }
 
   get #currentPlayerBlock() {
-    return getBlockAtPosition(maze.currentLevel, player.position)
+    return getBlockAtPosition(this.maze.currentLevel, this.player.position)
   }
 
   get canPlayerProceed() {
-    return this.#currentPlayerBlock.edges[player.direction]
+    return this.#currentPlayerBlock.edges[this.player.direction]
   }
 
   get isPlayerOnStair(): boolean {
@@ -54,7 +55,7 @@ export class Game {
     if (i > 2) return []
     const block = i === 0 ? this.#currentPlayerBlock : this.#getFrontBlock(i)
     if (block) {
-      if (block.edges[player.direction]) return [block].concat(this.getPath(i + 1))
+      if (block.edges[this.player.direction]) return [block].concat(this.getPath(i + 1))
       else return [block]
     }
     return []
@@ -62,10 +63,10 @@ export class Game {
 
   #getFrontBlock(dist = 1) {
     const front = this.#getPlayerFrontPosition(dist)
-    return getMatrixItem(maze.currentLevel, front)
+    return getMatrixItem(this.maze.currentLevel, front)
   }
 
   #getPlayerFrontPosition(dist = 1): Position {
-    return sumPosition(player.position, positionalDirection(player.direction, dist))
+    return sumPosition(this.player.position, positionalDirection(this.player.direction, dist))
   }
 }

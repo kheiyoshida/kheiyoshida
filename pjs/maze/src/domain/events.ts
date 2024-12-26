@@ -4,11 +4,8 @@ import { game, player } from './game/setup.ts'
 import { updatePlayerStats } from './game/status'
 import { MessageQueue, RenderSignal } from './messages'
 import { lightnessMoveDirection } from './query/vision/color'
-import { mapper, resetMap, track } from './entities/map'
 
 export const initializeEvent = () => {
-  mapper.resetMap()
-
   MessageQueue.push(RenderSignal.ShowFloor)
 }
 
@@ -64,8 +61,8 @@ export const walkEvent = () => {
     closeMapEvent()
   }
   MessageQueue.push(RenderSignal.Go)
-  const res = game.movePlayerToFront()
-  track(res!)
+  game.movePlayerToFront()
+
   updatePlayerStats('walk')
   MessageQueue.push(RenderSignal.CurrentView)
 
@@ -78,7 +75,6 @@ export const goDownstairsEvent = () => {
   MessageQueue.push(RenderSignal.GoDownStairs)
 
   game.goDownStairs()
-  resetMap()
   updatePlayerStats('downstairs')
 
   if (store.current.floor >= 6 && store.current.floor % 3 === 0) {

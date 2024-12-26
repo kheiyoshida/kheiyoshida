@@ -1,6 +1,6 @@
 import { LR } from 'src/domain/entities/utils/direction.ts'
 import { closeMapEvent, openMapEvent, turnEvent, walkEvent } from './events'
-import { mapper } from './entities/map'
+import { mapper } from './game/setup.ts'
 import { store } from '../store'
 import { game } from './game/setup.ts'
 

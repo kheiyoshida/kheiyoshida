@@ -7,9 +7,10 @@ import { StairType } from './object.ts'
 export class Maze {
   protected floor = 0
 
-  constructor(private stages: FloorStage[], private buildParams: (floor: number) => MazeLevelParams) {
-    this.setNextLevel()
-  }
+  constructor(
+    private stages: FloorStage[],
+    private buildParams: (floor: number) => MazeLevelParams
+  ) {}
 
   getStageContext() {
     return {
@@ -24,7 +25,7 @@ export class Maze {
   }
 
   setNextLevel() {
-    this.floor ++;
+    this.floor++
     buildNewLevel(this.buildParams(this.floor), this.#getStairType())
   }
 

@@ -13,14 +13,6 @@ export class Player {
     private readonly statusStore: StatusStore
   ) {}
 
-  get floor(): number {
-    return this.store.current.floor
-  }
-
-  proceedToNextFloor() {
-    this.store.incrementFloor()
-  }
-
   get position(): Position {
     return this.store.current.current
   }
@@ -60,4 +52,3 @@ export class Player {
     }
   }
 }
-

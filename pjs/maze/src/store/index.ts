@@ -18,9 +18,6 @@ export type MazeState = {
   // map
   grid: Map
 
-  // stage
-  stageQueue: FloorStage[]
-
   // service state?
   mapOpen: boolean
   blockControl: boolean
@@ -37,7 +34,6 @@ const initialState: MazeState = {
   mapOpen: false,
   blockControl: false,
   blockStatusChange: false,
-  stageQueue: [],
 }
 
 const reducers = {
@@ -73,10 +69,6 @@ const reducers = {
   },
   updateBlockStatusChange: (s) => (blockStatusChange: boolean) => {
     s.blockStatusChange = blockStatusChange
-  },
-
-  setStageQueue: (s) => (stageQueue: FloorStage[]) => {
-    s.stageQueue = stageQueue
   },
 } satisfies ReducerMap<MazeState>
 
