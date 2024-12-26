@@ -7,6 +7,9 @@ import { adjacentInDirection, Direction } from './direction.ts'
  */
 export type Matrix<Item = unknown> = Array<Array<Item | null>>
 
+export const initializeEmptyMatrix = <M extends Matrix>(size: number): M =>
+  Array.from(Array(size), () => new Array(size).fill(null)) as M
+
 export const countMatrixNodes = (matrix: Matrix): number =>
   foldMatrix(matrix, (p, item) => p + (item !== null ? 1 : 0), 0)
 
@@ -72,7 +75,7 @@ export const iterateEachItem = <Item>(matrix: Matrix<Item>, cb: (matrix: Matrix<
 /**
  * filter nodes in matrix and map
  */
-export const filterNodes = <Item>(matrix: Matrix<Item>, p: (node: Item) => boolean): Item[] =>
+export const filterItems = <Item>(matrix: Matrix<Item>, p: (node: Item) => boolean): Item[] =>
   matrix.flatMap((row) => row.filter((node): node is Item => node !== null && p(node)))
 
 /**

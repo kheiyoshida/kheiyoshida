@@ -1,4 +1,4 @@
-import { FloorStage, RenderingMode, RenderingStyle, Stage } from '../entities/stage.ts'
+import { FloorStage, RenderingMode, Stage } from '../entities/maze/stages'
 import {
   clamp,
   fireByRate,
@@ -6,12 +6,12 @@ import {
   makeRangeMap,
   randomIntInclusiveBetween,
 } from 'utils'
-import { store } from '../../store'
 import { debugRenderingMode, InitialStyle } from '../../config/debug.ts'
+import { classifyStyle, RenderingStyle } from '../entities/maze/stages/style.ts'
 
 export const InitialNumOfStages = 20
 
-export const initStages = (): void => {
+export const buildFloorStages = () => {
   const stages = buildStages()
   const floorStages = mapStagesToFloors(stages)
 
@@ -20,7 +20,7 @@ export const initStages = (): void => {
     floorStages[1].mode = debugRenderingMode
   }
 
-  store.setStageQueue(floorStages)
+  return floorStages
 }
 
 export const buildStages = (): Stage[] => {
@@ -35,7 +35,7 @@ export const buildStages = (): Stage[] => {
       if (currentFloor === 1) return InitialStyle // initial style
       return clamp(currentStyle + randomIntInclusiveBetween(-3, 3), 1, 9) as RenderingStyle
     },
-    (v, p) => evalStyle(v) === evalStyle(p),
+    (v, p) => classifyStyle(v) === classifyStyle(p),
     2 // can stay in the same rendering style for 2 stages in a row, but not more than that
   )
 
@@ -63,12 +63,6 @@ export const buildStages = (): Stage[] => {
   }
 
   return stages
-}
-
-const evalStyle = (s: RenderingStyle) => {
-  if (s >= 1 && s <= 3) return 0
-  if (s >= 4 && s <= 6) return 1
-  if (s >= 7 && s <= 9) return 2
 }
 
 type ModeRange = [min: RenderingMode, max: RenderingMode]

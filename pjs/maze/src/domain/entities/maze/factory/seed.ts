@@ -3,9 +3,6 @@ import { MazeLevel } from '../level.ts'
 import { countMatrixNodes, iterateByPosition } from '../../utils/matrix.ts'
 import { putBlock } from './path.ts'
 
-export const initializeEmptyMatrix = (size: number): MazeLevel =>
-  Array.from(Array(size), () => new Array(size).fill(null))
-
 export const seedNodes = (matrix: MazeLevel, fillRate: number, maxNodes = 100, r = 0): MazeLevel => {
   const resultMatrix = _seedNodes(matrix, fillRate, maxNodes)
   if (r > 50) {

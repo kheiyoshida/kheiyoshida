@@ -1,5 +1,5 @@
-import { store } from '../../../store'
 import { determineTerrainStyle, TerrainStyle } from '../structure/terrainStyle.ts'
+import { maze } from '../../game/setup.ts'
 
 export type GoDownstairsAnimationType = 'descent' | 'lift' | 'proceed' | 'warp'
 
@@ -11,7 +11,7 @@ export type StairAnimation = {
 }
 
 export const getStairAnimation = (): StairAnimation => {
-  const { prev, current, next } = store.getStageContext()
+  const { prev, current, next } = maze.getStageContext()
   const prevStyle = prev ? determineTerrainStyle(prev.style) : null
   const currentStyle = determineTerrainStyle(current.style)
   const nextStyle = next ? determineTerrainStyle(next.style) : null

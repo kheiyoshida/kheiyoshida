@@ -11,7 +11,7 @@ export const paramBuild = (floor: number): MazeLevelParams => {
 
 export const InitialFloorSize = 6
 
-export const getFloorSize = (floor: number): number => {
+const getFloorSize = (floor: number): number => {
   if (floor < MaxFloorSize - InitialFloorSize) {
     return randomIntInclusiveBetween(InitialFloorSize, InitialFloorSize + floor)
   } else {
@@ -22,7 +22,7 @@ export const getFloorSize = (floor: number): number => {
 const DefaultFillRate = 0.44
 const MaxFillRate = 0.88
 
-export const getFillRate = (floor: number): number => {
+const getFillRate = (floor: number): number => {
   if (floor % 10 === 0) return 0.25
   if (floor % 5 === 0) return 0.75
   if (floor < 5) {
@@ -39,7 +39,7 @@ export const getFillRate = (floor: number): number => {
 
 const DefaultConnectionRate = 0.5
 
-export const getConnectionRate = (floor: number): number => {
+const getConnectionRate = (floor: number): number => {
   if (floor % 5 === 0) return 0.88
   if (floor < 5) return 0.25 + floor * 0.05
   else

@@ -1,4 +1,4 @@
-import { Position, reducePosition } from './position.ts'
+import { Position, sumPosition } from './position.ts'
 
 export type LR = 'left' | 'right'
 export type LRO = LR | 'opposite'
@@ -33,4 +33,4 @@ export const positionalDirection = (direction: Direction, distance = 1): Positio
 }
 
 export const adjacentInDirection = (d: Direction, p: Position) =>
-  reducePosition(p, positionalDirection(d))
+  sumPosition(p, positionalDirection(d))

@@ -1,16 +1,13 @@
 import { statusStore, store } from '../store'
 import { LR } from 'src/domain/entities/utils/direction.ts'
-import * as mapper from './mutate/mapper'
-import * as maze from './mutate/maze'
-import { updateStats } from './mutate/status'
+import { game, player } from './game/setup.ts'
+import { updatePlayerStats } from './game/status'
 import { MessageQueue, RenderSignal } from './messages'
 import { lightnessMoveDirection } from './query/vision/color'
-import { initStages } from './mutate/stage.ts'
+import { mapper, resetMap, track } from './entities/map'
 
 export const initializeEvent = () => {
-  maze.generateMaze()
   mapper.resetMap()
-  initStages()
 
   MessageQueue.push(RenderSignal.ShowFloor)
 }
@@ -33,7 +30,7 @@ export const unblockStatusChangeRequired = () => {
 
 export const idleStatusChangeRequired = () => {
   if (store.current.blockStatusChange) return
-  updateStats('idle')
+  updatePlayerStats('idle')
 
   if (statusStore.current.sanity <= 0) {
     MessageQueue.push(RenderSignal.Die)
@@ -43,7 +40,7 @@ export const idleStatusChangeRequired = () => {
 export const recurringConstantStatusEvent = () => {
   if (store.current.blockStatusChange) return
   if (store.current.mapOpen) return
-  updateStats('constant')
+  updatePlayerStats('constant')
 }
 
 export const resurrectEvent = () => {
@@ -67,18 +64,22 @@ export const walkEvent = () => {
     closeMapEvent()
   }
   MessageQueue.push(RenderSignal.Go)
-  const res = maze.navigate()
-  mapper.track(res!)
-  updateStats('walk')
+  const res = game.movePlayerToFront()
+  track(res!)
+  updatePlayerStats('walk')
   MessageQueue.push(RenderSignal.CurrentView)
+
+  if (game.isPlayerOnStair) {
+    goDownstairsEvent()
+  }
 }
 
 export const goDownstairsEvent = () => {
   MessageQueue.push(RenderSignal.GoDownStairs)
 
-  maze.goDownStairs()
-  mapper.resetMap()
-  updateStats('downstairs')
+  game.goDownStairs()
+  resetMap()
+  updatePlayerStats('downstairs')
 
   if (store.current.floor >= 6 && store.current.floor % 3 === 0) {
     lightnessMoveDirection.update()
@@ -95,8 +96,8 @@ export const turnEvent = (dir: LR) => {
     closeMapEvent()
   }
   MessageQueue.push(dir === 'right' ? RenderSignal.TurnRight : RenderSignal.TurnLeft)
-  maze.turn(dir)
-  updateStats('turn')
+  player.turn(dir)
+  updatePlayerStats('turn')
   MessageQueue.push(RenderSignal.CurrentView)
 }
 

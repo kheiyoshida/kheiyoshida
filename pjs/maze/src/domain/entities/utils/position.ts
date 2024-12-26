@@ -4,7 +4,7 @@
  */
 export type Position = [number, number]
 
-export const reducePosition = (p1: Position, p2: Position): Position => [
+export const sumPosition = (p1: Position, p2: Position): Position => [
   p1[0] + p2[0],
   p1[1] + p2[1],
 ]

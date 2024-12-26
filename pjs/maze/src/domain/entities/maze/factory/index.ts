@@ -1,20 +1,21 @@
 import { connect } from './connect.ts'
-import { MazeLevel, getCorridorBlocks, getDeadEndBlocks } from '../level.ts'
-import { initializeEmptyMatrix, seedNodes } from './seed.ts'
+import { getCorridorBlocks, getDeadEndBlocks, MazeLevel } from '../level.ts'
+import { seedNodes } from './seed.ts'
+import { initializeEmptyMatrix } from '../../utils/matrix.ts'
 
 export type MazeLevelParams = [size: number, fillRate: number, connRate: number]
 
-export const buildMatrix = (params: MazeLevelParams, retry = 0): MazeLevel => {
-  const matrix = _buildMatrix(...params)
-  if (!isValidMazeLevel(matrix)) {
-    if (retry < 20) return buildMatrix(adjustParams(params), retry + 1)
+export const buildMazeLevel = (params: MazeLevelParams, retry = 0): MazeLevel => {
+  const level = _buildMazeLevel(...params)
+  if (!isValidMazeLevel(level)) {
+    if (retry < 20) return buildMazeLevel(adjustParams(params), retry + 1)
     else throw Error(`could not build valid matrix`)
   }
-  return matrix
+  return level
 }
 
-const _buildMatrix = (...[size, fillRate, connRate]: MazeLevelParams): MazeLevel => {
-  const matrix = initializeEmptyMatrix(size)
+const _buildMazeLevel = (...[size, fillRate, connRate]: MazeLevelParams): MazeLevel => {
+  const matrix = initializeEmptyMatrix<MazeLevel>(size)
   seedNodes(matrix, fillRate)
   connect(matrix, connRate)
   return matrix

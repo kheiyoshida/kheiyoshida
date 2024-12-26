@@ -1,5 +1,6 @@
 import { Position } from '../utils/position.ts'
 import { Direction } from '../utils/direction.ts'
+import { Stair, StairType } from './object.ts'
 
 type Edges = {
   [k in Direction]: boolean
@@ -12,7 +13,7 @@ export class Block {
   }
 
   constructor(
-    public pos: Position,
+    readonly position: Position,
     edges?: { [k in Direction]?: boolean }
   ) {
     this._edges = {
@@ -27,13 +28,13 @@ export class Block {
     this._edges = Object.assign({ ...this._edges }, edges)
   }
 
-  private _stair = false
+  private _stair?: Stair
   public get stair() {
     return this._stair
   }
 
-  public setStair() {
-    this._stair = true
+  public setStair(stairType: StairType): void {
+    this._stair = new Stair(stairType)
   }
 
   get isDeadEnd() {
@@ -58,7 +59,7 @@ export class Block {
 
   public distance(other: Block) {
     if (this === other) throw Error(`distance should be compared with another node`)
-    return Math.abs(other.pos[0] - this.pos[0]) + Math.abs(other.pos[1] - this.pos[1])
+    return Math.abs(other.position[0] - this.position[0]) + Math.abs(other.position[1] - this.position[1])
   }
 
   public isAdjacent(another: Block): boolean {
@@ -68,15 +69,15 @@ export class Block {
   public direction(other: Block, prefer: 'ns' | 'ew' = 'ns'): Direction {
     let ns, ew
 
-    if (this.pos[0] < other.pos[0]) {
+    if (this.position[0] < other.position[0]) {
       ns = 's'
-    } else if (this.pos[0] > other.pos[0]) {
+    } else if (this.position[0] > other.position[0]) {
       ns = 'n'
     }
 
-    if (this.pos[1] < other.pos[1]) {
+    if (this.position[1] < other.position[1]) {
       ew = 'e'
-    } else if (this.pos[1] > other.pos[1]) {
+    } else if (this.position[1] > other.position[1]) {
       ew = 'w'
     }
 

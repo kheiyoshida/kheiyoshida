@@ -1,4 +1,5 @@
-import { RenderingMode, RenderingStyle } from '../domain/entities/stage.ts'
+import { RenderingMode } from '../domain/entities/maze/stages'
+import { RenderingStyle } from '../domain/entities/maze/stages/style.ts'
 
 export const debugRenderingMode: RenderingMode = RenderingMode.abstract
 

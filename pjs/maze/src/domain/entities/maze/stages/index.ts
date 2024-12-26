@@ -1,6 +1,4 @@
-import { IntRange } from 'utils'
-
-export type RenderingStyle = IntRange<1, 10>
+import { RenderingStyle } from './style.ts'
 
 export enum RenderingMode {
   'atmospheric',

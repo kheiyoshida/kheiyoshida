@@ -1,19 +1,20 @@
-import { LR } from "src/domain/entities/utils/direction.ts"
-import { closeMapEvent, goDownstairsEvent, openMapEvent, turnEvent, walkEvent } from './events'
-import * as validaters from './validaters.ts'
+import { LR } from 'src/domain/entities/utils/direction.ts'
+import { closeMapEvent, openMapEvent, turnEvent, walkEvent } from './events'
+import { mapper } from './entities/map'
+import { store } from '../store'
+import { game } from './game/setup.ts'
+
+export const isControlBlocked = () => store.current.blockControl
 
 export const go = () => {
-  if (!validaters.isAcceptingControl()) return
-  if (validaters.canGo()) {
+  if (isControlBlocked()) return
+  if (game.canPlayerProceed) {
     walkEvent()
-    if (validaters.shouldGoDownstairs()) {
-      goDownstairsEvent()
-    }
   }
 }
 
 const turn = (dir: LR) => () => {
-  if (!validaters.isAcceptingControl()) return
+  if (isControlBlocked()) return
   turnEvent(dir)
 }
 
@@ -21,10 +22,10 @@ export const turnRight = turn('right')
 export const turnLeft = turn('left')
 
 export const callMap = () => {
-  if (!validaters.isAcceptingControl()) return
-  if (validaters.canOpenMap()) {
-    openMapEvent()
-  } else {
+  if (isControlBlocked()) return
+  if (mapper.isMapOpen) {
     closeMapEvent()
+  } else {
+    openMapEvent()
   }
 }

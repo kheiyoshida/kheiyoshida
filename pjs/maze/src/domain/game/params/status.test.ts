@@ -1,5 +1,5 @@
+import { DefaultGoFrames, FPS, MAX_STATUS_VALUE } from '../../../config'
 import { StatusEventValues } from './status.ts'
-import { DefaultGoFrames, FPS, MAX_STATUS_VALUE } from '../../config'
 
 describe('status values requirements', () => {
   test(`within about a minute, player must reach the stair`, () => {

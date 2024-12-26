@@ -1,5 +1,5 @@
 import { NodeSpec, PathSpec, TerrainPattern } from './nodeSpec.ts'
-import { Grid, GridLayer } from './grid.ts'
+import { Grid, GridLayer } from '../../../entities/utils/grid.ts'
 
 /**
  * 6 * 3 grid of rendering patterns
@@ -7,15 +7,6 @@ import { Grid, GridLayer } from './grid.ts'
  */
 export type RenderGrid = Grid<RenderPattern>
 export type RenderGridLayer = GridLayer<RenderPattern>
-
-/**
- * @deprecated use GPosX
- */
-export enum RenderPosition {
-  LEFT = 0,
-  CENTER = 1,
-  RIGHT = 2,
-}
 
 export enum RenderPattern {
   FLOOR = 0,

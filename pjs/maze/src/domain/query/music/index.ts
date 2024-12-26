@@ -1,5 +1,6 @@
 import { IntRange } from 'utils'
-import { statusStore, store } from '../../../store'
+import { statusStore } from '../../../store'
+import { maze } from '../../game/setup.ts'
 
 export type MusicRange = IntRange<1, 10>
 export type MusicCommand = {
@@ -9,7 +10,7 @@ export type MusicCommand = {
 
 export const getMusicCommands = (): MusicCommand => ({
   alignment: calcMusicAlignment(statusStore.current.sanity),
-  aesthetics: store.getStageContext().current.style as MusicRange,
+  aesthetics: maze.getStageContext().current.style as MusicRange,
 })
 
 export const calcMusicAlignment = (sanity: number): MusicRange => {

@@ -1,4 +1,4 @@
-import { RenderingMode } from '../../../../domain/entities/stage.ts'
+import { RenderingMode } from '../../../../domain/entities/maze/stages'
 import {
   AbstractEffect,
   AmbientEffect,

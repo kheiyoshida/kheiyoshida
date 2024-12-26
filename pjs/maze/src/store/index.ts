@@ -3,29 +3,35 @@ import { MazeLevel } from '../domain/entities/maze/level.ts'
 import { Direction } from '../domain/entities/utils/direction.ts'
 import { Position } from '../domain/entities/utils/position.ts'
 import { makeStatusStore } from './status'
-import { buildMatrix, MazeLevelParams } from '../domain/entities/maze/factory'
-import { Block } from '../domain/entities/maze/block'
-import { trackMap, buildMap, Map } from '../domain/entities/map'
-import { FloorStage, StageContext } from '../domain/entities/stage.ts'
+import { Map } from '../domain/entities/map'
+import { FloorStage } from '../domain/entities/maze/stages'
 
 export type MazeState = {
+  // maze aggregate
   matrix: MazeLevel
+
+  // player
   floor: number
   current: Position
-  stairPos: number[]
   direction: Direction
+
+  // map
   grid: Map
+
+  // stage
+  stageQueue: FloorStage[]
+
+  // service state?
   mapOpen: boolean
   blockControl: boolean
   blockStatusChange: boolean
-  stageQueue: FloorStage[]
 }
 
 const initialState: MazeState = {
   floor: 1,
   matrix: [],
   current: [0, 0],
-  stairPos: [],
+
   direction: 'n',
   grid: [],
   mapOpen: false,
@@ -42,30 +48,18 @@ const reducers = {
   closeMap: (s) => () => {
     s.mapOpen = false
   },
-  resetMap: (s) => () => {
-    s.grid = buildMap(s.matrix)
-  },
-  trackMap: (s) => (from: Position, to: Position) => {
-    const oldGrid = s.grid.slice()
-    const newGrid = trackMap(oldGrid, from, to)
-    store.updateMap(newGrid)
-  },
   updateMap: (s) => (newMap: Map) => {
     s.grid = newMap
   },
   // maze
-  renewMatrix: (s) => (params: MazeLevelParams) => {
-    s.matrix = buildMatrix(params)
+  renewMatrix: (s) => (matrix: MazeLevel) => {
+    s.matrix = matrix
   },
   updateCurrent: (s) => (current: Position) => {
     s.current = current
   },
   updateDirection: (s) => (direction: Direction) => {
     s.direction = direction
-  },
-  setStair: (s) => (stairNode: Block) => {
-    stairNode.setStair()
-    s.stairPos = stairNode.pos
   },
   incrementFloor: (s) => () => {
     s.floor += 1
@@ -84,16 +78,11 @@ const reducers = {
   setStageQueue: (s) => (stageQueue: FloorStage[]) => {
     s.stageQueue = stageQueue
   },
-  getStageContext: (s) => (): StageContext => {
-    // TODO: handle the case when stages run out
-    return {
-      prev: s.stageQueue[s.floor - 2] || null,
-      current: s.stageQueue[s.floor - 1], // B1F = index:0
-      next: s.stageQueue[s.floor] || null,
-    }
-  },
 } satisfies ReducerMap<MazeState>
 
 const makeMazeStore = () => makeStoreV2<MazeState>(initialState)(reducers)
 export const store = makeMazeStore()
 export const statusStore = makeStatusStore()
+
+export type MazeStore = typeof store;
+export type StatusStore = typeof statusStore;

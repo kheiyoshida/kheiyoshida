@@ -56,7 +56,7 @@ export const connectNodes = (node: Block, adjacent: Block, direction?: Direction
  */
 export const makeShortestPath = (matrix: MazeLevel, from: Block, to: Block): void => {
   const dir = from.direction(to)
-  const adjPos = adjacentPositionInMatrix(dir, from.pos, matrix.length)!
+  const adjPos = adjacentPositionInMatrix(dir, from.position, matrix.length)!
   const adjNode = requireBlockAtPosition(matrix, adjPos)
   connectNodes(from, adjNode, dir)
   if (from.distance(to) !== 1) {
@@ -68,7 +68,7 @@ export const makeShortestPath = (matrix: MazeLevel, from: Block, to: Block): voi
  * get all the adjacent nodes in the 4 adjacent positions
  */
 export const getAllAdjacentBlocks = (level: MazeLevel, block: Block): Block[] =>
-  block.edgeList.map((d) => getAdjacentItem(level, block.pos, d)).filter((n): n is Block => n !== null)
+  block.edgeList.map((d) => getAdjacentItem(level, block.position, d)).filter((n): n is Block => n !== null)
 /**
  * put a new block at position, and returns the new one
  */

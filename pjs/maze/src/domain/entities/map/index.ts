@@ -1,14 +1,51 @@
 import { Position } from 'utils'
 import { MazeLevel } from '../maze/level.ts'
+import { initializeEmptyMatrix, iterateByPosition, Matrix } from '../utils/matrix.ts'
+import { store } from '../../../store'
 
-export type Map = Array<Array<MapCell | null>>
+export type Map = Matrix<MapCell>
 
 type MapCell = {
   visited: boolean
   stair?: boolean
 }
 
-export const trackMap = (grid: Map, from: Position, dest: Position): Map => {
+export const resetMap = () => {
+  const matrix = store.current.matrix
+  store.updateMap(buildMap(matrix))
+}
+
+const buildMap = (matrix: MazeLevel, matrixSize = matrix.length): Map => {
+  const gridSize = 2 * matrixSize - 1
+  const grid: Map = initializeEmptyMatrix<Map>(gridSize)
+
+  iterateByPosition(matrix, (matrix, [i, j]) => {
+    const node = matrix[i][j]
+    if (node) {
+      grid[i * 2][j * 2] = {
+        visited: false,
+        stair: !!node.stair,
+      }
+      if (node.edges.e) {
+        grid[i * 2][j * 2 + 1] = {
+          visited: false,
+        }
+      }
+      if (node.edges.s) {
+        grid[i * 2 + 1][j * 2] = {
+          visited: false,
+        }
+      }
+    }
+    return false
+  })
+
+  return grid
+}
+
+export const track = ({ from, dest }: { from: Position; dest: Position }) => {
+  const grid = store.current.grid.slice()
+
   const [gi, gj] = [dest[0] * 2, dest[1] * 2]
   grid[gi][gj]!.visited = true
   if (from[0] !== dest[0]) {
@@ -18,33 +55,17 @@ export const trackMap = (grid: Map, from: Position, dest: Position): Map => {
     const j = from[1] + dest[1]
     grid[gi][j]!.visited = true
   }
-  return grid
+
+  store.updateMap(grid)
 }
 
-export const buildMap = (matrix: MazeLevel, matrixSize = matrix.length): Map => {
-  const gridSize = 2 * matrixSize - 1
-  const grid: Map = Array.from(Array(gridSize), () => new Array(gridSize).fill(null))
-
-  for (let i = 0; i < matrixSize; i++) {
-    for (let j = 0; j < matrixSize; j++) {
-      const node = matrix[i][j]
-      if (node) {
-        grid[i * 2][j * 2] = {
-          visited: false,
-          stair: node.stair,
-        }
-        if (node.edges.e) {
-          grid[i * 2][j * 2 + 1] = {
-            visited: false,
-          }
-        }
-        if (node.edges.s) {
-          grid[i * 2 + 1][j * 2] = {
-            visited: false,
-          }
-        }
-      }
-    }
+export const mapper = {
+  resetMap,
+  track,
+  get map() {
+    return store.current.grid
+  },
+  get isMapOpen() {
+    return store.current.mapOpen
   }
-  return grid
 }

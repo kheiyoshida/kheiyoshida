@@ -2,7 +2,7 @@ import { makeContextManager, maze } from 'music'
 import { RenderHandler } from '../consumer'
 
 import { MusicRange } from '../../domain/query'
-import { RenderingMode } from '../../domain/entities/stage.ts'
+import { RenderingMode } from '../../domain/entities/maze/stages'
 
 let buffer: [MusicRange, MusicRange]
 let changeModeRequired = false

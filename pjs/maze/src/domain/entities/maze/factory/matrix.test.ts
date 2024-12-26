@@ -41,7 +41,7 @@ const originalMatrix: MazeLevel = [
 ]
 
 const matrixFactory = () =>
-  originalMatrix.map((row) => row.map((n) => (n ? new Block(n.pos, n.edges) : null)))
+  originalMatrix.map((row) => row.map((n) => (n ? new Block(n.position, n.edges) : null)))
 
 it(`countNodes`, () => {
   const matrix = matrixFactory()
@@ -51,7 +51,7 @@ it(`countNodes`, () => {
 it(`seekPath`, () => {
   const matrix = matrixFactory()
   const result = seekPathByPosition(matrix, [0, 0], [3, 3])
-  expect(result.map((n) => n.pos)).toMatchObject([
+  expect(result.map((n) => n.position)).toMatchObject([
     [0, 0],
     [0, 1],
     [0, 2],
@@ -64,11 +64,11 @@ it(`seekPath`, () => {
 
 it(`adjacentNodes`, () => {
   const matrix = matrixFactory()
-  expect(getAllAdjacentBlocks(matrix, matrix[0][0]!).map((n) => n.pos)).toMatchObject([
+  expect(getAllAdjacentBlocks(matrix, matrix[0][0]!).map((n) => n.position)).toMatchObject([
     [0, 1],
     [1, 0],
   ])
-  expect(getAllAdjacentBlocks(matrix, matrix[0][1]!).map((n) => n.pos)).toMatchObject([
+  expect(getAllAdjacentBlocks(matrix, matrix[0][1]!).map((n) => n.position)).toMatchObject([
     [0, 2],
     [1, 1],
     [0, 0],

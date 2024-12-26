@@ -1,4 +1,4 @@
-import { Range } from '../calc/range'
+import { Range } from '../calc'
 
 /**
  * 2 numbers tuple.

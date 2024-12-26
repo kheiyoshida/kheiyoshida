@@ -2,9 +2,9 @@ import { getLightColorIntention, LightVariables } from './light.ts'
 import { EffectParams, getEffectParams } from './effect.ts'
 import { ColorParams } from './color/types.ts'
 import { getColorParams } from './color'
-import { RenderingMode } from '../../entities/stage.ts'
-import { store } from '../../../store'
+import { RenderingMode } from '../../entities/maze/stages'
 import { getScreenEffectParams, ScreenEffectParams } from './screenEffect.ts'
+import { maze } from '../../game/setup.ts'
 
 export type { ScreenEffectParams } from './screenEffect.ts'
 export type { ColorParams, EffectParams, LightVariables }
@@ -21,6 +21,6 @@ export const getVision = (): Vision => ({
   light: getLightColorIntention(),
   effectParams: getEffectParams(),
   color: getColorParams(),
-  mode: store.getStageContext().current.mode,
+  mode: maze.getStageContext().current.mode,
   screenEffectParams: getScreenEffectParams(),
 })
