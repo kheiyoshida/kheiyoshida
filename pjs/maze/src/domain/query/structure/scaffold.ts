@@ -1,5 +1,5 @@
-import { statusStore } from '../../../store'
 import { makeDecreasingParameter, makeIncreasingParameter } from '../utils/params.ts'
+import { player } from '../../setup'
 
 export type ScaffoldParams = {
   corridorWidthLevel: number
@@ -9,7 +9,7 @@ export type ScaffoldParams = {
 }
 
 export const getScaffoldParams = (): ScaffoldParams => {
-  const { stamina, sanity } = statusStore.current
+  const { stamina, sanity } = player.status
   return {
     corridorWidthLevel: calcWidthLevel(sanity),
     wallHeightLevel: calcHeightLevel(sanity / 2 + stamina),

@@ -1,7 +1,7 @@
 import { getScaffoldParams, ScaffoldParams } from './scaffold.ts'
 import { LogicalView } from '../../entities/view'
 import { getTerrainRenderStyle, TerrainStyle } from './terrainStyle.ts'
-import { game } from '../../game/setup.ts'
+import { game } from '../../setup'
 
 export * from '../../entities/view'
 export type { ScaffoldParams, TerrainStyle }

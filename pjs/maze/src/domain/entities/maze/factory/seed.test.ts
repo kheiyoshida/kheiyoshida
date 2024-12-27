@@ -2,6 +2,7 @@ import * as utils from 'utils'
 import { Block } from '../block.ts'
 import { seedNodes } from './seed.ts'
 import { countMatrixNodes, initializeEmptyMatrix } from '../../utils/matrix.ts'
+import { MazeLevel } from '../level.ts'
 
 jest.mock('utils', () => ({
   __esModule: true,
@@ -31,7 +32,7 @@ describe(`${seedNodes.name}`, () => {
         }
       })()
     )
-    const matrix = initializeEmptyMatrix(3)
+    const matrix = initializeEmptyMatrix<MazeLevel>(3)
     expect(seedNodes(matrix, 1.0)).toMatchObject([
       [expect.any(Block), null, expect.any(Block)],
       [null, expect.any(Block), null],
@@ -39,7 +40,7 @@ describe(`${seedNodes.name}`, () => {
     ])
   })
   it(`should not put more nodes than defined max`, () => {
-    const matrix = initializeEmptyMatrix(3)
+    const matrix = initializeEmptyMatrix<MazeLevel>(3)
     expect(seedNodes(matrix, 1.0, 4)).toMatchObject([
       [expect.any(Block), expect.any(Block), expect.any(Block)],
       [expect.any(Block), null, null],
@@ -48,7 +49,7 @@ describe(`${seedNodes.name}`, () => {
   })
   it(`should retry with increased fill rate if the node is scarce`, () => {
     const spyFireByRate = jest.spyOn(utils, 'fireByRate')
-    const matrix = initializeEmptyMatrix(3)
+    const matrix = initializeEmptyMatrix<MazeLevel>(3)
     const result = seedNodes(matrix, 0)
     expect(spyFireByRate).not.toHaveBeenLastCalledWith(0)
     expect(countMatrixNodes(result)).toBeGreaterThanOrEqual(2)

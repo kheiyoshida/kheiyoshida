@@ -1,12 +1,17 @@
 import { ColorParams, FloorColorParams, FrameColorParams } from './types.ts'
-import { statusStore, store } from '../../../../store'
-import { fireByRate, makeConstrainedRandomEmitter, randomFloatBetween, randomFloatInAsymmetricRange } from 'utils'
+import {
+  fireByRate,
+  makeConstrainedRandomEmitter,
+  randomFloatBetween,
+  randomFloatInAsymmetricRange,
+} from 'utils'
 import { StatusState } from '../../../../store/status.ts'
 import { makeDecreasingParameter, makeIncreasingParameter } from '../../utils/params.ts'
+import { maze, player } from '../../../setup'
 
 export const getColorParams = (): ColorParams => {
-  const floor = store.current.floor
-  const status = statusStore.current
+  const floor = maze.currentFloor
+  const status = player.status
   return {
     floor: getFloorColorParams(floor),
     frame: getFrameColorParams(status),
@@ -22,7 +27,11 @@ const MaxSaturationLevel = 0.33
  */
 export const lightnessMoveDirection = (() => {
   let val: boolean = true
-  const updateSign = makeConstrainedRandomEmitter(() => fireByRate(0.5), (v, p) => v === p, 3)
+  const updateSign = makeConstrainedRandomEmitter(
+    () => fireByRate(0.5),
+    (v, p) => v === p,
+    3
+  )
   return {
     get currentSign(): 1 | -1 {
       return val ? 1 : -1
@@ -47,7 +56,7 @@ const litLevelParameter = makeDecreasingParameter(-0.5, 1.0, 1500)
 // change drastically when sanity is low
 const hueDeltaParameter = makeIncreasingParameter(0.0, 1, 2000)
 
-const getFrameColorParams = ({stamina, sanity}: StatusState): FrameColorParams => {
+const getFrameColorParams = ({ stamina, sanity }: StatusState): FrameColorParams => {
   return {
     litLevel: litLevelParameter(stamina),
     hueDelta: hueDeltaParameter(sanity) * randomFloatInAsymmetricRange(0.1),

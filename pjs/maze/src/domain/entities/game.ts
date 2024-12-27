@@ -18,6 +18,12 @@ export class Game {
     this.#setupNextLevel()
   }
 
+  restart() {
+    this.maze.restart()
+    this.player.reinitialize()
+    this.#setupNextLevel()
+  }
+
   #setupNextLevel() {
     this.maze.setNextLevel()
     this.mapper.resetMap(this.maze.currentLevel)

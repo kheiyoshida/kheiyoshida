@@ -1,10 +1,10 @@
-import { store } from '../../../store'
+import { mapper, maze, player } from '../../setup'
 
 export const getMapInfoFromCurrentState = () => ({
-  grid: store.current.grid,
-  current: store.current.current,
-  direction: store.current.direction,
-  floor: store.current.floor,
+  grid: mapper.map,
+  current: player.position,
+  direction: player.direction,
+  floor: maze.currentFloor,
 })
 
 export type MapInfo = ReturnType<typeof getMapInfoFromCurrentState>

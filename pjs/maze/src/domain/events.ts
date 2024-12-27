@@ -1,7 +1,6 @@
-import { statusStore, store } from '../store'
+import { state } from './state.ts'
 import { LR } from 'src/domain/entities/utils/direction.ts'
-import { game, player } from './game/setup.ts'
-import { updatePlayerStats } from './game/status'
+import { game, maze, player } from './setup'
 import { MessageQueue, RenderSignal } from './messages'
 import { lightnessMoveDirection } from './query/vision/color'
 
@@ -10,46 +9,45 @@ export const initializeEvent = () => {
 }
 
 export const blockControlRequired = () => {
-  store.updateBlockControl(true)
+  state.updateBlockControl(true)
 }
 
 export const unblockControlRequired = () => {
-  store.updateBlockControl(false)
+  state.updateBlockControl(false)
 }
 
 export const blockStatusChangeRequired = () => {
-  store.updateBlockStatusChange(true)
+  state.updateBlockStatusChange(true)
 }
 
 export const unblockStatusChangeRequired = () => {
-  store.updateBlockStatusChange(false)
+  state.updateBlockStatusChange(false)
 }
 
 export const idleStatusChangeRequired = () => {
-  if (store.current.blockStatusChange) return
-  updatePlayerStats('idle')
+  if (state.current.blockStatusChange) return
+  player.updateStatus('idle')
 
-  if (statusStore.current.sanity <= 0) {
+  if (player.isDead) {
     MessageQueue.push(RenderSignal.Die)
   }
 }
 
 export const recurringConstantStatusEvent = () => {
-  if (store.current.blockStatusChange) return
-  if (store.current.mapOpen) return
-  updatePlayerStats('constant')
+  if (state.current.blockStatusChange) return
+  if (state.current.mapOpen) return
+  player.updateStatus('constant')
 }
 
 export const resurrectEvent = () => {
-  store.updateBlockControl(true)
-  store.setFloor(1)
-  statusStore.resetStatus()
+  state.updateBlockControl(true)
+  game.restart()
   initializeEvent()
   MessageQueue.push(RenderSignal.Resurrect)
 }
 
 export const constantEvent = () => {
-  if (store.current.mapOpen) return
+  if (state.current.mapOpen) return
   if (MessageQueue.isEmpty) {
     MessageQueue.push(RenderSignal.CurrentView)
   }
@@ -57,13 +55,13 @@ export const constantEvent = () => {
 }
 
 export const walkEvent = () => {
-  if (store.current.mapOpen) {
+  if (state.current.mapOpen) {
     closeMapEvent()
   }
   MessageQueue.push(RenderSignal.Go)
   game.movePlayerToFront()
 
-  updatePlayerStats('walk')
+  player.updateStatus('walk')
   MessageQueue.push(RenderSignal.CurrentView)
 
   if (game.isPlayerOnStair) {
@@ -75,9 +73,9 @@ export const goDownstairsEvent = () => {
   MessageQueue.push(RenderSignal.GoDownStairs)
 
   game.goDownStairs()
-  updatePlayerStats('downstairs')
+  player.updateStatus('downstairs')
 
-  if (store.current.floor >= 6 && store.current.floor % 3 === 0) {
+  if (maze.currentFloor >= 6 && maze.currentFloor % 3 === 0) {
     lightnessMoveDirection.update()
   }
 
@@ -88,22 +86,22 @@ export const goDownstairsEvent = () => {
 }
 
 export const turnEvent = (dir: LR) => {
-  if (store.current.mapOpen) {
+  if (state.current.mapOpen) {
     closeMapEvent()
   }
   MessageQueue.push(dir === 'right' ? RenderSignal.TurnRight : RenderSignal.TurnLeft)
   player.turn(dir)
-  updatePlayerStats('turn')
+  player.updateStatus('turn')
   MessageQueue.push(RenderSignal.CurrentView)
 }
 
 export const openMapEvent = () => {
-  store.openMap()
+  state.openMap()
   MessageQueue.push(RenderSignal.OpenMap)
 }
 
 export const closeMapEvent = () => {
-  store.closeMap()
+  state.closeMap()
   MessageQueue.push(RenderSignal.CloseMap)
   MessageQueue.push(RenderSignal.CurrentView)
 }

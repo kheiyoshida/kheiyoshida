@@ -1,5 +1,5 @@
 import { determineTerrainStyle, TerrainStyle } from '../structure/terrainStyle.ts'
-import { maze } from '../../game/setup.ts'
+import { maze } from '../../setup'
 
 export type GoDownstairsAnimationType = 'descent' | 'lift' | 'proceed' | 'warp'
 

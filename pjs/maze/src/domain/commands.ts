@@ -1,10 +1,9 @@
 import { LR } from 'src/domain/entities/utils/direction.ts'
 import { closeMapEvent, openMapEvent, turnEvent, walkEvent } from './events'
-import { mapper } from './game/setup.ts'
-import { store } from '../store'
-import { game } from './game/setup.ts'
+import { game } from './setup'
+import { state } from './state.ts'
 
-export const isControlBlocked = () => store.current.blockControl
+export const isControlBlocked = () => state.current.blockControl
 
 export const go = () => {
   if (isControlBlocked()) return
@@ -23,7 +22,7 @@ export const turnLeft = turn('left')
 
 export const callMap = () => {
   if (isControlBlocked()) return
-  if (mapper.isMapOpen) {
+  if (state.current.mapOpen) {
     closeMapEvent()
   } else {
     openMapEvent()

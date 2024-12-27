@@ -4,7 +4,7 @@ import { ColorParams } from './color/types.ts'
 import { getColorParams } from './color'
 import { RenderingMode } from '../../entities/maze/stages'
 import { getScreenEffectParams, ScreenEffectParams } from './screenEffect.ts'
-import { maze } from '../../game/setup.ts'
+import { maze } from '../../setup'
 
 export type { ScreenEffectParams } from './screenEffect.ts'
 export type { ColorParams, EffectParams, LightVariables }
