@@ -1,16 +1,16 @@
-import { RenderGrid } from '../../../../domain/query'
+import { LogicalView } from '../../../../domain/query'
 import { convertToClassicGeometryCodes } from './default.ts'
 
 describe(`${convertToClassicGeometryCodes.name}`, () => {
   it(`converts render patterns to geometry codes in default style`, () => {
-    const grid: RenderGrid = [
+    const grid: LogicalView = [
       [null, null, null],
       [null, null, null],
       [1, 1, 1],
       [0, 0, 1],
       [1, 0, 1],
       [1, 0, 0],
-    ].reverse() as RenderGrid
+    ].reverse() as LogicalView
 
     const {grid: codeGrid} = convertToClassicGeometryCodes(grid)
     expect(codeGrid).toEqual(
@@ -38,14 +38,14 @@ describe(`${convertToClassicGeometryCodes.name}`, () => {
     )
   })
   test(`stairs`, () => {
-    const grid: RenderGrid = [
+    const grid: LogicalView = [
       [null, null, null],
       [null, null, null],
       [1, 1, 1],
       [1, 2, 1], // stair
       [1, 0, 1],
       [1, 0, 0],
-    ].reverse() as RenderGrid
+    ].reverse() as LogicalView
 
     const {grid: codeGrid} = convertToClassicGeometryCodes(grid)
     expect(codeGrid).toEqual(
@@ -82,14 +82,14 @@ describe(`${convertToClassicGeometryCodes.name}`, () => {
   })
 
   test(`stairs_warp`, () => {
-    const grid: RenderGrid = [
+    const grid: LogicalView = [
       [null, null, null],
       [null, null, null],
       [1, 1, 1],
       [1, 3, 1], // stair_warp
       [1, 0, 1],
       [1, 0, 0],
-    ].reverse() as RenderGrid
+    ].reverse() as LogicalView
 
     const {grid: codeGrid} = convertToClassicGeometryCodes(grid)
     expect(codeGrid).toEqual(

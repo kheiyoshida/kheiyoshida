@@ -1,6 +1,6 @@
-import { RenderGrid, convertToRenderGrid } from './renderSpec.ts'
+import { LogicalView, convertToLogicalView } from '../../entities/view/logicalView.ts'
 
-export const corridorToNextFloor: RenderGrid = convertToRenderGrid([
+export const corridorToNextFloor: LogicalView = convertToLogicalView([
   {
     terrain: {
       left: 'wall',
@@ -24,7 +24,7 @@ export const corridorToNextFloor: RenderGrid = convertToRenderGrid([
   },
 ])
 
-export const debugStair: RenderGrid = convertToRenderGrid([
+export const debugStair: LogicalView = convertToLogicalView([
   {
     terrain: {
       left: 'wall',
@@ -38,19 +38,19 @@ export const debugStair: RenderGrid = convertToRenderGrid([
       right: 'wall',
       front: 'wall',
     },
-    stair: 'stair',
+    stair: 'normal',
   },
   null,
 ])
 
-export const debugStairClose: RenderGrid = convertToRenderGrid([
+export const debugStairClose: LogicalView = convertToLogicalView([
   {
     terrain: {
       left: 'wall',
       right: 'wall',
       front: 'wall',
     },
-    stair: 'stair',
+    stair: 'normal',
   },
   null,
   null,

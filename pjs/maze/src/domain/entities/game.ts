@@ -7,6 +7,7 @@ import { getMatrixItem } from './utils/matrix.ts'
 import { Player } from './player'
 import { Maze } from './maze'
 import { Mapper } from './map'
+import { composeLogicalView, LogicalView } from './view'
 
 export class Game {
   constructor(
@@ -49,6 +50,10 @@ export class Game {
 
   get isPlayerOnStair(): boolean {
     return !!this.#currentPlayerBlock.stair
+  }
+
+  getView(): LogicalView {
+    return composeLogicalView(this.getPath(), this.player.direction)
   }
 
   getPath(i = 0): Block[] {

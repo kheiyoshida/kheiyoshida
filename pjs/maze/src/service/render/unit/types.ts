@@ -1,5 +1,5 @@
 import type { RenderBlockPosition } from '../scaffold'
-import { Grid, RenderGrid } from '../../../domain/query'
+import { Grid, LogicalView } from '../../../domain/query'
 
 export type UnitSpec = {
   codes: GeometryCode[]
@@ -14,7 +14,7 @@ export type GeometryRenderingSpec = {
 /**
  * converts render grid into layers of geometry codes
  */
-export type GeometryCodeConverter = (renderGrid: RenderGrid) => GeometryRenderingSpec
+export type GeometryCodeConverter = (renderGrid: LogicalView) => GeometryRenderingSpec
 
 export type AltGeometryCodeGrid = {
   yLayerOffset?: number

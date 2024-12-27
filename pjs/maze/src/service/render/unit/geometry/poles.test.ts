@@ -1,16 +1,16 @@
 import { convertToPoles } from './poles.ts'
-import { RenderGrid } from '../../../../domain/query'
+import { LogicalView } from '../../../../domain/query'
 
 describe(`${convertToPoles.name}`, () => {
   it(`converts render patterns to geometry codes in poles style`, () => {
-    const grid: RenderGrid = [
+    const grid: LogicalView = [
       [null, null, null],
       [null, null, null],
       [1, 1, 1],
       [0, 0, 1],
       [1, 0, 1],
       [1, 0, 0],
-    ].reverse() as RenderGrid
+    ].reverse() as LogicalView
 
     const {grid: codeGrid} = convertToPoles(grid)
     expect(codeGrid).toEqual([
@@ -24,14 +24,14 @@ describe(`${convertToPoles.name}`, () => {
   })
 
   it(`puts extra poles beyond the stair position`, () => {
-    const grid: RenderGrid = [
+    const grid: LogicalView = [
       [null, null, null],
       [null, null, null],
       [1, 1, 1],
       [1, 2, 1],
       [1, 0, 1],
       [1, 0, 0],
-    ].reverse() as RenderGrid
+    ].reverse() as LogicalView
 
     const {grid: codeGrid} = convertToPoles(grid)
     expect(codeGrid).toEqual([
@@ -43,14 +43,14 @@ describe(`${convertToPoles.name}`, () => {
       [['Pole'], [], []],
     ].reverse())
 
-    const grid2: RenderGrid = [
+    const grid2: LogicalView = [
       [null, null, null],
       [null, null, null],
       [null, null, null],
       [null, null, null],
       [1, 1, 1],
       [1, 2, 1],
-    ].reverse() as RenderGrid
+    ].reverse() as LogicalView
 
     const { grid: codeGrid2 } = convertToPoles(grid2)
     expect(codeGrid2).toEqual([

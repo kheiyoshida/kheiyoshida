@@ -1,4 +1,4 @@
-import { RenderGrid, TerrainStyle } from '../../../domain/query'
+import { LogicalView, TerrainStyle } from '../../../domain/query'
 import { convertToClassicGeometryCodes } from './geometry/default.ts'
 import { GeometryCodeConverter, UnitSpec } from './types.ts'
 import { injectGridPositionToModels } from './inject.ts'
@@ -11,7 +11,7 @@ const converters: Record<TerrainStyle, GeometryCodeConverter> = {
   tiles: convertToTiles,
 }
 
-export const convertRenderGridToUnitSpecList = (renderGrid: RenderGrid, style: TerrainStyle): UnitSpec[] => {
+export const convertRenderGridToUnitSpecList = (renderGrid: LogicalView, style: TerrainStyle): UnitSpec[] => {
   const modelCodeGrid = converters[style](renderGrid)
   return injectGridPositionToModels(modelCodeGrid)
 }

@@ -23,7 +23,7 @@ import { getUnits } from './scene'
 import { resetColors, resolveFloorColor, resolveFrameColor } from './color'
 import { drawButtons, hideButtons } from '../interface/buttons'
 import { getEffect } from './scene/effect.ts'
-import { corridorToNextFloor } from '../../domain/query/structure/renderGrid/scenes.ts'
+import { corridorToNextFloor } from '../../domain/query/structure/scenes.ts'
 import { getScreenEffect } from './scene/screenEffect'
 import { renderScene } from 'maze-gl'
 

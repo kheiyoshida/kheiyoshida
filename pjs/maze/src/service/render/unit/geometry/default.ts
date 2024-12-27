@@ -1,6 +1,6 @@
 import { buildInitialGrid, GPosX, iterateGrid } from '../../../../domain/query'
 import { GeometryCode, GeometryCodeConverter, GeometryCodeGrid } from '../types.ts'
-import { RenderPattern } from '../../../../domain/query/structure/renderGrid/renderSpec.ts'
+import { LogicalTerrainPattern } from '../../../../domain/entities/view/logicalView.ts'
 
 export const convertToClassicGeometryCodes: GeometryCodeConverter = (renderGrid) => {
   const modelGrid = buildInitialGrid<GeometryCodeGrid>(() => [])
@@ -18,8 +18,8 @@ export const convertToClassicGeometryCodes: GeometryCodeConverter = (renderGrid)
   return { grid: modelGrid }
 }
 
-const convertCenter = (pattern: RenderPattern): GeometryCode[] => {
-  if (pattern === RenderPattern.STAIR)
+const convertCenter = (pattern: LogicalTerrainPattern): GeometryCode[] => {
+  if (pattern === LogicalTerrainPattern.STAIR)
     return [
       'StairCeil',
       'StairSteps',
@@ -30,16 +30,16 @@ const convertCenter = (pattern: RenderPattern): GeometryCode[] => {
       'StairCorridorCeil',
       'StairCorridorFloor',
     ]
-  if (pattern === RenderPattern.STAIR_WARP)
+  if (pattern === LogicalTerrainPattern.STAIR_WARP)
     return ['Octahedron', 'Floor', 'Ceil']
-  if (pattern === RenderPattern.FLOOR) return ['Floor', 'Ceil']
-  if (pattern === RenderPattern.FILL) return ['FrontWall']
+  if (pattern === LogicalTerrainPattern.FLOOR) return ['Floor', 'Ceil']
+  if (pattern === LogicalTerrainPattern.FILL) return ['FrontWall']
   throw Error()
 }
 
-const convertSide = (pattern: RenderPattern, position: GPosX): GeometryCode[] => {
-  if (pattern === RenderPattern.FLOOR) return ['Floor', 'Ceil']
-  if (pattern === RenderPattern.FILL) {
+const convertSide = (pattern: LogicalTerrainPattern, position: GPosX): GeometryCode[] => {
+  if (pattern === LogicalTerrainPattern.FLOOR) return ['Floor', 'Ceil']
+  if (pattern === LogicalTerrainPattern.FILL) {
     if (position === GPosX.LEFT) return ['FrontWall', 'LeftWall']
     if (position === GPosX.RIGHT) return ['FrontWall', 'RightWall']
   }

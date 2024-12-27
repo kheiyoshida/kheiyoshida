@@ -1,5 +1,5 @@
 import { GeometryCodeConverter, GeometryCodeGrid } from '../types.ts'
-import { RenderPattern } from '../../../../domain/query/structure/renderGrid/renderSpec.ts'
+import { LogicalTerrainPattern } from '../../../../domain/entities/view/logicalView.ts'
 import { buildInitialGrid, GLayer, GPosX, iterateGrid } from '../../../../domain/query'
 
 export const convertToPoles: GeometryCodeConverter = (renderGrid) => {
@@ -8,13 +8,13 @@ export const convertToPoles: GeometryCodeConverter = (renderGrid) => {
 
   iterateGrid((layer, pos) => {
     const pattern = renderGrid[layer][pos]
-    if (pattern === RenderPattern.FILL) {
+    if (pattern === LogicalTerrainPattern.FILL) {
       codeGrid[layer][pos].push('Pole')
     }
-    if (pattern === RenderPattern.STAIR_WARP) {
+    if (pattern === LogicalTerrainPattern.STAIR_WARP) {
       codeGrid[layer][pos].push('Octahedron')
     }
-    if (pattern === RenderPattern.STAIR) {
+    if (pattern === LogicalTerrainPattern.STAIR) {
       stairPos = [layer, pos]
     }
   })
