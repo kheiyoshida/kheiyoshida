@@ -7,7 +7,7 @@ export const PITCH_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A'
 
 
 /**
- * Pitchname with octave number (C3, C4, C5,...)
+ * `PitchName` with octave number (C3, C4, C5,...)
  */
 export type NoteName = string
 

@@ -1,10 +1,10 @@
 import Logger from 'js-logger'
 import {
-  Range,
   normalizeRange,
   overrideDefault,
-  randomIntBetween,
+  randomIntInclusiveBetween,
   randomRemoveFromArray,
+  Range,
 } from 'utils'
 import { Note } from './Note'
 
@@ -19,7 +19,7 @@ export type SequenceConf = {
   density: number
 
   /**
-   * if notes are fixed regardless of density setting 
+   * if notes are fixed regardless of density setting
    */
   fillStrategy: 'fill' | 'fixed'
 
@@ -57,24 +57,31 @@ export class Sequence {
   get poly() {
     return this._conf.polyphony === 'poly'
   }
+
   get length(): number {
     return this._conf.length
   }
+
   get lenRange() {
     return this._conf.lenRange
   }
+
   get division() {
     return this._conf.division
   }
+
   get density(): number {
     return this._conf.density
   }
+
   get availableSpace() {
     return this.maxNumOfNotes - this.usedSpace
   }
+
   get maxNumOfNotes() {
     return Math.floor(this.length * this.density)
   }
+
   get usedSpace() {
     let used = 0
     this.iterateEachNote((note) => {
@@ -101,7 +108,7 @@ export class Sequence {
    */
   get numOfNotes() {
     let num = 0
-    this.iterateEachNote((_) => (num += 1))
+    this.iterateEachNote(() => (num += 1))
     return num
   }
 
@@ -187,7 +194,7 @@ export class Sequence {
       Logger.warn(`There's no available position`)
       return
     }
-    const pos = randomIntBetween(0, seqLen)
+    const pos = randomIntInclusiveBetween(0, seqLen - 1)
     if (this.notes[pos]) {
       return this.searchEmptyPosition(n + 1)
     }
@@ -201,7 +208,7 @@ export class Sequence {
   public getAvailablePosition() {
     return this._conf.polyphony === 'mono'
       ? this.searchEmptyPosition()
-      : randomIntBetween(0, this.length)
+      : randomIntInclusiveBetween(0, this.length - 1)
   }
 
   public canExtend(byLength: number) {
@@ -226,10 +233,7 @@ export class Sequence {
       .forEach(cb)
   }
 
-  static iterateNotesAtPosition(
-    noteMap: SequenceNoteMap,
-    cb: (notes: Note[], position: number) => void
-  ) {
+  static iterateNotesAtPosition(noteMap: SequenceNoteMap, cb: (notes: Note[], position: number) => void) {
     Object.keys(noteMap)
       .map((p) => parseInt(p))
       .forEach((p) => cb(noteMap[p], p))

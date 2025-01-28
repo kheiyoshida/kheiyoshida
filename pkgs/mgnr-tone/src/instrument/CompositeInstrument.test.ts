@@ -1,5 +1,6 @@
 import { CompositeInstrument, LayeredInstrument } from './CompositeInstrument'
 import * as Tone from 'tone'
+
 jest.mock('tone', () => ({
   ...jest.doMock('tone'),
   Synth: jest.fn(() => ({
@@ -12,9 +13,8 @@ jest.mock('tone', () => ({
   NoiseSynth: class {
     triggerAttackRelease = jest.fn()
     connect = jest.fn()
-  }
+  },
 }))
-
 
 describe(`${CompositeInstrument.name}`, () => {
   it(`can be constructed with multiple instruments to compose of`, () => {

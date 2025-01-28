@@ -12,7 +12,7 @@ export const randomFloatBetween = (min: number, max: number) => {
 
 /**
  * not inclusive for max value
- * @deprecated
+ * @deprecated use `randomIntInclusiveBetween`
  */
 export const randomIntBetween = (min: number, max: number) => {
   return Math.floor(randomFloatBetween(min, max))

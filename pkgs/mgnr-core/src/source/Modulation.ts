@@ -1,6 +1,6 @@
 import Logger from 'js-logger'
 import { removeItemFromArray } from 'utils'
-import { getSemitoneDiffBetweenPitches, Semitone } from '../entities/pitch'
+import { getSemitoneDiffBetweenPitches, Semitone } from '../entities'
 import { ScaleConf } from './Scale'
 import { SCALES, SemitonesInScale } from './scaleTypes'
 
@@ -14,10 +14,12 @@ export class Modulation {
   public get queue(): ModulationQueueItem[] {
     return this._queue
   }
+
   private _nextScaleConf: ScaleConf
   public get nextScaleConf(): ScaleConf {
     return this._nextScaleConf
   }
+
   private _degreesInNextScaleType: Semitone[]
   public get degreesInNextScaleType(): Semitone[] {
     return this._degreesInNextScaleType
@@ -29,11 +31,7 @@ export class Modulation {
     this._degreesInNextScaleType = degreeList
   }
 
-  static create(
-    currentConf: ScaleConf,
-    nextConf: ScaleConf,
-    stages: number
-  ): Modulation | undefined {
+  static create(currentConf: ScaleConf, nextConf: ScaleConf, stages: number): Modulation | undefined {
     const currentDegreeList = SCALES[currentConf.pref]
     const nextDegreeList = getNextDegreeList(currentConf, nextConf)
     const queue = Helpers.constructModulationQueue(currentDegreeList, nextDegreeList, stages)
@@ -88,11 +86,7 @@ function slideDegreeList(dl: SemitonesInScale, diff: number): SemitonesInScale {
  * @param stages
  * @returns
  */
-function constructModulationQueue(
-  current: SemitonesInScale,
-  next: SemitonesInScale,
-  stages: number
-) {
+function constructModulationQueue(current: SemitonesInScale, next: SemitonesInScale, stages: number) {
   const add = [...next.filter((d) => !current.includes(d))]
   const remove = [...current.filter((d) => !next.includes(d))]
   const totalItemsLen = add.length + remove.length

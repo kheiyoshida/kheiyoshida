@@ -451,8 +451,8 @@ importers:
         specifier: ^1.6.1
         version: 1.6.1
       mgnr-core:
-        specifier: npm:@mgnr/core@^0.0.2
-        version: '@mgnr/core@0.0.2(js-logger@1.6.1)'
+        specifier: workspace:@mgnr/core@^
+        version: link:../mgnr-core
       tone:
         specifier: ^14.7.77
         version: 14.7.77
@@ -1735,11 +1735,6 @@ packages:
 
   '@leichtgewicht/ip-codec@2.0.4':
     resolution: {integrity: sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==}
-
-  '@mgnr/core@0.0.2':
-    resolution: {integrity: sha512-CPavsOCBv5W4tJ+0CkVSCJovGTRdHGqD/5oIhmxrIEPXr0Vn8+2KvTCSTfyQtMy/sK3/1AxWJZqVvKn47t6vNA==}
-    peerDependencies:
-      js-logger: ^1.6.1
 
   '@next/env@14.2.10':
     resolution: {integrity: sha512-dZIu93Bf5LUtluBXIv4woQw2cZVZ2DJTjax5/5DOs3lzEOeKLy7GxRSr4caK9/SCPdaW6bCgpye6+n4Dh9oJPw==}
@@ -6834,11 +6829,6 @@ snapshots:
       pkg-prebuilds: 0.2.1
 
   '@leichtgewicht/ip-codec@2.0.4': {}
-
-  '@mgnr/core@0.0.2(js-logger@1.6.1)':
-    dependencies:
-      js-logger: 1.6.1
-      utils: link:pkgs/utils
 
   '@next/env@14.2.10': {}
 

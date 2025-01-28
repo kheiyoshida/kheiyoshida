@@ -1,6 +1,6 @@
 import { randomIntBetween, randomIntInclusiveBetween } from './value'
 
-export const randomItemFromArray = <T>(array: T[]): T => {
+export const randomItemFromArray = <T>(array: T[] | readonly T[]): T => {
   if (!array.length) {
     throw Error(`can't get an item from an empty array`)
   }

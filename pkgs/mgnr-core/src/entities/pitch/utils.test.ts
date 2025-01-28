@@ -1,4 +1,4 @@
-import { getSemitoneDiffBetweenPitches } from './utils'
+import { getSemitoneDiffBetweenPitches, pickRandomPitchName } from './utils'
 
 describe('keyDiff', () => {
   it('should be able to calculate degree of note from the provided root', () => {
@@ -7,4 +7,8 @@ describe('keyDiff', () => {
     expect(getSemitoneDiffBetweenPitches('B', 'C')).toBe(1)
     expect(getSemitoneDiffBetweenPitches('C', 'B')).toBe(11)
   })
+})
+
+test(`${pickRandomPitchName}`, () => {
+  expect([...Array(100)].map(pickRandomPitchName)).toContain("B")
 })

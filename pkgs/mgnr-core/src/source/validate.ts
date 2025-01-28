@@ -1,5 +1,5 @@
 import { NumRange, Range } from 'utils'
-import { HIGHEST_MIDI_NUM, LOWEST_MIDI_NUM } from '../entities/pitch'
+import { HIGHEST_MIDI_NUM, LOWEST_MIDI_NUM } from '../entities'
 import { Modulation } from './Modulation'
 import { ScaleConf } from './Scale'
 import { constructScalePitches, constructScalePitchesFromConf } from './construct'

@@ -14,8 +14,8 @@ export const convertMidiToNoteName = (midiNum: MidiNum): NoteName => {
     throw Error(`invalid midi num: ${midiNum}`)
   }
   const noteName = PITCH_NAMES[midiNum % 12]
-  const ocatve = Math.floor(midiNum / 12) - 1
-  return `${noteName}${ocatve}`
+  const octave = Math.floor(midiNum / 12) - 1
+  return `${noteName}${octave}`
 }
 
 export const convertDegreeToSemitone = (degree: Degree | Semitone): Semitone => {

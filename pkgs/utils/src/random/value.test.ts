@@ -35,6 +35,13 @@ describe(`${randomIntBetween.name}`, () => {
     expect(randomIntBetween(0, 10)).toBe(8)
     expect(randomIntBetween(0, 10)).toBe(9)
   })
+
+  // for migration
+  it.skip(`is equivalent to randomIntInclusiveBetween`, () => {
+    jest.resetAllMocks()
+    expect([...Array(100)].map(() => randomIntBetween(0, 3))).toContain(2)
+    expect([...Array(100)].map(() => randomIntInclusiveBetween(0, 2))).toContain(2)
+  })
 })
 
 describe(`${randomIntInclusiveBetween.name}`, () => {

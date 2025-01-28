@@ -1,4 +1,4 @@
-import { IntRange, clamp } from 'utils'
+import { clamp, IntRange } from 'utils'
 import { SceneMaker } from './scene'
 
 export type GridPositionIndex = IntRange<1, 10>
@@ -121,7 +121,7 @@ const translateChildColPosition = (index: number): GridColumn => {
   if (i === 0) return 'left'
   if (i === 1) return 'center'
   if (i === 2) return 'right'
-  throw Error(`unkwon index ${index}`)
+  throw Error(`unknown index ${index}`)
 }
 
 const translateChildRowPosition = (index: number): GridRow => {
@@ -129,7 +129,7 @@ const translateChildRowPosition = (index: number): GridRow => {
   if (i === 0) return 'bottom'
   if (i === 1) return 'middle'
   if (i === 2) return 'top'
-  throw Error(`unkwon index ${index}`)
+  throw Error(`unknown index ${index}`)
 }
 
 export const translateToPositionIndex = (

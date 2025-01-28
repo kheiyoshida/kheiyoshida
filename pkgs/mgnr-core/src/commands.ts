@@ -1,8 +1,7 @@
-import { GeneratorConf, Middlewares, SequenceGenerator, buildGenerator } from './generator/Generator'
+import { buildGenerator, GeneratorConf, Middlewares, SequenceGenerator } from './generator/Generator'
 import { fillNoteConf } from './generator/NotePicker'
-import { Sequence, SequenceNoteMap } from './entities/Sequence'
-import { MidiNum } from './entities/pitch/constants'
-import { Scale, ScaleConf } from './source/Scale'
+import { MidiNum, Sequence, SequenceNoteMap } from './entities'
+import { Scale, ScaleConf } from './source'
 import { constructNotes } from './generator/middleware'
 
 export function createScale(pitches: MidiNum[]): Scale
@@ -17,8 +16,7 @@ export function createScale(
   pref?: ScaleConf['pref'],
   range?: ScaleConf['range']
 ): Scale {
-  if (typeof confOrKeyOrPitches === 'string')
-    return new Scale({ key: confOrKeyOrPitches, pref, range })
+  if (typeof confOrKeyOrPitches === 'string') return new Scale({ key: confOrKeyOrPitches, pref, range })
   if (Array.isArray(confOrKeyOrPitches)) return new Scale(confOrKeyOrPitches)
   return new Scale(confOrKeyOrPitches)
 }
@@ -29,7 +27,7 @@ export function createGenerator<MW extends Middlewares>(
   const sequence = new Sequence(conf.sequence)
   const picker = fillNoteConf(conf.note || {})
   const scale = conf.scale || new Scale()
-  constructNotes({sequence, scale, picker}, conf.notes)
+  constructNotes({ sequence, scale, picker }, conf.notes)
   const generator = conf.middlewares
     ? buildGenerator({ picker, sequence, scale }, conf.middlewares)
     : buildGenerator({ picker, sequence, scale }, {} as MW)

@@ -1,7 +1,6 @@
-import { findNearestNumberInArray, randomItemFromArray } from 'utils'
-import { Range } from 'utils'
-import { MidiNum, PitchName, ROOT_TONE_MAP } from '../entities/pitch'
-import { ScaleType } from "./scaleTypes"
+import { findNearestNumberInArray, randomItemFromArray, Range } from 'utils'
+import { MidiNum, PitchName, ROOT_TONE_MAP } from '../entities'
+import { ScaleType } from './scaleTypes'
 import { Modulation } from './Modulation'
 import { constructScalePitches, constructScalePitchesFromConf } from './construct'
 import {
@@ -38,6 +37,7 @@ export class Scale {
   get wholePitches() {
     return this._wholePitches
   }
+
   private _wholePitches!: MidiNum[]
 
   /**
@@ -47,6 +47,7 @@ export class Scale {
   get primaryPitches(): MidiNum[] {
     return this._primaryPitches
   }
+
   private _primaryPitches!: MidiNum[]
 
   /**
@@ -72,9 +73,11 @@ export class Scale {
   }
 
   private _disposed = false
+
   get isDisposed() {
     return this._disposed
   }
+
   dispose() {
     this._disposed = true
   }
@@ -127,6 +130,7 @@ export class Scale {
   //-------------------
 
   private _modulation?: Modulation | undefined
+
   get inModulation(): boolean {
     return this._modulation !== undefined
   }

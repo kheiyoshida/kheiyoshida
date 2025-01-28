@@ -2,7 +2,7 @@ import Logger from 'js-logger'
 import { Helpers, Modulation } from './Modulation'
 
 describe(`${Modulation.name}`, () => {
-  describe(`construct modulatioon process`, () => {
+  describe(`construct modulation process`, () => {
     it(`should remove notes first, then add the replacement (if any)`, () => {
       const mod = Modulation.create(
         {

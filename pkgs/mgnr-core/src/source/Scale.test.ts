@@ -1,5 +1,5 @@
 import { Scale } from './Scale'
-import { OCTAVE } from '../entities/pitch/constants'
+import { OCTAVE } from '../entities'
 
 describe(`${Scale.name}`, () => {
   describe(`note construction`, () => {
@@ -39,7 +39,7 @@ describe(`${Scale.name}`, () => {
         })
       }).toThrow()
     })
-    it(`can be constructed with fixed pitches`,() => {
+    it(`can be constructed with fixed pitches`, () => {
       const scale = new Scale([60, 62, 64])
       expect(scale.primaryPitches).toMatchObject([60, 62, 64])
     })
@@ -109,9 +109,7 @@ describe(`${Scale.name}`, () => {
       const beforeNotes = scale.primaryPitches.slice()
       scale.modulate({ pref: 'omit47' })
       expect(scale.primaryPitches).not.toMatchObject(beforeNotes)
-      expect(scale.primaryPitches).toMatchObject([
-        60, 63, 65, 67, 70, 72, 75, 77, 79, 82, 84, 87, 89,
-      ])
+      expect(scale.primaryPitches).toMatchObject([60, 63, 65, 67, 70, 72, 75, 77, 79, 82, 84, 87, 89])
     })
     it(`should cancel modulation if there's no change`, () => {
       const scale = new Scale({
