@@ -18,7 +18,7 @@ export const createCameraNode = (...args: Parameters<typeof createBase3D>): Came
     setSpeed(speed) {
       changeSpeedV2(node, speed)
     },
-    move() {
+    moveInDirection() {
       move(node)
     },
   }

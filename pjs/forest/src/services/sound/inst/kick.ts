@@ -1,4 +1,4 @@
-import { defaultKick } from 'mgnr-tone-presets'
+import { defaultKick } from '../presets'
 import * as mgnr from 'mgnr-tone/src'
 import { randomFloatBetween } from 'utils'
 

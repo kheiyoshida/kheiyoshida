@@ -40,11 +40,11 @@ const DescentMovementValueArray: EyeMovementValues[] = [...Array(GoDownstairsFra
   const move = percentage / 3
   // flip every 2 frames
   const descend = (Math.floor(i / 2) % 2 === 0 ? 1 : 0.95) * percentage
-  return { move, descend }
+  return { move: moveInDirection, descend }
 })
 
 const WarpMovementValueArray: EyeMovementValues[] = [...Array(GoDownstairsFramesLength)].map(() => ({
-  move: 0,
+  moveInDirection: 0,
 }))
 
 const LiftMovementValueArray: EyeMovementValues[] = [...Array(GoDownstairsFramesLength)].map((_, i) => {
@@ -56,7 +56,7 @@ const LiftMovementValueArray: EyeMovementValues[] = [...Array(GoDownstairsFrames
 
 const getProceedMovementValueArray = (speed: number): EyeMovementValues[] => {
   return getGoDeltaArray(speed / 2).map((zDelta) => ({
-    move: zDelta * 2, // proceed 2 cells
+    moveInDirection: zDelta * 2, // proceed 2 cells
   }))
 }
 
@@ -75,6 +75,6 @@ export const ProceedToNextFloorMovement: Record<
   ProceedToNextFloorAnimationType,
   (speed: number) => EyeMovementValues[]
 > = {
-  corridor: (speed) => getGoDeltaArray(speed / 2).map((delta) => ({ move: delta * 2 })), // proceed 2 cells
+  corridor: (speed) => getGoDeltaArray(speed / 2).map((delta) => ({ moveInDirection: delta * 2 })), // proceed 2 cells
   still: () => stillMovementValueArray,
 }

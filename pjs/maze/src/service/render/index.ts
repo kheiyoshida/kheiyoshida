@@ -52,7 +52,7 @@ export const renderGo: RenderHandler = ({ structure, vision, movement }) => {
     }
     drawButtons(i === 0 ? 'up' : undefined)
     const { lightColor, unlitColor } = resolveFrameColor(vision.color.frame, vision.mode)
-    const eye = getMovementEye({ move: zDelta }, structure.scaffold)
+    const eye = getMovementEye({ moveInDirection: zDelta }, structure.scaffold)
     const units = getUnits(vision.mode, structure)
     const lights = getLights(eye, lightColor, vision.light)
     const effect = getEffect(vision.effectParams)

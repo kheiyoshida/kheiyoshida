@@ -9,7 +9,7 @@ export const translateSwipeMoveIntention = (
 ): ControlIntention => {
   const { x, y } = swipe.getNormalizedValues(position)
   return {
-    move: swipeMove(y),
+    moveInDirection: swipeMove(y),
     turn: { x, y },
   }
 }
@@ -40,7 +40,7 @@ export const translateKeyIntention = (keys: number[]): ControlIntention => {
     }
   }
   return {
-    move: direction.length ? direction : null,
+    moveInDirection: direction.length ? direction : null,
   }
 }
 

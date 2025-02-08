@@ -56,9 +56,6 @@ importers:
       mgnr-tone:
         specifier: workspace:@mgnr/tone@^
         version: link:../../pkgs/mgnr-tone
-      mgnr-tone-presets:
-        specifier: workspace:^
-        version: link:../../pkgs/mgnr-tone-presets
       p5:
         specifier: ^1.9.0
         version: 1.9.0
@@ -117,9 +114,6 @@ importers:
       mgnr-tone:
         specifier: workspace:@mgnr/tone@^
         version: link:../../pkgs/mgnr-tone
-      mgnr-tone-presets:
-        specifier: workspace:^
-        version: link:../../pkgs/mgnr-tone-presets
       p5:
         specifier: ^1.9.0
         version: 1.9.0
@@ -463,18 +457,6 @@ importers:
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
-
-  pkgs/mgnr-tone-presets:
-    dependencies:
-      mgnr-tone:
-        specifier: workspace:@mgnr/tone@^
-        version: link:../mgnr-tone
-      tone:
-        specifier: ^14.7.77
-        version: 14.7.77
-      utils:
-        specifier: workspace:^
-        version: link:../utils
 
   pkgs/p5utils:
     dependencies:

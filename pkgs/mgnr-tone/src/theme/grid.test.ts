@@ -7,7 +7,7 @@ import {
   translateParentGridPosition,
   translateChildGridPosition,
   translateToPositionIndex,
-  GridAlignment,
+  GridSubPosition,
 } from './grid'
 
 describe(`${createSceneGrid.name}`, () => {
@@ -24,16 +24,16 @@ describe(`${createSceneGrid.name}`, () => {
   })
   it(`can move its position`, () => {
     const grid = prepareGrid()
-    const shift = grid.move('up')
+    const shift = grid.moveInDirection('up')
     expect(shift.direction).toBe('up')
     expect(shift.makeScene).not.toBeNull()
     expect(shift.sceneAlignment).toBe('center-top')
 
-    const shift2 = grid.move('up')
+    const shift2 = grid.moveInDirection('up')
     expect(shift2.makeScene).not.toBeNull()
     expect(shift2.sceneAlignment).toBe('center-bottom')
 
-    const shift3 = grid.move('right')
+    const shift3 = grid.moveInDirection('right')
     expect(shift3.makeScene).not.toBeNull()
     expect(shift3.sceneAlignment).toBe('right-bottom')
   })
@@ -43,27 +43,27 @@ describe(`${createSceneGrid.name}`, () => {
     expect(grid.current.childGridPosition).toBe('center-middle')
 
     // it calculates the move direction
-    grid.moveTowards([5, 4])
+    grid.moveTowardsDestination([5, 4])
     expect(grid.current.parentGridPosition).toBe('center-middle')
     expect(grid.current.childGridPosition).toBe('center-bottom')
 
-    grid.moveTowards([4, 4])
+    grid.moveTowardsDestination([4, 4])
     expect(grid.current.parentGridPosition).toBe('center-middle')
     expect(grid.current.childGridPosition).toBe('left-bottom')
 
     // it stops when it's already at destination
-    grid.moveTowards([4, 4])
+    grid.moveTowardsDestination([4, 4])
     expect(grid.current.parentGridPosition).toBe('center-middle')
     expect(grid.current.childGridPosition).toBe('left-bottom')
 
     // it moves until it reaches the destination
-    grid.moveTowards([2, 5])
+    grid.moveTowardsDestination([2, 5])
     expect(grid.current.parentGridPosition).toBe('left-middle')
     expect(grid.current.childGridPosition).toBe('right-middle')
-    grid.moveTowards([2, 5])
+    grid.moveTowardsDestination([2, 5])
     expect(grid.current.parentGridPosition).toBe('left-middle')
     expect(grid.current.childGridPosition).toBe('center-middle')
-    grid.moveTowards([2, 5])
+    grid.moveTowardsDestination([2, 5])
     expect(grid.current.parentGridPosition).toBe('left-middle')
     expect(grid.current.childGridPosition).toBe('center-middle')
   })
@@ -129,7 +129,7 @@ test.each<[GridPositionIndex, GridPositionIndex, GridPosition]>([
   expect(translateChildGridPosition(col, row)).toBe(expected)
 })
 
-test.each<[GridPosition, GridAlignment, number, number]>([
+test.each<[GridPosition, GridSubPosition, number, number]>([
   ['center-bottom', 'left-top', 4, 3],
   ['left-bottom', 'right-bottom', 3, 1],
   ['right-top', 'right-top', 9, 9],

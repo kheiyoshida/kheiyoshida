@@ -1,31 +1,18 @@
-import {
-  GeneratorConf,
-  Middlewares,
-  ScaleSource,
-  SequenceGenerator,
-  SequenceNoteMap,
-} from 'mgnr-core'
-import { GridAlignment, GridColumn, GridRow } from './grid'
+import { GeneratorConf, Middlewares, ScaleSource, SequenceGenerator, SequenceNoteMap } from 'mgnr-core'
+import { GridSubPosition, GridColumn, GridRow } from './grid'
 
-export type SceneMaker<AvailableOutlets = string> = (
-  source: ScaleSource,
-  alignment: GridAlignment
-) => Scene<AvailableOutlets>
-
-export type SceneComponentPosition = 'top' | 'bottom' | 'right' | 'left' | 'center'
-
+/**
+ * A collection of generator specifications
+ * where each component is positioned
+ */
 export type Scene<AvailableOutlets = string> = {
   [k in SceneComponentPosition]?: SceneComponent<AvailableOutlets>
 }
-
-export type SceneComponentMaker<AvailableOutlets = string> = (
-  source: ScaleSource,
-  alignment: {
-    col: GridColumn
-    row: GridRow
-  }
-) => SceneComponent<AvailableOutlets>
-
+export type SceneComponentPosition = 'top' | 'bottom' | 'right' | 'left' | 'center'
+export type SceneComponent<AvailableOutlets = string> = {
+  outId: AvailableOutlets
+  generators: GeneratorSpec[]
+}
 export type GeneratorSpec<MW extends Middlewares = Middlewares> = {
   generator: GeneratorConf
   notes?: SequenceNoteMap
@@ -35,21 +22,28 @@ export type GeneratorSpec<MW extends Middlewares = Middlewares> = {
   onEnded: (g: SequenceGenerator<MW>) => void
 }
 
-export type SceneComponent<AvailableOutlets = string> = {
-  outId: AvailableOutlets
-  generators: GeneratorSpec[]
-}
+/**
+ * function that makes up a scene
+ */
+export type MakeScene<AvailableOutlets = string> = (
+  source: ScaleSource,
+  gridSubPosition: GridSubPosition
+) => Scene<AvailableOutlets>
 
-type SceneMakerMap<O> = { [k in SceneComponentPosition]?: SceneComponentMaker<O> }
+type SceneComponentMakerMap<O> = { [k in SceneComponentPosition]?: MakeSceneComponent<O> }
+
+export type MakeSceneComponent<AvailableOutlets = string> = (
+  source: ScaleSource,
+  subPosition: {
+    col: GridColumn
+    row: GridRow
+  }
+) => SceneComponent<AvailableOutlets>
 
 export const injectSceneMakerDeps =
-  <O = string>(components: SceneMakerMap<O>): SceneMaker<O> =>
-  (source, alignment) => {
-    const [col, row] = splitAlignment(alignment)
-    return Object.fromEntries(
-      Object.entries(components).map(([k, v]) => [k, v(source, { col, row })])
-    )
+  <O = string>(components: SceneComponentMakerMap<O>): MakeScene<O> =>
+  (source, gridSubPosition) => {
+    const [col, row] = splitPos(gridSubPosition)
+    return Object.fromEntries(Object.entries(components).map(([k, v]) => [k, v(source, { col, row })]))
   }
-
-export const splitAlignment = (alignment: GridAlignment) =>
-  alignment.split('-') as [GridColumn, GridRow]
+const splitPos = (pos: GridSubPosition) => pos.split('-') as [GridColumn, GridRow]

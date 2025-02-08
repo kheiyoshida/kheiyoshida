@@ -24,7 +24,7 @@ export const createNode = (
   headID: number
 ): Node => ({
   position,
-  move: p5.Vector.fromAngles(p.radians(angles.theta), p.radians(angles.phi), speed),
+  moveInDirection: p5.Vector.fromAngles(p.radians(angles.theta), p.radians(angles.phi), speed),
   angles,
   edges: [],
   rank: 'head',
@@ -45,7 +45,7 @@ export const growNode = (node: Node, max: number): Node[] => {
     ...NODE.duplicate(node),
     edges: [],
     rank: 'child',
-    move: p5.Vector.fromAngles(
+    moveInDirection: p5.Vector.fromAngles(
       node.angles.theta + randomBetween(-120, 120),
       node.angles.phi + randomBetween(-120, 120),
       node.move.mag() + 10

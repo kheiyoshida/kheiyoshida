@@ -33,7 +33,7 @@ export const init: LazyInit<CameraState> = () => {
     speed: initialSpeed,
     turn: { theta: 0, phi: 0 },
     reverting: false,
-    move: { theta: 0.01, phi: 0.02 },
+    moveInDirection: { theta: 0.01, phi: 0.02 },
   }
 }
 

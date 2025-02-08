@@ -15,7 +15,7 @@ export const createBase3D = (
   speed: number = 1
 ): BaseNode3D => ({
   position,
-  move: p5.Vector.fromAngles(toRadians(angles.theta), toRadians(angles.phi), speed),
+  moveInDirection: p5.Vector.fromAngles(toRadians(angles.theta), toRadians(angles.phi), speed),
   angles: angles,
 })
 
@@ -65,6 +65,6 @@ export const rotate3D = <Node extends BaseNode3D>(
   }
   mutate<BaseNode3D>(node, {
     angles,
-    move: vectorFromDegreeAngles(angles.theta, angles.phi, node.move.mag()),
+    moveInDirection: vectorFromDegreeAngles(angles.theta, angles.phi, node.move.mag()),
   })
 }

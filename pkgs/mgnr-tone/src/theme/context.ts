@@ -11,6 +11,7 @@ export const makeContextManager = (config: {
       Tone.start()
     }
   }
+
   let started = false
   const startPlaying = () => {
     if (started) return
@@ -20,6 +21,7 @@ export const makeContextManager = (config: {
     config.initialise()
     Tone.Transport.scheduleRepeat(config.onInterval, config.interval, config.interval)
   }
+
   return {
     startContext,
     startPlaying,

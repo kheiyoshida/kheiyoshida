@@ -9,8 +9,11 @@ export type InOut = {
 }
 type PositionOutletMap = Partial<Record<SceneComponentPosition, string>>
 
-const directionMap: Record<GridDirection, [SceneComponentPosition, SceneComponentPosition]> = {
-  up: ['top', 'bottom'], // inDirection, against
+const directionMap: Record<
+  GridDirection,
+  [inDirection: SceneComponentPosition, against: SceneComponentPosition]
+> = {
+  up: ['top', 'bottom'],
   down: ['bottom', 'top'],
   left: ['left', 'right'],
   right: ['right', 'left'],

@@ -1,10 +1,10 @@
 import {
+  createSceneGrid,
   GridColumn,
   GridRow,
-  SceneComponentMaker,
-  SceneMaker,
-  createSceneGrid,
   injectSceneMakerDeps,
+  MakeSceneComponent,
+  MakeScene,
 } from 'mgnr-tone'
 import * as cp from './components'
 
@@ -30,8 +30,8 @@ export const translate = ({ col, row }: { col: GridColumn; row: GridRow }) => ({
 
 export type AvailableOutlets = 'pad' | 'noise' | 'droneBass' | 'synth'
 
-export type DemoComponentMaker = SceneComponentMaker<AvailableOutlets>
-export type DemoSceneMaker = SceneMaker<AvailableOutlets>
+export type DemoComponentMaker = MakeSceneComponent<AvailableOutlets>
+export type DemoSceneMaker = MakeScene<AvailableOutlets>
 
 const thin = (meta: Randomness): DemoSceneMaker =>
   injectSceneMakerDeps({

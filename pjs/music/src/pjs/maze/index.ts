@@ -1,11 +1,4 @@
-import {
-  GridDirection,
-  ScaleType,
-  SceneGrid,
-  SceneShiftInfo,
-  createMusicState,
-  nthDegreeTone,
-} from 'mgnr-tone'
+import { createMusicState, GridDirection, nthDegreeTone, SceneGrid, SceneShiftInfo } from 'mgnr-tone'
 import * as Tone from 'tone'
 import { randomItemFromArray } from 'utils'
 import { AvailableOutlets, makeDefaultScenes } from './scenes'
@@ -14,7 +7,7 @@ import { createDefaultTheme } from './theme'
 export type Music = {
   applyInitialScene: () => void
   checkNextShift: (...commands: GridDirection[]) => void
-  moveToDest: (dest: Parameters<SceneGrid['moveTowards']>[0]) => void
+  moveToDest: (dest: Parameters<SceneGrid['moveTowardsDestination']>[0]) => void
   changeMode: () => void
   currentPosition: SceneGrid['current']
   config: {
@@ -41,8 +34,8 @@ export const makeMusic = (): Music => {
     })
   }
 
-  function moveToDest(dest: Parameters<SceneGrid['moveTowards']>[0]) {
-    const shift = scenes.moveTowards(dest)
+  function moveToDest(dest: Parameters<SceneGrid['moveTowardsDestination']>[0]) {
+    const shift = scenes.moveTowardsDestination(dest)
     if (!shift) return
     fadeInNextTheme(shift)
     if (scaleSource.inModulation) {
@@ -61,7 +54,7 @@ export const makeMusic = (): Music => {
   }
 
   function checkNextShift(...commands: GridDirection[]) {
-    const shift = commands.reduce((_, command) => scenes.move(command), {} as SceneShiftInfo)
+    const shift = commands.reduce((_, command) => scenes.moveInDirection(command), {} as SceneShiftInfo)
     fadeInNextTheme(shift)
     if (scaleSource.inModulation || scenes.current.isOnEdge) {
       _changeMode()

@@ -1,5 +1,5 @@
 import * as Tone from 'tone'
-import { providePreset } from '../utils/utils'
+import { providePreset } from '../utils'
 
 const defaultKickOptions = {
   id: 'kick',
@@ -23,20 +23,6 @@ export const defaultKick = providePreset(
     ],
     initialVolume: options.initialVolume,
     volumeRange: options.volumeRange
-  })
-)
-
-export const reverbKick = providePreset(
-  defaultKickOptions,
-  (options) => ({
-    inst: new Tone.MembraneSynth(),
-    effects: [
-      new Tone.Filter({ frequency: options.highPassFreq, type: 'highpass' }),
-      new Tone.Filter({ frequency: options.lowPassFreq, type: 'lowpass' }),
-      new Tone.Reverb(1),
-      new Tone.Distortion(0.3),
-    ],
-    initialVolume: options.initialVolume,
   })
 )
 

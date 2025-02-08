@@ -1,5 +1,5 @@
 import * as Tone from 'tone'
-import { providePreset } from '../utils/utils'
+import { providePreset } from '../utils'
 
 const defaultSynOptions = {
   id: 'syn',

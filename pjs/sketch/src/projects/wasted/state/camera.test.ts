@@ -26,7 +26,7 @@ const mockCameraState = () => {
       phi: 0,
     },
     reverting: false,
-    move: {
+    moveInDirection: {
       theta: 0,
       phi: 0
     }

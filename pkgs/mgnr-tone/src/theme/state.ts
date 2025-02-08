@@ -1,4 +1,4 @@
-import { Middlewares, SequenceGenerator, createGenerator } from 'mgnr-core'
+import { createGenerator, Middlewares, SequenceGenerator } from 'mgnr-core'
 import * as Transport from '../tone-wrapper/Transport'
 import { ToneOutlet } from '../outlet/Outlet'
 import { ToneOutletPort } from '../outlet/OutletPort'
@@ -12,7 +12,7 @@ type ActiveComponentState = {
 }
 
 export const createMusicState = (outlets: Record<string, ToneOutlet>) => {
-  const active: ActiveComponents = {
+  const activeComponents: ActiveComponents = {
     top: null,
     bottom: null,
     right: null,
@@ -21,14 +21,14 @@ export const createMusicState = (outlets: Record<string, ToneOutlet>) => {
   }
 
   const applyScene = (scene: Scene, nextStart = Transport.toSeconds('@4m')): InOut => {
-    const inOut = checkDiff(active, scene)
+    const inOut = checkDiff(activeComponents, scene)
     const positions: SceneComponentPosition[] = ['top', 'bottom', 'right', 'left', 'center']
     positions.forEach((position) => {
       const shouldDrop = inOut.out[position] !== undefined
       if (shouldDrop) {
-        if (!active[position]) throw Error(`active[${position}] is null`)
-        active[position]!.ports.forEach(cancelPort)
-        active[position] = null
+        if (!activeComponents[position]) throw Error(`active[${position}] is null`)
+        activeComponents[position]!.ports.forEach(cancelPort)
+        activeComponents[position] = null
       }
       if (scene[position]) {
         if (!scene[position]) throw Error(`scene[${position}] is null`)
@@ -43,7 +43,7 @@ export const createMusicState = (outlets: Record<string, ToneOutlet>) => {
     nextComponent: SceneComponent,
     nextStart: number
   ) => {
-    const activeComponent = active[position]
+    const activeComponent = activeComponents[position]
     if (activeComponent) {
       activeComponent.ports.forEach((p) => p.stopLoop())
     }
@@ -59,7 +59,7 @@ export const createMusicState = (outlets: Record<string, ToneOutlet>) => {
         newPorts.push(createNewPortForOutlet(outlet, spec, nextStart))
       }
     })
-    active[position] = {
+    activeComponents[position] = {
       ports: newPorts,
       component: nextComponent,
     }
@@ -67,7 +67,7 @@ export const createMusicState = (outlets: Record<string, ToneOutlet>) => {
 
   return {
     get active() {
-      return active
+      return activeComponents
     },
     applyScene,
   }

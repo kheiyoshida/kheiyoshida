@@ -1,5 +1,5 @@
 import { Scale } from 'mgnr-tone'
-import { defaultPad } from 'mgnr-tone-presets'
+import { defaultPad } from '../presets'
 import * as mgnr from 'mgnr-tone/src'
 import { randomFloatBetween, randomIntInclusiveBetween } from 'utils'
 

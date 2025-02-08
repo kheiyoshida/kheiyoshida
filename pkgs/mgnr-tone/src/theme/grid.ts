@@ -1,29 +1,34 @@
 import { clamp, IntRange } from 'utils'
-import { SceneMaker } from './scene'
+import { MakeScene } from './scene'
 
+/**
+ * SceneGrid is a 9x9 grid.
+ * Columns and rows can be obtained by 1-9 indices
+ */
 export type GridPositionIndex = IntRange<1, 10>
 
 export type SceneGrid = ReturnType<typeof createSceneGrid>
 export type GridRow = 'top' | 'middle' | 'bottom'
 export type GridColumn = 'left' | 'center' | 'right'
 export type GridPosition = `${GridColumn}-${GridRow}`
-export type GridAlignment = `${GridColumn}-${GridRow}`
+export type GridSubPosition = `${GridColumn}-${GridRow}`
 export type GridDirection = 'up' | 'down' | 'left' | 'right'
 
 export type SceneShiftInfo = {
-  makeScene: SceneMaker
+  makeScene: MakeScene
   direction: GridDirection
-  sceneAlignment: GridAlignment
+  sceneAlignment: GridSubPosition
 }
 
 export const createSceneGrid = (
-  sceneMakers: { [position in GridPosition]: SceneMaker },
+  sceneMakers: { [position in GridPosition]: MakeScene },
   initialPos: GridPosition = 'center-middle',
-  initialAlignment: GridAlignment = 'center-middle'
+  initialAlignment: GridSubPosition = 'center-middle'
 ) => {
   const [col, row] = translateToPositionIndex(initialPos, initialAlignment)
   const position = createGridPositionManager(col, row)
-  const move = (direction: GridDirection): SceneShiftInfo => {
+
+  const moveInDirection = (direction: GridDirection): SceneShiftInfo => {
     position.move(direction)
     return {
       makeScene: sceneMakers[position.parentGridPosition],
@@ -31,10 +36,11 @@ export const createSceneGrid = (
       sceneAlignment: position.childGridPosition,
     }
   }
+
   return {
     getInitialScene: () => sceneMakers[initialPos],
-    move,
-    moveTowards: ([destCol, destRow]: [GridPositionIndex, GridPositionIndex]) => {
+    moveInDirection,
+    moveTowardsDestination: ([destCol, destRow]: [GridPositionIndex, GridPositionIndex]) => {
       const [currentCol, currentRow] = translateToPositionIndex(
         position.parentGridPosition,
         position.childGridPosition
@@ -44,7 +50,7 @@ export const createSceneGrid = (
       const vert: GridDirection | undefined =
         destRow > currentRow ? 'up' : destRow < currentRow ? 'down' : undefined
       return [hori, vert].reduce(
-        (p, c) => (c ? move(c) : p),
+        (p, c) => (c ? moveInDirection(c) : p),
         undefined as unknown as SceneShiftInfo | undefined
       )
     },
@@ -134,7 +140,7 @@ const translateChildRowPosition = (index: number): GridRow => {
 
 export const translateToPositionIndex = (
   parent: GridPosition,
-  child: GridAlignment
+  child: GridSubPosition
 ): [GridPositionIndex, GridPositionIndex] => {
   const [gridCol, gridRow] = parent.split('-')
   const [alignCol, alignRow] = child.split('-')

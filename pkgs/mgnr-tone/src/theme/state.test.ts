@@ -22,7 +22,7 @@ const createMusicOutlets = () => ({
   tom: createOutlet(new Tone.MembraneSynth()),
 })
 
-const StartTime = 0
+const FixedStartTime = 0
 
 const generatorSpec = (override?: Partial<GeneratorSpec>) =>
   ({
@@ -45,7 +45,7 @@ it(`can apply scene component`, () => {
     {
       top: component,
     },
-    StartTime
+    FixedStartTime
   )
   expect(state.active.top).not.toBeNull()
   expect(state.active.top?.ports).toHaveLength(1)
@@ -62,7 +62,7 @@ it(`should override port when there's already an active ones`, () => {
     {
       top: { outId: 'synth', generators: [generatorSpec(), generatorSpec()] },
     },
-    0
+    FixedStartTime
   )
   // 2nd
   const newSpec = generatorSpec({ loops: 2 })
@@ -73,11 +73,11 @@ it(`should override port when there's already an active ones`, () => {
         generators: [newSpec],
       },
     },
-    StartTime
+    FixedStartTime
   )
 
   expect(state.active.top).not.toBeNull()
-  expect(state.active.top?.ports).toHaveLength(1)
+  expect(state.active.top?.ports).toHaveLength(1) // one port has been dropped
   expect(state.active.top?.ports[0].numOfLoops).toBe(0) // -> becomes 2 on next onElapsed
   expect(spyOverride).toHaveBeenCalledWith(state.active.top?.ports[0], newSpec)
 })
@@ -90,7 +90,7 @@ it(`should deactivate the component if it's absent in the next scene`, () => {
     {
       top: { outId: 'synth', generators: [generatorSpec()] },
     },
-    StartTime
+    FixedStartTime
   )
   expect(state.active.top).not.toBeNull()
 
@@ -101,7 +101,7 @@ it(`should deactivate the component if it's absent in the next scene`, () => {
     {
       bottom: { outId: 'tom', generators: [generatorSpec()] },
     },
-    StartTime
+    FixedStartTime
   )
   expect(spyStop).toHaveBeenCalled()
   expect(state.active.top).toBeNull()
@@ -116,7 +116,7 @@ it(`should replace the component if next component specifies different outlet`, 
     {
       top: { outId: 'synth', generators: [generatorSpec()] },
     },
-    StartTime
+    FixedStartTime
   )
   expect(state.active.top).not.toBeNull()
 
@@ -127,7 +127,7 @@ it(`should replace the component if next component specifies different outlet`, 
     {
       top: { outId: 'tom', generators: [generatorSpec()] },
     },
-    StartTime
+    FixedStartTime
   )
   expect(spyStop).toHaveBeenCalled()
   expect(state.active.top).not.toBeNull()

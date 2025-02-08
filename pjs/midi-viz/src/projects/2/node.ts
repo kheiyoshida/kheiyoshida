@@ -15,7 +15,7 @@ export const createNode = (
   vel: number
 ): MidiNode3D => ({
   position,
-  move: p5.Vector.fromAngles(
+  moveInDirection: p5.Vector.fromAngles(
     p.radians(angles.theta),
     p.radians(angles.phi),
     convertDurToSpeed(vel)

@@ -44,7 +44,7 @@ export const makeMusic = (): Music => {
         4
       )
     }
-    const shift = scenes.move(command)
+    const shift = scenes.moveInDirection(command)
     fadeInNextTheme(shift)
   }
 
