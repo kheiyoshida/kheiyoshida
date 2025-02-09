@@ -1,5 +1,5 @@
 import { NotePickerConf } from './NotePicker'
-import { Sequence, SequenceConf } from '../entities/Sequence'
+import { Sequence, SequenceConf } from '../entities'
 import {
   adjustNotes,
   adjustPitch,
@@ -10,7 +10,7 @@ import {
   resetNotes,
   updateConfig,
 } from './middleware'
-import { Scale } from '../source/Scale'
+import { Scale } from '../source'
 
 import type { Tail } from 'utils'
 
@@ -34,7 +34,7 @@ type InjectedMiddlewares<MW extends Middlewares> = {
   [k in keyof MW]: Injected<MW[k]>
 }
 
-export type SequenceGenerator<MW extends Middlewares> = GeneratorContext &
+export type SequenceGenerator<MW extends Middlewares = Record<string, never>> = GeneratorContext &
   InjectedMiddlewares<MW & typeof defaultMiddlewares>
 
 export const buildGenerator = <MW extends Middlewares>(

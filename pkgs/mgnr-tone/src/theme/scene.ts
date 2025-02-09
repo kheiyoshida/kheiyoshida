@@ -1,5 +1,5 @@
 import { GeneratorConf, Middlewares, ScaleSource, SequenceGenerator, SequenceNoteMap } from 'mgnr-core'
-import { GridSubPosition, GridColumn, GridRow } from './grid'
+import { GridColumn, GridRow, GridSubPosition } from './grid'
 
 /**
  * A collection of generator specifications

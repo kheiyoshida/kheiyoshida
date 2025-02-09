@@ -1,7 +1,7 @@
 import { InstChannel } from '../mixer/Channel'
 import * as Transport from '../tone-wrapper/Transport'
-import { GridDirection } from './grid'
 import { SceneComponentPosition } from './scene'
+import { GridDirection } from './grid'
 
 export type InOut = {
   in: PositionOutletMap
