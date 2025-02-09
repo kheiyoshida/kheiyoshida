@@ -6,7 +6,7 @@ import {
   ToneOutlet,
 } from 'mgnr-tone'
 import { InstChannel } from 'mgnr-tone/src/mixer/Channel'
-import { makeFader } from 'mgnr-tone/src/theme/fade'
+import { makeGridFader } from 'mgnr-tone/src/theme/fade'
 import * as Tone from 'tone'
 import { randomItemFromArray } from 'utils'
 import * as instruments from './components/instruments'
@@ -96,7 +96,7 @@ export const createDefaultTheme = () => {
     droneBass: createOutlet(droneBassCh.inst, Tone.Transport.toSeconds('16n')),
   }
 
-  const handlefade = makeFader(channels)
+  const handlefade = makeGridFader(channels)
 
   return {
     scaleSource,

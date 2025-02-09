@@ -30,7 +30,7 @@ export type DirectionDurationMap = {
   neutral: Duration
 }
 
-export const makeFader = (
+export const makeGridFader = (
   channels: Record<string, InstChannel>,
   duration: DirectionDurationMap = {
     inDirection: '24m',
@@ -40,7 +40,6 @@ export const makeFader = (
   timing = '@4m',
   delay = '4m'
 ) => {
-
   const getDuration = (position: SceneComponentPosition, direction: GridDirection) => {
     const [inDirection, againstDirection] = directionMap[direction]
     if (position === inDirection) return duration.inDirection
@@ -48,42 +47,58 @@ export const makeFader = (
     else return duration.neutral
   }
 
-  const fadeOut = (fadeOutInstIds: PositionOutletMap, direction: GridDirection) => {
+  const _fader = _makeFader(channels, timing, delay)
+
+  return (inOut: InOut, direction: GridDirection) => {
+    const fadeList: FadeSpec[] = []
+
+    Object.entries(inOut.in).forEach(([k, instId]) => {
+      const instCh = channels[instId]
+      if (!instCh) throw Error(`channel not found: ${instId}`)
+      const duration = getDuration(k as SceneComponentPosition, direction)
+      fadeList.push({
+        inOrOut: 'in',
+        instId,
+        duration,
+      })
+    })
+    Object.entries(inOut.out).forEach(([k, instId]) => {
+      const instCh = channels[instId]
+      if (!instCh) throw Error(`channel not found: ${instId}`)
+      const duration = getDuration(k as SceneComponentPosition, direction)
+      fadeList.push({
+        inOrOut: 'out',
+        instId,
+        duration,
+      })
+    })
+
+    _fader(fadeList)
+  }
+}
+
+type FadeSpec = {
+  inOrOut: 'in' | 'out'
+  instId: string
+  duration: Duration
+  timing?: Duration
+  delay?: Duration
+}
+
+const _makeFader = (channels: Record<string, InstChannel>, timing = '@4m', delay = '4m') => {
+  return (fadeList: FadeSpec[]) => {
     const fade = () => {
-      Object.entries(fadeOutInstIds).forEach(([k, instId]) => {
+      fadeList.forEach(({ instId, duration, inOrOut }) => {
         const instCh = channels[instId]
         if (!instCh) throw Error(`channel not found: ${instId}`)
-        const duration = getDuration(k as SceneComponentPosition, direction)
-        instCh.dynamicVolumeFade(-instCh.volumeRangeDiff, duration)
+        instCh.dynamicVolumeFade(
+          inOrOut === 'in' ? instCh.volumeRangeDiff : -instCh.volumeRangeDiff,
+          duration
+        )
       })
     }
     Transport.scheduleOnce((t) => {
       Transport.scheduleOnce(fade, t + Transport.toSeconds(delay))
     }, timing)
-  }
-
-  const fadeIn = (fadeInInstIds: PositionOutletMap, direction: GridDirection) => {
-    const fade = (t: number) => {
-      Object.entries(fadeInInstIds).forEach(([k, instId]) => {
-        const instCh = channels[instId]
-        if (!instCh) throw Error(`channel not found: ${instId}`)
-        const duration = getDuration(k as SceneComponentPosition, direction)
-        const [inDirection] = directionMap[direction]
-        if (k === inDirection) {
-          Transport.scheduleOnce(
-            () => instCh.dynamicVolumeFade(instCh.volumeRangeDiff, duration),
-            t + Transport.toSeconds(delay)
-          )
-        } else {
-          instCh.dynamicVolumeFade(instCh.volumeRangeDiff, duration)
-        }
-      })
-    }
-    Transport.scheduleOnce((t) => fade(t), timing)
-  }
-
-  return (inOut: InOut, direction: GridDirection) => {
-    fadeOut(inOut.out, direction)
-    fadeIn(inOut.in, direction)
   }
 }

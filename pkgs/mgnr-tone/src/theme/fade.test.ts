@@ -1,6 +1,6 @@
 import * as Tone from 'tone'
 import { getMixer } from '../commands'
-import { DirectionDurationMap, makeFader } from './fade'
+import { DirectionDurationMap, makeGridFader } from './fade'
 import * as Transport from '../tone-wrapper/Transport'
 
 jest.mock('tone')
@@ -18,7 +18,7 @@ jest.mock('../tone-wrapper/Transport', () => ({
 
 afterEach(jest.clearAllMocks)
 
-describe(`${makeFader.name}`, () => {
+describe(`${makeGridFader.name}`, () => {
   it(`should fade in with defined duration`, () => {
     const mixer = getMixer()
     const synCh = mixer.createInstChannel({
@@ -43,7 +43,7 @@ describe(`${makeFader.name}`, () => {
       neutral: '16m',
     }
     const [timing, delay] = ['@4m', '4m']
-    const fade = makeFader(channels, durationMap, timing, delay)
+    const fade = makeGridFader(channels, durationMap, timing, delay)
 
     // move to up + inst on top = "in direction" fade in
     fade({ in: { top: 'synth', bottom: 'synth2' }, out: {} }, 'up')
@@ -83,7 +83,7 @@ describe(`${makeFader.name}`, () => {
       neutral: '16m',
     }
     const [timing, delay] = ['@4m', '4m']
-    const fade = makeFader(channels, durationMap, timing, delay)
+    const fade = makeGridFader(channels, durationMap, timing, delay)
 
     // move to up + inst on top = "in direction" fade out
     fade({ out: { top: 'synth', bottom: 'synth2' }, in: {} }, 'up')
