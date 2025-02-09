@@ -3,6 +3,9 @@ import * as Transport from '../tone-wrapper/Transport'
 import { SceneComponentPosition } from './scene'
 import { GridDirection } from './grid'
 
+/**
+ * specification for channels that should fade in/out on event
+ */
 export type InOut = {
   in: PositionOutletMap
   out: PositionOutletMap
@@ -21,7 +24,7 @@ const directionMap: Record<
 
 export type Duration = `${number}m`
 
-type DirectionDurationMap = {
+export type DirectionDurationMap = {
   inDirection: Duration
   againstDirection: Duration
   neutral: Duration
@@ -37,12 +40,14 @@ export const makeFader = (
   timing = '@4m',
   delay = '4m'
 ) => {
+
   const getDuration = (position: SceneComponentPosition, direction: GridDirection) => {
     const [inDirection, againstDirection] = directionMap[direction]
     if (position === inDirection) return duration.inDirection
     else if (position === againstDirection) return duration.againstDirection
     else return duration.neutral
   }
+
   const fadeOut = (fadeOutInstIds: PositionOutletMap, direction: GridDirection) => {
     const fade = () => {
       Object.entries(fadeOutInstIds).forEach(([k, instId]) => {
@@ -56,6 +61,7 @@ export const makeFader = (
       Transport.scheduleOnce(fade, t + Transport.toSeconds(delay))
     }, timing)
   }
+
   const fadeIn = (fadeInInstIds: PositionOutletMap, direction: GridDirection) => {
     const fade = (t: number) => {
       Object.entries(fadeInInstIds).forEach(([k, instId]) => {
@@ -75,6 +81,7 @@ export const makeFader = (
     }
     Transport.scheduleOnce((t) => fade(t), timing)
   }
+
   return (inOut: InOut, direction: GridDirection) => {
     fadeOut(inOut.out, direction)
     fadeIn(inOut.in, direction)
