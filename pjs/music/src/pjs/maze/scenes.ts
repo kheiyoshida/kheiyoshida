@@ -1,11 +1,5 @@
-import {
-  createSceneGrid,
-  GridColumn,
-  GridRow,
-  injectSceneMakerDeps,
-  MakeSceneComponent,
-  MakeScene,
-} from 'mgnr-tone'
+import { injectSceneMakerDeps, MakeScene, MakeSceneComponent } from 'mgnr-tone'
+import { createSceneGrid, GridColumn, GridRow } from '../../grid'
 import * as cp from './components'
 
 export type Saturation = 'thin' | 'neutral' | 'thick'
@@ -69,5 +63,5 @@ export const makeDefaultScenes = () =>
       'right-bottom': thick('dynamic'),
     },
     'center-middle',
-    'center-middle',
+    'center-middle'
   )

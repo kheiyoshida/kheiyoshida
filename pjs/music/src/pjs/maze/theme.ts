@@ -8,11 +8,11 @@ import {
   ToneOutlet,
 } from 'mgnr-tone'
 import { InstChannel } from 'mgnr-tone/src/mixer/Channel'
-import { makeGridFader } from 'mgnr-tone/src/theme/fade'
 import * as Tone from 'tone'
 import { randomItemFromArray } from 'utils'
 import * as instruments from './components/instruments'
 import { AvailableOutlets } from './scenes'
+import { makeGridFader } from '../../grid/fade.ts'
 
 export const createDefaultTheme = () => {
   const pickScaleConfig = (): Omit<ScaleConf, 'range'> => ({
@@ -27,7 +27,7 @@ export const createDefaultTheme = () => {
     comp: {
       threshold: -6,
       ratio: 12,
-    }
+    },
   }).createSendChannel({
     effects: [
       new Tone.Filter(300, 'highpass', -48),
@@ -47,10 +47,7 @@ export const createDefaultTheme = () => {
       max: -6,
       min: -40,
     },
-    effects: [
-      new Tone.Filter(300, 'highpass', -12),
-      new Tone.Filter(1400, 'highshelf', -96),
-    ],
+    effects: [new Tone.Filter(300, 'highpass', -12), new Tone.Filter(1400, 'highshelf', -96)],
   })
   const padCh = mixer.createInstChannel({
     inst: instruments.darkPad(),

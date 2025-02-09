@@ -1,16 +1,10 @@
-import {
-  createOutlet,
-  createScaleSource,
-  getMixer,
-  pickRandomPitchName,
-  ToneOutlet,
-} from 'mgnr-tone'
+import { createOutlet, createScaleSource, getMixer, pickRandomPitchName, ToneOutlet } from 'mgnr-tone'
 import { InstChannel } from 'mgnr-tone/src/mixer/Channel'
-import { makeGridFader } from 'mgnr-tone/src/theme/fade'
 import * as Tone from 'tone'
 import { randomItemFromArray } from 'utils'
 import * as instruments from './components/instruments'
 import { AvailableOutlets } from './scenes'
+import { makeGridFader } from '../../grid/fade.ts'
 
 export const createDefaultTheme = () => {
   const scaleSource = createScaleSource({
@@ -20,11 +14,7 @@ export const createDefaultTheme = () => {
   })
 
   const sendTrack = getMixer().createSendChannel({
-    effects: [
-      new Tone.PingPongDelay('8n.', 0.1),
-      new Tone.Reverb(0.5),
-      new Tone.Filter(8000, 'lowpass'),
-    ],
+    effects: [new Tone.PingPongDelay('8n.', 0.1), new Tone.Reverb(0.5), new Tone.Filter(8000, 'lowpass')],
   })
 
   const mixer = getMixer()

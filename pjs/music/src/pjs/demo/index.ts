@@ -1,10 +1,5 @@
-import {
-  GridDirection,
-  SceneGrid,
-  SceneShiftInfo,
-  createMusicState,
-  pickRandomPitchName,
-} from 'mgnr-tone'
+import { createMusicState, pickRandomPitchName } from 'mgnr-tone'
+import { GridDirection, SceneGrid, SceneShiftInfo } from '../../grid'
 import * as Tone from 'tone'
 import { AvailableOutlets, makeDefaultScenes } from './scenes'
 import { createDefaultTheme } from './theme'

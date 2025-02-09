@@ -1,4 +1,5 @@
-import { createMusicState, GridDirection, nthDegreeTone, SceneGrid, SceneShiftInfo } from 'mgnr-tone'
+import { createMusicState, nthDegreeTone } from 'mgnr-tone'
+import { GridDirection, SceneGrid, SceneShiftInfo } from '../../grid'
 import * as Tone from 'tone'
 import { randomItemFromArray } from 'utils'
 import { AvailableOutlets, makeDefaultScenes } from './scenes'
@@ -72,7 +73,7 @@ export const makeMusic = (): Music => {
     checkNextShift,
     moveToDest,
     changeMode: () => {
-      if (scaleSource.inModulation) return;
+      if (scaleSource.inModulation) return
       _changeMode()
     },
     get currentPosition() {
