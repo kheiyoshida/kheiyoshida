@@ -30,7 +30,7 @@ export const translateKeyIntention = (keys: number[]): ControlIntention => {
     }
   }
   return {
-    moveInDirection: direction,
+    move: direction,
   }
 }
 

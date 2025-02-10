@@ -1,5 +1,11 @@
-import { injectSceneMakerDeps, MakeScene, MakeSceneComponent } from 'mgnr-tone'
-import { createSceneGrid, GridColumn, GridRow } from '../../grid'
+import {
+  createSceneGrid,
+  GridColumn,
+  GridRow,
+  injectSceneMakerDeps,
+  MakeScene,
+  MakeSceneComponent,
+} from '../../grid'
 import * as cp from './components'
 
 export type Saturation = 'thin' | 'neutral' | 'thick'

@@ -24,7 +24,7 @@ export const createNode = (
   headID: number
 ): Node => ({
   position,
-  moveInDirection: p5.Vector.fromAngles(p.radians(angles.theta), p.radians(angles.phi), speed),
+  move: p5.Vector.fromAngles(p.radians(angles.theta), p.radians(angles.phi), speed),
   angles,
   edges: [],
   rank: 'head',

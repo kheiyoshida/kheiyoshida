@@ -43,7 +43,7 @@ export function createCamera(p5camera?: p5.Camera): Camera {
     setMoveSpeed(speed) {
       node.setSpeed(speed)
     },
-    moveInDirection() {
+    move() {
       node.move()
       camera.setPosition(...node.position)
       keepFocus()

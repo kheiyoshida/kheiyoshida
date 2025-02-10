@@ -8,13 +8,13 @@ export const createBase = (
   speed = 100
 ): BaseNode => ({
   position: new p5.Vector(x, y),
-  moveInDirection: p5.Vector.fromAngle(p.radians(angle), speed),
+  move: p5.Vector.fromAngle(p.radians(angle), speed),
 })
 
 export const duplicate = <Node extends BaseNode>(node: Node): Node => ({
   ...node,
   position: node.position.copy(),
-  moveInDirection: node.move.copy(),
+  move: node.move.copy(),
 })
 
 export const move = <Node extends BaseNode>(node: Node) => {

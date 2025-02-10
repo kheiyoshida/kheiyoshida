@@ -55,7 +55,7 @@ export const createGraphNode = (
         return randomizer ? emit(...randomizer(delta, growAmount)) : emit(delta, growAmount)
       })
     },
-    moveInDirection() {
+    move() {
       NODE.move(_node)
       NODE3D.restrain3dFromPosition(_node)(initialPosition, movableDistance)
       NODE.changeSpeedV2(_node, decreaseSpeed)
