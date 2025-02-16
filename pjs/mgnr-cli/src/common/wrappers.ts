@@ -1,16 +1,13 @@
 import {
   createGenerator,
-  GeneratorConf,
+  defaultMiddlewares,
+  GeneratorContext,
   Middleware,
   Scale,
   ScaleConf,
   SequenceConf,
-  SequenceGenerator,
 } from 'mgnr-core'
-import { updateConfig } from 'mgnr-core/src/generator/middleware'
-import { NotePickerConf } from 'mgnr-core/src/generator/NotePicker'
 import { LogItem } from 'stream/src/types'
-import { Range } from 'utils'
 
 export class CliScale extends Scale {
   mutateKey(key: ScaleConf['key'], stages = 1) {
@@ -27,6 +24,7 @@ export class CliScale extends Scale {
       this.modulate({ range: { min, max } })
     }
   }
+
   mutatePref(pref: ScaleConf['pref'], stages = 1) {
     this.modulate({ pref }, stages)
   }
@@ -34,11 +32,13 @@ export class CliScale extends Scale {
   mk(...args: Parameters<typeof CliScale.prototype.mutateKey>) {
     this.mutateKey(...args)
   }
+
   mp(...args: Parameters<typeof CliScale.prototype.mutatePref>) {
     this.mutatePref(...args)
   }
 
   logName: string = ''
+
   logState(): LogItem {
     return {
       _: this.logName,
@@ -49,97 +49,38 @@ export class CliScale extends Scale {
   }
 }
 
-export const createCliGenerator = (conf: Parameters<typeof createGenerator>[0]) => {
-  return createGenerator({...conf, middlewares: cliMiddlewares })
-}
-
-const cliMiddlewares  = {
-  updateDensity: (ctx, density: SequenceConf['density']) => {
-    updateConfig(ctx, { sequence: { density } })
+const cliMiddlewares = {
+  updateDensity: (ctx: GeneratorContext, density: SequenceConf['density']) => {
+    defaultMiddlewares.updateConfig(ctx, { sequence: { density } })
   },
-  updateDur: (ctx, duration: NotePickerConf['duration']) => {
-    updateConfig(ctx, { note: { duration } })
+  updateDur: (ctx, duration: number) => {
+    defaultMiddlewares.updateConfig(ctx, { note: { duration } })
+  },
+  updateVel: (ctx: GeneratorContext, velocity: number) => {
+    defaultMiddlewares.updateConfig(ctx, { note: { velocity } })
+  },
+  randomise(ctx: GeneratorContext, rate: number) {
+    defaultMiddlewares.mutate(ctx, { strategy: 'randomize', rate })
+  },
+  shuffle(ctx: GeneratorContext, rate: number) {
+    defaultMiddlewares.mutate(ctx, { strategy: 'move', rate })
+  },
+  inPlace(ctx: GeneratorContext, rate: number) {
+    defaultMiddlewares.mutate(ctx, { strategy: 'inPlace', rate })
   },
   useMono: (ctx) => {
-    updateConfig(ctx, { sequence: { polyphony: 'mono' } })
+    defaultMiddlewares.updateConfig(ctx, { sequence: { polyphony: 'mono' } })
   },
   usePoly: (ctx) => {
-    updateConfig(ctx, { sequence: { polyphony: 'poly' } })
+    defaultMiddlewares.updateConfig(ctx, { sequence: { polyphony: 'poly' } })
   },
-  
+  flush: (ctx) => {
+    ctx.sequence.deleteEntireNotes()
+  },
 } satisfies Record<string, Middleware>
 
-export class CliSequenceGenerator extends SequenceGenerator {
-  
-  updateVel(veloPref: GeneratorConf['veloPref']) {
-    this.updateConfig({ veloPref })
-  }
-  harmonize(...degrees: HarmonizerConf['degree']) {
-    this.updateConfig({ harmonizer: { degree: degrees } })
-  }
-  fill() {
-    this.updateConfig({ fillStrategy: 'fill' })
-  }
-  random() {
-    this.updateConfig({ fillStrategy: 'random' })
-  }
-  randomize(rate: number) {
-    this.mutate({ rate, strategy: 'randomize' })
-  }
-  shuffle(rate: number) {
-    this.mutate({ rate, strategy: 'move' })
-  }
-  inPlace(rate: number) {
-    this.mutate({ rate, strategy: 'inPlace' })
-  }
-  reset() {
-    this.resetNotes()
-  }
-  construct() {
-    this.constructNotes()
-  }
-  get len() {
-    return this.sequence.length
-  }
-  flush() {
-    this.eraseSequenceNotes()
-    this.loopHandler = undefined
-  }
-  loopHandler?: (g: CliSequenceGenerator, s: CliScale) => void
-  onLoop(cb: typeof CliSequenceGenerator.prototype.loopHandler) {
-    this.loopHandler = cb
-  }
-  execLoop(s: CliScale) {
-    try {
-      if (!this.loopHandler) return
-      this.loopHandler(this, s)
-    } catch (err) {
-      console.error(`${this.logName}.loopHandler failed `)
-      this.loopHandler = undefined
-    }
-  }
-
-  remove(rate: number) {
-    this.sequence.deleteRandomNotes(rate)
-  }
-
-  logName: string = ''
-  logState(): LogItem {
-    return {
-      _: this.logName,
-      l: this.sequence.length,
-      n: this.sequence.numOfNotes,
-      den: this.sequence.density,
-      dur: convertRange(this.picker.conf.noteDur),
-      vel: convertRange(this.picker.conf.noteVel),
-      f: this.picker.conf.fillStrategy,
-      p: this.sequence.poly ? 'poly' : 'mono',
-      h: this.picker.conf.harmonizer ? this.picker.conf.harmonizer['degree'] : '',
-    }
-  }
+export const createCliGenerator = (conf: Parameters<typeof createGenerator>[0]) => {
+  return createGenerator({ ...conf, middlewares: cliMiddlewares })
 }
 
-function convertRange(r: Range | number) {
-  if (typeof r === 'number') return r
-  else return `${r.min}-${r.max}`
-}
+export type CliGenerator = ReturnType<typeof createCliGenerator>

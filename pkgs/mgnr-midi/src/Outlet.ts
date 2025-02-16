@@ -65,4 +65,13 @@ export class MidiOutletPort<MW extends Middlewares> extends OutletPort<MidiOutle
   private get sequenceDuration() {
     return this.generator.sequence.numOfMeasures * this.secsPerMeasure
   }
+
+  /**
+   * flush sequence notes and loop events
+   */
+  public flush(): void {
+    this.generator.sequence.deleteEntireNotes()
+    this.events.elapsed = undefined
+    this.events.ended = undefined
+  }
 }

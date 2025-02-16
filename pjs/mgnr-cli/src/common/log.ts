@@ -1,7 +1,9 @@
 import { LogData } from 'stream/src/types'
-import { CliScale, CliSequenceGenerator } from './wrappers'
+import { CliScale } from './wrappers'
+import { MidiOutletPort } from 'mgnr-midi/src/Outlet'
+import { Range } from 'utils'
 
-export function setupLogStream(generators: CliSequenceGenerator[], scales: CliScale[]) {
+export function setupLogStream(ports: MidiOutletPort<any>[], scales: CliScale[]) {
   let time = 0
   const interval = 250
   setInterval(() => {
@@ -9,7 +11,19 @@ export function setupLogStream(generators: CliSequenceGenerator[], scales: CliSc
     sendStream({
       head: msToMinutesSeconds(time),
       body: {
-        g: generators.map((g) => g.logState()),
+        p: ports.map((p) => {
+          return {
+            _: '',
+            l: p.generator.sequence.length,
+            n: p.generator.sequence.numOfNotes,
+            den: p.generator.sequence.density,
+            dur: convertRange(p.generator.picker.duration),
+            vel: convertRange(p.generator.picker.velocity),
+            f: p.generator.sequence.conf.fillStrategy,
+            p: p.generator.sequence.poly ? 'poly' : 'mono',
+            h: p.generator.picker.harmonizer ? p.generator.picker.harmonizer['degree'] : '',
+          }
+        }),
         s: scales.map((s) => s.logState()),
       },
     })
@@ -33,4 +47,9 @@ function msToMinutesSeconds(millis: number) {
 
 function zeroFill(t: string) {
   return t.length === 1 ? `0${t}` : t
+}
+
+function convertRange(r: Range | number) {
+  if (typeof r === 'number') return r
+  else return `${r.min}-${r.max}`
 }
