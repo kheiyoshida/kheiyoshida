@@ -1,14 +1,10 @@
-
 import { MidiPort } from 'mgnr-midi/src/Port'
-import { createMidiChannelOutlet } from '../../common/setup'
 import { createCliGenerator } from '../../common/wrappers'
 import { createScale } from '../../common'
 import { setupLogStream } from '../../common/log'
 
 export function main() {
-  const port = new MidiPort('Logic Pro Virtual In', 120)
-  const midiOutlet1 = createMidiChannelOutlet(port, 1)
-  const midiOutlet2 = createMidiChannelOutlet(port, 2)
+  const [chOut1, chOut2] = new MidiPort('Logic Pro Virtual In', 120).getChannelOutlets()
 
   const s1 = createScale('C', 'major', { min: 50, max: 80 })
   const g1 = createCliGenerator({
@@ -53,8 +49,8 @@ export function main() {
     scale: s1,
   })
 
-  const outletPort1 = midiOutlet1.assignGenerator(g1)
-  const outletPort2 = midiOutlet2.assignGenerator(g2)
+  const outletPort1 = chOut1.assignGenerator(g1)
+  const outletPort2 = chOut2.assignGenerator(g2)
 
   setupLogStream([outletPort1, outletPort2], [s1])
 

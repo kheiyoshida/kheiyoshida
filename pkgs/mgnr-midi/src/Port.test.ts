@@ -19,7 +19,7 @@ describe(`${MidiPort.name}`, () => {
     expect(() => {
       new MidiPort(portName, 120)
     }).toThrowErrorMatchingInlineSnapshot(
-      `"Output port fugafugafoo is not availavble. Avaialble ports are: midi port 1, midi port 2"`
+      `"Output port fugafugafoo is not available. Available ports are: midi port 1, midi port 2"`
     )
   })
   it(`can send note on/off message at a relative beat`, () => {
@@ -57,5 +57,13 @@ describe(`${MidiPort.name}`, () => {
     expect(spySend).toHaveBeenLastCalledWith('noteoff', offNote)
 
     jest.useRealTimers()
+  })
+
+  it(`can get 16 midi channel outlets`, () => {
+    const port = new MidiPort('midi port 1', 120)
+    const outlets = port.getChannelOutlets()
+    outlets.forEach((ch, i) => {
+      expect(ch.midiCh.chNumber).toBe(i + 1)
+    })
   })
 })

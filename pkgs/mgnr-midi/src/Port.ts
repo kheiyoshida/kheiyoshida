@@ -1,11 +1,11 @@
 import easymidi from 'easymidi'
-import { MidiNote } from './types'
+import { MidiChannelNumber, MidiNote } from './types'
+import { Tuple } from 'utils'
+import { MidiChOutlet } from './Outlet'
 
 export class PortNotFoundError extends Error {
   constructor(portName: string, availablePorts: string[]) {
-    super(
-      `Output port ${portName} is not availavble. Avaialble ports are: ${availablePorts.join(`, `)}`
-    )
+    super(`Output port ${portName} is not available. Available ports are: ${availablePorts.join(`, `)}`)
   }
 }
 
@@ -26,9 +26,16 @@ export class MidiPort {
     this.msPerMeasure = (1000 * 60) / (this.bpm / 4)
   }
 
+  getChannelOutlets(): Tuple<MidiChOutlet, 16> {
+    return Array.from({ length: 16 }).map(
+      (_, i) => new MidiChOutlet(this, (i + 1) as MidiChannelNumber)
+    ) as Tuple<MidiChOutlet, 16>
+  }
+
   noteOnAtRelativeBeat(beat: number, note: MidiNote) {
     this.#noteOnAtRelativeTime(beat * this.msPerMeasure, note)
   }
+
   noteOffAtRelativeBeat(beat: number, note: MidiNote) {
     this.#noteOffAtRelativeTime(beat * this.msPerMeasure, note)
   }
@@ -38,6 +45,7 @@ export class MidiPort {
       this.output.send('noteon', note)
     }, ms)
   }
+
   #noteOffAtRelativeTime(ms: number, note: MidiNote) {
     setTimeout(() => {
       this.output.send('noteoff', note)

@@ -3,20 +3,34 @@ import { Middlewares, Outlet, OutletPort, SequenceGenerator } from 'mgnr-core/sr
 import { MidiChannel } from './Channel'
 import { convertToConcreteNote } from './convert'
 import { scheduleRepeat } from './timeEvent'
+import { MidiPort } from './Port'
+import { MidiChannelNumber } from './types'
 
-export class MidiOutlet extends Outlet<MidiChannel> {
+export class MidiChOutlet extends Outlet<MidiChannel> {
+  constructor(ch: MidiChannel)
+  constructor(port: MidiPort, chNumber: MidiChannelNumber)
+  constructor(portOrCh: MidiChannel | MidiPort, chNumber?: MidiChannelNumber) {
+    if (chNumber !== undefined && portOrCh instanceof MidiPort) {
+      super(new MidiChannel(portOrCh, chNumber))
+    } else if (portOrCh instanceof MidiChannel) {
+      super(portOrCh)
+    } else throw Error(`uncaught constructor signature`)
+  }
+
   sendNote(...args: Parameters<MidiChannel['sendNote']>): void {
     this.inst.sendNote(...args)
   }
+
   assignGenerator<MW extends Middlewares>(generator: SequenceGenerator<MW>) {
-    return new MidiOutletPort(this, generator)
+    return new MidiChOutletPort(this, generator)
   }
+
   get midiCh() {
     return this.inst
   }
 }
 
-export class MidiOutletPort<MW extends Middlewares> extends OutletPort<MidiOutlet, MW> {
+export class MidiChOutletPort<MW extends Middlewares> extends OutletPort<MidiChOutlet, MW> {
   public loopSequence(numOfLoops = 1) {
     const intervalMs = this.sequenceDuration
     scheduleRepeat(intervalMs, numOfLoops, (loopNth) => {
@@ -62,6 +76,7 @@ export class MidiOutletPort<MW extends Middlewares> extends OutletPort<MidiOutle
   private get secsPerMeasure() {
     return this.outlet.midiCh.port.msPerMeasure
   }
+
   private get sequenceDuration() {
     return this.generator.sequence.numOfMeasures * this.secsPerMeasure
   }

@@ -1,7 +1,7 @@
 import { SequenceNoteMap } from 'mgnr-core'
 import * as core from 'mgnr-core/src'
 import { MidiChannel } from './Channel'
-import { MidiOutlet } from './Outlet'
+import { MidiChOutlet } from './Outlet'
 import { MidiPort } from './Port'
 import { mockOutputPorts } from './__tests__/mock'
 
@@ -15,11 +15,11 @@ afterEach(() => {
   jest.useRealTimers()
 })
 
-describe(`${MidiOutlet.name}`, () => {
+describe(`${MidiChOutlet.name}`, () => {
   it(`can loop sequence to send each note to the midi channel`, () => {
     const port = new MidiPort('midi port 1', 120)
     const ch = new MidiChannel(port, 1)
-    const outlet = new MidiOutlet(ch)
+    const outlet = new MidiChOutlet(ch)
     const generator = core.createGenerator({
       sequence: {
         fillStrategy: 'fixed',
@@ -55,7 +55,7 @@ describe(`${MidiOutlet.name}`, () => {
   it(`can loop sequence & fire events on each loop`, () => {
     const port = new MidiPort('midi port 1', 120)
     const ch = new MidiChannel(port, 1)
-    const outlet = new MidiOutlet(ch)
+    const outlet = new MidiChOutlet(ch)
     const generator = core.createGenerator({
       sequence: {
         fillStrategy: 'fixed',

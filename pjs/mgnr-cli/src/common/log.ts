@@ -1,9 +1,9 @@
 import { LogData } from 'stream/src/types'
 import { CliScale } from './wrappers'
-import { MidiOutletPort } from 'mgnr-midi/src/Outlet'
+import { MidiChOutletPort } from 'mgnr-midi/src/Outlet'
 import { Range } from 'utils'
 
-export function setupLogStream(ports: MidiOutletPort<any>[], scales: CliScale[]) {
+export function setupLogStream(ports: MidiChOutletPort<any>[], scales: CliScale[]) {
   let time = 0
   const interval = 250
   setInterval(() => {
