@@ -1,6 +1,7 @@
 import { defaultTom, kickFactory } from '../presets'
 import * as mgnr from 'mgnr-tone/src'
 import { randomFloatBetween } from 'utils'
+import { ForestSequenceGenerator } from '../generator.ts'
 
 export const setupTom = () => {
   const mixer = mgnr.getMixer()
@@ -17,7 +18,7 @@ export const setupTom = () => {
   )
   tomCh.mute('on')
   const tomOut = mgnr.createOutlet(tomCh)
-  const generator = mgnr.createGenerator({
+  const generator = ForestSequenceGenerator.create({
     scale: mgnr.createScale({ range: { min: 20, max: 40 } }),
     sequence: {
       length: 20,
@@ -30,9 +31,6 @@ export const setupTom = () => {
       fillStrategy: 'fill',
       polyphony: 'mono',
     },
-    middlewares: {
-      changeLength: mgnr.pingpongSequenceLength('extend'),
-    },
   })
   generator.constructNotes(kickFactory(10, 8))
 
@@ -42,7 +40,7 @@ export const setupTom = () => {
     .onEnded((generator) => {
       generator.mutate({ rate: 0.5, strategy: 'randomize' })
       generator.mutate({ rate: 0.2, strategy: 'inPlace' })
-      generator.changeLength(4)
+      ;(generator as ForestSequenceGenerator).changeLength(4)
     })
 
   const randomizeConfig = () => {

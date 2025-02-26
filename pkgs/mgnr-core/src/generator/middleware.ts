@@ -1,5 +1,5 @@
 import { fireByRate } from 'utils'
-import { GeneratorConf, GeneratorContext } from './Generator'
+import { GeneratorConf, GeneratorContext } from './SequenceGenerator'
 import { adjustNotePitch, changeNotePitch, harmonizeNote, pickHarmonizedNotes } from './NotePicker'
 import { Sequence, SequenceNoteMap } from '../entities'
 

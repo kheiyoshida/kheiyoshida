@@ -1,4 +1,4 @@
-import { createGenerator, Middlewares, SequenceGenerator } from 'mgnr-core'
+import { createGenerator, SequenceGenerator } from 'mgnr-core'
 import * as Transport from '../tone-wrapper/Transport'
 import { ToneOutlet } from '../outlet/Outlet'
 import { ToneOutletPort } from '../outlet/OutletPort'
@@ -7,7 +7,7 @@ import { InOut } from './fade'
 
 export type ActiveComponents = Record<SceneComponentPosition, ActiveComponentState | null>
 type ActiveComponentState = {
-  ports: ToneOutletPort<Middlewares>[]
+  ports: ToneOutletPort[]
   component: SceneComponent
 }
 
@@ -47,7 +47,7 @@ export const createMusicState = (outlets: Record<string, ToneOutlet>) => {
     if (activeComponent) {
       activeComponent.ports.forEach((p) => p.stopLoop())
     }
-    const newPorts: ToneOutletPort<Middlewares>[] = []
+    const newPorts: ToneOutletPort[] = []
     nextComponent.generators.forEach((spec, i) => {
       const port = activeComponent?.ports[i]
       if (port) {
@@ -73,8 +73,8 @@ export const createMusicState = (outlets: Record<string, ToneOutlet>) => {
   }
 }
 
-export const overridePort = (port: ToneOutletPort<Middlewares>, spec: GeneratorSpec) => {
-  const override = (g: SequenceGenerator<Middlewares>) => {
+export const overridePort = (port: ToneOutletPort, spec: GeneratorSpec) => {
+  const override = (g: SequenceGenerator) => {
     g.updateConfig(spec.generator)
     g.adjustNotes(spec.notes)
     port.numOfLoops = spec.loops
@@ -84,7 +84,7 @@ export const overridePort = (port: ToneOutletPort<Middlewares>, spec: GeneratorS
   port.onEnded(override)
 }
 
-export const cancelPort = (port: ToneOutletPort<Middlewares>) => {
+export const cancelPort = (port: ToneOutletPort) => {
   Transport.scheduleOnce(() => {
     port.stopLoop()
   }, '+24m')
@@ -94,11 +94,11 @@ export const createNewPortForOutlet = (
   outlet: ToneOutlet,
   spec: GeneratorSpec,
   start: number
-): ToneOutletPort<Middlewares> => {
+): ToneOutletPort => {
+  // TODO: make this compatible with subclass of SequenceGenerator
   const newGenerator = createGenerator({
     ...spec.generator,
     notes: spec.notes,
-    middlewares: spec.middlewares,
   })
   return outlet
     .assignGenerator(newGenerator)

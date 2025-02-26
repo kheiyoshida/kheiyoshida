@@ -2,6 +2,7 @@ import { Scale } from 'mgnr-tone'
 import { defaultPad } from '../presets'
 import * as mgnr from 'mgnr-tone/src'
 import { randomFloatBetween, randomIntInclusiveBetween } from 'utils'
+import { ForestSequenceGenerator } from '../generator.ts'
 
 export const setupPadCh = (scale: Scale) => {
   const mixer = mgnr.getMixer()
@@ -21,7 +22,7 @@ export const setupPadCh = (scale: Scale) => {
 
   const out = mgnr.createOutlet(padCh)
 
-  const generator = mgnr.createGenerator({
+  const generator = ForestSequenceGenerator.create({
     scale: scale,
     sequence: {
       length: 50,
@@ -48,9 +49,6 @@ export const setupPadCh = (scale: Scale) => {
         lookDown: false,
       },
     },
-    middlewares: {
-      lengthChange: mgnr.pingpongSequenceLength('extend'),
-    },
   })
 
   generator.constructNotes()
@@ -61,7 +59,7 @@ export const setupPadCh = (scale: Scale) => {
     .onEnded((generator) => {
       generator.mutate({ rate: 0.3, strategy: 'randomize' })
       generator.mutate({ rate: 0.4, strategy: 'inPlace' })
-      generator.lengthChange(4)
+      ;(generator as ForestSequenceGenerator).changeLength(4)
     })
 
   const randomizeConfig = () => {

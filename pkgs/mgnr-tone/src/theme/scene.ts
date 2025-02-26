@@ -1,4 +1,4 @@
-import { GeneratorConf, Middlewares, SequenceGenerator, SequenceNoteMap } from 'mgnr-core'
+import { GeneratorConf, SequenceGenerator, SequenceNoteMap } from 'mgnr-core'
 
 /**
  * A collection of generator specifications
@@ -15,11 +15,10 @@ export type SceneComponent<AvailableOutlets = string> = {
   generators: GeneratorSpec[]
 }
 
-export type GeneratorSpec<MW extends Middlewares = Middlewares> = {
+export type GeneratorSpec = {
   generator: GeneratorConf
   notes?: SequenceNoteMap
-  middlewares?: MW
   loops: number
-  onElapsed: (g: SequenceGenerator<MW>) => void
-  onEnded: (g: SequenceGenerator<MW>) => void
+  onElapsed: (g: SequenceGenerator) => void
+  onEnded: (g: SequenceGenerator) => void
 }

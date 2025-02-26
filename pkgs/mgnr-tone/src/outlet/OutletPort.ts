@@ -1,25 +1,22 @@
-import { Middlewares, Note, OutletPort } from 'mgnr-core'
+import { Note, OutletPort } from 'mgnr-core'
 import { pickRange } from 'utils'
 import { ToneOutlet } from './Outlet'
 import * as Transport from '../tone-wrapper/Transport'
 import { scheduleLoop } from '../tone-wrapper/utils'
 
-export class ToneOutletPort<MW extends Middlewares> extends OutletPort<ToneOutlet, MW> {
+export class ToneOutletPort extends OutletPort<ToneOutlet> {
   /**
    * Outlet needs to have overhead for time=0 notes
    */
   static BufferTime = 0.5
 
-  public loopSequence(numOfLoops = this.numOfLoops, startTime = 0): ToneOutletPort<MW> {
+  public loopSequence(numOfLoops = this.numOfLoops, startTime = 0): ToneOutletPort {
     this.numOfLoops = numOfLoops
     if (this.numOfLoops >= 1) {
       scheduleLoop(
         (time, loopNth) => {
           this.generator.sequence.iterateEachNote((note, position) => {
-            this.assignNote(
-              note,
-              time + position * this.secsPerDivision + ToneOutletPort.BufferTime
-            )
+            this.assignNote(note, time + position * this.secsPerDivision + ToneOutletPort.BufferTime)
           })
           this.checkEvent(numOfLoops, loopNth, startTime)
         },

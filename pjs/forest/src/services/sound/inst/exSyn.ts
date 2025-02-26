@@ -2,6 +2,7 @@ import * as mgnr from 'mgnr-tone'
 import { Scale } from 'mgnr-tone'
 import { fmSynth } from '../presets'
 import { randomFloatBetween, randomIntInclusiveBetween } from 'utils'
+import { ForestSequenceGenerator } from '../generator.ts'
 
 export const setupExtraSynCh = (scale: Scale) => {
   const mixer = mgnr.getMixer()
@@ -21,7 +22,7 @@ export const setupExtraSynCh = (scale: Scale) => {
 
   const out = mgnr.createOutlet(exSynCh)
 
-  const generator = mgnr.createGenerator({
+  const generator = ForestSequenceGenerator.create({
     scale,
     sequence: {
       length: 10,
@@ -40,9 +41,6 @@ export const setupExtraSynCh = (scale: Scale) => {
         max: 3,
       },
     },
-    middlewares: {
-      lengthChange: mgnr.pingpongSequenceLength('extend'),
-    },
   })
 
   generator.constructNotes()
@@ -55,10 +53,10 @@ export const setupExtraSynCh = (scale: Scale) => {
     })
     .onEnded((generator) => {
       generator.mutate({ rate: 0.2, strategy: 'inPlace' })
-      generator.lengthChange(4)
+      ;(generator as ForestSequenceGenerator).changeLength(4)
     })
 
-  const generator2 = mgnr.createGenerator({
+  const generator2 = ForestSequenceGenerator.create({
     scale,
     sequence: {
       length: 16,
@@ -76,9 +74,6 @@ export const setupExtraSynCh = (scale: Scale) => {
         min: 2,
         max: 3,
       },
-    },
-    middlewares: {
-      lengthChange: mgnr.pingpongSequenceLength('extend'),
     },
   })
 
@@ -104,7 +99,7 @@ export const setupExtraSynCh = (scale: Scale) => {
     .loopSequence(2)
     .onEnded((generator) => {
       generator.mutate({ rate: 0.2, strategy: 'inPlace' })
-      generator.lengthChange(6)
+      ;(generator as ForestSequenceGenerator).changeLength(6)
     })
 
   const randomizeConfig = () => {

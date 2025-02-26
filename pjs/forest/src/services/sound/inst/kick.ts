@@ -1,6 +1,7 @@
 import { defaultKick } from '../presets'
 import * as mgnr from 'mgnr-tone/src'
 import { randomFloatBetween } from 'utils'
+import { ForestSequenceGenerator } from '../generator.ts'
 
 export const setupKick = () => {
   const mixer = mgnr.getMixer()
@@ -16,7 +17,7 @@ export const setupKick = () => {
   )
   const kickOut = mgnr.createOutlet(kickCh)
 
-  const generator = mgnr.createGenerator({
+  const generator = ForestSequenceGenerator.create({
     scale: mgnr.createScale({ range: { min: 30, max: 31 } }),
     sequence: {
       length: 8,
@@ -29,9 +30,6 @@ export const setupKick = () => {
         max: 50,
       },
     },
-    middlewares: {
-      changeLength: mgnr.pingpongSequenceLength('extend'),
-    }
   })
 
   generator.constructNotes({
@@ -56,7 +54,7 @@ export const setupKick = () => {
     .loopSequence(2)
     .onEnded((generator) => {
       generator.mutate({ strategy: 'move', rate: 0.3 })
-      generator.changeLength(3)
+      ;(generator as ForestSequenceGenerator).changeLength(3)
     })
 
   const randomizeConfig = () => {

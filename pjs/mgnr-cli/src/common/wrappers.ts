@@ -1,12 +1,4 @@
-import {
-  createGenerator,
-  defaultMiddlewares,
-  GeneratorContext,
-  Middleware,
-  Scale,
-  ScaleConf,
-  SequenceConf,
-} from 'mgnr-core'
+import { GeneratorConf, Scale, ScaleConf, SequenceConf, SequenceGenerator } from 'mgnr-core'
 import { LogItem } from 'stream/src/types'
 
 export class CliScale extends Scale {
@@ -49,38 +41,44 @@ export class CliScale extends Scale {
   }
 }
 
-const cliMiddlewares = {
-  updateDensity: (ctx: GeneratorContext, density: SequenceConf['density']) => {
-    defaultMiddlewares.updateConfig(ctx, { sequence: { density } })
-  },
-  updateDur: (ctx, duration: number) => {
-    defaultMiddlewares.updateConfig(ctx, { note: { duration } })
-  },
-  updateVel: (ctx: GeneratorContext, velocity: number) => {
-    defaultMiddlewares.updateConfig(ctx, { note: { velocity } })
-  },
-  randomise(ctx: GeneratorContext, rate: number) {
-    defaultMiddlewares.mutate(ctx, { strategy: 'randomize', rate })
-  },
-  shuffle(ctx: GeneratorContext, rate: number) {
-    defaultMiddlewares.mutate(ctx, { strategy: 'move', rate })
-  },
-  inPlace(ctx: GeneratorContext, rate: number) {
-    defaultMiddlewares.mutate(ctx, { strategy: 'inPlace', rate })
-  },
-  useMono: (ctx) => {
-    defaultMiddlewares.updateConfig(ctx, { sequence: { polyphony: 'mono' } })
-  },
-  usePoly: (ctx) => {
-    defaultMiddlewares.updateConfig(ctx, { sequence: { polyphony: 'poly' } })
-  },
-  flush: (ctx) => {
-    ctx.sequence.deleteEntireNotes()
-  },
-} satisfies Record<string, Middleware>
+class CliSequenceGenerator extends SequenceGenerator {
+  updateDensity(density: SequenceConf['density']) {
+    this.updateConfig({ sequence: { density } })
+  }
 
-export const createCliGenerator = (conf: Parameters<typeof createGenerator>[0]) => {
-  return createGenerator({ ...conf, middlewares: cliMiddlewares })
+  updateDur(duration: number) {
+    this.updateConfig({ note: { duration } })
+  }
+
+  updateVel(velocity: number) {
+    this.updateConfig({ note: { velocity } })
+  }
+
+  randomise(rate: number) {
+    this.mutate({ strategy: 'randomize', rate })
+  }
+
+  shuffle(rate: number) {
+    this.mutate({ strategy: 'move', rate })
+  }
+
+  inPlace(rate: number) {
+    this.mutate({ strategy: 'inPlace', rate })
+  }
+
+  useMono() {
+    this.updateConfig({ sequence: { polyphony: 'mono' } })
+  }
+
+  usePoly() {
+    this.updateConfig({ sequence: { polyphony: 'poly' } })
+  }
+
+  flush() {
+    this.context.sequence.deleteEntireNotes()
+  }
 }
 
-export type CliGenerator = ReturnType<typeof createCliGenerator>
+export const createCliGenerator = (conf: GeneratorConf) => {
+  return CliSequenceGenerator.create(conf)
+}

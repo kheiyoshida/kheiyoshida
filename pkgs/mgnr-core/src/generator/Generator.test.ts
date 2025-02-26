@@ -1,5 +1,6 @@
 import * as utils from 'utils'
-import { buildGenerator, defaultMiddlewares } from './Generator'
+import { buildGenerator } from './SequenceGenerator'
+import * as mw from './middleware'
 import { fillNoteConf, harmonizeNote } from './NotePicker'
 import { Sequence, SequenceNoteMap } from '../entities'
 import { Scale } from '../source'
@@ -65,12 +66,12 @@ const monoNotes: SequenceNoteMap = {
 const deepCopy = <T>(v: T) => JSON.parse(JSON.stringify(v)) as T
 
 describe(`generator middlewares`, () => {
-  describe(`${defaultMiddlewares.updateConfig.name}`, () => {
+  describe(`${mw.updateConfig.name}`, () => {
     it(`should update config with given fields & values`, () => {
       const picker = fillNoteConf({ duration: { min: 1, max: 4 } })
       const scale = new Scale()
       const sequence = new Sequence({ density: 0.5, length: 8 })
-      const generator = buildGenerator({ picker, sequence, scale }, {})
+      const generator = buildGenerator({ picker, sequence, scale })
       generator.updateConfig({
         sequence: {
           density: 0.9,
@@ -85,7 +86,7 @@ describe(`generator middlewares`, () => {
       expect(generator.picker.duration).toBe(2)
     })
   })
-  describe(`${defaultMiddlewares.constructNotes.name}`, () => {
+  describe(`${mw.constructNotes.name}`, () => {
     it(`should assign initial notes if provided`, () => {
       const picker = fillNoteConf({})
       const sequence = new Sequence({ fillStrategy: 'fixed' })
@@ -118,7 +119,7 @@ describe(`generator middlewares`, () => {
     })
   })
 
-  describe(`${defaultMiddlewares.changeSequenceLength.name}`, () => {
+  describe(`${mw.changeSequenceLength.name}`, () => {
     it(`can extend its sequence length, filling the extended part with notes`, () => {
       const picker = fillNoteConf({ duration: 1 })
       const sequence = new Sequence({
@@ -168,7 +169,7 @@ describe(`generator middlewares`, () => {
     })
   })
 
-  describe(`${defaultMiddlewares.mutate.name}`, () => {
+  describe(`${mw.mutate.name}`, () => {
     beforeEach(() => {
       jest
         .spyOn(utils, 'randomRemoveFromArray')
@@ -228,7 +229,7 @@ describe(`generator middlewares`, () => {
     })
   })
 
-  describe(`${defaultMiddlewares.adjustPitch.name}`, () => {
+  describe(`${mw.adjustPitch.name}`, () => {
     it(`can adjust notes on scale changes`, () => {
       const scale = new Scale({ key: 'C', pref: '_1M' })
       const picker = fillNoteConf({})
@@ -246,7 +247,7 @@ describe(`generator middlewares`, () => {
     })
   })
 
-  describe(`${defaultMiddlewares.eraseSequenceNotes.name}`, () => {
+  describe(`${mw.eraseSequenceNotes.name}`, () => {
     const sequence = new Sequence({ polyphony: 'mono' })
     const picker = fillNoteConf({})
     const generator = buildGenerator({ picker, sequence, scale })
@@ -256,7 +257,7 @@ describe(`generator middlewares`, () => {
     expect(sequence.numOfNotes).toBe(0)
   })
 
-  describe(`${defaultMiddlewares.resetNotes.name}`, () => {
+  describe(`${mw.resetNotes.name}`, () => {
     it(`can reset notes`, () => {
       const picker = fillNoteConf({})
       const sequence = new Sequence()

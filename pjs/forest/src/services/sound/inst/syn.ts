@@ -1,6 +1,7 @@
 import * as mgnr from 'mgnr-tone'
 import { Scale } from 'mgnr-tone'
 import { fmSynth, registerTremolo } from '../presets'
+import { ForestSequenceGenerator } from '../generator.ts'
 
 export const setupSynCh = (scale: Scale) => {
   const mixer = mgnr.getMixer()
@@ -12,7 +13,7 @@ export const setupSynCh = (scale: Scale) => {
     })
   )
   const out = mgnr.createOutlet(synCh)
-  const generator = mgnr.createGenerator({
+  const generator = ForestSequenceGenerator.create({
     scale,
     sequence: {
       length: 10,
@@ -35,9 +36,6 @@ export const setupSynCh = (scale: Scale) => {
         lookDown: true,
       },
     },
-    middlewares: {
-      lengthChange: mgnr.pingpongSequenceLength('extend'),
-    }
   })
 
   generator.constructNotes({
@@ -66,7 +64,7 @@ export const setupSynCh = (scale: Scale) => {
     .onEnded((generator) => {
       generator.mutate({ rate: 0.5, strategy: 'randomize' })
       generator.mutate({ rate: 0.2, strategy: 'inPlace' })
-      generator.lengthChange(4)
+      ;(generator as ForestSequenceGenerator).changeLength(4)
       generator.resetNotes()
     })
 

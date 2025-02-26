@@ -1,4 +1,4 @@
-import { Middlewares, Outlet, SequenceGenerator, convertMidiToNoteName } from 'mgnr-core'
+import { Outlet, SequenceGenerator, convertMidiToNoteName } from 'mgnr-core'
 import { LayeredNoteBuffer, NoteBuffer } from './Buffer'
 import { ToneOutletPort } from './OutletPort'
 import { LayeredInstrument } from '../instrument'
@@ -13,7 +13,7 @@ export class ToneOutlet extends Outlet<ToneInst> {
     const noteName = convertMidiToNoteName(pitch)
     this.inst.triggerAttackRelease(noteName, duration, time, velocity / 127)
   }
-  assignGenerator<MW extends Middlewares>(generator: SequenceGenerator<MW>) {
+  assignGenerator(generator: SequenceGenerator) {
     return new ToneOutletPort(this, generator)
   }
 }

@@ -1,4 +1,4 @@
-import { GeneratorContext } from './Generator'
+import { GeneratorContext } from './SequenceGenerator'
 import { fillNoteConf } from './NotePicker'
 import { Sequence } from '../entities/Sequence'
 import { Scale } from '../source/Scale'

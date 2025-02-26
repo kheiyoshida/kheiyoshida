@@ -1,13 +1,16 @@
-import { Middlewares, SequenceGenerator } from '../generator/Generator'
+import { SequenceGenerator } from '../generator/SequenceGenerator'
 
-export type LoopEventKey = 'elapsed' | 'ended'
-
-export type SequenceLoopHandler<GMW extends Middlewares> = (
-  generator: SequenceGenerator<GMW>,
+/**
+ * note:
+ * if the client were to use subclass of SequenceGenerator,
+ * it should cast the type for now
+ */
+export type SequenceLoopHandler = (
+  generator: SequenceGenerator,
   loopNth: number
 ) => void
 
-export type LoopEvent<GMW extends Middlewares> = {
-  elapsed?: SequenceLoopHandler<GMW>
-  ended?: SequenceLoopHandler<GMW>
+export type LoopEvent = {
+  elapsed?: SequenceLoopHandler
+  ended?: SequenceLoopHandler
 }

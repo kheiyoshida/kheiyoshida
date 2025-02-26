@@ -1,5 +1,5 @@
 import { Note } from 'mgnr-core'
-import { Middlewares, Outlet, OutletPort, SequenceGenerator } from 'mgnr-core/src'
+import { Outlet, OutletPort, SequenceGenerator } from 'mgnr-core/src'
 import { MidiChannel } from './Channel'
 import { convertToConcreteNote } from './convert'
 import { scheduleRepeat } from './timeEvent'
@@ -21,7 +21,7 @@ export class MidiChOutlet extends Outlet<MidiChannel> {
     this.inst.sendNote(...args)
   }
 
-  assignGenerator<MW extends Middlewares>(generator: SequenceGenerator<MW>) {
+  assignGenerator(generator: SequenceGenerator) {
     return new MidiChOutletPort(this, generator)
   }
 
@@ -30,7 +30,7 @@ export class MidiChOutlet extends Outlet<MidiChannel> {
   }
 }
 
-export class MidiChOutletPort<MW extends Middlewares> extends OutletPort<MidiChOutlet, MW> {
+export class MidiChOutletPort extends OutletPort<MidiChOutlet> {
   public loopSequence(numOfLoops = 1) {
     const intervalMs = this.sequenceDuration
     scheduleRepeat(intervalMs, numOfLoops, (loopNth) => {
