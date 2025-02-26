@@ -1,5 +1,5 @@
 import * as mgnr from './commands'
-import { Scale } from './source'
+import { Scale } from './entities/source'
 
 test(`${mgnr.createScale.name}`, () => {
   expect(() => mgnr.createScale('C')).not.toThrow()

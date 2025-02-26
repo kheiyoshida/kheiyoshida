@@ -1,4 +1,4 @@
-import { SequenceGenerator } from '../generator/SequenceGenerator'
+import { SequenceGenerator } from '../features/SequenceGenerator'
 import { LoopEvent, SequenceLoopHandler } from './types'
 
 export abstract class Outlet<Inst = unknown> {

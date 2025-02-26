@@ -1,7 +1,7 @@
 import { fillNoteConf, NotePickerConf } from './NotePicker'
 import { Sequence, SequenceConf } from '../entities'
 import * as mw from './middleware'
-import { Scale } from '../source'
+import { Scale } from '../entities/source'
 
 import type { Tail } from 'utils'
 

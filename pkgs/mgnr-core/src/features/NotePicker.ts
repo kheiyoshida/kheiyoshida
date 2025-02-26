@@ -1,7 +1,7 @@
 import { Range, overrideDefault, pickRange } from 'utils'
 import { HarmonizerConf, harmonize } from './Harmonizer'
 import { Note } from '../entities'
-import { Scale } from '../source'
+import { Scale } from '../entities/source'
 
 type VelocityConf = {
   velocity: number | Range

@@ -1,4 +1,4 @@
-import { Semitone } from '../entities'
+import { Semitone } from '../index'
 
 export type ScaleType = keyof typeof SCALES
 export type SemitonesInScale = readonly Semitone[]

@@ -1,5 +1,5 @@
 import { findNearestNumberInArray, randomItemFromArray, Range } from 'utils'
-import { MidiNum, PitchName, ROOT_TONE_MAP } from '../entities'
+import { MidiNum, PitchName, ROOT_TONE_MAP } from '../index'
 import { ScaleType } from './scaleTypes'
 import { Modulation } from './Modulation'
 import { constructScalePitches, constructScalePitchesFromConf } from './construct'

@@ -1,5 +1,5 @@
 import { Scale } from './Scale'
-import { OCTAVE } from '../entities'
+import { OCTAVE } from '../index'
 
 describe(`${Scale.name}`, () => {
   describe(`note construction`, () => {

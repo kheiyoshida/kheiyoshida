@@ -3,7 +3,7 @@ import { buildGenerator } from './SequenceGenerator'
 import * as mw from './middleware'
 import { fillNoteConf, harmonizeNote } from './NotePicker'
 import { Sequence, SequenceNoteMap } from '../entities'
-import { Scale } from '../source'
+import { Scale } from '../entities/source'
 
 jest.mock('utils', () => ({
   __esModule: true,

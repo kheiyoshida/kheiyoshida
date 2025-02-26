@@ -1,5 +1,5 @@
 import { NumRange, Range } from 'utils'
-import { MidiNum, OCTAVE, ROOT_TONE_MAP, WHOLE_OCTAVES } from '../entities'
+import { MidiNum, OCTAVE, ROOT_TONE_MAP, WHOLE_OCTAVES } from '../index'
 import { ScaleConf } from './Scale'
 import { SCALES, SemitonesInScale } from './scaleTypes'
 

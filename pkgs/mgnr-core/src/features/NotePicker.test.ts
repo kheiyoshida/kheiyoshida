@@ -5,7 +5,7 @@ import {
   pickHarmonizedNotes,
   pickNote,
 } from './NotePicker'
-import { Scale } from '../source/Scale'
+import { Scale } from '../entities/source/Scale'
 
 describe(`${pickHarmonizedNotes.name}`, () => {
   it(`should pick harmonzied note`, () => {

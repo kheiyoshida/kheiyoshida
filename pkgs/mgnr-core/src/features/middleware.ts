@@ -75,6 +75,7 @@ export function changeSequenceLength(
   }
 }
 
+// TODO: drop from package
 export function pingpongSequenceLength(initialMethod: 'shrink' | 'extend') {
   let direction = initialMethod
   return (context: GeneratorContext, len: number) => {
