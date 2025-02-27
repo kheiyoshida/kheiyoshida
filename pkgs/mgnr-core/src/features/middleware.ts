@@ -1,5 +1,5 @@
 import { fireByRate } from 'utils'
-import { GeneratorConf, GeneratorContext } from './SequenceGenerator'
+import { GeneratorConf, GeneratorContext } from '../interface/SequenceGenerator'
 import { adjustNotePitch, changeNotePitch, harmonizeNote, pickHarmonizedNotes } from './NotePicker'
 import { Sequence, SequenceNoteMap } from '../entities'
 
@@ -13,24 +13,20 @@ export function updateConfig(context: GeneratorContext, config: Partial<Generato
   constructNotes(context)
 }
 
-export function constructNotes(context: GeneratorContext, initialNotes?: SequenceNoteMap) {
+export function constructNotes (context: GeneratorContext, initialNotes?: SequenceNoteMap) {
   assignInitialNotes(context, initialNotes)
   assignNotes(context)
 }
 
-export function resetNotes(context: GeneratorContext, notes?: SequenceNoteMap) {
-  eraseSequenceNotes(context)
-  assignInitialNotes(context, notes)
-  removeNotesOutOfLength(context.sequence)
-  removeNotesOutOfCapacity(context)
-  adjustPitch(context)
-  assignNotes(context)
+export function resetNotes (context: GeneratorContext, notes?: SequenceNoteMap) {
+  eraseSequenceNotes(context.sequence)
+  adjustNotes(context, notes)
 }
 
 export function adjustNotes(context: GeneratorContext, fixedNotes?: SequenceNoteMap) {
   assignInitialNotes(context, fixedNotes)
   removeNotesOutOfLength(context.sequence)
-  removeNotesOutOfCapacity(context)
+  removeNotesOutOfCapacity(context.sequence)
   adjustPitch(context)
   assignNotes(context)
 }
@@ -50,7 +46,7 @@ export function assignInitialNotes(context: GeneratorContext, initialNotes?: Seq
   })
 }
 
-export function eraseSequenceNotes({ sequence }: GeneratorContext) {
+export function eraseSequenceNotes(sequence: Sequence) {
   sequence.deleteEntireNotes()
 }
 
@@ -75,39 +71,10 @@ export function changeSequenceLength(
   }
 }
 
-// TODO: drop from package
-export function pingpongSequenceLength(initialMethod: 'shrink' | 'extend') {
-  let direction = initialMethod
-  return (context: GeneratorContext, len: number) => {
-    changeSequenceLength(context, direction, len, () => {
-      direction = direction === 'extend' ? 'shrink' : 'extend'
-      changeSequenceLength(context, direction, len)
-    })
-  }
-}
-
-export function extend(context: GeneratorContext, length: number) {
-  context.sequence.extend(length)
-  assignNotes(context)
-}
-
-export function shrink(context: GeneratorContext, length: number) {
-  context.sequence.shrink(length)
-  removeNotesOutOfLength(context.sequence)
-}
-
-export function removeNotesOutOfLength(sequence: Sequence) {
-  sequence.iteratePosition((p) => {
-    if (p >= sequence.length) {
-      sequence.deleteNotesInPosition(p)
-    }
-  })
-}
-
-export function removeNotesOutOfCapacity({sequence}: GeneratorContext) {
-  while(sequence.availableSpace < 0) {
-    sequence.deleteRandomNotes(0.1)
-  }
+export type MutateStrategy = 'randomize' | 'move' | 'inPlace' | 'recursion'
+export type MutateSpec = {
+  rate: number
+  strategy: MutateStrategy
 }
 
 export function mutate(context: GeneratorContext, { rate, strategy }: MutateSpec) {
@@ -121,6 +88,42 @@ export function mutate(context: GeneratorContext, { rate, strategy }: MutateSpec
     case 'inPlace':
       mutateNotesPitches(context, rate)
       break
+  }
+}
+
+/// -------private middlewares--------
+
+export function pingPongSequenceLength(initialMethod: 'shrink' | 'extend') {
+  let direction = initialMethod
+  return (context: GeneratorContext, len: number) => {
+    changeSequenceLength(context, direction, len, () => {
+      direction = direction === 'extend' ? 'shrink' : 'extend'
+      changeSequenceLength(context, direction, len)
+    })
+  }
+}
+
+function extend(context: GeneratorContext, length: number) {
+  context.sequence.extend(length)
+  assignNotes(context)
+}
+
+function shrink(context: GeneratorContext, length: number) {
+  context.sequence.shrink(length)
+  removeNotesOutOfLength(context.sequence)
+}
+
+export function removeNotesOutOfLength(sequence: Sequence) {
+  sequence.iteratePosition((p) => {
+    if (p >= sequence.length) {
+      sequence.deleteNotesInPosition(p)
+    }
+  })
+}
+
+export function removeNotesOutOfCapacity(sequence: Sequence) {
+  while(sequence.availableSpace < 0) {
+    sequence.deleteRandomNotes(0.1)
   }
 }
 
@@ -161,9 +164,3 @@ export function mutateNotesPitches({ sequence, scale }: GeneratorContext, rate: 
     }
   })
 }
-export type MutateStrategy = 'randomize' | 'move' | 'inPlace' | 'recursion'
-export type MutateSpec = {
-  rate: number
-  strategy: MutateStrategy
-}
-

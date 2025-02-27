@@ -1,5 +1,5 @@
 export * from './commands'
 export * from './entities'
-export * from './features/SequenceGenerator'
-export { pingpongSequenceLength } from './features/middleware'
+export * from './interface/SequenceGenerator'
+export { pingPongSequenceLength } from './features/middleware'
 export { Outlet, OutletPort } from './interface/Outlet'

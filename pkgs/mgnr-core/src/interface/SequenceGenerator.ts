@@ -1,8 +1,6 @@
-import { fillNoteConf, NotePickerConf } from './NotePicker'
-import { Sequence, SequenceConf } from '../entities'
-import * as mw from './middleware'
-import { Scale } from '../entities/source'
-
+import { fillNoteConf, NotePickerConf } from '../features/NotePicker'
+import { Scale, Sequence, SequenceConf } from '../entities'
+import * as mw from '../features/middleware'
 import type { Tail } from 'utils'
 
 export type GeneratorConf = {
@@ -64,8 +62,8 @@ export class SequenceGenerator {
     mw.adjustNotes(this.context, ...args)
   }
 
-  eraseSequenceNotes(...args: MiddlewareArgs<typeof mw.eraseSequenceNotes>) {
-    mw.eraseSequenceNotes(this.context, ...args)
+  eraseSequenceNotes() {
+    mw.eraseSequenceNotes(this.context.sequence)
   }
 
   adjustPitch(...args: MiddlewareArgs<typeof mw.adjustPitch>) {
@@ -81,6 +79,3 @@ export class SequenceGenerator {
   }
 }
 
-export const buildGenerator = (context: GeneratorContext): SequenceGenerator => {
-  return new SequenceGenerator(context)
-}

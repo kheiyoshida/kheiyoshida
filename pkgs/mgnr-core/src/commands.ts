@@ -1,7 +1,6 @@
-import { buildGenerator, SequenceGenerator, GeneratorConf } from './features/SequenceGenerator'
+import { GeneratorConf, SequenceGenerator } from './interface/SequenceGenerator'
 import { fillNoteConf } from './features/NotePicker'
-import { MidiNum, Sequence, SequenceNoteMap } from './entities'
-import { Scale, ScaleConf } from './entities/source'
+import { MidiNum, Scale, ScaleConf, Sequence, SequenceNoteMap } from './entities'
 import { constructNotes } from './features/middleware'
 
 export function createScale(pitches: MidiNum[]): Scale
@@ -32,5 +31,5 @@ export function createGenerator(
   const scale = conf.scale || new Scale()
   const context = { sequence, scale, picker }
   constructNotes(context, conf.notes)
-  return buildGenerator(context)
+  return new SequenceGenerator(context)
 }

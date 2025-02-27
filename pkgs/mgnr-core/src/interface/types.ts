@@ -1,4 +1,4 @@
-import { SequenceGenerator } from '../features/SequenceGenerator'
+import { SequenceGenerator } from './SequenceGenerator'
 
 /**
  * note:

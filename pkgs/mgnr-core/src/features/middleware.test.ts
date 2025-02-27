@@ -1,17 +1,16 @@
-import { GeneratorContext } from './SequenceGenerator'
+import { GeneratorContext } from '../interface/SequenceGenerator'
 import { fillNoteConf } from './NotePicker'
-import { Sequence } from '../entities/Sequence'
-import { Scale } from '../entities/source/Scale'
-import { pingpongSequenceLength, removeNotesOutOfCapacity } from './middleware'
+import { Scale, Sequence } from '../entities'
+import { pingPongSequenceLength, removeNotesOutOfCapacity } from './middleware'
 
-test(`${pingpongSequenceLength.name}`, () => {
+test(`${pingPongSequenceLength.name}`, () => {
   const sequence = new Sequence({ length: 8, lenRange: { min: 2, max: 12 } })
   const context: GeneratorContext = {
     sequence,
     scale: new Scale(),
     picker: fillNoteConf({}),
   }
-  const change = pingpongSequenceLength('extend')
+  const change = pingPongSequenceLength('extend')
   expect(sequence.length).toBe(8)
   change(context, 3)
   expect(sequence.length).toBe(11)
@@ -31,10 +30,10 @@ test(`${removeNotesOutOfCapacity.name}`, () => {
     0: [...Array(6)].map(() => ({
       pitch: 60,
       vel: 100,
-      dur: 1
-    }))
+      dur: 1,
+    })),
   })
   expect(sequence.availableSpace).toBe(-2)
-  removeNotesOutOfCapacity({ sequence } as GeneratorContext)
+  removeNotesOutOfCapacity(sequence)
   expect(sequence.availableSpace).toBeGreaterThanOrEqual(0)
 })

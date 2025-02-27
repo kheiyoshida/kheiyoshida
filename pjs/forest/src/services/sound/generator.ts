@@ -1,7 +1,8 @@
-import { SequenceGenerator, pingpongSequenceLength } from 'mgnr-tone'
+import { SequenceGenerator, pingPongSequenceLength } from 'mgnr-tone'
 
 export class ForestSequenceGenerator extends SequenceGenerator {
+  private _changeLength = pingPongSequenceLength('extend')
   changeLength(num: number) {
-    pingpongSequenceLength('extend')(this.context, num)
+    this._changeLength(this.context, num)
   }
 }

@@ -18,11 +18,11 @@ export function harmonize(
   wholePitches: Semitone[],
   conf: Partial<HarmonizerConf>
 ): Note[] {
-  const fullconf = overrideDefault(getDefaultConf(), conf)
+  const fullConf = overrideDefault(getDefaultConf(), conf)
   if (note.pitch === 'random') return []
-  return fullconf.degree
+  return fullConf.degree
     .map((d) =>
-      getHarmonicPitch(fullconf, note.pitch as number, convertDegreeToSemitone(d), wholePitches)
+      getHarmonicPitch(fullConf, note.pitch as number, convertDegreeToSemitone(d), wholePitches)
     )
     .filter((n): n is number => n !== null)
     .map((harmonicPitch) => ({ ...note, pitch: harmonicPitch }))
