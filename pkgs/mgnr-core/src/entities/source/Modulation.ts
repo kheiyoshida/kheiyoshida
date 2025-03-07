@@ -1,4 +1,3 @@
-import Logger from 'js-logger'
 import { removeItemFromArray } from 'utils'
 import { getSemitoneDiffBetweenPitches, Semitone } from '../index'
 import { ScaleConf } from './Scale'
@@ -55,7 +54,6 @@ export class Modulation {
       this._degreesInNextScaleType.push(...modQueueItem.add)
     }
     if (this._degreesInNextScaleType.length === 0) {
-      Logger.info(`empty degreeList. consume another queue...`)
       return this.consumeQueue()
     }
     return this._degreesInNextScaleType.sort((a, b) => a - b)

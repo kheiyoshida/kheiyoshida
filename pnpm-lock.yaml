@@ -412,9 +412,6 @@ importers:
 
   pkgs/mgnr-core:
     dependencies:
-      js-logger:
-        specifier: ^1.6.1
-        version: 1.6.1
       utils:
         specifier: workspace:^
         version: link:../utils
@@ -441,9 +438,6 @@ importers:
 
   pkgs/mgnr-tone:
     dependencies:
-      js-logger:
-        specifier: ^1.6.1
-        version: 1.6.1
       mgnr-core:
         specifier: workspace:@mgnr/core@^
         version: link:../mgnr-core

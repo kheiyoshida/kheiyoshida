@@ -3,6 +3,7 @@ import * as Tone from 'tone'
 import { fireByRate, randomIntInclusiveBetween } from 'utils'
 import { compsoiteSynth, drumMachine } from './instruments'
 import { dnb } from './sequence'
+import { SequenceGenerator } from 'mgnr-tone'
 
 const mixer = mgnr.getMixer()
 
@@ -22,7 +23,7 @@ const prepareDrums = () => {
 
   const outlet = mgnr.createOutlet(synCh.inst, Tone.Transport.toSeconds('16n'))
 
-  const generator = mgnr.createGenerator({
+  const generator = SequenceGenerator.create({
     scale: scale,
     note: {
       duration: 1,
@@ -35,7 +36,7 @@ const prepareDrums = () => {
       polyphony: 'mono',
     },
   })
-  const generator2 = mgnr.createGenerator({
+  const generator2 = SequenceGenerator.create({
     scale: scale,
     sequence: {
       length: 12,

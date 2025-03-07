@@ -2,7 +2,7 @@
   "name": "@mgnr/tone",
   "description": "music generator for WebAudio/Tone.js/node",
   "version": "0.0.2",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "files": [
     "src",
     "dist"
@@ -19,13 +19,11 @@
   "author": "Katsumi Yoshida",
   "license": "ISC",
   "dependencies": {
-    "js-logger": "^1.6.1",
     "mgnr-core": "workspace:@mgnr/core@^",
     "tone": "^14.7.77",
     "utils": "workspace:^"
   },
   "peerDependencies": {
-    "js-logger": "^1.6.1",
     "tone": "^14.7.77"
   },
   "devDependencies": {

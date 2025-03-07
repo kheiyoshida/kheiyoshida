@@ -1,5 +1,4 @@
 import * as Tone from 'tone'
-import * as MGNR from 'mgnr-tone'
 import { createNuancePad } from './preset'
 
 export const toneStart = () => {

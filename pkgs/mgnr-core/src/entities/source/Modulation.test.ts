@@ -1,4 +1,3 @@
-import Logger from 'js-logger'
 import { Helpers, Modulation } from './Modulation'
 
 describe(`${Modulation.name}`, () => {
@@ -53,7 +52,6 @@ describe(`${Modulation.name}`, () => {
       expect(mod).toBe(undefined)
     })
     it(`should consume another queue if degreeList gets empty`, () => {
-      const spyLogger = jest.spyOn(Logger, 'info')
       const mod = Modulation.create(
         {
           key: 'C',
@@ -95,7 +93,6 @@ describe(`${Modulation.name}`, () => {
       mod!.next()
       expect(mod!.queue).not.toHaveLength(3)
       expect(mod!.queue).toHaveLength(2)
-      expect(spyLogger).toHaveBeenCalledWith(`empty degreeList. consume another queue...`)
 
       mod!.next()
       expect(mod!.queue).toHaveLength(1)

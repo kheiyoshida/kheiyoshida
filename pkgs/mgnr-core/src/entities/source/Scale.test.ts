@@ -19,7 +19,7 @@ describe(`${Scale.name}`, () => {
       })
       expect(scale.primaryPitches).toMatchObject([24, 26, 28, 29])
     })
-    it(`can set prefered degree in the key`, () => {
+    it(`can set preferred degree in the key`, () => {
       const scale = new Scale({
         key: 'D#',
         pref: 'omit27',

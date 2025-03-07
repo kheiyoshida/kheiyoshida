@@ -1,4 +1,3 @@
-import Logger from 'js-logger'
 import {
   normalizeRange,
   overrideDefault,
@@ -191,7 +190,7 @@ export class Sequence {
   private searchEmptyPosition(n = 0): number | undefined {
     const seqLen = this.length
     if (n > 50) {
-      Logger.warn(`There's no available position`)
+      // there's no available position
       return
     }
     const pos = randomIntInclusiveBetween(0, seqLen - 1)

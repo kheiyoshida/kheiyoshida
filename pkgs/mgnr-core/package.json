@@ -2,7 +2,7 @@
   "name": "@mgnr/core",
   "description": "mgnr core",
   "version": "0.0.3",
-  "main": "src/index.ts",
+  "main": "./dist/index.js",
   "files": [
     "src",
     "dist"
@@ -19,11 +19,7 @@
   "author": "Katsumi Yoshida",
   "license": "ISC",
   "dependencies": {
-    "js-logger": "^1.6.1",
     "utils": "workspace:^"
-  },
-  "peerDependencies": {
-    "js-logger": "^1.6.1"
   },
   "devDependencies": {
     "typescript": "^4.8.4"
