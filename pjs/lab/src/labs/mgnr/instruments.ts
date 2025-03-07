@@ -1,4 +1,4 @@
-import * as mgnr from 'mgnr-tone'
+import * as mgnr from '@mgnr/tone'
 import * as Tone from 'tone'
 
 export const monoSynth = new Tone.PolySynth(Tone.MonoSynth, {

@@ -54,8 +54,8 @@ importers:
   pjs/forest:
     dependencies:
       mgnr-tone:
-        specifier: workspace:@mgnr/tone@^
-        version: link:../../pkgs/mgnr-tone
+        specifier: npm:@mgnr/tone@^0.0.3
+        version: '@mgnr/tone@0.0.3(tone@14.7.77)'
       p5:
         specifier: ^1.9.0
         version: 1.9.0
@@ -105,15 +105,15 @@ importers:
 
   pjs/lab:
     dependencies:
+      '@mgnr/tone':
+        specifier: ^0.0.3
+        version: 0.0.3(tone@14.7.77)
       '@types/webmidi':
         specifier: ^2.0.10
         version: 2.0.10
       maze:
         specifier: workspace:^
         version: link:../maze
-      mgnr-tone:
-        specifier: workspace:@mgnr/tone@^
-        version: link:../../pkgs/mgnr-tone
       p5:
         specifier: ^1.9.0
         version: 1.9.0
@@ -305,8 +305,8 @@ importers:
   pjs/music:
     dependencies:
       mgnr-tone:
-        specifier: workspace:@mgnr/tone@^
-        version: link:../../pkgs/mgnr-tone
+        specifier: npm:@mgnr/tone@^0.0.3
+        version: '@mgnr/tone@0.0.3(tone@14.7.77)'
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -1262,20 +1262,24 @@ packages:
 
   '@effect/data@0.17.1':
     resolution: {integrity: sha512-QCYkLE5Y5Dm5Yax5R3GmW4ZIgTx7W+kSZ7yq5eqQ/mFWa8i4yxbLuu8cudqzdeZtRtTGZKlhDxfFfgVtMywXJg==}
+    deprecated: this package has been merged into the main effect package
 
   '@effect/io@0.38.0':
     resolution: {integrity: sha512-qlVC9ASxNC+L2NKX5qOV9672CE5wWizfwBSFaX2XLI7CC118WRvohCTIPQ52n50Bj5TmR20+na+U9C7e4VkqzA==}
+    deprecated: this package has been merged into the main effect package
     peerDependencies:
       '@effect/data': ^0.17.1
 
   '@effect/match@0.32.0':
     resolution: {integrity: sha512-04QfnIgCcMnnNbGxTv2xa9/7q1c5kgpsBodqTUZ8eX86A/EdE8Czz+JkVarG00/xE+nYhQLXOXCN9Zj+dtqVkQ==}
+    deprecated: this package has been merged into the main effect package
     peerDependencies:
       '@effect/data': ^0.17.1
       '@effect/schema': ^0.33.0
 
   '@effect/schema@0.33.1':
     resolution: {integrity: sha512-h+fQInui4q3we8fegAygL0Cs5B2DD/+oC3JWthOh8eLcbKkbYM9smCD/PsHuyQ+BaeWiSP5JdvREGlP4Sg+Ysw==}
+    deprecated: this package has been merged into the main effect package
     peerDependencies:
       '@effect/data': ^0.17.1
       '@effect/io': ^0.38.0
@@ -1575,6 +1579,7 @@ packages:
   '@humanwhocodes/config-array@0.11.13':
     resolution: {integrity: sha512-JSBDMiDKSzQVngfRjOdFXgFfklaXI4K9nLF49Auh21lmBWRLIK3+xTErTWD4KU54pb6coM6ESE7Awz/FNU3zgQ==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
 
   '@humanwhocodes/module-importer@1.0.1':
     resolution: {integrity: sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA==}
@@ -1582,6 +1587,7 @@ packages:
 
   '@humanwhocodes/object-schema@2.0.1':
     resolution: {integrity: sha512-dvuCeX5fC9dXgJn9t+X5atfmgQAzUOWqS1254Gh0m6i8wKd10ebXkfNKiRK+1GWi/yTvvLDHpoxLr0xxxeslWw==}
+    deprecated: Use @eslint/object-schema instead
 
   '@istanbuljs/load-nyc-config@1.1.0':
     resolution: {integrity: sha512-VjeHSlIzpv/NyD3N0YuHfXOPDIixcA1q2ZV98wsMqcYlPmv2n3Yb2lYP9XMElnaFVXg5A7YLTeLu6V84uQDjmQ==}
@@ -1711,6 +1717,11 @@ packages:
 
   '@leichtgewicht/ip-codec@2.0.4':
     resolution: {integrity: sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==}
+
+  '@mgnr/tone@0.0.3':
+    resolution: {integrity: sha512-KtT1lTnvsqAW+APHesTOIgmynpUyCHI9yIfNZVt3siD2N04TrfQy/H8F5+CBXWoUfWgb8KxiJnxoN6BGDbUP1w==}
+    peerDependencies:
+      tone: ^14.7.77
 
   '@next/env@14.2.10':
     resolution: {integrity: sha512-dZIu93Bf5LUtluBXIv4woQw2cZVZ2DJTjax5/5DOs3lzEOeKLy7GxRSr4caK9/SCPdaW6bCgpye6+n4Dh9oJPw==}
@@ -2351,6 +2362,7 @@ packages:
 
   acorn-import-assertions@1.9.0:
     resolution: {integrity: sha512-cmMwop9x+8KFhxvKrKfPYmN6/pKTYYHBqLa0DfvVZcKMJWNyWLnaqND7dx/qn66R7ewM1UX5XMaDVP5wlVTaVA==}
+    deprecated: package has been renamed to acorn-import-attributes
     peerDependencies:
       acorn: ^8
 
@@ -3203,11 +3215,13 @@ packages:
   eslint@8.32.0:
     resolution: {integrity: sha512-nETVXpnthqKPFyuY2FNjz/bEd6nbosRgKbkgS/y1C7LJop96gYHWpiguLecMHQ2XCPxn77DS0P+68WzG6vkZSQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   eslint@8.55.0:
     resolution: {integrity: sha512-iyUUAM0PCKj5QpwGfmCAG9XXbZCWsqP/eWAWrG/W0umvjuLRBECwSFdt+rCntju0xEH7teIABPwXpahftIaTdA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   espree@9.6.1:
@@ -3433,9 +3447,11 @@ packages:
 
   glob@7.1.7:
     resolution: {integrity: sha512-OvD9ENzPLbegENnYP5UUfJIirTg4+XwMWGaQfQTY0JenxNvvIKP3U3/tAQSPIu/lHxXYSZmpXlUHeqAIdKzBLQ==}
+    deprecated: Glob versions prior to v9 are no longer supported
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
+    deprecated: Glob versions prior to v9 are no longer supported
 
   globals@11.12.0:
     resolution: {integrity: sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==}
@@ -3598,6 +3614,7 @@ packages:
 
   inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
+    deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
 
   inherits@2.0.3:
     resolution: {integrity: sha512-x00IRNXNy63jwGkJmzPigoySHbaqpNuzKbBOmzK+g2OdZpQ9w+sxCN+VSB3ja7IAge2OP2qpfxTjeNcyjmW1uw==}
@@ -4619,6 +4636,7 @@ packages:
 
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rollup@4.12.0:
@@ -6805,6 +6823,12 @@ snapshots:
       pkg-prebuilds: 0.2.1
 
   '@leichtgewicht/ip-codec@2.0.4': {}
+
+  '@mgnr/tone@0.0.3(tone@14.7.77)':
+    dependencies:
+      mgnr-core: link:pkgs/mgnr-core
+      tone: 14.7.77
+      utils: link:pkgs/utils
 
   '@next/env@14.2.10': {}
 

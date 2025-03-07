@@ -1,9 +1,9 @@
-import * as mgnr from 'mgnr-tone'
+import * as mgnr from '@mgnr/tone'
+import { SequenceGenerator } from '@mgnr/tone'
 import * as Tone from 'tone'
 import { fireByRate, randomIntInclusiveBetween } from 'utils'
 import { compsoiteSynth, drumMachine } from './instruments'
 import { dnb } from './sequence'
-import { SequenceGenerator } from 'mgnr-tone'
 
 const mixer = mgnr.getMixer()
 

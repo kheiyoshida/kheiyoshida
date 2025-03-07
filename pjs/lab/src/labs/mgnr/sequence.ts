@@ -1,4 +1,4 @@
-  import { SequenceNoteMap, makeCreateNotes, mergeNoteMap } from 'mgnr-tone'
+  import { SequenceNoteMap, makeCreateNotes, mergeNoteMap } from '@mgnr/tone'
 
 const n = makeCreateNotes()
 
