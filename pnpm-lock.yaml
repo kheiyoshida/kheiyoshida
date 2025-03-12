@@ -54,8 +54,8 @@ importers:
   pjs/forest:
     dependencies:
       mgnr-tone:
-        specifier: npm:@mgnr/tone@^0.0.3
-        version: '@mgnr/tone@0.0.3(tone@14.7.77)'
+        specifier: npm:@mgnr/tone@^0.0.5
+        version: '@mgnr/tone@0.0.5(tone@14.7.77)'
       p5:
         specifier: ^1.9.0
         version: 1.9.0
@@ -305,8 +305,8 @@ importers:
   pjs/music:
     dependencies:
       mgnr-tone:
-        specifier: npm:@mgnr/tone@^0.0.3
-        version: '@mgnr/tone@0.0.3(tone@14.7.77)'
+        specifier: npm:@mgnr/tone@^0.0.5
+        version: '@mgnr/tone@0.0.5(tone@14.7.77)'
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -1718,8 +1718,16 @@ packages:
   '@leichtgewicht/ip-codec@2.0.4':
     resolution: {integrity: sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==}
 
+  '@mgnr/core@0.0.7':
+    resolution: {integrity: sha512-QYcqliE3/jJBmUUQ4/V5uLn+7jkGqxh868a+JwTWLZP8IdQbNhNUSK900/Dt+9599ifuYRVHxHfGI3Uwc+zO3A==}
+
   '@mgnr/tone@0.0.3':
     resolution: {integrity: sha512-KtT1lTnvsqAW+APHesTOIgmynpUyCHI9yIfNZVt3siD2N04TrfQy/H8F5+CBXWoUfWgb8KxiJnxoN6BGDbUP1w==}
+    peerDependencies:
+      tone: ^14.7.77
+
+  '@mgnr/tone@0.0.5':
+    resolution: {integrity: sha512-RUPbXkqAut6Ubzba7zc9Mlojy9XOAxo/pU1ZeJo9MDWyzHLczbxH4dcNXHcz3e5JXzg0HI2wn5pVLAsIW+sTrQ==}
     peerDependencies:
       tone: ^14.7.77
 
@@ -6824,11 +6832,18 @@ snapshots:
 
   '@leichtgewicht/ip-codec@2.0.4': {}
 
+  '@mgnr/core@0.0.7': {}
+
   '@mgnr/tone@0.0.3(tone@14.7.77)':
     dependencies:
       mgnr-core: link:pkgs/mgnr-core
       tone: 14.7.77
       utils: link:pkgs/utils
+
+  '@mgnr/tone@0.0.5(tone@14.7.77)':
+    dependencies:
+      mgnr-core: '@mgnr/core@0.0.7'
+      tone: 14.7.77
 
   '@next/env@14.2.10': {}
 
