@@ -1,5 +1,5 @@
 import { defaultKick } from '../presets'
-import * as mgnr from 'mgnr-tone/src'
+import * as mgnr from 'mgnr-tone'
 import { randomFloatBetween } from 'utils'
 import { ForestSequenceGenerator } from '../generator.ts'
 

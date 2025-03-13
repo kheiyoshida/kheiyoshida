@@ -1,6 +1,6 @@
+import * as mgnr from 'mgnr-tone'
 import { DEGREES, nthDegreeTone, pickRandomPitchName, SCALES, ScaleType } from 'mgnr-tone'
 import { filterDelay, reverb } from './presets'
-import * as mgnr from 'mgnr-tone/src'
 import { Transport } from 'tone'
 import { randomIntInclusiveBetween, randomItemFromArray } from 'utils'
 import { setupExtraSynCh } from './inst/exSyn'

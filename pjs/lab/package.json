@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@types/webmidi": "^2.0.10",
-    "@mgnr/tone": "^0.0.3",
+    "@mgnr/tone": "^0.0.6",
     "p5": "^1.9.0",
     "p5utils": "workspace:^",
     "react": "18.2.0",

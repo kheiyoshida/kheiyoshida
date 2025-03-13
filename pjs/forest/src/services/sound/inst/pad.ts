@@ -1,6 +1,6 @@
 import { Scale } from 'mgnr-tone'
 import { defaultPad } from '../presets'
-import * as mgnr from 'mgnr-tone/src'
+import * as mgnr from 'mgnr-tone'
 import { randomFloatBetween, randomIntInclusiveBetween } from 'utils'
 import { ForestSequenceGenerator } from '../generator.ts'
 

@@ -10,7 +10,7 @@
     "test": "cd ../.. && jest --selectProjects forest"
   },
   "dependencies": {
-    "mgnr-tone": "npm:@mgnr/tone@^0.0.5",
+    "mgnr-tone": "npm:@mgnr/tone@^0.0.7",
     "p5": "^1.9.0",
     "p5utils": "workspace:^",
     "react": "18.2.0",

@@ -6,8 +6,8 @@
     "stream": "ts-node src/stream.ts"
   },
   "dependencies": {
-    "mgnr-core": "workspace:@mgnr/core@^",
-    "mgnr-midi": "workspace:@mgnr/midi@^",
+    "mgnr-core": "link:../../../mgnr/pkgs/mgnr-core",
+    "mgnr-midi": "link:../../../mgnr/pkgs/mgnr-midi",
     "utils": "workspace:^",
     "stream": "workspace:^"
   },
