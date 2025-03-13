@@ -1,5 +1,0 @@
-export { Scale } from './Scale'
-export type { ScaleConf } from './Scale'
-export { SCALES } from './scaleTypes'
-export type { ScaleType } from './scaleTypes'
-export * from './Source'
