@@ -1,12 +1,14 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "NodeNext",
     "rootDir": "src",
     "baseUrl": "src",
     "outDir": "dist",
     "isolatedModules": false,
-    "downlevelIteration": true,    
-    "target": "ES6",
+    "downlevelIteration": true,
+    "target": "esnext",
     "types": ["node"]
   }
 }

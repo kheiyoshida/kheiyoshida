@@ -1,0 +1,16 @@
+{
+  "name": "mgnr-cli",
+  "type": "module",
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@mgnr/cli": "^0.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.4",
+    "tsx": "^4.19.3",
+    "typescript": "^4.8.4"
+  }
+}
