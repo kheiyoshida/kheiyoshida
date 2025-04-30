@@ -5,6 +5,30 @@ const { wasted, shinjuku, forest, tp4, maze, medwEP, surfaceWater, regrets } = C
 
 const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
   {
+    title: 'mgnr',
+    date: '2023-',
+    contents: [
+      {
+        embed: [
+          `<iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/5oNRNsfQMAU?si=TzKii9WX0zxE9t-l"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
+        ></iframe>`,
+        ],
+      },
+      {
+        text: `<a href="https://mgnr-lib.vercel.app">documentation page</a>`,
+      },
+      {
+        text: `mgnr is a generative music library for javascript. I've been developing the package as I develop other projects including maze, forest, and other music works`,
+      },
+    ],
+  },
+  {
     title: 'MAZE',
     date: maze.date,
     contents: [
@@ -90,18 +114,14 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
       ...forest.caption.map((text) => ({ text })),
       {
         image: {
-          images: forest.screenshots
-            .slice(0, 4)
-            .map((path) => ({ path, link: worksLink(forest.title) })),
+          images: forest.screenshots.slice(0, 4).map((path) => ({ path, link: worksLink(forest.title) })),
           layout: 'grid',
         },
       },
       ...forest.comments.map((text) => ({ text })),
       {
         image: {
-          images: forest.screenshots
-            .slice(4)
-            .map((path) => ({ path, link: worksLink(forest.title) })),
+          images: forest.screenshots.slice(4).map((path) => ({ path, link: worksLink(forest.title) })),
           layout: 'grid',
         },
       },
