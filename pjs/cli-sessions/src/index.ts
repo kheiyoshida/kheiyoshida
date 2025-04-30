@@ -9,4 +9,9 @@ if (!sessionId) {
 }
 
 const sessionSetup = (await import(`sessions/${sessionId}`)).default
-startReplSession(sessionSetup)
+
+try {
+  startReplSession(sessionSetup)
+} catch (e) {
+  console.error(e)
+}

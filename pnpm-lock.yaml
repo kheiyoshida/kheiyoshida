@@ -1828,8 +1828,8 @@ packages:
   '@mgnr/core@0.1.0':
     resolution: {integrity: sha512-mf0rMUS3ppSP/L1btvk7f+n/JC0ZulGQltoiJ3NuN8vkQgZm7BaAVT3SVakEiVSOjbky7M/KMPyOyFOspNc6PA==}
 
-  '@mgnr/midi@0.0.1':
-    resolution: {integrity: sha512-tx0OduXa15fFdEoHlj8QqlU73Fa+01KntipWKwGDbcnaxMZ2vIWYMTsu7WFwQ2Hm76YfAkOz9BearwgDC6RdzQ==}
+  '@mgnr/midi@0.0.2':
+    resolution: {integrity: sha512-dqgcgaUvGkfAV3idRcCA0joup9BiCotge3pluUOejjfFrO9toJ5q2j1zfK4aj6clSkX3DjEkVy5uC2SZ/gLJ3Q==}
 
   '@mgnr/tone@0.0.6':
     resolution: {integrity: sha512-IhPyXRqfU6jU6pcz+qlJ52V9WOdSf+3b/desar5/xoQ4KQGrWJrhYoMLU0Ex6AHhha96KQYbALCSzTVrHPtHLA==}
@@ -7248,7 +7248,7 @@ snapshots:
     dependencies:
       cors: 2.8.5
       express: 5.1.0
-      mgnr-midi: '@mgnr/midi@0.0.1'
+      mgnr-midi: '@mgnr/midi@0.0.2'
       table-layout: 4.1.1
     transitivePeerDependencies:
       - supports-color
@@ -7257,7 +7257,7 @@ snapshots:
 
   '@mgnr/core@0.1.0': {}
 
-  '@mgnr/midi@0.0.1':
+  '@mgnr/midi@0.0.2':
     dependencies:
       easymidi: 3.1.0
       mgnr-core: '@mgnr/core@0.1.0'

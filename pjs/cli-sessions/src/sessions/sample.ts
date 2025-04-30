@@ -1,4 +1,8 @@
 import * as mgnr from '@mgnr/cli'
+import * as callbacks from '../utils/callbacks.js'
+import { mutateInPlace, resetNotes } from '../utils/callbacks.js'
+
+mgnr.Scheduler.multiEventsBufferInterval = 3
 
 const midiPort = new mgnr.MidiPort('Logic Pro Virtual In')
 midiPort.configureExitHandlers()
@@ -8,14 +12,14 @@ const ch2 = new mgnr.MidiChannel(midiPort, 2)
 const outlet1 = new mgnr.MidiChOutlet(ch1)
 const outlet2 = new mgnr.MidiChOutlet(ch2)
 
-const scale1 = new mgnr.CliScale('C', 'major', { min: 48, max: 80 })
-const scale2 = new mgnr.CliScale('C', 'omit25', { min: 32, max: 72 })
+const scale1 = new mgnr.CliScale('D#', 'omit25', { min: 48, max: 80 })
+const scale2 = new mgnr.CliScale('D#', 'omit25', { min: 32, max: 72 })
 
 const generator1 = new mgnr.CliSequenceGenerator({
   scale: scale1,
   sequence: {
     length: 10,
-    density: 0.4,
+    density: 0.3,
     division: 16,
   },
   note: {
@@ -29,13 +33,16 @@ const generator1 = new mgnr.CliSequenceGenerator({
 const generator2 = new mgnr.CliSequenceGenerator({
   scale: scale1,
   sequence: {
-    length: 6,
-    density: 0.5,
+    length: 8,
+    density: 0.25,
     division: 16,
     polyphony: 'mono',
   },
   note: {
-    duration: 1,
+    duration: {
+      min: 1,
+      max: 2,
+    },
   },
 })
 
@@ -54,24 +61,24 @@ const port1 = outlet1.assignGenerator(generator1)
 const port2 = outlet1.assignGenerator(generator2)
 const port3 = outlet2.assignGenerator(generator3)
 
-port1.loopSequence(2).onEnded((g) => g.mutate({ rate: 0.3, strategy: 'inPlace' }))
-port2.loopSequence(2).onEnded((g) => g.mutate({ rate: 0.3, strategy: 'inPlace' }))
-port3
-  .loopSequence(2)
-  .onElapsed((g) => g.mutate({ rate: 0.3, strategy: 'randomize' }))
-  .onEnded((g) => g.resetNotes())
+// port1.loopSequence(2).onEnded(mutateInPlace(0.3))
+// port2.loopSequence(2).onEnded(mutateInPlace(0.3))
+port3.loopSequence(2).onElapsed(mutateInPlace(0.3)).onEnded(resetNotes)
 
 export default function setup() {
   mgnr.Time.bpm = 96
-  mgnr.Scheduler.get().start()
+  const start = () => mgnr.Scheduler.get().start()
 
   scale1.logName = 's1'
+  scale2.logName = 's2'
   generator1.logName = 'g1'
   generator2.logName = 'g2'
   generator3.logName = 'g3'
   void mgnr.setupLogStream([generator1, generator2, generator3], [scale1, scale2])
 
   return {
+    ...callbacks,
+    start,
     g1: generator1,
     g2: generator2,
     g3: generator3,
