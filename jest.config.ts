@@ -58,27 +58,12 @@ const JestConfig: Config = {
       displayName: 'forest',
       rootDir: './pjs/forest',
     },
+    {
+      ...RootConfig,
+      displayName: 'midi-viz',
+      rootDir: './pjs/midi-viz',
+    },
     // pkgs
-    {
-      ...RootConfig,
-      displayName: 'mgnr-core',
-      rootDir: './pkgs/mgnr-core',
-    },
-    {
-      ...RootConfig,
-      displayName: 'mgnr-midi',
-      rootDir: './pkgs/mgnr-midi',
-    },
-    {
-      ...RootConfig,
-      displayName: 'mgnr-tone',
-      rootDir: './pkgs/mgnr-tone',
-    },
-    {
-      ...RootConfig,
-      displayName: 'stream',
-      rootDir: './pkgs/stream',
-    },
     {
       ...RootConfig,
       displayName: 'utils',
