@@ -1,7 +1,10 @@
 import { main as sample } from './pjs/sample'
+import { main as pj1 } from './pjs/1'
 
 const pjs: Record<string, () => Promise<void>> = {
-  sample
+  // sample,
+  pj1
 }
 
-pjs['sample']()
+pjs['pj1']()
+// pjs['sample']()

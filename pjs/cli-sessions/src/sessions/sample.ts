@@ -9,8 +9,8 @@ midiPort.configureExitHandlers()
 const ch1 = new mgnr.MidiChannel(midiPort, 1)
 const ch2 = new mgnr.MidiChannel(midiPort, 2)
 
-const outlet1 = new mgnr.MidiChOutlet(ch1)
-const outlet2 = new mgnr.MidiChOutlet(ch2)
+const outlet1 = new mgnr.CliMidiChOutlet(ch1)
+const outlet2 = new mgnr.CliMidiChOutlet(ch2)
 
 const scale1 = new mgnr.CliScale('D#', 'omit25', { min: 48, max: 80 })
 const scale2 = new mgnr.CliScale('D#', 'omit25', { min: 32, max: 72 })
@@ -74,7 +74,7 @@ export default function setup() {
   generator1.logName = 'g1'
   generator2.logName = 'g2'
   generator3.logName = 'g3'
-  void mgnr.setupLogStream([generator1, generator2, generator3], [scale1, scale2])
+  void mgnr.setupLogStream([port1, port2, port3], [scale1, scale2])
 
   return {
     ...callbacks,
