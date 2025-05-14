@@ -11,6 +11,6 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "@mgnr/cli": "^0.1.3"
+    "@mgnr/cli": "^0.1.4"
   }
 }
