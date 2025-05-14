@@ -54,8 +54,8 @@ importers:
   pjs/cli-sessions:
     dependencies:
       '@mgnr/cli':
-        specifier: ^0.1.3
-        version: 0.1.3
+        specifier: link:/Users/yozibak/khei/mgnr/pkgs/mgnr-cli
+        version: link:../../../mgnr/pkgs/mgnr-cli
     devDependencies:
       '@types/node':
         specifier: ^20.11.4
@@ -1797,26 +1797,11 @@ packages:
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
 
-  '@julusian/midi@3.6.1':
-    resolution: {integrity: sha512-sC6tTMAMZsHOQILAv/R0On5tKKhzBQUjdyYWzh9l0UQeNry12CFIyRWK1Mep5xCHWCTUB0w4gxngpciA5PgN/Q==}
-    engines: {node: '>=14.15'}
-
   '@leichtgewicht/ip-codec@2.0.4':
     resolution: {integrity: sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==}
 
-  '@mgnr/cli@0.1.3':
-    resolution: {integrity: sha512-gvj605kE02BlaoYj1CeowptKT70ROlSbCljdkIPn9FEf22JtiRkVhyO49WkIzukfUNZR8BRS69S8gyfWUTRf4A==}
-    engines: {node: '>=18.0.0'}
-    hasBin: true
-
   '@mgnr/core@0.0.8':
     resolution: {integrity: sha512-aDQSJQcc/o4JKc5kAWlFbNKgcwD9lb9XoQhcauYss5YMCbl0DN0b4jGUo/2WC+DS52F85k9tNaDKPJLTkTHIqA==}
-
-  '@mgnr/core@0.1.0':
-    resolution: {integrity: sha512-mf0rMUS3ppSP/L1btvk7f+n/JC0ZulGQltoiJ3NuN8vkQgZm7BaAVT3SVakEiVSOjbky7M/KMPyOyFOspNc6PA==}
-
-  '@mgnr/midi@0.0.3':
-    resolution: {integrity: sha512-D4FKFpeb7EhOZLASGjcqtSWwIvfbB4KCjIwR7BTeFm3WXIbJtaqc0/Dzz2+gjoLAxXsEQyMcgTIh4ry8Xrh9tw==}
 
   '@mgnr/tone@0.0.6':
     resolution: {integrity: sha512-IhPyXRqfU6jU6pcz+qlJ52V9WOdSf+3b/desar5/xoQ4KQGrWJrhYoMLU0Ex6AHhha96KQYbALCSzTVrHPtHLA==}
@@ -2650,10 +2635,6 @@ packages:
   aria-query@5.3.0:
     resolution: {integrity: sha512-b0P0sZPKtyu8HkeRAfCq0IfURZK+SuwMjY1UXGBU27wpAiTwQAIlq56IbIO+ytk/JjS1fMR14ee5WBBfKi5J6A==}
 
-  array-back@6.2.2:
-    resolution: {integrity: sha512-gUAZ7HPyb4SJczXAMUXMGAvI976JoK3qEx9v1FTmeYuJj0IBiaKttG1ydtGKdkfqWkIkouke7nG8ufGy77+Cvw==}
-    engines: {node: '>=12.17'}
-
   array-buffer-byte-length@1.0.0:
     resolution: {integrity: sha512-LPuwb2P+NrQw3XhxGc36+XSvuBPopovXYTR9Ew++Du9Yb/bx5AzBfrIsBoj0EZUifjQU+sHL21sseZ3jerWO/A==}
 
@@ -3167,10 +3148,6 @@ packages:
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
     engines: {node: '>= 0.4'}
-
-  easymidi@3.1.0:
-    resolution: {integrity: sha512-bxEwfPysM1L+SO/qwHaYu9dvTxw2QHFjGV9EMzqGQJbhEP2MupKpg6eJMkj+uoXN0Ep1JhVPLbNLPmt3UkZRTw==}
-    engines: {node: '>=14.15'}
 
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
@@ -4453,9 +4430,6 @@ packages:
       sass:
         optional: true
 
-  node-addon-api@6.1.0:
-    resolution: {integrity: sha512-+eawOlIgy680F0kBzPUNFhMZGtJ1YmqM6l4+Crf4IkImjYrO/mqPwRMh352g23uIaQKFItcQ64I7KMaJxHgAVA==}
-
   node-forge@1.3.1:
     resolution: {integrity: sha512-dPEtOeMvF9VMcYV/1Wb8CPoVAXtp6MKMlcbAt4ddqmGqUJ6fQZFXkNZNkNlfevtNkGtaSoXf/vNNNSvgrdXwtA==}
     engines: {node: '>= 6.13.0'}
@@ -4649,11 +4623,6 @@ packages:
   pkg-dir@7.0.0:
     resolution: {integrity: sha512-Ie9z/WINcxxLp27BKOCHGde4ITq9UklYKDzVo1nhk5sqGEXU3FpkwP5GM2voTGJkGd9B3Otl+Q4uwSOeSUtOBA==}
     engines: {node: '>=14.16'}
-
-  pkg-prebuilds@1.0.0:
-    resolution: {integrity: sha512-D9wlkXZCmjxj2kBHTw3fGSyjoahr33breGBoJcoezpi7ouYS59DJVOHMZ+dgqacSrZiJo4qtkXxLQTE+BqXJmQ==}
-    engines: {node: '>= 14.15.0'}
-    hasBin: true
 
   postcss@8.4.31:
     resolution: {integrity: sha512-PS08Iboia9mts/2ygV3eLpY5ghnUcfLV/EXTOW1E2qYxJKGGBUtNjN76FYHnMs36RmARn41bC0AZmn+rR0OVpQ==}
@@ -5159,10 +5128,6 @@ packages:
     resolution: {integrity: sha512-WoUtm+ZLmWUvy0cLJy8ds/smVRH3ivI6iANcGTPrsvareCc4SmRVMvr+TwjZyFm0FDGmEfMVsAX7z16+yxL6bQ==}
     engines: {node: '>=16'}
     hasBin: true
-
-  table-layout@4.1.1:
-    resolution: {integrity: sha512-iK5/YhZxq5GO5z8wb0bY1317uDF3Zjpha0QFFLA8/trAoiLbQD0HUbMesEaxyzUgDxi2QlcbM8IvqOlEjgoXBA==}
-    engines: {node: '>=12.17'}
 
   tapable@2.2.1:
     resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
@@ -5693,10 +5658,6 @@ packages:
 
   wildcard@2.0.1:
     resolution: {integrity: sha512-CC1bOL87PIWSBhDcTrdeLo6eGT7mCFtrg0uIJtqJUFyK+eJnzl8A1niH56uu7KMa5XFrtiV+AQuHO3n7DsHnLQ==}
-
-  wordwrapjs@5.1.0:
-    resolution: {integrity: sha512-JNjcULU2e4KJwUNv6CHgI46UvDGitb6dGryHajXTDiLgg1/RiGoPSDw4kZfYnwGtEXf2ZMeIewDQgFGzkCB2Sg==}
-    engines: {node: '>=12.17'}
 
   wrap-ansi@7.0.0:
     resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}
@@ -7031,26 +6992,9 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@julusian/midi@3.6.1':
-    dependencies:
-      node-addon-api: 6.1.0
-      pkg-prebuilds: 1.0.0
-
   '@leichtgewicht/ip-codec@2.0.4': {}
 
-  '@mgnr/cli@0.1.3':
-    dependencies:
-      mgnr-midi: '@mgnr/midi@0.0.3'
-      table-layout: 4.1.1
-
   '@mgnr/core@0.0.8': {}
-
-  '@mgnr/core@0.1.0': {}
-
-  '@mgnr/midi@0.0.3':
-    dependencies:
-      easymidi: 3.1.0
-      mgnr-core: '@mgnr/core@0.1.0'
 
   '@mgnr/tone@0.0.6(tone@14.7.77)':
     dependencies:
@@ -7927,8 +7871,6 @@ snapshots:
     dependencies:
       dequal: 2.0.3
 
-  array-back@6.2.2: {}
-
   array-buffer-byte-length@1.0.0:
     dependencies:
       call-bind: 1.0.5
@@ -8473,10 +8415,6 @@ snapshots:
       call-bind-apply-helpers: 1.0.2
       es-errors: 1.3.0
       gopd: 1.2.0
-
-  easymidi@3.1.0:
-    dependencies:
-      '@julusian/midi': 3.6.1
 
   ee-first@1.1.1: {}
 
@@ -10238,8 +10176,6 @@ snapshots:
       - '@babel/core'
       - babel-plugin-macros
 
-  node-addon-api@6.1.0: {}
-
   node-forge@1.3.1: {}
 
   node-int64@0.4.0: {}
@@ -10430,10 +10366,6 @@ snapshots:
   pkg-dir@7.0.0:
     dependencies:
       find-up: 6.3.0
-
-  pkg-prebuilds@1.0.0:
-    dependencies:
-      yargs: 17.7.2
 
   postcss@8.4.31:
     dependencies:
@@ -11074,11 +11006,6 @@ snapshots:
       tightrope: 0.1.0
       ts-toolbelt: 9.6.0
 
-  table-layout@4.1.1:
-    dependencies:
-      array-back: 6.2.2
-      wordwrapjs: 5.1.0
-
   tapable@2.2.1: {}
 
   terser-webpack-plugin@5.3.14(webpack@5.93.0):
@@ -11638,8 +11565,6 @@ snapshots:
       isexe: 2.0.0
 
   wildcard@2.0.1: {}
-
-  wordwrapjs@5.1.0: {}
 
   wrap-ansi@7.0.0:
     dependencies:

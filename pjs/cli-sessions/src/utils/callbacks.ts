@@ -23,3 +23,5 @@ export const shrink = (amount: number) => (g: SequenceGenerator) => {
 
 export const mutateInPlace = (rate: number) => (g: SequenceGenerator) =>
   g.mutate({ rate, strategy: 'inPlace' })
+
+export const rand = (rate: number) => (g: SequenceGenerator) => g.mutate({ rate, strategy: 'randomize' })

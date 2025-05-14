@@ -23,7 +23,7 @@ export const main = async () => {
   renderer.setClearColor(bgColor)
 
   // point setup
-  const pointSpeed = 2
+  const pointSpeed = 3
   ChainablePoint.decreaseSpeed = (m) => {
     m.setLength(Math.max(0.1, m.length() / 1.02))
   }
@@ -53,10 +53,15 @@ export const main = async () => {
 
   const allMovingPoints = chains.flatMap((chain) => chain.points.map((p) => p))
 
+  let pitchOffset = 0
+  setInterval(() => {
+    pitchOffset += 1
+  }, 10_000)
   const midiCallback = (note: MidiNote, speed: number): void => {
-    const chainNum = note.pitch % numOfChains
+    const pitch = note.pitch + pitchOffset
+    const chainNum = (pitch) % numOfChains
     const chain = chains[chainNum]
-    const point = chain.points[note.pitch % chain.points.length]
+    const point = chain.points[pitch % chain.points.length]
     point.movement = getRandomSpeedVector(speed)
     point.sortFrag = speed
   }
@@ -74,8 +79,10 @@ export const main = async () => {
 
   ChainablePoint.pullThresholdDistance = 28
 
-  // // reference
-  // const ballGeo = new SphereGeometry(200)
+
+
+  // reference
+  // const ballGeo = new SphereGeometry(300)
   // const ballMat = new T.MeshBasicMaterial({ color: new T.Color(1, 0, 0), opacity: 0.5, transparent: true })
   // const ballMesh = new T.Mesh(ballGeo, ballMat)
   // scene.add(ballMesh)
@@ -85,10 +92,11 @@ export const main = async () => {
     requestAnimationFrame(animate)
 
     allMovingPoints.forEach((p) => p.move())
-    allMovingPoints.sort((p) => p.sortFrag).forEach((p) => p.checkChainReaction())
+    allMovingPoints.sort((a, b) => b.sortFrag - a.sortFrag)
+    allMovingPoints.forEach((p) => p.checkChainReaction())
     chains.forEach((chain) => chain.update())
 
-    constrainPointPosition(300, allMovingPoints)
+    constrainPointPosition(200, allMovingPoints)
 
     const timeComponent = performance.now() * 0.007
     camera.position.set(

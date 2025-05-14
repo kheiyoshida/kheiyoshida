@@ -2,7 +2,7 @@ import * as mgnr from '@mgnr/cli'
 import * as callbacks from '../utils/callbacks.js'
 import { mutateInPlace, resetNotes } from '../utils/callbacks.js'
 
-mgnr.Scheduler.multiEventsBufferInterval = 3
+mgnr.Scheduler.multiEventsBufferInterval = 5
 
 const midiPort = new mgnr.MidiPort('Logic Pro Virtual In')
 midiPort.configureExitHandlers()

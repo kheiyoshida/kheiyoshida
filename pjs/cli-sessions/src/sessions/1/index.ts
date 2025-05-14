@@ -1,34 +1,33 @@
 import * as mgnr from '@mgnr/cli'
 import * as callbacks from '../../utils/callbacks.js'
 import { padChOutlet, synthChOutlet, drumChOutlet } from './channels.js'
+import { mutateInPlace, rand } from '../../utils/callbacks.js'
+import { beat } from './patterns.js'
 
-const scale1 = new mgnr.CliScale('D', 'omit25', { min: 52, max: 80 })
-const scale2 = new mgnr.CliScale('D', 'omit27', { min: 32, max: 72 })
+mgnr.Scheduler.multiEventsBufferInterval = 5
+
+const key = mgnr.pickRandomPitchName()
+const scale1 = new mgnr.CliScale(key, 'omit25', { min: 52, max: 80 })
+const scale2 = new mgnr.CliScale(key, 'omit27', { min: 32, max: 72 })
 const scale3 = new mgnr.CliScale([60, 62, 66])
 
 const generator1 = new mgnr.CliSequenceGenerator({
   scale: scale1,
   sequence: {
-    length: 6,
+    length: 8,
     density: 0.5,
     division: 16,
     polyphony: 'mono',
-  },
-  note: {
-    duration: 1,
   },
 })
 
 const generator2 = new mgnr.CliSequenceGenerator({
   scale: scale1,
   sequence: {
-    length: 8,
-    density: 0.25,
+    length: 6,
+    density: 0.5,
     division: 16,
     polyphony: 'mono',
-  },
-  note: {
-    duration: 1,
   },
 })
 
@@ -47,19 +46,24 @@ const generator4 = new mgnr.CliSequenceGenerator({
   sequence: {
     length: 16,
     density: 0.4,
-  }
+    division: 16,
+  },
 })
 
 const generator5 = new mgnr.CliSequenceGenerator({
   scale: scale3,
   sequence: {
     length: 6,
-    division: 1,
+    division: 16,
     density: 0.5,
-  }
+  },
 })
 
-;[generator1, generator2, generator3, generator4, generator5].forEach((g) => g.constructNotes())
+// generator1.constructNotes()
+// generator2.constructNotes()
+generator3.constructNotes()
+generator4.constructNotes(beat)
+// generator5.constructNotes()
 
 const port1 = synthChOutlet.assignGenerator(generator1)
 const port2 = synthChOutlet.assignGenerator(generator2)
@@ -69,11 +73,24 @@ const port3 = padChOutlet.assignGenerator(generator3)
 const port4 = drumChOutlet.assignGenerator(generator4)
 const port5 = drumChOutlet.assignGenerator(generator5)
 
-port1.loopSequence(2).onEnded(callbacks.mutateInPlace(0.3))
-port2.loopSequence(2).onEnded(callbacks.mutateInPlace(0.3))
-port3.loopSequence(2).onElapsed(callbacks.mutateInPlace(0.3)).onEnded(callbacks.resetNotes)
-port4.loopSequence(2).onEnded(callbacks.mutateInPlace(0.3))
-port5.loopSequence(2).onEnded(callbacks.mutateInPlace(0.3))
+port1.loopSequence(4) //.onEnded(callbacks.mutateInPlace(0.3))
+port2.loopSequence(4)
+port3.loopSequence(4).onElapsed(callbacks.mutateInPlace(0.3)).onEnded(callbacks.resetNotes)
+port4.loopSequence(4).onEnded(callbacks.mutateInPlace(0.3))
+port5.loopSequence(4).onEnded(callbacks.mutateInPlace(0.3))
+
+const modulate =
+  (key = mgnr.pickRandomPitchName(), stages = 4) =>
+  () => {
+    scale1.modulate({ key }, stages)
+    scale2.modulate({ key }, stages)
+  }
+
+const actions = {
+  ip3: mutateInPlace(0.3),
+  rnd3: rand(0.3),
+  mod: modulate,
+}
 
 export default function setup() {
   const start = () => mgnr.Scheduler.get().start()
@@ -98,7 +115,9 @@ export default function setup() {
 
   return {
     ...callbacks,
+    ...actions,
     start,
+    beat,
     g1: generator1,
     g2: generator2,
     g3: generator3,
