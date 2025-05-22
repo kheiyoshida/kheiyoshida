@@ -1,14 +1,14 @@
+import { setupAnalogInput } from '../../utils/analogInput.js'
 import * as mgnr from '@mgnr/cli'
 import * as callbacks from '../../utils/callbacks.js'
 import { padChOutlet, synthChOutlet, drumChOutlet } from './channels.js'
-import { mutateInPlace, rand } from '../../utils/callbacks.js'
-import { beat } from './patterns.js'
+import { mutateInPlace, rand, resetNotes } from '../../utils/callbacks.js'
 
-mgnr.Scheduler.multiEventsBufferInterval = 3
+mgnr.Scheduler.multiEventsBufferInterval = 5
 
 const key = mgnr.pickRandomPitchName()
-const scale1 = new mgnr.CliScale('D#', 'omit25', { min: 52, max: 76 })
-const scale2 = new mgnr.CliScale('D#', 'omit27', { min: 32, max: 68 })
+const scale1 = new mgnr.CliScale(key, 'omit25', { min: 52, max: 80 })
+const scale2 = new mgnr.CliScale(key, 'omit27', { min: 32, max: 72 })
 const scale3 = new mgnr.CliScale([60, 62, 66])
 
 const generator1 = new mgnr.CliSequenceGenerator({
@@ -25,7 +25,7 @@ const generator2 = new mgnr.CliSequenceGenerator({
   scale: scale1,
   sequence: {
     length: 6,
-    density: 0.4,
+    density: 0.5,
     division: 16,
     polyphony: 'mono',
   },
@@ -35,16 +35,10 @@ const generator3 = new mgnr.CliSequenceGenerator({
   scale: scale2,
   sequence: {
     length: 4,
-    division: 2,
+    division: 1,
     density: 1,
     polyphony: 'poly',
   },
-  note: {
-    duration: {
-      min: 1,
-      max: 2,
-    },
-  }
 })
 
 const generator4 = new mgnr.CliSequenceGenerator({
@@ -61,29 +55,37 @@ const generator5 = new mgnr.CliSequenceGenerator({
   sequence: {
     length: 6,
     division: 16,
-    density: 0.4,
+    density: 0.5,
   },
 })
 
 generator1.constructNotes()
 generator2.constructNotes()
 generator3.constructNotes()
-generator4.constructNotes(beat)
+generator4.constructNotes()
 generator5.constructNotes()
 
 const port1 = synthChOutlet.assignGenerator(generator1)
 const port2 = synthChOutlet.assignGenerator(generator2)
-
 const port3 = padChOutlet.assignGenerator(generator3)
-
 const port4 = drumChOutlet.assignGenerator(generator4)
 const port5 = drumChOutlet.assignGenerator(generator5)
 
-port1.loopSequence(4).onElapsed(callbacks.resetNotes).onEnded(callbacks.resetNotes)
-port2.loopSequence(4)
-port3.loopSequence(4).onElapsed(callbacks.mutateInPlace(0.3)).onEnded(callbacks.resetNotes)
-port4.loopSequence(4).onEnded(callbacks.mutateInPlace(0.3))
-port5.loopSequence(4).onEnded(callbacks.mutateInPlace(0.3))
+port1.loopSequence(4).onElapsed(g => g.constructNotes()).onEnded(resetNotes)
+port2.loopSequence(4).onElapsed(g => g.constructNotes()).onEnded(resetNotes)
+port3.loopSequence(4).onElapsed(g => g.constructNotes()).onEnded(resetNotes)
+port4.loopSequence(4).onElapsed(g => g.constructNotes()).onEnded(resetNotes)
+port5.loopSequence(4).onElapsed(g => g.constructNotes()).onEnded(resetNotes)
+
+const generators = [generator1, generator2, generator3, generator4, generator5]
+setupAnalogInput(({ target, value }) => {
+  try {
+    const generator = generators[target - 1]
+    generator.updateDensity(value)
+  } catch (error) {
+    console.error(error)
+  }
+})
 
 const modulate =
   (key = mgnr.pickRandomPitchName(), stages = 4) =>
@@ -116,14 +118,13 @@ export default function setup() {
   generator5.logName = 'g5'
   void mgnr.setupLogStream([port1, port2, port3, port4, port5], [scale1, scale2])
 
-  mgnr.Time.bpm = 86
+  mgnr.Time.bpm = 91
   start()
 
   return {
     ...callbacks,
     ...actions,
     start,
-    beat,
     g1: generator1,
     g2: generator2,
     g3: generator3,
