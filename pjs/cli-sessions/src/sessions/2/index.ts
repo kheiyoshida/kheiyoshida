@@ -1,47 +1,64 @@
-import { setupAnalogInput } from '../../utils/analogInput.js'
 import * as mgnr from '@mgnr/cli'
 import * as callbacks from '../../utils/callbacks.js'
-import { padChOutlet, synthChOutlet, drumChOutlet } from './channels.js'
 import { mutateInPlace, rand, resetNotes } from '../../utils/callbacks.js'
+import { drumChOutlet, padChOutlet, synthChOutlet } from './channels.js'
+import { setupAnalogInput } from '../../utils/analogInput.js'
+import { hh1, hh2, kick, snare } from './config.js'
+import { beat1, beat2, beat3, beat4 } from './patterns.js'
 
 mgnr.Scheduler.multiEventsBufferInterval = 5
 
 const key = mgnr.pickRandomPitchName()
-const scale1 = new mgnr.CliScale(key, 'omit25', { min: 52, max: 80 })
-const scale2 = new mgnr.CliScale(key, 'omit27', { min: 32, max: 72 })
-const scale3 = new mgnr.CliScale([60, 62, 66])
+const scale1 = new mgnr.CliScale(key, 'omit25', { min: 48, max: 72 })
+const scale2 = new mgnr.CliScale(key, 'omit27', { min: 32, max: 68 })
+const scale3 = new mgnr.CliScale([kick, snare, hh1, hh2])
 
-const generator1 = new mgnr.CliSequenceGenerator({
+const flute1 = new mgnr.CliSequenceGenerator({
   scale: scale1,
   sequence: {
     length: 8,
-    density: 0.5,
+    density: 0.25,
     division: 16,
     polyphony: 'mono',
   },
+  note: {
+    duration: {
+      min: 1,
+      max: 4,
+    },
+  },
 })
 
-const generator2 = new mgnr.CliSequenceGenerator({
+const flute2 = new mgnr.CliSequenceGenerator({
   scale: scale1,
   sequence: {
     length: 6,
-    density: 0.5,
+    density: 0.3,
     division: 16,
     polyphony: 'mono',
   },
+  note: {
+    duration: {
+      min: 1,
+      max: 2,
+    },
+  },
 })
 
-const generator3 = new mgnr.CliSequenceGenerator({
+const pad = new mgnr.CliSequenceGenerator({
   scale: scale2,
   sequence: {
-    length: 4,
+    length: 8,
     division: 1,
     density: 1,
     polyphony: 'poly',
   },
+  note: {
+    duration: 2,
+  },
 })
 
-const generator4 = new mgnr.CliSequenceGenerator({
+const drums1 = new mgnr.CliSequenceGenerator({
   scale: scale3,
   sequence: {
     length: 16,
@@ -50,40 +67,57 @@ const generator4 = new mgnr.CliSequenceGenerator({
   },
 })
 
-const generator5 = new mgnr.CliSequenceGenerator({
+const drums2 = new mgnr.CliSequenceGenerator({
   scale: scale3,
   sequence: {
-    length: 6,
+    length: 10,
     division: 16,
-    density: 0.5,
+    density: 0.25,
   },
 })
 
-generator1.constructNotes()
-generator2.constructNotes()
-generator3.constructNotes()
-generator4.constructNotes()
-generator5.constructNotes()
+let beat = beat1
+const ub = (pattern: 1 | 2 | 3 | 4) => {
+  switch (pattern) {
+    case 1:
+      return (beat = beat1)
+    case 2:
+      return (beat = beat2)
+    case 3:
+      return (beat = beat3)
+    case 4:
+      return (beat = beat4)
+  }
+}
 
-const port1 = synthChOutlet.assignGenerator(generator1)
-const port2 = synthChOutlet.assignGenerator(generator2)
-const port3 = padChOutlet.assignGenerator(generator3)
-const port4 = drumChOutlet.assignGenerator(generator4)
-const port5 = drumChOutlet.assignGenerator(generator5)
+// flute1.constructNotes()
+// flute2.constructNotes()
+pad.constructNotes()
+// drums1.constructNotes(beat)
+// drums2.constructNotes()
 
-port1.loopSequence(4).onElapsed(g => g.constructNotes()).onEnded(resetNotes)
-port2.loopSequence(4).onElapsed(g => g.constructNotes()).onEnded(resetNotes)
-port3.loopSequence(4).onElapsed(g => g.constructNotes()).onEnded(resetNotes)
-port4.loopSequence(4).onElapsed(g => g.constructNotes()).onEnded(resetNotes)
-port5.loopSequence(4).onElapsed(g => g.constructNotes()).onEnded(resetNotes)
+const port1 = synthChOutlet.assignGenerator(flute1)
+const port2 = synthChOutlet.assignGenerator(flute2)
+const padPort = padChOutlet.assignGenerator(pad)
+const drumPort1 = drumChOutlet.assignGenerator(drums1)
+const drumPort2 = drumChOutlet.assignGenerator(drums2)
 
-const generators = [generator1, generator2, generator3, generator4, generator5]
+port1.loopSequence(4)
+port2.loopSequence(4)
+padPort
+  .loopSequence(4)
+  .onElapsed((g) => g.mutate({ strategy: 'move', rate: 0.3 }))
+  .onEnded(resetNotes)
+drumPort1.loopSequence(4).onEnded((g) => g.resetNotes(beat))
+drumPort2.loopSequence(4)
+
+const generators = [flute1, flute2, pad, drums1, drums2]
 setupAnalogInput(({ target, value }) => {
   try {
     const generator = generators[target - 1]
     generator.updateDensity(value)
   } catch (error) {
-    console.error(error)
+    console.error((error as Error).message)
   }
 })
 
@@ -105,37 +139,39 @@ export default function setup() {
 
   port1.logName = 'p1'
   port2.logName = 'p2'
-  port3.logName = 'p3'
-  port4.logName = 'p4'
-  port5.logName = 'p5'
+  padPort.logName = 'p3'
+  drumPort1.logName = 'p4'
+  drumPort2.logName = 'p5'
   scale1.logName = 's1'
   scale2.logName = 's2'
   scale3.logName = 's3'
-  generator1.logName = 'g1'
-  generator2.logName = 'g2'
-  generator3.logName = 'g3'
-  generator4.logName = 'g4'
-  generator5.logName = 'g5'
-  void mgnr.setupLogStream([port1, port2, port3, port4, port5], [scale1, scale2])
+  flute1.logName = 'g1'
+  flute2.logName = 'g2'
+  pad.logName = 'g3'
+  drums1.logName = 'g4'
+  drums2.logName = 'g5'
+  void mgnr.setupLogStream([port1, port2, padPort, drumPort1, drumPort2], [scale1, scale2])
 
-  mgnr.Time.bpm = 91
+  mgnr.Time.bpm = 134
   start()
 
   return {
     ...callbacks,
     ...actions,
     start,
-    g1: generator1,
-    g2: generator2,
-    g3: generator3,
-    g4: generator4,
-    g5: generator5,
+    ub,
+    beat,
+    g1: flute1,
+    g2: flute2,
+    g3: pad,
+    g4: drums1,
+    g5: drums2,
 
     p1: port1,
     p2: port2,
-    p3: port3,
-    p4: port4,
-    p5: port5,
+    p3: padPort,
+    p4: drumPort1,
+    p5: drumPort2,
 
     s1: scale1,
     s2: scale2,

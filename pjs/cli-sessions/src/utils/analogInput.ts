@@ -3,7 +3,7 @@ import { SerialPortStream } from '@serialport/stream'
 import { autoDetect } from '@serialport/bindings-cpp'
 import { ReadlineParser } from '@serialport/parser-readline'
 
-const usbPath = '/dev/cu.usbmodem101'
+const usbPath = '/dev/cu.usbmodem1101'
 
 type InputCallback = (data: ControllerInputData) => void
 
@@ -14,11 +14,16 @@ export const setupAnalogInput = (callback: InputCallback) => {
   // Detect platform-specific bindings
   const Bindings = autoDetect()
 
-  const port = new SerialPortStream({
-    path: usbPath,
-    baudRate: 9600,
-    binding: Bindings,
-  })
+  const port = new SerialPortStream(
+    {
+      path: usbPath,
+      baudRate: 9600,
+      binding: Bindings,
+    },
+    (e) => {
+      console.error(e)
+    }
+  )
 
   // set up a line parser (to parse '\n'-terminated lines)
   const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }))
@@ -52,8 +57,8 @@ enum KnobValueType {
 }
 
 export type ControllerInputData = {
-  target: number,
-  valueType: KnobValueType,
+  target: number
+  valueType: KnobValueType
   value: number
 }
 
