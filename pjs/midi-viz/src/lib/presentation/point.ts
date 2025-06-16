@@ -1,4 +1,5 @@
 import * as T from 'three'
+import { Vector3 } from 'three'
 import { toRadians, xyz } from './utils.ts'
 
 export class MovingPoint {
@@ -41,6 +42,11 @@ export const constrainPointPosition = (radiusFromCenter: number, points: MovingP
   for (const point of points) {
     if (point.position.length() > radiusFromCenter) {
       point.position.setLength(radiusFromCenter)
+      const speed = point.movement.length()
+      point.movement = new T.Vector3()
+        .subVectors(new Vector3(), point.position)
+        .normalize()
+        .multiplyScalar(speed)
     }
   }
 }
@@ -60,7 +66,7 @@ export class ChainablePoint extends MovingPoint {
   override move() {
     super.move()
     this.needsCheck = true
-    this.sortFrag = 0
+    this.sortFrag= this.movement.length()
   }
 
   sortFrag: number = 0
