@@ -2,6 +2,7 @@
 import { SerialPortStream } from '@serialport/stream'
 import { autoDetect } from '@serialport/bindings-cpp'
 import { ReadlineParser } from '@serialport/parser-readline'
+import { CliSequenceGenerator } from '@mgnr/cli'
 
 const usbPath = '/dev/cu.usbmodem1101'
 
@@ -51,19 +52,24 @@ export const setupAnalogInput = (callback: InputCallback) => {
   })
 }
 
-enum KnobValueType {
+export enum GeneratorParameter {
   Density = 0,
   SequenceLength = 1,
 }
 
+export enum ScaleParameter {
+  Low = 0,
+  High= 1
+}
+
 export type ControllerInputData = {
   target: number
-  valueType: KnobValueType
+  valueType: GeneratorParameter | ScaleParameter
   value: number
 }
 
 const parseInput = (inputString: string): ControllerInputData => {
-  const [target, valueType, , value] = inputString.trim().split(' ')
+  const [target, valueType, value] = inputString.trim().split(',')
   return {
     target: parseInt(target),
     valueType: parseInt(valueType),
