@@ -1,7 +1,7 @@
 import { Renderer } from './Renderer'
 
 export class ScreenRenderer extends Renderer {
-  private texture!: WebGLTexture
+  protected texture!: WebGLTexture
 
   constructor(program: WebGLProgram) {
     super(program)
@@ -38,6 +38,7 @@ export class ScreenRenderer extends Renderer {
   }
 
   setTextureImage(source: TexImageSource) {
+    this.gl.activeTexture(this.gl.TEXTURE0)
     this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture)
     this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, source)
   }
@@ -47,6 +48,88 @@ export class ScreenRenderer extends Renderer {
    */
   draw() {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT)
+    this.gl.clearColor(0.0, 0.0, 0.0, 1.0)
     this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4)
+  }
+}
+
+export class OffscreenRenderer extends ScreenRenderer {
+  private offscreenTexture!: WebGLTexture
+  private frameBuffer!: WebGLFramebuffer
+
+  constructor(
+    program: WebGLProgram,
+    private width = 400,
+    private height = 300
+  ) {
+    super(program)
+    this.setupFrameBuffer()
+  }
+
+  private setupFrameBuffer() {
+    // create frame buffer
+    this.frameBuffer = this.gl.createFramebuffer()!
+    this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.frameBuffer)
+
+    // offscreen texture
+    this.offscreenTexture = this.gl.createTexture()!
+    this.gl.bindTexture(this.gl.TEXTURE_2D, this.offscreenTexture)
+    this.gl.texImage2D(
+      this.gl.TEXTURE_2D,
+      0, // level
+      this.gl.RGBA, // internalFormat
+      this.width,
+      this.height,
+      0, // border
+      this.gl.RGBA, // format
+      this.gl.UNSIGNED_BYTE, // type
+      null // no data, just allocate
+    )
+
+    const gl = this.gl
+    // required texture parameters for framebuffer completeness
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+
+    // attach it to framebuffer
+    gl.framebufferTexture2D(
+      gl.FRAMEBUFFER,
+      gl.COLOR_ATTACHMENT0,
+      gl.TEXTURE_2D,
+      this.offscreenTexture,
+      0 // mipmap level
+    )
+
+    const status = this.gl.checkFramebufferStatus(this.gl.FRAMEBUFFER)
+    if (status !== this.gl.FRAMEBUFFER_COMPLETE) {
+      if (status === this.gl.FRAMEBUFFER_INCOMPLETE_ATTACHMENT) {
+        throw Error('Framebuffer incomplete: Attachment is missing or invalid')
+      } else if (status === this.gl.FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT) {
+        throw Error('Framebuffer incomplete: No attachments')
+      } else if (status === this.gl.FRAMEBUFFER_INCOMPLETE_DIMENSIONS) {
+        throw Error('Framebuffer incomplete: Attachments have different dimensions')
+      } else if (status === this.gl.FRAMEBUFFER_UNSUPPORTED) {
+        throw Error('Framebuffer incomplete: Unsupported configuration')
+      } else {
+        throw Error(`Framebuffer incomplete: Unknown error ${status.toString(16)}`)
+      }
+    }
+
+    this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null)
+  }
+
+  drawToOffscreenBuffer() {
+    this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.frameBuffer)
+    this.draw()
+  }
+
+  readPixels() {
+    const pixelBuffer = new Uint8Array(this.width * this.height * 4)
+
+    this.gl.readPixels(0, 0, this.width, this.height, this.gl.RGBA, this.gl.UNSIGNED_BYTE, pixelBuffer)
+
+    return pixelBuffer
   }
 }
