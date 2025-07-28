@@ -1,5 +1,7 @@
+#version 300 es
+
 precision mediump float;
-varying vec2 vUV;
+in vec2 vUV;
 uniform sampler2D uTexture;
 
 void main() {

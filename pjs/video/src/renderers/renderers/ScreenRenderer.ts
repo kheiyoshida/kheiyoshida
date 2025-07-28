@@ -5,19 +5,26 @@ export class ScreenRenderer extends Renderer {
 
   constructor(program: WebGLProgram) {
     super(program)
-    this.setupScreenRect()
+    this.setupScreenQuad()
   }
 
-  private setupScreenRect() {
+  protected quadVBO!: WebGLBuffer
+  protected quadVAO!: WebGLVertexArrayObject
+
+  private setupScreenQuad() {
     const gl = this.gl
 
     // Fullscreen quad (clip space -1 to +1)
     // video texture starts from top-left as (0,0), while WebGL starts from bottom-left (-1, -1)
     const vertices = new Float32Array([-1, -1, 0, 1, 1, -1, 1, 1, -1, 1, 0, 0, 1, 1, 1, 0])
 
-    const buffer = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
+    this.quadVBO = gl.createBuffer()!
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.quadVBO)
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW)
+
+    this.quadVAO = gl.createVertexArray()!
+
+    gl.bindVertexArray(this.quadVAO);
 
     const aPosition = gl.getAttribLocation(this.program, 'aPosition')
     gl.enableVertexAttribArray(aPosition)
@@ -26,6 +33,8 @@ export class ScreenRenderer extends Renderer {
     const aUV = gl.getAttribLocation(this.program, 'aUV')
     gl.enableVertexAttribArray(aUV)
     gl.vertexAttribPointer(aUV, 2, gl.FLOAT, false, 16, 8) // 4bytes x2 for position
+
+    gl.bindVertexArray(null);
 
     this.texture = gl.createTexture()!
     gl.bindTexture(gl.TEXTURE_2D, this.texture)
@@ -47,8 +56,11 @@ export class ScreenRenderer extends Renderer {
    * draw screen rect with texture
    */
   draw() {
+    this.use()
     this.gl.clear(this.gl.COLOR_BUFFER_BIT)
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0)
+
+    this.gl.bindVertexArray(this.quadVAO)
     this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4)
   }
 }
@@ -121,11 +133,17 @@ export class OffscreenRenderer extends ScreenRenderer {
   }
 
   drawToOffscreenBuffer() {
-    this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.frameBuffer)
+    // this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.frameBuffer)
     this.draw()
+
+    const pixelBuffer = this.readPixels()
+
+    // this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null)
+
+    return pixelBuffer
   }
 
-  readPixels() {
+  private readPixels() {
     const pixelBuffer = new Uint8Array(this.width * this.height * 4)
 
     this.gl.readPixels(0, 0, this.width, this.height, this.gl.RGBA, this.gl.UNSIGNED_BYTE, pixelBuffer)

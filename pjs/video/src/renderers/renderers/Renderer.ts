@@ -1,4 +1,4 @@
-import { getGL } from './gl'
+import { getGL } from '../gl'
 
 export class Renderer {
   protected gl = getGL()
