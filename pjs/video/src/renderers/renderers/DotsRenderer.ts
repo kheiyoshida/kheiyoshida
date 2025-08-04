@@ -34,11 +34,11 @@ export class DotsRenderer extends Renderer {
     // Create empty VBO for instance data
     this.instanceVBO = this.gl.createBuffer()!
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.instanceVBO)
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, 1000 * 2 * 4, this.gl.DYNAMIC_DRAW) // enough space for 1000 vec2s
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, 12000 * 3 * 4, this.gl.DYNAMIC_DRAW) // enough space for 1000 vec2s
 
     const aInstance = this.gl.getAttribLocation(this.program, 'aInstance')
     this.gl.enableVertexAttribArray(aInstance)
-    this.gl.vertexAttribPointer(aInstance, 2, this.gl.FLOAT, false, 0, 0)
+    this.gl.vertexAttribPointer(aInstance, 3, this.gl.FLOAT, false, 0, 0)
     this.gl.vertexAttribDivisor(aInstance, 1) // advance per instance
 
     this.gl.bindVertexArray(null)

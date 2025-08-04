@@ -14,8 +14,8 @@ prepareVideoElements(videoSourceList).then((videoElements) => {
   videoSupply.onEnded(() => videoSupply.swapVideo())
 })
 
-const width = window.innerWidth
-const height = window.innerHeight
+const width = 400
+const height = 300
 
 const offscreenRenderer = new OffscreenRenderer(createProgram(vertexSrc, fragmentSrc), width, height)
 const dotsRenderer = new DotsRenderer()
@@ -33,36 +33,33 @@ function render() {
 
     const pixelBuffer = offscreenRenderer.drawToOffscreenBuffer()
 
-    const threshold = 123; // brightness threshold (0–255)
-    const brightSpots = [];
+    const threshold = 123 // brightness threshold (0–255)
+    const brightSpots = []
 
-    for (let y = 0; y < height; y+=48) {
-      for (let x = 0; x < width; x+=48) {
-        const index = (y * width + x) * 4;
-        const brightness = pixelBuffer[index];
+    for (let y = 0; y < height; y += 1) {
+      for (let x = 0; x < width; x += 1) {
+        const index = (y * width + x) * 4
+        const brightness = pixelBuffer[index]
 
         if (brightness > threshold) {
           brightSpots.push({
             x: 1.0 - x / width,
             y: y / height, // flip Y for OpenGL → NDC space
-          });
+            brightness: brightness / 255,
+          })
         }
       }
     }
 
     const positions = new Float32Array(brightSpots.length * 2)
-    for(let i = 0; i < brightSpots.length; i++) {
+    for (let i = 0; i < brightSpots.length; i++) {
       positions[i] = brightSpots[i].x
       positions[i + 1] = brightSpots[i].y
+      positions[i + 2] = brightSpots[i].brightness
     }
-
-    // const positions = new Float32Array([
-    //   0.5, 0.1
-    // ])
 
     dotsRenderer.setDotPositions(positions)
     dotsRenderer.draw()
-
   }
 }
 render()

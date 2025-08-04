@@ -15,7 +15,8 @@ export class ScreenRenderer extends Renderer {
     const gl = this.gl
 
     // Fullscreen quad (clip space -1 to +1)
-    // video texture starts from top-left as (0,0), while WebGL starts from bottom-left (-1, -1)
+    // video texture starts from top-left as (0,0),
+    // while WebGL starts from bottom-left (-1, -1)
     const vertices = new Float32Array([-1, -1, 0, 1, 1, -1, 1, 1, -1, 1, 0, 0, 1, 1, 1, 0])
 
     this.quadVBO = gl.createBuffer()!
@@ -133,12 +134,12 @@ export class OffscreenRenderer extends ScreenRenderer {
   }
 
   drawToOffscreenBuffer() {
-    // this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.frameBuffer)
+    this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.frameBuffer)
     this.draw()
 
     const pixelBuffer = this.readPixels()
 
-    // this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null)
+    this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null)
 
     return pixelBuffer
   }
