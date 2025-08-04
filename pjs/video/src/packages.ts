@@ -76,7 +76,7 @@ function renderVideo() {
     }
   }
 
-  quad.setOffsets(offsets)
+  quad.setInstances(offsets)
 
   frameBuffer.deactivate()
 
@@ -89,11 +89,11 @@ function renderVideo() {
   quad.setUniformFloat('uSize', 0.002)
   quad.draw()
 }
-renderVideo()
+// renderVideo()
 
 function render() {
   requestAnimationFrame(render)
-  angle += 0.01
+  // angle += 0.01
 
   // === PASS 1: draw triangle to texture ===
   frameBuffer.activate()
@@ -113,17 +113,18 @@ function render() {
   for (let y = 0; y < frameBufferHeight; y += 4) {
     for (let x = 0; x < frameBufferWidth; x += 4) {
       const i = (y * frameBufferHeight + x) * 4
-      if (pixels[i] > 128) {
-        offsets.push(x / frameBufferWidth, 1 - y / frameBufferHeight) // normalized, flipped Y
+      if (pixels[i ] > 20) {
+        offsets.push(x / frameBufferWidth, y / frameBufferHeight) // normalized, flipped Y
+        offsets.push(pixels[i] / 255, pixels[i+1] / 255, pixels[i+2] / 255)
       }
     }
   }
 
-  quad.setOffsets(offsets)
+  quad.setInstances(offsets)
 
   frameBuffer.deactivate()
 
-  // === PASS 2: draw dots ===
+  // // === PASS 2: draw dots ===
   gl.viewport(0, 0, window.innerWidth, window.innerHeight)
   gl.clearColor(0.2, 0.2, 0.2, 1)
   gl.clear(gl.COLOR_BUFFER_BIT)
@@ -133,4 +134,4 @@ function render() {
   quad.draw()
 }
 
-// render()
+render()

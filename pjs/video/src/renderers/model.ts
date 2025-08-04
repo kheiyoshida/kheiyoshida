@@ -101,20 +101,29 @@ export class InstancedModel extends Model {
     gl.bindBuffer(gl.ARRAY_BUFFER, this.offsetVBO)
 
     gl.bindVertexArray(this.vao)
+
+    const stride = (2 + 3) * 4
+
     const aOffset = gl.getAttribLocation(shader.program, 'aOffset')
     gl.enableVertexAttribArray(aOffset)
-    gl.vertexAttribPointer(aOffset, 2, gl.FLOAT, false, 0, 0)
+    gl.vertexAttribPointer(aOffset, 2, gl.FLOAT, false, stride, 0)
     gl.vertexAttribDivisor(aOffset, 1)
+
+    const aColor = gl.getAttribLocation(shader.program, 'aColor')
+    gl.enableVertexAttribArray(aColor)
+    gl.vertexAttribPointer(aColor, 3, gl.FLOAT, false, stride, 2 * 4)
+    gl.vertexAttribDivisor(aColor, 1)
+
     gl.bindVertexArray(null)
   }
 
   private offsetCount = 0
 
-  setOffsets(offsets: number[]) {
+  setInstances(instances: number[]) {
     const gl = getGL()
     gl.bindBuffer(gl.ARRAY_BUFFER, this.offsetVBO)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(offsets), gl.STATIC_DRAW)
-    this.offsetCount = offsets.length /2
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(instances), gl.STATIC_DRAW)
+    this.offsetCount = instances.length /5
   }
 
   override draw() {
