@@ -8,7 +8,6 @@ export class FrameBuffer {
 
   public pixels: Uint8Array
 
-
   constructor(
     readonly width: number,
     readonly height: number
@@ -22,6 +21,8 @@ export class FrameBuffer {
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.fbo)
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0)
     gl.drawBuffers([gl.COLOR_ATTACHMENT0])
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null)
 
     this.pixels = new Uint8Array(width * height * 4) // 4 values per rgba
   }

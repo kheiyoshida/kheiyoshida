@@ -20,6 +20,18 @@ export class Shader {
   use() {
     getGL().useProgram(this.program)
   }
+
+  setUniformFloat(name: string, value: number) {
+    getGL().uniform1f(this.getUniformLoc(name), value)
+  }
+
+  setUniformInt(name: string, value: number) {
+    getGL().uniform1i(this.getUniformLoc(name), value)
+  }
+
+  private getUniformLoc(name: string) {
+    return getGL().getUniformLocation(this.program, name)
+  }
 }
 
 // Compile shader

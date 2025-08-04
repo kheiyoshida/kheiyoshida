@@ -1,5 +1,4 @@
-import vertexSrc from './renderers/shaders/dev.vert?raw'
-// import fragmentSrc from './renderers/shaders/dev.frag?raw'
+import vertexSrc from './renderers/shaders/screen.vert?raw'
 import fragmentSrc from './renderers/shaders/captureBrightness.frag?raw'
 import { makeVideoSupply, VideoSupply } from './media/video/supply'
 import { prepareVideoElements } from './media/video/load'
@@ -16,6 +15,7 @@ prepareVideoElements(videoSourceList).then((videoElements) => {
 
 const width = 400
 const height = 300
+
 
 const offscreenRenderer = new OffscreenRenderer(createProgram(vertexSrc, fragmentSrc), width, height)
 const dotsRenderer = new DotsRenderer()

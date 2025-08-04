@@ -42,6 +42,51 @@ export class Model {
   }
 }
 
+// TODO: inherit Model
+/**
+ * model that accepts 2d vertices and UVs as data
+ */
+export class ModelWithUV {
+  public vbo: WebGLBuffer
+  public vao: WebGLVertexArrayObject
+  protected vertexCount: number
+
+  constructor(public shader: Shader, dataArray: Float32Array) {
+    const gl = getGL()
+
+    // data
+    this.vbo = gl.createBuffer()!
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo)
+    gl.bufferData(gl.ARRAY_BUFFER, dataArray, gl.STATIC_DRAW)
+    this.vertexCount = dataArray.length / 4 // 4 values per vertex
+
+    // vao
+    this.vao = gl.createVertexArray()!
+    gl.bindVertexArray(this.vao)
+    const aPosT = gl.getAttribLocation(shader.program, 'aPos')
+    gl.enableVertexAttribArray(aPosT)
+    gl.vertexAttribPointer(aPosT, 2, gl.FLOAT, false, 16, 0)
+
+    const aUV = gl.getAttribLocation(shader.program, 'aUV')
+    gl.enableVertexAttribArray(aUV)
+    gl.vertexAttribPointer(aUV, 2, gl.FLOAT, false, 16, 8) // 4bytes x2 for position
+
+    gl.bindVertexArray(null)
+  }
+
+  // remember to call shader.use() before calling methods below
+
+  draw() {
+    const gl = getGL()
+    gl.bindVertexArray(this.vao)
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.vertexCount)
+  }
+
+  setUniformFloat(name: string, value: number) {
+    this.shader.setUniformFloat(name, value)
+  }
+}
+
 /**
  * Instanced model that can be placed repeatedly at aOffset positions, not more than that
  */

@@ -1,50 +1,23 @@
 import { getGL } from './renderers/gl'
 import { Shader } from './renderers/shader'
-import { InstancedModel, Model } from './renderers/model'
+import { InstancedModel, Model, ModelWithUV } from './renderers/model'
 import { FrameBuffer } from './renderers/frameBuffer'
+import vs1 from './renderers/shaders/triangle.vert?raw'
+import fs1 from './renderers/shaders/triangle.frag?raw'
+import vs2 from './renderers/shaders/instance.vert?raw'
+import fs2 from './renderers/shaders/instance.frag?raw'
+import screenVert from './renderers/shaders/screen.vert?raw'
+import screenFrag from './renderers/shaders/screen.frag?raw'
+import { Texture } from './renderers/texture'
 
 const gl = getGL()
 
-// === SHADERS ===
-// Draws a triangle to texture
-const vs1 = `#version 300 es
-in vec2 aPos;
-uniform float uAngle;
-void main() {
-  float c = cos(uAngle), s = sin(uAngle);
-  mat2 rot = mat2(c, -s, s, c);
-  gl_Position = vec4(rot * aPos, 0, 1);
-}`
-const fs1 = `#version 300 es
-precision mediump float;
-out vec4 fragColor;
-void main() {
-  fragColor = vec4(1.0); // white
-}`
-
-// Draws a dot (quad) at each bright pixel
-const vs2 = `#version 300 es
-in vec2 aPos;
-in vec2 aOffset;
-uniform float uSize;
-void main() {
-  vec2 scaled = aPos * uSize;
-  vec2 world = aOffset + scaled;
-  gl_Position = vec4(world * 2.0 - 1.0, 0, 1);
-}`
-const fs2 = `#version 300 es
-precision mediump float;
-out vec4 fragColor;
-void main() {
-  fragColor = vec4(1.0, 0.0, 0.0, 1.0); // red
-}`
-
-const offscreenShader = new Shader(vs1, fs1)
-const screenShader = new Shader(vs2, fs2)
+const triangleShader = new Shader(vs1, fs1)
+const instanceShader = new Shader(vs2, fs2)
 
 // triangle
 const triVertices = new Float32Array([0, 0.8, -0.8, -0.6, 0.8, -0.6])
-const triangle = new Model(offscreenShader, triVertices)
+const triangle = new Model(triangleShader, triVertices)
 
 // frame buffer
 const frameBufferWidth = 800
@@ -53,9 +26,70 @@ const frameBuffer = new FrameBuffer(frameBufferWidth, frameBufferHeight)
 
 // dot
 const quadVertices = new Float32Array([-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5])
-const quad = new InstancedModel(screenShader, quadVertices)
+const quad = new InstancedModel(instanceShader, quadVertices)
 
 let angle = 0
+
+
+// set up rect
+const screenShader = new Shader(screenVert, screenFrag)
+// prettier-ignore
+const screenRectVertices = new Float32Array([
+  -1, -1, 0, 1,
+  1, -1, 1, 1,
+  -1, 1, 0, 0,
+  1, 1, 1, 0
+])
+const screenRect = new ModelWithUV(screenShader,screenRectVertices)
+
+const texture = new Texture()
+screenShader.use()
+screenShader.setUniformInt('uTexture', texture.id)
+
+const video = document.getElementById('video') as HTMLVideoElement
+texture.setTextureImage(video)
+
+function renderVideo() {
+  requestAnimationFrame(renderVideo)
+
+  // frameBuffer.activate()
+
+  gl.viewport(0, 0, window.innerWidth, window.innerHeight)
+  gl.clearColor(0.5, 0.2, 0.2, 1)
+  gl.clear(gl.COLOR_BUFFER_BIT)
+
+  screenRect.shader.use()
+  // texture.setTextureImage(video)
+  screenRect.draw()
+
+  // === READ PIXELS ===
+  const pixels = frameBuffer.readPixels()
+
+  // === DETECT BRIGHT PIXELS ===
+  const offsets = []
+  for (let y = 0; y < frameBuffer.height; y += 4) {
+    for (let x = 0; x < frameBuffer.width; x += 4) {
+      const i = (y * frameBuffer.height + x) * 4
+      if (pixels[i] > 120) {
+        offsets.push(x / frameBuffer.width, y / frameBuffer.height) // normalized, flipped Y
+      }
+    }
+  }
+
+  quad.setOffsets(offsets)
+
+  frameBuffer.deactivate()
+
+  // === PASS 2: draw dots ===
+  gl.viewport(0, 0, window.innerWidth, window.innerHeight)
+  // gl.clearColor(0.2, 0.2, 0.2, 1)
+  // gl.clear(gl.COLOR_BUFFER_BIT)
+
+  quad.shader.use()
+  quad.setUniformFloat('uSize', 0.002)
+  quad.draw()
+}
+renderVideo()
 
 function render() {
   requestAnimationFrame(render)
@@ -99,4 +133,4 @@ function render() {
   quad.draw()
 }
 
-render()
+// render()
