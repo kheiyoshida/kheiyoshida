@@ -1,65 +1,106 @@
-import vertexSrc from './renderers/shaders/screen.vert?raw'
-import fragmentSrc from './renderers/shaders/captureBrightness.frag?raw'
 import { makeVideoSupply, VideoSupply } from './media/video/supply'
 import { prepareVideoElements } from './media/video/load'
 import { videoSourceList } from './pjs/shinjuku/videos'
-import { createProgram } from './renderers/gl'
-import { OffscreenRenderer } from './renderers/renderers/ScreenRenderer'
-import { DotsRenderer } from './renderers/renderers/DotsRenderer'
+import { getGL } from './renderers/gl'
+import { Shader } from './renderers/shader'
+import { InstancedModel, Model, ModelWithUV } from './renderers/model'
+import { FrameBuffer } from './renderers/frameBuffer'
+import vs1 from './renderers/shaders/triangle.vert?raw'
+import fs1 from './renderers/shaders/triangle.frag?raw'
+import vs2 from './renderers/shaders/instance.vert?raw'
+import fs2 from './renderers/shaders/instance.frag?raw'
+import screenVert from './renderers/shaders/screen.vert?raw'
+import screenFrag from './renderers/shaders/screen.frag?raw'
+import { Texture } from './renderers/texture'
 
 let videoSupply: VideoSupply
 prepareVideoElements(videoSourceList).then((videoElements) => {
-  videoSupply = makeVideoSupply(videoElements, { speed: 0.1 })
+  videoSupply = makeVideoSupply(videoElements, { speed: 0.3 })
   videoSupply.onEnded(() => videoSupply.swapVideo())
 })
 
-const width = 400
-const height = 300
+const gl = getGL()
 
+const triangleShader = new Shader(vs1, fs1)
+const instanceShader = new Shader(vs2, fs2)
 
-const offscreenRenderer = new OffscreenRenderer(createProgram(vertexSrc, fragmentSrc), width, height)
-const dotsRenderer = new DotsRenderer()
+// triangle
+const triVertices = new Float32Array([0, 0.8, -0.8, -0.6, 0.8, -0.6])
+const triangle = new Model(triangleShader, triVertices)
 
-// render loop
-function render() {
-  requestAnimationFrame(render)
+// frame buffer
+const frameBufferWidth = 800
+const frameBufferHeight = 800
+const frameBuffer = new FrameBuffer(frameBufferWidth, frameBufferHeight)
+
+// dot
+const quadVertices = new Float32Array([-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5])
+const quad = new InstancedModel(instanceShader, quadVertices)
+
+let angle = 0
+
+// set up rect
+const screenShader = new Shader(screenVert, screenFrag)
+// prettier-ignore
+const screenRectVertices = new Float32Array([
+  -1, -1, 0, 1,
+  1, -1, 1, 1,
+  -1, 1, 0, 0,
+  1, 1, 1, 0
+])
+const screenRect = new ModelWithUV(screenShader, screenRectVertices)
+
+const texture = new Texture()
+screenShader.use()
+screenShader.setUniformInt('uTexture', texture.id)
+
+function renderVideo() {
+  requestAnimationFrame(renderVideo)
 
   if (!videoSupply) return
-  const video = videoSupply.currentVideo
+  if (videoSupply.currentVideo.readyState < HTMLVideoElement.prototype.HAVE_CURRENT_DATA) return
 
-  // inject video as texture
-  if (video.readyState >= video.HAVE_CURRENT_DATA) {
-    offscreenRenderer.setTextureImage(video)
+  if (Math.random() < 0.003) {
+    videoSupply.swapVideo()
+  }
 
-    const pixelBuffer = offscreenRenderer.drawToOffscreenBuffer()
+  frameBuffer.activate()
 
-    const threshold = 123 // brightness threshold (0–255)
-    const brightSpots = []
+  gl.clearColor(0.5, 0.2, 0.2, 1)
+  gl.clear(gl.COLOR_BUFFER_BIT)
 
-    for (let y = 0; y < height; y += 1) {
-      for (let x = 0; x < width; x += 1) {
-        const index = (y * width + x) * 4
-        const brightness = pixelBuffer[index]
+  screenRect.shader.use()
+  texture.setTextureImage(videoSupply.currentVideo)
+  screenRect.draw()
 
-        if (brightness > threshold) {
-          brightSpots.push({
-            x: 1.0 - x / width,
-            y: y / height, // flip Y for OpenGL → NDC space
-            brightness: brightness / 255,
-          })
-        }
+  // === READ PIXELS ===
+  const pixels = frameBuffer.readPixels()
+
+  // === DETECT BRIGHT PIXELS ===
+  const offsets = []
+  for (let y = 0; y < frameBufferHeight; y += 4) {
+    for (let x = 0; x < frameBufferWidth; x += 2) {
+      const i = (y * frameBufferHeight + x) * 4
+      if (pixels[i+2] > 120) {
+        offsets.push(x / frameBufferWidth, y / frameBufferHeight) // normalized, flipped Y
+        offsets.push(pixels[i] / 255, pixels[i + 1] / 255, pixels[i + 2] / 255)
       }
     }
-
-    const positions = new Float32Array(brightSpots.length * 2)
-    for (let i = 0; i < brightSpots.length; i++) {
-      positions[i] = brightSpots[i].x
-      positions[i + 1] = brightSpots[i].y
-      positions[i + 2] = brightSpots[i].brightness
-    }
-
-    dotsRenderer.setDotPositions(positions)
-    dotsRenderer.draw()
   }
+
+  quad.setInstances(offsets)
+
+  frameBuffer.deactivate()
+
+  // === PASS 2: draw dots ===
+  gl.viewport(0, 0, window.innerWidth, window.innerHeight)
+  // gl.clearColor(0.2, 0.2, 0.2, 1)
+  gl.clearColor(0, 0, 0, 1)
+  gl.clear(gl.COLOR_BUFFER_BIT)
+
+  quad.shader.use()
+  quad.setUniformFloat('uSize', 2.0 / frameBufferWidth)
+  quad.draw()
 }
-render()
+renderVideo()
+

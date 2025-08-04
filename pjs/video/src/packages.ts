@@ -30,7 +30,6 @@ const quad = new InstancedModel(instanceShader, quadVertices)
 
 let angle = 0
 
-
 // set up rect
 const screenShader = new Shader(screenVert, screenFrag)
 // prettier-ignore
@@ -40,26 +39,27 @@ const screenRectVertices = new Float32Array([
   -1, 1, 0, 0,
   1, 1, 1, 0
 ])
-const screenRect = new ModelWithUV(screenShader,screenRectVertices)
+const screenRect = new ModelWithUV(screenShader, screenRectVertices)
 
 const texture = new Texture()
 screenShader.use()
 screenShader.setUniformInt('uTexture', texture.id)
 
 const video = document.getElementById('video') as HTMLVideoElement
-texture.setTextureImage(video)
+video.playbackRate = 3
 
 function renderVideo() {
   requestAnimationFrame(renderVideo)
 
-  // frameBuffer.activate()
+  if (video.readyState < HTMLVideoElement.prototype.HAVE_CURRENT_DATA) return
 
-  gl.viewport(0, 0, window.innerWidth, window.innerHeight)
+  frameBuffer.activate()
+
   gl.clearColor(0.5, 0.2, 0.2, 1)
   gl.clear(gl.COLOR_BUFFER_BIT)
 
   screenRect.shader.use()
-  // texture.setTextureImage(video)
+  texture.setTextureImage(video)
   screenRect.draw()
 
   // === READ PIXELS ===
@@ -67,11 +67,12 @@ function renderVideo() {
 
   // === DETECT BRIGHT PIXELS ===
   const offsets = []
-  for (let y = 0; y < frameBuffer.height; y += 4) {
-    for (let x = 0; x < frameBuffer.width; x += 4) {
-      const i = (y * frameBuffer.height + x) * 4
+  for (let y = 0; y < frameBufferHeight; y += 2) {
+    for (let x = 0; x < frameBufferWidth; x += 2) {
+      const i = (y * frameBufferHeight + x) * 4
       if (pixels[i] > 120) {
-        offsets.push(x / frameBuffer.width, y / frameBuffer.height) // normalized, flipped Y
+        offsets.push(x / frameBufferWidth, y / frameBufferHeight) // normalized, flipped Y
+        offsets.push(pixels[i] / 255, pixels[i + 1] / 255, pixels[i + 2] / 255)
       }
     }
   }
@@ -82,14 +83,14 @@ function renderVideo() {
 
   // === PASS 2: draw dots ===
   gl.viewport(0, 0, window.innerWidth, window.innerHeight)
-  // gl.clearColor(0.2, 0.2, 0.2, 1)
-  // gl.clear(gl.COLOR_BUFFER_BIT)
+  gl.clearColor(0.2, 0.2, 0.2, 1)
+  gl.clear(gl.COLOR_BUFFER_BIT)
 
   quad.shader.use()
-  quad.setUniformFloat('uSize', 0.002)
+  quad.setUniformFloat('uSize', 1.0/ frameBufferWidth)
   quad.draw()
 }
-// renderVideo()
+renderVideo()
 
 function render() {
   requestAnimationFrame(render)
@@ -113,9 +114,9 @@ function render() {
   for (let y = 0; y < frameBufferHeight; y += 4) {
     for (let x = 0; x < frameBufferWidth; x += 4) {
       const i = (y * frameBufferHeight + x) * 4
-      if (pixels[i ] > 20) {
+      if (pixels[i] > 20) {
         offsets.push(x / frameBufferWidth, y / frameBufferHeight) // normalized, flipped Y
-        offsets.push(pixels[i] / 255, pixels[i+1] / 255, pixels[i+2] / 255)
+        offsets.push(pixels[i] / 255, pixels[i + 1] / 255, pixels[i + 2] / 255)
       }
     }
   }
@@ -130,8 +131,8 @@ function render() {
   gl.clear(gl.COLOR_BUFFER_BIT)
 
   quad.shader.use()
-  quad.setUniformFloat('uSize', 0.002)
+  quad.setUniformFloat('uSize', 0.5 / frameBufferWidth)
   quad.draw()
 }
 
-render()
+// render()
