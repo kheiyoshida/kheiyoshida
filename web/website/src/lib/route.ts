@@ -4,7 +4,7 @@ import { Slug } from '../constants'
 export const useSPALink = (cb?: () => void) => {
   const router = useRouter()
   const handleClickLink = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!router.pathname.includes(Slug.works)) {
+    if (!router.pathname.includes(Slug.play)) {
       e.preventDefault()
       const href = e.currentTarget.getAttribute('href')
       router.push(href!)

@@ -9,7 +9,7 @@ export const insertSlug = <T extends ContentPageInfo>(content: WithoutId<T>) => 
   id: titleToSlug(content.title),
 })
 export const titleToSlug = (title: string) => title.replaceAll(' ', '-').toLowerCase()
-export const worksLink = (title: string) => '/' + [Slug.works, titleToSlug(title)].join('/')
+export const worksLink = (title: string) => '/' + [Slug.play, titleToSlug(title)].join('/')
 
 export enum Sketch {
   wasted = 'wasted',

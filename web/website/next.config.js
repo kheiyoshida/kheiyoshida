@@ -4,6 +4,15 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/works/:slug*',
+        destination: '/play/:slug*',
+        permanent: true, // or false for temporary (307)
+      },
+    ]
+  },
   reactStrictMode: false,
   transpilePackages: ['sketch-components'],
   images: {

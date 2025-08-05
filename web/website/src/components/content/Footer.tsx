@@ -34,8 +34,8 @@ export const FooterExpanded = () => {
       </div>
       <div className={styles.footer__expanded__nav}>
         <div>
-          {prev ? <a href={`/${Slug.works}/${prev}`}>←</a> : <span />}
-          {next ? <a href={`/${Slug.works}/${next}`}>→</a> : <span />}
+          {prev ? <a href={`/${Slug.play}/${prev}`}>←</a> : <span />}
+          {next ? <a href={`/${Slug.play}/${next}`}>→</a> : <span />}
         </div>
         <span>×</span>
       </div>
