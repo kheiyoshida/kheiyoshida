@@ -68,9 +68,12 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
       {
         text: surfaceWater.message[0],
       },
-      ...Object.entries(surfaceWater.links).map(([k, v]) => ({
-        text: `<a href="${v}">Listen on ${k}</a>`,
-      })),
+      {
+        embed: [surfaceWater.bandcamp]
+      },
+      // ...Object.entries(surfaceWater.links).map(([k, v]) => ({
+      //   text: `<a href="${v}">Listen on ${k}</a>`,
+      // })),
       {
         text: surfaceWater.caption.join(''),
       },

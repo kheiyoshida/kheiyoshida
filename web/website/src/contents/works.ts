@@ -48,9 +48,12 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
           ],
         },
       },
-      ...Object.entries(surfaceWater.links).map(([k, v]) => ({
-        text: `<a href="${v}">Listen on ${k}</a>`,
-      })),
+      {
+        embed: [surfaceWater.bandcamp]
+      }
+      // ...Object.entries(surfaceWater.links).map(([k, v]) => ({
+      //   text: `<a href="${v}">Listen on ${k}</a>`,
+      // })),
     ],
   },
   {
