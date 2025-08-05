@@ -50,7 +50,7 @@ export const ContentData = {
     title: 'wasted',
     date: '2024',
     sketch: Sketch.wasted,
-    thumbnail: thumbnailPath('wasted.gif'),
+    thumbnail: thumbnailPath('wasted.webp'),
     placeholder: thumbnailPath('wasted.png'),
     caption: ``,
   },
@@ -71,7 +71,7 @@ export const ContentData = {
       ` So I shot tens of videos in the city, then I treated them as indifferent figures and turned them into this work.`,
       `* If you have any issues with rendering of the work, you can also watch on <a href="https://www.youtube.com/watch?v=lqn06t1xFOE">YouTube</a>`,
     ],
-    thumbnail: thumbnailPath('shinjuku.gif'),
+    thumbnail: thumbnailPath('shinjuku.webp'),
     placeholder: thumbnailPath('shinjuku.png'),
   },
   forest: {
@@ -95,7 +95,7 @@ export const ContentData = {
     title: 'tp4',
     date: '2023',
     sketch: Sketch.tp4,
-    thumbnail: thumbnailPath('tp4.gif'),
+    thumbnail: thumbnailPath('tp4.webp'),
     placeholder: thumbnailPath('tp4.png'),
     caption: [
       `I felt like dancing, so I made a graph network dance.Each node has its frequency to dance to (like you react to a kick), and significant sound makes it produce child nodes. (Audio data is FFT-analyzed via WebAudio API)`,
