@@ -34,10 +34,12 @@ export const ContentData = {
     date: '2024',
     thumbnail: resolveImagekitPath('works', 'surface-water', 'surface-water.png'),
     trackList: ['profit', 'shinjuku', 'wasted', '018th', 'regrets', 'platonic', 'divec'],
-    message: [`Album with 7 songs. Available on Bandcamp and streaming services.`],
+    message: [`Album with 7 songs. Available on Bandcamp.`],
     caption: [
       `Music is an interface. It's the interface to connect to something obscure and vague within yourself, which existence you need a "clue" to assume. Some music helps. It's like the water on the surface, which actually comes from the earth's underground even though all you can see are the waves on the surface. I made that kind of music through the experiments of music-generating programs, layered rhythms, and randomization of sound.`,
     ],
+    // album=42543690
+    bandcamp: '<iframe style="border: 0; width: 100%; height: 274px;" src="https://bandcamp.com/EmbeddedPlayer/album=42543690/size=large/bgcol=333333/linkcol=ffffff/artwork=small/transparent=true/" seamless><a href="https://kheiyoshida.bandcamp.com/album/medw">Surface Water by Khei Yoshida</a></iframe>',
     links: {
       Bandcamp: 'https://kheiyoshida.bandcamp.com/album/surface-water',
       Spotify: 'https://open.spotify.com/album/1YUjiO1HmUdDfJ2tfwY2bF?si=hVPRjfnwRXWBJhXLZAoLGA',
@@ -111,7 +113,7 @@ export const ContentData = {
   },
   maze: {
     title: 'MAZE',
-    date: '2023-2024',
+    date: '2023-',
     sketch: Sketch.maze,
     caption: [
       `This is the maze of experience.`,
@@ -132,9 +134,8 @@ export const ContentData = {
     date: '2022',
     artwork: resolveImagekitPath('works', '221201', 'medw.png'),
     bandcamp:
-      '<iframe style="border: 0; height: 274px;" src="https://bandcamp.com/EmbeddedPlayer/album=3299876757/size=large/bgcol=ffffff/linkcol=0687f5/artwork=small/transparent=true/" seamless><a href="https://kheiyoshida.bandcamp.com/album/medw">medw by Khei Yoshida</a></iframe>',
-    caption: `An EP with 4 songs made exploiting the over-editing of the sound, which I think ended up with intriguing rhthms and ambience. 
-      <br />You can lisen to it on <a href="https://open.spotify.com/album/2wrZ8mU7TPvzOVcm7aMDqJ?si=2XVjlRTLRPayZyfuQHYx-Q">Spotify</a> and other subscription services.`,
+      '<iframe style="border: 0; width: 100%; height: 274px;" src="https://bandcamp.com/EmbeddedPlayer/album=3299876757/size=large/bgcol=333333/linkcol=ffffff/artwork=small/transparent=true/" seamless><a href="https://kheiyoshida.bandcamp.com/album/medw">medw by Khei Yoshida</a></iframe>',
+    caption: ``,
   },
   gene: {
     title: 'Gene',
