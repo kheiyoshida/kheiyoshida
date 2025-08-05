@@ -135,7 +135,7 @@ export const ContentData = {
     artwork: resolveImagekitPath('works', '221201', 'medw.png'),
     bandcamp:
       '<iframe style="border: 0; width: 100%; height: 274px;" src="https://bandcamp.com/EmbeddedPlayer/album=3299876757/size=large/bgcol=333333/linkcol=ffffff/artwork=small/transparent=true/" seamless><a href="https://kheiyoshida.bandcamp.com/album/medw">medw by Khei Yoshida</a></iframe>',
-    caption: ``,
+    caption: ` `,
   },
   gene: {
     title: 'Gene',
