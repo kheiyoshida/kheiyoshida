@@ -18,7 +18,14 @@
       z-index: 50;
       &:hover {
         cursor: pointer;
+        & + img {
+          filter: contrast(0.85);
+        }
       }
+    }
+
+    img {
+      box-shadow: vars.$bg-color 0 0 8px -6px;
     }
   }
 
