@@ -10,23 +10,29 @@ const _ProjectEntities: WithoutId<ProjectPageInfo>[] = [
     contents: [
       {
         embed: [
-          `<iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/5oNRNsfQMAU?si=TzKii9WX0zxE9t-l"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerPolicy="strict-origin-when-cross-origin"
-          allowFullScreen
-        ></iframe>`,
-          `<iframe width="560" height="315" src="https://www.youtube.com/embed/5EWKIUT_irc?si=IfkM6tSKaz6SU-v0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`,
-          `<iframe width="560" height="315" src="https://www.youtube.com/embed/39rSydC9NzI?si=lPAhnJLxH4gMPZGc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`
+          `<iframe width="560" height="315" src="https://www.youtube.com/embed/b0d6twT3bgM?si=Q89mjSr4ZP7QcGwu" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`
         ],
       },
       {
-        text: `<a href="https://mgnr-lib.vercel.app">documentation page</a>`,
+        text: `<a href="https://83ssds.csb.app/" target="_blank" rel="noopener">Play the demo in sandbox environment</a>`
       },
       {
-        text: `mgnr is a generative music library for javascript. I've been developing the package as I develop other projects including maze, forest, and other music works`,
+        text: `MGNR is a generative music library built for JavaScript. It generates musical sequences in real time based on a number of modifiable parameters that change the range of random musical notes.`
+      },
+      {
+        text: `The focus of this package is on the algorithmic generation of music. By providing an explicit interface that can change musical sequences, it opens up possibilities for web-based interactive works, including my projects "<a href="/play/maze">maze</a>" and "<a href="/play/forest">forest</a>".`,
+      },
+      {
+        embed: [
+          `<iframe width="560" height="315" src="https://www.youtube.com/embed/5EWKIUT_irc?si=IfkM6tSKaz6SU-v0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`,
+          `<iframe width="560" height="315" src="https://www.youtube.com/embed/39rSydC9NzI?si=lPAhnJLxH4gMPZGc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`,
+        ],
+      },
+      {
+        text: `The output of the package can be used with the WebAudio API package Tone.js or transported to general MIDI inputs such as DAW software.`
+      },
+      {
+        text: `MGNR can be installed via the npm package registry. You can also try the package in the sandbox environment on the <a href="https://mgnr-lib.vercel.app">documentation page</a>.`
       },
     ],
   },
