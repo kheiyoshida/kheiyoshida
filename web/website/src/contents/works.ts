@@ -8,8 +8,6 @@ const {
   tp4,
   maze,
   medwEP,
-  gene,
-  zen4computers,
   regrets,
   surfaceWater,
   mandala,
@@ -17,8 +15,6 @@ const {
 
 const makePathsWithLink = (title: string, paths: string[], placeholderPath?: string) =>
   paths.map((p) => ({ path: p, link: worksLink(title), placeholderPath: placeholderPath || null }))
-
-const makePathsWithoutLink = (paths: string[]) => paths.map((p) => ({ path: p }))
 
 const _WorkEntities: WithoutId<WorkPageInfo>[] = [
   {
@@ -52,9 +48,12 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
           ],
         },
       },
-      ...Object.entries(surfaceWater.links).map(([k, v]) => ({
-        text: `<a href="${v}">Listen on ${k}</a>`,
-      })),
+      {
+        embed: [surfaceWater.bandcamp]
+      }
+      // ...Object.entries(surfaceWater.links).map(([k, v]) => ({
+      //   text: `<a href="${v}">Listen on ${k}</a>`,
+      // })),
     ],
   },
   {
@@ -111,35 +110,6 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
       },
     ],
     caption: medwEP.caption,
-  },
-  {
-    title: gene.title,
-    date: gene.date,
-    thumbnail: {
-      images: makePathsWithLink(gene.title, gene.images.slice(0, 2)),
-      layout: 'row',
-    },
-    contents: [
-      {
-        image: { images: makePathsWithoutLink(gene.images), layout: 'row' },
-      },
-    ],
-  },
-  {
-    title: zen4computers.title,
-    date: zen4computers.date,
-    thumbnail: {
-      images: makePathsWithLink(zen4computers.title, zen4computers.images.slice(0, 2)),
-      layout: 'grid',
-    },
-    contents: [
-      {
-        image: {
-          images: makePathsWithoutLink(zen4computers.images),
-          layout: 'grid',
-        },
-      },
-    ],
   },
 ]
 

@@ -7,15 +7,8 @@ export const retrieveImgAlt = (path: string) => {
   return p[p.length - 1]
 }
 
-export const imageKitLoader = ({
-  src,
-  width,
-  quality,
-}: {
-  src: string
-  width: number
-  quality?: number
-}) => {
-  const paramsString = `w-${width},q-${quality || 30}`
+export const imageKitLoader = ({ src, width, quality }: { src: string; width: number; quality?: number }) => {
+  const cappedWidth = width > 1200 ? 1200 : width
+  const paramsString = `w-${cappedWidth},q-${quality || 30}`
   return `${src}?tr=${paramsString}`
 }

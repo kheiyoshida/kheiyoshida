@@ -1,6 +1,6 @@
 export enum Slug {
   projects = 'projects',
-  works = 'works',
+  play = 'play',
   about= 'about'
 }
 

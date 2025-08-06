@@ -115,12 +115,4 @@ const socialLinks: { href: string; name: string }[] = [
     href: Links.github,
     name: 'Github',
   },
-  {
-    href: Links.youtube,
-    name: 'YouTube',
-  },
-  {
-    href: Links.spotify,
-    name: 'Spotify',
-  },
 ]
