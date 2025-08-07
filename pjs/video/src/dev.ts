@@ -3,14 +3,13 @@ import { prepareVideoElements } from './media/video/load'
 import { videoSourceList } from './pjs/shinjuku/videos'
 import { getGL } from './renderers/gl'
 import { Shader } from './renderers/shader'
-
 import { FrameBuffer } from './renderers/frameBuffer'
 import instanceVert from './renderers/shaders/instance.vert?raw'
 import instanceFrag from './renderers/shaders/instance.frag?raw'
 import screenVert from './renderers/shaders/screen.vert?raw'
 import screenFrag from './renderers/shaders/screen.frag?raw'
 import { Texture } from './renderers/texture'
-import { GenericModel, InstancedModel } from './renderers/newModel'
+import { GenericModel, InstancedModel } from './renderers/model'
 
 let videoSupply: VideoSupply
 prepareVideoElements(videoSourceList).then((videoElements) => {
@@ -67,7 +66,7 @@ const screenRectVertices = new Float32Array([
   -1, 1, 0, 0,
   1, 1, 1, 0
 ])
-// const screenRect = new ModelWithUV(screenShader, screenRectVertices)
+
 const screenRect = new GenericModel(screenShader, screenRectVertices, [
   { name: 'aPos', size: 2, stride: 16, offset: 0 },
   { name: 'aUV', size: 2, stride: 16, offset: 8 },

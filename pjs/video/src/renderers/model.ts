@@ -1,134 +1,135 @@
 import { Shader } from './shader'
 import { getGL } from './gl'
 
-/**
- * Model that accepts 2d vertices, not more than that
- */
-export class Model {
-  public vbo: WebGLBuffer
+type AttributeDescriptor = {
+  /**
+   * name of the attribute.
+   * e.g. aPos, aColor
+   */
+  name: string
+
+  /**
+   * size of the attribute data.
+   * e.g. 2 (vec2), 3 (vec3)
+   */
+  size: number
+
+  /**
+   * type of attribute.
+   * typically gl.FLOAT
+   */
+  type?: number
+  normalized?: boolean
+  stride?: number
+  offset?: number
+}
+
+export class GenericModel {
   public vao: WebGLVertexArrayObject
+  public vbo: WebGLBuffer
   protected vertexCount: number
 
-  constructor(public shader: Shader, dataArray: Float32Array) {
+  constructor(
+    public shader: Shader,
+    data: Float32Array,
+    attributes: AttributeDescriptor[],
+    usage: number = getGL().STATIC_DRAW
+  ) {
     const gl = getGL()
-
-    // data
-    this.vbo = gl.createBuffer()!
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo)
-    gl.bufferData(gl.ARRAY_BUFFER, dataArray, gl.STATIC_DRAW)
-    this.vertexCount = dataArray.length / 2 // 2 per vertex
-
-    // vao
-    // TODO: implement a uniform way to do this
     this.vao = gl.createVertexArray()!
+    this.vbo = gl.createBuffer()!
     gl.bindVertexArray(this.vao)
-    const aPosT = gl.getAttribLocation(shader.program, 'aPos')
-    gl.enableVertexAttribArray(aPosT)
-    gl.vertexAttribPointer(aPosT, 2, gl.FLOAT, false, 0, 0)
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo)
+    gl.bufferData(gl.ARRAY_BUFFER, data, usage)
+
+    for (const attr of attributes) {
+      const loc = gl.getAttribLocation(shader.program, attr.name)
+      if (loc === -1) continue
+
+      gl.enableVertexAttribArray(loc)
+      gl.vertexAttribPointer(
+        loc,
+        attr.size,
+        attr.type ?? gl.FLOAT,
+        attr.normalized ?? false,
+        attr.stride ?? 0,
+        attr.offset ?? 0
+      )
+    }
+
     gl.bindVertexArray(null)
+
+    this.vertexCount = data.length / attributes.reduce((pre, cur) => pre + cur.size, 0)
   }
 
-  // remember to call shader.use() before calling methods below
-
-  draw() {
+  draw(mode: number = getGL().TRIANGLE_STRIP) {
     const gl = getGL()
     gl.bindVertexArray(this.vao)
-    gl.drawArrays(gl.TRIANGLES, 0, this.vertexCount)
-  }
-
-  setUniformFloat(name: string, value: number) {
-    const gl = getGL()
-    gl.uniform1f(gl.getUniformLocation(this.shader.program, name), value)
+    gl.drawArrays(mode, 0, this.vertexCount)
   }
 }
 
-// TODO: inherit Model
-/**
- * model that accepts 2d vertices and UVs as data
- */
-export class ModelWithUV {
-  public vbo: WebGLBuffer
-  public vao: WebGLVertexArrayObject
-  protected vertexCount: number
-
-  constructor(public shader: Shader, dataArray: Float32Array) {
-    const gl = getGL()
-
-    // data
-    this.vbo = gl.createBuffer()!
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo)
-    gl.bufferData(gl.ARRAY_BUFFER, dataArray, gl.STATIC_DRAW)
-    this.vertexCount = dataArray.length / 4 // 4 values per vertex
-
-    // vao
-    this.vao = gl.createVertexArray()!
-    gl.bindVertexArray(this.vao)
-    const aPosT = gl.getAttribLocation(shader.program, 'aPos')
-    gl.enableVertexAttribArray(aPosT)
-    gl.vertexAttribPointer(aPosT, 2, gl.FLOAT, false, 16, 0)
-
-    const aUV = gl.getAttribLocation(shader.program, 'aUV')
-    gl.enableVertexAttribArray(aUV)
-    gl.vertexAttribPointer(aUV, 2, gl.FLOAT, false, 16, 8) // 4bytes x2 for position
-
-    gl.bindVertexArray(null)
-  }
-
-  // remember to call shader.use() before calling methods below
-
-  draw() {
-    const gl = getGL()
-    gl.bindVertexArray(this.vao)
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.vertexCount)
-  }
-
-  setUniformFloat(name: string, value: number) {
-    this.shader.setUniformFloat(name, value)
-  }
+type InstanceAttributeDescriptor = AttributeDescriptor & {
+  /**
+   * divisor for instancing
+   * 1 means "update attribute per instance"
+   */
+  divisor: number
 }
 
-/**
- * Instanced model that can be placed repeatedly at aOffset positions, not more than that
- */
-export class InstancedModel extends Model {
+export class InstancedModel extends GenericModel {
   public instanceVBO: WebGLBuffer
 
-  constructor(shader: Shader, dataArray: Float32Array) {
-    super(shader, dataArray)
+  protected instanceCount = 0
+  protected readonly instanceLength: number
+
+  constructor(
+    shader: Shader,
+    data: Float32Array,
+    attributes: AttributeDescriptor[],
+    instanceAttributes: InstanceAttributeDescriptor[],
+    usage: number = getGL().STATIC_DRAW
+  ) {
+    super(shader, data, attributes, usage)
 
     const gl = getGL()
     this.instanceVBO = gl.createBuffer()!
     gl.bindBuffer(gl.ARRAY_BUFFER, this.instanceVBO)
-
     gl.bindVertexArray(this.vao)
 
-    const stride = (2 + 3) * 4
+    for (const attr of instanceAttributes) {
+      const loc = gl.getAttribLocation(shader.program, attr.name)
+      if (loc === -1) continue
 
-    const aOffset = gl.getAttribLocation(shader.program, 'aOffset')
-    gl.enableVertexAttribArray(aOffset)
-    gl.vertexAttribPointer(aOffset, 2, gl.FLOAT, false, stride, 0)
-    gl.vertexAttribDivisor(aOffset, 1)
-
-    const aColor = gl.getAttribLocation(shader.program, 'aColor')
-    gl.enableVertexAttribArray(aColor)
-    gl.vertexAttribPointer(aColor, 3, gl.FLOAT, false, stride, 2 * 4)
-    gl.vertexAttribDivisor(aColor, 1)
+      gl.enableVertexAttribArray(loc)
+      gl.vertexAttribPointer(
+        loc,
+        attr.size,
+        attr.type ?? gl.FLOAT,
+        attr.normalized ?? false,
+        attr.stride ?? 0,
+        attr.offset ?? 0
+      )
+      if (attr.divisor !== undefined) {
+        gl.vertexAttribDivisor(loc, attr.divisor)
+      }
+    }
 
     gl.bindVertexArray(null)
-  }
 
-  private instanceCount = 0
+    this.instanceLength = instanceAttributes.reduce((pre, cur) => pre + cur.size, 0)
+  }
 
   setInstances(instances: number[]) {
     const gl = getGL()
     gl.bindBuffer(gl.ARRAY_BUFFER, this.instanceVBO)
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(instances), gl.STATIC_DRAW)
-    this.instanceCount = instances.length /5
+    this.instanceCount = instances.length / this.instanceLength
   }
 
-  override draw() {
+  override draw(mode: number = getGL().TRIANGLE_STRIP) {
     const gl = getGL()
     gl.bindVertexArray(this.vao)
-    gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, this.vertexCount, this.instanceCount)
+    gl.drawArraysInstanced(mode, 0, this.vertexCount, this.instanceCount)
   }
 }
