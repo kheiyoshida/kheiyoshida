@@ -91,14 +91,14 @@ export class ModelWithUV {
  * Instanced model that can be placed repeatedly at aOffset positions, not more than that
  */
 export class InstancedModel extends Model {
-  public offsetVBO: WebGLBuffer
+  public instanceVBO: WebGLBuffer
 
   constructor(shader: Shader, dataArray: Float32Array) {
     super(shader, dataArray)
 
     const gl = getGL()
-    this.offsetVBO = gl.createBuffer()!
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.offsetVBO)
+    this.instanceVBO = gl.createBuffer()!
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.instanceVBO)
 
     gl.bindVertexArray(this.vao)
 
@@ -117,18 +117,18 @@ export class InstancedModel extends Model {
     gl.bindVertexArray(null)
   }
 
-  private offsetCount = 0
+  private instanceCount = 0
 
   setInstances(instances: number[]) {
     const gl = getGL()
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.offsetVBO)
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.instanceVBO)
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(instances), gl.STATIC_DRAW)
-    this.offsetCount = instances.length /5
+    this.instanceCount = instances.length /5
   }
 
   override draw() {
     const gl = getGL()
     gl.bindVertexArray(this.vao)
-    gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, this.vertexCount, this.offsetCount)
+    gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, this.vertexCount, this.instanceCount)
   }
 }
