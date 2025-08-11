@@ -20,7 +20,7 @@ const frameBufferWidth = 800
 const frameBufferHeight = 800
 const frameBuffer = new FrameBuffer(frameBufferWidth, frameBufferHeight)
 
-const quad = new DotInstance()
+const dotInstance = new DotInstance()
 
 const texture = new Texture()
 const screenRect = new ScreenRect(texture)
@@ -48,18 +48,18 @@ function renderVideo() {
   const pixels = frameBuffer.readPixels()
 
   // === DETECT BRIGHT PIXELS ===
-  const offsets = []
-  for (let y = 0; y < frameBufferHeight; y += 4) {
+  const instances = []
+  for (let y = 0; y < frameBufferHeight; y += 2) {
     for (let x = 0; x < frameBufferWidth; x += 2) {
       const i = (y * frameBufferHeight + x) * 4
       if (pixels[i + 2] > 120) {
-        offsets.push(x / frameBufferWidth, y / frameBufferHeight) // normalized, flipped Y
-        offsets.push(pixels[i] / 255, pixels[i + 1] / 255, pixels[i + 2] / 255)
+        instances.push(x / frameBufferWidth, y / frameBufferHeight) // normalized, flipped Y
+        instances.push(pixels[i] / 255, pixels[i + 1] / 255, pixels[i + 2] / 255)
       }
     }
   }
 
-  quad.setInstances(offsets)
+  dotInstance.setInstances(instances)
 
   frameBuffer.deactivate()
 
@@ -68,8 +68,7 @@ function renderVideo() {
   gl.clearColor(0, 0, 0, 1)
   gl.clear(gl.COLOR_BUFFER_BIT)
 
-  quad.shader.use()
-  quad.shader.setUniformFloat('uSize', 2.0 / frameBufferWidth)
-  quad.draw()
+  dotInstance.setSize(1.0 / frameBufferWidth)
+  dotInstance.draw()
 }
 renderVideo()

@@ -5,14 +5,20 @@ import instanceFrag from '../shaders/instance.frag?raw'
 import { getGL } from '../gl'
 
 export class DotInstance extends InstancedModel {
-  constructor() {
+  constructor(aspectRatio: number = 1) {
     const instanceShader = new Shader(instanceVert, instanceFrag)
+
+    const gl = getGL()
+    const screenAspectRatio = gl.canvas.width / gl.canvas.height
+    const h = 1
+    const w = aspectRatio / screenAspectRatio
+
     // prettier-ignore
     const quadVertices = new Float32Array([
-      -0.5, -0.5,
-      0.5, -0.5,
-      -0.5, 0.5,
-      0.5, 0.5
+      -w, -h,
+      w, -h,
+      -w, h,
+      w, h
     ])
     super(
       instanceShader,
@@ -42,6 +48,11 @@ export class DotInstance extends InstancedModel {
         },
       ]
     )
+  }
+
+  public setSize(size: number) {
+    this.shader.use()
+    this.shader.setUniformFloat('uSize', size)
   }
 
   override draw() {
