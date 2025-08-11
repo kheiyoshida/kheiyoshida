@@ -2,14 +2,10 @@ import { makeVideoSupply, VideoSupply } from './media/video/supply'
 import { prepareVideoElements } from './media/video/load'
 import { videoSourceList } from './pjs/shinjuku/videos'
 import { getGL } from './renderers/gl'
-import { Shader } from './renderers/shader'
 import { FrameBuffer } from './renderers/frameBuffer'
-import instanceVert from './renderers/shaders/instance.vert?raw'
-import instanceFrag from './renderers/shaders/instance.frag?raw'
-import screenVert from './renderers/shaders/screen.vert?raw'
-import screenFrag from './renderers/shaders/screen.frag?raw'
 import { Texture } from './renderers/texture'
-import { GenericModel, InstancedModel } from './renderers/model'
+import { ScreenRect } from './renderers/model/screen'
+import { DotInstance } from './renderers/model/dot'
 
 let videoSupply: VideoSupply
 prepareVideoElements(videoSourceList).then((videoElements) => {
@@ -19,62 +15,15 @@ prepareVideoElements(videoSourceList).then((videoElements) => {
 
 const gl = getGL()
 
-const instanceShader = new Shader(instanceVert, instanceFrag)
-
 // frame buffer
 const frameBufferWidth = 800
 const frameBufferHeight = 800
 const frameBuffer = new FrameBuffer(frameBufferWidth, frameBufferHeight)
 
-// quad
-const quadVertices = new Float32Array([-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5])
-const quad = new InstancedModel(
-  instanceShader,
-  quadVertices,
-  [
-    {
-      name: 'aPos',
-      size: 2,
-      stride: 0,
-      offset: 0,
-    },
-  ],
-  [
-    {
-      name: 'aOffset',
-      size: 2,
-      stride: (2 + 3) * 4,
-      offset: 0,
-      divisor: 1,
-    },
-    {
-      name: 'aColor',
-      size: 3,
-      stride: (2 + 3) * 4,
-      offset: 2 * 4,
-      divisor: 1,
-    },
-  ]
-)
-
-// set up rect
-const screenShader = new Shader(screenVert, screenFrag)
-// prettier-ignore
-const screenRectVertices = new Float32Array([
-  -1, -1, 0, 1,
-  1, -1, 1, 1,
-  -1, 1, 0, 0,
-  1, 1, 1, 0
-])
-
-const screenRect = new GenericModel(screenShader, screenRectVertices, [
-  { name: 'aPos', size: 2, stride: 16, offset: 0 },
-  { name: 'aUV', size: 2, stride: 16, offset: 8 },
-])
+const quad = new DotInstance()
 
 const texture = new Texture()
-screenShader.use()
-screenShader.setUniformInt('uTexture', texture.id)
+const screenRect = new ScreenRect(texture)
 
 function renderVideo() {
   requestAnimationFrame(renderVideo)

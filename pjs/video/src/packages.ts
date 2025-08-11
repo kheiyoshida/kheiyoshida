@@ -1,6 +1,6 @@
 import { getGL } from './renderers/gl'
 import { Shader } from './renderers/shader'
-import { InstancedModel, Model, ModelWithUV } from './renderers/model'
+import { InstancedModel, Model, ModelWithUV } from './renderers/model/model'
 import { FrameBuffer } from './renderers/frameBuffer'
 import vs1 from './renderers/shaders/triangle.vert?raw'
 import fs1 from './renderers/shaders/triangle.frag?raw'
