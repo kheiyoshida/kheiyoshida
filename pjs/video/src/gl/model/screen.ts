@@ -3,6 +3,7 @@ import { Shader } from '../shader'
 import screenVert from '../shaders/screen.vert?raw'
 import screenFrag from '../shaders/screen.frag?raw'
 import { Texture } from '../texture'
+import { getGL } from '../gl'
 
 /**
  * screen rect that renders texture input
@@ -28,6 +29,10 @@ export class ScreenRect extends GenericModel {
   public setTexture(texture: Texture) {
     this.shader.use()
     this.shader.setUniformInt('uTexture', texture.id)
+  }
+
+  override draw() {
+    super.draw(getGL().TRIANGLE_STRIP)
   }
 }
 

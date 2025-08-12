@@ -1,11 +1,11 @@
 import { makeVideoSupply, VideoSupply } from './media/video/supply'
 import { prepareVideoElements } from './media/video/load'
 import { videoSourceList } from './pjs/shinjuku/videos'
-import { getGL } from './renderers/gl'
-import { FrameBuffer } from './renderers/frameBuffer'
-import { Texture } from './renderers/texture'
-import { ScreenRect } from './renderers/model/screen'
-import { DotInstance } from './renderers/model/dot'
+import { getGL } from './gl/gl'
+import { Texture } from './gl/texture'
+import { DotInstance } from './gl/model/dot'
+import { OffScreenTextureRenderer } from './gl/renderers/offscreen'
+import { ScreenRenderer } from './gl/renderers/renderer'
 
 let videoSupply: VideoSupply
 prepareVideoElements(videoSourceList).then((videoElements) => {
@@ -13,17 +13,20 @@ prepareVideoElements(videoSourceList).then((videoElements) => {
   videoSupply.onEnded(() => videoSupply.swapVideo())
 })
 
-const gl = getGL()
+getGL()
 
-// frame buffer
-const frameBufferWidth = 800
-const frameBufferHeight = 800
-const frameBuffer = new FrameBuffer(frameBufferWidth, frameBufferHeight)
+const videoTexture = new Texture()
+const frameBufferWidth = 320
+const frameBufferHeight = 180
+const offscreenTextureRenderer = new OffScreenTextureRenderer(
+  videoTexture,
+  frameBufferWidth,
+  frameBufferHeight
+)
 
+const screenRenderer = new ScreenRenderer()
+screenRenderer.backgroundColor = [0, 0, 0, 1]
 const dotInstance = new DotInstance()
-
-const texture = new Texture()
-const screenRect = new ScreenRect(texture)
 
 function renderVideo() {
   requestAnimationFrame(renderVideo)
@@ -35,23 +38,13 @@ function renderVideo() {
     videoSupply.swapVideo()
   }
 
-  frameBuffer.activate()
+  videoTexture.setTextureImage(videoSupply.currentVideo)
+  const pixels = offscreenTextureRenderer.renderAsPixels()
 
-  gl.clearColor(0.5, 0.2, 0.2, 1)
-  gl.clear(gl.COLOR_BUFFER_BIT)
-
-  screenRect.shader.use()
-  texture.setTextureImage(videoSupply.currentVideo)
-  screenRect.draw(gl.TRIANGLE_STRIP)
-
-  // === READ PIXELS ===
-  const pixels = frameBuffer.readPixels()
-
-  // === DETECT BRIGHT PIXELS ===
   const instances = []
-  for (let y = 0; y < frameBufferHeight; y += 2) {
-    for (let x = 0; x < frameBufferWidth; x += 2) {
-      const i = (y * frameBufferHeight + x) * 4
+  for (let y = 0; y < frameBufferHeight; y += 1) {
+    for (let x = 0; x < frameBufferWidth; x += 1) {
+      const i = (y * frameBufferWidth + x) * 4
       if (pixels[i + 2] > 120) {
         instances.push(x / frameBufferWidth, y / frameBufferHeight) // normalized, flipped Y
         instances.push(pixels[i] / 255, pixels[i + 1] / 255, pixels[i + 2] / 255)
@@ -60,15 +53,7 @@ function renderVideo() {
   }
 
   dotInstance.setInstances(instances)
-
-  frameBuffer.deactivate()
-
-  // === PASS 2: draw dots ===
-  gl.viewport(0, 0, window.innerWidth, window.innerHeight)
-  gl.clearColor(0, 0, 0, 1)
-  gl.clear(gl.COLOR_BUFFER_BIT)
-
-  dotInstance.setSize(1.0 / frameBufferWidth)
-  dotInstance.draw()
+  dotInstance.setSize(0.3 / frameBufferHeight)
+  screenRenderer.render([dotInstance])
 }
 renderVideo()

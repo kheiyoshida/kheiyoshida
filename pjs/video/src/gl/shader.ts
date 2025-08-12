@@ -17,8 +17,13 @@ export class Shader {
     this.program = program
   }
 
+  static currentProgram: WebGLProgram | null = null
+
   use() {
-    getGL().useProgram(this.program)
+    if (Shader.currentProgram != this.program) {
+      Shader.currentProgram = this.program
+      getGL().useProgram(this.program)
+    }
   }
 
   setUniformFloat(name: string, value: number) {

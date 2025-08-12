@@ -64,6 +64,7 @@ export class GenericModel {
 
   draw(mode: number = getGL().TRIANGLE_STRIP) {
     const gl = getGL()
+    this.shader.use()
     gl.bindVertexArray(this.vao)
     gl.drawArrays(mode, 0, this.vertexCount)
   }
