@@ -11,6 +11,7 @@ export class ImageScope {
   // so that it won't show pixels outside image
   private readonly movableRegionsBySize: MovableRegion[]
 
+  public readonly finalResolution: MediaSize
   public readonly finalPixelDataSize: number
 
   constructor(
@@ -18,12 +19,17 @@ export class ImageScope {
     private finalResolutionWidth: number
   ) {
     this.sizeCandidates = createMagnifiedSizeList(originalImageSize, finalResolutionWidth)
+    console.log(this.sizeCandidates)
     this.movableRegionsBySize = this.sizeCandidates.map((size) =>
       getRestrainedRegion(originalImageSize, size)
     )
     this.position = centerPosition(originalImageSize)
 
     const finalResolutionHeight = finalResolutionWidth * (originalImageSize.height / originalImageSize.width)
+    this.finalResolution = {
+      width: finalResolutionWidth,
+      height: finalResolutionHeight
+    }
     this.finalPixelDataSize = finalResolutionWidth * finalResolutionHeight * 4
   }
 
@@ -63,6 +69,7 @@ export class ImageScope {
     if (this.magnifyLevel === 0) {
       this.resetPosition()
     }
+    console.log(this.magnifyLevel)
   }
 
   changePosition(change: (position: PixelPosition) => PixelPosition) {
