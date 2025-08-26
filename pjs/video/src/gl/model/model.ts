@@ -122,14 +122,18 @@ export class InstancedModel extends GenericModel {
 
     gl.bindVertexArray(null)
 
+    // allocate gpu space
     this.instanceLength = instanceAttributes.reduce((pre, cur) => pre + cur.size, 0)
     this.instanceDataArray = new Float32Array(maxInstanceCount * this.instanceLength)
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.instanceVBO)
+    gl.bufferData(gl.ARRAY_BUFFER, this.instanceDataArray, gl.DYNAMIC_DRAW)
   }
 
   updateInstances(count: number) {
     const gl = getGL()
     gl.bindBuffer(gl.ARRAY_BUFFER, this.instanceVBO)
-    gl.bufferData(gl.ARRAY_BUFFER, this.instanceDataArray, gl.STATIC_DRAW)
+    gl.bufferSubData(gl.ARRAY_BUFFER, 0, this.instanceDataArray.subarray(0, count * this.instanceLength))
+
     this.instanceCount = count
   }
 
