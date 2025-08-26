@@ -63,6 +63,11 @@ const JestConfig: Config = {
       displayName: 'midi-viz',
       rootDir: './pjs/midi-viz',
     },
+    {
+      ...RootConfig,
+      displayName: 'video',
+      rootDir: './pjs/video',
+    },
     // pkgs
     {
       ...RootConfig,

@@ -16,6 +16,7 @@
     "eslint": "8.32.0",
     "eslint-config-next": "13.1.2",
     "forest": "workspace:^",
+    "video": "workspace:^",
     "maze": "workspace:^",
     "music": "workspace:^",
     "next": "14.2.10",
