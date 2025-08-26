@@ -7,7 +7,7 @@ import { DotInstance } from './gl/model/dot'
 import { OffScreenTextureRenderer } from './gl/renderers/offscreen'
 import { ScreenRenderer } from './gl/renderers/renderer'
 import { PixelParser } from './media/pixels/parse'
-import { randomIntInclusiveBetween } from 'utils'
+import { randomFloatBetween, randomIntInclusiveBetween } from 'utils'
 import { ImageScope } from './media/pixels/scope/scope'
 
 let videoSupply: VideoSupply
@@ -29,7 +29,7 @@ const offscreenTextureRenderer = new OffScreenTextureRenderer(
 
 const screenRenderer = new ScreenRenderer()
 screenRenderer.backgroundColor = [0, 0, 0, 1]
-const dotInstance = new DotInstance()
+const dotInstance = new DotInstance(1)
 
 const scope = new ImageScope(
   {
@@ -60,20 +60,23 @@ function renderVideo() {
   const rawPixels = offscreenTextureRenderer.renderAsPixels()
   const parsedPixels = parser.parsePixelData(rawPixels)
 
-  const instances = []
+  const instanceData = []
   for (let y = 0; y < resolutionHeight; y += 1) {
     for (let x = 0; x < resolutionWidth; x += 1) {
       const i = (y * resolutionWidth + x) * 4
       if (parsedPixels[i + 2] > 40) {
-        instances.push(x / resolutionWidth, y / resolutionHeight) // normalized, flipped Y
+        const dx = randomIntInclusiveBetween(-2, 2)
+        const dy = randomIntInclusiveBetween(-2, 2)
+        instanceData.push((x + dx) / resolutionWidth, (y + dy) / resolutionHeight) // normalized, flipped Y
         // instances.push(parsedPixels[i] / 255, parsedPixels[i + 1] / 255, parsedPixels[i + 2] / 255)
         const bri = parsedPixels[i + 2] / 255
-        instances.push(bri, bri, bri)
+        instanceData.push(bri, bri, bri)
+        instanceData.push(randomFloatBetween(0.05, 0.2) / resolutionHeight) // size
       }
     }
   }
 
-  dotInstance.setInstances(instances)
+  dotInstance.setInstances(instanceData)
   dotInstance.setSize(0.1 / resolutionHeight)
   screenRenderer.render([dotInstance])
 }

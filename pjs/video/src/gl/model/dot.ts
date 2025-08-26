@@ -35,17 +35,24 @@ export class DotInstance extends InstancedModel {
         {
           name: 'aOffset',
           size: 2,
-          stride: (2 + 3) * 4,
+          stride: (2 + 3 + 1) * 4,
           offset: 0,
           divisor: 1,
         },
         {
           name: 'aColor',
           size: 3,
-          stride: (2 + 3) * 4,
+          stride: (2 + 3 + 1) * 4,
           offset: 2 * 4,
           divisor: 1,
         },
+        {
+          name: 'aSize',
+          size: 1,
+          stride: (2 + 3 + 1) * 4,
+          offset: (2 + 3) * 4,
+          divisor: 1,
+        }
       ]
     )
   }
