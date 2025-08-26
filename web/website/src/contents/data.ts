@@ -126,7 +126,7 @@ export const ContentData = {
       '[v0.2] Added some scripted music using Tone.js',
       '[v0.1] The original version was built on a weekend',
     ],
-    images: [thumbnailPath('maze.webp')],
+    images: [thumbnailPath('maze_v6.webp')],
     placeholder: thumbnailPath('maze.png'),
   },
   medwEP: {
