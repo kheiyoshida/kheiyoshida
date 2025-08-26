@@ -1,5 +1,5 @@
 import { makeVideoSupply } from '../../media/video/supply'
-import { checkLoadingState, loadVideoSourceList, waitForVideosToLoad } from '../../media/video/load'
+import { loadVideoSourceList, waitForVideosToLoad } from '../../media/video/load'
 import { videoSourceList } from './videos'
 import { getGL } from '../../gl/gl'
 import { Texture } from '../../gl/texture'
@@ -7,12 +7,13 @@ import { DotInstance } from '../../gl/model/dot'
 import { OffScreenTextureRenderer } from '../../gl/renderers/offscreen'
 import { ScreenRenderer } from '../../gl/renderers/renderer'
 import { PixelParser } from '../../media/pixels/parse'
-import { clamp, fireByRate, randomIntInclusiveBetween } from 'utils'
+import { clamp, makeIntWobbler } from 'utils'
 import { ImageScope } from '../../media/pixels/scope/scope'
 import { Analyzer, FFTSize } from '../../media/audio/types'
 import { callContext, createAnalyzer, createSoundSource } from '../../media/audio/analyzer'
 import { getMusicLoc } from '../../media/cdn'
 import { Message } from './message'
+import { updateScope, updateVideo } from './domain'
 
 // config
 const fftSize: FFTSize = 32
@@ -21,6 +22,7 @@ const frameBufferWidth = 640
 const frameBufferHeight = frameBufferWidth / (16 / 9)
 const finalResolutionWidth = frameBufferWidth / 4
 const backgroundColor: [number, number, number, number] = [0, 0, 0, 1]
+const updateFrequency = 4
 
 export const app = async () => {
   // init gl
@@ -66,7 +68,8 @@ export const app = async () => {
   const screenRenderer = new ScreenRenderer()
   screenRenderer.backgroundColor = backgroundColor
   const maxInstanceCount = scope.finalResolution.width * scope.finalResolution.height
-  const dotInstance = new DotInstance(maxInstanceCount, 3)
+  const dotAspectRatio = 3 * 16/9
+  const dotInstance = new DotInstance(maxInstanceCount, dotAspectRatio)
 
   // loading & interactions
   let started = false
@@ -81,20 +84,21 @@ export const app = async () => {
     started = true
   })
 
-  await waitForVideosToLoad(videoElements, (progress) => message.text = `loading: ${progress}%`)
+  await waitForVideosToLoad(
+    videoElements,
+    (progress) => (message.text = `loading: ${progress}%`),
+    15,
+    'canplaythrough'
+  )
   message.text = 'click/tap to play'
 
   function renderVideo(frameCount: number) {
     if (!started) return
     playSound()
 
-    if (fireByRate(0.03)) {
-      videoSupply.swapVideo()
-      scope.magnifyLevel = randomIntInclusiveBetween(0, scope.maxMagnifyLevel)
-      scope.position = {
-        x: scope.position.x + randomIntInclusiveBetween(-100, 100),
-        y: scope.position.y + randomIntInclusiveBetween(-100, 100),
-      }
+    if (frameCount % updateFrequency === 0) {
+      updateVideo(videoSupply)
+      updateScope(scope)
     }
 
     videoTexture.setTextureImage(videoSupply.currentVideo)
@@ -102,22 +106,23 @@ export const app = async () => {
     const parsedPixels = parser.parsePixelData(rawPixels)
 
     const wave = calcWave(analyser)
-    const wiggle = () => randomIntInclusiveBetween(Math.floor(-wave * 2), Math.floor(wave * 2))
+    const wiggle = makeIntWobbler(clamp(wave * 6, 1, 10))
 
     let k = 0
     for (let y = 0; y < resolutionHeight; y += 1) {
       for (let x = 0; x < resolutionWidth; x += 1) {
         const i = (y * resolutionWidth + x) * 4
-        if (parsedPixels[i + 2] > 80) {
-          dotInstance.instanceDataArray[k++] = (x + wiggle()) / resolutionWidth
-          dotInstance.instanceDataArray[k++] = (y + wiggle()) / resolutionHeight
+        if (parsedPixels[i + 2] > 60 + wave * 20) {
+          dotInstance.instanceDataArray[k++] = wiggle(x) / resolutionWidth
+          dotInstance.instanceDataArray[k++] = wiggle(y) / resolutionHeight
 
-          const bri = parsedPixels[i + 2] / 255
-          dotInstance.instanceDataArray[k++] = bri
-          dotInstance.instanceDataArray[k++] = bri
-          dotInstance.instanceDataArray[k++] = bri
+          const brightnessLevel = parsedPixels[i + 2] / 255
+          dotInstance.instanceDataArray[k++] = brightnessLevel
+          dotInstance.instanceDataArray[k++] = brightnessLevel
+          dotInstance.instanceDataArray[k++] = brightnessLevel
 
-          dotInstance.instanceDataArray[k++] = (0.2 + wave * 0.1) * singleDotSize
+          const dotSize = clamp((1 + wave) / 10, 0.3, 0.5)
+          dotInstance.instanceDataArray[k++] = dotSize * singleDotSize
         }
       }
     }
