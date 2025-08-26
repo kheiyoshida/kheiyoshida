@@ -38,6 +38,7 @@ function renderVideo() {
       if (pixels[i + 2] > 30) {
         instances.push(x / frameBufferWidth, y / frameBufferHeight) // normalized, flipped Y
         instances.push(pixels[i] / 255, pixels[i + 1] / 255, pixels[i + 2] / 255)
+        instances.push(0.3 / frameBufferHeight)
       }
     }
   }

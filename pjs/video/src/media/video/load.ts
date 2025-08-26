@@ -73,3 +73,13 @@ const waitForVideoReady = (
     } catch {}
   })
 }
+
+export const checkLoadingState = (videoElements: HTMLVideoElement[]) => {
+  let playable = 0
+  for(const videoElement of videoElements) {
+    if (videoElement.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
+      playable++
+    }
+  }
+  return playable / videoElements.length
+}

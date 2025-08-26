@@ -1,5 +1,5 @@
 import { makeVideoSupply } from '../../media/video/supply'
-import { loadVideoSourceList, waitForVideosToLoad } from '../../media/video/load'
+import { checkLoadingState, loadVideoSourceList, waitForVideosToLoad } from '../../media/video/load'
 import { cdnVideoSourceList } from './videos'
 import { getGL } from '../../gl/gl'
 import { Texture } from '../../gl/texture'
@@ -62,15 +62,17 @@ export const app = async () => {
     started = true
   })
 
+  const check = setInterval(() => {
+    const state = checkLoadingState(videoElements)
+    message.text = `loading: ${Math.floor(state * 100)}%`
+  }, 100)
   await waitForVideosToLoad(videoElements)
+  clearInterval(check)
+
+  message.text = 'click/tap to play'
 
   function renderVideo() {
     requestAnimationFrame(renderVideo)
-
-    if (!videoSupply) return
-    if (videoSupply.currentVideo.readyState < HTMLVideoElement.prototype.HAVE_CURRENT_DATA) return
-
-    message.text = 'click/tap to play'
     if (!started) return
 
     if (Math.random() < 0.03) {
