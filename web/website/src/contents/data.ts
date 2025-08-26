@@ -58,7 +58,7 @@ export const ContentData = {
   },
   shinjuku: {
     title: 'shinjuku',
-    date: '2024',
+    date: '2024, 2025',
     sketch: Sketch.shinjuku,
     soundcloud:
       '<iframe style="margin-top: 8px;" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1733015109&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>',
@@ -69,8 +69,7 @@ export const ContentData = {
       `Every time you walk through the crowd in a city, you walk past the shadows of them.`,
       `Sometimes you don't even realize they all have their names.`,
       `They are the anonymous shadows, and so are you to them.`,
-      `Every time I walk through the Shinjuku, I find myself blurred.`,
-      `So I shot videos in the city, then I turned them into this work.`,
+      `Click or tap on the screen to see the shadows in the world's busiest city.`
       // `* If you have any issues with rendering of the work, you can also watch on <a href="https://www.youtube.com/watch?v=lqn06t1xFOE">YouTube</a>`,
     ],
     thumbnail: thumbnailPath('shinjuku.webp'),

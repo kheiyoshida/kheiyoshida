@@ -19,7 +19,7 @@ import { makeInteraction, updateScope, updateVideo } from './domain'
 const isVertical = window.innerWidth < window.innerHeight
 const fftSize: FFTSize = 32
 
-const frameBufferWidth = isVertical ? 480 : 960
+const frameBufferWidth = 960
 const frameBufferHeight = frameBufferWidth / (16 / 9)
 const finalResolutionWidth = frameBufferWidth / 4
 const backgroundColor: [number, number, number, number] = [0, 0, 0, 1]
@@ -107,7 +107,7 @@ export const app = async () => {
   await waitForVideosToLoad(
     videoElements,
     (progress) => (message.text = `loading: ${progress}%`),
-    15,
+    30,
     'canplaythrough'
   )
   loaded = true
