@@ -1,17 +1,7 @@
 import { WithoutId, WorkPageInfo } from '../types'
 import { ContentData, insertSlug, worksLink } from './data'
 
-const {
-  wasted,
-  shinjuku,
-  forest,
-  tp4,
-  maze,
-  medwEP,
-  regrets,
-  surfaceWater,
-  mandala,
-} = ContentData
+const { wasted, shinjuku, forest, tp4, maze, medwEP, regrets, surfaceWater, mandala } = ContentData
 
 const makePathsWithLink = (title: string, paths: string[], placeholderPath?: string) =>
   paths.map((p) => ({ path: p, link: worksLink(title), placeholderPath: placeholderPath || null }))
@@ -23,6 +13,15 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
     contents: maze.sketch,
     thumbnail: { images: makePathsWithLink(maze.title, [...maze.images], maze.placeholder) },
     caption: `This is the maze of experience.\nControl: Touch the buttons (mobile) / Arrow or WASD keys (desktop). \nTurn on the sound of your device when playing.`,
+  },
+  {
+    title: shinjuku.title,
+    date: shinjuku.date,
+    thumbnail: {
+      images: makePathsWithLink(shinjuku.title, [shinjuku.thumbnail], shinjuku.placeholder),
+    },
+    contents: shinjuku.sketch,
+    caption: shinjuku.caption.join(' '),
   },
   {
     title: mandala.title,
@@ -49,8 +48,8 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
         },
       },
       {
-        embed: [surfaceWater.bandcamp]
-      }
+        embed: [surfaceWater.bandcamp],
+      },
       // ...Object.entries(surfaceWater.links).map(([k, v]) => ({
       //   text: `<a href="${v}">Listen on ${k}</a>`,
       // })),
@@ -78,15 +77,6 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
     },
     contents: wasted.sketch,
     caption: wasted.caption,
-  },
-  {
-    title: shinjuku.title,
-    date: shinjuku.date,
-    thumbnail: {
-      images: makePathsWithLink(shinjuku.title, [shinjuku.thumbnail], shinjuku.placeholder),
-    },
-    contents: shinjuku.sketch,
-    caption: shinjuku.caption.join(' '),
   },
 
   {

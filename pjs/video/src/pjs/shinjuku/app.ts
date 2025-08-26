@@ -1,6 +1,6 @@
 import { makeVideoSupply } from '../../media/video/supply'
 import { loadVideoSourceList, waitForVideosToLoad } from '../../media/video/load'
-import { videoSourceList } from './videos'
+import { cdnVideoSourceList } from './videos'
 import { getGL } from '../../gl/gl'
 import { Texture } from '../../gl/texture'
 import { DotInstance } from '../../gl/model/dot'
@@ -53,7 +53,7 @@ export const app = async () => {
   }
 
   // video
-  const videoElements = loadVideoSourceList(videoSourceList)
+  const videoElements = loadVideoSourceList(cdnVideoSourceList)
   const videoSupply = makeVideoSupply(videoElements, { speed: 0.3 })
   videoSupply.onEnded(() => videoSupply.swapVideo())
 
@@ -92,13 +92,17 @@ export const app = async () => {
   message.text = 'loading...'
 
   const interact = makeInteraction(videoSupply, scope)
-  canvas.addEventListener('pointerdown', (e) => {
+
+  message.div.onclick = () => {
     if (!loaded) return
     playSound()
     message.hide()
     started = true
-    interact(e)
-  })
+
+    canvas.addEventListener('pointerdown', (e) => {
+      interact(e)
+    })
+  }
 
   await waitForVideosToLoad(
     videoElements,

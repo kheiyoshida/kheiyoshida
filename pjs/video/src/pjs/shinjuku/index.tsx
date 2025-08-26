@@ -48,7 +48,9 @@ const styles: Record<string, React.CSSProperties> = {
     top: window.innerHeight / 2,
     left: window.innerWidth / 2 - 100,
     width: 200,
+    height: 300,
     textAlign: 'center',
     zIndex: 100,
+    cursor: 'pointer',
   },
 }

@@ -1,6 +1,6 @@
 
 export class Message{
-  private div: HTMLDivElement
+  readonly div: HTMLDivElement
 
   constructor() {
     this.div = document.getElementById('message')! as HTMLDivElement
