@@ -1,5 +1,6 @@
 import { convertPixelDataIntoMatrix, PixelParser } from './parse'
 import { MediaSize } from './types'
+import { ImageScope } from './scope/scope'
 
 const createMockPixelData = ({ width, height }: MediaSize) =>
   [...new Array(width * height * 4)].map((_, i) => i)
@@ -49,9 +50,9 @@ const createRGBAByCoord = ({ width, height }: MediaSize) => {
 test(`${PixelParser.name}`, () => {
   const originalImageSize: MediaSize = { width: 32, height: 18 } // 16:9
   const finalResolutionWidth = 16
-  const parser = new PixelParser(originalImageSize, finalResolutionWidth)
-  expect(parser.scope.size).toMatchObject({ width: 32, height: 18 })
-  expect(parser.scope.skip).toBe(2)
+  const parser = new PixelParser(new ImageScope(originalImageSize, finalResolutionWidth))
+  expect(parser.scope.parseParams.scopedSize).toMatchObject({ width: 32, height: 18 })
+  expect(parser.scope.parseParams.pixelSkip).toBe(2)
   expect(parser.parseResult.length).toBe(16 * 9 * 4)
 
   const rawPixelData = createRGBAByCoord(originalImageSize)
@@ -59,7 +60,7 @@ test(`${PixelParser.name}`, () => {
 
   // Assert we’re sampling every `skip` along rows/cols:
   const wOut = finalResolutionWidth // or compute expected output width
-  const skip = parser.scope.skip
+  const skip = parser.scope.parseParams.pixelSkip
 
   // First pixel should be y=0, x=0  -> [0,0,0,255]
   expect(result.slice(0, 4)).toEqual(Uint8Array.of(0, 0, 0, 255))

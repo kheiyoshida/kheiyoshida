@@ -1,4 +1,4 @@
-import { MediaSize, PixelPosition } from './types'
+import { MediaSize, PixelPosition } from '../types'
 
 /**
  * determine the region where the center position of magnified region can move

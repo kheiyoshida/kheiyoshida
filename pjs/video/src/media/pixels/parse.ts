@@ -1,29 +1,25 @@
-import { ImageScope } from './scope'
+import { ImageScope } from './scope/scope'
 import { MediaSize, PixelPosition } from './types'
-import { leftTopIze } from './position'
+import { leftTopIze } from './scope/position'
 
 export class PixelParser {
   public readonly scope: ImageScope
 
-  constructor(
-    originalImageSize: MediaSize,
-    finalResolutionWidth: number
-  ) {
-    this.scope = new ImageScope(originalImageSize, finalResolutionWidth)
-    this.parseResult = new Uint8Array(this.scope.finalPixelDataSize)
+  constructor(scope: ImageScope) {
+    this.scope = scope
+    this.parseResult = new Uint8Array(
+      this.scope.finalResolution.width * this.scope.finalResolution.height * 4
+    )
   }
 
   public readonly parseResult: Uint8Array
 
-  public parsePixelData(
-    pixels: Uint8Array,
-  ): Uint8Array {
-    const magnifiedSize = this.scope.size
-    const skip = this.scope.skip
-    const leftTopPosition = leftTopIze(this.scope.position, magnifiedSize)
+  public parsePixelData(pixels: Uint8Array): Uint8Array {
+    const { pixelSkip, scopedSize, scopeCenter } = this.scope.parseParams
+    const leftTopPosition = leftTopIze(scopeCenter, scopedSize)
     let r = 0
-    for (let y = leftTopPosition.y; y < leftTopPosition.y + magnifiedSize.height; y += skip) {
-      for (let x = leftTopPosition.x; x < leftTopPosition.x + magnifiedSize.width; x += skip) {
+    for (let y = leftTopPosition.y; y < leftTopPosition.y + scopedSize.height; y += pixelSkip) {
+      for (let x = leftTopPosition.x; x < leftTopPosition.x + scopedSize.width; x += pixelSkip) {
         const i = (y * this.scope.originalImageSize.width + x) * 4
         this.parseResult[r] = pixels[i]
         this.parseResult[r + 1] = pixels[i + 1]

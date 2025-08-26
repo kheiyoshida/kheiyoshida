@@ -8,8 +8,6 @@ export type PixelPosition = {
   y: number
 }
 
-export type PixelPositionArray = [x: number, y: number]
-
 export type MovableRegion = {
   t: number,
   r: number

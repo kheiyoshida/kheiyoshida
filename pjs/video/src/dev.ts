@@ -8,6 +8,7 @@ import { OffScreenTextureRenderer } from './gl/renderers/offscreen'
 import { ScreenRenderer } from './gl/renderers/renderer'
 import { PixelParser } from './media/pixels/parse'
 import { randomIntInclusiveBetween } from 'utils'
+import { ImageScope } from './media/pixels/scope/scope'
 
 let videoSupply: VideoSupply
 prepareVideoElements(videoSourceList).then((videoElements) => {
@@ -19,7 +20,7 @@ getGL()
 
 const videoTexture = new Texture()
 const frameBufferWidth = 600
-const frameBufferHeight = frameBufferWidth / (16/9)
+const frameBufferHeight = frameBufferWidth / (16 / 9)
 const offscreenTextureRenderer = new OffScreenTextureRenderer(
   videoTexture,
   frameBufferWidth,
@@ -30,14 +31,15 @@ const screenRenderer = new ScreenRenderer()
 screenRenderer.backgroundColor = [0, 0, 0, 1]
 const dotInstance = new DotInstance()
 
-const parser = new PixelParser(
+const scope = new ImageScope(
   {
     width: frameBufferWidth,
     height: frameBufferHeight,
   },
   200
 )
-const { width: resolutionWidth, height: resolutionHeight } = parser.scope.finalResolution
+const parser = new PixelParser(scope)
+const { width: resolutionWidth, height: resolutionHeight } = scope.finalResolution
 
 function renderVideo() {
   requestAnimationFrame(renderVideo)
@@ -47,11 +49,11 @@ function renderVideo() {
 
   if (Math.random() < 0.03) {
     // videoSupply.swapVideo()
-    parser.scope.randomMagnify()
-    parser.scope.changePosition((pos) => ({
-      x: pos.x + randomIntInclusiveBetween(-100, 100),
-      y: pos.y + randomIntInclusiveBetween(-100, 100),
-    }))
+    scope.magnifyLevel = randomIntInclusiveBetween(0, scope.maxMagnifyLevel)
+    scope.position = {
+      x: scope.position.x + randomIntInclusiveBetween(-100, 100),
+      y: scope.position.y + randomIntInclusiveBetween(-100, 100),
+    }
   }
 
   videoTexture.setTextureImage(videoSupply.currentVideo)

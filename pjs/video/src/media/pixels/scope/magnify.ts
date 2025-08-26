@@ -1,5 +1,5 @@
 import { getCommonDivisors, getFloatDivisors } from 'utils'
-import { MediaSize } from './types'
+import { MediaSize } from '../types'
 
 export const createMagnifiedSizeList = (
   originalMediaSize: MediaSize,
