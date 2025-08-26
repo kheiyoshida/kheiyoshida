@@ -1,6 +1,6 @@
 import { makeVideoSupply } from '../../media/video/supply'
 import { loadVideoSourceList, waitForVideosToLoad } from '../../media/video/load'
-import { videoSourceList } from './videos'
+import { cdnVideoSourceList, videoSourceList } from './videos'
 import { getGL } from '../../gl/gl'
 import { Texture } from '../../gl/texture'
 import { DotInstance } from '../../gl/model/dot'
@@ -40,7 +40,7 @@ export const app = async () => {
   }
 
   // video
-  const videoElements = loadVideoSourceList(videoSourceList)
+  const videoElements = loadVideoSourceList(cdnVideoSourceList)
   const videoSupply = makeVideoSupply(videoElements, { speed: 0.3 })
   videoSupply.onEnded(() => videoSupply.swapVideo())
 
