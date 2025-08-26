@@ -20,7 +20,7 @@ const getSketchComponent = (sketch: Sketch) => {
     case Sketch.wasted:
       return dynamic(() => import('sketch/src/projects/wasted'), { ssr: false })
     case Sketch.shinjuku:
-      return dynamic(() => import('sketch/src/projects/shinjuku'), { ssr: false })
+      return dynamic(() => import('video/src/pjs/shinjuku'), { ssr: false })
     case Sketch.forest:
       return dynamic(() => import('forest'), { ssr: false })
     case Sketch.maze:

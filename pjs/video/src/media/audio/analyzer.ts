@@ -1,9 +1,5 @@
-import { CreateAnalyzer, CreateSoundSource } from './types'
+import type { CreateAnalyzer, CreateSoundSource } from './types'
 
-/**
- * access to a audio context,
- * making sure context has only one reference
- */
 export const callContext = (() => {
   let context: AudioContext
   return () => {
@@ -15,9 +11,6 @@ export const callContext = (() => {
   }
 })()
 
-/**
- * create an mutate object to control sound buffer
- */
 export const createSoundSource: CreateSoundSource = (fileLocation) => {
   const context = callContext()
   const audioElement = document.createElement('audio')
@@ -30,9 +23,6 @@ export const createSoundSource: CreateSoundSource = (fileLocation) => {
   }
 }
 
-/**
- * create an mutate object to control WebAudioAPI analyzer node
- */
 export const createAnalyzer: CreateAnalyzer = (source, fftSize, smoothing = 0.6) => {
   const context = callContext()
   const analyzer = context.createAnalyser()
