@@ -1,3 +1,6 @@
+import { Simulate } from 'react-dom/test-utils'
+import progress = Simulate.progress
+
 export const prepareVideoElements = async (sourceList: string[]): Promise<HTMLVideoElement[]> => {
   const videoElements = loadVideoSourceList(sourceList)
   await waitForVideosToLoad(videoElements)
@@ -22,12 +25,20 @@ type VideoReadyEvent = 'loadedmetadata' | 'loadeddata' | 'canplay' | 'canplaythr
 
 export const waitForVideosToLoad = async (
   videoElements: HTMLVideoElement[],
+  onProgress?: (progress: number) => void,
   waitSeconds = 10,
   event: VideoReadyEvent = 'canplay'
 ) => {
   const timeoutMs = waitSeconds * 1000
+
+  const check = setInterval(() => {
+    const progress = checkLoadingState(videoElements)
+    onProgress && onProgress(Math.floor(progress * 100))
+  }, 100)
+
   await Promise.all(videoElements.map((v) => waitForVideoReady(v, event, timeoutMs)))
-  return true
+
+  clearInterval(check)
 }
 
 const waitForVideoReady = (

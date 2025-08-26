@@ -66,3 +66,4 @@ export class DotInstance extends InstancedModel {
     super.draw(getGL().TRIANGLE_STRIP)
   }
 }
+
