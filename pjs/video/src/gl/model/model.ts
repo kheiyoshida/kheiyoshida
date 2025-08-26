@@ -84,11 +84,15 @@ export class InstancedModel extends GenericModel {
   protected instanceCount = 0
   protected readonly instanceLength: number
 
+  // data array to put instance data in
+  public readonly instanceDataArray: Float32Array
+
   constructor(
     shader: Shader,
     data: Float32Array,
     attributes: AttributeDescriptor[],
     instanceAttributes: InstanceAttributeDescriptor[],
+    maxInstanceCount: number,
     usage: number = getGL().STATIC_DRAW
   ) {
     super(shader, data, attributes, usage)
@@ -119,13 +123,14 @@ export class InstancedModel extends GenericModel {
     gl.bindVertexArray(null)
 
     this.instanceLength = instanceAttributes.reduce((pre, cur) => pre + cur.size, 0)
+    this.instanceDataArray = new Float32Array(maxInstanceCount * this.instanceLength)
   }
 
-  setInstances(instances: number[]) {
+  updateInstances(count: number) {
     const gl = getGL()
     gl.bindBuffer(gl.ARRAY_BUFFER, this.instanceVBO)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(instances), gl.STATIC_DRAW)
-    this.instanceCount = instances.length / this.instanceLength
+    gl.bufferData(gl.ARRAY_BUFFER, this.instanceDataArray, gl.STATIC_DRAW)
+    this.instanceCount = count
   }
 
   override draw(mode: number = getGL().TRIANGLE_STRIP) {

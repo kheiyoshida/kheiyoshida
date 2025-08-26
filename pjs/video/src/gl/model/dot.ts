@@ -5,7 +5,7 @@ import instanceFrag from '../shaders/instance.frag?raw'
 import { getGL } from '../gl'
 
 export class DotInstance extends InstancedModel {
-  constructor(aspectRatio: number = 1) {
+  constructor(maxInstanceCount: number, aspectRatio: number = 1) {
     const instanceShader = new Shader(instanceVert, instanceFrag)
 
     const gl = getGL()
@@ -53,7 +53,8 @@ export class DotInstance extends InstancedModel {
           offset: (2 + 3) * 4,
           divisor: 1,
         }
-      ]
+      ],
+      maxInstanceCount
     )
   }
 

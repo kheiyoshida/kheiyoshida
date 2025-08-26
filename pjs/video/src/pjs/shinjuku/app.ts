@@ -65,7 +65,8 @@ export const app = async () => {
   // rendering
   const screenRenderer = new ScreenRenderer()
   screenRenderer.backgroundColor = backgroundColor
-  const dotInstance = new DotInstance(3)
+  const maxInstanceCount = scope.finalResolution.width * scope.finalResolution.height
+  const dotInstance = new DotInstance(maxInstanceCount, 3)
 
   // loading & interactions
   let started = false
@@ -103,23 +104,26 @@ export const app = async () => {
     const wave = calcWave(analyser)
     const wiggle = () => randomIntInclusiveBetween(Math.floor(-wave * 2), Math.floor(wave * 2))
 
-    const instanceData = []
+    let k = 0
     for (let y = 0; y < resolutionHeight; y += 1) {
       for (let x = 0; x < resolutionWidth; x += 1) {
         const i = (y * resolutionWidth + x) * 4
         if (parsedPixels[i + 2] > 80) {
-          instanceData.push((x + wiggle()) / resolutionWidth, (y + wiggle()) / resolutionHeight)
+          dotInstance.instanceDataArray[k++] = (x + wiggle()) / resolutionWidth
+          dotInstance.instanceDataArray[k++] = (y + wiggle()) / resolutionHeight
 
-          // instanceData.push(parsedPixels[i] / 255, parsedPixels[i + 1] / 255, parsedPixels[i + 2] / 255)
           const bri = parsedPixels[i + 2] / 255
-          instanceData.push(bri, bri, bri)
+          dotInstance.instanceDataArray[k++] = bri
+          dotInstance.instanceDataArray[k++] = bri
+          dotInstance.instanceDataArray[k++] = bri
 
-          instanceData.push((0.2 + wave * 0.1) * singleDotSize)
+          dotInstance.instanceDataArray[k++] = (0.2 + wave * 0.1) * singleDotSize
         }
       }
     }
 
-    dotInstance.setInstances(instanceData)
+    const finalInstanceCount = k / 6
+    dotInstance.updateInstances(finalInstanceCount)
     dotInstance.setSize(0.1 / resolutionHeight)
     screenRenderer.render([dotInstance])
   }
