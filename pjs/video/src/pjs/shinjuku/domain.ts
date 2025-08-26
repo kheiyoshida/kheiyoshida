@@ -25,3 +25,18 @@ export const updateScope = (scope: ImageScope) => {
     }
   }
 }
+
+export const makeInteraction = (videoSupply: VideoSupply, scope: ImageScope) => (e: PointerEvent) => {
+  const offsetX = e.x - window.innerWidth / 2
+  const offsetY = e.y - window.innerHeight / 2
+  if (scope.magnifyLevel == scope.maxMagnifyLevel) {
+    videoSupply.swapVideo()
+    scope.magnifyLevel = 0
+  } else {
+    scope.magnifyLevel++
+    scope.position = {
+      x: scope.position.x + Math.floor(10 * (offsetX / window.innerWidth)),
+      y: scope.position.y + Math.floor(10 * (offsetY / window.innerHeight)),
+    }
+  }
+}

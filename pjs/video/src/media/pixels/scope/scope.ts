@@ -54,7 +54,7 @@ export class ImageScope {
     return this._magnifyLevel
   }
   public set magnifyLevel(level: number) {
-    if (level > this.scopedSizes.length - 1) throw new RangeError()
+    if (level > this.scopedSizes.length - 1) return
     this._magnifyLevel = level
     if (this._magnifyLevel === 0) {
       this.resetPosition()

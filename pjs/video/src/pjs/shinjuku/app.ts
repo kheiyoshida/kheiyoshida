@@ -1,6 +1,6 @@
 import { makeVideoSupply } from '../../media/video/supply'
 import { loadVideoSourceList, waitForVideosToLoad } from '../../media/video/load'
-import { cdnVideoSourceList, videoSourceList } from './videos'
+import { videoSourceList } from './videos'
 import { getGL } from '../../gl/gl'
 import { Texture } from '../../gl/texture'
 import { DotInstance } from '../../gl/model/dot'
@@ -13,12 +13,13 @@ import { Analyzer, FFTSize } from '../../media/audio/types'
 import { callContext, createAnalyzer, createSoundSource } from '../../media/audio/analyzer'
 import { getMusicLoc } from '../../media/cdn'
 import { Message } from './message'
-import { updateScope, updateVideo } from './domain'
+import { makeInteraction, updateScope, updateVideo } from './domain'
 
 // config
+const isVertical = window.innerWidth < window.innerHeight
 const fftSize: FFTSize = 32
 
-const frameBufferWidth = 640
+const frameBufferWidth = isVertical ? 480 : 960
 const frameBufferHeight = frameBufferWidth / (16 / 9)
 const finalResolutionWidth = frameBufferWidth / 4
 const backgroundColor: [number, number, number, number] = [0, 0, 0, 1]
@@ -27,6 +28,18 @@ const updateFrequency = 4
 export const app = async () => {
   // init gl
   getGL()
+
+  // init canvas resolution
+  const canvas = document.getElementById('canvas')! as HTMLCanvasElement
+  canvas.style.aspectRatio = `${4 / 3}`
+  if (isVertical) {
+    canvas.height = canvas.width / (4 / 3)
+  } else {
+    canvas.style.height = `100vh`
+    canvas.style.width = `auto`
+    canvas.height = window.innerHeight
+    canvas.width = canvas.height * (4 / 3)
+  }
 
   // sound
   const soundSource = createSoundSource(getMusicLoc('shinjuku_240131.mp3'))
@@ -40,7 +53,7 @@ export const app = async () => {
   }
 
   // video
-  const videoElements = loadVideoSourceList(cdnVideoSourceList)
+  const videoElements = loadVideoSourceList(videoSourceList)
   const videoSupply = makeVideoSupply(videoElements, { speed: 0.3 })
   videoSupply.onEnded(() => videoSupply.swapVideo())
 
@@ -68,20 +81,23 @@ export const app = async () => {
   const screenRenderer = new ScreenRenderer()
   screenRenderer.backgroundColor = backgroundColor
   const maxInstanceCount = scope.finalResolution.width * scope.finalResolution.height
-  const dotAspectRatio = 3 * 16/9
+  const dotAspectRatio = (2 * 16) / 9
   const dotInstance = new DotInstance(maxInstanceCount, dotAspectRatio)
 
   // loading & interactions
+  let loaded = false
   let started = false
 
   const message = new Message()
   message.text = 'loading...'
 
-  const canvas = document.getElementById('canvas')!
-  canvas.addEventListener('pointerdown', () => {
+  const interact = makeInteraction(videoSupply, scope)
+  canvas.addEventListener('pointerdown', (e) => {
+    if (!loaded) return
     playSound()
     message.hide()
     started = true
+    interact(e)
   })
 
   await waitForVideosToLoad(
@@ -90,6 +106,7 @@ export const app = async () => {
     15,
     'canplaythrough'
   )
+  loaded = true
   message.text = 'click/tap to play'
 
   function renderVideo(frameCount: number) {
@@ -106,22 +123,22 @@ export const app = async () => {
     const parsedPixels = parser.parsePixelData(rawPixels)
 
     const wave = calcWave(analyser)
-    const wiggle = makeIntWobbler(clamp(wave * 6, 1, 10))
+    const wiggle = makeIntWobbler(clamp(wave * 8, 1, 10))
 
     let k = 0
     for (let y = 0; y < resolutionHeight; y += 1) {
       for (let x = 0; x < resolutionWidth; x += 1) {
         const i = (y * resolutionWidth + x) * 4
-        if (parsedPixels[i + 2] > 60 + wave * 20) {
+        if (parsedPixels[i + 2] > 70 + wave * 30) {
           dotInstance.instanceDataArray[k++] = wiggle(x) / resolutionWidth
           dotInstance.instanceDataArray[k++] = wiggle(y) / resolutionHeight
 
           const brightnessLevel = parsedPixels[i + 2] / 255
-          dotInstance.instanceDataArray[k++] = brightnessLevel
+          dotInstance.instanceDataArray[k++] = brightnessLevel / 2
           dotInstance.instanceDataArray[k++] = brightnessLevel
           dotInstance.instanceDataArray[k++] = brightnessLevel
 
-          const dotSize = clamp((1 + wave) / 10, 0.3, 0.5)
+          const dotSize = clamp((1 + wave) / 10, 0.25, 0.3)
           dotInstance.instanceDataArray[k++] = dotSize * singleDotSize
         }
       }

@@ -1,17 +1,17 @@
-"use client";
+'use client'
 import React, { useEffect, useState } from 'react'
 import { app } from './app'
 
 export default () => {
-  const [initialised, setInitialised] = useState(false);
+  const [initialised, setInitialised] = useState(false)
   useEffect(() => {
-    if (initialised) return;
-    setInitialised(true);
+    if (initialised) return
+    setInitialised(true)
     void app()
   }, [initialised])
   return (
     <div style={styles.canvasContainer}>
-      <canvas id={'canvas'} style={styles.canvas}/>
+      <canvas id={'canvas'} style={styles.canvas} />
       <div id={'message'} style={styles.message}></div>
     </div>
   )
@@ -34,12 +34,14 @@ const styles: Record<string, React.CSSProperties> = {
     overscrollBehavior: 'none',
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   canvas: {
     display: 'block',
     width: '100vw',
     height: 'auto',
-    aspectRatio: 16/9,
+    aspectRatio: 16 / 9,
+    border: '1px solid black',
   },
   message: {
     position: 'fixed',
@@ -48,5 +50,5 @@ const styles: Record<string, React.CSSProperties> = {
     width: 200,
     textAlign: 'center',
     zIndex: 100,
-  }
+  },
 }
