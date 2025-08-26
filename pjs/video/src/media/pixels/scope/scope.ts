@@ -58,6 +58,8 @@ export class ImageScope {
     this._magnifyLevel = level
     if (this._magnifyLevel === 0) {
       this.resetPosition()
+    } else {
+      this._position = restrain(this.movablePosition, this._position)
     }
   }
   public get maxMagnifyLevel() {

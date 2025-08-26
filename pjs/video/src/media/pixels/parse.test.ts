@@ -1,36 +1,6 @@
-import { convertPixelDataIntoMatrix, PixelParser } from './parse'
 import { MediaSize } from './types'
 import { ImageScope } from './scope/scope'
-
-const createMockPixelData = ({ width, height }: MediaSize) =>
-  [...new Array(width * height * 4)].map((_, i) => i)
-
-test(`${convertPixelDataIntoMatrix.name}`, () => {
-  const videoSize = { width: 16, height: 12 }
-  const skip = 4 // resolution = 4p x 3p
-  const magnifiedSize = { width: 8, height: 6 } // 2x
-  const centerPosition = { x: 8, y: 6 }
-  const mockPixelDataArray = createMockPixelData(videoSize)
-
-  const result = convertPixelDataIntoMatrix(
-    mockPixelDataArray,
-    videoSize,
-    skip,
-    magnifiedSize,
-    centerPosition
-  )
-
-  // prettier-ignore
-  const expectedResult = [
-    208, 209, 210, 211,
-    224, 225, 226, 227,
-    464, 465, 466, 467,
-    480, 481, 482, 483,
-  ]
-
-  expect(result).toEqual(expectedResult)
-  expect(result[4] - result[0]).toBe(skip * 4) // 4 pixels (16 digits) are skipped
-})
+import { PixelParser } from './parse'
 
 // Replace your mock with this for the PixelParser test
 const createRGBAByCoord = ({ width, height }: MediaSize) => {

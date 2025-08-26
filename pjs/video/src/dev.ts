@@ -19,7 +19,7 @@ prepareVideoElements(videoSourceList).then((videoElements) => {
 getGL()
 
 const videoTexture = new Texture()
-const frameBufferWidth = 600
+const frameBufferWidth = 640
 const frameBufferHeight = frameBufferWidth / (16 / 9)
 const offscreenTextureRenderer = new OffScreenTextureRenderer(
   videoTexture,
@@ -29,14 +29,14 @@ const offscreenTextureRenderer = new OffScreenTextureRenderer(
 
 const screenRenderer = new ScreenRenderer()
 screenRenderer.backgroundColor = [0, 0, 0, 1]
-const dotInstance = new DotInstance(1)
+const dotInstance = new DotInstance(3.6)
 
 const scope = new ImageScope(
   {
     width: frameBufferWidth,
     height: frameBufferHeight,
   },
-  200
+  160
 )
 const parser = new PixelParser(scope)
 const { width: resolutionWidth, height: resolutionHeight } = scope.finalResolution
@@ -48,7 +48,7 @@ function renderVideo() {
   if (videoSupply.currentVideo.readyState < HTMLVideoElement.prototype.HAVE_CURRENT_DATA) return
 
   if (Math.random() < 0.03) {
-    // videoSupply.swapVideo()
+    videoSupply.swapVideo()
     scope.magnifyLevel = randomIntInclusiveBetween(0, scope.maxMagnifyLevel)
     scope.position = {
       x: scope.position.x + randomIntInclusiveBetween(-100, 100),
@@ -65,13 +65,17 @@ function renderVideo() {
     for (let x = 0; x < resolutionWidth; x += 1) {
       const i = (y * resolutionWidth + x) * 4
       if (parsedPixels[i + 2] > 40) {
-        const dx = randomIntInclusiveBetween(-2, 2)
-        const dy = randomIntInclusiveBetween(-2, 2)
+
+        const dx = 0//randomIntInclusiveBetween(-2, 2)
+        const dy = 0//randomIntInclusiveBetween(-2, 2)
         instanceData.push((x + dx) / resolutionWidth, (y + dy) / resolutionHeight) // normalized, flipped Y
-        // instances.push(parsedPixels[i] / 255, parsedPixels[i + 1] / 255, parsedPixels[i + 2] / 255)
+
+        // instanceData.push(parsedPixels[i] / 255, parsedPixels[i + 1] / 255, parsedPixels[i + 2] / 255)
         const bri = parsedPixels[i + 2] / 255
         instanceData.push(bri, bri, bri)
+
         instanceData.push(randomFloatBetween(0.05, 0.2) / resolutionHeight) // size
+        // instanceData.push(0.5 / resolutionHeight) // size
       }
     }
   }
