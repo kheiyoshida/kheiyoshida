@@ -139,6 +139,7 @@ export class InstancedModel extends GenericModel {
 
   override draw(mode: number = getGL().TRIANGLE_STRIP) {
     const gl = getGL()
+    this.shader.use()
     gl.bindVertexArray(this.vao)
     gl.drawArraysInstanced(mode, 0, this.vertexCount, this.instanceCount)
   }

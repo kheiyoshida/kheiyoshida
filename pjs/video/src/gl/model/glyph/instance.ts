@@ -1,10 +1,11 @@
-import { InstancedModel } from './model'
-import { Shader } from '../shader'
-import instanceVert from '../shaders/instance.vert?raw'
-import instanceFrag from '../shaders/instance.frag?raw'
-import { getGL } from '../gl'
+import { InstancedModel } from '../model'
+import { Shader } from '../../shader'
+import instanceVert from './glyph.vert?raw'
+import instanceFrag from './glyph.frag?raw'
+import { getGL } from '../../gl'
+import { Texture } from '../../texture'
 
-export class DotInstance extends InstancedModel {
+export class GlyphInstance extends InstancedModel {
   constructor(maxInstanceCount: number, aspectRatio: number = 1) {
     const instanceShader = new Shader(instanceVert, instanceFrag)
 
@@ -35,32 +36,46 @@ export class DotInstance extends InstancedModel {
         {
           name: 'aOffset',
           size: 2,
-          stride: (2 + 3 + 1) * 4,
+          stride: (2 + 3 + 1 + 2 + 2) * 4,
           offset: 0,
           divisor: 1,
         },
         {
           name: 'aColor',
           size: 3,
-          stride: (2 + 3 + 1) * 4,
+          stride: (2 + 3 + 1 + 2 + 2) * 4,
           offset: 2 * 4,
           divisor: 1,
         },
         {
           name: 'aSize',
           size: 1,
-          stride: (2 + 3 + 1) * 4,
+          stride: (2 + 3 + 1 + 2 + 2) * 4,
           offset: (2 + 3) * 4,
           divisor: 1,
-        }
+        },
+        {
+          name: 'aUvMin',
+          size: 2,
+          stride: (2 + 3 + 1 + 2 + 2) * 4,
+          offset: (2 + 3 + 1) * 4,
+          divisor: 1,
+        },
+        {
+          name: 'aUvMax',
+          size: 2,
+          stride: (2 + 3 + 1 + 2 + 2) * 4,
+          offset: (2 + 3 + 1 + 2) * 4,
+          divisor: 1,
+        },
       ],
       maxInstanceCount
     )
   }
 
-  public setSize(size: number) {
+  public setTexture(texture: Texture) {
     this.shader.use()
-    this.shader.setUniformFloat('uSize', size)
+    this.shader.setUniformInt('uFontAtlas', texture.id)
   }
 
   override draw() {
