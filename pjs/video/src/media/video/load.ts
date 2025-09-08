@@ -1,6 +1,3 @@
-import { Simulate } from 'react-dom/test-utils'
-import progress = Simulate.progress
-
 export const prepareVideoElements = async (sourceList: string[]): Promise<HTMLVideoElement[]> => {
   const videoElements = loadVideoSourceList(sourceList)
   await waitForVideosToLoad(videoElements)

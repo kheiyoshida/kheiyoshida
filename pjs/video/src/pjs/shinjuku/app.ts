@@ -1,19 +1,12 @@
-import { makeVideoSupply } from '../../media/video/supply'
-import { loadVideoSourceList, waitForVideosToLoad } from '../../media/video/load'
-import { cdnVideoSourceList } from './videos'
 import { getGL } from '../../gl/gl'
-import { Texture } from '../../gl/texture'
 import { DotInstance } from '../../gl/model/dot'
-import { OffScreenTextureRenderer } from '../../gl/renderers/offscreen'
 import { ScreenRenderer } from '../../gl/renderers/renderer'
-import { PixelParser } from '../../media/pixels/parse'
 import { clamp, makeIntWobbler } from 'utils'
-import { ImageScope } from '../../media/pixels/scope/scope'
 import { Analyzer, FFTSize } from '../../media/audio/types'
 import { callContext, createAnalyzer, createSoundSource } from '../../media/audio/analyzer'
 import { getMusicLoc } from '../../media/cdn'
 import { Message } from './message'
-import { makeInteraction, updateScope, updateVideo } from './domain'
+import { ShinjukuChannel, ShinjukuFootageCollection } from './channel'
 
 // config
 const isVertical = window.innerWidth < window.innerHeight
@@ -53,34 +46,17 @@ export const app = async () => {
   }
 
   // video
-  const videoElements = loadVideoSourceList(cdnVideoSourceList)
-  const videoSupply = makeVideoSupply(videoElements, { speed: 0.3 })
-  videoSupply.onEnded(() => videoSupply.swapVideo())
+  const source = new ShinjukuFootageCollection()
+  const channel = new ShinjukuChannel(source, frameBufferWidth, frameBufferHeight, finalResolutionWidth)
 
-  // texture
-  const videoTexture = new Texture()
-  const offscreenTextureRenderer = new OffScreenTextureRenderer(
-    videoTexture,
-    frameBufferWidth,
-    frameBufferHeight
-  )
-
-  // parser
-  const scope = new ImageScope(
-    {
-      width: frameBufferWidth,
-      height: frameBufferHeight,
-    },
-    finalResolutionWidth
-  )
-  const parser = new PixelParser(scope)
-  const { width: resolutionWidth, height: resolutionHeight } = scope.finalResolution
+  // dot
+  const { width: resolutionWidth, height: resolutionHeight } = channel.finalResolution
   const singleDotSize = 0.5 / resolutionHeight
 
   // rendering
   const screenRenderer = new ScreenRenderer()
   screenRenderer.backgroundColor = backgroundColor
-  const maxInstanceCount = scope.finalResolution.width * scope.finalResolution.height
+  const maxInstanceCount = channel.finalResolution.width * channel.finalResolution.height
   const dotAspectRatio = (2 * 16) / 9
   const dotInstance = new DotInstance(maxInstanceCount, dotAspectRatio)
 
@@ -91,25 +67,17 @@ export const app = async () => {
   const message = new Message()
   message.text = 'loading...'
 
-  const interact = makeInteraction(videoSupply, scope)
-
   message.div.onclick = () => {
     if (!loaded) return
     playSound()
     message.hide()
     started = true
 
-    canvas.addEventListener('pointerdown', (e) => {
-      interact(e)
-    })
+    canvas.addEventListener('pointerdown', (e) => channel.interact(e))
   }
 
-  await waitForVideosToLoad(
-    videoElements,
-    (progress) => (message.text = `loading: ${progress}%`),
-    30,
-    'canplaythrough'
-  )
+  await source.waitForVideosToLoad((progress) => (message.text = `loading: ${progress}%`))
+
   loaded = true
   message.text = 'click/tap to play'
 
@@ -118,13 +86,10 @@ export const app = async () => {
     playSound()
 
     if (frameCount % updateFrequency === 0) {
-      updateVideo(videoSupply)
-      updateScope(scope)
+      channel.update()
     }
 
-    videoTexture.setTextureImage(videoSupply.currentVideo)
-    const rawPixels = offscreenTextureRenderer.renderAsPixels()
-    const parsedPixels = parser.parsePixelData(rawPixels)
+    const parsedPixels = channel.getPixels()
 
     const wave = calcWave(analyser)
     const wiggle = makeIntWobbler(clamp(wave * 8, 1, 10))
