@@ -1,7 +1,7 @@
 import { InstancedModel } from '../gl/model/model'
 import { ImageResolution } from '../media/pixels/types'
 
-export abstract class PixelPresentation<I extends InstancedModel> {
+export abstract class PixelPresentation<I extends InstancedModel = InstancedModel> {
   private _pixelDataResolution: ImageResolution
   public get pixelDataResolution() {
     return this._pixelDataResolution
@@ -21,7 +21,6 @@ export abstract class PixelPresentation<I extends InstancedModel> {
     public readonly instance: I,
     private readonly maximumPixelDataResolution: ImageResolution
   ) {
-    console.log(maximumPixelDataResolution)
     this._pixelDataResolution = maximumPixelDataResolution
   }
 

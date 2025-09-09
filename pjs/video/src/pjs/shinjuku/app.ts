@@ -1,12 +1,12 @@
 import { getGL } from '../../gl/gl'
-import { ScreenPass } from '../../gl/pass/pass'
 import { clamp } from 'utils'
-import { Analyzer, FFTSize } from '../../media/audio/types'
+import { FFTSize } from '../../media/audio/types'
 import { callContext, createAnalyzer, createSoundSource } from '../../media/audio/analyzer'
 import { getMusicLoc } from '../../media/cdn'
 import { Message } from './message'
 import { ShinjukuChannel } from './channel'
 import { DotPresentation } from './presentation'
+import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
 
 // config
 const isVertical = window.innerWidth < window.innerHeight
@@ -44,74 +44,40 @@ export const app = async () => {
     soundSource.play()
   }
 
-  // video
-  const channel = new ShinjukuChannel(videoAspectRatio, frameBufferWidth, frameBufferWidth / 4)
-
   // rendering
-  const screenPass = new ScreenPass()
-  screenPass.backgroundColor = backgroundColor
-
+  const channel = new ShinjukuChannel(videoAspectRatio, frameBufferWidth, frameBufferWidth / 4)
   const dotAspectRatio = (2 * 16) / 9
   const dotPresentation = new DotPresentation(channel.outputResolution, dotAspectRatio)
 
-  // loading & interactions
-  // message
-  const message = new Message()
-  message.text = 'loading...'
+  const pipeline = new VideoProjectionPipeline([channel], [dotPresentation])
+  pipeline.setBackgroundColor(backgroundColor)
 
-  let loaded = false
-  let started = false
-
-  message.div.onclick = () => {
-    if (!loaded) return
+  function renderLoop(frameCount: number) {
+    // control
     playSound()
-    message.hide()
-    started = true
-
-    canvas.addEventListener('pointerdown', (e) => channel.interact(e))
-  }
-
-  await channel.waitForReady((progress) => (message.text = `loading: ${progress}%`))
-
-  loaded = true
-  message.text = 'click/tap to play'
-
-  function renderVideo(frameCount: number) {
-    if (!started) return
 
     // param phase
-    playSound()
-
     if (frameCount % updateFrequency === 0) {
       channel.update()
     }
+    const base = analyser.analyze().reduce((a, b) => a + b) / analyser.bufferLength
+    dotPresentation.wave = clamp((base - 0.3) * 10, 0, 2)
 
-    dotPresentation.wave = calcWave(analyser)
-
-    // instance presentation phase
-    const parsedPixels = channel.getPixels()
-    dotPresentation.represent(parsedPixels)
-
-    screenPass.render([dotPresentation.instance])
+    // rendering phase
+    pipeline.render()
   }
 
-  const calcWave = (analyzer: Analyzer) => {
-    const base = analyzer.analyze().reduce((a, b) => a + b) / analyzer.bufferLength
-    return clamp((base - 0.3) * 10, 0, 2)
-  }
+  // set up
+  const message = new Message()
 
-  const targetFps = 30
-  const minFrameTime = 1000 / targetFps // ms
-  let lastFrame = performance.now()
-  let frameCount = 0
-  function loop(now: number) {
-    const elapsed = now - lastFrame
-    if (elapsed >= minFrameTime) {
-      lastFrame = now - (elapsed % minFrameTime) // reduce drift
-      frameCount += 1
-      renderVideo(frameCount)
-    }
-    requestAnimationFrame(loop)
+  message.text = 'loading...'
+  await channel.waitForReady((progress) => (message.text = `loading: ${progress}%`))
+
+  message.text = 'click/tap to play'
+  message.div.onclick = () => {
+    playSound()
+    message.hide()
+    startRenderingLoop(renderLoop)
+    canvas.addEventListener('pointerdown', (e) => channel.interact(e))
   }
-  requestAnimationFrame(loop)
 }
