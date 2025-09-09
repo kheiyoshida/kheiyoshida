@@ -1,70 +1,25 @@
-import { Channel } from '../../lib/channel/channel'
-import { VideoSource } from '../../lib/source/source'
-import { loadVideoSourceList, waitForVideosToLoad } from '../../media/video/load'
-import { cdnVideoSourceList, videoSourceList } from './videos'
-import { makeVideoSupply, SupplyVideoOption, VideoSupply } from '../../media/video/supply'
-import { Texture } from '../../gl/texture'
+import { PixelChannel } from '../../lib/channel/channel'
+import { VideoSupply } from '../../media/video/supply'
 import { OffScreenTextureRenderer } from '../../gl/renderers/offscreen'
 import { ImageScope } from '../../media/pixels/scope/scope'
 import { PixelParser } from '../../media/pixels/parse'
 import { fireByRate, makeIntWobbler, randomIntInclusiveBetween, randomItemFromArray } from 'utils'
 
-export class ShinjukuFootageCollection implements VideoSource {
-  private readonly videoElements: HTMLVideoElement[]
-  private readonly videoSupply: VideoSupply
-
-  constructor() {
-    this.videoElements = loadVideoSourceList(videoSourceList)
-    this.videoSupply = makeVideoSupply(this.videoElements, { speed: 0.3 })
-    this.videoSupply.onEnded(() => this.videoSupply.swapVideo())
-  }
-
-  get currentVideo(): HTMLVideoElement {
-    return this.videoSupply.currentVideo
-  }
-
-  public waitForVideosToLoad(onProgress: (progress: number) => void, secs = 30) {
-    return waitForVideosToLoad(this.videoElements, onProgress, secs, 'canplaythrough')
-  }
-
-  public swapVideo() {
-    this.videoSupply.swapVideo()
-  }
-
-  onEnded(cb: () => void): void {
-    this.videoSupply.onEnded(cb)
-  }
-
-  onSwap(cb: (video: HTMLVideoElement) => void): void {
-    this.videoSupply.onSwap(cb)
-  }
-
-  updateOptions(newOptions: SupplyVideoOption): void {
-    this.videoSupply.updateOptions(newOptions)
-  }
-}
-
-export class ShinjukuChannel extends Channel<ShinjukuFootageCollection> {
-  private readonly videoTexture: Texture
+export class ShinjukuChannel extends PixelChannel<VideoSupply> {
   private readonly offscreenTextureRenderer: OffScreenTextureRenderer
   private readonly parser: PixelParser
   public readonly scope: ImageScope
 
   constructor(
-    source: ShinjukuFootageCollection,
+    source: VideoSupply,
     frameBufferWidth: number,
     frameBufferHeight: number,
-    finalResolutionWidth: number,
+    finalResolutionWidth: number
   ) {
     super(source)
 
     // texture
-    this.videoTexture = new Texture()
-    this.offscreenTextureRenderer = new OffScreenTextureRenderer(
-      this.videoTexture,
-      frameBufferWidth,
-      frameBufferHeight
-    )
+    this.offscreenTextureRenderer = new OffScreenTextureRenderer(frameBufferWidth, frameBufferHeight)
 
     // parser
     this.scope = new ImageScope(
@@ -77,8 +32,16 @@ export class ShinjukuChannel extends Channel<ShinjukuFootageCollection> {
     this.parser = new PixelParser(this.scope)
   }
 
+  public async waitForReady(onProgress: (progress: number) => void) {
+    const interval = setInterval(() => {
+      onProgress(this.source.loadingProgress)
+    }, 100)
+    await this.source.readyPromise
+    clearTimeout(interval)
+  }
+
   public getPixels(): Uint8Array {
-    this.videoTexture.setTextureImage(this.source.currentVideo)
+    this.offscreenTextureRenderer.setTextureImage(this.source.currentVideo)
     const rawPixels = this.offscreenTextureRenderer.renderAsPixels()
     return this.parser.parsePixelData(rawPixels)
   }

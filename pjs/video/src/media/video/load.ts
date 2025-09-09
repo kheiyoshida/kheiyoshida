@@ -22,20 +22,11 @@ type VideoReadyEvent = 'loadedmetadata' | 'loadeddata' | 'canplay' | 'canplaythr
 
 export const waitForVideosToLoad = async (
   videoElements: HTMLVideoElement[],
-  onProgress?: (progress: number) => void,
   waitSeconds = 10,
   event: VideoReadyEvent = 'canplay'
 ) => {
   const timeoutMs = waitSeconds * 1000
-
-  const check = setInterval(() => {
-    const progress = checkLoadingState(videoElements)
-    onProgress && onProgress(Math.floor(progress * 100))
-  }, 100)
-
   await Promise.all(videoElements.map((v) => waitForVideoReady(v, event, timeoutMs)))
-
-  clearInterval(check)
 }
 
 const waitForVideoReady = (
@@ -82,6 +73,9 @@ const waitForVideoReady = (
   })
 }
 
+/**
+ * returns percentage of playable videos of given video elements
+ */
 export const checkLoadingState = (videoElements: HTMLVideoElement[]) => {
   let playable = 0
   for(const videoElement of videoElements) {
@@ -89,5 +83,5 @@ export const checkLoadingState = (videoElements: HTMLVideoElement[]) => {
       playable++
     }
   }
-  return playable / videoElements.length
+  return Math.floor(100 * playable / videoElements.length)
 }

@@ -33,7 +33,7 @@ export class OffScreenRenderer extends Renderer {
 export class OffScreenTextureRenderer extends OffScreenRenderer {
   protected screenRect: ScreenRect
 
-  constructor(texture: Texture, frameBufferWidth: number, frameBufferHeight: number) {
+  constructor(frameBufferWidth: number, frameBufferHeight: number, readonly texture: Texture = new Texture()) {
     super(frameBufferWidth, frameBufferHeight)
     this.screenRect = new ScreenRect(texture)
   }
@@ -44,5 +44,9 @@ export class OffScreenTextureRenderer extends OffScreenRenderer {
 
   renderAsPixels(): Uint8Array {
     return super.renderAsPixels([this.screenRect])
+  }
+
+  setTextureImage(source: TexImageSource) {
+    this.texture.setTextureImage(source)
   }
 }

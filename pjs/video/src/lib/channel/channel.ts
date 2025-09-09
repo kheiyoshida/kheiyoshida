@@ -7,7 +7,7 @@ import { VideoSource } from '../source/source'
  * - read pixel data from the buffer
  * - set parameters for read operation
  */
-export abstract class Channel<VS extends VideoSource = VideoSource> {
+export abstract class PixelChannel<VS extends VideoSource = VideoSource> {
   protected constructor(readonly source: VS) {}
 
   // TODO: provide normalised interface for controller

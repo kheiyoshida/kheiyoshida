@@ -6,7 +6,9 @@ import { Analyzer, FFTSize } from '../../media/audio/types'
 import { callContext, createAnalyzer, createSoundSource } from '../../media/audio/analyzer'
 import { getMusicLoc } from '../../media/cdn'
 import { Message } from './message'
-import { ShinjukuChannel, ShinjukuFootageCollection } from './channel'
+import { ShinjukuChannel } from './channel'
+import { VideoSupply } from '../../media/video/supply'
+import { videoSourceList } from './videos'
 
 // config
 const isVertical = window.innerWidth < window.innerHeight
@@ -46,7 +48,7 @@ export const app = async () => {
   }
 
   // video
-  const source = new ShinjukuFootageCollection()
+  const source = new VideoSupply(videoSourceList)
   const channel = new ShinjukuChannel(source, frameBufferWidth, frameBufferHeight, finalResolutionWidth)
 
   // dot
@@ -61,11 +63,12 @@ export const app = async () => {
   const dotInstance = new DotInstance(maxInstanceCount, dotAspectRatio)
 
   // loading & interactions
-  let loaded = false
-  let started = false
-
+  // message
   const message = new Message()
   message.text = 'loading...'
+
+  let loaded = false
+  let started = false
 
   message.div.onclick = () => {
     if (!loaded) return
@@ -76,7 +79,7 @@ export const app = async () => {
     canvas.addEventListener('pointerdown', (e) => channel.interact(e))
   }
 
-  await source.waitForVideosToLoad((progress) => (message.text = `loading: ${progress}%`))
+  await channel.waitForReady((progress) => (message.text = `loading: ${progress}%`))
 
   loaded = true
   message.text = 'click/tap to play'
