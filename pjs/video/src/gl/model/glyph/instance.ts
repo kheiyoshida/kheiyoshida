@@ -75,7 +75,7 @@ export class GlyphInstance extends InstancedModel {
 
   public setTexture(texture: Texture) {
     this.shader.use()
-    this.shader.setUniformInt('uFontAtlas', texture.id)
+    this.shader.setUniformInt('uFontAtlas', texture.unit)
   }
 
   override draw() {

@@ -3,6 +3,7 @@ import { Message } from '../shinjuku/message'
 import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
 import { DevVideoChannel } from './channel'
 import { DevDotPresentation } from './presentation'
+import { DotPresentation } from '../shinjuku/presentation'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -12,8 +13,6 @@ const backgroundColor: [number, number, number, number] = [0, 0, 0, 1]
 export const app = async () => {
   // init gl
   getGL()
-
-  // init canvas resolution
 
   // rendering
   const channel = new DevVideoChannel(videoAspectRatio, frameBufferWidth, frameBufferWidth / 4)

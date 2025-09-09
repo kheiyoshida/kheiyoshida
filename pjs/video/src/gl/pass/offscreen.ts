@@ -6,11 +6,9 @@ import { Texture } from '../texture'
 import { ImageResolution } from '../../media/pixels/types'
 
 export class OffScreenPass extends RenderingPass {
-  protected frameBuffer: FrameBuffer
+  public readonly frameBuffer: FrameBuffer
 
-  constructor(
-    protected frameBufferResolution: ImageResolution,
-  ) {
+  constructor(protected frameBufferResolution: ImageResolution) {
     super()
     this.frameBuffer = new FrameBuffer(frameBufferResolution.width, frameBufferResolution.height)
   }
@@ -33,7 +31,10 @@ export class OffScreenPass extends RenderingPass {
 export class OffScreenTexturePass extends OffScreenPass {
   protected screenRect: ScreenRect
 
-  constructor(frameBufferResolution: ImageResolution,readonly texture: Texture = new Texture()) {
+  constructor(
+    frameBufferResolution: ImageResolution,
+    readonly texture: Texture = new Texture()
+  ) {
     super(frameBufferResolution)
     this.screenRect = new ScreenRect(texture)
   }

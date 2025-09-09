@@ -1,18 +1,27 @@
 import { PixelChannel } from './channel/channel'
 import { PixelPresentation } from './presentation'
 import { ScreenPass } from '../gl/pass/pass'
+import { OffScreenPass } from '../gl/pass/offscreen'
+import { getGL } from '../gl/gl'
+import { PostEffect } from './effect/effect'
+import { ScreenRect2 } from '../gl/model/screen'
 
 export class VideoProjectionPipeline {
   constructor(
     private readonly channels: PixelChannel[],
     private readonly presentations: PixelPresentation[]
-  ) {}
-
-  public setBackgroundColor(rgba: [number, number, number, number]): void {
-    this.screenPass.backgroundColor = rgba
+  ) {
+    this.presentationPass = new OffScreenPass({ width: 960, height: 540 })
+    // this.presentationPass = new ScreenPass()
+    this.postEffectPass = new PostEffect(this.presentationPass.frameBuffer)
   }
 
-  private screenPass = new ScreenPass()
+  private presentationPass: OffScreenPass
+  private postEffectPass: PostEffect
+
+  public setBackgroundColor(rgba: [number, number, number, number]): void {
+    this.presentationPass.backgroundColor = rgba
+  }
 
   private channelIndex = 0
   public get currentChannel() {
@@ -25,7 +34,9 @@ export class VideoProjectionPipeline {
     for (const presentation of presentations) {
       presentation.represent(pixels)
     }
-    this.screenPass.render(presentations.map((p) => p.instance))
+    this.presentationPass.render(presentations.map((p) => p.instance))
+
+    this.postEffectPass.render()
   }
 }
 

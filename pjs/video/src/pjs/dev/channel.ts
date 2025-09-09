@@ -2,6 +2,7 @@ import { VideoSupply } from '../../media/video/supply'
 import { VideoPixelChannel } from '../../lib/channel/channel'
 
 const devVideoList = ['/assets/footage/bird/960p/bird1.mp4']
+// const devVideoList = ['/assets/footage/shinjuku/shinjuku1.mp4']
 
 export class DevVideoChannel extends VideoPixelChannel {
   constructor(videoAspectRatio: number, videoWidth: number, outputResolutionWidth: number) {

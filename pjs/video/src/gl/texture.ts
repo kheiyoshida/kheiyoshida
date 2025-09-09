@@ -1,7 +1,7 @@
 import { getGL } from './gl'
 
 export class Texture {
-  private tex: WebGLTexture
+  public readonly tex: WebGLTexture
   constructor() {
     const gl = getGL()
     this.tex = gl.createTexture()!
@@ -9,21 +9,16 @@ export class Texture {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
-
-    this.id = Texture.nextTextureId
-    Texture.nextTextureId ++
   }
 
   /**
    * use this id to set texture uniform
    * ```ts
    * const uTexture = gl.getUniformLocation(this.program, 'uTexture')
-   * gl.uniform1i(uTexture, texture.id)
+   * gl.uniform1i(uTexture, texture.unit)
    * ```
    */
-  readonly id: number
-
-  static nextTextureId = 0
+  readonly unit: number = 0
 
   get gl() {
     return getGL()
