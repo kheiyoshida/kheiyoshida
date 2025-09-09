@@ -8,14 +8,6 @@ export class ShinjukuChannel extends VideoPixelChannel {
     super(new VideoSupply(videoSourceList), videoAspectRatio, videoWidth, outputResolutionWidth)
   }
 
-  public async waitForReady(onProgress: (progress: number) => void) {
-    const interval = setInterval(() => {
-      onProgress(this.source.loadingProgress)
-    }, 100)
-    await this.source.readyPromise
-    clearTimeout(interval)
-  }
-
   // use cases
   private wobble = makeIntWobbler(10)
   public update() {

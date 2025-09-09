@@ -1,0 +1,12 @@
+import { VideoSupply } from '../../media/video/supply'
+import { VideoPixelChannel } from '../../lib/channel/channel'
+
+const devVideoList = ['/assets/footage/bird/960p/bird1.mp4']
+
+export class DevVideoChannel extends VideoPixelChannel {
+  constructor(videoAspectRatio: number, videoWidth: number, outputResolutionWidth: number) {
+    const supply = new VideoSupply(devVideoList)
+    supply.onEnded = () => supply.swapVideo()
+    super(supply, videoAspectRatio, videoWidth, outputResolutionWidth)
+  }
+}

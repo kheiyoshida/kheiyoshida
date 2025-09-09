@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './pjs/shinjuku'
+import App from './pjs/dev'
 
 const root = document.getElementById('root')
 if (root) {

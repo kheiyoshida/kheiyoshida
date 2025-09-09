@@ -12,6 +12,7 @@ export class DotPresentation extends PixelPresentation<DotInstance> {
     this.singleDotSize = 0.5 / pixelDataResolution.height
   }
 
+  // needs to be here to override setter
   public get pixelDataResolution() {
     return super.pixelDataResolution
   }
@@ -25,7 +26,7 @@ export class DotPresentation extends PixelPresentation<DotInstance> {
 
   public wave: number = 0
 
-  public represent(parsedPixels: Uint8Array): void {
+  public represent(pixels: Uint8Array): void {
     const wiggle = makeIntWobbler(clamp(this.wave * 8, 1, 10))
     const resolutionWidth = this.pixelDataResolution.width
     const resolutionHeight = this.pixelDataResolution.height
@@ -35,14 +36,14 @@ export class DotPresentation extends PixelPresentation<DotInstance> {
     for (let y = 0; y < resolutionHeight; y += 1) {
       for (let x = 0; x < resolutionWidth; x += 1) {
         const i = (y * resolutionWidth + x) * 4
-        if (parsedPixels[i + 2] > 70 + this.wave * 30) {
+        if (pixels[i + 2] > 70 + this.wave * 30) {
           dotInstance.instanceDataArray[k++] = wiggle(x) / resolutionWidth
           dotInstance.instanceDataArray[k++] = wiggle(y) / resolutionHeight
 
-          const brightnessLevel = parsedPixels[i + 2] / 255
+          const brightnessLevel = pixels[i + 2] / 255
           dotInstance.instanceDataArray[k++] = brightnessLevel / 2
-          dotInstance.instanceDataArray[k++] = brightnessLevel
-          dotInstance.instanceDataArray[k++] = brightnessLevel
+          dotInstance.instanceDataArray[k++] = brightnessLevel - 0.3
+          dotInstance.instanceDataArray[k++] = brightnessLevel - 0.3
 
           const dotSize = clamp((1 + this.wave) / 10, 0.25, 0.3)
           dotInstance.instanceDataArray[k++] = dotSize * this.singleDotSize

@@ -32,7 +32,7 @@ export class VideoSupply implements VideoSource {
 
   private readonly randomVideo: () => HTMLVideoElement
 
-  private options: SupplyVideoOption = { speed: 0.1 }
+  private options: SupplyVideoOption = { speed: 0.3 }
   public updateOptions(newOptions: SupplyVideoOption) {
     this.options = { ...this.options, ...newOptions }
   }
