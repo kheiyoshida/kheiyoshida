@@ -52,15 +52,10 @@ export class DotInstance extends InstancedModel {
           stride: (2 + 3 + 1) * 4,
           offset: (2 + 3) * 4,
           divisor: 1,
-        }
+        },
       ],
       maxInstanceCount
     )
-  }
-
-  public setSize(size: number) {
-    this.shader.use()
-    this.shader.setUniformFloat('uSize', size)
   }
 
   override draw() {

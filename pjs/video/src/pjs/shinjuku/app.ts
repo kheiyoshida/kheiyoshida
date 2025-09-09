@@ -1,12 +1,12 @@
 import { getGL } from '../../gl/gl'
-import { DotInstance } from '../../gl/model/dot'
 import { ScreenPass } from '../../gl/pass/pass'
-import { clamp, makeIntWobbler } from 'utils'
+import { clamp } from 'utils'
 import { Analyzer, FFTSize } from '../../media/audio/types'
 import { callContext, createAnalyzer, createSoundSource } from '../../media/audio/analyzer'
 import { getMusicLoc } from '../../media/cdn'
 import { Message } from './message'
 import { ShinjukuChannel } from './channel'
+import { DotPresentation } from './presentation'
 
 // config
 const isVertical = window.innerWidth < window.innerHeight
@@ -47,16 +47,12 @@ export const app = async () => {
   // video
   const channel = new ShinjukuChannel(videoAspectRatio, frameBufferWidth, frameBufferWidth / 4)
 
-  // dot
-  const { width: resolutionWidth, height: resolutionHeight } = channel.outputResolution
-  const singleDotSize = 0.5 / resolutionHeight
-
   // rendering
-  const screenRenderer = new ScreenPass()
-  screenRenderer.backgroundColor = backgroundColor
-  const maxInstanceCount = channel.outputResolution.width * channel.outputResolution.height
+  const screenPass = new ScreenPass()
+  screenPass.backgroundColor = backgroundColor
+
   const dotAspectRatio = (2 * 16) / 9
-  const dotInstance = new DotInstance(maxInstanceCount, dotAspectRatio)
+  const dotPresentation = new DotPresentation(channel.outputResolution, dotAspectRatio)
 
   // loading & interactions
   // message
@@ -82,43 +78,21 @@ export const app = async () => {
 
   function renderVideo(frameCount: number) {
     if (!started) return
+
+    // param phase
     playSound()
 
     if (frameCount % updateFrequency === 0) {
       channel.update()
     }
 
+    dotPresentation.wave = calcWave(analyser)
+
+    // instance presentation phase
     const parsedPixels = channel.getPixels()
+    dotPresentation.represent(parsedPixels)
 
-    const wave = calcWave(analyser)
-    const wiggle = makeIntWobbler(clamp(wave * 8, 1, 10))
-
-
-    let k = 0
-    for (let y = 0; y < resolutionHeight; y += 1) {
-      for (let x = 0; x < resolutionWidth; x += 1) {
-        const i = (y * resolutionWidth + x) * 4
-        if (parsedPixels[i + 2] > 70 + wave * 30) {
-
-          dotInstance.instanceDataArray[k++] = wiggle(x) / resolutionWidth
-          dotInstance.instanceDataArray[k++] = wiggle(y) / resolutionHeight
-
-          const brightnessLevel = parsedPixels[i + 2] / 255
-          dotInstance.instanceDataArray[k++] = brightnessLevel / 2
-          dotInstance.instanceDataArray[k++] = brightnessLevel
-          dotInstance.instanceDataArray[k++] = brightnessLevel
-
-          const dotSize = clamp((1 + wave) / 10, 0.25, 0.3)
-          dotInstance.instanceDataArray[k++] = dotSize * singleDotSize
-        }
-      }
-    }
-
-    const finalInstanceCount = k / 6
-
-    dotInstance.updateInstances(finalInstanceCount)
-    dotInstance.setSize(0.1 / resolutionHeight)
-    screenRenderer.render([dotInstance])
+    screenPass.render([dotPresentation.instance])
   }
 
   const calcWave = (analyzer: Analyzer) => {

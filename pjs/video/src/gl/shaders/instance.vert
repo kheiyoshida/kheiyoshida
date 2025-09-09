@@ -5,8 +5,6 @@ in vec2 aPos;
 in vec3 aColor;
 in vec2 aOffset;
 
-uniform float uSize;
-
 out vec3 vColor;
 
 void main() {
