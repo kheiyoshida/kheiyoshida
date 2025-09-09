@@ -4,12 +4,8 @@ import { fireByRate, makeIntWobbler, randomIntInclusiveBetween, randomItemFromAr
 import { videoSourceList } from './videos'
 
 export class ShinjukuChannel extends VideoPixelChannel {
-  constructor(frameBufferWidth: number, frameBufferHeight: number, finalResolutionWidth: number) {
-    super(
-      new VideoSupply(videoSourceList),
-      { width: frameBufferWidth, height: frameBufferHeight },
-      finalResolutionWidth
-    )
+  constructor(videoAspectRatio: number, videoWidth: number, outputResolutionWidth: number) {
+    super(new VideoSupply(videoSourceList), videoAspectRatio, videoWidth, outputResolutionWidth)
   }
 
   public async waitForReady(onProgress: (progress: number) => void) {

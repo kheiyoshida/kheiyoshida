@@ -25,6 +25,7 @@ export class ImageScope {
     }
 
     this.scopedSizes = createMagnifiedSizeList(originalImageSize, finalResolutionWidth)
+    console.log(this.scopedSizes)
     this.movableRegionsBySize = this.scopedSizes.map((size) => getRestrainedRegion(originalImageSize, size))
 
     this._position = centerPosition(originalImageSize)

@@ -36,14 +36,31 @@ export abstract class PixelChannel<VS extends VideoSource = VideoSource> {
     const rawPixels = this.offscreenTextureRenderer.renderAsPixels()
     return this.parser.parsePixelData(rawPixels)
   }
+
+  public iteratePixelData(iterator: (i: number) => void) {
+    const readHeight = this.outputResolution.height
+    const readWidth = this.outputResolution.width
+    for (let y = 0; y < readHeight; y += 1) {
+      for (let x = 0; x < readWidth; x += 1) {
+        // TODO: translate the actual position of pixel fragment by converting x & y into pixel data compatible
+        const i = (y * this.outputResolution.width + x) * 4
+        iterator(i)
+      }
+    }
+  }
 }
 
 export class VideoPixelChannel extends PixelChannel<VideoSupply> {
   constructor(
     source: VideoSupply,
-    videoResolution: ImageResolution,
+    videoAspectRatio: number,
+    videoWidth: number,
     outputResolutionWidth: number
   ) {
+    const videoResolution: ImageResolution = {
+      width: videoWidth,
+      height: videoWidth / videoAspectRatio
+    }
     super(source, videoResolution, outputResolutionWidth)
   }
 

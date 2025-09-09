@@ -12,9 +12,8 @@ import { ShinjukuChannel } from './channel'
 const isVertical = window.innerWidth < window.innerHeight
 const fftSize: FFTSize = 32
 
+const videoAspectRatio = 16 / 9
 const frameBufferWidth = 960
-const frameBufferHeight = frameBufferWidth / (16 / 9)
-const finalResolutionWidth = frameBufferWidth / 4
 const backgroundColor: [number, number, number, number] = [0, 0, 0, 1]
 const updateFrequency = 4
 
@@ -46,7 +45,7 @@ export const app = async () => {
   }
 
   // video
-  const channel = new ShinjukuChannel(frameBufferWidth, frameBufferHeight, finalResolutionWidth)
+  const channel = new ShinjukuChannel(videoAspectRatio, frameBufferWidth, frameBufferWidth / 4)
 
   // dot
   const { width: resolutionWidth, height: resolutionHeight } = channel.outputResolution
@@ -94,11 +93,13 @@ export const app = async () => {
     const wave = calcWave(analyser)
     const wiggle = makeIntWobbler(clamp(wave * 8, 1, 10))
 
+
     let k = 0
     for (let y = 0; y < resolutionHeight; y += 1) {
       for (let x = 0; x < resolutionWidth; x += 1) {
         const i = (y * resolutionWidth + x) * 4
         if (parsedPixels[i + 2] > 70 + wave * 30) {
+
           dotInstance.instanceDataArray[k++] = wiggle(x) / resolutionWidth
           dotInstance.instanceDataArray[k++] = wiggle(y) / resolutionHeight
 
@@ -114,6 +115,7 @@ export const app = async () => {
     }
 
     const finalInstanceCount = k / 6
+
     dotInstance.updateInstances(finalInstanceCount)
     dotInstance.setSize(0.1 / resolutionHeight)
     screenRenderer.render([dotInstance])
