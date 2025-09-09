@@ -1,4 +1,9 @@
 import { VideoSource } from '../source/source'
+import { OffScreenTextureRenderer } from '../../gl/renderers/offscreen'
+import { PixelParser } from '../../media/pixels/parse'
+import { ImageScope } from '../../media/pixels/scope/scope'
+import { ImageResolution } from '../../media/pixels/types'
+import { VideoSupply } from '../../media/video/supply'
 
 /**
  * abstracts operations below:
@@ -8,7 +13,45 @@ import { VideoSource } from '../source/source'
  * - set parameters for read operation
  */
 export abstract class PixelChannel<VS extends VideoSource = VideoSource> {
-  protected constructor(readonly source: VS) {}
+  protected readonly offscreenTextureRenderer: OffScreenTextureRenderer
+  protected readonly parser: PixelParser
+  public readonly scope: ImageScope
 
-  // TODO: provide normalised interface for controller
+  protected constructor(
+    readonly source: VS,
+    frameBufferResolution: ImageResolution,
+    outputResolutionWidth: number
+  ) {
+    this.offscreenTextureRenderer = new OffScreenTextureRenderer(frameBufferResolution)
+    this.scope = new ImageScope(frameBufferResolution, outputResolutionWidth)
+    this.parser = new PixelParser(this.scope)
+  }
+
+  public get outputResolution() {
+    return this.scope.finalResolution
+  }
+
+  public getPixels(): Uint8Array {
+    this.offscreenTextureRenderer.setTextureImage(this.source.currentVideo)
+    const rawPixels = this.offscreenTextureRenderer.renderAsPixels()
+    return this.parser.parsePixelData(rawPixels)
+  }
+}
+
+export class VideoPixelChannel extends PixelChannel<VideoSupply> {
+  constructor(
+    source: VideoSupply,
+    videoResolution: ImageResolution,
+    outputResolutionWidth: number
+  ) {
+    super(source, videoResolution, outputResolutionWidth)
+  }
+
+  public async waitForReady(onProgress: (progress: number) => void) {
+    const interval = setInterval(() => {
+      onProgress(this.source.loadingProgress)
+    }, 100)
+    await this.source.readyPromise
+    clearTimeout(interval)
+  }
 }

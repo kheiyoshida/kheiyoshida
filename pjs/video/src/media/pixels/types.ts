@@ -1,4 +1,4 @@
-export type MediaSize = {
+export type ImageResolution = {
   width: number
   height: number
 }

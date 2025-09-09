@@ -3,16 +3,16 @@ import { Renderer } from './renderer'
 import { GenericModel } from '../model/model'
 import { ScreenRect } from '../model/screen'
 import { Texture } from '../texture'
+import { ImageResolution } from '../../media/pixels/types'
 
 export class OffScreenRenderer extends Renderer {
   protected frameBuffer: FrameBuffer
 
   constructor(
-    protected frameBufferWidth: number,
-    protected frameBufferHeight: number
+    protected frameBufferResolution: ImageResolution,
   ) {
     super()
-    this.frameBuffer = new FrameBuffer(frameBufferWidth, frameBufferHeight)
+    this.frameBuffer = new FrameBuffer(frameBufferResolution.width, frameBufferResolution.height)
   }
 
   render(models: GenericModel[]) {
@@ -33,8 +33,8 @@ export class OffScreenRenderer extends Renderer {
 export class OffScreenTextureRenderer extends OffScreenRenderer {
   protected screenRect: ScreenRect
 
-  constructor(frameBufferWidth: number, frameBufferHeight: number, readonly texture: Texture = new Texture()) {
-    super(frameBufferWidth, frameBufferHeight)
+  constructor(frameBufferResolution: ImageResolution,readonly texture: Texture = new Texture()) {
+    super(frameBufferResolution)
     this.screenRect = new ScreenRect(texture)
   }
 

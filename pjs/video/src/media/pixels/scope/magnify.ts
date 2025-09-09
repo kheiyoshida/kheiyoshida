@@ -1,11 +1,11 @@
 import { getCommonDivisors, getFloatDivisors } from 'utils'
-import { MediaSize } from '../types'
+import { ImageResolution } from '../types'
 
 export const createMagnifiedSizeList = (
-  originalMediaSize: MediaSize,
+  originalMediaSize: ImageResolution,
   finalResolutionWidth: number,
   bindHeight = false
-): MediaSize[] => {
+): ImageResolution[] => {
   const magCandidates = listMagnifyCandidates(originalMediaSize, finalResolutionWidth, bindHeight)
   return magCandidates.map((mag) => ({
     width: originalMediaSize.width / mag,
@@ -13,7 +13,7 @@ export const createMagnifiedSizeList = (
   }))
 }
 
-export const listMagnifyCandidates = (videoSize: MediaSize, resolution: number, bindHeight = false) => {
+export const listMagnifyCandidates = (videoSize: ImageResolution, resolution: number, bindHeight = false) => {
   try {
     const candidates = getFloatDivisors(videoSize.width / resolution)
     if (!bindHeight) return candidates
@@ -25,16 +25,16 @@ export const listMagnifyCandidates = (videoSize: MediaSize, resolution: number, 
 }
 
 export class WrongResolutionError extends Error {
-  constructor(videoSize: MediaSize, resolution: number) {
+  constructor(videoSize: ImageResolution, resolution: number) {
     super(`maybe setting wrong candidate for resolution. ${resolution}
     the candidates would be: ${JSON.stringify(resolutionCandidates(videoSize), null, 4)}`)
   }
 }
 
-const resolutionCandidates = (size: MediaSize) =>
+const resolutionCandidates = (size: ImageResolution) =>
   Object.fromEntries(
     getCommonDivisors(size.width, size.height).map((d) => [
       d,
       { width: size.width / d, height: size.height / d },
     ])
-  ) as { [skip: number]: MediaSize }
+  ) as { [skip: number]: ImageResolution }

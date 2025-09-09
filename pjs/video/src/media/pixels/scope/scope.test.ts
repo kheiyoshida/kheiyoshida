@@ -1,8 +1,8 @@
 import { ImageScope } from './scope'
-import { MediaSize } from '../types'
+import { ImageResolution } from '../types'
 
 describe(`${ImageScope.name}`, () => {
-  const size: MediaSize = {
+  const size: ImageResolution = {
     width: 960,
     height: 540,
   }

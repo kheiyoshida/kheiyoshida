@@ -1,9 +1,9 @@
-import { MediaSize, PixelPosition } from '../types'
+import { ImageResolution, PixelPosition } from '../types'
 
 /**
  * determine the region where the center position of magnified region can move
  */
-export const getRestrainedRegion = (videoSize: MediaSize, magnifiedSize: MediaSize) => {
+export const getRestrainedRegion = (videoSize: ImageResolution, magnifiedSize: ImageResolution) => {
   return {
     t: magnifiedSize.height / 2,
     b: videoSize.height - magnifiedSize.height / 2,
@@ -29,7 +29,7 @@ export const restrain = (
   return position
 }
 
-export const centerPosition = (size: MediaSize) => ({
+export const centerPosition = (size: ImageResolution) => ({
   x: size.width / 2,
   y: size.height / 2,
 })
@@ -40,7 +40,7 @@ export const centerPosition = (size: MediaSize) => ({
  * @param magnifiedSize
  * @returns
  */
-export const leftTopIze = (position: PixelPosition, magnifiedSize: MediaSize) => {
+export const leftTopIze = (position: PixelPosition, magnifiedSize: ImageResolution) => {
   const [halfWidth, halfHeight] = [magnifiedSize.width / 2, magnifiedSize.height / 2]
   // if (!Number.isInteger(halfWidth) || !Number.isInteger(halfHeight)) {
   //   throw Error(`magnifiedSize is not consisting of even numbers: ${JSON.stringify(magnifiedSize)}`)

@@ -1,35 +1,15 @@
-import { PixelChannel } from '../../lib/channel/channel'
+import { VideoPixelChannel } from '../../lib/channel/channel'
 import { VideoSupply } from '../../media/video/supply'
-import { OffScreenTextureRenderer } from '../../gl/renderers/offscreen'
-import { ImageScope } from '../../media/pixels/scope/scope'
-import { PixelParser } from '../../media/pixels/parse'
 import { fireByRate, makeIntWobbler, randomIntInclusiveBetween, randomItemFromArray } from 'utils'
+import { videoSourceList } from './videos'
 
-export class ShinjukuChannel extends PixelChannel<VideoSupply> {
-  private readonly offscreenTextureRenderer: OffScreenTextureRenderer
-  private readonly parser: PixelParser
-  public readonly scope: ImageScope
-
-  constructor(
-    source: VideoSupply,
-    frameBufferWidth: number,
-    frameBufferHeight: number,
-    finalResolutionWidth: number
-  ) {
-    super(source)
-
-    // texture
-    this.offscreenTextureRenderer = new OffScreenTextureRenderer(frameBufferWidth, frameBufferHeight)
-
-    // parser
-    this.scope = new ImageScope(
-      {
-        width: frameBufferWidth,
-        height: frameBufferHeight,
-      },
+export class ShinjukuChannel extends VideoPixelChannel {
+  constructor(frameBufferWidth: number, frameBufferHeight: number, finalResolutionWidth: number) {
+    super(
+      new VideoSupply(videoSourceList),
+      { width: frameBufferWidth, height: frameBufferHeight },
       finalResolutionWidth
     )
-    this.parser = new PixelParser(this.scope)
   }
 
   public async waitForReady(onProgress: (progress: number) => void) {
@@ -40,18 +20,7 @@ export class ShinjukuChannel extends PixelChannel<VideoSupply> {
     clearTimeout(interval)
   }
 
-  public getPixels(): Uint8Array {
-    this.offscreenTextureRenderer.setTextureImage(this.source.currentVideo)
-    const rawPixels = this.offscreenTextureRenderer.renderAsPixels()
-    return this.parser.parsePixelData(rawPixels)
-  }
-
-  public get finalResolution() {
-    return this.scope.finalResolution
-  }
-
   // use cases
-
   private wobble = makeIntWobbler(10)
   public update() {
     if (fireByRate(0.05)) {

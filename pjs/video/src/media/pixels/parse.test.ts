@@ -1,9 +1,9 @@
-import { MediaSize } from './types'
+import { ImageResolution } from './types'
 import { ImageScope } from './scope/scope'
 import { PixelParser } from './parse'
 
 // Replace your mock with this for the PixelParser test
-const createRGBAByCoord = ({ width, height }: MediaSize) => {
+const createRGBAByCoord = ({ width, height }: ImageResolution) => {
   const data = new Uint8Array(width * height * 4)
   let k = 0
   for (let y = 0; y < height; y++) {
@@ -18,7 +18,7 @@ const createRGBAByCoord = ({ width, height }: MediaSize) => {
 }
 
 test(`${PixelParser.name}`, () => {
-  const originalImageSize: MediaSize = { width: 32, height: 18 } // 16:9
+  const originalImageSize: ImageResolution = { width: 32, height: 18 } // 16:9
   const finalResolutionWidth = 16
   const parser = new PixelParser(new ImageScope(originalImageSize, finalResolutionWidth))
   expect(parser.scope.parseParams.scopedSize).toMatchObject({ width: 32, height: 18 })

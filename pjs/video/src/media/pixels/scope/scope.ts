@@ -1,10 +1,10 @@
-import { MediaSize, MovableRegion, PixelPosition } from '../types'
+import { ImageResolution, MovableRegion, PixelPosition } from '../types'
 import { createMagnifiedSizeList } from './magnify'
 import { centerPosition, getRestrainedRegion, restrain } from './position'
 
 export class ImageScope {
   // possible image resolution sizes it can take
-  private readonly scopedSizes: MediaSize[]
+  private readonly scopedSizes: ImageResolution[]
 
   // the regions position can take in magnified images
   // so that it won't show pixels outside image
@@ -12,10 +12,10 @@ export class ImageScope {
 
   // the parse option should be provided so that
   // final parsed size meets this resolution however the magnifyLevel and position is
-  public readonly finalResolution: MediaSize
+  public readonly finalResolution: ImageResolution
 
   constructor(
-    public readonly originalImageSize: MediaSize,
+    public readonly originalImageSize: ImageResolution,
     finalResolutionWidth: number
   ) {
     const finalResolutionHeight = finalResolutionWidth * (originalImageSize.height / originalImageSize.width)

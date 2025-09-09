@@ -7,8 +7,6 @@ import { callContext, createAnalyzer, createSoundSource } from '../../media/audi
 import { getMusicLoc } from '../../media/cdn'
 import { Message } from './message'
 import { ShinjukuChannel } from './channel'
-import { VideoSupply } from '../../media/video/supply'
-import { videoSourceList } from './videos'
 
 // config
 const isVertical = window.innerWidth < window.innerHeight
@@ -48,17 +46,16 @@ export const app = async () => {
   }
 
   // video
-  const source = new VideoSupply(videoSourceList)
-  const channel = new ShinjukuChannel(source, frameBufferWidth, frameBufferHeight, finalResolutionWidth)
+  const channel = new ShinjukuChannel(frameBufferWidth, frameBufferHeight, finalResolutionWidth)
 
   // dot
-  const { width: resolutionWidth, height: resolutionHeight } = channel.finalResolution
+  const { width: resolutionWidth, height: resolutionHeight } = channel.outputResolution
   const singleDotSize = 0.5 / resolutionHeight
 
   // rendering
   const screenRenderer = new ScreenRenderer()
   screenRenderer.backgroundColor = backgroundColor
-  const maxInstanceCount = channel.finalResolution.width * channel.finalResolution.height
+  const maxInstanceCount = channel.outputResolution.width * channel.outputResolution.height
   const dotAspectRatio = (2 * 16) / 9
   const dotInstance = new DotInstance(maxInstanceCount, dotAspectRatio)
 
