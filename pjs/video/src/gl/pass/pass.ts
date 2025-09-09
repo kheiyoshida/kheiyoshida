@@ -1,7 +1,7 @@
 import { GenericModel } from '../model/model'
 import { getGL } from '../gl'
 
-export abstract class Renderer {
+export abstract class RenderingPass {
   protected gl = getGL()
 
   public render(models: GenericModel[]) {
@@ -15,7 +15,7 @@ export abstract class Renderer {
   public backgroundColor: [number, number, number, number] = [1, 1, 1, 1]
 }
 
-export class ScreenRenderer extends Renderer {
+export class ScreenPass extends RenderingPass {
   public render(models: GenericModel[]) {
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height)
     super.render(models)

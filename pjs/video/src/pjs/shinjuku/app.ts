@@ -1,6 +1,6 @@
 import { getGL } from '../../gl/gl'
 import { DotInstance } from '../../gl/model/dot'
-import { ScreenRenderer } from '../../gl/renderers/renderer'
+import { ScreenPass } from '../../gl/pass/pass'
 import { clamp, makeIntWobbler } from 'utils'
 import { Analyzer, FFTSize } from '../../media/audio/types'
 import { callContext, createAnalyzer, createSoundSource } from '../../media/audio/analyzer'
@@ -52,7 +52,7 @@ export const app = async () => {
   const singleDotSize = 0.5 / resolutionHeight
 
   // rendering
-  const screenRenderer = new ScreenRenderer()
+  const screenRenderer = new ScreenPass()
   screenRenderer.backgroundColor = backgroundColor
   const maxInstanceCount = channel.outputResolution.width * channel.outputResolution.height
   const dotAspectRatio = (2 * 16) / 9

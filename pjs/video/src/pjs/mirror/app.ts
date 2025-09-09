@@ -1,5 +1,5 @@
 import { getGL } from '../../gl/gl'
-import { ScreenRenderer } from '../../gl/renderers/renderer'
+import { ScreenPass } from '../../gl/pass/pass'
 import { GlyphInstance } from '../../gl/model/glyph/instance'
 import { Texture } from '../../gl/texture'
 import { FntParser } from '../../media/font/glyph'
@@ -14,7 +14,7 @@ export const app = async () => {
   canvas.height = window.innerHeight
 
   // rendering
-  const screenRenderer = new ScreenRenderer()
+  const screenRenderer = new ScreenPass()
   screenRenderer.backgroundColor = [0, 0, 0, 1]
   const maxInstanceCount = 100
   const dotAspectRatio = 1

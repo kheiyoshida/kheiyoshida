@@ -1,11 +1,11 @@
 import { FrameBuffer } from '../frameBuffer'
-import { Renderer } from './renderer'
+import { RenderingPass } from './pass'
 import { GenericModel } from '../model/model'
 import { ScreenRect } from '../model/screen'
 import { Texture } from '../texture'
 import { ImageResolution } from '../../media/pixels/types'
 
-export class OffScreenRenderer extends Renderer {
+export class OffScreenPass extends RenderingPass {
   protected frameBuffer: FrameBuffer
 
   constructor(
@@ -30,7 +30,7 @@ export class OffScreenRenderer extends Renderer {
   }
 }
 
-export class OffScreenTextureRenderer extends OffScreenRenderer {
+export class OffScreenTexturePass extends OffScreenPass {
   protected screenRect: ScreenRect
 
   constructor(frameBufferResolution: ImageResolution,readonly texture: Texture = new Texture()) {

@@ -1,8 +1,8 @@
 import { getGL } from './gl/gl'
 import { Texture } from './gl/texture'
 import { DotInstance } from './gl/model/dot'
-import { OffScreenTextureRenderer } from './gl/renderers/offscreen'
-import { ScreenRenderer } from './gl/renderers/renderer'
+import { OffScreenTexturePass } from './gl/pass/offscreen'
+import { ScreenPass } from './gl/pass/pass'
 import { setupCamera } from './media/camera'
 
 const videoEl = await setupCamera()
@@ -12,13 +12,13 @@ getGL()
 const videoTexture = new Texture()
 const frameBufferWidth = 320
 const frameBufferHeight = 180
-const offscreenTextureRenderer = new OffScreenTextureRenderer(
+const offscreenTextureRenderer = new OffScreenTexturePass(
   videoTexture,
   frameBufferWidth,
   frameBufferHeight
 )
 
-const screenRenderer = new ScreenRenderer()
+const screenRenderer = new ScreenPass()
 screenRenderer.backgroundColor = [0, 0, 0, 1]
 const dotInstance = new DotInstance()
 

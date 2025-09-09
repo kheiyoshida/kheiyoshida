@@ -1,5 +1,5 @@
 import { VideoSource } from '../source/source'
-import { OffScreenTextureRenderer } from '../../gl/renderers/offscreen'
+import { OffScreenTexturePass } from '../../gl/pass/offscreen'
 import { PixelParser } from '../../media/pixels/parse'
 import { ImageScope } from '../../media/pixels/scope/scope'
 import { ImageResolution } from '../../media/pixels/types'
@@ -13,7 +13,7 @@ import { VideoSupply } from '../../media/video/supply'
  * - set parameters for read operation
  */
 export abstract class PixelChannel<VS extends VideoSource = VideoSource> {
-  protected readonly offscreenTextureRenderer: OffScreenTextureRenderer
+  protected readonly offscreenTextureRenderer: OffScreenTexturePass
   protected readonly parser: PixelParser
   public readonly scope: ImageScope
 
@@ -22,7 +22,7 @@ export abstract class PixelChannel<VS extends VideoSource = VideoSource> {
     frameBufferResolution: ImageResolution,
     outputResolutionWidth: number
   ) {
-    this.offscreenTextureRenderer = new OffScreenTextureRenderer(frameBufferResolution)
+    this.offscreenTextureRenderer = new OffScreenTexturePass(frameBufferResolution)
     this.scope = new ImageScope(frameBufferResolution, outputResolutionWidth)
     this.parser = new PixelParser(this.scope)
   }
