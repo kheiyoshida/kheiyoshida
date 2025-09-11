@@ -1,11 +1,11 @@
 import { getGL } from '../../gl/gl'
-import { ScreenPass } from '../../gl/pass/pass'
 import { GlyphInstance } from '../../gl/model/glyph/instance'
 import { Texture } from '../../gl/texture'
 import { FntParser } from '../../media/font/glyph'
 import fnt from '../../assets/fonts/A.fnt?raw'
 import fontImageUrl from '../../assets/fonts/A.png?url'
 import { randomFloatBetween, randomItemFromArray } from 'utils'
+import { ScreenPass } from '../../gl/pass/onscreen'
 
 export const app = async () => {
   const gl = getGL()

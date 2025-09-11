@@ -4,6 +4,7 @@ import { PixelParser } from '../../media/pixels/parse'
 import { ImageScope } from '../../media/pixels/scope/scope'
 import { ImageResolution } from '../../media/pixels/types'
 import { VideoSupply } from '../../media/video/supply'
+import { ScreenTexturePass } from '../../gl/pass/onscreen'
 
 /**
  * abstracts operations below:
@@ -13,7 +14,7 @@ import { VideoSupply } from '../../media/video/supply'
  * - set parameters for read operation
  */
 export abstract class PixelChannel<VS extends VideoSource = VideoSource> {
-  protected readonly offscreenTextureRenderer: OffScreenTexturePass
+  protected readonly offScreenTexturePass: OffScreenTexturePass
   protected readonly parser: PixelParser
   public readonly scope: ImageScope
 
@@ -22,7 +23,7 @@ export abstract class PixelChannel<VS extends VideoSource = VideoSource> {
     frameBufferResolution: ImageResolution,
     outputResolutionWidth: number
   ) {
-    this.offscreenTextureRenderer = new OffScreenTexturePass(frameBufferResolution)
+    this.offScreenTexturePass = new OffScreenTexturePass(frameBufferResolution)
     this.scope = new ImageScope(frameBufferResolution, outputResolutionWidth)
     this.parser = new PixelParser(this.scope)
   }
@@ -32,21 +33,9 @@ export abstract class PixelChannel<VS extends VideoSource = VideoSource> {
   }
 
   public getPixels(): Uint8Array {
-    this.offscreenTextureRenderer.setTextureImage(this.source.currentVideo)
-    const rawPixels = this.offscreenTextureRenderer.renderAsPixels()
+    this.offScreenTexturePass.setTextureImage(this.source.currentVideo)
+    const rawPixels = this.offScreenTexturePass.renderAsPixels()
     return this.parser.parsePixelData(rawPixels)
-  }
-
-  public iteratePixelData(iterator: (i: number) => void) {
-    const readHeight = this.outputResolution.height
-    const readWidth = this.outputResolution.width
-    for (let y = 0; y < readHeight; y += 1) {
-      for (let x = 0; x < readWidth; x += 1) {
-        // TODO: translate the actual position of pixel fragment by converting x & y into pixel data compatible
-        const i = (y * this.outputResolution.width + x) * 4
-        iterator(i)
-      }
-    }
   }
 }
 
@@ -59,11 +48,35 @@ export class VideoPixelChannel extends PixelChannel<VideoSupply> {
   ) {
     const videoResolution: ImageResolution = {
       width: videoWidth,
-      height: videoWidth / videoAspectRatio
+      height: videoWidth / videoAspectRatio,
     }
     super(source, videoResolution, outputResolutionWidth)
   }
 
+  public async waitForReady(onProgress: (progress: number) => void) {
+    const interval = setInterval(() => {
+      onProgress(this.source.loadingProgress)
+    }, 100)
+    await this.source.readyPromise
+    clearTimeout(interval)
+  }
+}
+
+// renders videos directly onto screen
+export class DebugChannel<VS extends VideoSource = VideoSource> {
+  protected readonly screenTexturePass: ScreenTexturePass
+
+  protected constructor(readonly source: VS) {
+    this.screenTexturePass = new ScreenTexturePass()
+  }
+
+  public render(): void {
+    this.screenTexturePass.setTextureImage(this.source.currentVideo)
+    this.screenTexturePass.render()
+  }
+}
+
+export class DebugVideoChannel extends DebugChannel<VideoSupply> {
   public async waitForReady(onProgress: (progress: number) => void) {
     const interval = setInterval(() => {
       onProgress(this.source.loadingProgress)

@@ -14,10 +14,3 @@ export abstract class RenderingPass {
 
   public backgroundColor: [number, number, number, number] = [1, 1, 1, 1]
 }
-
-export class ScreenPass extends RenderingPass {
-  public render(models: GenericModel[]) {
-    this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height)
-    super.render(models)
-  }
-}

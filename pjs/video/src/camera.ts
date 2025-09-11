@@ -2,8 +2,8 @@ import { getGL } from './gl/gl'
 import { Texture } from './gl/texture'
 import { DotInstance } from './gl/model/dot'
 import { OffScreenTexturePass } from './gl/pass/offscreen'
-import { ScreenPass } from './gl/pass/pass'
 import { setupCamera } from './media/camera'
+import { ScreenPass } from './gl/pass/onscreen'
 
 const videoEl = await setupCamera()
 

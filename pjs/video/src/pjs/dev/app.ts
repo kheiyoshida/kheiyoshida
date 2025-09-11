@@ -3,7 +3,7 @@ import { Message } from '../shinjuku/message'
 import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
 import { DevVideoChannel } from './channel'
 import { DevDotPresentation } from './presentation'
-import { DotPresentation } from '../shinjuku/presentation'
+import { SaturationEffect } from './effect/saturation'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -14,6 +14,8 @@ export const app = async () => {
   // init gl
   getGL()
 
+  // const channel = new DebugDevVideoChannel()
+
   // rendering
   const channel = new DevVideoChannel(videoAspectRatio, frameBufferWidth, frameBufferWidth / 4)
   const dotAspectRatio = 16 / 9
@@ -21,6 +23,7 @@ export const app = async () => {
 
   const pipeline = new VideoProjectionPipeline([channel], [dotPresentation])
   pipeline.setBackgroundColor(backgroundColor)
+  pipeline.registerEffect(tex => new SaturationEffect(tex))
 
   function renderLoop(frameCount: number) {
     // rendering phase

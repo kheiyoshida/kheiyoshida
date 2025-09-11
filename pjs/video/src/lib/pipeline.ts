@@ -1,10 +1,7 @@
 import { PixelChannel } from './channel/channel'
 import { PixelPresentation } from './presentation'
-import { ScreenPass } from '../gl/pass/pass'
 import { OffScreenPass } from '../gl/pass/offscreen'
-import { getGL } from '../gl/gl'
 import { PostEffect } from './effect/effect'
-import { ScreenRect2 } from '../gl/model/screen'
 
 export class VideoProjectionPipeline {
   constructor(
@@ -12,12 +9,14 @@ export class VideoProjectionPipeline {
     private readonly presentations: PixelPresentation[]
   ) {
     this.presentationPass = new OffScreenPass({ width: 960, height: 540 })
-    // this.presentationPass = new ScreenPass()
-    this.postEffectPass = new PostEffect(this.presentationPass.frameBuffer)
   }
 
   private presentationPass: OffScreenPass
-  private postEffectPass: PostEffect
+  private readonly postEffects: PostEffect[] = []
+
+  public registerEffect(factory: (tex: WebGLTexture) => PostEffect) {
+    this.postEffects.push(factory(this.presentationPass.frameBuffer.tex))
+  }
 
   public setBackgroundColor(rgba: [number, number, number, number]): void {
     this.presentationPass.backgroundColor = rgba
@@ -36,7 +35,9 @@ export class VideoProjectionPipeline {
     }
     this.presentationPass.render(presentations.map((p) => p.instance))
 
-    this.postEffectPass.render()
+    if (this.postEffects.length > 0) {
+      this.postEffects[0].render() // TODO: implement multi effect
+    }
   }
 }
 
