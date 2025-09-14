@@ -1,21 +1,49 @@
 import { PixelChannel } from './channel/channel'
 import { PixelPresentation } from './presentation'
 import { OffScreenPass } from '../gl/pass/offscreen'
-import { PostEffect } from './effect/effect'
+import { EffectFactory, PostEffect } from './effect/effect'
+import { FrameBuffer } from '../gl/frameBuffer'
+import { ImageResolution } from '../media/pixels/types'
+import { FrameBufferScreenPass } from '../gl/pass/onscreen'
 
 export class VideoProjectionPipeline {
-  constructor(
-    private readonly channels: PixelChannel[],
-    private readonly presentations: PixelPresentation[]
-  ) {
-    this.presentationPass = new OffScreenPass({ width: 960, height: 540 })
-  }
-
   private presentationPass: OffScreenPass
   private readonly postEffects: PostEffect[] = []
+  private screenPass: FrameBufferScreenPass
 
-  public registerEffect(factory: (tex: WebGLTexture) => PostEffect) {
-    this.postEffects.push(factory(this.presentationPass.frameBuffer.tex))
+  constructor(
+    private readonly channels: PixelChannel[],
+    private readonly presentations: PixelPresentation[],
+    effects: EffectFactory[] = []
+  ) {
+    const frameBufferResolution: ImageResolution = { width: 960, height: 540 }
+    this.presentationPass = new OffScreenPass(frameBufferResolution)
+
+    if (effects.length == 0) {
+      this.screenPass = new FrameBufferScreenPass(this.presentationPass.frameBuffer.tex)
+    }
+
+    else {
+      const frameBufferA = new FrameBuffer(frameBufferResolution.width, frameBufferResolution.height)
+      const frameBufferB = new FrameBuffer(frameBufferResolution.width, frameBufferResolution.height)
+
+      for (let i = 0; i < effects.length; i++) {
+        const fxFactory = effects[i]
+        if (i ===0) {
+          this.postEffects.push(fxFactory(this.presentationPass.frameBuffer, frameBufferA))
+        } else if (i % 2 != 0) {
+          this.postEffects.push(fxFactory(frameBufferA, frameBufferB))
+        } else {
+          this.postEffects.push(fxFactory(frameBufferB, frameBufferA))
+        }
+      }
+
+      if (effects.length % 2 == 0) {
+        this.screenPass = new FrameBufferScreenPass(frameBufferB.tex)
+      } else {
+        this.screenPass = new FrameBufferScreenPass(frameBufferA.tex)
+      }
+    }
   }
 
   public setBackgroundColor(rgba: [number, number, number, number]): void {
@@ -35,9 +63,11 @@ export class VideoProjectionPipeline {
     }
     this.presentationPass.render(presentations.map((p) => p.instance))
 
-    if (this.postEffects.length > 0) {
-      this.postEffects[0].render() // TODO: implement multi effect
+    for(const fx of this.postEffects) {
+      fx.render()
     }
+
+    this.screenPass.render()
   }
 }
 

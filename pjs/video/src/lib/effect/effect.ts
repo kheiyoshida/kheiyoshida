@@ -1,29 +1,35 @@
 import { Shader } from '../../gl/shader'
-import { ScreenPass } from '../../gl/pass/onscreen'
-import screenVert from '../../gl/shaders/screen.vert?raw'
-import screenFrag2 from '../../gl/shaders/monotone.frag?raw'
 import { Texture2dModel } from '../../gl/model/screen'
 import { GenericModel } from '../../gl/model/model'
+import { OffScreenPass } from '../../gl/pass/offscreen'
+import { FrameBuffer } from '../../gl/frameBuffer'
 
-export abstract class PostEffect {
-  public screenPass: ScreenPass = new ScreenPass()
+export type EffectFactory = (input: FrameBuffer, output: FrameBuffer) => PostEffect
+
+export class PostEffect {
+  public offScreenPass: OffScreenPass
   public models: GenericModel[] = []
 
-  protected constructor(readonly tex: WebGLTexture) {}
+  public constructor(
+    inputFrameBuffer: FrameBuffer,
+    outputFrameBuffer: FrameBuffer,
+    screenShader: Shader
+  ) {
+    this.offScreenPass = new OffScreenPass(outputFrameBuffer)
+    this.models.push(
+      new FrameBufferTextureRect(inputFrameBuffer.tex, screenShader)
+    )
+  }
+
+  public static makeFactory(vert: string, frag: string): EffectFactory {
+    return (input, output) => new PostEffect(input, output, new Shader(vert, frag))
+  }
 
   public render() {
-    this.screenPass.render(this.models)
+    this.offScreenPass.render(this.models)
   }
 }
 
-export class PostScreenEffect extends PostEffect {
-  public screenPass: ScreenPass = new ScreenPass()
-
-  constructor(tex: WebGLTexture, screenShader: Shader = new Shader(screenVert, screenFrag2)) {
-    super(tex)
-    this.models.push(new FrameBufferTextureRect(tex, screenShader))
-  }
-}
 
 /**
  * screen rect to render frame buffer.

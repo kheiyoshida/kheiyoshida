@@ -3,7 +3,7 @@ import { Message } from '../shinjuku/message'
 import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
 import { DevVideoChannel } from './channel'
 import { DevDotPresentation } from './presentation'
-import { SaturationEffect } from './effect/saturation'
+import { saturationEffectFactory } from './effect/saturation'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -21,9 +21,8 @@ export const app = async () => {
   const dotAspectRatio = 16 / 9
   const dotPresentation = new DevDotPresentation(channel.outputResolution, dotAspectRatio)
 
-  const pipeline = new VideoProjectionPipeline([channel], [dotPresentation])
+  const pipeline = new VideoProjectionPipeline([channel], [dotPresentation], [saturationEffectFactory, saturationEffectFactory])
   pipeline.setBackgroundColor(backgroundColor)
-  pipeline.registerEffect(tex => new SaturationEffect(tex))
 
   function renderLoop(frameCount: number) {
     // rendering phase
@@ -35,10 +34,6 @@ export const app = async () => {
 
   message.text = 'loading...'
   await channel.waitForReady((progress) => (message.text = `loading: ${progress}%`))
-
-  message.text = 'click/tap to play'
-  message.div.onclick = () => {
-    message.hide()
-    startRenderingLoop(renderLoop)
-  }
+  startRenderingLoop(renderLoop)
+  message.hide()
 }

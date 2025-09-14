@@ -31,7 +31,10 @@ export class Texture2dModel extends GenericModel {
  * screen rect that renders texture input
  */
 export class ScreenRect extends Texture2dModel {
-  constructor(texture: Texture, screenShader = new Shader(screenVert, screenFrag)) {
+  constructor(
+    texture: Texture | WebGLTexture,
+    screenShader = new Shader(screenVert, screenFrag),
+  ) {
     // prettier-ignore
     const screenRectVertices = new Float32Array([
       -1, -1, 0, 1,
@@ -39,6 +42,6 @@ export class ScreenRect extends Texture2dModel {
       -1, 1, 0, 0,
       1, 1, 1, 0
     ])
-    super(texture.tex, screenShader, screenRectVertices)
+    super(texture instanceof Texture ? texture.tex : texture, screenShader, screenRectVertices)
   }
 }

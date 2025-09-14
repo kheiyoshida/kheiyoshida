@@ -8,9 +8,13 @@ import { ImageResolution } from '../../media/pixels/types'
 export class OffScreenPass extends RenderingPass {
   public readonly frameBuffer: FrameBuffer
 
-  constructor(protected frameBufferResolution: ImageResolution) {
+  constructor(frameBufferOrResolution: FrameBuffer | ImageResolution) {
     super()
-    this.frameBuffer = new FrameBuffer(frameBufferResolution.width, frameBufferResolution.height)
+    if (frameBufferOrResolution instanceof FrameBuffer) {
+      this.frameBuffer = frameBufferOrResolution
+    } else {
+      this.frameBuffer = new FrameBuffer(frameBufferOrResolution.width, frameBufferOrResolution.height)
+    }
   }
 
   render(models: GenericModel[]) {
