@@ -6,27 +6,33 @@ import { FrameBuffer } from '../../gl/frameBuffer'
 
 export type EffectFactory = (input: FrameBuffer, output: FrameBuffer) => PostEffect
 
-export class PostEffect {
+export abstract class PostEffect {
   public offScreenPass: OffScreenPass
   public models: GenericModel[] = []
 
+  protected constructor(outputFrameBuffer: FrameBuffer) {
+    this.offScreenPass = new OffScreenPass(outputFrameBuffer)
+  }
+
+  public render() {
+    this.offScreenPass.render(this.models)
+  }
+}
+
+export class PostScreenEffect extends PostEffect {
   public constructor(
     inputFrameBuffer: FrameBuffer,
     outputFrameBuffer: FrameBuffer,
     screenShader: Shader
   ) {
-    this.offScreenPass = new OffScreenPass(outputFrameBuffer)
+    super(outputFrameBuffer)
     this.models.push(
       new FrameBufferTextureRect(inputFrameBuffer.tex, screenShader)
     )
   }
 
   public static makeFactory(vert: string, frag: string): EffectFactory {
-    return (input, output) => new PostEffect(input, output, new Shader(vert, frag))
-  }
-
-  public render() {
-    this.offScreenPass.render(this.models)
+    return (input, output) => new PostScreenEffect(input, output, new Shader(vert, frag))
   }
 }
 

@@ -8,7 +8,7 @@ import { FrameBufferScreenPass } from '../gl/pass/onscreen'
 
 export class VideoProjectionPipeline {
   private presentationPass: OffScreenPass
-  private readonly postEffects: PostEffect[] = []
+  public readonly postEffects: PostEffect[] = []
   private screenPass: FrameBufferScreenPass
 
   constructor(
