@@ -6,6 +6,7 @@ import { DevDotPresentation } from './presentation'
 import { saturationEffectFactory } from './effect/saturation'
 import { KaleidoscopeEffect } from './effect/kaleido'
 import { fireByRate, randomIntInclusiveBetween } from 'utils'
+import { DevLinePresentation } from './presentation/line'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -22,18 +23,19 @@ export const app = async () => {
   const channel = new DevVideoChannel(videoAspectRatio, frameBufferWidth, frameBufferWidth / 4)
   const dotAspectRatio = 16 / 9
   const dotPresentation = new DevDotPresentation(channel.outputResolution, dotAspectRatio)
+  const linePresentation = new DevLinePresentation(channel.outputResolution)
 
-  const pipeline = new VideoProjectionPipeline([channel], [dotPresentation], [KaleidoscopeEffect.factory, saturationEffectFactory])
+  const pipeline = new VideoProjectionPipeline([channel], [linePresentation, ], [KaleidoscopeEffect.factory])
   pipeline.setBackgroundColor(backgroundColor)
 
   function renderLoop(frameCount: number) {
-    // param phase
-    if (fireByRate(0.1)) {
-      (pipeline.postEffects[0] as KaleidoscopeEffect).startAngle = randomIntInclusiveBetween(0, 360)
-    }
-    if (fireByRate(0.01)) {
-      (pipeline.postEffects[0] as KaleidoscopeEffect).numOfTriangles = randomIntInclusiveBetween(4, 12)
-    }
+    // // param phase
+    // if (fireByRate(0.1)) {
+    //   (pipeline.postEffects[0] as KaleidoscopeEffect).startAngle = randomIntInclusiveBetween(0, 360)
+    // }
+    // if (fireByRate(0.01)) {
+    //   (pipeline.postEffects[0] as KaleidoscopeEffect).numOfTriangles = randomIntInclusiveBetween(4, 12)
+    // }
 
     // rendering phase
     pipeline.render()

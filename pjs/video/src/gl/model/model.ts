@@ -59,6 +59,8 @@ export class GenericModel {
 
     gl.bindVertexArray(null)
 
+
+
     this.vertexCount = data.length / attributes.reduce((pre, cur) => pre + cur.size, 0)
   }
 
