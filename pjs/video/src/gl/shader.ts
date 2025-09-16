@@ -34,6 +34,10 @@ export class Shader {
     getGL().uniform1i(this.getUniformLoc(name), value)
   }
 
+  setUniformFloat2(name: string, x: number, y: number) {
+    getGL().uniform2f(this.getUniformLoc(name), x, y)
+  }
+
   private getUniformLoc(name: string) {
     return getGL().getUniformLocation(this.program, name)
   }

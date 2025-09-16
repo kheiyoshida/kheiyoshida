@@ -3,9 +3,6 @@ import { Message } from '../shinjuku/message'
 import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
 import { DevVideoChannel } from './channel'
 import { DevDotPresentation } from './presentation'
-import { saturationEffectFactory } from './effect/saturation'
-import { KaleidoscopeEffect } from './effect/kaleido'
-import { fireByRate, randomIntInclusiveBetween } from 'utils'
 import { DevLinePresentation } from './presentation/line'
 
 // config
@@ -21,11 +18,14 @@ export const app = async () => {
 
   // rendering
   const channel = new DevVideoChannel(videoAspectRatio, frameBufferWidth, frameBufferWidth / 4)
+
   const dotAspectRatio = 16 / 9
   const dotPresentation = new DevDotPresentation(channel.outputResolution, dotAspectRatio)
+  dotPresentation.dotSize = 0.8
+
   const linePresentation = new DevLinePresentation(channel.outputResolution)
 
-  const pipeline = new VideoProjectionPipeline([channel], [linePresentation, ], [KaleidoscopeEffect.factory])
+  const pipeline = new VideoProjectionPipeline([channel], [linePresentation], [])
   pipeline.setBackgroundColor(backgroundColor)
 
   function renderLoop(frameCount: number) {

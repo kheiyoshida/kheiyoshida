@@ -11,8 +11,9 @@ export class DevDotPresentation extends PixelPresentation<DotInstance> {
     this.singleDotSize = 0.5 / pixelDataResolution.height
   }
 
+  private singleDotSize: number
 
-  private  singleDotSize: number
+  public dotSize = 0.3
 
   public represent(pixels: Uint8Array): void {
     const resolutionWidth = this.pixelDataResolution.width
@@ -30,8 +31,7 @@ export class DevDotPresentation extends PixelPresentation<DotInstance> {
         dotInstance.instanceDataArray[k++] = pixels[i + 1] / 255
         dotInstance.instanceDataArray[k++] = pixels[i + 2] / 255
 
-        const dotSize = 0.3
-        dotInstance.instanceDataArray[k++] = dotSize * this.singleDotSize
+        dotInstance.instanceDataArray[k++] = this.dotSize * this.singleDotSize
       }
     }
 
