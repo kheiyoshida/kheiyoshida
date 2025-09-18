@@ -4,6 +4,9 @@ import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
 import { DevVideoChannel } from './channel'
 import { DevDotPresentation } from './presentation'
 import { DevLinePresentation } from './presentation/line'
+import { KaleidoscopeEffect } from './effect/kaleido'
+import { fireByRate, randomIntInclusiveBetween } from 'utils'
+import { saturationEffectFactory } from './effect/saturation'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -21,15 +24,15 @@ export const app = async () => {
 
   const dotAspectRatio = 16 / 9
   const dotPresentation = new DevDotPresentation(channel.outputResolution, dotAspectRatio)
-  dotPresentation.dotSize = 0.8
+  dotPresentation.dotSize = 0.6
 
   const linePresentation = new DevLinePresentation(channel.outputResolution)
 
-  const pipeline = new VideoProjectionPipeline([channel], [linePresentation], [])
+  const pipeline = new VideoProjectionPipeline([channel], [linePresentation], [saturationEffectFactory])
   pipeline.setBackgroundColor(backgroundColor)
 
   function renderLoop(frameCount: number) {
-    // // param phase
+    // param phase
     // if (fireByRate(0.1)) {
     //   (pipeline.postEffects[0] as KaleidoscopeEffect).startAngle = randomIntInclusiveBetween(0, 360)
     // }

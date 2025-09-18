@@ -1,6 +1,7 @@
 import { PixelPresentation } from '../../../lib/presentation'
 import { ImageResolution } from '../../../media/pixels/types'
 import { TextureLineInstance } from '../../../gl/model/textureLine/instance'
+import { randomIntInclusiveBetween } from 'utils'
 
 export class DevLinePresentation extends PixelPresentation {
   constructor(
@@ -12,6 +13,10 @@ export class DevLinePresentation extends PixelPresentation {
     const instance = new TextureLineInstance(maxInstanceCount, pixelDataResolution)
     super(instance, pixelDataResolution)
     this.setupPixelCoords()
+
+    this.instance.shader.use()
+    this.instance.shader.setUniformInt('uMaxDistance', randomIntInclusiveBetween(2, 24))
+    this.instance.shader.setUniformFloat('uLuminanceThreshold', 0.03)
   }
 
   private setupPixelCoords() {
@@ -26,6 +31,8 @@ export class DevLinePresentation extends PixelPresentation {
   }
 
   represent() {
+    this.instance.shader.use()
+    this.instance.shader.setUniformFloat('uTime', Math.floor(performance.now() / 1000))
     return
   }
 }
