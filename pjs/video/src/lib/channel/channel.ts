@@ -37,6 +37,10 @@ export abstract class PixelChannel<VS extends VideoSource = VideoSource> {
     const rawPixels = this.offScreenTexturePass.renderAsPixels()
     return this.parser.parsePixelData(rawPixels)
   }
+
+  public get isAvailable(): boolean {
+    return true
+  }
 }
 
 export class VideoPixelChannel extends PixelChannel<VideoSupply> {

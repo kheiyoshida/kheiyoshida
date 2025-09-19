@@ -21,15 +21,13 @@ export class VideoProjectionPipeline {
 
     if (effects.length == 0) {
       this.screenPass = new FrameBufferScreenPass(this.presentationPass.frameBuffer.tex)
-    }
-
-    else {
+    } else {
       const frameBufferA = new FrameBuffer(frameBufferResolution.width, frameBufferResolution.height)
       const frameBufferB = new FrameBuffer(frameBufferResolution.width, frameBufferResolution.height)
 
       for (let i = 0; i < effects.length; i++) {
         const fxFactory = effects[i]
-        if (i ===0) {
+        if (i === 0) {
           this.postEffects.push(fxFactory(this.presentationPass.frameBuffer, frameBufferA))
         } else if (i % 2 != 0) {
           this.postEffects.push(fxFactory(frameBufferA, frameBufferB))
@@ -55,7 +53,22 @@ export class VideoProjectionPipeline {
     return this.channels[this.channelIndex]
   }
 
-  public render() {
+  public set channelNumber(value: number) {
+    if (value < 0) return;
+    this.channelIndex = value % this.channels.length
+  }
+  public get channelNumber(): number {
+    return this.channelIndex;
+  }
+
+  public render(retry = 0): void {
+    if (!this.currentChannel.isAvailable) {
+      this.channelNumber++
+      if (retry > this.channels.length) {
+        throw new Error("No channel's available")
+      }
+      return this.render(retry + 1)
+    }
     const pixels = this.currentChannel.getPixels()
     const presentations = this.presentations // TODO: maybe filter by on/off
     for (const presentation of presentations) {
@@ -63,7 +76,7 @@ export class VideoProjectionPipeline {
     }
     this.presentationPass.render(presentations.map((p) => p.instance))
 
-    for(const fx of this.postEffects) {
+    for (const fx of this.postEffects) {
       fx.render()
     }
 

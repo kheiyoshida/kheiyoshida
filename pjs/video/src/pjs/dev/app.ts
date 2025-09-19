@@ -5,12 +5,15 @@ import { DevVideoChannel } from './channel'
 import { DevDotPresentation } from './presentation'
 import { DevLinePresentation } from './presentation/line'
 import { KaleidoscopeEffect } from './effect/kaleido'
-import { fireByRate, randomIntInclusiveBetween } from 'utils'
+import { fireByRate, pipe, randomIntInclusiveBetween } from 'utils'
 import { saturationEffectFactory } from './effect/saturation'
+import { CameraChannel } from '../../lib/channel/camera'
+import { CameraInputSource } from '../../media/camera'
 
 // config
 const videoAspectRatio = 16 / 9
 const frameBufferWidth = 960
+const outputResolutionWidth = frameBufferWidth / 4
 const backgroundColor: [number, number, number, number] = [0, 0, 0, 1]
 
 export const app = async () => {
@@ -20,7 +23,10 @@ export const app = async () => {
   // const channel = new DebugDevVideoChannel()
 
   // rendering
-  const channel = new DevVideoChannel(videoAspectRatio, frameBufferWidth, frameBufferWidth / 4)
+  const channel = new DevVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
+
+  const cameraSource = await CameraInputSource.create('Video Control')
+  const cameraCh = new CameraChannel(cameraSource, videoAspectRatio, frameBufferWidth, outputResolutionWidth)
 
   const dotAspectRatio = 16 / 9
   const dotPresentation = new DevDotPresentation(channel.outputResolution, dotAspectRatio)
@@ -28,7 +34,8 @@ export const app = async () => {
 
   const linePresentation = new DevLinePresentation(channel.outputResolution)
 
-  const pipeline = new VideoProjectionPipeline([channel], [linePresentation], [saturationEffectFactory])
+  const pipeline = new VideoProjectionPipeline([channel, cameraCh], [linePresentation], [saturationEffectFactory])
+  pipeline.channelNumber ++
   pipeline.setBackgroundColor(backgroundColor)
 
   function renderLoop(frameCount: number) {
