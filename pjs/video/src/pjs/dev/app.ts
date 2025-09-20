@@ -9,6 +9,8 @@ import { fireByRate, pipe, randomIntInclusiveBetween } from 'utils'
 import { saturationEffectFactory } from './effect/saturation'
 import { CameraChannel } from '../../lib/channel/camera'
 import { CameraInputSource } from '../../media/camera'
+import { createAudioInputSource } from '../../media/audio/input'
+import { SoundAnalyser } from '../../media/audio/analyzer'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -20,12 +22,15 @@ export const app = async () => {
   // init gl
   getGL()
 
-  // const channel = new DebugDevVideoChannel()
+  // sound input control
+  const source = await createAudioInputSource()
+  const analyser = new SoundAnalyser(source, 32)
 
   // rendering
   const channel = new DevVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
 
-  const cameraSource = await CameraInputSource.create('Video Control')
+  const cameraName = 'Video Control'
+  const cameraSource = await CameraInputSource.create()
   const cameraCh = new CameraChannel(cameraSource, videoAspectRatio, frameBufferWidth, outputResolutionWidth)
 
   const dotAspectRatio = 16 / 9
@@ -40,6 +45,10 @@ export const app = async () => {
 
   function renderLoop(frameCount: number) {
     // param phase
+    const rms = analyser.getRMS()
+    const effectLevel = Math.floor((1 - rms) * 50)
+    linePresentation.setMaxDistance(effectLevel)
+
     // if (fireByRate(0.1)) {
     //   (pipeline.postEffects[0] as KaleidoscopeEffect).startAngle = randomIntInclusiveBetween(0, 360)
     // }

@@ -1,7 +1,7 @@
 import { getGL } from '../../gl/gl'
 import { clamp } from 'utils'
 import { FFTSize } from '../../media/audio/types'
-import { callContext, createAnalyzer, createSoundSource } from '../../media/audio/analyzer'
+import { getAudioCtx, createSoundSource, SoundAnalyser } from '../../media/audio/analyzer'
 import { getMusicLoc } from '../../media/cdn'
 import { Message } from './message'
 import { ShinjukuChannel } from './channel'
@@ -35,13 +35,13 @@ export const app = async () => {
 
   // sound
   const soundSource = createSoundSource(getMusicLoc('shinjuku_240131.mp3'))
-  const analyser = createAnalyzer(soundSource.source, fftSize)
+  const analyser = new SoundAnalyser(soundSource, fftSize)
   const playSound = () => {
-    const context = callContext()
+    const context = getAudioCtx()
     if (context.state === 'suspended') {
       context.resume()
     }
-    soundSource.play()
+    soundSource.mediaElement.play()
   }
 
   // rendering
