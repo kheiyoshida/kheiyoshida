@@ -1,37 +1,37 @@
-export interface IKnobParamsAdapter {
-  ApplyKnobValueA(value: number): void
-  ApplyKnobValueB(value: number): void
-  ApplyKnobValueC(value: number): void
-  ApplySwitchValueA(value: boolean): void
-  ApplySwitchValueB(value: boolean): void
+export interface IKnobParamsControlAdapter {
+  applyKnobValueA(value: number): void
+  applyKnobValueB(value: number): void
+  applyKnobValueC(value: number): void
+  applySwitchValueA(value: boolean): void
+  applySwitchValueB(value: boolean): void
 }
 
-export interface IFaderParamsAdapter {
-  ApplyFaderValue1(value: number): void
-  ApplyFaderValue2(value: number): void
-  ApplyFaderValue3(value: number): void
-  ApplyFaderValue4(value: number): void
-  ApplyFaderValue5(value: number): void
-  ApplyFaderValue6(value: number): void
-  ApplyFaderValue7(value: number): void
-  ApplyFaderValue8(value: number): void
+export interface IFaderParamsControlAdapter {
+  applyFaderValue1(value: number): void
+  applyFaderValue2(value: number): void
+  applyFaderValue3(value: number): void
+  applyFaderValue4(value: number): void
+  applyFaderValue5(value: number): void
+  applyFaderValue6(value: number): void
+  applyFaderValue7(value: number): void
+  applyFaderValue8(value: number): void
 }
 
-export const NoOpKnobParamsAdapter: IKnobParamsAdapter = {
-  ApplyKnobValueA(value: number): void {},
-  ApplyKnobValueB(value: number): void {},
-  ApplyKnobValueC(value: number): void {},
-  ApplySwitchValueA(value: boolean): void {},
-  ApplySwitchValueB(value: boolean): void {},
+export const NoOpKnobParamsAdapter: IKnobParamsControlAdapter = {
+  applyKnobValueA(value: number): void {},
+  applyKnobValueB(value: number): void {},
+  applyKnobValueC(value: number): void {},
+  applySwitchValueA(value: boolean): void {},
+  applySwitchValueB(value: boolean): void {},
 }
 
-export const NoOpFaderParamsAdapter: IFaderParamsAdapter = {
-  ApplyFaderValue1: function (value: number): void {},
-  ApplyFaderValue2: function (value: number): void {},
-  ApplyFaderValue3: function (value: number): void {},
-  ApplyFaderValue4: function (value: number): void {},
-  ApplyFaderValue5: function (value: number): void {},
-  ApplyFaderValue6: function (value: number): void {},
-  ApplyFaderValue7: function (value: number): void {},
-  ApplyFaderValue8: function (value: number): void {},
+export const NoOpFaderParamsAdapter: IFaderParamsControlAdapter = {
+  applyFaderValue1: function (value: number): void {},
+  applyFaderValue2: function (value: number): void {},
+  applyFaderValue3: function (value: number): void {},
+  applyFaderValue4: function (value: number): void {},
+  applyFaderValue5: function (value: number): void {},
+  applyFaderValue6: function (value: number): void {},
+  applyFaderValue7: function (value: number): void {},
+  applyFaderValue8: function (value: number): void {},
 }

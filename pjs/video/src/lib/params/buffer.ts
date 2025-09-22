@@ -1,4 +1,4 @@
-import { IFaderParamsAdapter, IKnobParamsAdapter } from './adapter'
+import { IFaderParamsControlAdapter, IKnobParamsControlAdapter } from './adapter'
 
 export class ValueBuffer<T extends number | boolean> {
   constructor(value: T, private id = '') {
@@ -27,7 +27,7 @@ export class ValueBuffer<T extends number | boolean> {
 }
 
 export class KnobParamsBuffer {
-  constructor(private target: IKnobParamsAdapter, private id: string = '') {}
+  constructor(private target: IKnobParamsControlAdapter, private id: string = '') {}
 
   public readonly knobValueA = new ValueBuffer<number>(0, `${this.id} KnobA`);
   public readonly knobValueB = new ValueBuffer<number>(0, `${this.id} KnobB`);
@@ -36,16 +36,16 @@ export class KnobParamsBuffer {
   public readonly switchValueB = new ValueBuffer<boolean>(true, `${this.id} SwB`);
 
   apply() {
-    this.knobValueA.apply((v) => this.target.ApplyKnobValueA(v))
-    this.knobValueB.apply((v) => this.target.ApplyKnobValueB(v))
-    this.knobValueC.apply((v) => this.target.ApplyKnobValueC(v))
-    this.switchValueA.apply((v) => this.target.ApplySwitchValueA(v))
-    this.switchValueB.apply((v) => this.target.ApplySwitchValueB(v))
+    this.knobValueA.apply((v) => this.target.applyKnobValueA(v))
+    this.knobValueB.apply((v) => this.target.applyKnobValueB(v))
+    this.knobValueC.apply((v) => this.target.applyKnobValueC(v))
+    this.switchValueA.apply((v) => this.target.applySwitchValueA(v))
+    this.switchValueB.apply((v) => this.target.applySwitchValueB(v))
   }
 }
 
 export class FaderParamsBuffer {
-  constructor(private target: IFaderParamsAdapter) {
+  constructor(private target: IFaderParamsControlAdapter) {
   }
 
   public readonly faderValue1 = new ValueBuffer<number>(0, `fader 1`);
@@ -58,13 +58,13 @@ export class FaderParamsBuffer {
   public readonly faderValue8 = new ValueBuffer<number>(0, `fader 8`);
 
   apply() {
-    this.faderValue1.apply(v => this.target.ApplyFaderValue1(v))
-    this.faderValue2.apply(v => this.target.ApplyFaderValue2(v))
-    this.faderValue3.apply(v => this.target.ApplyFaderValue3(v))
-    this.faderValue4.apply(v => this.target.ApplyFaderValue4(v))
-    this.faderValue5.apply(v => this.target.ApplyFaderValue5(v))
-    this.faderValue6.apply(v => this.target.ApplyFaderValue6(v))
-    this.faderValue7.apply(v => this.target.ApplyFaderValue7(v))
-    this.faderValue8.apply(v => this.target.ApplyFaderValue8(v))
+    this.faderValue1.apply(v => this.target.applyFaderValue1(v))
+    this.faderValue2.apply(v => this.target.applyFaderValue2(v))
+    this.faderValue3.apply(v => this.target.applyFaderValue3(v))
+    this.faderValue4.apply(v => this.target.applyFaderValue4(v))
+    this.faderValue5.apply(v => this.target.applyFaderValue5(v))
+    this.faderValue6.apply(v => this.target.applyFaderValue6(v))
+    this.faderValue7.apply(v => this.target.applyFaderValue7(v))
+    this.faderValue8.apply(v => this.target.applyFaderValue8(v))
   }
 }

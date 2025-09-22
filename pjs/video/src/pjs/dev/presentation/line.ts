@@ -2,6 +2,7 @@ import { PixelPresentation } from '../../../lib/presentation'
 import { ImageResolution } from '../../../media/pixels/types'
 import { TextureLineInstance } from '../../../gl/model/textureLine/instance'
 import { randomIntInclusiveBetween } from 'utils'
+import { IKnobParamsControlAdapter } from '../../../lib/params/adapter'
 
 export class DevLinePresentation extends PixelPresentation {
   constructor(
@@ -40,4 +41,15 @@ export class DevLinePresentation extends PixelPresentation {
     this.instance.shader.setUniformFloat('uTime', Math.floor(performance.now() / 1000))
     return
   }
+}
+
+export class DevLinePresentationParamsControl implements IKnobParamsControlAdapter {
+  constructor(private presentation: DevLinePresentation) {}
+  applyKnobValueA(value: number): void {
+    this.presentation.setMaxDistance(2 + (value / 127) * 10)
+  }
+  applyKnobValueB(value: number): void {}
+  applyKnobValueC(value: number): void {}
+  applySwitchValueA(value: boolean): void {}
+  applySwitchValueB(value: boolean): void {}
 }

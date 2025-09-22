@@ -3,7 +3,7 @@ import { Message } from '../shinjuku/message'
 import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
 import { DevVideoChannel } from './channel'
 import { DevDotPresentation } from './presentation'
-import { DevLinePresentation } from './presentation/line'
+import { DevLinePresentation, DevLinePresentationParamsControl } from './presentation/line'
 import { KaleidoscopeEffect } from './effect/kaleido'
 import { fireByRate, pipe, randomIntInclusiveBetween } from 'utils'
 import { saturationEffectFactory } from './effect/saturation'
@@ -25,9 +25,7 @@ export const app = async () => {
   // init gl
   getGL()
 
-  const params = new ParamsManager({ knob: []})
-  const launchControl = new LaunchControl(params)
-  await bindMidiInputMessage(m => launchControl.handle(m))
+
 
   // sound input control
   // const source = await createAudioInputSource()
@@ -50,8 +48,14 @@ export const app = async () => {
   // pipeline.channelNumber ++
   pipeline.setBackgroundColor(backgroundColor)
 
+  const params = new ParamsManager({ knob: [new DevLinePresentationParamsControl(linePresentation)]})
+  const launchControl = new LaunchControl(params)
+  await bindMidiInputMessage(m => launchControl.handle(m))
+
   function renderLoop(frameCount: number) {
     // param phase
+    params.apply()
+
     // const rms = analyser.getRMS()
     // const effectLevel = Math.floor((1 - rms) * 50)
     // linePresentation.setMaxDistance(effectLevel)

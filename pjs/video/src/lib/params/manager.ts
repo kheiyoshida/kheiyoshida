@@ -1,9 +1,9 @@
-import { IFaderParamsAdapter, IKnobParamsAdapter, NoOpFaderParamsAdapter, NoOpKnobParamsAdapter } from './adapter'
+import { IFaderParamsControlAdapter, IKnobParamsControlAdapter, NoOpFaderParamsAdapter, NoOpKnobParamsAdapter } from './adapter'
 import { FaderParamsBuffer, KnobParamsBuffer } from './buffer'
 
 type AdapterSpec = {
-  knob: IKnobParamsAdapter[]
-  fader: IFaderParamsAdapter
+  knob: IKnobParamsControlAdapter[]
+  fader: IFaderParamsControlAdapter
 }
 
 export class ParamsManager {
