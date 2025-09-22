@@ -11,6 +11,9 @@ import { CameraChannel } from '../../lib/channel/camera'
 import { CameraInputSource } from '../../media/camera'
 import { createAudioInputSource } from '../../media/audio/input'
 import { SoundAnalyser } from '../../media/audio/analyzer'
+import { bindMidiInputMessage } from '../../media/midi/input'
+import { LaunchControl } from '../../lib/params/launchControl'
+import { ParamsManager } from '../../lib/params/manager'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -22,9 +25,13 @@ export const app = async () => {
   // init gl
   getGL()
 
+  const params = new ParamsManager({ knob: []})
+  const launchControl = new LaunchControl(params)
+  await bindMidiInputMessage(m => launchControl.handle(m))
+
   // sound input control
-  const source = await createAudioInputSource()
-  const analyser = new SoundAnalyser(source, 32)
+  // const source = await createAudioInputSource()
+  // const analyser = new SoundAnalyser(source, 32)
 
   // rendering
   const channel = new DevVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
@@ -40,14 +47,14 @@ export const app = async () => {
   const linePresentation = new DevLinePresentation(channel.outputResolution)
 
   const pipeline = new VideoProjectionPipeline([channel, cameraCh], [linePresentation], [saturationEffectFactory])
-  pipeline.channelNumber ++
+  // pipeline.channelNumber ++
   pipeline.setBackgroundColor(backgroundColor)
 
   function renderLoop(frameCount: number) {
     // param phase
-    const rms = analyser.getRMS()
-    const effectLevel = Math.floor((1 - rms) * 50)
-    linePresentation.setMaxDistance(effectLevel)
+    // const rms = analyser.getRMS()
+    // const effectLevel = Math.floor((1 - rms) * 50)
+    // linePresentation.setMaxDistance(effectLevel)
 
     // if (fireByRate(0.1)) {
     //   (pipeline.postEffects[0] as KaleidoscopeEffect).startAngle = randomIntInclusiveBetween(0, 360)

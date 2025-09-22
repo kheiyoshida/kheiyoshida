@@ -5,6 +5,7 @@
     "module": "esnext",
     "strict": true,
     "baseUrl": ".",
-    "jsx": "react"
-  }
+    "jsx": "react",
+    "lib": ["esnext", "dom"]
+  },
 }

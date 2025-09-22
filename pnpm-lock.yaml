@@ -355,6 +355,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.2.19
         version: 18.2.19
+      '@types/webmidi':
+        specifier: ^2.0.10
+        version: 2.1.0
       '@vitejs/plugin-react':
         specifier: ^4.2.1
         version: 4.2.1(vite@6.3.4(@types/node@20.11.16)(sass@1.69.5)(terser@5.39.2)(tsx@4.19.3))
@@ -5662,8 +5665,7 @@ snapshots:
 
   '@types/webmidi@2.0.10': {}
 
-  '@types/webmidi@2.1.0':
-    optional: true
+  '@types/webmidi@2.1.0': {}
 
   '@types/webxr@0.5.22': {}
 
