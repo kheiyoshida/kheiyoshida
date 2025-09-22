@@ -14,6 +14,7 @@ import { SoundAnalyser } from '../../media/audio/analyzer'
 import { bindMidiInputMessage } from '../../media/midi/input'
 import { LaunchControl } from '../../lib/params/launchControl'
 import { ParamsManager } from '../../lib/params/manager'
+import { ChannelManager, ChannelParamsControl } from '../../lib/channel/manager'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -24,8 +25,6 @@ const backgroundColor: [number, number, number, number] = [0, 0, 0, 1]
 export const app = async () => {
   // init gl
   getGL()
-
-
 
   // sound input control
   // const source = await createAudioInputSource()
@@ -44,13 +43,18 @@ export const app = async () => {
 
   const linePresentation = new DevLinePresentation(channel.outputResolution)
 
-  const pipeline = new VideoProjectionPipeline([channel, cameraCh], [linePresentation], [saturationEffectFactory])
-  // pipeline.channelNumber ++
+  const channelManager = new ChannelManager([channel, cameraCh])
+  const pipeline = new VideoProjectionPipeline(channelManager, [linePresentation], [saturationEffectFactory])
+  channelManager.channelNumber++
   pipeline.setBackgroundColor(backgroundColor)
 
-  const params = new ParamsManager({ knob: [new DevLinePresentationParamsControl(linePresentation)]})
+  const channelParams = new ChannelParamsControl(channelManager)
+  const params = new ParamsManager({
+    knob: [new DevLinePresentationParamsControl(linePresentation)],
+    fader: channelParams,
+  })
   const launchControl = new LaunchControl(params)
-  await bindMidiInputMessage(m => launchControl.handle(m))
+  await bindMidiInputMessage((m) => launchControl.handle(m))
 
   function renderLoop(frameCount: number) {
     // param phase

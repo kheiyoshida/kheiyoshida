@@ -1,10 +1,10 @@
-import { PixelChannel } from './channel/channel'
 import { PixelPresentation } from './presentation'
 import { OffScreenPass } from '../gl/pass/offscreen'
 import { EffectFactory, PostEffect } from './effect/effect'
 import { FrameBuffer } from '../gl/frameBuffer'
 import { ImageResolution } from '../media/pixels/types'
 import { FrameBufferScreenPass } from '../gl/pass/onscreen'
+import { ChannelManager } from './channel/manager'
 
 export class VideoProjectionPipeline {
   private presentationPass: OffScreenPass
@@ -12,7 +12,7 @@ export class VideoProjectionPipeline {
   private screenPass: FrameBufferScreenPass
 
   constructor(
-    private readonly channels: PixelChannel[],
+    private readonly channels: ChannelManager,
     private readonly presentations: PixelPresentation[],
     effects: EffectFactory[] = []
   ) {
@@ -48,28 +48,8 @@ export class VideoProjectionPipeline {
     this.presentationPass.backgroundColor = rgba
   }
 
-  private channelIndex = 0
-  public get currentChannel() {
-    return this.channels[this.channelIndex]
-  }
-
-  public set channelNumber(value: number) {
-    if (value < 0) return;
-    this.channelIndex = value % this.channels.length
-  }
-  public get channelNumber(): number {
-    return this.channelIndex;
-  }
-
-  public render(retry = 0): void {
-    if (!this.currentChannel.isAvailable) {
-      this.channelNumber++
-      if (retry > this.channels.length) {
-        throw new Error("No channel's available")
-      }
-      return this.render(retry + 1)
-    }
-    const pixels = this.currentChannel.getPixels()
+  public render(): void {
+    const pixels = this.channels.getChannel().getPixels()
     const presentations = this.presentations // TODO: maybe filter by on/off
     for (const presentation of presentations) {
       presentation.represent(pixels)
