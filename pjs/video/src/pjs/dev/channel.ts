@@ -19,3 +19,21 @@ export class DebugDevVideoChannel extends DebugVideoChannel {
     super(supply)
   }
 }
+
+const youtubeVideoList = [
+  `/assets/footage/youtube/Breaking Bad.mp4`,
+  `/assets/footage/youtube/Chargeman.mp4`,
+  `/assets/footage/youtube/Eva.mp4`,
+  `/assets/footage/youtube/Gouketsuji.mp4`,
+  `/assets/footage/youtube/Nonomura.mp4`,
+  `/assets/footage/youtube/Noriaki.mp4`,
+  `/assets/footage/youtube/You Died.mp4`,
+]
+
+export class YoutubeVideoChannel extends VideoPixelChannel {
+  constructor(videoAspectRatio: number, videoWidth: number, outputResolutionWidth: number) {
+    const supply = new VideoSupply(youtubeVideoList)
+    supply.onEnded = () => supply.swapVideo()
+    super(supply, videoAspectRatio, videoWidth, outputResolutionWidth)
+  }
+}

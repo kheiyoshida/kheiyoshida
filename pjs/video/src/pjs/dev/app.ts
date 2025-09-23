@@ -1,7 +1,7 @@
 import { getGL } from '../../gl/gl'
 import { Message } from '../shinjuku/message'
 import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
-import { DevVideoChannel } from './channel'
+import { DevVideoChannel, YoutubeVideoChannel } from './channel'
 import { DevDotPresentation } from './presentation'
 import { DevLinePresentation, DevLinePresentationParamsControl } from './presentation/line'
 import { KaleidoscopeEffect } from './effect/kaleido'
@@ -32,6 +32,7 @@ export const app = async () => {
 
   // rendering
   const channel = new DevVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
+  const channel2 = new YoutubeVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
 
   const cameraName = 'Video Control'
   const cameraSource = await CameraInputSource.create()
@@ -43,7 +44,7 @@ export const app = async () => {
 
   const linePresentation = new DevLinePresentation(channel.outputResolution)
 
-  const channelManager = new ChannelManager([channel, cameraCh])
+  const channelManager = new ChannelManager([channel, cameraCh, channel2])
   const pipeline = new VideoProjectionPipeline(channelManager, [linePresentation], [saturationEffectFactory])
   channelManager.channelNumber++
   pipeline.setBackgroundColor(backgroundColor)

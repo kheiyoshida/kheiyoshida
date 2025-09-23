@@ -48,14 +48,14 @@ export class FaderParamsBuffer {
   constructor(private target: IFaderParamsControlAdapter) {
   }
 
-  public readonly faderValue1 = new ValueBuffer<number>(0, `fader 1`);
-  public readonly faderValue2 = new ValueBuffer<number>(0, `fader 2`);
-  public readonly faderValue3 = new ValueBuffer<number>(0, `fader 3`);
-  public readonly faderValue4 = new ValueBuffer<number>(0, `fader 4`);
-  public readonly faderValue5 = new ValueBuffer<number>(0, `fader 5`);
-  public readonly faderValue6 = new ValueBuffer<number>(0, `fader 6`);
-  public readonly faderValue7 = new ValueBuffer<number>(0, `fader 7`);
-  public readonly faderValue8 = new ValueBuffer<number>(0, `fader 8`);
+  public readonly faderValue1 = new ValueBuffer<number>(1, `fader 1`);
+  public readonly faderValue2 = new ValueBuffer<number>(1, `fader 2`);
+  public readonly faderValue3 = new ValueBuffer<number>(1, `fader 3`);
+  public readonly faderValue4 = new ValueBuffer<number>(1, `fader 4`);
+  public readonly faderValue5 = new ValueBuffer<number>(1, `fader 5`);
+  public readonly faderValue6 = new ValueBuffer<number>(1, `fader 6`);
+  public readonly faderValue7 = new ValueBuffer<number>(1, `fader 7`);
+  public readonly faderValue8 = new ValueBuffer<number>(1, `fader 8`);
 
   apply() {
     this.faderValue1.apply(v => this.target.applyFaderValue1(v))

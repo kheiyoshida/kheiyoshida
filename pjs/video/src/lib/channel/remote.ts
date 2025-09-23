@@ -34,6 +34,7 @@ export class ChannelRemote {
 }
 
 function weightedRandomIndex(weights: number[]): number {
+  console.log(weights)
   const total = weights.reduce((a, b) => a + b, 0);
   const r = Math.random() * total;
   let acc = 0;
@@ -44,6 +45,8 @@ function weightedRandomIndex(weights: number[]): number {
       return i;
     }
   }
+
+  console.warn(`picked -1 for ${weights.join(", ")}`)
 
   // fallback (shouldn't happen unless weights are empty or all 0)
   return -1;
