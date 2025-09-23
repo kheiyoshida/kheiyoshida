@@ -2,7 +2,7 @@ import { getGL } from '../../gl/gl'
 import { Message } from '../shinjuku/message'
 import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
 import { DevVideoChannel, YoutubeVideoChannel } from './channel'
-import { DevDotPresentation } from './presentation'
+import { DevDotPresentation } from './presentation/dot'
 import { DevLinePresentation, DevLinePresentationParamsControl } from './presentation/line'
 import { KaleidoscopeEffect } from './effect/kaleido'
 import { fireByRate, pipe, randomIntInclusiveBetween } from 'utils'
@@ -17,6 +17,7 @@ import { ParamsManager } from '../../lib/params/manager'
 import { ChannelManager, ChannelParamsControl } from '../../lib/channel/manager'
 import { CubeRenderingChannel } from './channels/object'
 import { vec3 } from 'gl-matrix'
+import { GlyphPresentation } from './presentation/glyph'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -47,11 +48,13 @@ export const app = async () => {
   const dotAspectRatio = 16 / 9
   const dotPresentation = new DevDotPresentation(videoCh.outputResolution, dotAspectRatio)
   dotPresentation.dotSize = 0.6
+  const glyphPresentation = new GlyphPresentation(videoCh.outputResolution, dotAspectRatio)
+
 
   const linePresentation = new DevLinePresentation(videoCh.outputResolution)
 
-  const channelManager = new ChannelManager([objectCh])
-  const pipeline = new VideoProjectionPipeline(channelManager, [linePresentation, dotPresentation], [saturationEffectFactory])
+  const channelManager = new ChannelManager([objectCh, cameraCh, youtubeCh, videoCh])
+  const pipeline = new VideoProjectionPipeline(channelManager, [linePresentation, glyphPresentation], [saturationEffectFactory])
   pipeline.setBackgroundColor(backgroundColor)
 
   const channelParams = new ChannelParamsControl(channelManager)

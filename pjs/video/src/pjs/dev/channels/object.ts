@@ -71,7 +71,7 @@ class CubeModel extends GenericModel {
 
   override draw(mode: number = getGL().TRIANGLE_STRIP) {
     const gl = getGL()
-    gl.clearColor(0.04, 0.05, 0.06, 1)
+    gl.clearColor(0.4, 0.5, 0.6, 1)
     gl.clear(gl.COLOR_BUFFER_BIT)
     this.shader.use()
     gl.bindVertexArray(this.vao)

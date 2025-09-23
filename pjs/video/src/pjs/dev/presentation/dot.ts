@@ -1,6 +1,6 @@
 import { ImageResolution } from 'src/media/pixels/types'
-import { PixelPresentation } from '../../lib/presentation'
-import { DotInstance } from '../../gl/model/dot'
+import { PixelPresentation } from '../../../lib/presentation'
+import { DotInstance } from '../../../gl/model/dot'
 
 export class DevDotPresentation extends PixelPresentation<DotInstance> {
   constructor(pixelDataResolution: ImageResolution, dotAspectRatio: number) {
