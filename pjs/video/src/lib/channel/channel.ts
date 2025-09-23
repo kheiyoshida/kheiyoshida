@@ -6,6 +6,14 @@ import { ImageResolution } from '../../media/pixels/types'
 import { VideoSupply } from '../../media/video/supply'
 import { ScreenTexturePass } from '../../gl/pass/onscreen'
 
+export abstract class PixelChannelBase {
+  public abstract getPixels(): Uint8Array
+
+  public get isAvailable(): boolean {
+    return true
+  }
+}
+
 /**
  * abstracts operations below:
  * - preparing offscreen renderer
@@ -13,16 +21,17 @@ import { ScreenTexturePass } from '../../gl/pass/onscreen'
  * - read pixel data from the buffer
  * - set parameters for read operation
  */
-export abstract class PixelChannel<VS extends VideoSource = VideoSource> {
+export abstract class PixelChannel<VS extends VideoSource = VideoSource> extends PixelChannelBase {
   protected readonly offScreenTexturePass: OffScreenTexturePass
   protected readonly parser: PixelParser
-  public readonly scope: ImageScope
+  protected readonly scope: ImageScope
 
   protected constructor(
     readonly source: VS,
     frameBufferResolution: ImageResolution,
     outputResolutionWidth: number
   ) {
+    super()
     this.offScreenTexturePass = new OffScreenTexturePass(frameBufferResolution)
     this.scope = new ImageScope(frameBufferResolution, outputResolutionWidth)
     this.parser = new PixelParser(this.scope)
@@ -36,10 +45,6 @@ export abstract class PixelChannel<VS extends VideoSource = VideoSource> {
     this.offScreenTexturePass.setTextureImage(this.source.currentVideo)
     const rawPixels = this.offScreenTexturePass.renderAsPixels()
     return this.parser.parsePixelData(rawPixels)
-  }
-
-  public get isAvailable(): boolean {
-    return true
   }
 }
 

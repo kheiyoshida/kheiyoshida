@@ -15,6 +15,8 @@ import { bindMidiInputMessage } from '../../media/midi/input'
 import { LaunchControl } from '../../lib/params/launchControl'
 import { ParamsManager } from '../../lib/params/manager'
 import { ChannelManager, ChannelParamsControl } from '../../lib/channel/manager'
+import { CubeRenderingChannel } from './channels/object'
+import { vec3 } from 'gl-matrix'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -31,22 +33,25 @@ export const app = async () => {
   // const analyser = new SoundAnalyser(source, 32)
 
   // rendering
-  const channel = new DevVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
-  const channel2 = new YoutubeVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
+  const objectCh = new CubeRenderingChannel({
+    width: frameBufferWidth,
+    height: frameBufferWidth / videoAspectRatio
+  },outputResolutionWidth)
+  const videoCh = new DevVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
+  const youtubeCh = new YoutubeVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
 
   const cameraName = 'Video Control'
   const cameraSource = await CameraInputSource.create()
   const cameraCh = new CameraChannel(cameraSource, videoAspectRatio, frameBufferWidth, outputResolutionWidth)
 
   const dotAspectRatio = 16 / 9
-  const dotPresentation = new DevDotPresentation(channel.outputResolution, dotAspectRatio)
+  const dotPresentation = new DevDotPresentation(videoCh.outputResolution, dotAspectRatio)
   dotPresentation.dotSize = 0.6
 
-  const linePresentation = new DevLinePresentation(channel.outputResolution)
+  const linePresentation = new DevLinePresentation(videoCh.outputResolution)
 
-  const channelManager = new ChannelManager([channel, cameraCh, channel2])
-  const pipeline = new VideoProjectionPipeline(channelManager, [linePresentation], [saturationEffectFactory])
-  channelManager.channelNumber++
+  const channelManager = new ChannelManager([objectCh])
+  const pipeline = new VideoProjectionPipeline(channelManager, [linePresentation, dotPresentation], [saturationEffectFactory])
   pipeline.setBackgroundColor(backgroundColor)
 
   const channelParams = new ChannelParamsControl(channelManager)
@@ -59,6 +64,10 @@ export const app = async () => {
 
   function renderLoop(frameCount: number) {
     // param phase
+    objectCh.cube.rot[0] += 0.01
+    objectCh.cube.rot[1] += 0.1
+    objectCh.cube.offsets[randomIntInclusiveBetween(0, 7)] = [Math.random(), Math.random(), 0]
+
     params.apply()
 
     // const rms = analyser.getRMS()
@@ -80,7 +89,7 @@ export const app = async () => {
   const message = new Message()
 
   message.text = 'loading...'
-  await channel.waitForReady((progress) => (message.text = `loading: ${progress}%`))
+  await videoCh.waitForReady((progress) => (message.text = `loading: ${progress}%`))
   startRenderingLoop(renderLoop)
   message.hide()
 }

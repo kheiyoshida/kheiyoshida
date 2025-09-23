@@ -339,6 +339,9 @@ importers:
 
   pjs/video:
     dependencies:
+      gl-matrix:
+        specifier: ^3.4.3
+        version: 3.4.3
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -349,6 +352,9 @@ importers:
         specifier: workspace:^
         version: link:../../pkgs/utils
     devDependencies:
+      '@types/gl-matrix':
+        specifier: ^3.2.0
+        version: 3.2.0
       '@types/react':
         specifier: ^18.2.56
         version: 18.2.56

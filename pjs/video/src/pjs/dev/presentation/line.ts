@@ -17,7 +17,7 @@ export class DevLinePresentation extends PixelPresentation {
 
     this.instance.shader.use()
     this.instance.shader.setUniformInt('uMaxDistance', randomIntInclusiveBetween(2, 24))
-    this.instance.shader.setUniformFloat('uLuminanceThreshold', 0.03)
+    this.instance.shader.setUniformFloat('uLuminanceThreshold', 0.3)
   }
 
   public setMaxDistance(maxDistance: number) {

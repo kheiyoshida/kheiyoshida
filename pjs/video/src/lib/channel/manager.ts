@@ -1,10 +1,10 @@
-import { PixelChannel, VideoPixelChannel } from './channel'
+import { PixelChannelBase, VideoPixelChannel } from './channel'
 import { IFaderParamsControlAdapter } from '../params/adapter'
 import { ChannelRemote } from './remote'
 import { fireByRate } from 'utils'
 
 export class ChannelManager {
-  constructor(readonly channels: PixelChannel[]) {
+  constructor(readonly channels: PixelChannelBase[]) {
     this.remote = new ChannelRemote(channels.length)
   }
 
@@ -36,7 +36,7 @@ export class ChannelManager {
     return this._videoPlaybackSpeed
   }
 
-  public getChannel(): PixelChannel {
+  public getChannel(): PixelChannelBase {
     if (fireByRate(this.channelSwitchRate)) {
       this.channelNumber = this.remote.random()
       if (this.currentChannel instanceof VideoPixelChannel) {
@@ -52,7 +52,7 @@ export class ChannelManager {
     return this.getNextAvailableChannel()
   }
 
-  private getNextAvailableChannel(retry = 0): PixelChannel {
+  private getNextAvailableChannel(retry = 0): PixelChannelBase {
     if (retry > this.channels.length) throw new Error("No channel's available")
     if (!this.currentChannel.isAvailable) {
       this.channelNumber++
