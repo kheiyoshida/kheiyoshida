@@ -19,6 +19,7 @@ import { CubeRenderingChannel } from './channels/object'
 import { vec3 } from 'gl-matrix'
 import { GlyphPresentation } from './presentation/glyph'
 import { MultiplyEffect } from './effect/multiply'
+import { TextOverlayEffect } from './effect/text'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -62,10 +63,11 @@ export const app = async () => {
   // prettier-ignore
   const pipeline = new VideoProjectionPipeline(
     channelManager,
-    [glyphPresentation],
+    [dotPresentation],
     [
       saturationEffectFactory,
-      MultiplyEffect.factory(16)
+      // MultiplyEffect.factory(16),
+      TextOverlayEffect.factory(24)
     ]
   )
   pipeline.setBackgroundColor(backgroundColor)
@@ -84,9 +86,9 @@ export const app = async () => {
     objectCh.cube.rot[1] += 0.1
     objectCh.cube.offsets[randomIntInclusiveBetween(0, 7)] = [Math.random(), Math.random(), 0]
 
-    if (fireByRate(0.2)) {
-    (pipeline.postEffects[1] as MultiplyEffect).multiply = randomIntInclusiveBetween(1, 16);
-    }
+    // if (fireByRate(0.2)) {
+    // (pipeline.postEffects[1] as MultiplyEffect).multiply = randomIntInclusiveBetween(1, 16);
+    // }
 
     dotPresentation.dotSize = 0.44
 

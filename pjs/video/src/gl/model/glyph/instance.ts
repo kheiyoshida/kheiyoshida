@@ -6,7 +6,11 @@ import { getGL } from '../../gl'
 import { Texture } from '../../texture'
 
 export class GlyphInstance extends InstancedModel {
-  constructor(maxInstanceCount: number, private readonly texture: Texture,aspectRatio: number = 1) {
+  constructor(
+    maxInstanceCount: number,
+    private readonly texture: Texture | WebGLTexture,
+    aspectRatio: number = 1
+  ) {
     const instanceShader = new Shader(instanceVert, instanceFrag)
 
     const gl = getGL()
@@ -76,11 +80,9 @@ export class GlyphInstance extends InstancedModel {
     this.shader.setUniformInt('uFontAtlas', 0)
   }
 
-
-
   override draw() {
     const gl = getGL()
-    gl.bindTexture(gl.TEXTURE_2D, this.texture.tex)
+    gl.bindTexture(gl.TEXTURE_2D, this.texture instanceof Texture ? this.texture.tex : this.texture)
     super.draw(getGL().TRIANGLE_STRIP)
   }
 }

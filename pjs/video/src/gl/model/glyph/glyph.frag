@@ -13,7 +13,6 @@ void main() {
     float alpha = col.a;
     if (alpha < 0.01) {
         discard;
-//        fragColor = vec4(0, 1, 0, 1);
     }
     else {
         fragColor = vec4(vColor.x, vColor.y, vColor.z, alpha);
