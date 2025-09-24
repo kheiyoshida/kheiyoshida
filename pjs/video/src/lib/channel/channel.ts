@@ -12,6 +12,8 @@ export abstract class PixelChannelBase {
   public get isAvailable(): boolean {
     return true
   }
+
+  public abstract get bufferTex(): WebGLTexture
 }
 
 /**
@@ -45,6 +47,14 @@ export abstract class PixelChannel<VS extends VideoSource = VideoSource> extends
     this.offScreenTexturePass.setTextureImage(this.source.currentVideo)
     const rawPixels = this.offScreenTexturePass.renderAsPixels()
     return this.parser.parsePixelData(rawPixels)
+  }
+
+  public get bufferTex() {
+    return this.offScreenTexturePass.frameBuffer.tex
+  }
+
+  public setReverseHorizontal(flag: boolean) {
+    this.offScreenTexturePass.setReverseHorizontal(flag)
   }
 }
 

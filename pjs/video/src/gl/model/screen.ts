@@ -25,6 +25,11 @@ export class Texture2dModel extends GenericModel {
     gl.bindTexture(gl.TEXTURE_2D, this.tex)
     super.draw(getGL().TRIANGLE_STRIP)
   }
+
+  public setReverseHorizontal(bool: boolean) {
+    this.shader.use()
+    this.shader.setUniformInt('uReverseHorizontal', bool ? 1 : 0)
+  }
 }
 
 /**

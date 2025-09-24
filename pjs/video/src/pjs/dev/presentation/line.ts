@@ -3,6 +3,7 @@ import { ImageResolution } from '../../../media/pixels/types'
 import { TextureLineInstance } from '../../../gl/model/textureLine/instance'
 import { randomIntInclusiveBetween } from 'utils'
 import { IKnobParamsControlAdapter } from '../../../lib/params/adapter'
+import { getGL } from '../../../gl/gl'
 
 export class DevLinePresentation extends PixelPresentation {
   constructor(
@@ -36,8 +37,10 @@ export class DevLinePresentation extends PixelPresentation {
     this.instance.updateInstances(k / 2)
   }
 
-  represent() {
+  represent(_: Uint8Array, pixelChTex?: WebGLTexture) {
+    if (!pixelChTex) throw Error('requires texture')
     this.instance.shader.use()
+    getGL().bindTexture(getGL().TEXTURE_2D, pixelChTex)
     this.instance.shader.setUniformFloat('uTime', Math.floor(performance.now() / 1000))
     return
   }

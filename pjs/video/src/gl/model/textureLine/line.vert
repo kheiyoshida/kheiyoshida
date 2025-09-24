@@ -23,7 +23,7 @@ float luminance(vec3 color) {
 // gl_VertexID % 2: 0 = start, 1 = end
 void main() {
     vec2 position = vec2(aPixelCoord);
-    vec2 texCoord = vec2(aPixelCoord.x,  1.0-aPixelCoord.y);
+    vec2 texCoord = vec2(aPixelCoord.x,  aPixelCoord.y);
 
     // Sample luminance at this pixel
     vec3 color = texture(uVideoTex, texCoord).rgb;

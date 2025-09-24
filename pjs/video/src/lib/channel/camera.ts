@@ -14,6 +14,7 @@ export class CameraChannel extends PixelChannel<CameraInputSource> {
       height: videoWidth / videoAspectRatio,
     }
     super(source, videoResolution, outputResolutionWidth)
+    this.setReverseHorizontal(true)
   }
 
   override get isAvailable(): boolean {

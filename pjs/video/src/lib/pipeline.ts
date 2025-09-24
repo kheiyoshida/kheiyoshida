@@ -49,10 +49,11 @@ export class VideoProjectionPipeline {
   }
 
   public render(): void {
-    const pixels = this.channels.getChannel().getPixels()
+    const channel = this.channels.getChannel()
+    const pixels = channel.getPixels()
     const presentations = this.presentations // TODO: maybe filter by on/off
     for (const presentation of presentations) {
-      presentation.represent(pixels)
+      presentation.represent(pixels, channel.bufferTex)
     }
     this.presentationPass.render(presentations.map((p) => p.instance))
 

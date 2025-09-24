@@ -37,10 +37,10 @@ export class OffScreenTexturePass extends OffScreenPass {
 
   constructor(
     frameBufferResolution: ImageResolution,
-    readonly texture: Texture = new Texture()
+    readonly sourceTexture: Texture = new Texture()
   ) {
     super(frameBufferResolution)
-    this.screenRect = new ScreenRect(texture)
+    this.screenRect = new ScreenRect(sourceTexture)
   }
 
   render() {
@@ -52,6 +52,10 @@ export class OffScreenTexturePass extends OffScreenPass {
   }
 
   setTextureImage(source: TexImageSource) {
-    this.texture.setTextureImage(source)
+    this.sourceTexture.setTextureImage(source)
+  }
+
+  setReverseHorizontal(flag: boolean) {
+    this.screenRect.setReverseHorizontal(flag)
   }
 }

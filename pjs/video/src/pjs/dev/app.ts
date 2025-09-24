@@ -53,8 +53,9 @@ export const app = async () => {
 
   const linePresentation = new DevLinePresentation(videoCh.outputResolution)
 
-  const channelManager = new ChannelManager([objectCh, cameraCh, youtubeCh, videoCh])
-  const pipeline = new VideoProjectionPipeline(channelManager, [linePresentation, glyphPresentation], [saturationEffectFactory])
+  const channelManager = new ChannelManager([cameraCh])
+  channelManager.channelNumber++
+  const pipeline = new VideoProjectionPipeline(channelManager, [linePresentation, dotPresentation], [saturationEffectFactory])
   pipeline.setBackgroundColor(backgroundColor)
 
   const channelParams = new ChannelParamsControl(channelManager)
@@ -70,6 +71,8 @@ export const app = async () => {
     objectCh.cube.rot[0] += 0.01
     objectCh.cube.rot[1] += 0.1
     objectCh.cube.offsets[randomIntInclusiveBetween(0, 7)] = [Math.random(), Math.random(), 0]
+
+    dotPresentation.dotSize = 0.44
 
     params.apply()
 

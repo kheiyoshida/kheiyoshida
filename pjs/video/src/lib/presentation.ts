@@ -24,5 +24,5 @@ export abstract class PixelPresentation<I extends InstancedModel = InstancedMode
     this._pixelDataResolution = maximumPixelDataResolution
   }
 
-  public abstract represent(parsedPixels: Uint8Array): void
+  public abstract represent(parsedPixels: Uint8Array, pixelChTex?: WebGLTexture): void
 }
