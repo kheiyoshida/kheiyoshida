@@ -18,6 +18,7 @@ import { ChannelManager, ChannelParamsControl } from '../../lib/channel/manager'
 import { CubeRenderingChannel } from './channels/object'
 import { vec3 } from 'gl-matrix'
 import { GlyphPresentation } from './presentation/glyph'
+import { MultiplyEffect } from './effect/multiply'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -34,10 +35,13 @@ export const app = async () => {
   // const analyser = new SoundAnalyser(source, 32)
 
   // rendering
-  const objectCh = new CubeRenderingChannel({
-    width: frameBufferWidth,
-    height: frameBufferWidth / videoAspectRatio
-  },outputResolutionWidth)
+  const objectCh = new CubeRenderingChannel(
+    {
+      width: frameBufferWidth,
+      height: frameBufferWidth / videoAspectRatio,
+    },
+    outputResolutionWidth
+  )
   const videoCh = new DevVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
   const youtubeCh = new YoutubeVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
 
@@ -50,12 +54,20 @@ export const app = async () => {
   dotPresentation.dotSize = 0.6
   const glyphPresentation = new GlyphPresentation(videoCh.outputResolution, dotAspectRatio)
 
-
   const linePresentation = new DevLinePresentation(videoCh.outputResolution)
 
   const channelManager = new ChannelManager([cameraCh])
   channelManager.channelNumber++
-  const pipeline = new VideoProjectionPipeline(channelManager, [linePresentation, dotPresentation], [saturationEffectFactory])
+
+  // prettier-ignore
+  const pipeline = new VideoProjectionPipeline(
+    channelManager,
+    [glyphPresentation],
+    [
+      saturationEffectFactory,
+      MultiplyEffect.factory(16)
+    ]
+  )
   pipeline.setBackgroundColor(backgroundColor)
 
   const channelParams = new ChannelParamsControl(channelManager)
@@ -71,6 +83,10 @@ export const app = async () => {
     objectCh.cube.rot[0] += 0.01
     objectCh.cube.rot[1] += 0.1
     objectCh.cube.offsets[randomIntInclusiveBetween(0, 7)] = [Math.random(), Math.random(), 0]
+
+    if (fireByRate(0.2)) {
+    (pipeline.postEffects[1] as MultiplyEffect).multiply = randomIntInclusiveBetween(1, 16);
+    }
 
     dotPresentation.dotSize = 0.44
 

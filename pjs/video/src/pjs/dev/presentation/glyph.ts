@@ -15,7 +15,7 @@ export class GlyphPresentation extends PixelPresentation<DotInstance> {
     const dotInstance = new GlyphInstance(maxInstanceCount, texture, dotAspectRatio)
     super(dotInstance, pixelDataResolution)
 
-    this.singleDotSize = (10 * 0.5) / pixelDataResolution.height
+    this.singleDotSize = (20 * 0.5) / pixelDataResolution.height
 
     this.parser = new FntParser(fnt, { textureWidth: 512, textureHeight: 512 })
 
@@ -43,8 +43,8 @@ export class GlyphPresentation extends PixelPresentation<DotInstance> {
     const dotInstance = this.instance
 
     let k = 0
-    for (let y = 0; y < resolutionHeight; y += 10) {
-      for (let x = 0; x < resolutionWidth; x += 10) {
+    for (let y = 0; y < resolutionHeight; y += 8) {
+      for (let x = 0; x < resolutionWidth; x += 4) {
         const i = (y * resolutionWidth + x) * 4
         // offset
         dotInstance.instanceDataArray[k++] = x / resolutionWidth
