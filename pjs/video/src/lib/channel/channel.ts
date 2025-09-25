@@ -50,7 +50,7 @@ export abstract class PixelChannel<VS extends VideoSource = VideoSource> extends
   }
 
   public get bufferTex() {
-    return this.offScreenTexturePass.frameBuffer.tex
+    return this.offScreenTexturePass.frameBuffer!.tex
   }
 
   public setReverseHorizontal(flag: boolean) {

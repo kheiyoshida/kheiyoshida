@@ -97,6 +97,6 @@ export class CubeRenderingChannel extends ObjectRenderingChannel {
     this.models.push(this.cube)
   }
   public get bufferTex(): WebGLTexture {
-    return this.offscreenPass.frameBuffer.tex
+    return this.offscreenPass.frameBuffer!.tex
   }
 }

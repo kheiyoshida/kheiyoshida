@@ -93,7 +93,7 @@ export class MultiplyEffect extends PostEffect {
     output: FrameBuffer,
     private readonly maxMultiply: number
   ) {
-    super(output)
+    super()
 
     this.rectModel = new RectInstance(input.tex, maxMultiply)
     this.models.push(this.rectModel)

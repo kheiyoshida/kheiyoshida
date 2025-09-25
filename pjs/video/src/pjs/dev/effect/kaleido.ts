@@ -79,7 +79,7 @@ export class KaleidoscopeEffect extends PostEffect {
   private readonly triangleModel: TriangleInstance
 
   public constructor(input: FrameBuffer, output: FrameBuffer, numOfTriangles = 4) {
-    super(output)
+    super()
 
     this.triangleModel = new TriangleInstance(input.tex, 24)
     this.models.push(this.triangleModel)

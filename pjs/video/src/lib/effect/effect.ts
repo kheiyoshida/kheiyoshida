@@ -10,8 +10,8 @@ export abstract class PostEffect {
   public offScreenPass: OffScreenPass
   public models: GenericModel[] = []
 
-  protected constructor(outputFrameBuffer: FrameBuffer) {
-    this.offScreenPass = new OffScreenPass(outputFrameBuffer)
+  protected constructor() {
+    this.offScreenPass = new OffScreenPass()
   }
 
   public render() {
@@ -24,11 +24,8 @@ export abstract class PostEffect {
 export class PostScreenEffect extends PostEffect {
   private readonly rect: FrameBufferTextureRect
 
-  public constructor(
-    outputFrameBuffer: FrameBuffer,
-    screenShader: Shader
-  ) {
-    super(outputFrameBuffer)
+  public constructor(screenShader: Shader) {
+    super()
     this.rect = new FrameBufferTextureRect(screenShader)
     this.models.push(this.rect)
   }
@@ -38,7 +35,7 @@ export class PostScreenEffect extends PostEffect {
   }
 
   public static makeFactory(vert: string, frag: string): EffectFactory {
-    return (input, output) => new PostScreenEffect(output, new Shader(vert, frag))
+    return (input, output) => new PostScreenEffect(new Shader(vert, frag))
   }
 }
 

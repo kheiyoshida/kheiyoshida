@@ -29,6 +29,6 @@ export class ObjectRenderingChannel extends PixelChannelBase {
   }
 
   public get bufferTex(): WebGLTexture {
-    return this.offscreenPass.frameBuffer.tex
+    return this.offscreenPass.frameBuffer!.tex
   }
 }

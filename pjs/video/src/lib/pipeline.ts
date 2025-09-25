@@ -19,6 +19,9 @@ export class VideoProjectionPipeline {
     const frameBufferResolution: ImageResolution = { width: 960, height: 540 }
     this.presentationPass = new OffScreenPass(frameBufferResolution)
 
+    this.presentationPass.validate()
+    if (!this.presentationPass.frameBuffer) throw Error(`unexpected`)
+
     if (effects.length == 0) {
       this.screenPass = new FrameBufferScreenPass(this.presentationPass.frameBuffer.tex)
     } else {
@@ -30,14 +33,17 @@ export class VideoProjectionPipeline {
         if (i === 0) {
           const fx = fxFactory(this.presentationPass.frameBuffer, frameBufferA)
           fx.setInput(this.presentationPass.frameBuffer)
+          fx.offScreenPass.frameBuffer = frameBufferA
           this.postEffects.push(fx)
         } else if (i % 2 != 0) {
           const fx = fxFactory(frameBufferA, frameBufferB)
           fx.setInput(frameBufferA)
+          fx.offScreenPass.frameBuffer = frameBufferB
           this.postEffects.push(fx)
         } else {
           const fx = fxFactory(frameBufferB, frameBufferA)
           fx.setInput(frameBufferB)
+          fx.offScreenPass.frameBuffer = frameBufferA
           this.postEffects.push(fx)
         }
       }
@@ -48,16 +54,22 @@ export class VideoProjectionPipeline {
         this.screenPass = new FrameBufferScreenPass(frameBufferA.tex)
       }
     }
+
+    this.validate()
   }
 
   public setBackgroundColor(rgba: [number, number, number, number]): void {
     this.presentationPass.backgroundColor = rgba
   }
 
+  public validate() {
+    this.postEffects.forEach((effect) => effect.offScreenPass.validate())
+  }
+
   public render(): void {
     const channel = this.channels.getChannel()
     const pixels = channel.getPixels()
-    const presentations = this.presentations.filter(p => p.enabled)
+    const presentations = this.presentations.filter((p) => p.enabled)
     for (const presentation of presentations) {
       presentation.represent(pixels, channel.bufferTex)
     }
@@ -72,7 +84,7 @@ export class VideoProjectionPipeline {
 }
 
 export function startRenderingLoop(render: (frameCount: number) => void, targetFps = 30) {
-const minFrameTime = 1000 / targetFps // ms
+  const minFrameTime = 1000 / targetFps // ms
   let lastFrame = performance.now()
   let frameCount = 0
   function loop(now: number) {

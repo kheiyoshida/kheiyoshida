@@ -19,7 +19,7 @@ export class TextOverlayEffect extends PostEffect {
   ) {
     if (maxLetters < 1) throw Error('Max Letters must be greater than 1')
 
-    super(output)
+    super()
     const texture = new Texture()
 
     // TODO: add screen rect to this.models to blit into output texture from input texture
