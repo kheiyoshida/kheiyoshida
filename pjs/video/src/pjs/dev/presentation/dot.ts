@@ -2,7 +2,7 @@ import { ImageResolution } from 'src/media/pixels/types'
 import { PixelPresentation } from '../../../lib/presentation'
 import { DotInstance } from '../../../gl/model/dot'
 
-export class DevDotPresentation extends PixelPresentation<DotInstance> {
+export class DotPresentation extends PixelPresentation<DotInstance> {
   constructor(pixelDataResolution: ImageResolution, dotAspectRatio: number) {
     const maxInstanceCount = pixelDataResolution.width * pixelDataResolution.height
     const dotInstance = new DotInstance(maxInstanceCount, dotAspectRatio)
@@ -15,14 +15,20 @@ export class DevDotPresentation extends PixelPresentation<DotInstance> {
 
   public dotSize = 0.3
 
+  public densityX = 1
+  public densityY = 1
+
   public represent(pixels: Uint8Array): void {
     const resolutionWidth = this.pixelDataResolution.width
     const resolutionHeight = this.pixelDataResolution.height
     const dotInstance = this.instance
 
+    const intervalX = Math.ceil(1 / this.densityX)
+    const intervalY = Math.ceil(1 / this.densityY)
+
     let k = 0
-    for (let y = 0; y < resolutionHeight; y += 1) {
-      for (let x = 0; x < resolutionWidth; x += 1) {
+    for (let y = 0; y < resolutionHeight; y += intervalY) {
+      for (let x = 0; x < resolutionWidth; x += intervalX) {
         const i = (y * resolutionWidth + x) * 4
         dotInstance.instanceDataArray[k++] = x / resolutionWidth
         dotInstance.instanceDataArray[k++] = y / resolutionHeight

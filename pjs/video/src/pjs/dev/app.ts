@@ -2,7 +2,7 @@ import { getGL } from '../../gl/gl'
 import { Message } from '../shinjuku/message'
 import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
 import { DevVideoChannel, YoutubeVideoChannel } from './channel'
-import { DevDotPresentation } from './presentation/dot'
+import { DotPresentation } from './presentation/dot'
 import { LinePresentation } from './presentation/line'
 import { fireByRate, randomIntInclusiveBetween } from 'utils'
 import { saturationEffectFactory } from './effect/saturation'
@@ -14,9 +14,9 @@ import { ParamsManager } from '../../lib/params/manager'
 import { ChannelManager } from '../../lib/channel/manager'
 import { CubeRenderingChannel } from './channels/object'
 import { GlyphPresentation } from './presentation/glyph'
-import { MultiplyEffect } from './effect/multiply'
 import { ChannelParamsControl } from './control/fader'
-import { LinePresentationControl } from './control/knobs'
+import { DotPresentationControl, GlyphPresentationControl, LinePresentationControl } from './control/knobs'
+import { MultiplyEffect } from './effect/multiply'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -48,8 +48,8 @@ export const app = async () => {
   const cameraCh = new CameraChannel(cameraSource, videoAspectRatio, frameBufferWidth, outputResolutionWidth)
 
   const dotAspectRatio = 16 / 9
-  const dotPresentation = new DevDotPresentation(videoCh.outputResolution, dotAspectRatio)
-  dotPresentation.dotSize = 0.6
+  const dotPresentation = new DotPresentation(videoCh.outputResolution, dotAspectRatio)
+
   const glyphPresentation = new GlyphPresentation(videoCh.outputResolution, dotAspectRatio)
 
   const linePresentation = new LinePresentation(videoCh.outputResolution)
@@ -60,7 +60,7 @@ export const app = async () => {
   // prettier-ignore
   const pipeline = new VideoProjectionPipeline(
     channelManager,
-    [linePresentation],
+    [linePresentation, dotPresentation, glyphPresentation],
     [
       saturationEffectFactory,
       // MultiplyEffect.factory(16),
@@ -71,7 +71,11 @@ export const app = async () => {
 
   const channelParams = new ChannelParamsControl(channelManager)
   const params = new ParamsManager({
-    knob: [new LinePresentationControl(linePresentation)],
+    knob: [
+      new LinePresentationControl(linePresentation),
+      new DotPresentationControl(dotPresentation),
+      new GlyphPresentationControl(glyphPresentation),
+    ],
     fader: channelParams,
   })
   const launchControl = new LaunchControl(params)
@@ -83,11 +87,10 @@ export const app = async () => {
     objectCh.cube.rot[1] += 0.1
     objectCh.cube.offsets[randomIntInclusiveBetween(0, 7)] = [Math.random(), Math.random(), 0]
 
-    // if (fireByRate(0.2)) {
+    // if (
+    //   fireByRate(0.2)) {
     // (pipeline.postEffects[1] as MultiplyEffect).multiply = randomIntInclusiveBetween(1, 16);
     // }
-
-    dotPresentation.dotSize = 0.44
 
     params.apply()
 

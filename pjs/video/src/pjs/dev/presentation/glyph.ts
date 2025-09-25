@@ -15,7 +15,7 @@ export class GlyphPresentation extends PixelPresentation<DotInstance> {
     const dotInstance = new GlyphInstance(maxInstanceCount, texture, dotAspectRatio)
     super(dotInstance, pixelDataResolution)
 
-    this.singleDotSize = (20 * 0.5) / pixelDataResolution.height
+    this.unitDotSize = 8  / pixelDataResolution.height
 
     this.parser = new FntParser(fnt, { textureWidth: 512, textureHeight: 512 })
 
@@ -33,18 +33,24 @@ export class GlyphPresentation extends PixelPresentation<DotInstance> {
     return randomItemFromArray(this.As)
   }
 
-  private readonly singleDotSize: number
+  private readonly unitDotSize: number
 
-  public dotSize = 0.3
+  public dotSize = 1.0
+
+  public densityX = 1.0
+  public densityY = 1.0
 
   public represent(pixels: Uint8Array): void {
     const resolutionWidth = this.pixelDataResolution.width
     const resolutionHeight = this.pixelDataResolution.height
     const dotInstance = this.instance
 
+    const intervalX = Math.ceil(8 / this.densityX)
+    const intervalY = Math.ceil(8 / this.densityY)
+
     let k = 0
-    for (let y = 0; y < resolutionHeight; y += 8) {
-      for (let x = 0; x < resolutionWidth; x += 4) {
+    for (let y = 0; y < resolutionHeight; y += intervalY) {
+      for (let x = 0; x < resolutionWidth; x += intervalX) {
         const i = (y * resolutionWidth + x) * 4
         // offset
         dotInstance.instanceDataArray[k++] = x / resolutionWidth
@@ -56,7 +62,7 @@ export class GlyphPresentation extends PixelPresentation<DotInstance> {
         dotInstance.instanceDataArray[k++] = pixels[i + 2] / 255
 
         // size
-        dotInstance.instanceDataArray[k++] = this.dotSize * this.singleDotSize
+        dotInstance.instanceDataArray[k++] = this.dotSize * this.unitDotSize
 
         // uvs
         const {uvMin, uvMax} = this.parser.getAttributes(this.pickGlyph())
