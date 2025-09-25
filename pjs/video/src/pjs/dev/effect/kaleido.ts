@@ -18,7 +18,6 @@ class TriangleInstance extends InstancedModel {
       0, 0,  0.5, 0.5,
       1, 1,  1, 1,
       1, -1, 1, 0
-
     ])
     super(
       instanceShader,
@@ -73,6 +72,10 @@ class TriangleInstance extends InstancedModel {
 }
 
 export class KaleidoscopeEffect extends PostEffect {
+  public setInput(inputFrameBuffer: FrameBuffer): void {
+
+  }
+
   private readonly triangleModel: TriangleInstance
 
   public constructor(input: FrameBuffer, output: FrameBuffer, numOfTriangles = 4) {

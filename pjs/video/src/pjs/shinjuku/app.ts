@@ -7,6 +7,7 @@ import { Message } from './message'
 import { ShinjukuChannel } from './channel'
 import { DotPresentation } from './presentation'
 import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
+import { ChannelManager } from '../../lib/channel/manager'
 
 // config
 const isVertical = window.innerWidth < window.innerHeight
@@ -49,7 +50,8 @@ export const app = async () => {
   const dotAspectRatio = (2 * 16) / 9
   const dotPresentation = new DotPresentation(channel.outputResolution, dotAspectRatio)
 
-  const pipeline = new VideoProjectionPipeline([channel], [dotPresentation])
+  const channelManager = new ChannelManager([channel])
+  const pipeline = new VideoProjectionPipeline(channelManager, [dotPresentation])
   pipeline.setBackgroundColor(backgroundColor)
 
   function renderLoop(frameCount: number) {

@@ -6,6 +6,7 @@ import { PixelParser } from '../../media/pixels/parse'
 import { GenericModel } from '../../gl/model/model'
 
 export class ObjectRenderingChannel extends PixelChannelBase {
+
   protected readonly offscreenPass: OffScreenPass
   protected readonly parser: PixelParser
   protected readonly scope: ImageScope
@@ -25,5 +26,9 @@ export class ObjectRenderingChannel extends PixelChannelBase {
   public override getPixels(): Uint8Array {
     const rawPixels = this.offscreenPass.renderAsPixels(this.models)
     return this.parser.parsePixelData(rawPixels)
+  }
+
+  public get bufferTex(): WebGLTexture {
+    return this.offscreenPass.frameBuffer.tex
   }
 }

@@ -43,7 +43,7 @@ export class FrameBufferScreenPass extends ScreenPass {
     readonly frameBufferTex: WebGLTexture
   ) {
     super()
-    this.screenRect = new FrameBufferTextureRect(frameBufferTex, new Shader(screenVert, screenFrag))
+    this.screenRect = new FrameBufferTextureRect(new Shader(screenVert, screenFrag), frameBufferTex)
   }
 
   render() {

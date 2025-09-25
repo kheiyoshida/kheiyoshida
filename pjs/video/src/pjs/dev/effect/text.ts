@@ -7,6 +7,9 @@ import fnt from '../../../assets/fonts/A.fnt?raw'
 import fontImageUrl from '../../../assets/fonts/A.png?url'
 
 export class TextOverlayEffect extends PostEffect {
+  public setInput(inputFrameBuffer: FrameBuffer): void {
+      console.log(`doesn't matter here`)
+  }
   private readonly glyphModel: GlyphInstance
 
   public constructor(

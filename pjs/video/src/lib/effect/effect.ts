@@ -17,22 +17,28 @@ export abstract class PostEffect {
   public render() {
     this.offScreenPass.render(this.models)
   }
+
+  public abstract setInput(inputFrameBuffer: FrameBuffer): void
 }
 
 export class PostScreenEffect extends PostEffect {
+  private readonly rect: FrameBufferTextureRect
+
   public constructor(
-    inputFrameBuffer: FrameBuffer,
     outputFrameBuffer: FrameBuffer,
     screenShader: Shader
   ) {
     super(outputFrameBuffer)
-    this.models.push(
-      new FrameBufferTextureRect(inputFrameBuffer.tex, screenShader)
-    )
+    this.rect = new FrameBufferTextureRect(screenShader)
+    this.models.push(this.rect)
+  }
+
+  public setInput(inputFrameBuffer: FrameBuffer) {
+    this.rect.tex = inputFrameBuffer.tex
   }
 
   public static makeFactory(vert: string, frag: string): EffectFactory {
-    return (input, output) => new PostScreenEffect(input, output, new Shader(vert, frag))
+    return (input, output) => new PostScreenEffect(output, new Shader(vert, frag))
   }
 }
 
@@ -42,7 +48,7 @@ export class PostScreenEffect extends PostEffect {
  * note that UVs are inverted
  */
 export class FrameBufferTextureRect extends Texture2dModel {
-  constructor(tex: WebGLTexture, screenShader: Shader) {
+  constructor(screenShader: Shader, tex?: WebGLTexture) {
     // prettier-ignore
     const screenRectVertices = new Float32Array([
       -1, -1, 0, 0,
@@ -50,6 +56,6 @@ export class FrameBufferTextureRect extends Texture2dModel {
       -1, 1,  0, 1,
       1, 1,   1, 1
     ])
-    super(tex, screenShader, screenRectVertices)
+    super(screenShader, screenRectVertices, tex)
   }
 }

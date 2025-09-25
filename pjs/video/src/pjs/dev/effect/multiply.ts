@@ -83,6 +83,9 @@ class RectInstance extends InstancedModel {
 }
 
 export class MultiplyEffect extends PostEffect {
+  public setInput(inputFrameBuffer: FrameBuffer): void {
+
+  }
   private readonly rectModel: RectInstance
 
   public constructor(

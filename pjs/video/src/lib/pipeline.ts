@@ -28,11 +28,17 @@ export class VideoProjectionPipeline {
       for (let i = 0; i < effects.length; i++) {
         const fxFactory = effects[i]
         if (i === 0) {
-          this.postEffects.push(fxFactory(this.presentationPass.frameBuffer, frameBufferA))
+          const fx = fxFactory(this.presentationPass.frameBuffer, frameBufferA)
+          fx.setInput(this.presentationPass.frameBuffer)
+          this.postEffects.push(fx)
         } else if (i % 2 != 0) {
-          this.postEffects.push(fxFactory(frameBufferA, frameBufferB))
+          const fx = fxFactory(frameBufferA, frameBufferB)
+          fx.setInput(frameBufferA)
+          this.postEffects.push(fx)
         } else {
-          this.postEffects.push(fxFactory(frameBufferB, frameBufferA))
+          const fx = fxFactory(frameBufferB, frameBufferA)
+          fx.setInput(frameBufferB)
+          this.postEffects.push(fx)
         }
       }
 
@@ -66,7 +72,7 @@ export class VideoProjectionPipeline {
 }
 
 export function startRenderingLoop(render: (frameCount: number) => void, targetFps = 30) {
-  const minFrameTime = 1000 / targetFps // ms
+const minFrameTime = 1000 / targetFps // ms
   let lastFrame = performance.now()
   let frameCount = 0
   function loop(now: number) {
