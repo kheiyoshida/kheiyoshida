@@ -3,23 +3,20 @@ import { Message } from '../shinjuku/message'
 import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
 import { DevVideoChannel, YoutubeVideoChannel } from './channel'
 import { DevDotPresentation } from './presentation/dot'
-import { DevLinePresentation, DevLinePresentationParamsControl } from './presentation/line'
-import { KaleidoscopeEffect } from './effect/kaleido'
-import { fireByRate, pipe, randomIntInclusiveBetween } from 'utils'
+import { LinePresentation } from './presentation/line'
+import { fireByRate, randomIntInclusiveBetween } from 'utils'
 import { saturationEffectFactory } from './effect/saturation'
 import { CameraChannel } from '../../lib/channel/camera'
 import { CameraInputSource } from '../../media/camera'
-import { createAudioInputSource } from '../../media/audio/input'
-import { SoundAnalyser } from '../../media/audio/analyzer'
 import { bindMidiInputMessage } from '../../media/midi/input'
 import { LaunchControl } from '../../lib/params/launchControl'
 import { ParamsManager } from '../../lib/params/manager'
-import { ChannelManager, ChannelParamsControl } from '../../lib/channel/manager'
+import { ChannelManager } from '../../lib/channel/manager'
 import { CubeRenderingChannel } from './channels/object'
-import { vec3 } from 'gl-matrix'
 import { GlyphPresentation } from './presentation/glyph'
 import { MultiplyEffect } from './effect/multiply'
-import { TextOverlayEffect } from './effect/text'
+import { ChannelParamsControl } from './control/fader'
+import { LinePresentationControl } from './control/knobs'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -55,7 +52,7 @@ export const app = async () => {
   dotPresentation.dotSize = 0.6
   const glyphPresentation = new GlyphPresentation(videoCh.outputResolution, dotAspectRatio)
 
-  const linePresentation = new DevLinePresentation(videoCh.outputResolution)
+  const linePresentation = new LinePresentation(videoCh.outputResolution)
 
   const channelManager = new ChannelManager([cameraCh])
   channelManager.channelNumber++
@@ -63,18 +60,18 @@ export const app = async () => {
   // prettier-ignore
   const pipeline = new VideoProjectionPipeline(
     channelManager,
-    [dotPresentation],
+    [linePresentation],
     [
       saturationEffectFactory,
       // MultiplyEffect.factory(16),
-      TextOverlayEffect.factory(24)
+      // TextOverlayEffect.factory(24)
     ]
   )
   pipeline.setBackgroundColor(backgroundColor)
 
   const channelParams = new ChannelParamsControl(channelManager)
   const params = new ParamsManager({
-    knob: [new DevLinePresentationParamsControl(linePresentation)],
+    knob: [new LinePresentationControl(linePresentation)],
     fader: channelParams,
   })
   const launchControl = new LaunchControl(params)

@@ -25,4 +25,6 @@ export abstract class PixelPresentation<I extends InstancedModel = InstancedMode
   }
 
   public abstract represent(parsedPixels: Uint8Array, pixelChTex?: WebGLTexture): void
+
+  public enabled = true
 }

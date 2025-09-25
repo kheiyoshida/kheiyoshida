@@ -29,9 +29,9 @@ export class ValueBuffer<T extends number | boolean> {
 export class KnobParamsBuffer {
   constructor(private target: IKnobParamsControlAdapter, private id: string = '') {}
 
-  public readonly knobValueA = new ValueBuffer<number>(0, `${this.id} KnobA`);
-  public readonly knobValueB = new ValueBuffer<number>(0, `${this.id} KnobB`);
-  public readonly knobValueC = new ValueBuffer<number>(0, `${this.id} KnobC`);
+  public readonly knobValueA = new ValueBuffer<number>(20, `${this.id} KnobA`);
+  public readonly knobValueB = new ValueBuffer<number>(20, `${this.id} KnobB`);
+  public readonly knobValueC = new ValueBuffer<number>(20, `${this.id} KnobC`);
   public readonly switchValueA = new ValueBuffer<boolean>(true, `${this.id} SwA`);
   public readonly switchValueB = new ValueBuffer<boolean>(true, `${this.id} SwB`);
 

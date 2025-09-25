@@ -1,11 +1,9 @@
 import { PixelPresentation } from '../../../lib/presentation'
 import { ImageResolution } from '../../../media/pixels/types'
 import { TextureLineInstance } from '../../../gl/model/textureLine/instance'
-import { randomIntInclusiveBetween } from 'utils'
-import { IKnobParamsControlAdapter } from '../../../lib/params/adapter'
 import { getGL } from '../../../gl/gl'
 
-export class DevLinePresentation extends PixelPresentation {
+export class LinePresentation extends PixelPresentation {
   constructor(
     pixelDataResolution: ImageResolution,
     public threshold = 30,
@@ -17,8 +15,13 @@ export class DevLinePresentation extends PixelPresentation {
     this.setupPixelCoords()
 
     this.instance.shader.use()
-    this.instance.shader.setUniformInt('uMaxDistance', randomIntInclusiveBetween(2, 24))
-    this.instance.shader.setUniformFloat('uLuminanceThreshold', 0.3)
+    this.setMaxDistance(8)
+    this.setLuminanceThreshold(0.3)
+  }
+
+  public setLuminanceThreshold(threshold: number): void {
+    this.instance.shader.use()
+    this.instance.shader.setUniformFloat('uLuminanceThreshold', threshold)
   }
 
   public setMaxDistance(maxDistance: number) {
@@ -44,15 +47,4 @@ export class DevLinePresentation extends PixelPresentation {
     this.instance.shader.setUniformFloat('uTime', Math.floor(performance.now() / 1000))
     return
   }
-}
-
-export class DevLinePresentationParamsControl implements IKnobParamsControlAdapter {
-  constructor(private presentation: DevLinePresentation) {}
-  applyKnobValueA(value: number): void {
-    this.presentation.setMaxDistance(2 + (value / 127) * 10)
-  }
-  applyKnobValueB(value: number): void {}
-  applyKnobValueC(value: number): void {}
-  applySwitchValueA(value: boolean): void {}
-  applySwitchValueB(value: boolean): void {}
 }
