@@ -1,5 +1,5 @@
-import { PostScreenEffect } from '../../../lib/effect/effect'
 import vert from './saturation.vert?raw'
 import frag from './saturation.frag?raw'
+import { Shader } from '../../../gl/shader'
 
-export const saturationEffectFactory = PostScreenEffect.makeFactory(vert, frag)
+export const saturationFxShader = () => new Shader(vert, frag)

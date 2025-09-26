@@ -5,7 +5,7 @@ import { DevVideoChannel, YoutubeVideoChannel } from './channel'
 import { DotPresentation } from './presentation/dot'
 import { LinePresentation } from './presentation/line'
 import { fireByRate, randomIntInclusiveBetween } from 'utils'
-import { saturationEffectFactory } from './effect/saturation'
+import { saturationFxShader } from './effect/saturation'
 import { CameraChannel } from '../../lib/channel/camera'
 import { CameraInputSource } from '../../media/camera'
 import { bindMidiInputMessage } from '../../media/midi/input'
@@ -18,6 +18,7 @@ import { ChannelParamsControl } from './control/fader'
 import { DotPresentationControl, GlyphPresentationControl, LinePresentationControl } from './control/knobs'
 import { TextOverlayEffect } from './effect/text'
 import { MultiplyEffect } from './effect/multiply'
+import { PostScreenEffect } from '../../lib/effect/effect'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -62,8 +63,8 @@ export const app = async () => {
     channelManager,
     [linePresentation, dotPresentation, glyphPresentation],
     [
-      saturationEffectFactory,
-      MultiplyEffect.factory(16),
+      new PostScreenEffect(saturationFxShader()),
+      new MultiplyEffect(16),
       // TextOverlayEffect.factory(24)
     ]
   )

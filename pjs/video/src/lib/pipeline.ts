@@ -1,6 +1,6 @@
 import { PixelPresentation } from './presentation'
 import { OffScreenPass } from '../gl/pass/offscreen'
-import { EffectFactory, PostEffect } from './effect/effect'
+import { PostEffect } from './effect/effect'
 import { FrameBuffer } from '../gl/frameBuffer'
 import { ImageResolution } from '../media/pixels/types'
 import { FrameBufferScreenPass } from '../gl/pass/onscreen'
@@ -14,7 +14,7 @@ export class VideoProjectionPipeline {
   constructor(
     private readonly channels: ChannelManager,
     private readonly presentations: PixelPresentation[],
-    effects: EffectFactory[] = []
+    effects: PostEffect[] = []
   ) {
     const frameBufferResolution: ImageResolution = { width: 960, height: 540 }
     this.presentationPass = new OffScreenPass(frameBufferResolution)
@@ -29,19 +29,16 @@ export class VideoProjectionPipeline {
       const frameBufferB = new FrameBuffer(frameBufferResolution.width, frameBufferResolution.height)
 
       for (let i = 0; i < effects.length; i++) {
-        const fxFactory = effects[i]
+        const fx = effects[i]
         if (i === 0) {
-          const fx = fxFactory(this.presentationPass.frameBuffer, frameBufferA)
           fx.setInput(this.presentationPass.frameBuffer)
           fx.offScreenPass.frameBuffer = frameBufferA
           this.postEffects.push(fx)
         } else if (i % 2 != 0) {
-          const fx = fxFactory(frameBufferA, frameBufferB)
           fx.setInput(frameBufferA)
           fx.offScreenPass.frameBuffer = frameBufferB
           this.postEffects.push(fx)
         } else {
-          const fx = fxFactory(frameBufferB, frameBufferA)
           fx.setInput(frameBufferB)
           fx.offScreenPass.frameBuffer = frameBufferA
           this.postEffects.push(fx)

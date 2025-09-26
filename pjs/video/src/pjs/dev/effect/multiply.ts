@@ -7,8 +7,9 @@ import { InstancedModel } from '../../../gl/model/model'
 import { getGL } from '../../../gl/gl'
 
 class RectInstance extends InstancedModel {
+  public tex: WebGLTexture | undefined
+
   constructor(
-    private tex: WebGLTexture,
     readonly maxMultiply = 16
   ) {
     const instanceShader = new Shader(vert, frag)
@@ -75,27 +76,30 @@ class RectInstance extends InstancedModel {
     this.updateInstances(numOfInstances)
   }
 
+  public validate() {
+    if (!this.tex) throw Error(`texture not set`)
+  }
+
   public override draw(mode: number = getGL().TRIANGLE_STRIP) {
     const gl = getGL()
-    gl.bindTexture(gl.TEXTURE_2D, this.tex)
+    gl.bindTexture(gl.TEXTURE_2D, this.tex!)
     super.draw(mode)
   }
 }
 
 export class MultiplyEffect extends PostEffect {
-  public setInput(inputFrameBuffer: FrameBuffer): void {
-
-  }
   private readonly rectModel: RectInstance
 
+  public setInput(inputFrameBuffer: FrameBuffer): void {
+    this.rectModel.tex = inputFrameBuffer.tex
+  }
+
   public constructor(
-    input: FrameBuffer,
-    output: FrameBuffer,
     private readonly maxMultiply: number
   ) {
     super()
 
-    this.rectModel = new RectInstance(input.tex, maxMultiply)
+    this.rectModel = new RectInstance(maxMultiply)
     this.models.push(this.rectModel)
     this.rectModel.setMultiply(1)
   }
@@ -110,9 +114,5 @@ export class MultiplyEffect extends PostEffect {
   }
   public get multiply(): number {
     return this._multiply
-  }
-
-  static factory(maxMultiply: number) {
-    return (input: FrameBuffer, output: FrameBuffer) => new MultiplyEffect(input, output, maxMultiply)
   }
 }
