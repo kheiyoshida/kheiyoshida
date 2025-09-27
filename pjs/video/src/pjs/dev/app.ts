@@ -15,7 +15,13 @@ import { ChannelManager } from '../../lib/channel/manager'
 import { CubeRenderingChannel } from './channels/object'
 import { GlyphPresentation } from './presentation/glyph'
 import { ChannelParamsControl } from './control/fader'
-import { DotPresentationControl, GlyphPresentationControl, LinePresentationControl } from './control/knobs'
+import {
+  ChannelControl,
+  DotPresentationControl,
+  GlyphPresentationControl,
+  LinePresentationControl,
+  PostEffectControl,
+} from './control/knobs'
 import { MultiplyEffectModel } from './effect/multiply'
 import { EffectSlot, ScreenEffectModel } from '../../lib/effect/slot'
 
@@ -65,9 +71,7 @@ export const app = async () => {
     channelManager,
     [linePresentation, dotPresentation, glyphPresentation],
     [
-      new EffectSlot([saturationFx, multiplyFx, ]),
-      // new EffectSlot([multiplyFx]),
-      // TextOverlayEffect.factory(24)
+      new EffectSlot([saturationFx, multiplyFx]),
     ]
   )
   pipeline.setBackgroundColor(backgroundColor)
@@ -75,40 +79,34 @@ export const app = async () => {
   multiplyFx.enabled = false
   saturationFx.enabled = false
 
+  // control
   const channelParams = new ChannelParamsControl(channelManager)
   const params = new ParamsManager({
     knob: [
+      new ChannelControl(objectCh),
       new LinePresentationControl(linePresentation),
       new DotPresentationControl(dotPresentation),
       new GlyphPresentationControl(glyphPresentation),
+      new PostEffectControl(multiplyFx)
     ],
     fader: channelParams,
   })
   const launchControl = new LaunchControl(params)
   await bindMidiInputMessage((m) => launchControl.handle(m))
 
+  objectCh.update = (cube) => {
+    cube.rot[0] += 0.01
+    cube.rot[1] += 0.1
+    cube.offsets[randomIntInclusiveBetween(0, 7)] = [Math.random(), Math.random(), 0]
+  }
+
   function renderLoop(frameCount: number) {
     // param phase
-    objectCh.cube.rot[0] += 0.01
-    objectCh.cube.rot[1] += 0.1
-    objectCh.cube.offsets[randomIntInclusiveBetween(0, 7)] = [Math.random(), Math.random(), 0]
-
-    if (fireByRate(0.2)) {
-      multiplyFx.setMultiply(randomIntInclusiveBetween(1, 16))
-    }
-
     params.apply()
 
     // const rms = analyser.getRMS()
     // const effectLevel = Math.floor((1 - rms) * 50)
     // linePresentation.setMaxDistance(effectLevel)
-
-    // if (fireByRate(0.1)) {
-    //   (pipeline.postEffects[0] as KaleidoscopeEffect).startAngle = randomIntInclusiveBetween(0, 360)
-    // }
-    // if (fireByRate(0.01)) {
-    //   (pipeline.postEffects[0] as KaleidoscopeEffect).numOfTriangles = randomIntInclusiveBetween(4, 12)
-    // }
 
     // rendering phase
     pipeline.render()

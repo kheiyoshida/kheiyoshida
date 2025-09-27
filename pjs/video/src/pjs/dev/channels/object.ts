@@ -59,6 +59,7 @@ class CubeModel extends GenericModel {
   public rot: vec3 = [0, 0, 0]
   public readonly offsets = new Array(8).fill(0).map(() => vec3.create())
   public wireframe = false
+  public scale: number = 1.0
 
   private computeModel() {
     const M = mat4.create()
@@ -66,6 +67,7 @@ class CubeModel extends GenericModel {
     mat4.rotateX(M, M, this.rot[0])
     mat4.rotateY(M, M, this.rot[1])
     mat4.rotateZ(M, M, this.rot[2])
+    mat4.scale(M, M, [this.scale, this.scale, this.scale])
     return M
   }
 
@@ -73,9 +75,11 @@ class CubeModel extends GenericModel {
     const gl = getGL()
     gl.clearColor(0.4, 0.5, 0.6, 1)
     gl.clear(gl.COLOR_BUFFER_BIT)
+
     this.shader.use()
     gl.bindVertexArray(this.vao)
     this.shader.setUniformMatrix4fv('uModel', this.computeModel())
+
     for (let i = 0; i < 8; i++) gl.uniform3fv(this.uOffsets[i], this.offsets[i])
 
     const idxLength = 36
@@ -99,4 +103,11 @@ export class CubeRenderingChannel extends ObjectRenderingChannel {
   public get bufferTex(): WebGLTexture {
     return this.offscreenPass.frameBuffer!.tex
   }
+
+  public override getPixels() {
+    this.update(this.cube)
+    return super.getPixels()
+  }
+
+  public update: (cube: CubeModel) => void = () => undefined
 }

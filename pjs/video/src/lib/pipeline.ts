@@ -6,27 +6,26 @@ import { ChannelManager } from './channel/manager'
 import { EffectSlot } from './effect/slot'
 
 export class VideoProjectionPipeline {
-  // private presentationPass: OffScreenPass
   private screenPass: FrameBufferScreenPass
   private presentationSlot: PixelPresentationSlot
 
   constructor(
     private readonly channels: ChannelManager,
-    private readonly presentations: PixelPresentation[],
-    public readonly slots: EffectSlot[] = []
+
+    presentations: PixelPresentation[],
+    public readonly fxSlots: EffectSlot[] = []
   ) {
     const frameBufferResolution: ImageResolution = { width: 960, height: 540 }
-    // this.presentationPass = new OffScreenPass(frameBufferResolution)
-    // TODO: directly render if just one presentation slot
 
     const frameBufferA = new FrameBuffer(frameBufferResolution.width, frameBufferResolution.height)
     const frameBufferB = new FrameBuffer(frameBufferResolution.width, frameBufferResolution.height)
 
+    // presentation
     this.presentationSlot = new PixelPresentationSlot(presentations)
     this.presentationSlot.setOutput(frameBufferA)
 
-    for (let i = 0; i < slots.length; i++) {
-      const slot = slots[i]
+    for (let i = 0; i < fxSlots.length; i++) {
+      const slot = fxSlots[i]
       if (i % 2 === 0) {
         slot.setInput(frameBufferA)
         slot.setOutput(frameBufferB)
@@ -36,7 +35,7 @@ export class VideoProjectionPipeline {
       }
     }
 
-    if (slots.length % 2 == 0) {
+    if (fxSlots.length % 2 == 0) {
       this.screenPass = new FrameBufferScreenPass(frameBufferA.tex)
     } else {
       this.screenPass = new FrameBufferScreenPass(frameBufferB.tex)
@@ -51,7 +50,7 @@ export class VideoProjectionPipeline {
   }
 
   public validate() {
-    this.slots.forEach((effect) => effect.offScreenPass.validate())
+    this.fxSlots.forEach((effect) => effect.offScreenPass.validate())
   }
 
   public render(): void {
@@ -60,7 +59,7 @@ export class VideoProjectionPipeline {
 
     this.presentationSlot.represent(pixels, channel.bufferTex)
 
-    for (const slot of this.slots) {
+    for (const slot of this.fxSlots) {
       slot.render()
     }
 
