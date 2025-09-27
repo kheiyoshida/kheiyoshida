@@ -1,20 +1,19 @@
 import { PixelPresentation } from './presentation'
 import { OffScreenPass } from '../gl/pass/offscreen'
-import { PostEffect } from './effect/effect'
 import { FrameBuffer } from '../gl/frameBuffer'
 import { ImageResolution } from '../media/pixels/types'
 import { FrameBufferScreenPass } from '../gl/pass/onscreen'
 import { ChannelManager } from './channel/manager'
+import { EffectSlot } from './effect/slot'
 
 export class VideoProjectionPipeline {
   private presentationPass: OffScreenPass
-  public readonly postEffects: PostEffect[] = []
   private screenPass: FrameBufferScreenPass
 
   constructor(
     private readonly channels: ChannelManager,
     private readonly presentations: PixelPresentation[],
-    effects: PostEffect[] = []
+    public readonly slots: EffectSlot[] = []
   ) {
     const frameBufferResolution: ImageResolution = { width: 960, height: 540 }
     this.presentationPass = new OffScreenPass(frameBufferResolution)
@@ -22,30 +21,27 @@ export class VideoProjectionPipeline {
     this.presentationPass.validate()
     if (!this.presentationPass.frameBuffer) throw Error(`unexpected`)
 
-    if (effects.length == 0) {
+    if (slots.length == 0) {
       this.screenPass = new FrameBufferScreenPass(this.presentationPass.frameBuffer.tex)
     } else {
       const frameBufferA = new FrameBuffer(frameBufferResolution.width, frameBufferResolution.height)
       const frameBufferB = new FrameBuffer(frameBufferResolution.width, frameBufferResolution.height)
 
-      for (let i = 0; i < effects.length; i++) {
-        const fx = effects[i]
+      for (let i = 0; i < slots.length; i++) {
+        const slot = slots[i]
         if (i === 0) {
-          fx.setInput(this.presentationPass.frameBuffer)
-          fx.offScreenPass.frameBuffer = frameBufferA
-          this.postEffects.push(fx)
+          slot.setInput(this.presentationPass.frameBuffer)
+          slot.setOutput(frameBufferA)
         } else if (i % 2 != 0) {
-          fx.setInput(frameBufferA)
-          fx.offScreenPass.frameBuffer = frameBufferB
-          this.postEffects.push(fx)
+          slot.setInput(frameBufferA)
+          slot.setOutput(frameBufferB)
         } else {
-          fx.setInput(frameBufferB)
-          fx.offScreenPass.frameBuffer = frameBufferA
-          this.postEffects.push(fx)
+          slot.setInput(frameBufferB)
+          slot.setOutput(frameBufferA)
         }
       }
 
-      if (effects.length % 2 == 0) {
+      if (slots.length % 2 == 0) {
         this.screenPass = new FrameBufferScreenPass(frameBufferB.tex)
       } else {
         this.screenPass = new FrameBufferScreenPass(frameBufferA.tex)
@@ -60,7 +56,7 @@ export class VideoProjectionPipeline {
   }
 
   public validate() {
-    this.postEffects.forEach((effect) => effect.offScreenPass.validate())
+    this.slots.forEach((effect) => effect.offScreenPass.validate())
   }
 
   public render(): void {
@@ -72,8 +68,8 @@ export class VideoProjectionPipeline {
     }
     this.presentationPass.render(presentations.map((p) => p.instance))
 
-    for (const fx of this.postEffects) {
-      fx.render()
+    for (const slot of this.slots) {
+      slot.render()
     }
 
     this.screenPass.render()

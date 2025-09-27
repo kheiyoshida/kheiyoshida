@@ -5,13 +5,12 @@ import frag from './multiply.frag?raw'
 import { FrameBuffer } from '../../../gl/frameBuffer'
 import { InstancedModel } from '../../../gl/model/model'
 import { getGL } from '../../../gl/gl'
+import { IEffectModel } from '../../../lib/effect/slot'
 
-class RectInstance extends InstancedModel {
+export class MultiplyEffectModel extends InstancedModel implements IEffectModel {
   public tex: WebGLTexture | undefined
 
-  constructor(
-    readonly maxMultiply = 16
-  ) {
+  constructor(readonly maxMultiply = 16) {
     const instanceShader = new Shader(vert, frag)
 
     // prettier-ignore
@@ -54,13 +53,24 @@ class RectInstance extends InstancedModel {
     this.shader.setUniformInt('uTexture', 0)
   }
 
+  setInput(inputFrameBuffer: FrameBuffer): void {
+    this.tex = inputFrameBuffer.tex
+  }
+  enabled: boolean = true
+
   private setNum(num: number) {
     this.shader.use()
     this.shader.setUniformInt('uNum', num)
   }
 
   public setMultiply(num: number) {
-    if (num < 1 || num > this.maxMultiply) return
+    if (num < 1) {
+      num = 1
+    }
+    if (num > this.maxMultiply) {
+      num = this.maxMultiply
+    }
+
     const numOfInstances = Math.pow(num, 2)
     this.setNum(num)
 
@@ -88,18 +98,16 @@ class RectInstance extends InstancedModel {
 }
 
 export class MultiplyEffect extends PostEffect {
-  private readonly rectModel: RectInstance
+  private readonly rectModel: MultiplyEffectModel
 
   public setInput(inputFrameBuffer: FrameBuffer): void {
     this.rectModel.tex = inputFrameBuffer.tex
   }
 
-  public constructor(
-    private readonly maxMultiply: number
-  ) {
+  public constructor(private readonly maxMultiply: number) {
     super()
 
-    this.rectModel = new RectInstance(maxMultiply)
+    this.rectModel = new MultiplyEffectModel(maxMultiply)
     this.models.push(this.rectModel)
     this.rectModel.setMultiply(1)
   }
