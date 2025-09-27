@@ -3,6 +3,8 @@ import { Texture2dModel } from '../../gl/model/screen'
 import { GenericModel } from '../../gl/model/model'
 import { OffScreenPass } from '../../gl/pass/offscreen'
 import { FrameBuffer } from '../../gl/frameBuffer'
+import vert from './shaders/screen.vert?raw'
+import frag from './shaders/screen.frag?raw'
 
 export type IEffect = {
   setInput(inputFrameBuffer: FrameBuffer): void
@@ -14,18 +16,26 @@ export type IEffectModel = GenericModel & IEffect
 export class EffectSlot {
   public offScreenPass: OffScreenPass
   public effects: IEffectModel[] = []
+  private noOpFx: IEffectModel
 
   public constructor(effects: IEffectModel[]) {
     this.offScreenPass = new OffScreenPass()
     this.effects = effects
+    this.noOpFx = new ScreenEffectModel(new Shader(vert, frag))
   }
 
   public render() {
-    this.offScreenPass.render(this.effects.filter(fx => fx.enabled))
+    const fx = this.effects.find(fx => fx.enabled)
+    if (fx) {
+      this.offScreenPass.render([fx])
+    } else {
+      this.offScreenPass.render([this.noOpFx])
+    }
   }
 
   public setInput(inputFrameBuffer: FrameBuffer): void {
     this.effects.forEach(fx => fx.setInput(inputFrameBuffer))
+    this.noOpFx.setInput(inputFrameBuffer)
   }
 
   public setOutput(outputFrameBuffer: FrameBuffer): void {

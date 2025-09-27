@@ -65,12 +65,15 @@ export const app = async () => {
     channelManager,
     [linePresentation, dotPresentation, glyphPresentation],
     [
-      new EffectSlot([saturationFx]),
-      new EffectSlot([multiplyFx]),
+      new EffectSlot([saturationFx, multiplyFx, ]),
+      // new EffectSlot([multiplyFx]),
       // TextOverlayEffect.factory(24)
     ]
   )
   pipeline.setBackgroundColor(backgroundColor)
+
+  multiplyFx.enabled = false
+  saturationFx.enabled = false
 
   const channelParams = new ChannelParamsControl(channelManager)
   const params = new ParamsManager({
