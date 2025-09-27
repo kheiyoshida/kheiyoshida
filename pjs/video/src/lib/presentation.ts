@@ -1,5 +1,27 @@
 import { InstancedModel } from '../gl/model/model'
 import { ImageResolution } from '../media/pixels/types'
+import { OffScreenPass } from '../gl/pass/offscreen'
+import { FrameBuffer } from '../gl/frameBuffer'
+
+export class PixelPresentationSlot {
+  public readonly offScreenPass: OffScreenPass
+
+  constructor(private readonly presentations: PixelPresentation[]) {
+    this.offScreenPass = new OffScreenPass()
+  }
+
+  public represent(pixels: Uint8Array, channelTex: WebGLTexture) {
+    const presentations = this.presentations.filter((p) => p.enabled)
+    for (const presentation of presentations) {
+      presentation.represent(pixels, channelTex)
+    }
+    this.offScreenPass.render(presentations.map((p) => p.instance))
+  }
+
+  public setOutput(frameBuffer: FrameBuffer) {
+    this.offScreenPass.frameBuffer = frameBuffer
+  }
+}
 
 export abstract class PixelPresentation<I extends InstancedModel = InstancedModel> {
   private _pixelDataResolution: ImageResolution
