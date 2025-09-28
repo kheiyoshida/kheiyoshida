@@ -5,7 +5,7 @@ import { DevVideoChannel, YoutubeVideoChannel } from './channel'
 import { DotPresentation } from './presentation/dot'
 import { LinePresentation } from './presentation/line'
 import { fireByRate, randomIntInclusiveBetween } from 'utils'
-import { saturationFxShader } from './effect/saturation'
+import { ColorEffect } from './effect/saturation'
 import { CameraChannel } from '../../lib/channel/camera'
 import { CameraInputSource } from '../../media/camera'
 import { bindMidiInputMessage } from '../../media/midi/input'
@@ -16,7 +16,7 @@ import { CubeRenderingChannel } from './channels/object'
 import { GlyphPresentation } from './presentation/glyph'
 import { ChannelParamsControl } from './control/fader'
 import {
-  ChannelControl,
+  ChannelControl, ColorCapControl, ColorSaturationControl,
   DotPresentationControl,
   GlyphPresentationControl,
   LinePresentationControl,
@@ -61,9 +61,10 @@ export const app = async () => {
 
   const linePresentation = new LinePresentation(videoCh.outputResolution)
 
+  //
   const channelManager = new ChannelManager([cameraCh, videoCh, youtubeCh, objectCh])
 
-  const saturationFx = new ScreenEffectModel(saturationFxShader())
+  const colorFx = new ColorEffect()
   const multiplyFx = new MultiplyEffectModel(16)
 
   // prettier-ignore
@@ -71,23 +72,24 @@ export const app = async () => {
     channelManager,
     [linePresentation, dotPresentation, glyphPresentation],
     [
-      new EffectSlot([saturationFx, multiplyFx]),
+      new EffectSlot([multiplyFx]),
+      new EffectSlot([colorFx]),
     ]
   )
   pipeline.setBackgroundColor(backgroundColor)
-
-  multiplyFx.enabled = false
-  saturationFx.enabled = false
 
   // control
   const channelParams = new ChannelParamsControl(channelManager)
   const params = new ParamsManager({
     knob: [
-      new ChannelControl(objectCh),
-      new LinePresentationControl(linePresentation),
-      new DotPresentationControl(dotPresentation),
-      new GlyphPresentationControl(glyphPresentation),
-      new PostEffectControl(multiplyFx)
+      new ChannelControl(objectCh), // 1
+      new LinePresentationControl(linePresentation), //2
+      new DotPresentationControl(dotPresentation), // 3
+      new GlyphPresentationControl(glyphPresentation), // 4
+      new PostEffectControl(multiplyFx), // 5
+      new PostEffectControl(multiplyFx), // 6
+      new ColorCapControl(colorFx), // 7
+      new ColorSaturationControl(colorFx), // 8
     ],
     fader: channelParams,
   })

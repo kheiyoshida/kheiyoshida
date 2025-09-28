@@ -7,6 +7,7 @@ import { GlyphPresentation } from '../presentation/glyph'
 import { MultiplyEffectModel } from '../effect/multiply'
 import { ObjectRenderingChannel } from '../../../lib/channel/object'
 import { CubeRenderingChannel } from '../channels/object'
+import { ColorEffect } from '../effect/saturation'
 
 abstract class PresentationControl<P extends PixelPresentation> implements IKnobParamsControlAdapter {
   public constructor(protected presentation: P) {}
@@ -76,5 +77,61 @@ export class PostEffectControl implements IKnobParamsControlAdapter {
   applySwitchValueA(value: boolean): void {
     this.multiplyFx.enabled = value
   }
+  applySwitchValueB(value: boolean): void {}
+}
+
+export class ColorSaturationControl implements IKnobParamsControlAdapter {
+  constructor(private colorEffect: ColorEffect) {}
+
+  applyKnobValueA(value: number): void {
+    this.colorEffect.saturation = [
+      2 * (value / 127),
+      this.colorEffect.saturation[1],
+      this.colorEffect.saturation[2],
+    ]
+  }
+  applyKnobValueB(value: number): void {
+    this.colorEffect.saturation = [
+      this.colorEffect.saturation[0],
+      2 * (value / 127),
+      this.colorEffect.saturation[2],
+    ]
+  }
+  applyKnobValueC(value: number): void {
+    this.colorEffect.saturation = [
+      this.colorEffect.saturation[0],
+      this.colorEffect.saturation[1],
+      2 * (value / 127),
+    ]
+  }
+  applySwitchValueA(value: boolean): void {}
+  applySwitchValueB(value: boolean): void {}
+}
+
+export class ColorCapControl implements IKnobParamsControlAdapter {
+  constructor(private colorEffect: ColorEffect) {}
+
+  applyKnobValueA(value: number): void {
+    this.colorEffect.cap = [
+      2 * (value / 127),
+      this.colorEffect.cap[1],
+      this.colorEffect.cap[2],
+    ]
+  }
+  applyKnobValueB(value: number): void {
+    this.colorEffect.cap = [
+      this.colorEffect.cap[0],
+      2 * (value / 127),
+      this.colorEffect.cap[2],
+    ]
+  }
+  applyKnobValueC(value: number): void {
+    this.colorEffect.cap = [
+      this.colorEffect.cap[0],
+      this.colorEffect.cap[1],
+      2 * (value / 127),
+    ]
+  }
+  applySwitchValueA(value: boolean): void {}
   applySwitchValueB(value: boolean): void {}
 }
