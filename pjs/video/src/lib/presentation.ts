@@ -1,6 +1,6 @@
 import { InstancedModel } from '../gl/model/model'
 import { ImageResolution } from '../media/pixels/types'
-import { OffScreenPass } from '../gl/pass/offscreen'
+import { OffScreenPass, OffScreenTexturePass } from '../gl/pass/offscreen'
 import { FrameBuffer } from '../gl/frameBuffer'
 
 export class PixelPresentationSlot {
@@ -10,12 +10,39 @@ export class PixelPresentationSlot {
     this.offScreenPass = new OffScreenPass()
   }
 
-  public represent(pixels: Uint8Array, channelTex: WebGLTexture) {
+  public render(pixels: Uint8Array, channelTex: WebGLTexture) {
     const presentations = this.presentations.filter((p) => p.enabled)
     for (const presentation of presentations) {
       presentation.represent(pixels, channelTex)
     }
     this.offScreenPass.render(presentations.map((p) => p.instance))
+  }
+
+  public setOutput(frameBuffer: FrameBuffer) {
+    this.offScreenPass.frameBuffer = frameBuffer
+  }
+}
+
+export class PostPresentationSlot {
+  public readonly offScreenPass: OffScreenTexturePass
+
+  constructor(
+    private readonly presentations: PixelPresentation[],
+    frameBufferResolution: ImageResolution
+  ) {
+    this.offScreenPass = new OffScreenTexturePass(frameBufferResolution)
+  }
+
+  public render(pixels: Uint8Array, channelTex: WebGLTexture) {
+    const presentations = this.presentations.filter((p) => p.enabled)
+    for (const presentation of presentations) {
+      presentation.represent(pixels, channelTex)
+    }
+    this.offScreenPass.render(presentations.map((p) => p.instance))
+  }
+
+  public setInput(frameBuffer: FrameBuffer) {
+    this.offScreenPass.screenRect.tex = frameBuffer.tex
   }
 
   public setOutput(frameBuffer: FrameBuffer) {

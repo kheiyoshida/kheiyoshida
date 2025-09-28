@@ -37,7 +37,7 @@ export class OffScreenPass extends RenderingPass {
 }
 
 export class OffScreenTexturePass extends OffScreenPass {
-  protected screenRect: ScreenRect
+  public readonly screenRect: ScreenRect
 
   constructor(
     frameBufferResolution: ImageResolution,
@@ -47,12 +47,12 @@ export class OffScreenTexturePass extends OffScreenPass {
     this.screenRect = new ScreenRect(sourceTexture)
   }
 
-  render() {
-    super.render([this.screenRect])
+  render(models: GenericModel[] = []) {
+    super.render([this.screenRect, ...models])
   }
 
-  renderAsPixels(): Uint8Array {
-    return super.renderAsPixels([this.screenRect])
+  renderAsPixels(models: GenericModel[] = []): Uint8Array {
+    return super.renderAsPixels([this.screenRect, ...models])
   }
 
   setTextureImage(source: TexImageSource) {

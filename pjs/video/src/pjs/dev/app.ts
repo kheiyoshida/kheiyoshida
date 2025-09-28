@@ -71,12 +71,13 @@ export const app = async () => {
   // prettier-ignore
   const pipeline = new VideoProjectionPipeline(
     channelManager,
-    [dotPresentation, glyphPresentation, new TextPresentation({ width: 960, height: 540 }, 8)],
+    [linePresentation, dotPresentation, glyphPresentation],
     [
       // new EffectSlot([multiplyFx]),
       new EffectSlot([]),
       new EffectSlot([colorFx]),
-    ]
+    ],
+    [new TextPresentation({ width: 960, height: 540 }, 8)]
   )
   pipeline.setBackgroundColor(backgroundColor)
 

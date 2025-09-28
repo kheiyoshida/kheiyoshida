@@ -1,4 +1,4 @@
-import { PixelPresentation, PixelPresentationSlot } from './presentation'
+import { PixelPresentation, PixelPresentationSlot, PostPresentationSlot } from './presentation'
 import { FrameBuffer } from '../gl/frameBuffer'
 import { ImageResolution } from '../media/pixels/types'
 import { FrameBufferScreenPass } from '../gl/pass/onscreen'
@@ -6,14 +6,15 @@ import { ChannelManager } from './channel/manager'
 import { EffectSlot } from './effect/slot'
 
 export class VideoProjectionPipeline {
-  private screenPass: FrameBufferScreenPass
   private presentationSlot: PixelPresentationSlot
+  private postPresentationSlot: PostPresentationSlot
+  private screenPass: FrameBufferScreenPass
 
   constructor(
     private readonly channels: ChannelManager,
-
     presentations: PixelPresentation[],
-    public readonly fxSlots: EffectSlot[] = []
+    public readonly fxSlots: EffectSlot[] = [],
+    postPresentations: PixelPresentation[],
   ) {
     const frameBufferResolution: ImageResolution = { width: 960, height: 540 }
 
@@ -24,6 +25,7 @@ export class VideoProjectionPipeline {
     this.presentationSlot = new PixelPresentationSlot(presentations)
     this.presentationSlot.setOutput(frameBufferA)
 
+    // effects
     for (let i = 0; i < fxSlots.length; i++) {
       const slot = fxSlots[i]
       if (i % 2 === 0) {
@@ -35,6 +37,13 @@ export class VideoProjectionPipeline {
       }
     }
 
+    // post presentations - draw on top of the last frame buffer
+    this.postPresentationSlot = new PostPresentationSlot(postPresentations, frameBufferResolution)
+    this.postPresentationSlot.setInput(frameBufferB)
+    this.postPresentationSlot.setOutput(frameBufferA)
+    // this.postPresentationSlot.setOutput(fxSlots.length % 2 == 0 ? frameBufferA : frameBufferB)
+
+    // screen output
     if (fxSlots.length % 2 == 0) {
       this.screenPass = new FrameBufferScreenPass(frameBufferA.tex)
     } else {
@@ -57,11 +66,13 @@ export class VideoProjectionPipeline {
     const channel = this.channels.getChannel()
     const pixels = channel.getPixels()
 
-    this.presentationSlot.represent(pixels, channel.bufferTex)
+    this.presentationSlot.render(pixels, channel.bufferTex)
 
     for (const slot of this.fxSlots) {
       slot.render()
     }
+
+    this.postPresentationSlot.render(pixels, channel.bufferTex)
 
     this.screenPass.render()
   }
