@@ -74,9 +74,10 @@ export const app = async () => {
     [linePresentation, dotPresentation, glyphPresentation],
     [
       new EffectSlot([multiplyFx]),
-      new EffectSlot([colorFx]),
+      // new EffectSlot([colorFx]),
     ],
-    [new TextPresentation({ width: 960, height: 540 }, 8)]
+    [new TextPresentation({ width: 960, height: 540 }, 8)],
+    new EffectSlot([colorFx])
   )
   pipeline.setBackgroundColor(backgroundColor)
 

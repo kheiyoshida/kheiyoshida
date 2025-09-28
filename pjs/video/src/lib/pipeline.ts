@@ -15,6 +15,7 @@ export class VideoProjectionPipeline {
     presentations: PixelPresentation[],
     public readonly fxSlots: EffectSlot[] = [],
     postPresentations: PixelPresentation[],
+    private finalEffectSlot: EffectSlot,
   ) {
     const frameBufferResolution: ImageResolution = { width: 960, height: 540 }
 
@@ -28,13 +29,8 @@ export class VideoProjectionPipeline {
     // effects
     for (let i = 0; i < fxSlots.length; i++) {
       const slot = fxSlots[i]
-      if (i % 2 === 0) {
-        slot.setInput(frameBufferA)
-        slot.setOutput(frameBufferB)
-      } else {
-        slot.setInput(frameBufferB)
-        slot.setOutput(frameBufferA)
-      }
+      slot.setInput(i % 2 === 0 ? frameBufferA : frameBufferB)
+      slot.setOutput(i % 2 === 0 ? frameBufferB: frameBufferA)
     }
 
     // post presentations - draw on top of the last frame buffer
@@ -42,12 +38,12 @@ export class VideoProjectionPipeline {
     this.postPresentationSlot.setInput(fxSlots.length % 2 == 0 ? frameBufferA : frameBufferB)
     this.postPresentationSlot.setOutput(fxSlots.length % 2 == 0 ? frameBufferB : frameBufferA)
 
+    // final effect
+    this.finalEffectSlot.setInput(fxSlots.length % 2 == 0 ? frameBufferB : frameBufferA)
+    this.finalEffectSlot.setOutput(fxSlots.length % 2 == 0 ? frameBufferA : frameBufferB)
+
     // screen output
-    if (fxSlots.length % 2 == 0) {
-      this.screenPass = new FrameBufferScreenPass(frameBufferB.tex)
-    } else {
-      this.screenPass = new FrameBufferScreenPass(frameBufferA.tex)
-    }
+    this.screenPass = new FrameBufferScreenPass(fxSlots.length % 2 == 0 ? frameBufferA.tex : frameBufferB.tex)
 
     this.validate()
   }
@@ -72,6 +68,8 @@ export class VideoProjectionPipeline {
     }
 
     this.postPresentationSlot.render(pixels, channel.bufferTex)
+
+    this.finalEffectSlot.render()
 
     this.screenPass.render()
   }
