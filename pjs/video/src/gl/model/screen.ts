@@ -38,6 +38,11 @@ export class Texture2dModel extends GenericModel {
     this.shader.use()
     this.shader.setUniformInt('uReverseHorizontal', bool ? 1 : 0)
   }
+
+  public setReverseVertical(bool: boolean) {
+    this.shader.use()
+    this.shader.setUniformInt('uReverseVertical', bool ? 1 : 0)
+  }
 }
 
 /**

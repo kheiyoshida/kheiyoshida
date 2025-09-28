@@ -39,15 +39,14 @@ export class VideoProjectionPipeline {
 
     // post presentations - draw on top of the last frame buffer
     this.postPresentationSlot = new PostPresentationSlot(postPresentations, frameBufferResolution)
-    this.postPresentationSlot.setInput(frameBufferB)
-    this.postPresentationSlot.setOutput(frameBufferA)
-    // this.postPresentationSlot.setOutput(fxSlots.length % 2 == 0 ? frameBufferA : frameBufferB)
+    this.postPresentationSlot.setInput(fxSlots.length % 2 == 0 ? frameBufferA : frameBufferB)
+    this.postPresentationSlot.setOutput(fxSlots.length % 2 == 0 ? frameBufferB : frameBufferA)
 
     // screen output
     if (fxSlots.length % 2 == 0) {
-      this.screenPass = new FrameBufferScreenPass(frameBufferA.tex)
-    } else {
       this.screenPass = new FrameBufferScreenPass(frameBufferB.tex)
+    } else {
+      this.screenPass = new FrameBufferScreenPass(frameBufferA.tex)
     }
 
     this.validate()

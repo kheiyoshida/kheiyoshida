@@ -31,6 +31,7 @@ export class PostPresentationSlot {
     frameBufferResolution: ImageResolution
   ) {
     this.offScreenPass = new OffScreenTexturePass(frameBufferResolution)
+    this.offScreenPass.screenRect.setReverseVertical(true)
   }
 
   public render(pixels: Uint8Array, channelTex: WebGLTexture) {

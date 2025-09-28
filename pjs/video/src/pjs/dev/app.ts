@@ -73,8 +73,7 @@ export const app = async () => {
     channelManager,
     [linePresentation, dotPresentation, glyphPresentation],
     [
-      // new EffectSlot([multiplyFx]),
-      new EffectSlot([]),
+      new EffectSlot([multiplyFx]),
       new EffectSlot([colorFx]),
     ],
     [new TextPresentation({ width: 960, height: 540 }, 8)]
