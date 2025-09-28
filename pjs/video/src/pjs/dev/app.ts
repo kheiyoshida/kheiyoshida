@@ -24,6 +24,7 @@ import {
 } from './control/knobs'
 import { MultiplyEffectModel } from './effect/multiply'
 import { EffectSlot, ScreenEffectModel } from '../../lib/effect/slot'
+import { TextPresentation } from './presentation/text'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -57,7 +58,7 @@ export const app = async () => {
   const dotAspectRatio = 16 / 9
   const dotPresentation = new DotPresentation(videoCh.outputResolution, dotAspectRatio)
 
-  const glyphPresentation = new GlyphPresentation(videoCh.outputResolution, dotAspectRatio)
+  const glyphPresentation = new GlyphPresentation(videoCh.outputResolution, 1)
 
   const linePresentation = new LinePresentation(videoCh.outputResolution)
 
@@ -70,9 +71,10 @@ export const app = async () => {
   // prettier-ignore
   const pipeline = new VideoProjectionPipeline(
     channelManager,
-    [linePresentation, dotPresentation, glyphPresentation],
+    [dotPresentation, glyphPresentation, new TextPresentation({ width: 960, height: 540 }, 8)],
     [
-      new EffectSlot([multiplyFx]),
+      // new EffectSlot([multiplyFx]),
+      new EffectSlot([]),
       new EffectSlot([colorFx]),
     ]
   )

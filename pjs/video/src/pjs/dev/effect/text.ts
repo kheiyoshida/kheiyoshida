@@ -79,7 +79,6 @@ export class TextOverlayEffect extends PostEffect {
       this.glyphModel.instanceDataArray[k++] = uvMin[1]
       this.glyphModel.instanceDataArray[k++] = uvMax[0]
       this.glyphModel.instanceDataArray[k++] = uvMax[1]
-      // TODO: why is this not showing anything??
     }
 
     this.glyphModel.updateInstances(text.length)
