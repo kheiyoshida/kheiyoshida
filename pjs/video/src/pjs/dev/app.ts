@@ -4,7 +4,7 @@ import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
 import { DevVideoChannel, YoutubeVideoChannel } from './channel'
 import { DotPresentation } from './presentation/dot'
 import { LinePresentation } from './presentation/line'
-import { fireByRate, randomIntInclusiveBetween } from 'utils'
+import { randomIntInclusiveBetween } from 'utils'
 import { ColorEffect } from './effect/saturation'
 import { CameraChannel } from '../../lib/channel/camera'
 import { CameraInputSource } from '../../media/camera'
@@ -29,7 +29,7 @@ import { EffectSlot } from '../../lib/effect/slot'
 import { TextPresentation } from './presentation/text'
 import { ImageResolution } from '../../media/pixels/types'
 import { createAudioInputSource } from '../../media/audio/input'
-import { SoundAnalyser } from '../../media/audio/analyzer'
+import { SoundLevel } from './control/soundLevel'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -42,8 +42,7 @@ export const app = async () => {
   getGL()
 
   // sound input control
-  const source = await createAudioInputSource()
-  const analyser = new SoundAnalyser(source, 32)
+  const soundLevel = new SoundLevel(await createAudioInputSource())
 
   const frameBufferResolution: ImageResolution = {
     width: frameBufferWidth,
@@ -98,7 +97,7 @@ export const app = async () => {
   const channelParams = new ChannelParamsControl(channelManager)
   const params = new ParamsManager({
     knob: [
-      new ChannelControl(objectCh), // 1
+      new ChannelControl(objectCh, soundLevel), // 1
       new LinePresentationControl(linePresentation), //2
       new DotPresentationControl(dotPresentation), // 3
       new GlyphPresentationControl(glyphPresentation), // 4
@@ -124,23 +123,17 @@ export const app = async () => {
     params.apply()
 
     // sound level
-    const decibels = analyser.getDecibels()
-    const maxLoudness = -3
-    const effectLevel = Math.min(1, Math.abs(decibels / maxLoudness))
-
-    const rand = (Math.sin(frameCount * 0.1) + 1) / 2
-    linePresentation.updateParams(rand)
-
+    const effectLevel = soundLevel.getSoundLevel()
     dotPresentation.dotSize.updateValue(effectLevel)
     dotPresentation.densityX.updateValue(effectLevel)
     dotPresentation.densityY.updateValue(effectLevel)
+    glyphPresentation.dotSize.updateValue(effectLevel)
+    objectCh.cube.scale.updateValue(effectLevel)
 
-    if (fireByRate(0.1)) {
-      score += Math.floor(Math.random() * 5) * 100
+    if (effectLevel > 0.5) {
+      score += Math.floor(effectLevel * 10)
       scorePresentation.setText(score.toString())
     }
-
-
 
     // rendering phase
     pipeline.render()

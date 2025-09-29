@@ -6,6 +6,7 @@ import vert from './cube.vert?raw'
 import frag from './cube.frag?raw'
 import { getGL } from '../../../gl/gl'
 import { mat4, vec3 } from 'gl-matrix'
+import { RangedValue } from '../utils/rangedValue'
 
 class CubeModel extends GenericModel {
   constructor() {
@@ -59,7 +60,7 @@ class CubeModel extends GenericModel {
   public rot: vec3 = [0, 0, 0]
   public readonly offsets = new Array(8).fill(0).map(() => vec3.create())
   public wireframe = false
-  public scale: number = 1.0
+  public scale = new RangedValue(1, 1, 0.2, 2)
 
   private computeModel() {
     const M = mat4.create()
@@ -67,7 +68,8 @@ class CubeModel extends GenericModel {
     mat4.rotateX(M, M, this.rot[0])
     mat4.rotateY(M, M, this.rot[1])
     mat4.rotateZ(M, M, this.rot[2])
-    mat4.scale(M, M, [this.scale, this.scale, this.scale])
+    const scale = this.scale.value
+    mat4.scale(M, M, [scale, scale, scale])
     return M
   }
 

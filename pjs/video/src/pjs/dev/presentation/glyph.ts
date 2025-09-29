@@ -7,6 +7,7 @@ import fnt from '../../../assets/fonts/A.fnt?raw'
 import { randomItemFromArray } from 'utils'
 import { Texture } from '../../../gl/texture'
 import fontImageUrl from '../../../assets/fonts/A.png?url'
+import { RangedValue } from '../utils/rangedValue'
 
 export class GlyphPresentation extends PixelPresentation<DotInstance> {
   constructor(pixelDataResolution: ImageResolution, dotAspectRatio: number) {
@@ -35,7 +36,7 @@ export class GlyphPresentation extends PixelPresentation<DotInstance> {
 
   private readonly unitDotSize: number
 
-  public dotSize = 1.0
+  public dotSize = new RangedValue(0.5, 0.5, 0, 1)
 
   public densityX = 1.0
   public densityY = 1.0
@@ -52,6 +53,7 @@ export class GlyphPresentation extends PixelPresentation<DotInstance> {
     for (let y = 0; y < resolutionHeight; y += intervalY) {
       for (let x = 0; x < resolutionWidth; x += intervalX) {
         const i = (y * resolutionWidth + x) * 4
+
         // offset
         dotInstance.instanceDataArray[k++] = x / resolutionWidth
         dotInstance.instanceDataArray[k++] = y / resolutionHeight
@@ -62,7 +64,7 @@ export class GlyphPresentation extends PixelPresentation<DotInstance> {
         dotInstance.instanceDataArray[k++] = pixels[i + 2] / 255
 
         // size
-        dotInstance.instanceDataArray[k++] = this.dotSize * this.unitDotSize
+        dotInstance.instanceDataArray[k++] = this.dotSize.value * this.unitDotSize
 
         // uvs
         const {uvMin, uvMax} = this.parser.getAttributes(this.pickGlyph())

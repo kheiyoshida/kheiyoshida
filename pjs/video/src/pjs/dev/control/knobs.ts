@@ -7,14 +7,19 @@ import { GlyphPresentation } from '../presentation/glyph'
 import { MultiplyEffectModel } from '../effect/multiply'
 import { CubeRenderingChannel } from '../channels/object'
 import { ColorEffect } from '../effect/saturation'
+import { SoundLevel } from './soundLevel'
 
 export class ChannelControl implements IKnobParamsControlAdapter {
-  constructor(private cubeCh: CubeRenderingChannel) {}
+  constructor(private cubeCh: CubeRenderingChannel, private soundLevel: SoundLevel) {}
   applyKnobValueA(value: number): void {
-    this.cubeCh.cube.scale = 2 * (value / 127)
+    this.cubeCh.cube.scale.anchor = 2 * (value / 127)
   }
-  applyKnobValueB(value: number): void {}
-  applyKnobValueC(value: number): void {}
+  applyKnobValueB(value: number): void {
+    this.soundLevel.maxLoudness = -3 - (value / 127)
+  }
+  applyKnobValueC(value: number): void {
+    this.soundLevel.maxLoudness = -0.2 - (value / 127)
+  }
   applySwitchValueA(value: boolean): void {}
   applySwitchValueB(value: boolean): void {}
 }
@@ -33,8 +38,6 @@ abstract class PresentationControl<P extends PixelPresentation> implements IKnob
 }
 
 export class LinePresentationControl extends PresentationControl<LinePresentation> {
-  public maxDistanceAnchor = 2
-
   applyKnobValueA(value: number): void {
     this.presentation.maxDistance.anchor = (2 + (value / 127) * 10)
   }
@@ -60,7 +63,7 @@ export class DotPresentationControl extends PresentationControl<DotPresentation>
 
 export class GlyphPresentationControl extends PresentationControl<GlyphPresentation> {
   applyKnobValueA(value: number): void {
-    this.presentation.dotSize = value / 127
+    this.presentation.dotSize.anchor = value / 127
   }
   applyKnobValueB(value: number): void {
     this.presentation.densityX = value / 127

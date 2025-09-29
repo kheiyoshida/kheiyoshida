@@ -12,7 +12,7 @@ export class ValueBuffer<T extends number | boolean> {
   }
 
   public update(value: T): void {
-    console.log(this.id, value)
+    // console.log(this.id, value)
     if (value !== this._value) {
       this._value = value
       this.dirty = true
