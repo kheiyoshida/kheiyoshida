@@ -5,9 +5,19 @@ import { PixelPresentation } from '../../../lib/presentation'
 import { DotPresentation } from '../presentation/dot'
 import { GlyphPresentation } from '../presentation/glyph'
 import { MultiplyEffectModel } from '../effect/multiply'
-import { ObjectRenderingChannel } from '../../../lib/channel/object'
 import { CubeRenderingChannel } from '../channels/object'
 import { ColorEffect } from '../effect/saturation'
+
+export class ChannelControl implements IKnobParamsControlAdapter {
+  constructor(private cubeCh: CubeRenderingChannel) {}
+  applyKnobValueA(value: number): void {
+    this.cubeCh.cube.scale = 2 * (value / 127)
+  }
+  applyKnobValueB(value: number): void {}
+  applyKnobValueC(value: number): void {}
+  applySwitchValueA(value: boolean): void {}
+  applySwitchValueB(value: boolean): void {}
+}
 
 abstract class PresentationControl<P extends PixelPresentation> implements IKnobParamsControlAdapter {
   public constructor(protected presentation: P) {}
@@ -23,11 +33,16 @@ abstract class PresentationControl<P extends PixelPresentation> implements IKnob
 }
 
 export class LinePresentationControl extends PresentationControl<LinePresentation> {
+  public maxDistanceAnchor = 2
+
   applyKnobValueA(value: number): void {
-    this.presentation.setMaxDistance(2 + (value / 127) * 10)
+    this.presentation.maxDistance.anchor = (2 + (value / 127) * 10)
   }
   applyKnobValueB(value: number): void {
-    this.presentation.setLuminanceThreshold(value / 127 / 5) // up to 0.2
+    this.presentation.maxDistance.offsetRange = Math.floor((value / 127) * 40)
+  }
+  applyKnobValueC(value: number) {
+    this.presentation.luminanceThreshold.anchor = 0.001 + (value / 127) * 0.2
   }
 }
 
@@ -53,17 +68,6 @@ export class GlyphPresentationControl extends PresentationControl<GlyphPresentat
   applyKnobValueC(value: number): void {
     this.presentation.densityY = value / 127
   }
-}
-
-export class ChannelControl implements IKnobParamsControlAdapter {
-  constructor(private cubeCh: CubeRenderingChannel) {}
-  applyKnobValueA(value: number): void {
-    this.cubeCh.cube.scale = 2 * (value / 127)
-  }
-  applyKnobValueB(value: number): void {}
-  applyKnobValueC(value: number): void {}
-  applySwitchValueA(value: boolean): void {}
-  applySwitchValueB(value: boolean): void {}
 }
 
 export class PostEffectControl implements IKnobParamsControlAdapter {
@@ -112,25 +116,13 @@ export class ColorCapControl implements IKnobParamsControlAdapter {
   constructor(private colorEffect: ColorEffect) {}
 
   applyKnobValueA(value: number): void {
-    this.colorEffect.cap = [
-      2 * (value / 127),
-      this.colorEffect.cap[1],
-      this.colorEffect.cap[2],
-    ]
+    this.colorEffect.cap = [2 * (value / 127), this.colorEffect.cap[1], this.colorEffect.cap[2]]
   }
   applyKnobValueB(value: number): void {
-    this.colorEffect.cap = [
-      this.colorEffect.cap[0],
-      2 * (value / 127),
-      this.colorEffect.cap[2],
-    ]
+    this.colorEffect.cap = [this.colorEffect.cap[0], 2 * (value / 127), this.colorEffect.cap[2]]
   }
   applyKnobValueC(value: number): void {
-    this.colorEffect.cap = [
-      this.colorEffect.cap[0],
-      this.colorEffect.cap[1],
-      2 * (value / 127),
-    ]
+    this.colorEffect.cap = [this.colorEffect.cap[0], this.colorEffect.cap[1], 2 * (value / 127)]
   }
   applySwitchValueA(value: boolean): void {}
   applySwitchValueB(value: boolean): void {}

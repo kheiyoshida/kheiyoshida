@@ -2,12 +2,12 @@ import { PixelPresentation } from '../../../lib/presentation'
 import { ImageResolution } from '../../../media/pixels/types'
 import { TextureLineInstance } from '../../../gl/model/textureLine/instance'
 import { getGL } from '../../../gl/gl'
+import { RangedValue } from '../utils/rangedValue'
+import { fireByRate } from 'utils'
 
 export class LinePresentation extends PixelPresentation {
   constructor(
     pixelDataResolution: ImageResolution,
-    public threshold = 30,
-    public step = 5
   ) {
     const maxInstanceCount = pixelDataResolution.width * pixelDataResolution.height
     const instance = new TextureLineInstance(maxInstanceCount, pixelDataResolution)
@@ -15,18 +15,27 @@ export class LinePresentation extends PixelPresentation {
     this.setupPixelCoords()
 
     this.instance.shader.use()
-    this.setMaxDistance(8)
-    this.setLuminanceThreshold(0.3)
+    this.setMaxDistanceDirect(8)
+    this.setLuminanceThresholdDirect(0.3)
   }
 
-  public setLuminanceThreshold(threshold: number): void {
+  public setLuminanceThresholdDirect(threshold: number): void {
     this.instance.shader.use()
     this.instance.shader.setUniformFloat('uLuminanceThreshold', threshold)
   }
 
-  public setMaxDistance(maxDistance: number) {
+  public setMaxDistanceDirect(maxDistance: number) {
     this.instance.shader.use()
     this.instance.shader.setUniformInt('uMaxDistance', maxDistance)
+  }
+
+  public maxDistance: RangedValue = new RangedValue(4, 12, 4, 40)
+  public luminanceThreshold: RangedValue = new RangedValue(0.1, 0.02, 0.001, 0.2)
+
+  public updateParams(randomComponent: number) {
+    if (!this.enabled) return;
+    this.setMaxDistanceDirect(this.maxDistance.getConcreteValue(randomComponent))
+    this.setLuminanceThresholdDirect(this.luminanceThreshold.getConcreteValue(randomComponent))
   }
 
   private setupPixelCoords() {

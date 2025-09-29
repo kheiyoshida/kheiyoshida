@@ -50,8 +50,6 @@ export class TextPresentation extends PixelPresentation<GlyphInstance> {
   public posY: number
 
   public setText(text: string): void {
-    const x = 0
-
     const singleFontWidth = this.fontSize + this.padding
     const halfLen = text.length / 2
 

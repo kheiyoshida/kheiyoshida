@@ -80,7 +80,7 @@ export const app = async () => {
   // prettier-ignore
   const pipeline = new VideoProjectionPipeline(
     channelManager,
-    [linePresentation, dotPresentation, glyphPresentation],
+    [dotPresentation, glyphPresentation],
     [
       new EffectSlot([multiplyFx]),
       // new EffectSlot([colorFx]),
@@ -119,8 +119,10 @@ export const app = async () => {
     // param phase
     params.apply()
 
+    linePresentation.updateParams((Math.sin(frameCount * 0.1) + 1) / 2)
+
     if (fireByRate(0.1)) {
-      score += Math.floor(Math.random() * 100) * 10000
+      score += Math.floor(Math.random() * 5) * 100
       scorePresentation.setText(score.toString())
     }
 
