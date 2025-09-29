@@ -4,7 +4,7 @@ import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
 import { DevVideoChannel, YoutubeVideoChannel } from './channel'
 import { DotPresentation } from './presentation/dot'
 import { LinePresentation } from './presentation/line'
-import { randomIntInclusiveBetween } from 'utils'
+import { fireByRate, randomIntInclusiveBetween } from 'utils'
 import { ColorEffect } from './effect/saturation'
 import { CameraChannel } from '../../lib/channel/camera'
 import { CameraInputSource } from '../../media/camera'
@@ -133,6 +133,10 @@ export const app = async () => {
     if (effectLevel > 0.5) {
       score += Math.floor(effectLevel * 10)
       scorePresentation.setText(score.toString())
+    }
+
+    if (effectLevel > 0.3) {
+      multiplyFx.randomiseMultiply(effectLevel)
     }
 
     // rendering phase

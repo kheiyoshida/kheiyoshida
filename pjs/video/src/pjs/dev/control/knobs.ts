@@ -76,11 +76,14 @@ export class GlyphPresentationControl extends PresentationControl<GlyphPresentat
 export class PostEffectControl implements IKnobParamsControlAdapter {
   constructor(private multiplyFx: MultiplyEffectModel) {}
   applyKnobValueA(value: number): void {
-    const numOfMultiply = Math.ceil(this.multiplyFx.maxMultiply * (value / 127))
-    this.multiplyFx.setMultiply(numOfMultiply)
+    this.multiplyFx.sensitivity = value / 127
   }
-  applyKnobValueB(value: number): void {}
-  applyKnobValueC(value: number): void {}
+  applyKnobValueB(value: number): void {
+    this.multiplyFx.multiply.anchor = 1 // Math.max(1, Math.ceil(this.multiplyFx.maxMultiply * (value / 127)))
+  }
+  applyKnobValueC(value: number): void {
+    this.multiplyFx.multiply.offsetRange = 12 // this.multiplyFx.maxMultiply * (value / 127)
+  }
   applySwitchValueA(value: boolean): void {
     this.multiplyFx.enabled = value
   }

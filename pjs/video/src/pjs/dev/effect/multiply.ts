@@ -6,6 +6,8 @@ import { FrameBuffer } from '../../../gl/frameBuffer'
 import { InstancedModel } from '../../../gl/model/model'
 import { getGL } from '../../../gl/gl'
 import { IEffectModel } from '../../../lib/effect/slot'
+import { fireByRate } from 'utils'
+import { RangedValue } from '../utils/rangedValue'
 
 export class MultiplyEffectModel extends InstancedModel implements IEffectModel {
   public tex: WebGLTexture | undefined
@@ -51,6 +53,7 @@ export class MultiplyEffectModel extends InstancedModel implements IEffectModel 
 
     this.shader.use()
     this.shader.setUniformInt('uTexture', 0)
+    this.setMultiply(1)
   }
 
   setInput(inputFrameBuffer: FrameBuffer): void {
@@ -84,6 +87,14 @@ export class MultiplyEffectModel extends InstancedModel implements IEffectModel 
     }
 
     this.updateInstances(numOfInstances)
+  }
+
+  public multiply = new RangedValue(1, this.maxMultiply, 1, this.maxMultiply)
+  public sensitivity: number = 0
+  public randomiseMultiply(baseRate: number) {
+    if (fireByRate(baseRate * this.sensitivity)) {
+      this.setMultiply(Math.floor(this.multiply.updateValue(Math.random())))
+    }
   }
 
   public validate() {
