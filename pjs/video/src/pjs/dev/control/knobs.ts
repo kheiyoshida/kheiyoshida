@@ -111,21 +111,25 @@ export class ColorSaturationControl implements IKnobParamsControlAdapter {
       2 * (value / 127),
     ]
   }
-  applySwitchValueA(value: boolean): void {}
-  applySwitchValueB(value: boolean): void {}
+  applySwitchValueA(value: boolean): void {
+    this.colorEffect.enableSaturation(value)
+  }
+  applySwitchValueB(value: boolean): void {
+    this.colorEffect.useMonotone(value)
+  }
 }
 
 export class ColorCapControl implements IKnobParamsControlAdapter {
   constructor(private colorEffect: ColorEffect) {}
 
   applyKnobValueA(value: number): void {
-    this.colorEffect.cap = [2 * (value / 127), this.colorEffect.cap[1], this.colorEffect.cap[2]]
+    this.colorEffect.luminanceCap = Math.min(0.8 * value / 127)
   }
   applyKnobValueB(value: number): void {
-    this.colorEffect.cap = [this.colorEffect.cap[0], 2 * (value / 127), this.colorEffect.cap[2]]
+    this.colorEffect.luminanceBase = Math.max(0.01, 0.1 * value / 127)
   }
   applyKnobValueC(value: number): void {
-    this.colorEffect.cap = [this.colorEffect.cap[0], this.colorEffect.cap[1], 2 * (value / 127)]
+    this.colorEffect.saturationOffsetLevel.offsetRange = 0.2 * value / 127
   }
   applySwitchValueA(value: boolean): void {}
   applySwitchValueB(value: boolean): void {}

@@ -103,8 +103,8 @@ export const app = async () => {
       new GlyphPresentationControl(glyphPresentation), // 4
       new PostEffectControl(multiplyFx), // 5
       new PostEffectControl(multiplyFx), // 6
-      new ColorCapControl(colorFx), // 7
-      new ColorSaturationControl(colorFx), // 8
+      new ColorSaturationControl(colorFx), // 7
+      new ColorCapControl(colorFx), // 8
     ],
     fader: channelParams,
   })
