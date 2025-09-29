@@ -2,15 +2,18 @@ import { ImageResolution } from 'src/media/pixels/types'
 import { PixelPresentation } from '../../../lib/presentation'
 import { GlyphInstance } from '../../../gl/model/glyph/instance'
 import { FntParser } from '../../../media/font/glyph'
-import fnt from '../../../assets/fonts/A.fnt?raw'
+import fnt from '../../../assets/fonts/Alphabets512.fnt?raw'
 import { Texture } from '../../../gl/texture'
-import fontImageUrl from '../../../assets/fonts/A.png?url'
+import fontImageUrl from '../../../assets/fonts/Alphabets512.png?url'
 import { getGL } from '../../../gl/gl'
 
 export class TextPresentation extends PixelPresentation<GlyphInstance> {
   private tex: WebGLTexture
 
-  constructor(private frameBufferResolution: ImageResolution, private readonly maxLetters: number) {
+  constructor(
+    private frameBufferResolution: ImageResolution,
+    private readonly maxLetters: number
+  ) {
     const maxInstanceCount = maxLetters
     const texture = new Texture()
 
@@ -18,7 +21,7 @@ export class TextPresentation extends PixelPresentation<GlyphInstance> {
     const dotInstance = new GlyphInstance(maxInstanceCount, texture, 1)
     super(dotInstance, pixelDataResolution)
 
-    this.unitDotSize = 8  / pixelDataResolution.height
+    this.unitDotSize = 1 / frameBufferResolution.height
 
     this.parser = new FntParser(fnt, { textureWidth: 512, textureHeight: 512 })
 
@@ -30,25 +33,28 @@ export class TextPresentation extends PixelPresentation<GlyphInstance> {
 
     this.tex = texture.tex
 
-    this.setText('ああああa')
+    this.posX = this.frameBufferResolution.height / 2
+    this.posY = (this.frameBufferResolution.height - this.fontSize - 8)
   }
 
   private parser: FntParser
 
   private readonly unitDotSize: number
 
-  public dotSize = 1.0
+  public fontSize = 8.0
+  public padding = 4.0
+
+  public color: [number, number, number] = [1, 1, 1]
+
+  public posX: number
+  public posY: number
 
   public setText(text: string): void {
-    // TODO: handle text position
-    const x = 200
-    const y = 200
+    const x = 0
 
-    // TODO: handle text color
-    const color = [1, 0, 0]
+    const singleFontWidth = this.fontSize + this.padding
+    const halfLen = text.length / 2
 
-    const resolutionWidth = this.frameBufferResolution.width
-    const resolutionHeight = this.frameBufferResolution.height
     const glyphInstance = this.instance
 
     let k = 0
@@ -56,21 +62,19 @@ export class TextPresentation extends PixelPresentation<GlyphInstance> {
       if (text.length > this.maxLetters) throw Error('Max Letters exceeded')
 
       // offset
-      glyphInstance.instanceDataArray[k++] = (x + i * 20) / resolutionWidth
-      glyphInstance.instanceDataArray[k++] = y / resolutionHeight
-      console.log((x + i * 20) / resolutionWidth)
-      console.log(y / resolutionHeight)
+      glyphInstance.instanceDataArray[k++] = (this.posX + (i - halfLen) * singleFontWidth) * this.unitDotSize
+      glyphInstance.instanceDataArray[k++] = this.posY * this.unitDotSize
 
       // color
-      glyphInstance.instanceDataArray[k++] = color[0]
-      glyphInstance.instanceDataArray[k++] = color[1]
-      glyphInstance.instanceDataArray[k++] = color[2]
+      glyphInstance.instanceDataArray[k++] = this.color[0]
+      glyphInstance.instanceDataArray[k++] = this.color[1]
+      glyphInstance.instanceDataArray[k++] = this.color[2]
 
       // size
-      glyphInstance.instanceDataArray[k++] = this.dotSize * this.unitDotSize
+      glyphInstance.instanceDataArray[k++] = this.fontSize * this.unitDotSize
 
       // uvs
-      const {uvMin, uvMax} = this.parser.getAttributes(text[i])
+      const { uvMin, uvMax } = this.parser.getAttributes(text[i])
       glyphInstance.instanceDataArray[k++] = uvMin[0]
       glyphInstance.instanceDataArray[k++] = uvMin[1]
       glyphInstance.instanceDataArray[k++] = uvMax[0]

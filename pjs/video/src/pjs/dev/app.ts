@@ -68,6 +68,15 @@ export const app = async () => {
   const colorFx = new ColorEffect()
   const multiplyFx = new MultiplyEffectModel(16)
 
+  const textPresentation = new TextPresentation({ width: 960, height: 540 }, 50)
+  textPresentation.fontSize = 6
+  textPresentation.posY = 540 - 16
+  textPresentation.setText('PHANTASY BREAK')
+
+  const scorePresentation = new TextPresentation({ width: 960, height: 540 }, 50)
+  scorePresentation.fontSize = 8
+  scorePresentation.posY = 500
+
   // prettier-ignore
   const pipeline = new VideoProjectionPipeline(
     channelManager,
@@ -76,7 +85,7 @@ export const app = async () => {
       new EffectSlot([multiplyFx]),
       // new EffectSlot([colorFx]),
     ],
-    [new TextPresentation({ width: 960, height: 540 }, 8)],
+    [textPresentation, scorePresentation],
     new EffectSlot([colorFx])
   )
   pipeline.setBackgroundColor(backgroundColor)
@@ -105,9 +114,15 @@ export const app = async () => {
     cube.offsets[randomIntInclusiveBetween(0, 7)] = [Math.random(), Math.random(), 0]
   }
 
+  let score = 0;
   function renderLoop(frameCount: number) {
     // param phase
     params.apply()
+
+    if (fireByRate(0.1)) {
+      score += Math.floor(Math.random() * 100) * 10000
+      scorePresentation.setText(score.toString())
+    }
 
     // const rms = analyser.getRMS()
     // const effectLevel = Math.floor((1 - rms) * 50)
