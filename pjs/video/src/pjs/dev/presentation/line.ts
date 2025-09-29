@@ -3,7 +3,6 @@ import { ImageResolution } from '../../../media/pixels/types'
 import { TextureLineInstance } from '../../../gl/model/textureLine/instance'
 import { getGL } from '../../../gl/gl'
 import { RangedValue } from '../utils/rangedValue'
-import { fireByRate } from 'utils'
 
 export class LinePresentation extends PixelPresentation {
   constructor(
@@ -34,8 +33,8 @@ export class LinePresentation extends PixelPresentation {
 
   public updateParams(randomComponent: number) {
     if (!this.enabled) return;
-    this.setMaxDistanceDirect(this.maxDistance.getConcreteValue(randomComponent))
-    this.setLuminanceThresholdDirect(this.luminanceThreshold.getConcreteValue(randomComponent))
+    this.setMaxDistanceDirect(this.maxDistance.updateValue(randomComponent))
+    this.setLuminanceThresholdDirect(this.luminanceThreshold.updateValue(randomComponent))
   }
 
   private setupPixelCoords() {

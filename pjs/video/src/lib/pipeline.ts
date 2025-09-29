@@ -11,13 +11,13 @@ export class VideoProjectionPipeline {
   private screenPass: FrameBufferScreenPass
 
   constructor(
+    frameBufferResolution: ImageResolution = { width: 960, height: 540 },
     private readonly channels: ChannelManager,
     presentations: PixelPresentation[],
     public readonly fxSlots: EffectSlot[] = [],
     postPresentations: PixelPresentation[],
     private finalEffectSlot: EffectSlot,
   ) {
-    const frameBufferResolution: ImageResolution = { width: 960, height: 540 }
 
     const frameBufferA = new FrameBuffer(frameBufferResolution.width, frameBufferResolution.height)
     const frameBufferB = new FrameBuffer(frameBufferResolution.width, frameBufferResolution.height)

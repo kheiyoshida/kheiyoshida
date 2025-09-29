@@ -8,11 +8,14 @@ export class RangedValue {
     private maxValue = 1
   ) {}
 
-  /**
-   * @param deterministicValue normalised value between 0.0 - 1.0
-   */
-  public getConcreteValue(deterministicValue: number): number {
+  public updateValue(deterministicValue: number): number {
     const concreteValue = this.anchor + (deterministicValue - 0.5) * 2 * this.offsetRange
-    return clamp(concreteValue, this.minValue, this.maxValue)
+    this._value = clamp(concreteValue, this.minValue, this.maxValue)
+    return this._value
+  }
+
+  private _value: number = 0;
+  public get value() {
+    return this._value
   }
 }

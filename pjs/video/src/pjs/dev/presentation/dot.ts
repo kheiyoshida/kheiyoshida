@@ -1,30 +1,31 @@
 import { ImageResolution } from 'src/media/pixels/types'
 import { PixelPresentation } from '../../../lib/presentation'
 import { DotInstance } from '../../../gl/model/dot'
+import { RangedValue } from '../utils/rangedValue'
 
 export class DotPresentation extends PixelPresentation<DotInstance> {
-  constructor(pixelDataResolution: ImageResolution, dotAspectRatio: number) {
+  constructor(pixelDataResolution: ImageResolution, dotAspectRatio: number = 1) {
     const maxInstanceCount = pixelDataResolution.width * pixelDataResolution.height
     const dotInstance = new DotInstance(maxInstanceCount, dotAspectRatio)
     super(dotInstance, pixelDataResolution)
 
-    this.singleDotSize = 0.5 / pixelDataResolution.height
+    this.singleDotSize = 1 / pixelDataResolution.height
   }
 
   private singleDotSize: number
 
-  public dotSize = 0.3
+  public dotSize = new RangedValue(0.3, 0.3, 0, 1)
 
-  public densityX = 1
-  public densityY = 1
+  public densityX = new RangedValue(0.5, 1, 0, 1)
+  public densityY = new RangedValue(0.5, 1, 0, 1)
 
   public represent(pixels: Uint8Array): void {
     const resolutionWidth = this.pixelDataResolution.width
     const resolutionHeight = this.pixelDataResolution.height
     const dotInstance = this.instance
 
-    const intervalX = Math.ceil(1 / this.densityX)
-    const intervalY = Math.ceil(1 / this.densityY)
+    const intervalX = Math.ceil(1 / this.densityX.value)
+    const intervalY = Math.ceil(1 / this.densityY.value)
 
     let k = 0
     for (let y = 0; y < resolutionHeight; y += intervalY) {
@@ -37,7 +38,7 @@ export class DotPresentation extends PixelPresentation<DotInstance> {
         dotInstance.instanceDataArray[k++] = pixels[i + 1] / 255
         dotInstance.instanceDataArray[k++] = pixels[i + 2] / 255
 
-        dotInstance.instanceDataArray[k++] = this.dotSize * this.singleDotSize
+        dotInstance.instanceDataArray[k++] = this.dotSize.value * this.singleDotSize
       }
     }
 

@@ -48,13 +48,13 @@ export class LinePresentationControl extends PresentationControl<LinePresentatio
 
 export class DotPresentationControl extends PresentationControl<DotPresentation> {
   applyKnobValueA(value: number): void {
-    this.presentation.dotSize = value / 127
+    this.presentation.dotSize.anchor = value / 127
   }
   applyKnobValueB(value: number): void {
-    this.presentation.densityX = value / 127
+    this.presentation.densityX.offsetRange = value / 127
   }
   applyKnobValueC(value: number) {
-    this.presentation.densityY = value / 127
+    this.presentation.densityY.offsetRange = value / 127
   }
 }
 

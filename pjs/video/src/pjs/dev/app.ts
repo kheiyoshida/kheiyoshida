@@ -16,15 +16,20 @@ import { CubeRenderingChannel } from './channels/object'
 import { GlyphPresentation } from './presentation/glyph'
 import { ChannelParamsControl } from './control/fader'
 import {
-  ChannelControl, ColorCapControl, ColorSaturationControl,
+  ChannelControl,
+  ColorCapControl,
+  ColorSaturationControl,
   DotPresentationControl,
   GlyphPresentationControl,
   LinePresentationControl,
   PostEffectControl,
 } from './control/knobs'
 import { MultiplyEffectModel } from './effect/multiply'
-import { EffectSlot, ScreenEffectModel } from '../../lib/effect/slot'
+import { EffectSlot } from '../../lib/effect/slot'
 import { TextPresentation } from './presentation/text'
+import { ImageResolution } from '../../media/pixels/types'
+import { createAudioInputSource } from '../../media/audio/input'
+import { SoundAnalyser } from '../../media/audio/analyzer'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -37,17 +42,16 @@ export const app = async () => {
   getGL()
 
   // sound input control
-  // const source = await createAudioInputSource()
-  // const analyser = new SoundAnalyser(source, 32)
+  const source = await createAudioInputSource()
+  const analyser = new SoundAnalyser(source, 32)
+
+  const frameBufferResolution: ImageResolution = {
+    width: frameBufferWidth,
+    height: frameBufferWidth / videoAspectRatio,
+  }
 
   // rendering
-  const objectCh = new CubeRenderingChannel(
-    {
-      width: frameBufferWidth,
-      height: frameBufferWidth / videoAspectRatio,
-    },
-    outputResolutionWidth
-  )
+  const objectCh = new CubeRenderingChannel(frameBufferResolution, outputResolutionWidth)
   const videoCh = new DevVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
   const youtubeCh = new YoutubeVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
 
@@ -55,8 +59,7 @@ export const app = async () => {
   const cameraSource = await CameraInputSource.create()
   const cameraCh = new CameraChannel(cameraSource, videoAspectRatio, frameBufferWidth, outputResolutionWidth)
 
-  const dotAspectRatio = 16 / 9
-  const dotPresentation = new DotPresentation(videoCh.outputResolution, dotAspectRatio)
+  const dotPresentation = new DotPresentation(videoCh.outputResolution, 1)
 
   const glyphPresentation = new GlyphPresentation(videoCh.outputResolution, 1)
 
@@ -79,6 +82,7 @@ export const app = async () => {
 
   // prettier-ignore
   const pipeline = new VideoProjectionPipeline(
+    frameBufferResolution,
     channelManager,
     [dotPresentation, glyphPresentation],
     [
@@ -114,21 +118,29 @@ export const app = async () => {
     cube.offsets[randomIntInclusiveBetween(0, 7)] = [Math.random(), Math.random(), 0]
   }
 
-  let score = 0;
+  let score = 0
   function renderLoop(frameCount: number) {
     // param phase
     params.apply()
 
-    linePresentation.updateParams((Math.sin(frameCount * 0.1) + 1) / 2)
+    // sound level
+    const decibels = analyser.getDecibels()
+    const maxLoudness = -3
+    const effectLevel = Math.min(1, Math.abs(decibels / maxLoudness))
+
+    const rand = (Math.sin(frameCount * 0.1) + 1) / 2
+    linePresentation.updateParams(rand)
+
+    dotPresentation.dotSize.updateValue(effectLevel)
+    dotPresentation.densityX.updateValue(effectLevel)
+    dotPresentation.densityY.updateValue(effectLevel)
 
     if (fireByRate(0.1)) {
       score += Math.floor(Math.random() * 5) * 100
       scorePresentation.setText(score.toString())
     }
 
-    // const rms = analyser.getRMS()
-    // const effectLevel = Math.floor((1 - rms) * 50)
-    // linePresentation.setMaxDistance(effectLevel)
+
 
     // rendering phase
     pipeline.render()

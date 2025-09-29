@@ -10,7 +10,7 @@ export class DotInstance extends InstancedModel {
 
     const gl = getGL()
     const screenAspectRatio = gl.canvas.width / gl.canvas.height
-    const h = 1
+    const h = 1 / 2
     const w = aspectRatio / screenAspectRatio
 
     // prettier-ignore
