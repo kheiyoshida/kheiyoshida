@@ -46,8 +46,12 @@ export class GlyphPresentation extends PixelPresentation<DotInstance> {
     const resolutionHeight = this.pixelDataResolution.height
     const dotInstance = this.instance
 
-    const intervalX = Math.ceil(8 / this.densityX)
-    const intervalY = Math.ceil(8 / this.densityY)
+    const intervalX = this.densityX == 0 ? resolutionWidth : Math.ceil(8 / this.densityX)
+    const intervalY = this.densityY == 0 ? resolutionHeight : Math.ceil(8 / this.densityY)
+
+    const cols = Math.ceil(resolutionWidth / intervalX)
+    const rows = Math.ceil(resolutionHeight / intervalY)
+    console.log(cols, intervalX, resolutionWidth)
 
     let k = 0
     for (let y = 0; y < resolutionHeight; y += intervalY) {
@@ -55,8 +59,11 @@ export class GlyphPresentation extends PixelPresentation<DotInstance> {
         const i = (y * resolutionWidth + x) * 4
 
         // offset
-        dotInstance.instanceDataArray[k++] = x / resolutionWidth
-        dotInstance.instanceDataArray[k++] = y / resolutionHeight
+        // TODO: change the shader to accept col/row numbers
+        const colNum = x / intervalX
+        const rowNum = y / intervalY
+        dotInstance.instanceDataArray[k++] = (colNum + 0.5) / cols
+        dotInstance.instanceDataArray[k++] = (rowNum + 0.5) / rows
 
         // color
         dotInstance.instanceDataArray[k++] = pixels[i] / 255

@@ -4,7 +4,7 @@ import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
 import { DevVideoChannel, YoutubeVideoChannel } from './channel'
 import { DotPresentation } from './presentation/dot'
 import { LinePresentation } from './presentation/line'
-import { clamp, randomIntInclusiveBetween } from 'utils'
+import { randomIntInclusiveBetween } from 'utils'
 import { ColorEffect } from './effect/saturation'
 import { CameraChannel } from '../../lib/channel/camera'
 import { CameraInputSource } from '../../media/camera'
@@ -32,10 +32,8 @@ import { createAudioInputSource } from '../../media/audio/input'
 import { SoundLevel } from './control/soundLevel'
 import { NoOpKnobParamsAdapter } from '../../lib/params/adapter'
 import { KaleidoscopeEffectModel } from './effect/kaleido'
-import { DualShockKaleidoscopeShooterControl, MouseKaleidoscopeShooterControl } from './control/shooter'
+import { DualShockKaleidoscopeShooterControl } from './control/shooter'
 import { PS3DualShock } from '../../media/gamepad/ps3'
-import { Simulate } from 'react-dom/test-utils'
-import progress = Simulate.progress
 
 // config
 const videoAspectRatio = 16 / 9
