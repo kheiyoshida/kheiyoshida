@@ -4,7 +4,7 @@ import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
 import { DevVideoChannel, YoutubeVideoChannel } from './channel'
 import { DotPresentation } from './presentation/dot'
 import { LinePresentation } from './presentation/line'
-import { clamp, fireByRate, randomIntInclusiveBetween } from 'utils'
+import { clamp, randomIntInclusiveBetween } from 'utils'
 import { ColorEffect } from './effect/saturation'
 import { CameraChannel } from '../../lib/channel/camera'
 import { CameraInputSource } from '../../media/camera'
@@ -32,6 +32,7 @@ import { createAudioInputSource } from '../../media/audio/input'
 import { SoundLevel } from './control/soundLevel'
 import { NoOpKnobParamsAdapter } from '../../lib/params/adapter'
 import { KaleidoscopeEffectModel } from './effect/kaleido'
+import { MouseKaleidoscopeShooterControl } from './control/shooter'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -88,7 +89,7 @@ export const app = async () => {
     channelManager,
     [dotPresentation, glyphPresentation],
     [
-      new EffectSlot([kaleidoscopeFx]),
+      new EffectSlot([kaleidoscopeFx, multiplyFx]),
     ],
     [textPresentation, scorePresentation],
     new EffectSlot([colorFx])
@@ -113,17 +114,12 @@ export const app = async () => {
   const launchControl = new LaunchControl(params)
   await bindMidiInputMessage((m) => launchControl.handle(m))
 
+  const shooterControl = new MouseKaleidoscopeShooterControl(kaleidoscopeFx)
+
   objectCh.update = (cube) => {
     cube.rot[0] += 0.01
     cube.rot[1] += 0.1
     cube.offsets[randomIntInclusiveBetween(0, 7)] = [Math.random(), Math.random(), 0]
-  }
-
-  let mouseX = 0;
-  let mouseY = 0;
-  window.onmousemove = (e) => {
-    mouseX = e.x;
-    mouseY = e.y;
   }
 
   let score = 0
@@ -139,15 +135,8 @@ export const app = async () => {
     glyphPresentation.dotSize.updateValue(effectLevel)
     objectCh.cube.scale.updateValue(effectLevel)
 
-    // kaleidoscopeFx.numOfTriangles = clamp(Math.ceil(8 * effectLevel), 4, 8)
-    kaleidoscopeFx.numOfTriangles = 4
-
-    kaleidoscopeFx.setCenter(
-      (mouseX / window.innerWidth) * 2.0 - 1.0,
-      ((window.innerHeight - mouseY) / window.innerHeight) * 2.0 - 1.0
-    )
-    kaleidoscopeFx.textureOffset -= 0.01
-
+    kaleidoscopeFx.numOfTriangles = clamp(Math.ceil(6 * effectLevel), 4, 6)
+    shooterControl.submitControlValues()
 
     if (effectLevel > 0.5) {
       score += Math.floor(effectLevel * 10)
