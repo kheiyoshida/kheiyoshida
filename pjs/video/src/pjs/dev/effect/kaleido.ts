@@ -10,9 +10,15 @@ export class KaleidoscopeEffectModel extends InstancedModel implements IEffectMo
   constructor(maxInstanceCount: number) {
     const instanceShader = new Shader(vert, frag)
 
+    // // prettier-ignore
+    // const triangleVertices = new Float32Array([
+    //   0, 0,  0, 0,
+    //   1, 1,  1, 1,
+    //   1, -1, 1, 0
+    // ])
     // prettier-ignore
     const triangleVertices = new Float32Array([
-      0, 0,  0.5, 0.5,
+      0, 0,  0, 0,
       1, 1,  1, 1,
       1, -1, 1, 0
     ])
@@ -55,6 +61,7 @@ export class KaleidoscopeEffectModel extends InstancedModel implements IEffectMo
     this.shader.use()
     this.numOfTriangles = 4
     this.shader.setUniformInt('uTexture', 0)
+    this.startAngle = 60
   }
 
   private tex: WebGLTexture | undefined
@@ -83,7 +90,7 @@ export class KaleidoscopeEffectModel extends InstancedModel implements IEffectMo
 
   private _numOfTriangles: number = 4
   public set numOfTriangles(numOfTriangles: number) {
-    if (numOfTriangles < 4) throw new Error(`invalid num of triangles`)
+    if (numOfTriangles < 4) numOfTriangles = 4
     this._numOfTriangles = numOfTriangles
     this.updateInstanceData()
   }
@@ -98,6 +105,21 @@ export class KaleidoscopeEffectModel extends InstancedModel implements IEffectMo
   }
   public get startAngle(): number {
     return this._startAngle
+  }
+
+  public setCenter(x: number, y: number) {
+    this.shader.use()
+    this.shader.setUniformFloat2('uCenterPos', x, y)
+  }
+
+  private _textureOffset = 0;
+  public set textureOffset(value: number) {
+    this._textureOffset = value;
+    this.shader.use()
+    this.shader.setUniformFloat('uTextureOffset', this._textureOffset)
+  }
+  public get textureOffset() {
+    return this._textureOffset
   }
 
   public override draw(mode: number = getGL().TRIANGLE_STRIP) {

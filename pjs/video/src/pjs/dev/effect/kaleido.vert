@@ -6,15 +6,17 @@ in vec2 aUV;
 in float aStartAngle;
 in float aSign;
 
+uniform vec2 uCenterPos;
 uniform float uAnglePerTriangle;
+uniform float uTextureOffset;
 
 out vec2 vUV;
 
 void main() {
-    vUV = aUV;
+    vUV = vec2(aUV.x + uTextureOffset, aUV.y);
 
     if (aPos.x == 0.0 && aPos.y == 0.0) {
-        gl_Position = vec4(aPos, 0, 1);
+        gl_Position = vec4(uCenterPos, 0, 1);
         return;
     }
 

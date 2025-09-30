@@ -119,6 +119,13 @@ export const app = async () => {
     cube.offsets[randomIntInclusiveBetween(0, 7)] = [Math.random(), Math.random(), 0]
   }
 
+  let mouseX = 0;
+  let mouseY = 0;
+  window.onmousemove = (e) => {
+    mouseX = e.x;
+    mouseY = e.y;
+  }
+
   let score = 0
   function renderLoop(frameCount: number) {
     // param phase
@@ -132,8 +139,15 @@ export const app = async () => {
     glyphPresentation.dotSize.updateValue(effectLevel)
     objectCh.cube.scale.updateValue(effectLevel)
 
-    kaleidoscopeFx.numOfTriangles = clamp(Math.ceil(12 * effectLevel), 4, 12)
-    kaleidoscopeFx.startAngle = 60
+    // kaleidoscopeFx.numOfTriangles = clamp(Math.ceil(8 * effectLevel), 4, 8)
+    kaleidoscopeFx.numOfTriangles = 4
+
+    kaleidoscopeFx.setCenter(
+      (mouseX / window.innerWidth) * 2.0 - 1.0,
+      ((window.innerHeight - mouseY) / window.innerHeight) * 2.0 - 1.0
+    )
+    kaleidoscopeFx.textureOffset -= 0.01
+
 
     if (effectLevel > 0.5) {
       score += Math.floor(effectLevel * 10)
