@@ -32,7 +32,10 @@ import { createAudioInputSource } from '../../media/audio/input'
 import { SoundLevel } from './control/soundLevel'
 import { NoOpKnobParamsAdapter } from '../../lib/params/adapter'
 import { KaleidoscopeEffectModel } from './effect/kaleido'
-import { MouseKaleidoscopeShooterControl } from './control/shooter'
+import { DualShockKaleidoscopeShooterControl, MouseKaleidoscopeShooterControl } from './control/shooter'
+import { PS3DualShock } from '../../media/gamepad/ps3'
+import { Simulate } from 'react-dom/test-utils'
+import progress = Simulate.progress
 
 // config
 const videoAspectRatio = 16 / 9
@@ -114,7 +117,8 @@ export const app = async () => {
   const launchControl = new LaunchControl(params)
   await bindMidiInputMessage((m) => launchControl.handle(m))
 
-  const shooterControl = new MouseKaleidoscopeShooterControl(kaleidoscopeFx)
+  let dualshock = await PS3DualShock.Connect()
+  let shooterControl: DualShockKaleidoscopeShooterControl
 
   objectCh.update = (cube) => {
     cube.rot[0] += 0.01
@@ -135,8 +139,12 @@ export const app = async () => {
     glyphPresentation.dotSize.updateValue(effectLevel)
     objectCh.cube.scale.updateValue(effectLevel)
 
-    kaleidoscopeFx.numOfTriangles = clamp(Math.ceil(6 * effectLevel), 4, 6)
-    shooterControl.submitControlValues()
+    kaleidoscopeFx.numOfTriangles = 4 + Math.floor(2 * effectLevel)
+
+    if (dualshock && shooterControl) {
+      shooterControl.pollInput()
+      shooterControl.submitControlValues()
+    }
 
     if (effectLevel > 0.5) {
       score += Math.floor(effectLevel * 10)
@@ -156,6 +164,13 @@ export const app = async () => {
 
   message.text = 'loading...'
   await shinjukuVideoCh.waitForReady((progress) => (message.text = `loading: ${progress}%`))
+  await youtubeCh.waitForReady((_) => undefined)
+  document.body.onclick = async (e) => {
+    if (!dualshock) {
+      dualshock = await PS3DualShock.Connect()
+    }
+    shooterControl = new DualShockKaleidoscopeShooterControl(kaleidoscopeFx, dualshock!)
+  }
   startRenderingLoop(renderLoop)
   message.hide()
 }

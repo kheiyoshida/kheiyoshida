@@ -81,7 +81,7 @@ export class KaleidoscopeEffectModel extends InstancedModel implements IEffectMo
 
     let k = 0
     for (let i = 0; i < this.numOfTriangles; i++) {
-      this.instanceDataArray[k++] = this._startAngle + anglePerTriangle * i
+      this.instanceDataArray[k++] = this.startAngle + anglePerTriangle * i
       this.instanceDataArray[k++] = i % 2 == 0 ? 1.0 : 0.0
     }
 
@@ -98,14 +98,14 @@ export class KaleidoscopeEffectModel extends InstancedModel implements IEffectMo
     return this._numOfTriangles
   }
 
-  private _startAngle = 0
-  public set startAngle(val: number) {
-    this._startAngle = val
-    this.updateInstanceData()
-  }
-  public get startAngle(): number {
-    return this._startAngle
-  }
+  public startAngle = 0
+  // public set startAngle(val: number) {
+  //   this._startAngle = val
+  //   this.updateInstanceData()
+  // }
+  // public get startAngle(): number {
+  //   return this._startAngle
+  // }
 
   public setCenter(x: number, y: number) {
     this.shader.use()

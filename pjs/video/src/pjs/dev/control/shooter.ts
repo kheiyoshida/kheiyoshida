@@ -1,4 +1,6 @@
 import { KaleidoscopeEffectModel } from '../effect/kaleido'
+import { PS3DualShock } from '../../../media/gamepad/ps3'
+import { clamp } from 'utils'
 
 abstract class KaleidoscopeShooterControl {
   protected constructor(protected kaleidoscope: KaleidoscopeEffectModel) {
@@ -8,18 +10,18 @@ abstract class KaleidoscopeShooterControl {
   protected posX = 0
   protected posY = 0
 
-  protected speed: number = 0.01
+  public speed: number = 0.01
 
   private lastInteraction = 0
   private startInteraction() {
     this.lastInteraction = performance.now()
-    this.kaleidoscope.enabled = true;
+    this.kaleidoscope.enabled = true
   }
 
   protected updatePosition(x: number, y: number): void {
     this.startInteraction()
-    this.posX = x
-    this.posY = y
+    this.posX = clamp(x, -0.8, 0.8)
+    this.posY = clamp(y, -0.8, 0.8)
   }
 
   protected increaseSpeed() {
@@ -38,9 +40,10 @@ abstract class KaleidoscopeShooterControl {
     const now = performance.now()
     if (now - this.lastInteraction > 5_000) {
       this.kaleidoscope.enabled = false
-      return;
+      return
     }
 
+    this.kaleidoscope.startAngle = this.kaleidoscope.startAngle + this.speed * 100
     this.kaleidoscope.setCenter(this.posX, this.posY)
     this.decreaseSpeed()
     this.kaleidoscope.textureOffset -= this.speed
@@ -59,6 +62,29 @@ export class MouseKaleidoscopeShooterControl extends KaleidoscopeShooterControl 
     }
 
     window.onclick = () => {
+      this.increaseSpeed()
+    }
+  }
+}
+
+export class DualShockKaleidoscopeShooterControl extends KaleidoscopeShooterControl {
+  constructor(
+    kaleidoscope: KaleidoscopeEffectModel,
+    private dualshock: PS3DualShock
+  ) {
+    super(kaleidoscope)
+  }
+
+  public pollInput(): void {
+    const {
+      sticks: { left },
+      pressed,
+    } = this.dualshock.poll()
+    if (left.x > 0.5 || left.x < -0.5 || left.y > 0.5 || left.y < -0.5) {
+      this.updatePosition(this.posX + left.x * 0.1, this.posY - left.y * 0.1)
+    }
+
+    if (pressed.cross) {
       this.increaseSpeed()
     }
   }
