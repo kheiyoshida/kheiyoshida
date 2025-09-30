@@ -30,6 +30,7 @@ import { TextPresentation } from './presentation/text'
 import { ImageResolution } from '../../media/pixels/types'
 import { createAudioInputSource } from '../../media/audio/input'
 import { SoundLevel } from './control/soundLevel'
+import { NoOpKnobParamsAdapter } from '../../lib/params/adapter'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -51,21 +52,21 @@ export const app = async () => {
 
   // rendering
   const objectCh = new CubeRenderingChannel(frameBufferResolution, outputResolutionWidth)
-  const videoCh = new DevVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
+  const shinjukuVideoCh = new DevVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
   const youtubeCh = new YoutubeVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
 
   const cameraName = 'Video Control'
   const cameraSource = await CameraInputSource.create()
   const cameraCh = new CameraChannel(cameraSource, videoAspectRatio, frameBufferWidth, outputResolutionWidth)
 
-  const dotPresentation = new DotPresentation(videoCh.outputResolution, 1)
+  const dotPresentation = new DotPresentation(shinjukuVideoCh.outputResolution, 1)
 
-  const glyphPresentation = new GlyphPresentation(videoCh.outputResolution, 1)
+  const glyphPresentation = new GlyphPresentation(shinjukuVideoCh.outputResolution, 1)
 
-  const linePresentation = new LinePresentation(videoCh.outputResolution)
+  const linePresentation = new LinePresentation(shinjukuVideoCh.outputResolution)
 
   //
-  const channelManager = new ChannelManager([cameraCh, videoCh, youtubeCh, objectCh])
+  const channelManager = new ChannelManager([objectCh, cameraCh, shinjukuVideoCh, youtubeCh])
 
   const colorFx = new ColorEffect()
   const multiplyFx = new MultiplyEffectModel(16)
@@ -102,7 +103,7 @@ export const app = async () => {
       new DotPresentationControl(dotPresentation), // 3
       new GlyphPresentationControl(glyphPresentation), // 4
       new PostEffectControl(multiplyFx), // 5
-      new PostEffectControl(multiplyFx), // 6
+      NoOpKnobParamsAdapter,
       new ColorSaturationControl(colorFx), // 7
       new ColorCapControl(colorFx), // 8
     ],
@@ -147,7 +148,7 @@ export const app = async () => {
   const message = new Message()
 
   message.text = 'loading...'
-  await videoCh.waitForReady((progress) => (message.text = `loading: ${progress}%`))
+  await shinjukuVideoCh.waitForReady((progress) => (message.text = `loading: ${progress}%`))
   startRenderingLoop(renderLoop)
   message.hide()
 }
