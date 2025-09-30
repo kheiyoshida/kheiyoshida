@@ -1,16 +1,13 @@
-import { PostEffect } from '../../../lib/effect/effect'
 import { Shader } from '../../../gl/shader'
 import vert from './kaleido.vert?raw'
 import frag from './kaleido.frag?raw'
 import { FrameBuffer } from '../../../gl/frameBuffer'
-import { GenericModel, InstancedModel } from '../../../gl/model/model'
+import { InstancedModel } from '../../../gl/model/model'
 import { getGL } from '../../../gl/gl'
+import { IEffectModel } from '../../../lib/effect/slot'
 
-class TriangleInstance extends InstancedModel {
-  constructor(
-    private tex: WebGLTexture,
-    maxInstanceCount: number
-  ) {
+export class KaleidoscopeEffectModel extends InstancedModel implements IEffectModel {
+  constructor(maxInstanceCount: number) {
     const instanceShader = new Shader(vert, frag)
 
     // prettier-ignore
@@ -56,51 +53,35 @@ class TriangleInstance extends InstancedModel {
     )
 
     this.shader.use()
+    this.numOfTriangles = 4
     this.shader.setUniformInt('uTexture', 0)
   }
+
+  private tex: WebGLTexture | undefined
+  setInput(inputFrameBuffer: FrameBuffer): void {
+    this.tex = inputFrameBuffer.tex
+  }
+  enabled: boolean = true
 
   public setAnglePerTriangle(num: number) {
     this.shader.use()
     this.shader.setUniformFloat('uAnglePerTriangle', num)
   }
 
-  public override draw(mode: number = getGL().TRIANGLE_STRIP) {
-    const gl = getGL()
-    gl.bindTexture(gl.TEXTURE_2D, this.tex)
-    super.draw(mode)
-  }
-}
-
-export class KaleidoscopeEffect extends PostEffect {
-  public setInput(inputFrameBuffer: FrameBuffer): void {
-
-  }
-
-  private readonly triangleModel: TriangleInstance
-
-  public constructor(input: FrameBuffer, output: FrameBuffer, numOfTriangles = 4) {
-    super()
-
-    this.triangleModel = new TriangleInstance(input.tex, 24)
-    this.models.push(this.triangleModel)
-    this._numOfTriangles = numOfTriangles
-    this.updateInstanceData()
-  }
-
   public updateInstanceData() {
     const anglePerTriangle = 360 / this.numOfTriangles
-    this.triangleModel.setAnglePerTriangle(anglePerTriangle)
+    this.setAnglePerTriangle(anglePerTriangle)
 
     let k = 0
     for (let i = 0; i < this.numOfTriangles; i++) {
-      this.triangleModel.instanceDataArray[k++] = this._startAngle + anglePerTriangle * i
-      this.triangleModel.instanceDataArray[k++] = i % 2 == 0 ? 1.0 : 0.0
+      this.instanceDataArray[k++] = this._startAngle + anglePerTriangle * i
+      this.instanceDataArray[k++] = i % 2 == 0 ? 1.0 : 0.0
     }
 
-    this.triangleModel.updateInstances(this.numOfTriangles)
+    this.updateInstances(this.numOfTriangles)
   }
 
-  private _numOfTriangles: number
+  private _numOfTriangles: number = 4
   public set numOfTriangles(numOfTriangles: number) {
     if (numOfTriangles < 4) throw new Error(`invalid num of triangles`)
     this._numOfTriangles = numOfTriangles
@@ -119,7 +100,9 @@ export class KaleidoscopeEffect extends PostEffect {
     return this._startAngle
   }
 
-  static factory(input: FrameBuffer, output: FrameBuffer): PostEffect {
-    return new KaleidoscopeEffect(input, output, 8)
+  public override draw(mode: number = getGL().TRIANGLE_STRIP) {
+    const gl = getGL()
+    gl.bindTexture(gl.TEXTURE_2D, this.tex!)
+    super.draw(mode)
   }
 }

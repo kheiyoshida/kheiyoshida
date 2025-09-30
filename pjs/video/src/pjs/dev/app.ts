@@ -4,7 +4,7 @@ import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
 import { DevVideoChannel, YoutubeVideoChannel } from './channel'
 import { DotPresentation } from './presentation/dot'
 import { LinePresentation } from './presentation/line'
-import { fireByRate, randomIntInclusiveBetween } from 'utils'
+import { clamp, fireByRate, randomIntInclusiveBetween } from 'utils'
 import { ColorEffect } from './effect/saturation'
 import { CameraChannel } from '../../lib/channel/camera'
 import { CameraInputSource } from '../../media/camera'
@@ -31,6 +31,7 @@ import { ImageResolution } from '../../media/pixels/types'
 import { createAudioInputSource } from '../../media/audio/input'
 import { SoundLevel } from './control/soundLevel'
 import { NoOpKnobParamsAdapter } from '../../lib/params/adapter'
+import { KaleidoscopeEffectModel } from './effect/kaleido'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -70,6 +71,7 @@ export const app = async () => {
 
   const colorFx = new ColorEffect()
   const multiplyFx = new MultiplyEffectModel(16)
+  const kaleidoscopeFx = new KaleidoscopeEffectModel(16)
 
   const textPresentation = new TextPresentation({ width: 960, height: 540 }, 50)
   textPresentation.fontSize = 6
@@ -86,8 +88,7 @@ export const app = async () => {
     channelManager,
     [dotPresentation, glyphPresentation],
     [
-      new EffectSlot([multiplyFx]),
-      // new EffectSlot([colorFx]),
+      new EffectSlot([kaleidoscopeFx]),
     ],
     [textPresentation, scorePresentation],
     new EffectSlot([colorFx])
@@ -130,6 +131,9 @@ export const app = async () => {
     dotPresentation.densityY.updateValue(effectLevel)
     glyphPresentation.dotSize.updateValue(effectLevel)
     objectCh.cube.scale.updateValue(effectLevel)
+
+    kaleidoscopeFx.numOfTriangles = clamp(Math.ceil(12 * effectLevel), 4, 12)
+    kaleidoscopeFx.startAngle = 60
 
     if (effectLevel > 0.5) {
       score += Math.floor(effectLevel * 10)

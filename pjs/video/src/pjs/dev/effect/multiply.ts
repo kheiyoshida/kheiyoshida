@@ -107,31 +107,3 @@ export class MultiplyEffectModel extends InstancedModel implements IEffectModel 
     super.draw(mode)
   }
 }
-
-export class MultiplyEffect extends PostEffect {
-  private readonly rectModel: MultiplyEffectModel
-
-  public setInput(inputFrameBuffer: FrameBuffer): void {
-    this.rectModel.tex = inputFrameBuffer.tex
-  }
-
-  public constructor(private readonly maxMultiply: number) {
-    super()
-
-    this.rectModel = new MultiplyEffectModel(maxMultiply)
-    this.models.push(this.rectModel)
-    this.rectModel.setMultiply(1)
-  }
-
-  private _multiply = 1
-  public set multiply(value: number) {
-    if (value > this.maxMultiply) {
-      this.rectModel.setMultiply(this.maxMultiply)
-    } else {
-      this.rectModel.setMultiply(value)
-    }
-  }
-  public get multiply(): number {
-    return this._multiply
-  }
-}
