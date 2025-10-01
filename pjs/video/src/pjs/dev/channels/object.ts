@@ -7,7 +7,7 @@ import frag from './cube.frag?raw'
 import { getGL } from '../../../gl/gl'
 import { mat4, vec3 } from 'gl-matrix'
 import { RangedValue } from '../utils/rangedValue'
-import { fireByRate, randomIntInclusiveBetween } from 'utils'
+import { randomIntInclusiveBetween } from 'utils'
 
 class CubeModel extends GenericModel {
   constructor(color: [number, number, number]) {

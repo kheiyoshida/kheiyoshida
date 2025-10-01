@@ -1,5 +1,5 @@
 import { VideoSupply } from '../../media/video/supply'
-import { DebugChannel, DebugVideoChannel, VideoPixelChannel } from '../../lib/channel/channel'
+import { VideoPixelChannel } from '../../lib/channel/channel'
 import { videoSourceList as shinjukuVideoSourceList } from '../shinjuku/videos'
 
 const devVideoList = ['/assets/footage/bird/960p/bird1.mp4']
@@ -46,6 +46,18 @@ export class YoutubeVideoChannel extends VideoPixelChannel {
 export class RandomVideoChannel extends VideoPixelChannel {
   constructor(videoAspectRatio: number, videoWidth: number, outputResolutionWidth: number) {
     const supply = new VideoSupply(youtubeVideoList)
+    supply.onEnded = () => supply.swapVideo()
+    super(supply, videoAspectRatio, videoWidth, outputResolutionWidth)
+  }
+}
+
+const cityVideoList = [
+  `/assets/footage/city/qqq.mp4`,
+]
+
+export class CityChannel extends VideoPixelChannel {
+  constructor(videoAspectRatio: number, videoWidth: number, outputResolutionWidth: number) {
+    const supply = new VideoSupply(cityVideoList)
     supply.onEnded = () => supply.swapVideo()
     super(supply, videoAspectRatio, videoWidth, outputResolutionWidth)
   }

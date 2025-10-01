@@ -1,7 +1,7 @@
 import { getGL } from '../../gl/gl'
 import { Message } from '../shinjuku/message'
 import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
-import { DevVideoChannel, YoutubeVideoChannel } from './channel'
+import { CityChannel, DevVideoChannel, YoutubeVideoChannel } from './channel'
 import { DotPresentation } from './presentation/dot'
 import { LinePresentation } from './presentation/line'
 import { ColorEffect } from './effect/saturation'
@@ -57,6 +57,7 @@ export const app = async () => {
   const objectCh = new CubeRenderingChannel(frameBufferResolution, outputResolutionWidth)
   const shinjukuVideoCh = new DevVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
   const youtubeCh = new YoutubeVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
+  const cityCh = new CityChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
 
   const cameraName = 'Video Control'
   const cameraSource = await CameraInputSource.create(cameraName)
@@ -75,8 +76,8 @@ export const app = async () => {
 
   const linePresentation = new LinePresentation(shinjukuVideoCh.outputResolution)
 
-  //
-  const channelManager = new ChannelManager([objectCh, cameraCh, shinjukuVideoCh, youtubeCh])
+  //channels
+  const channelManager = new ChannelManager([objectCh, cameraCh, shinjukuVideoCh, youtubeCh, cityCh])
 
   const colorFx = new ColorEffect()
   const multiplyFx = new MultiplyEffectModel(16)
