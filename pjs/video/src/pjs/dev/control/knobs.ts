@@ -13,6 +13,7 @@ export class ChannelControl implements IKnobParamsControlAdapter {
   constructor(private cubeCh: CubeRenderingChannel, private soundLevel: SoundLevel) {}
   applyKnobValueA(value: number): void {
     this.cubeCh.cube.scale.anchor = 2 * (value / 127)
+    this.cubeCh.cube2.scale.anchor = 2 * (value / 127)
   }
   applyKnobValueB(value: number): void {
     this.soundLevel.maxLoudness = -3 - (value / 127)
@@ -21,7 +22,10 @@ export class ChannelControl implements IKnobParamsControlAdapter {
     this.soundLevel.maxLoudness = -0.2 - (value / 127)
   }
   applySwitchValueA(value: boolean): void {}
-  applySwitchValueB(value: boolean): void {}
+  applySwitchValueB(value: boolean): void {
+    this.cubeCh.cube.wireframe = value
+    this.cubeCh.cube2.wireframe = value
+  }
 }
 
 abstract class PresentationControl<P extends PixelPresentation> implements IKnobParamsControlAdapter {
@@ -39,13 +43,16 @@ abstract class PresentationControl<P extends PixelPresentation> implements IKnob
 
 export class LinePresentationControl extends PresentationControl<LinePresentation> {
   applyKnobValueA(value: number): void {
-    this.presentation.maxDistance.anchor = (2 + (value / 127) * 10)
+    this.presentation.maxDistance.anchor = (1 + (value / 127) * 20)
   }
   applyKnobValueB(value: number): void {
-    this.presentation.maxDistance.offsetRange = Math.floor((value / 127) * 40)
+    this.presentation.maxDistance.offsetRange = Math.floor((value / 127) * 8)
   }
   applyKnobValueC(value: number) {
-    this.presentation.luminanceThreshold.anchor = 0.001 + (value / 127) * 0.2
+    this.presentation.setLuminanceThresholdDirect(Math.max(0.1, (value / 127) * 0.5))
+  }
+  applySwitchValueB(value: boolean) {
+    this.presentation.setVertical(value)
   }
 }
 

@@ -88,7 +88,7 @@ export const app = async () => {
   const pipeline = new VideoProjectionPipeline(
     frameBufferResolution,
     channelManager,
-    [dotPresentation, glyphPresentation],
+    [linePresentation, dotPresentation, glyphPresentation],
     [
       new EffectSlot([kaleidoscopeFx, multiplyFx]),
     ],
@@ -96,6 +96,9 @@ export const app = async () => {
     new EffectSlot([colorFx])
   )
   pipeline.setBackgroundColor(backgroundColor)
+
+  kaleidoscopeFx.enabled = false
+  multiplyFx.enabled = false
 
   // control
   const channelParams = new ChannelParamsControl(channelManager)
@@ -118,24 +121,22 @@ export const app = async () => {
   let dualshock = await PS3DualShock.Connect()
   let shooterControl: DualShockKaleidoscopeShooterControl
 
-  objectCh.update = (cube) => {
-    cube.rot[0] += 0.01
-    cube.rot[1] += 0.1
-    cube.offsets[randomIntInclusiveBetween(0, 7)] = [Math.random(), Math.random(), 0]
-  }
-
   let score = 0
   function renderLoop(frameCount: number) {
     // param phase
     params.apply()
 
+
     // sound level
     const effectLevel = soundLevel.getSoundLevel()
+    linePresentation.updateParams(effectLevel)
     dotPresentation.dotSize.updateValue(effectLevel)
     dotPresentation.densityX.updateValue(effectLevel)
     dotPresentation.densityY.updateValue(effectLevel)
     glyphPresentation.dotSize.updateValue(effectLevel)
     objectCh.cube.scale.updateValue(effectLevel)
+    objectCh.cube.scale.updateValue(effectLevel)
+    objectCh.applyEffect(effectLevel)
 
     kaleidoscopeFx.numOfTriangles = 4 + Math.floor(2 * effectLevel)
 

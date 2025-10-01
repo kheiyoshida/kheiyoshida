@@ -14,8 +14,8 @@ export class LinePresentation extends PixelPresentation {
     this.setupPixelCoords()
 
     this.instance.shader.use()
-    this.setMaxDistanceDirect(8)
-    this.setLuminanceThresholdDirect(0.3)
+    this.setMaxDistanceDirect(2)
+    this.setLuminanceThresholdDirect(0.1)
   }
 
   public setLuminanceThresholdDirect(threshold: number): void {
@@ -29,12 +29,15 @@ export class LinePresentation extends PixelPresentation {
   }
 
   public maxDistance: RangedValue = new RangedValue(4, 12, 4, 40)
-  public luminanceThreshold: RangedValue = new RangedValue(0.1, 0.02, 0.001, 0.2)
 
   public updateParams(randomComponent: number) {
     if (!this.enabled) return;
     this.setMaxDistanceDirect(this.maxDistance.updateValue(randomComponent))
-    this.setLuminanceThresholdDirect(this.luminanceThreshold.updateValue(randomComponent))
+  }
+
+  public setVertical(value: boolean) {
+    this.instance.shader.use()
+    this.instance.shader.setUniformInt('uVertical', value ? 1 : 0)
   }
 
   private setupPixelCoords() {

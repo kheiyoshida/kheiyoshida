@@ -1,13 +1,14 @@
 import { InstancedModel } from '../model'
 import { Shader } from '../../shader'
 import vert from './line.vert?raw'
+import vertAlt from './alt.vert?raw'
 import frag from './line.frag?raw'
 import { getGL } from '../../gl'
 import { ImageResolution } from '../../../media/pixels/types'
 
 export class TextureLineInstance extends InstancedModel {
   constructor(maxInstanceCount: number, resolution: ImageResolution) {
-    const instanceShader = new Shader(vert, frag)
+    const instanceShader = new Shader(vertAlt, frag)
 
     // prettier-ignore
     const lineVertices = new Float32Array([

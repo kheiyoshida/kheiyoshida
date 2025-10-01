@@ -51,7 +51,6 @@ export class GlyphPresentation extends PixelPresentation<DotInstance> {
 
     const cols = Math.ceil(resolutionWidth / intervalX)
     const rows = Math.ceil(resolutionHeight / intervalY)
-    console.log(cols, intervalX, resolutionWidth)
 
     let k = 0
     for (let y = 0; y < resolutionHeight; y += intervalY) {

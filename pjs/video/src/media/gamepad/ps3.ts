@@ -12,6 +12,8 @@ export class PS3DualShock {
   static async Connect(): Promise<PS3DualShock | null> {
     try {
       const filters = [{ vendorId: 0x054c, productId: 0x0268 }]
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       const [device] = await navigator.hid.requestDevice({ filters })
       if (!device) return null
 
@@ -22,6 +24,8 @@ export class PS3DualShock {
 
       const pad = new PS3DualShock()
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       device.addEventListener('inputreport', (e) => {
         const bytes = new Uint8Array(e.data.buffer)
         pad.parseReport(bytes)

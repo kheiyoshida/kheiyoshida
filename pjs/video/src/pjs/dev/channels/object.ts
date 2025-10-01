@@ -7,9 +7,10 @@ import frag from './cube.frag?raw'
 import { getGL } from '../../../gl/gl'
 import { mat4, vec3 } from 'gl-matrix'
 import { RangedValue } from '../utils/rangedValue'
+import { fireByRate, randomIntInclusiveBetween } from 'utils'
 
 class CubeModel extends GenericModel {
-  constructor() {
+  constructor(color: [number, number, number]) {
     const shader = new Shader(vert, frag)
     // prettier-ignore
     const vertices = new Float32Array([
@@ -48,6 +49,9 @@ class CubeModel extends GenericModel {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ebo)
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, idx, gl.STATIC_DRAW)
     gl.bindVertexArray(null)
+
+    this.shader.use()
+    this.shader.setUniform3fv('uColor', color)
   }
 
   // uniform location
@@ -75,8 +79,8 @@ class CubeModel extends GenericModel {
 
   override draw(mode: number = getGL().TRIANGLE_STRIP) {
     const gl = getGL()
-    gl.clearColor(0.4, 0.5, 0.6, 1)
-    gl.clear(gl.COLOR_BUFFER_BIT)
+    // gl.clearColor(0.4, 0.5, 0.6, 1)
+    // gl.clear(gl.COLOR_BUFFER_BIT)
 
     this.shader.use()
     gl.bindVertexArray(this.vao)
@@ -93,23 +97,38 @@ class CubeModel extends GenericModel {
       gl.drawElements(mode, idxLength, gl.UNSIGNED_SHORT, 0)
     }
   }
+
+  public rotate(speed: number) {
+    this.rot[0] += speed
+    this.rot[1] += speed * 0.1
+  }
+
+  public distort() {
+    this.offsets[randomIntInclusiveBetween(0, 7)] = [Math.random(), Math.random(), 0]
+  }
 }
 
 export class CubeRenderingChannel extends ObjectRenderingChannel {
   public readonly cube: CubeModel
+  public readonly cube2: CubeModel
   constructor(frameBufferResolution: ImageResolution, outputResolutionWidth: number) {
     super(frameBufferResolution, outputResolutionWidth)
-    this.cube = new CubeModel()
+    this.cube = new CubeModel([0, 1, 0])
+    this.cube2 = new CubeModel([0, 0, 1])
     this.models.push(this.cube)
+    this.models.push(this.cube2)
   }
   public get bufferTex(): WebGLTexture {
     return this.offscreenPass.frameBuffer!.tex
   }
 
-  public override getPixels() {
-    this.update(this.cube)
-    return super.getPixels()
-  }
+  public applyEffect(level: number): void {
+    this.cube.rotate(0.1)
+    this.cube2.rotate(-0.1)
+    this.cube.distort()
+    this.cube2.distort()
 
-  public update: (cube: CubeModel) => void = () => undefined
+    this.cube.scale.updateValue(level)
+    this.cube2.scale.updateValue(level)
+  }
 }
