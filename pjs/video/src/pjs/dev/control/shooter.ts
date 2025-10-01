@@ -3,7 +3,7 @@ import { PS3DualShock } from '../../../media/gamepad/ps3'
 import { clamp } from 'utils'
 
 abstract class KaleidoscopeShooterControl {
-  protected constructor(protected kaleidoscope: KaleidoscopeEffectModel) {
+  protected constructor(protected kaleidoscope: KaleidoscopeEffectModel, private enableScore: (flag: boolean) => void) {
     kaleidoscope.enabled = false
   }
 
@@ -16,6 +16,7 @@ abstract class KaleidoscopeShooterControl {
   private startInteraction() {
     this.lastInteraction = performance.now()
     this.kaleidoscope.enabled = true
+    this.enableScore(true)
   }
 
   protected updatePosition(x: number, y: number): void {
@@ -40,6 +41,7 @@ abstract class KaleidoscopeShooterControl {
     const now = performance.now()
     if (now - this.lastInteraction > 5_000) {
       this.kaleidoscope.enabled = false
+      this.enableScore(false)
       return
     }
 
@@ -51,8 +53,8 @@ abstract class KaleidoscopeShooterControl {
 }
 
 export class MouseKaleidoscopeShooterControl extends KaleidoscopeShooterControl {
-  constructor(kaleidoscope: KaleidoscopeEffectModel) {
-    super(kaleidoscope)
+  constructor(kaleidoscope: KaleidoscopeEffectModel, enableScore: (flag: boolean) => void) {
+    super(kaleidoscope, enableScore)
 
     window.onmousemove = (e) => {
       this.updatePosition(
@@ -70,9 +72,10 @@ export class MouseKaleidoscopeShooterControl extends KaleidoscopeShooterControl 
 export class DualShockKaleidoscopeShooterControl extends KaleidoscopeShooterControl {
   constructor(
     kaleidoscope: KaleidoscopeEffectModel,
-    private dualshock: PS3DualShock
+    private dualshock: PS3DualShock,
+    enableScore: (flag: boolean) => void
   ) {
-    super(kaleidoscope)
+    super(kaleidoscope, enableScore)
   }
 
   public pollInput(): void {

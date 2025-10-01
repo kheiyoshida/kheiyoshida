@@ -34,7 +34,6 @@ import { KaleidoscopeEffectModel } from './effect/kaleido'
 import { DualShockKaleidoscopeShooterControl } from './control/shooter'
 import { PS3DualShock } from '../../media/gamepad/ps3'
 import { AATextData, AlphabetTextData } from './text/textData'
-import { randomIntInclusiveBetween } from 'utils'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -91,6 +90,9 @@ export const app = async () => {
   scorePresentation.fontSize = 8
   scorePresentation.posY = 500
 
+  textPresentation.enabled = false
+  scorePresentation.enabled = false
+
   // prettier-ignore
   const pipeline = new VideoProjectionPipeline(
     frameBufferResolution,
@@ -103,9 +105,6 @@ export const app = async () => {
     new EffectSlot([colorFx])
   )
   pipeline.setBackgroundColor(backgroundColor)
-
-  kaleidoscopeFx.enabled = false
-  multiplyFx.enabled = false
 
   // control
   const channelParams = new ChannelParamsControl(channelManager)
@@ -160,13 +159,13 @@ export const app = async () => {
       multiplyFx.randomiseMultiply(effectLevel)
     }
 
-    if (Math.random() > 0.9) {
-      alphabetTextData.text = [
-        'PHANTASY BREAK ',
-        'FILE EXPLORER ',
-        'VEE '
-      ][randomIntInclusiveBetween(0, 2)]
-    }
+    // if (Math.random() > 0.9) {
+    //   alphabetTextData.text = [
+    //     'PHANTASY BREAK ',
+    //     'FILE EXPLORER ',
+    //     'VEE '
+    //   ][randomIntInclusiveBetween(0, 2)]
+    // }
 
     // rendering phase
     pipeline.render()
@@ -182,7 +181,10 @@ export const app = async () => {
     if (!dualshock) {
       dualshock = await PS3DualShock.Connect()
     }
-    shooterControl = new DualShockKaleidoscopeShooterControl(kaleidoscopeFx, dualshock!)
+    shooterControl = new DualShockKaleidoscopeShooterControl(kaleidoscopeFx, dualshock!, (flag) => {
+      textPresentation.enabled = flag
+      scorePresentation.enabled = flag
+    })
   }
   startRenderingLoop(renderLoop)
   message.hide()
