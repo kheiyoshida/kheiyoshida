@@ -33,7 +33,7 @@ import { NoOpKnobParamsAdapter } from '../../lib/params/adapter'
 import { KaleidoscopeEffectModel } from './effect/kaleido'
 import { DualShockKaleidoscopeShooterControl } from './control/shooter'
 import { PS3DualShock } from '../../media/gamepad/ps3'
-import { AATextData, AlphabetTextData } from './text/textData'
+import { AATextData, AlphabetTextData, KatakanaTextData } from './text/textData'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -68,9 +68,12 @@ export const app = async () => {
 
   const aaTextData = new AATextData()
   const alphabetTextData = new AlphabetTextData('PHANTASY BREAK ')
+  const katakanaTextData = new KatakanaTextData()
+
   const glyphPresentation = new GlyphPresentation(shinjukuVideoCh.outputResolution, [
     aaTextData,
     alphabetTextData,
+    katakanaTextData
   ])
   glyphPresentation.currentGlyph++
 
@@ -113,11 +116,11 @@ export const app = async () => {
   const params = new ParamsManager({
     knob: [
       new ChannelControl(objectCh, soundLevel), // 1
-      new LinePresentationControl(linePresentation), //2
-      new DotPresentationControl(dotPresentation), // 3
-      new GlyphPresentationControl(glyphPresentation), // 4
-      new PostEffectControl(multiplyFx), // 5
-      new InputControl(cameraCh),
+      new InputControl(cameraCh, glyphPresentation), // 2
+      new LinePresentationControl(linePresentation), //3
+      new DotPresentationControl(dotPresentation), // 4
+      new GlyphPresentationControl(glyphPresentation), // 5
+      new PostEffectControl(multiplyFx), // 6
       new ColorSaturationControl(colorFx), // 7
       new ColorCapControl(colorFx), // 8
     ],
@@ -160,14 +163,6 @@ export const app = async () => {
     if (effectLevel > 0.3) {
       multiplyFx.randomiseMultiply(effectLevel)
     }
-
-    // if (Math.random() > 0.9) {
-    //   alphabetTextData.text = [
-    //     'PHANTASY BREAK ',
-    //     'FILE EXPLORER ',
-    //     'VEE '
-    //   ][randomIntInclusiveBetween(0, 2)]
-    // }
 
     // rendering phase
     pipeline.render()

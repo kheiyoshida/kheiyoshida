@@ -7,6 +7,9 @@ import aFntUrl from '../../../assets/fonts/A.png?url'
 import alphabetFnt from '../../../assets/fonts/Alphabets512.fnt?raw'
 import alphabetUrl from '../../../assets/fonts/Alphabets512.png?url'
 
+import katakanaFnt from '../../../assets/fonts/katakana.fnt?raw'
+import katakanaUrl from '../../../assets/fonts/katakana.png?url'
+
 export class AATextData implements TextData {
   fnt: string = aFnt
   fontImageUrl: string = aFntUrl
@@ -28,4 +31,15 @@ export class AlphabetTextData implements TextData {
     return this.text[this.index]
   }
   constructor(public text: string) {}
+}
+
+export class KatakanaTextData implements TextData {
+  fnt: string = katakanaFnt
+  fontImageUrl: string = katakanaUrl
+  index = 0
+  getNextGlyph(): string {
+    this.index = (this.index + 1) % this.text.length
+    return this.text[this.index]
+  }
+  constructor(public text: string = 'ファンタジーブレイク ') {}
 }

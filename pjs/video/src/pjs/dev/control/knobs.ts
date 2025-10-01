@@ -33,14 +33,19 @@ export class ChannelControl implements IKnobParamsControlAdapter {
 }
 
 export class InputControl implements IKnobParamsControlAdapter {
-  constructor(private cameraCh: CameraChannel) {}
+  constructor(
+    private cameraCh: CameraChannel,
+    private glyphPresentation: GlyphPresentation
+  ) {}
   applyKnobValueA(value: number): void {
     this.cameraCh.setContrast(2 + (value / 127) * 0.5)
   }
   applyKnobValueB(value: number): void {
     this.cameraCh.setBrightness(0.4 + (value / 127) * 0.4)
   }
-  applyKnobValueC(value: number): void {}
+  applyKnobValueC(value: number): void {
+    this.glyphPresentation.currentGlyph = Math.floor((value/127) * 3)
+  }
   applySwitchValueA(value: boolean): void {}
   applySwitchValueB(value: boolean): void {}
 }
