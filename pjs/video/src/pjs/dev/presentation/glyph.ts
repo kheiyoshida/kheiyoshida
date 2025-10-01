@@ -1,37 +1,48 @@
 import { ImageResolution } from 'src/media/pixels/types'
 import { PixelPresentation } from '../../../lib/presentation'
-import { DotInstance } from '../../../gl/model/dot'
 import { GlyphInstance } from '../../../gl/model/glyph/instance'
-import { FntParser } from '../../../media/font/glyph'
-import fnt from '../../../assets/fonts/A.fnt?raw'
-import { randomItemFromArray } from 'utils'
 import { Texture } from '../../../gl/texture'
-import fontImageUrl from '../../../assets/fonts/A.png?url'
 import { RangedValue } from '../utils/rangedValue'
 
-export class GlyphPresentation extends PixelPresentation<DotInstance> {
-  constructor(pixelDataResolution: ImageResolution, dotAspectRatio: number) {
-    const maxInstanceCount = pixelDataResolution.width * pixelDataResolution.height
-    const texture = new Texture()
-    const dotInstance = new GlyphInstance(maxInstanceCount, texture, dotAspectRatio)
-    super(dotInstance, pixelDataResolution)
+export interface TextData {
+  fnt: string
+  fontImageUrl: string
+  getNextGlyph(): string
+}
 
-    this.unitDotSize = 8  / pixelDataResolution.height
+export class GlyphPresentation extends PixelPresentation<GlyphInstance> {
+  private _currentGlyph: number = 0
+  private readonly glyphInstances: GlyphInstance[] = []
+  private readonly textDataList: TextData[] = []
 
-    this.parser = new FntParser(fnt, { textureWidth: 512, textureHeight: 512 })
-
-    const image = new Image()
-    image.src = fontImageUrl
-    image.onload = () => {
-      texture.setTextureImage(image)
-    }
+  public set currentGlyph(value: number) {
+    if (value < 0) this._currentGlyph = 0
+    else if (value >= this.textDataList.length) this._currentGlyph = this.textDataList.length -1
+    else this._currentGlyph = value
+  }
+  public get currentGlyph(): number {
+    return this._currentGlyph
   }
 
-  private parser: FntParser
+  public get instance() {
+    return this.glyphInstances[this._currentGlyph]
+  }
 
-  private As = 'Aあa亜ア阿 '.split('')
-  private pickGlyph() {
-    return randomItemFromArray(this.As)
+  constructor(pixelDataResolution: ImageResolution, textDataList: TextData[]) {
+    const maxInstanceCount = pixelDataResolution.width * pixelDataResolution.height
+
+    const glyphInstances: GlyphInstance[] = []
+    for(const text of textDataList) {
+      const glyphInstance = new GlyphInstance(maxInstanceCount, new Texture(), text.fnt, text.fontImageUrl)
+      glyphInstances.push(glyphInstance)
+      console.log(textDataList)
+    }
+    super(glyphInstances[0], pixelDataResolution)
+
+    this.glyphInstances = glyphInstances
+    this.textDataList = textDataList
+
+    this.unitDotSize = 8  / pixelDataResolution.height
   }
 
   private readonly unitDotSize: number
@@ -44,7 +55,9 @@ export class GlyphPresentation extends PixelPresentation<DotInstance> {
   public represent(pixels: Uint8Array): void {
     const resolutionWidth = this.pixelDataResolution.width
     const resolutionHeight = this.pixelDataResolution.height
-    const dotInstance = this.instance
+
+    const instance = this.glyphInstances[this._currentGlyph]
+    const textData = this.textDataList[this._currentGlyph]
 
     const intervalX = this.densityX == 0 ? resolutionWidth : Math.ceil(8 / this.densityX)
     const intervalY = this.densityY == 0 ? resolutionHeight : Math.ceil(8 / this.densityY)
@@ -61,27 +74,27 @@ export class GlyphPresentation extends PixelPresentation<DotInstance> {
         // TODO: change the shader to accept col/row numbers
         const colNum = x / intervalX
         const rowNum = y / intervalY
-        dotInstance.instanceDataArray[k++] = (colNum + 0.5) / cols
-        dotInstance.instanceDataArray[k++] = (rowNum + 0.5) / rows
+        instance.instanceDataArray[k++] = (colNum + 0.5) / cols
+        instance.instanceDataArray[k++] = (rowNum + 0.5) / rows
 
         // color
-        dotInstance.instanceDataArray[k++] = pixels[i] / 255
-        dotInstance.instanceDataArray[k++] = pixels[i + 1] / 255
-        dotInstance.instanceDataArray[k++] = pixels[i + 2] / 255
+        instance.instanceDataArray[k++] = pixels[i] / 255
+        instance.instanceDataArray[k++] = pixels[i + 1] / 255
+        instance.instanceDataArray[k++] = pixels[i + 2] / 255
 
         // size
-        dotInstance.instanceDataArray[k++] = this.dotSize.value * this.unitDotSize
+        instance.instanceDataArray[k++] = this.dotSize.value * this.unitDotSize
 
         // uvs
-        const {uvMin, uvMax} = this.parser.getAttributes(this.pickGlyph())
-        dotInstance.instanceDataArray[k++] = uvMin[0]
-        dotInstance.instanceDataArray[k++] = uvMin[1]
-        dotInstance.instanceDataArray[k++] = uvMax[0]
-        dotInstance.instanceDataArray[k++] = uvMax[1]
+        const {uvMin, uvMax} = instance.fntParser.getAttributes(textData.getNextGlyph())
+        instance.instanceDataArray[k++] = uvMin[0]
+        instance.instanceDataArray[k++] = uvMin[1]
+        instance.instanceDataArray[k++] = uvMax[0]
+        instance.instanceDataArray[k++] = uvMax[1]
       }
     }
 
     const finalInstanceCount = k / 10
-    dotInstance.updateInstances(finalInstanceCount)
+    instance.updateInstances(finalInstanceCount)
   }
 }

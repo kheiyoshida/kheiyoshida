@@ -4,11 +4,16 @@ import instanceVert from './glyph.vert?raw'
 import instanceFrag from './glyph.frag?raw'
 import { getGL } from '../../gl'
 import { Texture } from '../../texture'
+import { FntParser } from '../../../media/font/glyph'
 
 export class GlyphInstance extends InstancedModel {
+  public readonly fntParser: FntParser
+
   constructor(
     maxInstanceCount: number,
-    private readonly texture: Texture | WebGLTexture,
+    private readonly texture: Texture,
+    fnt: string,
+    fontImageUrl: string,
     aspectRatio: number = 1
   ) {
     const instanceShader = new Shader(instanceVert, instanceFrag)
@@ -76,13 +81,20 @@ export class GlyphInstance extends InstancedModel {
       maxInstanceCount
     )
 
+    this.fntParser = new FntParser(fnt, { textureWidth: 512, textureHeight: 512 })
+    const image = new Image()
+    image.src = fontImageUrl
+    image.onload = () => {
+      texture.setTextureImage(image)
+    }
+
     this.shader.use()
     this.shader.setUniformInt('uFontAtlas', 0)
   }
 
   override draw() {
     const gl = getGL()
-    gl.bindTexture(gl.TEXTURE_2D, this.texture instanceof Texture ? this.texture.tex : this.texture)
+    gl.bindTexture(gl.TEXTURE_2D, this.texture.tex)
     super.draw(getGL().TRIANGLE_STRIP)
   }
 }

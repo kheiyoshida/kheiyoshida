@@ -52,10 +52,15 @@ export class PostPresentationSlot {
 }
 
 export abstract class PixelPresentation<I extends InstancedModel = InstancedModel> {
+  public get instance(): I {
+    return this._instance
+  }
+
   private _pixelDataResolution: ImageResolution
   public get pixelDataResolution() {
     return this._pixelDataResolution
   }
+
   public set pixelDataResolution(value: ImageResolution) {
     if (
       value.width * value.height >
@@ -68,7 +73,7 @@ export abstract class PixelPresentation<I extends InstancedModel = InstancedMode
   }
 
   protected constructor(
-    public readonly instance: I,
+    private readonly _instance: I,
     private readonly maximumPixelDataResolution: ImageResolution
   ) {
     this._pixelDataResolution = maximumPixelDataResolution

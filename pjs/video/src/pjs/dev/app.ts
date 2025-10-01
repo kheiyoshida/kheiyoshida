@@ -4,7 +4,6 @@ import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
 import { DevVideoChannel, YoutubeVideoChannel } from './channel'
 import { DotPresentation } from './presentation/dot'
 import { LinePresentation } from './presentation/line'
-import { randomIntInclusiveBetween } from 'utils'
 import { ColorEffect } from './effect/saturation'
 import { CameraChannel } from '../../lib/channel/camera'
 import { CameraInputSource } from '../../media/camera'
@@ -34,6 +33,8 @@ import { NoOpKnobParamsAdapter } from '../../lib/params/adapter'
 import { KaleidoscopeEffectModel } from './effect/kaleido'
 import { DualShockKaleidoscopeShooterControl } from './control/shooter'
 import { PS3DualShock } from '../../media/gamepad/ps3'
+import { AATextData, AlphabetTextData } from './text/textData'
+import { randomIntInclusiveBetween } from 'utils'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -64,7 +65,13 @@ export const app = async () => {
 
   const dotPresentation = new DotPresentation(shinjukuVideoCh.outputResolution, 1)
 
-  const glyphPresentation = new GlyphPresentation(shinjukuVideoCh.outputResolution, 1)
+  const aaTextData = new AATextData()
+  const alphabetTextData = new AlphabetTextData('PHANTASY BREAK ')
+  const glyphPresentation = new GlyphPresentation(shinjukuVideoCh.outputResolution, [
+    aaTextData,
+    alphabetTextData,
+  ])
+  glyphPresentation.currentGlyph++
 
   const linePresentation = new LinePresentation(shinjukuVideoCh.outputResolution)
 
@@ -126,7 +133,6 @@ export const app = async () => {
     // param phase
     params.apply()
 
-
     // sound level
     const effectLevel = soundLevel.getSoundLevel()
     linePresentation.updateParams(effectLevel)
@@ -152,6 +158,14 @@ export const app = async () => {
 
     if (effectLevel > 0.3) {
       multiplyFx.randomiseMultiply(effectLevel)
+    }
+
+    if (Math.random() > 0.9) {
+      alphabetTextData.text = [
+        'PHANTASY BREAK ',
+        'FILE EXPLORER ',
+        'VEE '
+      ][randomIntInclusiveBetween(0, 2)]
     }
 
     // rendering phase

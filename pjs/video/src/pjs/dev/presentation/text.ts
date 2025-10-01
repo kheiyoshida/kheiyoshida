@@ -2,10 +2,10 @@ import { ImageResolution } from 'src/media/pixels/types'
 import { PixelPresentation } from '../../../lib/presentation'
 import { GlyphInstance } from '../../../gl/model/glyph/instance'
 import { FntParser } from '../../../media/font/glyph'
-import fnt from '../../../assets/fonts/Alphabets512.fnt?raw'
 import { Texture } from '../../../gl/texture'
-import fontImageUrl from '../../../assets/fonts/Alphabets512.png?url'
 import { getGL } from '../../../gl/gl'
+import fnt from '../../../assets/fonts/Alphabets512.fnt?raw'
+import fontImageUrl from '../../../assets/fonts/Alphabets512.png?url'
 
 export class TextPresentation extends PixelPresentation<GlyphInstance> {
   private tex: WebGLTexture
@@ -18,7 +18,7 @@ export class TextPresentation extends PixelPresentation<GlyphInstance> {
     const texture = new Texture()
 
     const pixelDataResolution = { width: 960, height: 540 } // doesn't matter
-    const dotInstance = new GlyphInstance(maxInstanceCount, texture, 1)
+    const dotInstance = new GlyphInstance(maxInstanceCount, texture, fnt, fontImageUrl)
     super(dotInstance, pixelDataResolution)
 
     this.unitDotSize = 1 / frameBufferResolution.height
