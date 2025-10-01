@@ -34,6 +34,7 @@ import { KaleidoscopeEffectModel } from './effect/kaleido'
 import { DualShockKaleidoscopeShooterControl } from './control/shooter'
 import { PS3DualShock } from '../../media/gamepad/ps3'
 import { AATextData, AlphabetTextData, KatakanaTextData } from './text/textData'
+import { DebugPresentation } from './presentation/debug'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -75,7 +76,6 @@ export const app = async () => {
     alphabetTextData,
     katakanaTextData,
   ])
-  glyphPresentation.currentGlyph++
 
   const linePresentation = new LinePresentation(shinjukuVideoCh.outputResolution)
 
@@ -86,17 +86,23 @@ export const app = async () => {
   const multiplyFx = new MultiplyEffectModel(16)
   const kaleidoscopeFx = new KaleidoscopeEffectModel(16)
 
-  const textPresentation = new TextPresentation({ width: 960, height: 540 }, 50)
+  const textPresentation = new TextPresentation(frameBufferResolution, 50)
   textPresentation.fontSize = 6
   textPresentation.posY = 540 - 16
   textPresentation.setText('PHANTASY BREAK')
 
-  const scorePresentation = new TextPresentation({ width: 960, height: 540 }, 50)
+  const scorePresentation = new TextPresentation(frameBufferResolution, 50)
   scorePresentation.fontSize = 8
   scorePresentation.posY = 500
 
+  // we're not showing unless it's shooter mode
   textPresentation.enabled = false
   scorePresentation.enabled = false
+
+  const debugPresentation = new DebugPresentation(frameBufferResolution, 50)
+  debugPresentation.fontSize = 8
+  debugPresentation.posX = 180
+  debugPresentation.posY = 40
 
   // prettier-ignore
   const pipeline = new VideoProjectionPipeline(
@@ -106,7 +112,7 @@ export const app = async () => {
     [
       new EffectSlot([kaleidoscopeFx, multiplyFx]),
     ],
-    [textPresentation, scorePresentation],
+    [textPresentation, scorePresentation, debugPresentation],
     new EffectSlot([colorFx])
   )
   pipeline.setBackgroundColor(backgroundColor)
@@ -115,7 +121,7 @@ export const app = async () => {
   const channelParams = new ChannelParamsControl(channelManager)
   const params = new ParamsManager({
     knob: [
-      new ChannelControl(objectCh, soundLevel), // 1
+      new ChannelControl(objectCh, soundLevel, debugPresentation), // 1
       new InputControl(cameraCh, glyphPresentation), // 2
       new LinePresentationControl(linePresentation), //3
       new DotPresentationControl(dotPresentation), // 4
@@ -139,7 +145,6 @@ export const app = async () => {
 
     // sound level
     const effectLevel = soundLevel.getSoundLevel()
-    console.log(effectLevel)
     linePresentation.updateParams(effectLevel)
     dotPresentation.dotSize.updateValue(effectLevel)
     dotPresentation.densityX.updateValue(effectLevel)
@@ -163,6 +168,14 @@ export const app = async () => {
 
     if (effectLevel > 0.3) {
       multiplyFx.randomiseMultiply(effectLevel)
+    }
+
+    // debug
+    if (debugPresentation.enabled) {
+      debugPresentation.soundLevel = effectLevel
+      debugPresentation.chNumber = channelManager.channelNumber
+      debugPresentation.cameraAvailable = cameraCh.isAvailable
+      debugPresentation.updateDebugText()
     }
 
     // rendering phase

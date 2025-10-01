@@ -9,11 +9,13 @@ import { CubeRenderingChannel } from '../channels/object'
 import { ColorEffect } from '../effect/saturation'
 import { SoundLevel } from './soundLevel'
 import { CameraChannel } from '../../../lib/channel/camera'
+import { DebugPresentation } from '../presentation/debug'
 
 export class ChannelControl implements IKnobParamsControlAdapter {
   constructor(
     private cubeCh: CubeRenderingChannel,
-    private soundLevel: SoundLevel
+    private soundLevel: SoundLevel,
+    private debugPresentation: DebugPresentation
   ) {}
   applyKnobValueA(value: number): void {
     this.cubeCh.cube.scale.anchor = 2 * (value / 127)
@@ -25,7 +27,9 @@ export class ChannelControl implements IKnobParamsControlAdapter {
   applyKnobValueC(value: number): void {
     this.soundLevel.maxLoudness = -0.2 - value / 127
   }
-  applySwitchValueA(value: boolean): void {}
+  applySwitchValueA(value: boolean): void {
+    this.debugPresentation.enabled = value
+  }
   applySwitchValueB(value: boolean): void {
     this.cubeCh.cube.wireframe = value
     this.cubeCh.cube2.wireframe = value
