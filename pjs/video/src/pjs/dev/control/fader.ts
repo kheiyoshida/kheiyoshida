@@ -30,7 +30,6 @@ export class ChannelParamsControl implements IFaderParamsControlAdapter {
     this.channelManager.videoSwitchRate = value / 127 / 10
   }
   applyFaderValue8(value: number): void {
-    this.channelManager.videoPlaybackSpeed = Math.floor((value / 127) * 10) / 10
-    console.log(this.channelManager.videoPlaybackSpeed)
+    this.channelManager.videoPlaybackSpeed = Math.max(0.1, Math.floor((value / 127) * 10) / 10)
   }
 }

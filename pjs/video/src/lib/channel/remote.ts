@@ -26,15 +26,15 @@ export class ChannelRemote {
 
   random(): number {
     const result = weightedRandomIndex(this.switchRate)
-    console.log('picker', result)
+    // console.log('picker', result)
     this.channelNumber = result
-    console.log('random', this.channelNumber)
+    // console.log('random', this.channelNumber)
     return this.channelNumber
   }
 }
 
 function weightedRandomIndex(weights: number[]): number {
-  console.log(weights)
+  // console.log(weights)
   const total = weights.reduce((a, b) => a + b, 0);
   const r = Math.random() * total;
   let acc = 0;

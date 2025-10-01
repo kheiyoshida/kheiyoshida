@@ -2,7 +2,7 @@ import vert from './saturation.vert?raw'
 import frag from './saturation.frag?raw'
 import { Shader } from '../../../gl/shader'
 import { ScreenEffectModel } from '../../../lib/effect/slot'
-import { randomFloatBetween, randomIntInclusiveBetween } from 'utils'
+import { randomFloatBetween } from 'utils'
 import { RangedValue } from '../utils/rangedValue'
 
 export class ColorEffect extends ScreenEffectModel {
@@ -17,7 +17,6 @@ export class ColorEffect extends ScreenEffectModel {
   public set luminanceCap(value: number) {
     this._luminanceCap = value
     this.shader.use()
-    console.log('cap', value)
     this.shader.setUniformFloat('uLuminanceCap', this._luminanceCap)
   }
 
