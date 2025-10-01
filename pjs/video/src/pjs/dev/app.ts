@@ -19,7 +19,8 @@ import {
   ColorCapControl,
   ColorSaturationControl,
   DotPresentationControl,
-  GlyphPresentationControl, InputControl,
+  GlyphPresentationControl,
+  InputControl,
   LinePresentationControl,
   PostEffectControl,
 } from './control/knobs'
@@ -29,7 +30,6 @@ import { TextPresentation } from './presentation/text'
 import { ImageResolution } from '../../media/pixels/types'
 import { createAudioInputSource } from '../../media/audio/input'
 import { SoundLevel } from './control/soundLevel'
-import { NoOpKnobParamsAdapter } from '../../lib/params/adapter'
 import { KaleidoscopeEffectModel } from './effect/kaleido'
 import { DualShockKaleidoscopeShooterControl } from './control/shooter'
 import { PS3DualShock } from '../../media/gamepad/ps3'
@@ -73,14 +73,14 @@ export const app = async () => {
   const glyphPresentation = new GlyphPresentation(shinjukuVideoCh.outputResolution, [
     aaTextData,
     alphabetTextData,
-    katakanaTextData
+    katakanaTextData,
   ])
   glyphPresentation.currentGlyph++
 
   const linePresentation = new LinePresentation(shinjukuVideoCh.outputResolution)
 
   //channels
-  const channelManager = new ChannelManager([objectCh, cameraCh, shinjukuVideoCh, youtubeCh, cityCh])
+  const channelManager = new ChannelManager([cameraCh, objectCh, shinjukuVideoCh, youtubeCh, cityCh])
 
   const colorFx = new ColorEffect()
   const multiplyFx = new MultiplyEffectModel(16)
@@ -139,6 +139,7 @@ export const app = async () => {
 
     // sound level
     const effectLevel = soundLevel.getSoundLevel()
+    console.log(effectLevel)
     linePresentation.updateParams(effectLevel)
     dotPresentation.dotSize.updateValue(effectLevel)
     dotPresentation.densityX.updateValue(effectLevel)
