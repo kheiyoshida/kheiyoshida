@@ -8,24 +8,41 @@ import { MultiplyEffectModel } from '../effect/multiply'
 import { CubeRenderingChannel } from '../channels/object'
 import { ColorEffect } from '../effect/saturation'
 import { SoundLevel } from './soundLevel'
+import { CameraChannel } from '../../../lib/channel/camera'
 
 export class ChannelControl implements IKnobParamsControlAdapter {
-  constructor(private cubeCh: CubeRenderingChannel, private soundLevel: SoundLevel) {}
+  constructor(
+    private cubeCh: CubeRenderingChannel,
+    private soundLevel: SoundLevel
+  ) {}
   applyKnobValueA(value: number): void {
     this.cubeCh.cube.scale.anchor = 2 * (value / 127)
     this.cubeCh.cube2.scale.anchor = 2 * (value / 127)
   }
   applyKnobValueB(value: number): void {
-    this.soundLevel.maxLoudness = -3 - (value / 127)
+    this.soundLevel.maxLoudness = -3 - value / 127
   }
   applyKnobValueC(value: number): void {
-    this.soundLevel.maxLoudness = -0.2 - (value / 127)
+    this.soundLevel.maxLoudness = -0.2 - value / 127
   }
   applySwitchValueA(value: boolean): void {}
   applySwitchValueB(value: boolean): void {
     this.cubeCh.cube.wireframe = value
     this.cubeCh.cube2.wireframe = value
   }
+}
+
+export class InputControl implements IKnobParamsControlAdapter {
+  constructor(private cameraCh: CameraChannel) {}
+  applyKnobValueA(value: number): void {
+    this.cameraCh.setContrast(2 + (value / 127) * 0.5)
+  }
+  applyKnobValueB(value: number): void {
+    this.cameraCh.setBrightness(0.4 + (value / 127) * 0.4)
+  }
+  applyKnobValueC(value: number): void {}
+  applySwitchValueA(value: boolean): void {}
+  applySwitchValueB(value: boolean): void {}
 }
 
 abstract class PresentationControl<P extends PixelPresentation> implements IKnobParamsControlAdapter {
@@ -43,7 +60,7 @@ abstract class PresentationControl<P extends PixelPresentation> implements IKnob
 
 export class LinePresentationControl extends PresentationControl<LinePresentation> {
   applyKnobValueA(value: number): void {
-    this.presentation.maxDistance.anchor = (1 + (value / 127) * 20)
+    this.presentation.maxDistance.anchor = 1 + (value / 127) * 20
   }
   applyKnobValueB(value: number): void {
     this.presentation.maxDistance.offsetRange = Math.floor((value / 127) * 8)
@@ -133,13 +150,13 @@ export class ColorCapControl implements IKnobParamsControlAdapter {
   constructor(private colorEffect: ColorEffect) {}
 
   applyKnobValueA(value: number): void {
-    this.colorEffect.luminanceCap = Math.min(0.8 * value / 127)
+    this.colorEffect.luminanceCap = Math.min((0.8 * value) / 127)
   }
   applyKnobValueB(value: number): void {
-    this.colorEffect.luminanceBase = Math.max(0.01, 0.1 * value / 127)
+    this.colorEffect.luminanceBase = Math.max(0.01, (0.1 * value) / 127)
   }
   applyKnobValueC(value: number): void {
-    this.colorEffect.saturationOffsetLevel.offsetRange = 0.2 * value / 127
+    this.colorEffect.saturationOffsetLevel.offsetRange = (0.2 * value) / 127
   }
   applySwitchValueA(value: boolean): void {}
   applySwitchValueB(value: boolean): void {}

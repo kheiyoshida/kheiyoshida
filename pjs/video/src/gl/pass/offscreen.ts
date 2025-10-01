@@ -4,6 +4,7 @@ import { GenericModel } from '../model/model'
 import { ScreenRect } from '../model/screen'
 import { Texture } from '../texture'
 import { ImageResolution } from '../../media/pixels/types'
+import { Shader } from '../shader'
 
 export class OffScreenPass extends RenderingPass {
   public frameBuffer: FrameBuffer | undefined
@@ -41,10 +42,11 @@ export class OffScreenTexturePass extends OffScreenPass {
 
   constructor(
     frameBufferResolution: ImageResolution,
-    readonly sourceTexture: Texture = new Texture()
+    readonly sourceTexture: Texture = new Texture(),
+    screenShader?: Shader,
   ) {
     super(frameBufferResolution)
-    this.screenRect = new ScreenRect(sourceTexture)
+    this.screenRect = new ScreenRect(sourceTexture, screenShader)
   }
 
   render(models: GenericModel[] = []) {

@@ -19,7 +19,7 @@ import {
   ColorCapControl,
   ColorSaturationControl,
   DotPresentationControl,
-  GlyphPresentationControl,
+  GlyphPresentationControl, InputControl,
   LinePresentationControl,
   PostEffectControl,
 } from './control/knobs'
@@ -59,8 +59,9 @@ export const app = async () => {
   const youtubeCh = new YoutubeVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
 
   const cameraName = 'Video Control'
-  const cameraSource = await CameraInputSource.create()
+  const cameraSource = await CameraInputSource.create(cameraName)
   const cameraCh = new CameraChannel(cameraSource, videoAspectRatio, frameBufferWidth, outputResolutionWidth)
+  cameraCh.reverse(true)
 
   const dotPresentation = new DotPresentation(shinjukuVideoCh.outputResolution, 1)
 
@@ -115,7 +116,7 @@ export const app = async () => {
       new DotPresentationControl(dotPresentation), // 3
       new GlyphPresentationControl(glyphPresentation), // 4
       new PostEffectControl(multiplyFx), // 5
-      NoOpKnobParamsAdapter,
+      new InputControl(cameraCh),
       new ColorSaturationControl(colorFx), // 7
       new ColorCapControl(colorFx), // 8
     ],

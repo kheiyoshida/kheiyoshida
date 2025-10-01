@@ -5,6 +5,8 @@ import { ImageScope } from '../../media/pixels/scope/scope'
 import { ImageResolution } from '../../media/pixels/types'
 import { VideoSupply } from '../../media/video/supply'
 import { ScreenTexturePass } from '../../gl/pass/onscreen'
+import { Texture } from '../../gl/texture'
+import { Shader } from '../../gl/shader'
 
 export abstract class PixelChannelBase {
   public abstract getPixels(): Uint8Array
@@ -31,10 +33,11 @@ export abstract class PixelChannel<VS extends VideoSource = VideoSource> extends
   protected constructor(
     readonly source: VS,
     frameBufferResolution: ImageResolution,
-    outputResolutionWidth: number
+    outputResolutionWidth: number,
+    screenShader?: Shader
   ) {
     super()
-    this.offScreenTexturePass = new OffScreenTexturePass(frameBufferResolution)
+    this.offScreenTexturePass = new OffScreenTexturePass(frameBufferResolution, new Texture(), screenShader)
     this.scope = new ImageScope(frameBufferResolution, outputResolutionWidth)
     this.parser = new PixelParser(this.scope)
   }
