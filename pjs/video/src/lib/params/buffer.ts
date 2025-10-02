@@ -26,7 +26,14 @@ export class ValueBuffer<T extends number | boolean> {
 }
 
 export class KnobParamsBuffer {
-  constructor(private target: IKnobParamsControlAdapter, private id: string = '') {}
+  constructor(private target: IKnobParamsControlAdapter, private id: string = '') {
+    const [a, b, c, swA, swB] = this.target.initialValues
+    this.knobValueA.update(a)
+    this.knobValueB.update(b)
+    this.knobValueC.update(c)
+    this.switchValueA.update(swA)
+    this.switchValueB.update(swB)
+  }
 
   public readonly knobValueA = new ValueBuffer<number>(20, `${this.id} KnobA`);
   public readonly knobValueB = new ValueBuffer<number>(20, `${this.id} KnobB`);

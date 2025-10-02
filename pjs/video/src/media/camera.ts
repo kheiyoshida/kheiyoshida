@@ -57,11 +57,13 @@ export async function getCameraInputStream(cameraName?: string) {
 const searchDeviceId = async (deviceName: string) => {
   const list = await navigator.mediaDevices.enumerateDevices()
   const found = list.find((m) => m.label.includes(deviceName))
-  if (!found)
-    throw new Error(`No device found for device ${deviceName}. 
+  if (!found) {
+    console.warn(`No device found for device ${deviceName}. 
     list: ${list
       .map((m) => m.label)
       .filter(Boolean)
       .join(', ')}`)
+    return
+  }
   return found.deviceId
 }

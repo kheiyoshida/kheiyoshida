@@ -17,6 +17,9 @@ export class ChannelControl implements IKnobParamsControlAdapter {
     private soundLevel: SoundLevel,
     private debugPresentation: DebugPresentation
   ) {}
+
+  initialValues: IKnobParamsControlAdapter['initialValues'] = [60, 0, 0, true, false]
+
   applyKnobValueA(value: number): void {
     this.cubeCh.cube.scale.anchor = 2 * (value / 127)
     this.cubeCh.cube2.scale.anchor = 2 * (value / 127)
@@ -25,7 +28,7 @@ export class ChannelControl implements IKnobParamsControlAdapter {
     this.soundLevel.maxLoudness = -3 - value / 127
   }
   applyKnobValueC(value: number): void {
-    this.soundLevel.maxLoudness = -0.2 - value / 127
+    this.soundLevel.minLoudness = -0.2 - value / 127
   }
   applySwitchValueA(value: boolean): void {
     this.debugPresentation.enabled = value
@@ -41,6 +44,10 @@ export class InputControl implements IKnobParamsControlAdapter {
     private cameraCh: CameraChannel,
     private glyphPresentation: GlyphPresentation
   ) {}
+
+  // TODO: adjust initial contrast and brightness
+  initialValues: IKnobParamsControlAdapter['initialValues'] = [20, 20, 0, false, false]
+
   applyKnobValueA(value: number): void {
     this.cameraCh.setContrast(2 + (value / 127) * 0.5)
   }
@@ -48,7 +55,7 @@ export class InputControl implements IKnobParamsControlAdapter {
     this.cameraCh.setBrightness(0.4 + (value / 127) * 0.4)
   }
   applyKnobValueC(value: number): void {
-    this.glyphPresentation.currentGlyph = Math.floor((value/127) * 3)
+    this.glyphPresentation.currentGlyph = Math.floor((value / 127) * 3)
   }
   applySwitchValueA(value: boolean): void {}
   applySwitchValueB(value: boolean): void {}
@@ -56,6 +63,8 @@ export class InputControl implements IKnobParamsControlAdapter {
 
 abstract class PresentationControl<P extends PixelPresentation> implements IKnobParamsControlAdapter {
   public constructor(protected presentation: P) {}
+
+  abstract get initialValues(): IKnobParamsControlAdapter['initialValues']
 
   abstract applyKnobValueA(value: number): void
   abstract applyKnobValueB(value: number): void
@@ -68,6 +77,8 @@ abstract class PresentationControl<P extends PixelPresentation> implements IKnob
 }
 
 export class LinePresentationControl extends PresentationControl<LinePresentation> {
+  initialValues: IKnobParamsControlAdapter['initialValues'] = [0, 30, 10, true, false]
+
   applyKnobValueA(value: number): void {
     this.presentation.maxDistance.anchor = 1 + (value / 127) * 20
   }
@@ -83,6 +94,8 @@ export class LinePresentationControl extends PresentationControl<LinePresentatio
 }
 
 export class DotPresentationControl extends PresentationControl<DotPresentation> {
+  initialValues: IKnobParamsControlAdapter['initialValues'] = [127, 70, 70, true, false]
+
   applyKnobValueA(value: number): void {
     this.presentation.dotSize.anchor = value / 127
   }
@@ -95,6 +108,7 @@ export class DotPresentationControl extends PresentationControl<DotPresentation>
 }
 
 export class GlyphPresentationControl extends PresentationControl<GlyphPresentation> {
+  initialValues: IKnobParamsControlAdapter['initialValues'] = [60, 20, 0, true, false]
   applyKnobValueA(value: number): void {
     this.presentation.dotSize.anchor = value / 127
   }
@@ -108,14 +122,15 @@ export class GlyphPresentationControl extends PresentationControl<GlyphPresentat
 
 export class PostEffectControl implements IKnobParamsControlAdapter {
   constructor(private multiplyFx: MultiplyEffectModel) {}
+  initialValues: IKnobParamsControlAdapter['initialValues'] = [10, 10, 10, false, false]
   applyKnobValueA(value: number): void {
     this.multiplyFx.sensitivity = value / 127
   }
   applyKnobValueB(value: number): void {
-    this.multiplyFx.multiply.anchor = 1 // Math.max(1, Math.ceil(this.multiplyFx.maxMultiply * (value / 127)))
+    this.multiplyFx.multiply.anchor = Math.max(1, Math.ceil(this.multiplyFx.maxMultiply * (value / 127)))
   }
   applyKnobValueC(value: number): void {
-    this.multiplyFx.multiply.offsetRange = 12 // this.multiplyFx.maxMultiply * (value / 127)
+    this.multiplyFx.multiply.offsetRange = this.multiplyFx.maxMultiply * (value / 127)
   }
   applySwitchValueA(value: boolean): void {
     this.multiplyFx.enabled = value
@@ -125,6 +140,7 @@ export class PostEffectControl implements IKnobParamsControlAdapter {
 
 export class ColorSaturationControl implements IKnobParamsControlAdapter {
   constructor(private colorEffect: ColorEffect) {}
+  initialValues: IKnobParamsControlAdapter['initialValues'] = [60, 60, 60, false, false]
 
   applyKnobValueA(value: number): void {
     this.colorEffect.saturation = [
@@ -157,6 +173,7 @@ export class ColorSaturationControl implements IKnobParamsControlAdapter {
 
 export class ColorCapControl implements IKnobParamsControlAdapter {
   constructor(private colorEffect: ColorEffect) {}
+  initialValues: IKnobParamsControlAdapter['initialValues'] = [100, 0, 60, false, false]
 
   applyKnobValueA(value: number): void {
     this.colorEffect.luminanceCap = Math.min((0.8 * value) / 127)

@@ -11,8 +11,6 @@ export class SoundLevel {
 
   public getSoundLevel(): number {
     const decibels = this.analyser.getDecibels()
-    const level = Math.min(1, Math.abs(decibels / (this.maxLoudness - this.minLoudness)))
-    // console.log(level)
-    return level
+    return Math.min(1, Math.abs(decibels / (this.maxLoudness - this.minLoudness)))
   }
 }

@@ -1,4 +1,5 @@
 export interface IKnobParamsControlAdapter {
+  initialValues: [number, number, number, boolean, boolean];
   applyKnobValueA(value: number): void
   applyKnobValueB(value: number): void
   applyKnobValueC(value: number): void
@@ -18,6 +19,7 @@ export interface IFaderParamsControlAdapter {
 }
 
 export const NoOpKnobParamsAdapter: IKnobParamsControlAdapter = {
+  initialValues: [0, 0, 0, false, false],
   applyKnobValueA(value: number): void {},
   applyKnobValueB(value: number): void {},
   applyKnobValueC(value: number): void {},
