@@ -2,6 +2,21 @@ import { getAudioCtx } from './analyzer'
 
 export const createAudioInputSource = async (audioInputName?: string) => {
   const stream = await getAudioInputStream(audioInputName)
+
+  const [track] = stream.getAudioTracks();
+
+// This gives you what the browser *actually used*
+  const settings = track.getSettings();
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  console.log("Settings:", settings.deviceId, settings.label);
+
+// Compare against enumerateDevices
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  const matched = devices.find(d => d.deviceId === settings.deviceId);
+  console.log("Matched device:", matched);
+
+
   const context = getAudioCtx()
   return context.createMediaStreamSource(stream);
 }

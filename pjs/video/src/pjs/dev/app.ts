@@ -47,7 +47,7 @@ export const app = async () => {
   getGL()
 
   // sound input control
-  const soundLevel = new SoundLevel(await createAudioInputSource())
+  const soundLevel = new SoundLevel(await createAudioInputSource('Zen Go'))
 
   const frameBufferResolution: ImageResolution = {
     width: frameBufferWidth,
