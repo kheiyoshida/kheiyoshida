@@ -16,11 +16,13 @@ export async function bindMidiInputMessage(
 
 function getInput(midiAccess: MIDIAccess, name: string): MIDIInput {
   let requestedInput: MIDIInput | undefined = undefined
+  const names: string[] = []
   midiAccess.inputs.forEach((input) => {
     if (input.name?.includes(name)) {
       requestedInput = input
     }
+    names.push(input.name || '')
   })
   if (requestedInput) return requestedInput
-  throw Error(`${name} not found`)
+  throw Error(`${name} not found. available ports are ${names.join(', ')}`)
 }
