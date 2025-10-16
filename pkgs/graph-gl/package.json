@@ -9,8 +9,8 @@
     "preview": "vite preview",
     "test": "cd ../.. && jest --selectProjects graph-gl"
   },
-  "dependencies": {},
   "devDependencies": {
+    "jest-canvas-mock": "^2.5.2",
     "typescript": "~5.7.2",
     "vite": "^6.3.1"
   }

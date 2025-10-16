@@ -92,6 +92,14 @@ const JestConfig: Config = {
       displayName: 'maze-gl',
       rootDir: './pkgs/maze-gl',
     },
+    {
+      ...RootConfig,
+      displayName: 'graph-gl',
+      rootDir: './pkgs/graph-gl',
+      setupFilesAfterEnv: [
+        '<rootDir>/src/__test__/setup-webgl-spy.ts'
+      ]
+    },
   ],
 }
 export default JestConfig

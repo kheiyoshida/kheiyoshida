@@ -379,6 +379,9 @@ importers:
 
   pkgs/graph-gl:
     devDependencies:
+      jest-canvas-mock:
+        specifier: ^2.5.2
+        version: 2.5.2
       typescript:
         specifier: ~5.7.2
         version: 5.7.3
