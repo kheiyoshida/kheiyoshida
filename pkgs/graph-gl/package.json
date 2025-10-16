@@ -1,0 +1,17 @@
+{
+  "name": "graph-gl",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "cd ../.. && jest --selectProjects graph-gl"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "~5.7.2",
+    "vite": "^6.3.1"
+  }
+}

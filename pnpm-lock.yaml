@@ -377,6 +377,15 @@ importers:
         specifier: ^6.3.1
         version: 6.3.4(@types/node@20.11.16)(sass@1.69.5)(terser@5.39.2)(tsx@4.19.3)
 
+  pkgs/graph-gl:
+    devDependencies:
+      typescript:
+        specifier: ~5.7.2
+        version: 5.7.3
+      vite:
+        specifier: ^6.3.1
+        version: 6.3.4(@types/node@20.11.16)(sass@1.69.5)(terser@5.39.2)(tsx@4.19.3)
+
   pkgs/maze-gl:
     dependencies:
       chroma-js:
