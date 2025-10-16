@@ -1,4 +1,4 @@
-import { getGL } from './gl/gl'
+import { getGL } from '../gl/gl'
 
 test(`example`, () => {
   getGL()

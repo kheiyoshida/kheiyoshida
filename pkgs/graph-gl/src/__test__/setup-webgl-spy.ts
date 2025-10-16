@@ -31,7 +31,7 @@ export function createWebGL2SpyContext(): WebGL2RenderingContext {
 }
 
 // --- Hook to automatically mock the module ---
-jest.mock('../domain/gl/gl', () => ({
+jest.mock('../gl/gl', () => ({
   getGL: jest.fn(() => createWebGL2SpyContext()),
 }));
 
