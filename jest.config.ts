@@ -98,7 +98,11 @@ const JestConfig: Config = {
       rootDir: './pkgs/graph-gl',
       setupFilesAfterEnv: [
         '<rootDir>/src/__test__/setup-webgl-spy.ts'
-      ]
+      ],
+      moduleNameMapper: {
+        "\\.frag\\?raw": "jest-raw-loader",
+        "\\.vert\\?raw": "jest-raw-loader",
+      }
     },
   ],
 }

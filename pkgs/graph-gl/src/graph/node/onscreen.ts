@@ -12,6 +12,9 @@ export class OnscreenRenderingNode extends ModelRenderingNode {
   }
 }
 
+/**
+ * draws input node's color result onto screen
+ */
 export class InputColorRenderingNode extends ModelRenderingNode {
   private readonly screenRect
 

@@ -10,7 +10,7 @@ export abstract class RenderingNode<RT extends RenderTarget | undefined = undefi
 export abstract class ModelRenderingNode<RT extends RenderTarget | undefined = undefined> extends RenderingNode<RT> {
   protected gl = getGL()
   public backgroundColor: [number, number, number, number] = [1, 1, 1, 1]
-  protected models: GenericModel[] = []
+  public models: GenericModel[] = []
 
   public render() {
     this.gl.clearColor(...this.backgroundColor)
