@@ -9,4 +9,3 @@ export interface DrawTarget extends RenderTarget {
 export interface DrawPixelTarget extends DrawTarget {
   pixelDataArray: Uint8Array
 }
-

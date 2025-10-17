@@ -342,6 +342,9 @@ importers:
       gl-matrix:
         specifier: ^3.4.3
         version: 3.4.3
+      graph-gl:
+        specifier: workspace:^
+        version: link:../../pkgs/graph-gl
       react:
         specifier: 18.2.0
         version: 18.2.0

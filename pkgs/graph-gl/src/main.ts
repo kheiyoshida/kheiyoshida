@@ -6,12 +6,13 @@ import { InputColorRenderingNode } from './graph/node/onscreen'
 async function main() {
   const offscreen = new OffscreenDrawNode()
   offscreen.renderTarget = {
-    frameBuffer: new FrameBuffer(960, 540),
+    frameBuffer: new FrameBuffer(1920, 1080),
   }
   offscreen.models.push(new TriangleModel())
 
   const screen = new InputColorRenderingNode()
   screen.setInput(offscreen)
+  screen.screenRect.setReverseVertical(true)
 
   offscreen.render()
   screen.render()

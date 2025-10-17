@@ -13,7 +13,8 @@
     "gl-matrix": "^3.4.3",
     "react": "18.2.0",
     "react-dom": "^18.2.0",
-    "utils": "workspace:^"
+    "utils": "workspace:^",
+    "graph-gl": "workspace:^"
   },
   "devDependencies": {
     "@types/gl-matrix": "^3.2.0",
