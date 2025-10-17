@@ -2,17 +2,12 @@ import { GenericModel } from '../model'
 import { Shader } from '../../gl/shader'
 import screenVert from './screen.vert?raw'
 import screenFrag from './screen.frag?raw'
-import { Texture } from '../../gl/texture'
 import { getGL } from '../../gl/gl'
 
 export class Texture2dModel extends GenericModel {
   public tex: WebGLTexture | undefined
 
-  constructor(
-    screenShader: Shader,
-    dataArray: Float32Array,
-    tex?: WebGLTexture,
-  ) {
+  constructor(screenShader: Shader, dataArray: Float32Array, tex?: WebGLTexture) {
     super(screenShader, dataArray, [
       { name: 'aPos', size: 2, stride: 16, offset: 0 },
       { name: 'aUV', size: 2, stride: 16, offset: 8 },
@@ -49,10 +44,7 @@ export class Texture2dModel extends GenericModel {
  * screen rect that renders texture input
  */
 export class ScreenRect extends Texture2dModel {
-  constructor(
-    texture: Texture | WebGLTexture,
-    screenShader = new Shader(screenVert, screenFrag),
-  ) {
+  constructor(screenShader = new Shader(screenVert, screenFrag)) {
     // prettier-ignore
     const screenRectVertices = new Float32Array([
       -1, -1, 0, 1,
@@ -60,6 +52,6 @@ export class ScreenRect extends Texture2dModel {
       -1, 1, 0, 0,
       1, 1, 1, 0
     ])
-    super(screenShader, screenRectVertices, texture instanceof Texture ? texture.tex : texture)
+    super(screenShader, screenRectVertices)
   }
 }
