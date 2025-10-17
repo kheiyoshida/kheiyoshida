@@ -1,5 +1,6 @@
-import { Shader } from '../gl/shader'
-import { getGL } from '../gl/gl'
+import { Shader } from '../gl'
+import { getGL } from '../gl'
+import { Drawable } from '../graph'
 
 type AttributeDescriptor = {
   /**
@@ -24,7 +25,7 @@ type AttributeDescriptor = {
   offset?: number
 }
 
-export class GenericModel {
+export class GenericModel implements Drawable {
   public vao: WebGLVertexArrayObject
   public vbo: WebGLBuffer
   protected vertexCount: number
