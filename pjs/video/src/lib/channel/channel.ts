@@ -4,7 +4,6 @@ import { PixelParser } from '../../media/pixels/parse'
 import { ImageScope } from '../../media/pixels/scope/scope'
 import { ImageResolution } from '../../media/pixels/types'
 import { VideoSupply } from '../../media/video/supply'
-import { ScreenTexturePass } from '../../gl/pass/onscreen'
 import { Texture } from '../../gl/texture'
 import { Shader } from '../../gl/shader'
 
@@ -75,30 +74,6 @@ export class VideoPixelChannel extends PixelChannel<VideoSupply> {
     super(source, videoResolution, outputResolutionWidth)
   }
 
-  public async waitForReady(onProgress: (progress: number) => void) {
-    const interval = setInterval(() => {
-      onProgress(this.source.loadingProgress)
-    }, 100)
-    await this.source.readyPromise
-    clearTimeout(interval)
-  }
-}
-
-// renders videos directly onto screen
-export class DebugChannel<VS extends VideoSource = VideoSource> {
-  protected readonly screenTexturePass: ScreenTexturePass
-
-  protected constructor(readonly source: VS) {
-    this.screenTexturePass = new ScreenTexturePass()
-  }
-
-  public render(): void {
-    this.screenTexturePass.setTextureImage(this.source.currentVideo)
-    this.screenTexturePass.render()
-  }
-}
-
-export class DebugVideoChannel extends DebugChannel<VideoSupply> {
   public async waitForReady(onProgress: (progress: number) => void) {
     const interval = setInterval(() => {
       onProgress(this.source.loadingProgress)
