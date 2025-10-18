@@ -1,5 +1,5 @@
 import { getGL } from './gl'
-import { mat4, vec3 } from 'gl-matrix'
+import { mat4, vec3, vec4 } from 'gl-matrix'
 
 export class Shader {
   public program: WebGLProgram
@@ -45,6 +45,10 @@ export class Shader {
 
   setUniform3fv(name: string, value: Float32Array | vec3) {
     getGL().uniform3fv(this.getUniformLoc(name), value)
+  }
+
+  setUniform4fv(name: string, value: vec4) {
+    getGL().uniform4fv(this.getUniformLoc(name), value)
   }
 
   private getUniformLoc(name: string) {

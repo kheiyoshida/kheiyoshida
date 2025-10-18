@@ -1,4 +1,5 @@
-import { FrameBuffer, getGL, Shader } from './gl'
+import { FrameBuffer, getGL } from './gl'
+import { DebugTriangleModel } from './model/triangle/model'
 
 async function main() {
   const gl = getGL()
@@ -8,50 +9,15 @@ async function main() {
 
   const framebuffer = new FrameBuffer(width, height)
 
-  // === 3. Compile trivial shaders ===
-  const vert = `#version 300 es
-in vec2 pos;
-void main() {
-  gl_Position = vec4(pos, 0.0, 1.0);
-}`
-  const frag = `#version 300 es
-precision mediump float;
-out vec4 fragColor;
-uniform vec4 uColor;
-void main() {
-  fragColor = uColor;
-}`
-  const shader = new Shader(vert, frag)
-  shader.use()
-
-  const posLoc = gl.getAttribLocation(shader.program, 'pos')
-  const uColor = gl.getUniformLocation(shader.program, 'uColor')
-
-  // === 4. Vertex buffer (one triangle) ===
-  const vbo = gl.createBuffer()
-  gl.bindBuffer(gl.ARRAY_BUFFER, vbo)
-  gl.bufferData(
-    gl.ARRAY_BUFFER,
-    new Float32Array([
-      -1,
-      -1,
-      3,
-      -1,
-      -1,
-      3, // oversize tri
-    ]),
-    gl.STATIC_DRAW
-  )
-  gl.enableVertexAttribArray(posLoc)
-  gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0)
+  const triangle = new DebugTriangleModel()
 
   function drawFrame(i: number) {
     framebuffer.activate()
 
     // alternate colors per frame
-    const color = i % 2 ? [1, 0, 0, 1] : [0, 1, 0, 1]
-    gl.uniform4fv(uColor, color)
-    gl.drawArrays(gl.TRIANGLES, 0, 3)
+    const color: [number, number, number, number] = i % 2 ? [1, 0, 0, 1] : [0, 1, 0, 1]
+    triangle.setColor(color)
+    triangle.draw(gl.TRIANGLES)
 
     // === Read pixels ===
     const pixels = framebuffer.readPixels()
@@ -59,12 +25,12 @@ void main() {
     // Sample a few values
     console.log(`frame ${i}`, pixels.slice(0, 12)) // first few pixels
 
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null)
+    framebuffer.deactivate()
   }
 
-  drawFrame(0)
-  drawFrame(1)
-  drawFrame(2)
+  drawFrame(0) // green
+  drawFrame(1) // red
+  drawFrame(2) // green
 }
 
 // eslint-disable-next-line no-console
