@@ -51,7 +51,7 @@ export class VideoSupply implements VideoSource {
 
   public onSwap?: (video: HTMLVideoElement) => void
 
-  public onEnded: () => void = () => undefined
+  public onEnded: () => void = () => this.swapVideo()
 
   public get loadingProgress() {
     return checkLoadingState(this.videoElements)

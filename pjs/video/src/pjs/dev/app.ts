@@ -1,20 +1,21 @@
 import { FrameBuffer, InputColorRenderingNode } from 'graph-gl'
-import { SingleChannelNode } from '../../lib-node/channel/node'
+import { MultiChannelNode } from '../../lib-node/channel/node'
 import { VideoChannel } from '../../lib-node/channel/channel'
 import { VideoSupply } from '../../media/video/supply'
 import { videoSourceList as shinjukuVideoSourceList } from '../shinjuku/videos'
 import { startRenderingLoop } from '../../lib/pipeline'
+import { youtubeVideoList } from './channels/videos'
+import { ChannelManager } from '../../lib-node/channel/manager'
 
 export async function app() {
-  const supply = new VideoSupply(shinjukuVideoSourceList)
-  supply.onEnded = () => supply.swapVideo()
+  const channel = new VideoChannel(new VideoSupply(shinjukuVideoSourceList))
+  const channel2 = new VideoChannel(new VideoSupply(youtubeVideoList))
 
-  await supply.readyPromise
-  supply.updateOptions({ speed: 0.3 })
+  await Promise.all([channel.waitForReady(), channel2.waitForReady()])
 
-  const channel = new VideoChannel(supply)
+  const channelManager = new ChannelManager([channel, channel2])
 
-  const offscreen = new SingleChannelNode(channel)
+  const offscreen = new MultiChannelNode(channelManager)
   offscreen.renderTarget = {
     frameBuffer: new FrameBuffer(1920, 1080),
     pixelDataArray: new Uint8Array(1920 * 1080 * 4),
@@ -23,6 +24,8 @@ export async function app() {
   const screen = new InputColorRenderingNode()
   screen.setInput(offscreen)
   screen.screenRect.setReverseVertical(true)
+
+  channelManager.channelSwitchRate = 0.2
 
   function renderLoop() {
     offscreen.render()

@@ -48,9 +48,9 @@ export class VideoChannel extends TextureChannel<VideoSupply> {
     return !this.isLoading
   }
 
-  public async waitForReady(onProgress: (progress: number) => void) {
+  public async waitForReady(onProgress?: (progress: number) => void) {
     const interval = setInterval(() => {
-      onProgress(this.source.loadingProgress)
+      onProgress?.(this.source.loadingProgress)
     }, 100)
     await this.source.readyPromise
     this.isLoading = false
