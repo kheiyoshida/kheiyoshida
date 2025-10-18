@@ -10,6 +10,9 @@ export class OnscreenRenderingNode extends ModelRenderingNode {
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height)
     super.render()
   }
+  public validate() {
+    return undefined
+  }
 }
 
 /**
@@ -31,5 +34,8 @@ export class InputColorRenderingNode extends ModelRenderingNode {
   public override render() {
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height)
     super.render()
+  }
+  public validate() {
+    return undefined
   }
 }

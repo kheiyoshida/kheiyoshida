@@ -33,6 +33,7 @@ export class TextureChannel<VS extends VideoSource = VideoSource> extends Channe
 
   override draw(): void {
     this.texture.setTextureImage(this.source.currentVideo)
+    console.log('setTextureImage', this.source.currentVideo)
     super.draw()
   }
 }

@@ -3,7 +3,8 @@ import { getGL } from '../../gl'
 
 export abstract class RenderingNode<RT extends RenderTarget | undefined = undefined> {
   renderTarget?: RT = undefined
-  abstract render(): void
+  public abstract render(): void
+  public abstract validate(): void
 }
 
 export interface Drawable {
@@ -28,5 +29,6 @@ export abstract class ModelRenderingNode<
     this.gl.clearColor(...this.backgroundColor)
     this.gl.clear(this.gl.COLOR_BUFFER_BIT)
     this.drawables.forEach((model) => model.draw())
+    console.log(this.drawables)
   }
 }

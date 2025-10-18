@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<body style="margin:0; background:#222;">
+<canvas id="c" width="160" height="90"></canvas>
+<script type="module">
+  const canvas = document.getElementById('c');
+  const gl = canvas.getContext('webgl2');
+  if (!gl) throw new Error('WebGL2 not supported');
+
+  const width = 160, height = 90;
+
+  // === 1. Create texture attachment ===
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+  // === 2. Create framebuffer ===
+  const fbo = gl.createFramebuffer();
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+  gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+  gl.drawBuffers([gl.COLOR_ATTACHMENT0]);
+  if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE)
+    throw new Error('Framebuffer incomplete');
+
+  // === 3. Compile trivial shaders ===
+  const vs = gl.createShader(gl.VERTEX_SHADER);
+  gl.shaderSource(vs, `#version 300 es
+in vec2 pos;
+void main() {
+  gl_Position = vec4(pos, 0.0, 1.0);
+}`);
+  gl.compileShader(vs);
+  if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS))
+    console.error(gl.getShaderInfoLog(vs));
+
+  const fs = gl.createShader(gl.FRAGMENT_SHADER);
+  gl.shaderSource(fs, `#version 300 es
+precision mediump float;
+out vec4 fragColor;
+uniform vec4 uColor;
+void main() {
+  fragColor = uColor;
+}`);
+  gl.compileShader(fs);
+  if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS))
+    console.error(gl.getShaderInfoLog(fs));
+
+  const prog = gl.createProgram();
+  gl.attachShader(prog, vs);
+  gl.attachShader(prog, fs);
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS))
+    console.error(gl.getProgramInfoLog(prog));
+  gl.useProgram(prog);
+
+  const posLoc = gl.getAttribLocation(prog, 'pos');
+  const uColor = gl.getUniformLocation(prog, 'uColor');
+
+  // === 4. Vertex buffer (one triangle) ===
+  const vbo = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+    -1, -1,   3, -1,  -1, 3   // oversize tri
+  ]), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(posLoc);
+  gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+  // === 5. Draw + Read loop ===
+  const pixels = new Uint8Array(width * height * 4);
+
+  function drawFrame(i) {
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+    gl.viewport(0, 0, width, height);
+    gl.clearColor(0, 0, 0, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    // alternate colors per frame
+    const color = i % 2 ? [1, 0, 0, 1] : [0, 1, 0, 1];
+    gl.uniform4fv(uColor, color);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+    // === Read pixels ===
+    gl.readBuffer(gl.COLOR_ATTACHMENT0);
+    gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+
+    // Sample a few values
+    console.log(`frame ${i}`, pixels.slice(0, 12)); // first few pixels
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  }
+
+  drawFrame(0);
+  drawFrame(1);
+  drawFrame(2);
+</script>
+</body>
+</html>

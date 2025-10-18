@@ -3,7 +3,6 @@ import { ImageResolution } from '../media/pixels/types'
 import { OffScreenPass, OffScreenTexturePass } from '../gl/pass/offscreen'
 import { FrameBuffer } from '../gl/frameBuffer'
 
-
 export class PixelPresentationSlot {
   public readonly offScreenPass: OffScreenPass
 
