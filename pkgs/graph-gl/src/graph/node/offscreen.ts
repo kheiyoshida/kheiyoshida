@@ -6,6 +6,9 @@ export type ImageResolution = {
   height: number
 }
 
+/**
+ * draw models into offscreen frame buffer
+ */
 export class OffscreenDrawNode extends ModelRenderingNode<DrawTarget> {
   render() {
     this.renderTarget!.frameBuffer.activate()
@@ -14,6 +17,9 @@ export class OffscreenDrawNode extends ModelRenderingNode<DrawTarget> {
   }
 }
 
+/**
+ * draw models into the target's data array as pixels
+ */
 export class OffscreenPixelDrawNode extends ModelRenderingNode<DrawPixelTarget> {
   render() {
     this.renderTarget!.frameBuffer.activate()

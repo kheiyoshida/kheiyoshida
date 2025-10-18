@@ -8,7 +8,7 @@ test(`can chain nodes to propagate rendering results`, () => {
   offscreen.renderTarget = {
     frameBuffer: new FrameBuffer(960, 540),
   }
-  offscreen.models.push(new TriangleModel())
+  offscreen.drawables.push(new TriangleModel())
 
   const screen = new InputColorRenderingNode()
   screen.setInput(offscreen)

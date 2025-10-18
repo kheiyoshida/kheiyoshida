@@ -1,6 +1,6 @@
 import { ModelRenderingNode, RenderingNode } from './node'
 import { DrawTarget } from '../target'
-import { ScreenRect } from '../../model/screen/screen'
+import { ScreenRect } from '../../model'
 
 /**
  * simply draws models on screen
@@ -21,7 +21,7 @@ export class InputColorRenderingNode extends ModelRenderingNode {
   constructor() {
     super()
     this.screenRect = new ScreenRect()
-    this.models.push(this.screenRect)
+    this.drawables.push(this.screenRect)
   }
 
   public setInput(node: RenderingNode<DrawTarget>) {

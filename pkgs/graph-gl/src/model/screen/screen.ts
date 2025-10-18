@@ -1,8 +1,7 @@
 import { GenericModel } from '../model'
-import { Shader } from '../../gl/shader'
+import { getGL, Shader } from '../../gl'
 import screenVert from './screen.vert?raw'
 import screenFrag from './screen.frag?raw'
-import { getGL } from '../../gl/gl'
 
 export class Texture2dModel extends GenericModel {
   public tex: WebGLTexture | undefined

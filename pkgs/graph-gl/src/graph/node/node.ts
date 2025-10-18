@@ -15,11 +15,18 @@ export abstract class ModelRenderingNode<
 > extends RenderingNode<RT> {
   protected gl = getGL()
   public backgroundColor: [number, number, number, number] = [1, 1, 1, 1]
-  public models: Drawable[] = []
+
+  protected _drawables: Drawable[] = []
+  public get drawables() {
+    return this._drawables
+  }
+  public set drawables(drawables: Drawable[]) {
+    this._drawables = drawables
+  }
 
   public render() {
     this.gl.clearColor(...this.backgroundColor)
     this.gl.clear(this.gl.COLOR_BUFFER_BIT)
-    this.models.forEach((model) => model.draw())
+    this.drawables.forEach((model) => model.draw())
   }
 }
