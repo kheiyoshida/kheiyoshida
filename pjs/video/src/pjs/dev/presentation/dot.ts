@@ -12,8 +12,8 @@ export class DotPresentation extends PixelPresentation<DotInstance> {
 
     this.singleDotSize = 1 / pixelDataResolution.height
 
-    this.densityX.updateValue(0.3)
-    this.densityY.updateValue(0.3)
+    this.densityX.updateValue(1)
+    this.densityY.updateValue(1)
     this.dotSize.updateValue(1)
   }
 
@@ -32,7 +32,7 @@ export class DotPresentation extends PixelPresentation<DotInstance> {
     const intervalX = Math.ceil(1 / this.densityX.value)
     const intervalY = Math.ceil(1 / this.densityY.value)
 
-    const size = this.dotSize.value * this.singleDotSize
+    const size = this.dotSize.value * this.singleDotSize * 2.0
 
     let k = 0
     for (let y = 0; y < resolutionHeight; y += intervalY) {
@@ -45,7 +45,7 @@ export class DotPresentation extends PixelPresentation<DotInstance> {
         dotInstance.instanceDataArray[k++] = pixels[i + 1] / 255
         dotInstance.instanceDataArray[k++] = pixels[i + 2] / 255
 
-        dotInstance.instanceDataArray[k++] = size * 10 // TODO: fix sizing
+        dotInstance.instanceDataArray[k++] = size
       }
     }
     const finalInstanceCount = k / 6

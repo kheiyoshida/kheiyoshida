@@ -1,4 +1,3 @@
-import { PostEffect } from '../../../lib/effect/effect'
 import { Shader } from '../../../gl/shader'
 import vert from './multiply.vert?raw'
 import frag from './multiply.frag?raw'
