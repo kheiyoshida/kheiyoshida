@@ -1,6 +1,5 @@
 import { InstancedModel } from '../model'
 import { Shader } from '../../shader'
-import vert from './line.vert?raw'
 import vertAlt from './alt.vert?raw'
 import frag from './line.frag?raw'
 import { getGL } from '../../gl'

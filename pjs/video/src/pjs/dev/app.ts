@@ -7,7 +7,7 @@ import { youtubeVideoList } from './channels/videos'
 import { ChannelManager } from '../../lib-node/channel/manager'
 import { startRenderingLoop } from '../../lib/pipeline'
 import { PresentationNode } from '../../lib-node/presentation/node'
-import { DotPresentation } from './presentation/dot'
+import { LinePresentation } from './presentation/line'
 
 export async function app() {
   const channel = new VideoChannel(new VideoSupply(shinjukuVideoSourceList))
@@ -23,7 +23,9 @@ export async function app() {
     pixelDataArray: new Uint8Array(960 * 540 * 4),
   }
 
-  const presentation = new DotPresentation(chNode.outputResolution)
+  const presentation = new LinePresentation(chNode.outputResolution)
+  presentation.setLuminanceThresholdDirect(0.1)
+  presentation.setMaxDistanceDirect(16)
 
   const presentationNode = new PresentationNode([presentation])
   presentationNode.renderTarget = {
