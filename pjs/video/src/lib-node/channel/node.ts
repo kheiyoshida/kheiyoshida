@@ -1,8 +1,18 @@
 import { OffscreenPixelDrawNode } from 'graph-gl'
 import { Channel } from './channel'
 import { ChannelManager } from './manager'
+import { PixelDataRTHandle } from './target'
 
-export class SingleChannelNode extends OffscreenPixelDrawNode {
+export abstract class PixelDataProviderNode extends OffscreenPixelDrawNode<PixelDataRTHandle> {
+  get scope() {
+    return this.renderTarget!.scope
+  }
+  override get outputResolution() {
+    return this.scope.finalResolution
+  }
+}
+
+export class SingleChannelNode extends PixelDataProviderNode {
   constructor(private channel: Channel) {
     super()
   }
@@ -12,7 +22,7 @@ export class SingleChannelNode extends OffscreenPixelDrawNode {
   }
 }
 
-export class MultiChannelNode extends OffscreenPixelDrawNode {
+export class MultiChannelNode extends PixelDataProviderNode {
   constructor(private channelManager: ChannelManager) {
     super()
   }

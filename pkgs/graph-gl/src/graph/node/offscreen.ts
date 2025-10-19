@@ -1,5 +1,5 @@
 import { ModelRenderingNode } from './node'
-import { DrawPixelTarget, DrawTarget } from '../target'
+import { DrawTarget, RenderTarget } from '../target'
 
 export type ImageResolution = {
   width: number
@@ -23,19 +23,14 @@ export class OffscreenDrawNode extends ModelRenderingNode<DrawTarget> {
 /**
  * draw models into the target's data array as pixels
  */
-export class OffscreenPixelDrawNode extends ModelRenderingNode<DrawPixelTarget> {
+export class OffscreenPixelDrawNode<RT extends DrawTarget = DrawTarget> extends ModelRenderingNode<RT> {
   render() {
     this.renderTarget!.frameBuffer.activate()
     super.render()
-
-    const pixels = this.renderTarget!.frameBuffer.readPixels()
-
-    for (let i = 0; i < pixels.length; i++) {
-      this.renderTarget!.pixelDataArray[i] = pixels[i]
-    }
-
+    this.renderTarget!.frameBuffer.readPixels()
     this.renderTarget!.frameBuffer.deactivate()
   }
+
   validate() {
     if (!this.renderTarget) throw new Error(`render target is not set for ${this.constructor.name}`)
   }

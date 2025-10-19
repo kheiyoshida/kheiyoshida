@@ -1,5 +1,6 @@
 import { OffscreenDrawNode, OffscreenNode, OffscreenPixelDrawNode, ScreenRect } from 'graph-gl'
 import { PixelPresentation } from './presentation'
+import { PixelDataProviderNode } from '../channel/node'
 
 /**
  * draws objects into offscreen buffer,
@@ -11,8 +12,8 @@ export class PresentationNode extends OffscreenDrawNode {
     this.drawables = this.presentations.map((p) => p.instance)
   }
 
-  private pixelDataInput?: OffscreenPixelDrawNode
-  public setPixelDataInput(node: OffscreenPixelDrawNode) {
+  private pixelDataInput?: PixelDataProviderNode
+  public setPixelDataInput(node: PixelDataProviderNode) {
     this.pixelDataInput = node
   }
 
