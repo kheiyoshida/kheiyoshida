@@ -58,6 +58,7 @@ void main() {
   }
 
   public setColor(color: [number, number, number, number]) {
+    console.log(this.shader)
     this.shader.use()
     this.shader.setUniform4fv('uColor', color)
   }

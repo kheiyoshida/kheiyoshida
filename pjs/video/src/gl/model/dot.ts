@@ -2,7 +2,7 @@ import { InstancedModel } from './model'
 import { Shader } from '../shader'
 import instanceVert from '../shaders/instance.vert?raw'
 import instanceFrag from '../shaders/instance.frag?raw'
-import { getGL } from '../gl'
+import { getGL } from 'graph-gl'
 
 export class DotInstance extends InstancedModel {
   constructor(maxInstanceCount: number, aspectRatio: number = 1) {

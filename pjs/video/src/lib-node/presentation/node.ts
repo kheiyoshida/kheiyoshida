@@ -23,7 +23,6 @@ export class PresentationNode extends OffscreenDrawNode {
 
   render() {
     const data = this.pixelDataInput!.renderTarget!.pixelDataArray
-    console.log(data.slice(0, 16))
     const tex = this.pixelDataInput!.renderTarget!.frameBuffer.tex
 
     for (const presentation of this.presentations) {

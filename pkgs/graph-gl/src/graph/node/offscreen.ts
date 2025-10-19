@@ -1,6 +1,5 @@
 import { ModelRenderingNode } from './node'
 import { DrawPixelTarget, DrawTarget } from '../target'
-import { getGL } from '../../gl'
 
 export type ImageResolution = {
   width: number
@@ -29,17 +28,7 @@ export class OffscreenPixelDrawNode extends ModelRenderingNode<DrawPixelTarget> 
     this.renderTarget!.frameBuffer.activate()
     super.render()
 
-    const gl = getGL()
-
-    console.log(
-      'FBO status:',
-      gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE,
-      'Binding:',
-      gl.getParameter(gl.FRAMEBUFFER_BINDING) === this.renderTarget!.frameBuffer.fbo
-    );
-
     const pixels = this.renderTarget!.frameBuffer.readPixels()
-    console.log('pixels snapshot', pixels.slice(0, 16))
 
     for (let i = 0; i < pixels.length; i++) {
       this.renderTarget!.pixelDataArray[i] = pixels[i]

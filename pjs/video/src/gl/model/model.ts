@@ -1,5 +1,5 @@
 import { Shader } from '../shader'
-import { getGL } from '../gl'
+import { getGL } from 'graph-gl'
 
 type AttributeDescriptor = {
   /**

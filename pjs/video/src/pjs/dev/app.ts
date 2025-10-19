@@ -1,12 +1,13 @@
-import { FrameBuffer, InputColorRenderingNode, OffscreenDrawNode, OnscreenRenderingNode } from 'graph-gl'
-import { MultiChannelNode, SingleChannelNode } from '../../lib-node/channel/node'
+import { FrameBuffer, InputColorRenderingNode, OffscreenDrawNode } from 'graph-gl'
+import { MultiChannelNode } from '../../lib-node/channel/node'
 import { VideoChannel } from '../../lib-node/channel/channel'
 import { VideoSupply } from '../../media/video/supply'
 import { videoSourceList as shinjukuVideoSourceList } from '../shinjuku/videos'
 import { youtubeVideoList } from './channels/videos'
 import { ChannelManager } from '../../lib-node/channel/manager'
-import { DebugDotPresentation } from './presentation/debug'
 import { startRenderingLoop } from '../../lib/pipeline'
+import { PresentationNode } from '../../lib-node/presentation/node'
+import { DotPresentation } from './presentation/dot'
 
 export async function app() {
   const channel = new VideoChannel(new VideoSupply(shinjukuVideoSourceList))
@@ -16,25 +17,26 @@ export async function app() {
 
   const channelManager = new ChannelManager([channel, channel2])
 
-  const chNode = new SingleChannelNode(channel)
+  const chNode = new MultiChannelNode(channelManager)
   chNode.renderTarget = {
-    frameBuffer: new FrameBuffer(96, 54),
-    pixelDataArray: new Uint8Array(96 * 54 * 4),
+    frameBuffer: new FrameBuffer(960, 540),
+    pixelDataArray: new Uint8Array(960 * 540 * 4),
   }
 
-  const presentation = new DebugDotPresentation(chNode.outputResolution)
+  const presentation = new DotPresentation(chNode.outputResolution)
 
-  // const presentationNode = new PresentationNode([presentation])
-  // presentationNode.renderTarget = {
-  //   frameBuffer: new FrameBuffer(960, 540),
-  // }
-  // presentationNode.setPixelDataInput(chNode)
-  // presentationNode.backgroundColor = [0.5, 0.5, 0.5, 1]
+  const presentationNode = new PresentationNode([presentation])
+  presentationNode.renderTarget = {
+    frameBuffer: new FrameBuffer(960, 540),
+  }
+  presentationNode.setPixelDataInput(chNode)
+  presentationNode.backgroundColor = [0.5, 0.5, 0.5, 1]
 
   const offscreen = new OffscreenDrawNode()
   offscreen.renderTarget = {
     frameBuffer: new FrameBuffer(960, 540),
   }
+  offscreen.backgroundColor = [1, 0, 0, 1]
   offscreen.drawables = [presentation.instance]
 
   const screen = new InputColorRenderingNode()
@@ -42,17 +44,10 @@ export async function app() {
 
   function renderLoop() {
     chNode.render()
-
-    const data = chNode.renderTarget!.pixelDataArray
-    console.log('data snapshot', data)
-    presentation.represent(data)
-
+    presentationNode.render()
     offscreen.render()
     screen.render()
   }
-  renderLoop()
 
-  setTimeout(renderLoop, 500)
-
-  // startRenderingLoop(renderLoop)
+  startRenderingLoop(renderLoop)
 }

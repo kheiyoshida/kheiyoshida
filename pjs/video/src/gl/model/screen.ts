@@ -3,7 +3,7 @@ import { Shader } from '../shader'
 import screenVert from '../shaders/screen.vert?raw'
 import screenFrag from '../shaders/screen.frag?raw'
 import { Texture } from '../texture'
-import { getGL } from '../gl'
+import { getGL } from 'graph-gl'
 
 export class Texture2dModel extends GenericModel {
   public tex: WebGLTexture | undefined

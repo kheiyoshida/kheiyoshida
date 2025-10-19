@@ -1,7 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-// import { app } from './app'
-import { app } from './debug'
+import { app } from './app'
 
 export default () => {
   const [initialised, setInitialised] = useState(false)
