@@ -1,10 +1,7 @@
-import { InstancedModel } from '../model'
-import { Shader } from '../../shader'
 import instanceVert from './glyph.vert?raw'
 import instanceFrag from './glyph.frag?raw'
-import { getGL } from '../../gl'
-import { Texture } from '../../texture'
 import { FntParser } from '../../../media/font/glyph'
+import { getGL, InstancedModel, Shader, Texture } from 'graph-gl'
 
 export class GlyphInstance extends InstancedModel {
   public readonly fntParser: FntParser

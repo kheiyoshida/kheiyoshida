@@ -1,5 +1,5 @@
 import { ModelRenderingNode } from './node'
-import { DrawTarget, RenderTarget } from '../target'
+import { DrawTarget } from '../target'
 
 export type ImageResolution = {
   width: number

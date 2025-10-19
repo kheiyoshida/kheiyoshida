@@ -1,4 +1,4 @@
-import { InstancedModel } from '../../gl/model/model'
+import { InstancedModel } from 'graph-gl'
 import { ImageResolution } from '../../media/pixels/types'
 
 export abstract class PixelPresentation<I extends InstancedModel = InstancedModel> {

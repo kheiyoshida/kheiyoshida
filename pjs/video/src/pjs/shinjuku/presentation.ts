@@ -1,6 +1,6 @@
 import { ImageResolution } from 'src/media/pixels/types'
 import { PixelPresentation } from '../../lib/presentation'
-import { DotInstance } from '../../gl/model/dot'
+import { DotInstance } from '../../gl/model/dot/instance'
 import { clamp, makeIntWobbler } from 'utils'
 
 export class DotPresentation extends PixelPresentation<DotInstance> {

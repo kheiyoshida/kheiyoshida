@@ -1,18 +1,6 @@
-import { VideoSupply } from '../../media/video/supply'
-import { VideoPixelChannel } from '../../lib/channel/channel'
-import { videoSourceList as shinjukuVideoSourceList } from '../shinjuku/videos'
+export const devVideoList = ['/assets/footage/bird/960p/bird1.mp4']
 
-const devVideoList = ['/assets/footage/bird/960p/bird1.mp4']
-
-export class DevVideoChannel extends VideoPixelChannel {
-  constructor(videoAspectRatio: number, videoWidth: number, outputResolutionWidth: number) {
-    const supply = new VideoSupply(shinjukuVideoSourceList)
-    supply.onEnded = () => supply.swapVideo()
-    super(supply, videoAspectRatio, videoWidth, outputResolutionWidth)
-  }
-}
-
-const youtubeVideoList = [
+export const youtubeVideoList = [
   `/assets/footage/youtube/lain.mp4`,
   `/assets/footage/youtube/GIS.mp4`,
   `/assets/footage/youtube/GIS2.mp4`,
@@ -40,23 +28,7 @@ const youtubeVideoList = [
   `/assets/footage/youtube/Nonomura.mp4`,
 ]
 
-export class YoutubeVideoChannel extends VideoPixelChannel {
-  constructor(videoAspectRatio: number, videoWidth: number, outputResolutionWidth: number) {
-    const supply = new VideoSupply(youtubeVideoList)
-    supply.onEnded = () => supply.swapVideo()
-    super(supply, videoAspectRatio, videoWidth, outputResolutionWidth)
-  }
-}
-
-export class RandomVideoChannel extends VideoPixelChannel {
-  constructor(videoAspectRatio: number, videoWidth: number, outputResolutionWidth: number) {
-    const supply = new VideoSupply(youtubeVideoList)
-    supply.onEnded = () => supply.swapVideo()
-    super(supply, videoAspectRatio, videoWidth, outputResolutionWidth)
-  }
-}
-
-const cityVideoList = [
+export const cityVideoList = [
   `/assets/footage/youtube/blade runner.mp4`,
   `/assets/footage/youtube/seventh seal.mp4`,
   `/assets/footage/youtube/chunking express.mp4`,
@@ -71,11 +43,3 @@ const cityVideoList = [
   `/assets/footage/city/city8.mp4`,
   `/assets/footage/city/city9.mp4`,
 ]
-
-export class CityChannel extends VideoPixelChannel {
-  constructor(videoAspectRatio: number, videoWidth: number, outputResolutionWidth: number) {
-    const supply = new VideoSupply(cityVideoList)
-    supply.onEnded = () => supply.swapVideo()
-    super(supply, videoAspectRatio, videoWidth, outputResolutionWidth)
-  }
-}

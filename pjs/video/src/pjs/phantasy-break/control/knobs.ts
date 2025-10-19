@@ -6,9 +6,9 @@ import { DotPresentation } from '../presentation/dot'
 import { GlyphPresentation } from '../presentation/glyph'
 import { MultiplyEffectModel } from '../effect/multiply'
 import { CubeRenderingChannel } from '../channels/object'
-import { ColorEffect } from '../effect/saturation'
+import { ColorEffect } from '../effect/color'
 import { SoundLevel } from './soundLevel'
-import { CameraChannel } from '../../../lib/channel/camera'
+import { CameraChannel } from '../../../lib-node/channel/camera/camera'
 import { DebugPresentation } from '../presentation/debug'
 
 export class ChannelControl implements IKnobParamsControlAdapter {

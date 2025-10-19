@@ -1,11 +1,10 @@
 import { ImageResolution } from 'src/media/pixels/types'
-import { PixelPresentation } from '../../../lib/presentation'
 import { GlyphInstance } from '../../../gl/model/glyph/instance'
 import { FntParser } from '../../../media/font/glyph'
-import { Texture } from '../../../gl/texture'
-import { getGL } from '../../../gl/gl'
 import fnt from '../../../assets/fonts/Alphabets512.fnt?raw'
 import fontImageUrl from '../../../assets/fonts/Alphabets512.png?url'
+import { getGL, Texture } from 'graph-gl'
+import { PixelPresentation } from '../../../lib-node/presentation/presentation'
 
 export class TextPresentation extends PixelPresentation<GlyphInstance> {
   private tex: WebGLTexture

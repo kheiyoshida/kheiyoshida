@@ -1,8 +1,8 @@
 import { ImageResolution } from 'src/media/pixels/types'
-import { PixelPresentation } from '../../../lib/presentation'
 import { GlyphInstance } from '../../../gl/model/glyph/instance'
-import { Texture } from '../../../gl/texture'
 import { RangedValue } from '../utils/rangedValue'
+import { Texture } from 'graph-gl'
+import { PixelPresentation } from '../../../lib-node/presentation/presentation'
 
 export interface TextData {
   fnt: string

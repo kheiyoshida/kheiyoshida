@@ -1,12 +1,9 @@
-import { Shader } from '../../../gl/shader'
 import vert from './multiply.vert?raw'
 import frag from './multiply.frag?raw'
-import { FrameBuffer } from '../../../gl/frameBuffer'
-import { InstancedModel } from '../../../gl/model/model'
-import { getGL } from '../../../gl/gl'
-import { IEffectModel } from '../../../lib/effect/slot'
 import { fireByRate } from 'utils'
-import { RangedValue } from '../utils/rangedValue'
+import { RangedValue } from '../../utils/rangedValue'
+import { FrameBuffer, getGL, InstancedModel, Shader } from 'graph-gl'
+import { IEffectModel } from '../../../../lib-node/effect/node'
 
 export class MultiplyEffectModel extends InstancedModel implements IEffectModel {
   public tex: WebGLTexture | undefined

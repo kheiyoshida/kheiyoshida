@@ -1,10 +1,7 @@
-import { Shader } from '../../../gl/shader'
+import { FrameBuffer, getGL, InstancedModel, Shader } from 'graph-gl'
 import vert from './kaleido.vert?raw'
 import frag from './kaleido.frag?raw'
-import { FrameBuffer } from '../../../gl/frameBuffer'
-import { InstancedModel } from '../../../gl/model/model'
-import { getGL } from '../../../gl/gl'
-import { IEffectModel } from '../../../lib/effect/slot'
+import { IEffectModel } from '../../../../lib-node/effect/node'
 
 export class KaleidoscopeEffectModel extends InstancedModel implements IEffectModel {
   constructor(maxInstanceCount: number) {

@@ -1,6 +1,6 @@
 import { ImageResolution } from 'src/media/pixels/types'
 
-import { DotInstance } from '../../../gl/model/dot'
+import { DotInstance } from '../../../gl/model/dot/instance'
 import { RangedValue } from '../utils/rangedValue'
 import { PixelPresentation } from '../../../lib-node/presentation/presentation'
 

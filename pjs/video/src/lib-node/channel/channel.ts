@@ -1,7 +1,6 @@
-import { Drawable, ScreenRect, Texture } from 'graph-gl'
+import { Drawable, getGL, ScreenRect, Shader, Texture } from 'graph-gl'
 import { VideoSupply } from '../../media/video/supply'
 import { VideoSource } from '../../lib/source/source'
-import { getGL } from '../../gl/gl'
 
 export abstract class Channel implements Drawable {
   protected abstract drawObjects: Drawable[]
@@ -20,9 +19,9 @@ export class TextureChannel<VS extends VideoSource = VideoSource> extends Channe
   public readonly screenRect: ScreenRect
   private readonly texture: Texture = new Texture()
 
-  constructor(readonly source: VS) {
+  constructor(readonly source: VS, screenRectShader?: Shader) {
     super()
-    this.screenRect = new ScreenRect()
+    this.screenRect = new ScreenRect(screenRectShader)
     this.screenRect.tex = this.texture.tex
     this.drawObjects = [this.screenRect]
   }
@@ -38,8 +37,8 @@ export class TextureChannel<VS extends VideoSource = VideoSource> extends Channe
 }
 
 export class VideoChannel extends TextureChannel<VideoSupply> {
-  constructor(source: VideoSupply) {
-    super(source)
+  constructor(source: VideoSupply | string[]) {
+    super(source instanceof VideoSupply ? source : new VideoSupply(source))
   }
 
   private isLoading = true;

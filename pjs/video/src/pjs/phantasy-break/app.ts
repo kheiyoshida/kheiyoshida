@@ -1,16 +1,14 @@
-import { getGL } from '../../gl/gl'
 import { Message } from '../shinjuku/message'
-import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
-import { CityChannel, DevVideoChannel, YoutubeVideoChannel } from './channel'
+import { startRenderingLoop } from '../../lib/pipeline'
+import { videoSourceList, videoSourceList as shinjukuVideoSourceList } from '../shinjuku/videos'
 import { DotPresentation } from './presentation/dot'
 import { LinePresentation } from './presentation/line'
-import { ColorEffect } from './effect/saturation'
-import { CameraChannel } from '../../lib/channel/camera'
+import { ColorEffect } from './effect/color'
+import { CameraChannel } from '../../lib-node/channel/camera/camera'
 import { CameraInputSource } from '../../media/camera'
 import { bindMidiInputMessage } from '../../media/midi/input'
 import { LaunchControl } from '../../lib/params/launchControl'
 import { ParamsManager } from '../../lib/params/manager'
-import { ChannelManager } from '../../lib/channel/manager'
 import { CubeRenderingChannel } from './channels/object'
 import { GlyphPresentation } from './presentation/glyph'
 import { ChannelParamsControl } from './control/fader'
@@ -25,7 +23,6 @@ import {
   PostEffectControl,
 } from './control/knobs'
 import { MultiplyEffectModel } from './effect/multiply'
-import { EffectSlot } from '../../lib/effect/slot'
 import { TextPresentation } from './presentation/text'
 import { ImageResolution } from '../../media/pixels/types'
 import { createAudioInputSource } from '../../media/audio/input'
@@ -35,12 +32,27 @@ import { DualShockKaleidoscopeShooterControl } from './control/shooter'
 import { PS3DualShock } from '../../media/gamepad/ps3'
 import { AATextData, AlphabetTextData, KatakanaTextData } from './text/textData'
 import { DebugPresentation } from './presentation/debug'
+import { DrawRTHandle, FrameBuffer, getGL, InputColorRenderingNode } from 'graph-gl'
+import { ChannelManager } from '../../lib-node/channel/manager'
+import { MultiChannelNode } from '../../lib-node/channel/node'
+import { VideoChannel } from '../../lib-node/channel/channel'
+import { cityVideoList } from './channel'
+import { AdditivePresentationNode, PresentationNode } from '../../lib-node/presentation/node'
+import { EffectNode } from '../../lib-node/effect/node'
+import { PixelDataRTHandle } from '../../lib-node/channel/target'
 
 // config
 const videoAspectRatio = 16 / 9
 const frameBufferWidth = 960
 const outputResolutionWidth = frameBufferWidth / 4
 const backgroundColor: [number, number, number, number] = [0, 0, 0, 1]
+
+const frameBufferResolution: ImageResolution = {
+  width: frameBufferWidth,
+  height: frameBufferWidth / videoAspectRatio,
+}
+const width = frameBufferResolution.width
+const height = frameBufferResolution.height
 
 export const app = async () => {
   // init gl
@@ -50,43 +62,42 @@ export const app = async () => {
   const deviceName = 'Zen Go'
   const soundLevel = new SoundLevel(await createAudioInputSource())
 
-  const frameBufferResolution: ImageResolution = {
-    width: frameBufferWidth,
-    height: frameBufferWidth / videoAspectRatio,
-  }
-
-  // rendering
-  const objectCh = new CubeRenderingChannel(frameBufferResolution, outputResolutionWidth)
-  const shinjukuVideoCh = new DevVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
-  const youtubeCh = new YoutubeVideoChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
-  const cityCh = new CityChannel(videoAspectRatio, frameBufferWidth, outputResolutionWidth)
-
+  // set up camera
   const cameraName = 'Video Control'
   const cameraSource = await CameraInputSource.create(cameraName)
-  const cameraCh = new CameraChannel(cameraSource, videoAspectRatio, frameBufferWidth, outputResolutionWidth)
-  cameraCh.reverse(true)
 
-  const dotPresentation = new DotPresentation(shinjukuVideoCh.outputResolution, 1)
+  // channels
+  const cameraCh = new CameraChannel(cameraSource)
+  const objectCh = new CubeRenderingChannel()
+  const shinjukuVideoCh = new VideoChannel(shinjukuVideoSourceList)
+  const youtubeCh = new VideoChannel(videoSourceList)
+  const cityCh = new VideoChannel(cityVideoList)
+
+  const channelManager = new ChannelManager([cameraCh, objectCh, shinjukuVideoCh, youtubeCh, cityCh])
+  const chNode = new MultiChannelNode(channelManager)
+  chNode.renderTarget = new PixelDataRTHandle(new FrameBuffer(width, height), outputResolutionWidth)
+
+  // presentations
+  const linePresentation = new LinePresentation(chNode.outputResolution)
+  const dotPresentation = new DotPresentation(chNode.outputResolution, 1)
 
   const aaTextData = new AATextData()
   const alphabetTextData = new AlphabetTextData('PHANTASY BREAK ')
   const katakanaTextData = new KatakanaTextData()
-
-  const glyphPresentation = new GlyphPresentation(shinjukuVideoCh.outputResolution, [
+  const glyphPresentation = new GlyphPresentation(chNode.outputResolution, [
     aaTextData,
     alphabetTextData,
     katakanaTextData,
   ])
 
-  const linePresentation = new LinePresentation(shinjukuVideoCh.outputResolution)
+  const presentationNode = new PresentationNode([linePresentation, dotPresentation, glyphPresentation])
 
-  //channels
-  const channelManager = new ChannelManager([cameraCh, objectCh, shinjukuVideoCh, youtubeCh, cityCh])
-
-  const colorFx = new ColorEffect()
+  // post effects
   const multiplyFx = new MultiplyEffectModel(16)
   const kaleidoscopeFx = new KaleidoscopeEffectModel(16)
+  const fxNode = new EffectNode([multiplyFx, kaleidoscopeFx])
 
+  // post presentations
   const textPresentation = new TextPresentation(frameBufferResolution, 50)
   textPresentation.fontSize = 6
   textPresentation.posY = 540 - 16
@@ -105,18 +116,53 @@ export const app = async () => {
   debugPresentation.posX = 180
   debugPresentation.posY = 40
 
-  // prettier-ignore
-  const pipeline = new VideoProjectionPipeline(
-    frameBufferResolution,
-    channelManager,
-    [linePresentation, dotPresentation, glyphPresentation],
-    [
-      new EffectSlot([kaleidoscopeFx, multiplyFx]),
-    ],
-    [textPresentation, scorePresentation, debugPresentation],
-    new EffectSlot([colorFx])
-  )
-  pipeline.setBackgroundColor(backgroundColor)
+  const postPresentationNode = new AdditivePresentationNode([
+    textPresentation,
+    scorePresentation,
+    debugPresentation,
+  ])
+
+  // final effects
+  const colorFx = new ColorEffect()
+  const finalFxNode = new EffectNode([colorFx])
+
+  // screen
+  const screenNode = new InputColorRenderingNode()
+
+  // render graph
+
+  const rtA = new DrawRTHandle(new FrameBuffer(width, height))
+  const rtB = new DrawRTHandle(new FrameBuffer(width, height))
+
+  presentationNode.renderTarget = rtA
+  presentationNode.setPixelDataInput(chNode)
+  fxNode.renderTarget = rtB
+  fxNode.setInput(presentationNode)
+  postPresentationNode.renderTarget = rtA
+  postPresentationNode.setFrameInput(fxNode)
+  postPresentationNode.setPixelDataInput(chNode) // TODO: make object node
+
+  finalFxNode.renderTarget = rtB
+  finalFxNode.setInput(postPresentationNode)
+
+  screenNode.setInput(finalFxNode)
+  screenNode.backgroundColor = backgroundColor
+
+  chNode.validate()
+  presentationNode.validate()
+  fxNode.validate()
+  postPresentationNode.validate()
+  finalFxNode.validate()
+  screenNode.validate()
+
+  function renderGraph() {
+    chNode.render()
+    presentationNode.render()
+    fxNode.render()
+    postPresentationNode.render()
+    finalFxNode.render()
+    screenNode.render()
+  }
 
   // control
   const channelParams = new ChannelParamsControl(channelManager)
@@ -180,7 +226,7 @@ export const app = async () => {
     }
 
     // rendering phase
-    pipeline.render()
+    renderGraph()
   }
 
   // set up

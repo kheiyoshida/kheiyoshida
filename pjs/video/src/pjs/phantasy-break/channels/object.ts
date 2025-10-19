@@ -1,13 +1,11 @@
-import { ObjectRenderingChannel } from '../../../lib/channel/object'
+import { ObjectRenderingChannel } from '../../../lib-node/channel/object'
 import { ImageResolution } from '../../../media/pixels/types'
-import { GenericModel } from '../../../gl/model/model'
-import { Shader } from '../../../gl/shader'
 import vert from './cube.vert?raw'
 import frag from './cube.frag?raw'
-import { getGL } from '../../../gl/gl'
 import { mat4, vec3 } from 'gl-matrix'
 import { RangedValue } from '../utils/rangedValue'
 import { randomIntInclusiveBetween } from 'utils'
+import { GenericModel, getGL, Shader } from 'graph-gl'
 
 class CubeModel extends GenericModel {
   constructor(color: [number, number, number]) {
@@ -111,15 +109,12 @@ class CubeModel extends GenericModel {
 export class CubeRenderingChannel extends ObjectRenderingChannel {
   public readonly cube: CubeModel
   public readonly cube2: CubeModel
-  constructor(frameBufferResolution: ImageResolution, outputResolutionWidth: number) {
-    super(frameBufferResolution, outputResolutionWidth)
-    this.cube = new CubeModel([0, 1, 0])
-    this.cube2 = new CubeModel([0, 0, 1])
-    this.models.push(this.cube)
-    this.models.push(this.cube2)
-  }
-  public get bufferTex(): WebGLTexture {
-    return this.offscreenPass.frameBuffer!.tex
+  constructor() {
+    const cube = new CubeModel([0, 1, 0])
+    const cube2 = new CubeModel([0, 0, 1])
+    super([cube, cube2])
+    this.cube = cube
+    this.cube2 = cube2
   }
 
   public applyEffect(level: number): void {

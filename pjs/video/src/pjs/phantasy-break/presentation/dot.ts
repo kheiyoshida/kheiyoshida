@@ -1,7 +1,7 @@
 import { ImageResolution } from 'src/media/pixels/types'
-import { PixelPresentation } from '../../../lib/presentation'
-import { DotInstance } from '../../../gl/model/dot'
+import { DotInstance } from '../../../gl/model/dot/instance'
 import { RangedValue } from '../utils/rangedValue'
+import { PixelPresentation } from '../../../lib-node/presentation/presentation'
 
 export class DotPresentation extends PixelPresentation<DotInstance> {
   constructor(pixelDataResolution: ImageResolution, dotAspectRatio: number = 1) {

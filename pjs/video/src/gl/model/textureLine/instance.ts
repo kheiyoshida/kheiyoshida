@@ -1,10 +1,11 @@
-import { InstancedModel } from '../model'
-import { Shader } from '../../shader'
 import vertAlt from './alt.vert?raw'
 import frag from './line.frag?raw'
-import { getGL } from '../../gl'
 import { ImageResolution } from '../../../media/pixels/types'
+import { getGL, InstancedModel, Shader } from 'graph-gl'
 
+/**
+ * draw lines based on texture fragments
+ */
 export class TextureLineInstance extends InstancedModel {
   constructor(maxInstanceCount: number, resolution: ImageResolution) {
     const instanceShader = new Shader(vertAlt, frag)

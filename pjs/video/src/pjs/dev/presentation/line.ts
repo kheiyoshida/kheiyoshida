@@ -1,8 +1,8 @@
 import { PixelPresentation } from '../../../lib-node/presentation/presentation'
 import { ImageResolution } from '../../../media/pixels/types'
 import { TextureLineInstance } from '../../../gl/model/textureLine/instance'
-import { getGL } from '../../../gl/gl'
 import { RangedValue } from '../utils/rangedValue'
+import { getGL } from 'graph-gl'
 
 export class LinePresentation extends PixelPresentation {
   constructor(

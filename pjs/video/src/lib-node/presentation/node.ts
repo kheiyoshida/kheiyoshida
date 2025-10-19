@@ -1,4 +1,4 @@
-import { OffscreenDrawNode, OffscreenNode, OffscreenPixelDrawNode, ScreenRect } from 'graph-gl'
+import { OffscreenDrawNode, OffscreenNode, ScreenRect } from 'graph-gl'
 import { PixelPresentation } from './presentation'
 import { PixelDataProviderNode } from '../channel/node'
 
@@ -27,7 +27,7 @@ export class PresentationNode extends OffscreenDrawNode {
     const tex = this.pixelDataInput!.renderTarget!.frameBuffer.tex
 
     for (const presentation of this.presentations) {
-      presentation.represent(data, tex)
+      if (presentation.enabled) presentation.represent(data, tex)
     }
 
     super.render()

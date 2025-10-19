@@ -1,9 +1,9 @@
 import vert from './saturation.vert?raw'
 import frag from './saturation.frag?raw'
-import { Shader } from '../../../gl/shader'
-import { ScreenEffectModel } from '../../../lib/effect/slot'
 import { randomFloatBetween } from 'utils'
-import { RangedValue } from '../utils/rangedValue'
+import { RangedValue } from '../../utils/rangedValue'
+import { Shader } from 'graph-gl'
+import { ScreenEffectModel } from '../../../../lib-node/effect/node'
 
 export class ColorEffect extends ScreenEffectModel {
   constructor() {
@@ -49,7 +49,11 @@ export class ColorEffect extends ScreenEffectModel {
   public saturationOffsetLevel = new RangedValue(0, 0.1, 0, 1)
   public moveSaturation(rand: number) {
     const max = this.saturationOffsetLevel.updateValue(rand)
-    this.saturationOffset = [randomFloatBetween(0, max), randomFloatBetween(0, max), randomFloatBetween(0, max)]
+    this.saturationOffset = [
+      randomFloatBetween(0, max),
+      randomFloatBetween(0, max),
+      randomFloatBetween(0, max),
+    ]
     this.saturation = this._saturation
   }
 
