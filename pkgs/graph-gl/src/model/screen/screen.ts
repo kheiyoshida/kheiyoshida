@@ -46,10 +46,10 @@ export class ScreenRect extends Texture2dModel {
   constructor(screenShader = new Shader(screenVert, screenFrag)) {
     // prettier-ignore
     const screenRectVertices = new Float32Array([
-      -1, -1, 0, 1,
-      1, -1, 1, 1,
-      -1, 1, 0, 0,
-      1, 1, 1, 0
+      -1, -1, 0, 0,
+      1, -1, 1, 0,
+      -1, 1, 0, 1,
+      1, 1, 1, 1
     ])
     super(screenShader, screenRectVertices)
   }

@@ -17,13 +17,17 @@ export abstract class Channel implements Drawable {
 export class TextureChannel<VS extends VideoSource = VideoSource> extends Channel {
   protected drawObjects: Drawable[]
   public readonly screenRect: ScreenRect
-  private readonly texture: Texture = new Texture()
+  protected readonly texture: Texture = new Texture()
 
-  constructor(readonly source: VS, screenRectShader?: Shader) {
+  constructor(
+    readonly source: VS,
+    screenRectShader?: Shader
+  ) {
     super()
     this.screenRect = new ScreenRect(screenRectShader)
     this.screenRect.tex = this.texture.tex
     this.drawObjects = [this.screenRect]
+    this.texture.yFlip = true
   }
 
   get gl() {
@@ -41,7 +45,7 @@ export class VideoChannel extends TextureChannel<VideoSupply> {
     super(source instanceof VideoSupply ? source : new VideoSupply(source))
   }
 
-  private isLoading = true;
+  private isLoading = true
 
   override get isAvailable() {
     return !this.isLoading

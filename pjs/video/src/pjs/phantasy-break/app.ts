@@ -68,6 +68,7 @@ export const app = async () => {
 
   // channels
   const cameraCh = new CameraChannel(cameraSource)
+  cameraCh.reverse(true)
   const objectCh = new CubeRenderingChannel()
   const shinjukuVideoCh = new VideoChannel(shinjukuVideoSourceList)
   const youtubeCh = new VideoChannel(videoSourceList)
@@ -235,6 +236,8 @@ export const app = async () => {
   message.text = 'loading...'
   await shinjukuVideoCh.waitForReady((progress) => (message.text = `loading: ${progress}%`))
   await youtubeCh.waitForReady((_) => undefined)
+
+  kaleidoscopeFx.enabled = false
   document.body.onclick = async (e) => {
     if (!dualshock) {
       dualshock = await PS3DualShock.Connect()
