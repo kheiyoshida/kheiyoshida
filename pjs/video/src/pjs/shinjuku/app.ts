@@ -1,13 +1,16 @@
-import { getGL } from '../../gl/gl'
 import { clamp } from 'utils'
 import { FFTSize } from '../../media/audio/types'
-import { getAudioCtx, createSoundSource, SoundAnalyser } from '../../media/audio/analyzer'
+import { createSoundSource, getAudioCtx, SoundAnalyser } from '../../media/audio/analyzer'
 import { getMusicLoc } from '../../media/cdn'
 import { Message } from './message'
-import { ShinjukuChannel } from './channel'
+import { ShinjukuChannelNode } from './channel'
 import { DotPresentation } from './presentation'
-import { startRenderingLoop, VideoProjectionPipeline } from '../../lib/pipeline'
-import { ChannelManager } from '../../lib/channel/manager'
+import { startRenderingLoop } from '../../lib/pipeline'
+import { DrawRTHandle, FrameBuffer, getGL, InputColorRenderingNode } from 'graph-gl'
+import { VideoChannel } from '../../lib-node/channel/channel'
+import { PixelDataRTHandle } from '../../lib-node/channel/target'
+import { videoSourceList } from './videos'
+import { PresentationNode } from '../../lib-node/presentation/node'
 
 // config
 const isVertical = window.innerWidth < window.innerHeight
@@ -15,6 +18,7 @@ const fftSize: FFTSize = 32
 
 const videoAspectRatio = 16 / 9
 const frameBufferWidth = 960
+const frameBufferHeight = frameBufferWidth / videoAspectRatio
 const backgroundColor: [number, number, number, number] = [0, 0, 0, 1]
 const updateFrequency = 4
 
@@ -45,14 +49,30 @@ export const app = async () => {
     soundSource.mediaElement.play()
   }
 
-  // rendering
-  const channel = new ShinjukuChannel(videoAspectRatio, frameBufferWidth, frameBufferWidth / 4)
-  const dotAspectRatio = (2 * 16) / 9
-  const dotPresentation = new DotPresentation(channel.outputResolution, dotAspectRatio)
+  // channel
+  const channel = new VideoChannel(videoSourceList)
+  const chNode = new ShinjukuChannelNode(channel)
+  chNode.renderTarget = new PixelDataRTHandle(
+    new FrameBuffer(frameBufferWidth, frameBufferHeight),
+    frameBufferWidth / 4
+  )
 
-  const channelManager = new ChannelManager([channel])
-  const pipeline = new VideoProjectionPipeline(channelManager, [dotPresentation])
-  pipeline.setBackgroundColor(backgroundColor)
+  // presentation
+  const dotAspectRatio = (2 * 16) / 9
+  const dotPresentation = new DotPresentation(chNode.outputResolution, dotAspectRatio)
+  const presentationNode = new PresentationNode([dotPresentation])
+  presentationNode.setPixelDataInput(chNode)
+  presentationNode.renderTarget = new DrawRTHandle(new FrameBuffer(frameBufferWidth, frameBufferHeight))
+  presentationNode.backgroundColor = backgroundColor
+
+  // screen
+  const screenNode = new InputColorRenderingNode()
+  screenNode.setInput(presentationNode)
+  screenNode.backgroundColor = backgroundColor
+
+  chNode.validate()
+  presentationNode.validate()
+  screenNode.validate()
 
   function renderLoop(frameCount: number) {
     // control
@@ -60,13 +80,15 @@ export const app = async () => {
 
     // param phase
     if (frameCount % updateFrequency === 0) {
-      channel.update()
+      chNode.update()
     }
     const base = analyser.analyze().reduce((a, b) => a + b) / analyser.bufferLength
     dotPresentation.wave = clamp((base - 0.3) * 10, 0, 2)
 
     // rendering phase
-    pipeline.render()
+    chNode.render()
+    presentationNode.render()
+    screenNode.render()
   }
 
   // set up
@@ -80,6 +102,6 @@ export const app = async () => {
     playSound()
     message.hide()
     startRenderingLoop(renderLoop)
-    canvas.addEventListener('pointerdown', (e) => channel.interact(e))
+    canvas.addEventListener('pointerdown', (e) => chNode.interact(e))
   }
 }

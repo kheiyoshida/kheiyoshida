@@ -12,8 +12,8 @@ export abstract class PixelDataProviderNode extends OffscreenPixelDrawNode<Pixel
   }
 }
 
-export class SingleChannelNode extends PixelDataProviderNode {
-  constructor(private channel: Channel) {
+export class SingleChannelNode<Ch extends Channel> extends PixelDataProviderNode {
+  constructor(protected channel: Ch) {
     super()
   }
 
@@ -23,7 +23,7 @@ export class SingleChannelNode extends PixelDataProviderNode {
 }
 
 export class MultiChannelNode extends PixelDataProviderNode {
-  constructor(private channelManager: ChannelManager) {
+  constructor(protected channelManager: ChannelManager) {
     super()
   }
 

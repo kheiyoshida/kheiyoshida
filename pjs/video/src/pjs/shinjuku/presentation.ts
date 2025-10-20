@@ -1,7 +1,7 @@
 import { ImageResolution } from 'src/media/pixels/types'
-import { PixelPresentation } from '../../lib/presentation'
 import { DotInstance } from '../../gl/model/dot/instance'
 import { clamp, makeIntWobbler } from 'utils'
+import { PixelPresentation } from '../../lib-node/presentation/presentation'
 
 export class DotPresentation extends PixelPresentation<DotInstance> {
   constructor(pixelDataResolution: ImageResolution, dotAspectRatio: number) {
@@ -9,7 +9,7 @@ export class DotPresentation extends PixelPresentation<DotInstance> {
     const dotInstance = new DotInstance(maxInstanceCount, dotAspectRatio)
     super(dotInstance, pixelDataResolution)
 
-    this.singleDotSize = 0.5 / pixelDataResolution.height
+    this.singleDotSize = 1 / pixelDataResolution.height
   }
 
   // needs to be here to override setter
@@ -18,7 +18,7 @@ export class DotPresentation extends PixelPresentation<DotInstance> {
   }
 
   public set pixelDataResolution(value: ImageResolution) {
-    this.singleDotSize = 0.5 / value.height
+    this.singleDotSize = 1 / value.height
     super.pixelDataResolution = value
   }
 

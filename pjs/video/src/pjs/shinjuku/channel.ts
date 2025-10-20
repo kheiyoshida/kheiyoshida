@@ -1,21 +1,16 @@
-import { VideoPixelChannel } from '../../lib/channel/channel'
-import { VideoSupply } from '../../media/video/supply'
 import { fireByRate, makeIntWobbler, randomIntInclusiveBetween, randomItemFromArray } from 'utils'
-import { videoSourceList } from './videos'
+import { VideoChannel } from '../../lib-node/channel/channel'
+import { SingleChannelNode } from '../../lib-node/channel/node'
 
-export class ShinjukuChannel extends VideoPixelChannel {
-  constructor(videoAspectRatio: number, videoWidth: number, outputResolutionWidth: number) {
-    super(new VideoSupply(videoSourceList), videoAspectRatio, videoWidth, outputResolutionWidth)
-  }
-
+export class ShinjukuChannelNode extends SingleChannelNode<VideoChannel> {
   // use cases
   private wobble = makeIntWobbler(10)
   public update() {
     if (fireByRate(0.05)) {
-      this.source.swapVideo()
+      this.channel.source.swapVideo()
     }
     if (fireByRate(0.4)) {
-      this.source.updateOptions({
+      this.channel.source.updateOptions({
         speed: randomItemFromArray([0.1, 0.3, 0.5]),
       })
     }
@@ -34,7 +29,7 @@ export class ShinjukuChannel extends VideoPixelChannel {
     const offsetX = e.x - window.innerWidth / 2
     const offsetY = e.y - window.innerHeight / 2
     if (this.scope.magnifyLevel == this.scope.maxMagnifyLevel) {
-      this.source.swapVideo()
+      this.channel.source.swapVideo()
       this.scope.magnifyLevel = 0
     } else {
       this.scope.magnifyLevel++
