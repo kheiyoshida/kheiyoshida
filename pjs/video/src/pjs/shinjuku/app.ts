@@ -9,7 +9,7 @@ import { startRenderingLoop } from '../../lib/pipeline'
 import { DrawRTHandle, FrameBuffer, getGL, InputColorRenderingNode } from 'graph-gl'
 import { VideoChannel } from '../../lib-node/channel/channel'
 import { PixelDataRTHandle } from '../../lib-node/channel/target'
-import { videoSourceList } from './videos'
+import { cdnVideoSourceList } from './videos'
 import { PresentationNode } from '../../lib-node/presentation/node'
 
 // config
@@ -50,7 +50,7 @@ export const app = async () => {
   }
 
   // channel
-  const channel = new VideoChannel(videoSourceList)
+  const channel = new VideoChannel(cdnVideoSourceList)
   const chNode = new ShinjukuChannelNode(channel)
   chNode.renderTarget = new PixelDataRTHandle(
     new FrameBuffer(frameBufferWidth, frameBufferHeight),
