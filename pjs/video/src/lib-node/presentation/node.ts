@@ -1,4 +1,4 @@
-import { OffscreenDrawNode, OffscreenNode, ScreenRect } from 'graph-gl'
+import { Drawable, OffscreenDrawNode, OffscreenNode, ScreenRect } from 'graph-gl'
 import { PixelPresentation } from './presentation'
 import { PixelDataProviderNode } from '../channel/node'
 
@@ -7,9 +7,8 @@ import { PixelDataProviderNode } from '../channel/node'
  * optionally using input's render result (data or frame buffer)
  */
 export class PresentationNode extends OffscreenDrawNode {
-  constructor(private readonly presentations: PixelPresentation[]) {
+  constructor(protected readonly presentations: PixelPresentation[]) {
     super()
-    this.drawables = this.presentations.map((p) => p.instance)
   }
 
   private pixelDataInput?: PixelDataProviderNode
@@ -32,6 +31,10 @@ export class PresentationNode extends OffscreenDrawNode {
 
     super.render()
   }
+
+  override get drawables(): Drawable[] {
+    return this.presentations.filter(p => p.enabled).map(p => p.instance)
+  }
 }
 
 /**
@@ -43,6 +46,10 @@ export class AdditivePresentationNode extends PresentationNode {
   constructor(presentations: PixelPresentation[]) {
     super(presentations)
     this.drawables.unshift(this.screenRect) // render screen first, and then draw others = additive
+  }
+
+  override get drawables(): Drawable[] {
+    return [this.screenRect, ...(this.presentations.filter(p => p.enabled).map(p => p.instance))]
   }
 
   private frameInput?: OffscreenNode
