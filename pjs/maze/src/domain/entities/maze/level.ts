@@ -16,7 +16,7 @@ export const buildNewLevel = (params: MazeLevelParams, stairType: StairType): Ma
 }
 
 /**
- * get corridor blocks with two edges faced in the opposite
+ * get corridor blocks with two edges faced on the opposite
  */
 export const getCorridorBlocks = (level: MazeLevel): Block[] => filterItems(level, (node) => node.isCorridor)
 

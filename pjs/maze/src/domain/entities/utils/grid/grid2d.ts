@@ -1,8 +1,8 @@
-
-export type Position2D = { x: number; y: number }
+import { randomIntInclusiveBetween } from 'utils'
+import { Position2D } from './position2d.ts'
 
 export class Grid2D<Item> {
-  public readonly items: Item[][]
+  public readonly items: (Item | null)[][]
 
   constructor(
     readonly sizeX: number,
@@ -27,6 +27,10 @@ export class Grid2D<Item> {
     this.items.forEach((row, y) => row.forEach((item, x) => cb(item, { x, y })))
   }
 
+  public iterateItems(cb: (item: Item, position: Position2D) => void) {
+    this.items.forEach((row, y) => row.forEach((item, x) => item && cb(item, { x, y })))
+  }
+
   public filter(predicate: (item: Item, position: Position2D) => boolean): Item[] {
     const result: Item[] = []
     this.iterate((item, position) => {
@@ -35,5 +39,23 @@ export class Grid2D<Item> {
       }
     })
     return result
+  }
+
+  public count(): number {
+    return this.items.reduce((acc, row) => acc + row.filter((item) => item !== null).length, 0)
+  }
+
+  getRandomPosition(): Position2D {
+    return {
+      x: randomIntInclusiveBetween(0, this.sizeX - 1),
+      y: randomIntInclusiveBetween(0, this.sizeY - 1),
+    }
+  }
+
+  getRandomEvenPosition(): Position2D {
+    return {
+      x: randomIntInclusiveBetween(0, Math.floor((this.sizeX - 1) / 2)) * 2,
+      y: randomIntInclusiveBetween(0, Math.floor((this.sizeY - 1) / 2)) * 2,
+    }
   }
 }

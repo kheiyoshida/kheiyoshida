@@ -12,7 +12,7 @@ import { composeLogicalView, LogicalView } from './view'
 export class Game {
   constructor(
     private maze: Maze,
-    private player: Player,
+    private player: Player<string>,
     private mapper: Mapper
   ) {
     this.#setupNextLevel()

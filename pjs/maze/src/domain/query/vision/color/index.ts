@@ -1,13 +1,8 @@
 import { ColorParams, FloorColorParams, FrameColorParams } from './types.ts'
-import {
-  fireByRate,
-  makeConstrainedRandomEmitter,
-  randomFloatBetween,
-  randomFloatInAsymmetricRange,
-} from 'utils'
-import { StatusState } from '../../../../store/status.ts'
+import { fireByRate, makeConstrainedRandomEmitter, randomFloatBetween, randomFloatInAsymmetricRange } from 'utils'
 import { makeDecreasingParameter, makeIncreasingParameter } from '../../utils/params.ts'
 import { maze, player } from '../../../setup'
+import { Status } from '../../../entities/player/status.ts'
 
 export const getColorParams = (): ColorParams => {
   const floor = maze.currentFloor
@@ -56,7 +51,7 @@ const litLevelParameter = makeDecreasingParameter(-0.5, 1.0, 1500)
 // change drastically when sanity is low
 const hueDeltaParameter = makeIncreasingParameter(0.0, 1, 2000)
 
-const getFrameColorParams = ({ stamina, sanity }: StatusState): FrameColorParams => {
+const getFrameColorParams = ({ stamina, sanity }: Status): FrameColorParams => {
   return {
     litLevel: litLevelParameter(stamina),
     hueDelta: hueDeltaParameter(sanity) * randomFloatInAsymmetricRange(0.1),
