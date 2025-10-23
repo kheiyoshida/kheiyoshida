@@ -1,6 +1,6 @@
 import { connectCells } from './connect.ts'
 import { findPath } from '../path.ts'
-import { makeTestGrid, visualizeGrid } from '../../../../__test__/grid/visualise.ts'
+import { makeTestGrid, visualizeGridWithSymbols } from '../../../../__test__/grid/visualise.ts'
 import { equals } from '../../utils/grid/position2d.ts'
 
 describe(`${connectCells.name}`, () => {
@@ -17,7 +17,7 @@ describe(`${connectCells.name}`, () => {
 
     connectCells(grid, 0.5)
 
-    console.log(visualizeGrid(grid))
+    console.log(visualizeGridWithSymbols(grid))
 
     grid.iterateItems((_, pos) => {
       grid.iterateItems((__, pos2) => {

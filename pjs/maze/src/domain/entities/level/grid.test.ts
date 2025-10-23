@@ -1,5 +1,5 @@
 import { MazeGrid } from './grid.ts'
-import { visualizeGrid } from '../../../__test__/grid/visualise.ts'
+import { makeTestGrid, visualizeGrid } from '../../../__test__/grid/visualise.ts'
 
 describe(`${MazeGrid.name}`, () => {
   it(`can connect adjacent cells`, () => {
@@ -25,5 +25,39 @@ describe(`${MazeGrid.name}`, () => {
       1 0 0 0 0 
       1 1 1 0 0 "
     `)
+  })
+
+  it(`can detect dead ends`, () => {
+    const grid = makeTestGrid([
+      [0, 0, 1, 0, 0],
+      [0, 0, 1, 0, 0],
+      [1, 1, 1, 1, 1],
+      [0, 0, 1, 0, 1],
+      [0, 0, 1, 1, 1],
+    ])
+
+    expect(grid.getDeadEnds()).toEqual([
+      { x: 2, y: 0 },
+      { x: 0, y: 2 },
+    ])
+  })
+
+  it(`can detect corridors`, () => {
+    const grid = makeTestGrid([
+      [0, 0, 1, 0, 0],
+      [0, 0, 1, 0, 0],
+      [1, 1, 1, 1, 1],
+      [0, 0, 1, 0, 1],
+      [0, 0, 1, 1, 1],
+    ])
+
+    expect(grid.getCorridors()).toEqual([
+      { x: 2, y: 1 },
+      { x: 1, y: 2 },
+      { x: 3, y: 2 },
+      { x: 2, y: 3 },
+      { x: 4, y: 3 },
+      { x: 3, y: 4 },
+    ])
   })
 })

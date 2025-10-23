@@ -1,6 +1,7 @@
 import { MazeGrid } from '../grid.ts'
-import { distance, Position2D } from '../../utils/grid/position2d.ts'
+import { distance, isEven, Position2D } from '../../utils/grid/position2d.ts'
 import { PositionSet } from './set.ts'
+import { fireByRate } from 'utils'
 
 /**
  * connect cells so that each cell has at least one path to every other cell
@@ -12,6 +13,7 @@ export const connectCells = (grid: MazeGrid, connRate: number): void => {
   const clusters: PositionSet[] = []
   grid.iterateItems((_, pos) => clusters.push(new PositionSet([pos])))
   connectClusters(grid, clusters)
+  randomConnect(grid, connRate)
 }
 
 /**
@@ -57,4 +59,12 @@ const shortestPathBetweenClusters = (
     }
   }
   return { from: from!, to: to!, distance: shortestDistance }
+}
+
+const randomConnect = (grid: MazeGrid, connRate: number) => {
+  grid.iterateItems((_, pos) => {
+    if (isEven(pos) && fireByRate(connRate)) {
+      grid.connect(pos, grid.getRandomEvenPosition())
+    }
+  })
 }

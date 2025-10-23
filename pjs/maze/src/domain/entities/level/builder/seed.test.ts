@@ -1,13 +1,13 @@
-import { seedNodes } from './seed.ts'
+import { seedCells } from './seed.ts'
 import { initGrid } from './init.ts'
 
-describe(`${seedNodes.name}`, () => {
+describe(`${seedCells.name}`, () => {
   it(`should put nodes in the grid randomly to satisfy given percentage of filled cells`, () => {
     const size = 10
     const grid = initGrid(size)
 
     const fillRate = 0.2
-    seedNodes(grid, fillRate)
+    seedCells(grid, fillRate)
 
     expect(grid.sizeX).toBe(size * 2 - 1)
     expect(grid.count()).toBe(size * size * fillRate)

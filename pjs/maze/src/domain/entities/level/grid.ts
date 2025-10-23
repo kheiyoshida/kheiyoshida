@@ -1,22 +1,43 @@
 import { Grid2D } from '../utils/grid/grid2d.ts'
 import { MazeCell } from './cell.ts'
-import { direction, equals, getPositionInDirection, Position2D } from '../utils/grid/position2d.ts'
+import {
+  direction,
+  equals,
+  getAdjacent,
+  getPositionInDirection,
+  Position2D,
+} from '../utils/grid/position2d.ts'
+import { NESW } from '../utils/direction.ts'
 
 export class MazeGrid extends Grid2D<MazeCell> {
-  getDeadEnds(): MazeCell[] {
-    return this.filter((_, pos) => this.isDeadEnd(pos))
+  getDeadEnds(): Position2D[] {
+    const deadEnds: Position2D[] = []
+    this.iterateItems((_, pos) => {
+      this.isDeadEnd(pos) && deadEnds.push(pos)
+    })
+    return deadEnds
   }
 
   isDeadEnd(position: Position2D): boolean {
-    return true
+    let count = 0
+    for (const dir of NESW) {
+      if (this.get(getAdjacent(position, dir))) count++
+    }
+    return count === 1
   }
 
-  getCorridors(): MazeCell[] {
-    return this.filter((_, pos) => this.isCorridor(pos))
+  getCorridors(): Position2D[] {
+    const corridors: Position2D[] = []
+    this.iterateItems((_, pos) => {
+      this.isCorridor(pos) && corridors.push(pos)
+    })
+    return corridors
   }
 
   isCorridor(position: Position2D): boolean {
-    return true
+    const ns = (!!this.get(getAdjacent(position, 'n'))) && (!!this.get(getAdjacent(position, 's')))
+    const ew = (!!this.get(getAdjacent(position, 'e'))) && (!!this.get(getAdjacent(position, 'w')))
+    return (ns && !ew) || (!ns && ew)
   }
 
   /**
@@ -27,15 +48,14 @@ export class MazeGrid extends Grid2D<MazeCell> {
   connect(start: Position2D, end: Position2D): Position2D[] {
     const path: Position2D[] = [start]
     let current = start
-    while(!equals(current, end)) {
+    while (!equals(current, end)) {
       const dir = direction(current, end, 'ns')
       const bridgePos = getPositionInDirection(current, dir, 1)
       const targetPos = getPositionInDirection(current, dir, 2)
-      console.log(path.length, current, bridgePos, targetPos)
       path.push(bridgePos, targetPos)
       current = targetPos
     }
-    for(const pos of path) {
+    for (const pos of path) {
       if (this.get(pos)) continue
       this.set(pos, new MazeCell())
     }

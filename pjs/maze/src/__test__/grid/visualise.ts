@@ -26,23 +26,38 @@ export const makeTestGrid = (input: NumericRepresentation[][]) => {
   return grid
 }
 
-const textRepresentationMap: Record<MazeCellType, string> = {
-  floor: '1',
-  stair: '2',
+type TextPresentationMap = {
+  null: string
+  cell: Record<MazeCellType, string>
 }
 
-const nullRepresentation = '0'
+const defaultTextRepresentationMap = {
+  null: '0',
+  cell: {
+    floor: '1',
+    stair: '2',
+  }
+}
 
-export const visualizeGrid = (grid: MazeGrid): string => {
+const visualise = (map: TextPresentationMap) => (grid: MazeGrid): string => {
   let representation = ``
   for(let y = 0; y < grid.sizeY; y++) {
     representation += `\n`
     for(let x = 0; x < grid.sizeX; x++) {
       const cell = grid.get({ x, y })
-      representation += cell ? textRepresentationMap[cell.type] : nullRepresentation
+      representation += cell ? map.cell[cell.type] : map.null
       representation += ' '
     }
   }
 
   return representation
 }
+
+export const visualizeGrid = visualise(defaultTextRepresentationMap)
+export const visualizeGridWithSymbols = visualise({
+  null: '_',
+  cell: {
+    floor: 'F',
+    stair: 'S',
+  }
+})

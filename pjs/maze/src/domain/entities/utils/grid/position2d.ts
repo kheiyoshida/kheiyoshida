@@ -23,6 +23,8 @@ export const sumPosition = (a: Position2D, b: Position2D): Position2D => {
   return { x: a.x + b.x, y: a.y + b.y }
 }
 
+export const isEven = (pos: Position2D): boolean => pos.x % 2 === 0 && pos.y % 2 === 0
+
 /**
  * get the direction from a to b
  * @param a

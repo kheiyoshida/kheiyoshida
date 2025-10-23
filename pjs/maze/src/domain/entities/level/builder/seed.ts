@@ -2,9 +2,10 @@ import { MazeGrid } from '../grid.ts'
 import { MazeCell } from '../cell.ts'
 
 /**
- * seed floor nodes in classic style. cells are put at even numbered positions
+ * seed floor cells in classic style.
+ * cells are put in even numbered positions
  */
-export const seedNodes = (grid: MazeGrid, fillRate: number): void => {
+export const seedCells = (grid: MazeGrid, fillRate: number): void => {
   const max = Math.ceil(grid.sizeX / 2) * Math.ceil(grid.sizeY / 2)
   const cellCount = max * fillRate
 
