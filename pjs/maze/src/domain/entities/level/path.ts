@@ -2,6 +2,7 @@ import { MazeGrid } from './grid.ts'
 
 import { equals, getAdjacent, Position2D } from '../utils/grid/position2d.ts'
 import { NESW } from '../utils/direction.ts'
+import { PositionSet } from './builder/set.ts'
 
 /**
  * find a path in the given grid from start to end using BFS algorithm
@@ -14,20 +15,16 @@ import { NESW } from '../utils/direction.ts'
 export const findPath = (grid: MazeGrid, start: Position2D, end: Position2D): Position2D[] | null => {
   if (!grid.get(start) || !grid.get(end)) return null
 
-  const visited = new Set<string>()
-  const posKey = (pos: Position2D) => `${pos.x},${pos.y}`
+  const visited = new PositionSet()
 
   const queue = [[start]]
   while (queue.length) {
-    console.log('queue length: ', queue.length)
     const currentPath = queue.shift()!
-    console.log('current path: ', currentPath.length)
     const lastPosInPath = currentPath[currentPath.length - 1]
     if (equals(lastPosInPath, end)) return currentPath
     for (const adj of getAllAdjacentCells(lastPosInPath)) {
-      const key = posKey(adj)
-      if (!visited.has(key)) {
-        visited.add(key)
+      if (!visited.has(adj)) {
+        visited.add(adj)
         queue.push([...currentPath, adj])
       }
     }

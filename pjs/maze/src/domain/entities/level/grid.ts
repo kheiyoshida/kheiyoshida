@@ -31,6 +31,7 @@ export class MazeGrid extends Grid2D<MazeCell> {
       const dir = direction(current, end, 'ns')
       const bridgePos = getPositionInDirection(current, dir, 1)
       const targetPos = getPositionInDirection(current, dir, 2)
+      console.log(path.length, current, bridgePos, targetPos)
       path.push(bridgePos, targetPos)
       current = targetPos
     }

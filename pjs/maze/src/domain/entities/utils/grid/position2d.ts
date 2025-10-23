@@ -56,3 +56,4 @@ export const getDisposition = (direction: Direction, distance: number): Position
       return { x: -distance, y: 0 }
   }
 }
+

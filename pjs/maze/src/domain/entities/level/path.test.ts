@@ -28,7 +28,7 @@ describe(`${findPath.name}`, () => {
     ])
   })
 
-  it.only(`should return null if no path is found`, () => {
+  it(`should return null if no path is found`, () => {
     const grid = makeTestGrid([
       [1, 0, 0, 0, 1],
       [1, 1, 1, 0, 1],
@@ -38,5 +38,23 @@ describe(`${findPath.name}`, () => {
     ])
     const path = findPath(grid, { x: 0, y: 4 }, { x: 4, y: 3 })
     expect(path).toBeNull()
+  })
+
+  it.skip(`doesn't produce memory bloat even when used intensely`, () => {
+    const grid = makeTestGrid([
+      [0, 0, 1, 0, 0, 0, 1],
+      [0, 0, 1, 0, 0, 0, 1],
+      [0, 0, 1, 1, 1, 1, 1],
+      [0, 0, 0, 0, 1, 0, 0],
+      [1, 0, 0, 0, 1, 0, 0],
+      [0, 0, 0, 0, 1, 0, 0],
+      [1, 1, 1, 1, 1, 1, 1],
+    ])
+    grid.iterateItems((_, pos) => {
+      grid.iterateItems((__, pos2) => {
+        console.log('bfs', pos, pos2)
+        findPath(grid, pos, pos2)
+      })
+    })
   })
 })
