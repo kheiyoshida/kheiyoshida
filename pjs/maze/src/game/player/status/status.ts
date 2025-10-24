@@ -1,4 +1,4 @@
-import { INITIAL_STATUS, MAX_STATUS_VALUE, MIN_STATUS_VALUE } from '../../config'
+import { INITIAL_STATUS, MAX_STATUS_VALUE, MIN_STATUS_VALUE } from '../../../config'
 import { clamp } from 'utils'
 
 export type Status = {

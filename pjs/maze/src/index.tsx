@@ -49,3 +49,4 @@ const styles: Record<string, React.CSSProperties> = {
   },
 }
 export { player } from './game'
+export { Actor } from './core/actor/actor.ts'

@@ -1,4 +1,4 @@
-import { DefaultGoFrames, FPS, MAX_STATUS_VALUE } from '../../config'
+import { DefaultGoFrames, FPS, MAX_STATUS_VALUE } from '../../../config'
 import { StatusEventValues } from './delta.ts'
 
 describe('status values requirements', () => {

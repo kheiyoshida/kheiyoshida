@@ -1,4 +1,4 @@
-import { StatsUpdatePattern } from '../../core/player'
+import { StatsUpdatePattern } from '../index.ts'
 
 export const StatusEventValues: Record<StatsUpdatePattern, { sanity: number; stamina: number }> = {
   walk: {

@@ -7,9 +7,6 @@ export type Direction = 'n' | 'e' | 's' | 'w'
 
 export const NESW = ['n', 'e', 's', 'w'] as const
 
-/**
- * @deprecated
- */
 export const getTurnedDirection = (lro: LRO, currentDirection: Direction) => {
   const i = NESW.indexOf(currentDirection)
   switch (lro) {
@@ -22,9 +19,6 @@ export const getTurnedDirection = (lro: LRO, currentDirection: Direction) => {
   }
 }
 
-/**
- * @deprecated
- */
 export const positionalDirection = (direction: Direction, distance = 1): Position => {
   switch (direction) {
     case 'n':
