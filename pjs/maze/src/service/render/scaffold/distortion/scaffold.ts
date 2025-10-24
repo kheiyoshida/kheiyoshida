@@ -1,4 +1,4 @@
-import { LR } from 'src/domain/entities/utils/direction.ts'
+import { LR } from 'src/core/grid/direction.ts'
 import {
   DistortionDelta,
   Scaffold,

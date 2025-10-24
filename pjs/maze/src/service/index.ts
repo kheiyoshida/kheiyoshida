@@ -1,4 +1,4 @@
-import { constantEvent, initializeEvent, recurringConstantStatusEvent } from '../domain/events'
+import { constantEvent, initializeEvent, recurringConstantStatusEvent } from '../integration/events.ts'
 import { bindControl } from './control'
 import { makeRenderer } from 'maze-gl'
 import { FPS } from '../config'
@@ -11,7 +11,7 @@ import { musicContext } from './music'
 import { initShaders } from './render/mesh/material/shaders'
 import { initMaterialMap } from './render/mesh/material'
 import { initScreenEffects } from './render/scene/screenEffect'
-import { player } from '../domain/setup'
+import { player } from '../game/setup'
 
 const renderer = makeRenderer(FPS)
 

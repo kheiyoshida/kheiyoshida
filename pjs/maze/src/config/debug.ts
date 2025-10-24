@@ -1,5 +1,5 @@
-import { RenderingMode } from '../domain/entities/maze/stages'
-import { RenderingStyle } from '../domain/entities/maze/stages/style.ts'
+import { RenderingMode } from '../game/stages'
+import { RenderingStyle } from '../game/stages/style.ts'
 
 export const debugRenderingMode: RenderingMode = RenderingMode.atmospheric
 

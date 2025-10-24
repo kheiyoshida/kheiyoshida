@@ -1,4 +1,4 @@
-import { RenderingMode } from '../../../../domain/entities/maze/stages'
+import { RenderingMode } from '../../../../game/stages'
 import {
   AbstractEffect,
   AmbientEffect,
@@ -7,7 +7,7 @@ import {
   MazeScreenEffect,
   SmoothEffect,
 } from './effects.ts'
-import { ScreenEffectParams } from '../../../../domain/query'
+import { ScreenEffectParams } from '../../../../integration/query'
 import { Color } from 'maze-gl'
 
 export type ScreenEffectType = 'atmospheric' | 'smooth' | 'ambient' | 'digital' | 'abstract'

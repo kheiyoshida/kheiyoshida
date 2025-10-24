@@ -1,4 +1,4 @@
-import { GPosX } from '../../../domain/query'
+import { GPosX } from '../../../integration/query'
 import {
   RenderBlock,
   RenderBlockLayer,

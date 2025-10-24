@@ -1,5 +1,5 @@
 import { FloorLength, MaxDistortionRange, MaxDistortionSpeed, PathLength, WallHeight } from '../../../config'
-import { ScaffoldParams } from '../../../domain/query'
+import { ScaffoldParams } from '../../../integration/query'
 import { ScaffoldValues } from './types.ts'
 
 export const calcConcreteScaffoldValues = (params: ScaffoldParams): ScaffoldValues => {

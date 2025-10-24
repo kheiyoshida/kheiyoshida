@@ -1,5 +1,5 @@
 import type { RenderBlockPosition } from '../scaffold'
-import { Grid, LogicalView } from '../../../domain/query'
+import { Grid, LogicalView } from '../../../integration/query'
 
 export type UnitSpec = {
   codes: GeometryCode[]

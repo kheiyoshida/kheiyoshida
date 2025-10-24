@@ -1,4 +1,4 @@
-import { LogicalView, TerrainStyle } from '../../../domain/query'
+import { LogicalView, TerrainStyle } from '../../../integration/query'
 import { convertToClassicGeometryCodes } from './geometry/default.ts'
 import { GeometryCodeConverter, UnitSpec } from './types.ts'
 import { injectGridPositionToModels } from './inject.ts'

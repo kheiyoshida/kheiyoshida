@@ -1,5 +1,5 @@
 import { RGB, Vector3D } from 'maze-gl'
-import { ScreenEffectParams } from '../../../../domain/query'
+import { ScreenEffectParams } from '../../../../integration/query'
 
 export type SharedScreenParams = {
   /**

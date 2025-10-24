@@ -1,5 +1,5 @@
 import { Vector3D } from 'maze-gl'
-import { GPosX } from '../../../domain/query'
+import { GPosX } from '../../../integration/query'
 
 export type ScaffoldValues = {
   floor: number

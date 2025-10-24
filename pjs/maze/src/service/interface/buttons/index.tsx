@@ -4,7 +4,7 @@ import { physicalToLogicalPoint } from '../renderer/utils.ts'
 import { makeButtonState } from './state.ts'
 import { btnSize, centerX, centerY } from './constants.ts'
 import { IsMobile } from '../../../config'
-import { state } from '../../../domain/state.ts'
+import { state } from '../../../game/state.ts'
 
 export const getButtons = () => {
   const map = document.getElementById(Map.id)

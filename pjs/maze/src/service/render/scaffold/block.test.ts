@@ -1,4 +1,4 @@
-import { GPosX } from '../../../domain/query'
+import { GPosX } from '../../../integration/query'
 import { MockScaffold } from './__test__/mock.ts'
 import { RenderBlock, RenderBlockLayer } from './types.ts'
 

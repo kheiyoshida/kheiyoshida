@@ -1,4 +1,4 @@
-import { MessageQueue, RenderSignal } from '../domain/messages'
+import { MessageQueue, RenderSignal } from '../integration/messages.ts'
 import { showFloor } from './interface/handlers'
 import { closeMap, renderMap } from './interface/map'
 import { updateMusicDest } from './music'

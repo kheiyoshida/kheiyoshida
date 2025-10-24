@@ -3,7 +3,7 @@ import { EyeMovementValues } from './types.ts'
 import {
   GoDownstairsAnimationType,
   ProceedToNextFloorAnimationType,
-} from '../../../domain/query/movement/stairs.ts'
+} from '../../../integration/query/movement/stairs.ts'
 
 export const getGoDeltaArray = (speed: number) => {
   const frameNumber = Math.floor(DefaultGoFrames / speed)

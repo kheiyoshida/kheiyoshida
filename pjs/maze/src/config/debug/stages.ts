@@ -1,4 +1,4 @@
-import { RenderingMode, Stage } from '../../domain/entities/maze/stages'
+import { RenderingMode, Stage } from '../../game/stages'
 
 export const fixedStages: Stage[] = [
   {

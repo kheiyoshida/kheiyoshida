@@ -48,4 +48,4 @@ const styles: Record<string, React.CSSProperties> = {
     overscrollBehavior: 'none',
   },
 }
-export { player } from './domain/setup'
+export { player } from './game/setup'

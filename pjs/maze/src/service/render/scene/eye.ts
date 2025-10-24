@@ -3,7 +3,7 @@ import { EyeMovementValues } from './types.ts'
 import { getConcreteLengths } from '../scaffold'
 import { Eye } from 'maze-gl'
 import { toRadians } from 'utils'
-import { ScaffoldParams } from '../../../domain/query'
+import { ScaffoldParams } from '../../../integration/query'
 
 const eyeElevation = WallHeight / 100
 

@@ -1,6 +1,6 @@
 import { Scene } from 'maze-gl'
 
-import { EffectParams } from '../../../domain/query'
+import { EffectParams } from '../../../integration/query'
 
 export const getEffect = (effectParams: EffectParams): Scene['effect'] => {
   return {

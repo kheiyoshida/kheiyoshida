@@ -1,5 +1,5 @@
-import { MazeCell, MazeCellType } from '../../domain/entities/level/cell.ts'
-import { MazeGrid } from '../../domain/entities/level/grid.ts'
+import { MazeCell, MazeCellType } from '../../core/level/cell.ts'
+import { MazeGrid } from '../../core/level/grid.ts'
 
 const NumericalRepresentationMap = {
   0: null,

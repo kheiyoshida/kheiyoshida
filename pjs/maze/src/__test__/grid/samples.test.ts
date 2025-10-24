@@ -1,5 +1,5 @@
 import { visualizeGridWithSymbols } from './visualise.ts'
-import { buildMazeGrid } from '../../domain/entities/level/builder'
+import { buildMazeGrid } from '../../core/level/builder'
 
 const samplesPerParam = 5
 

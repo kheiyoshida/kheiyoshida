@@ -1,5 +1,5 @@
 import { convertToPoles } from './poles.ts'
-import { LogicalView } from '../../../../domain/query'
+import { LogicalView } from '../../../../integration/query'
 
 describe(`${convertToPoles.name}`, () => {
   it(`converts render patterns to geometry codes in poles style`, () => {

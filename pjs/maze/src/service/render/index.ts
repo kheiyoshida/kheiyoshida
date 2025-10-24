@@ -1,4 +1,4 @@
-import { LR } from 'src/domain/entities/utils/direction.ts'
+import { LR } from 'src/core/grid/direction.ts'
 import {
   blockControlRequired,
   blockStatusChangeRequired,
@@ -6,7 +6,7 @@ import {
   resurrectEvent,
   unblockControlRequired,
   unblockStatusChangeRequired,
-} from '../../domain/events'
+} from '../../integration/events.ts'
 import { RenderHandler } from '../consumer'
 import { getDefaultEye, getMovementEye } from './scene/eye.ts'
 import { calcSmoothValue, getLights } from './scene/light.ts'
@@ -23,7 +23,7 @@ import { getUnits } from './scene'
 import { resetColors, resolveFloorColor, resolveFrameColor } from './color'
 import { drawButtons, hideButtons } from '../interface/buttons'
 import { getEffect } from './scene/effect.ts'
-import { corridorToNextFloor } from '../../domain/query/structure/scenes.ts'
+import { corridorToNextFloor } from '../../integration/query/structure/scenes.ts'
 import { getScreenEffect } from './scene/screenEffect'
 import { renderScene } from 'maze-gl'
 
