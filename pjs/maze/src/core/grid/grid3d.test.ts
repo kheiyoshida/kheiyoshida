@@ -6,9 +6,6 @@ describe(`${Grid3D.name}`, () => {
     expect(grid.sizeX).toBe(3)
     expect(grid.sizeY).toBe(4)
     expect(grid.sizeZ).toBe(3)
-    expect(grid.items.length).toBe(3)
-    expect(grid.items[0].sizeX).toBe(3)
-    expect(grid.items[0].sizeY).toBe(4)
     expect(grid.get({ x: 0, y: 0, z: 0 })).toBeNull()
     grid.iterate(item => {
       expect(item).toBeNull()
@@ -58,5 +55,16 @@ describe(`${Grid3D.name}`, () => {
 
     expect(grid.filter((item) => item).length).toBe(4)
     expect(grid.filter((item, { x, y, z }) => x % 2 == 0 && y % 2 == 0 && z == 1).length).toBe(4)
+  })
+
+  it(`can get vertical slice`, () => {
+    const grid = new Grid3D<number>(3, 4, 3)
+    grid.set({ x: 0, y: 0, z: 0 }, 1)
+
+    const slice = grid.getVerticalSlice({ x: 0, y: 0 })
+    expect(slice.sizeZ).toBe(3)
+    expect(slice.get(0)).toBe(1)
+    expect(slice.get(1)).toBeNull()
+    expect(slice.get(2)).toBeNull()
   })
 })
