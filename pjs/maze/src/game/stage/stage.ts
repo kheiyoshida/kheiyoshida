@@ -1,4 +1,4 @@
-import { FloorStage, RenderingMode, Stage } from '../stages'
+import { FloorStage, RenderingMode, Stage } from './index.ts'
 import {
   clamp,
   fireByRate,
@@ -7,7 +7,7 @@ import {
   randomIntInclusiveBetween,
 } from 'utils'
 import { debugRenderingMode, InitialStyle } from '../../config/debug.ts'
-import { classifyStyle, RenderingStyle } from '../stages/style.ts'
+import { classifyStyle, RenderingStyle } from './style.ts'
 
 export const InitialNumOfStages = 20
 

@@ -1,4 +1,4 @@
-import { RenderingMode } from '../../../../game/stages'
+import { RenderingMode } from '../../../../game/stage'
 import {
   AbstractEffect,
   AmbientEffect,

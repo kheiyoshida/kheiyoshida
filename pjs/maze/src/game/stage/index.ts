@@ -1,13 +1,5 @@
 import { RenderingStyle } from './style.ts'
 
-export enum RenderingMode {
-  'atmospheric',
-  'smooth',
-  'ambient',
-  'digital',
-  'abstract',
-}
-
 export type Stage = {
   number: number
 
@@ -16,6 +8,14 @@ export type Stage = {
 
   style: RenderingStyle
   mode: RenderingMode
+}
+
+export enum RenderingMode {
+  'atmospheric',
+  'smooth',
+  'ambient',
+  'digital',
+  'abstract',
 }
 
 export type StageContext = {

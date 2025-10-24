@@ -1,4 +1,4 @@
-import { RenderingMode, Stage } from '../../game/stages'
+import { RenderingMode, Stage } from '../../game/stage'
 
 export const fixedStages: Stage[] = [
   {

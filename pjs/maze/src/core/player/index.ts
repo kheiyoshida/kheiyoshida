@@ -2,8 +2,10 @@ import { Position } from 'utils'
 import { Direction, getTurnedDirection, LR } from '../grid/direction.ts'
 import { PlayerStatus, Status } from './status.ts'
 
-export class Player<S extends string> {
-  constructor(private statusDeltaMap: Record<S, Status>) {
+export type StatsUpdatePattern = 'walk' | 'constant' | 'turn' | 'downstairs' | 'idle'
+
+export class Player {
+  constructor(private statusDeltaMap: Record<StatsUpdatePattern, Status>) {
     this.#playerStatus = new PlayerStatus()
   }
 
@@ -41,7 +43,7 @@ export class Player<S extends string> {
     return { from, dest: frontPosition }
   }
 
-  updateStatus(statusKey: S) {
+  updateStatus(statusKey: StatsUpdatePattern) {
     this.#playerStatus.addStatusValue(this.statusDeltaMap[statusKey])
   }
 

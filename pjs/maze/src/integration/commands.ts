@@ -1,6 +1,6 @@
 import { LR } from 'src/core/grid/direction.ts'
 import { closeMapEvent, openMapEvent, turnEvent, walkEvent } from './events.ts'
-import { game } from '../game/setup'
+import { game } from '../game'
 import { state } from '../game/state.ts'
 
 export const isControlBlocked = () => state.current.blockControl

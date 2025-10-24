@@ -3,7 +3,7 @@ import vert from './default.vert?raw'
 import litFogFrag from './default.frag?raw'
 import unlitFogFrag from './unlitFog.frag?raw'
 import edgeRenderingFrag from './edgeRendering.frag?raw'
-import { RenderingMode } from '../../../../../game/stages'
+import { RenderingMode } from '../../../../../game/stage'
 
 export type MaterialShaderType = 'litFog' | 'unlitFog' | 'edgeRendering'
 

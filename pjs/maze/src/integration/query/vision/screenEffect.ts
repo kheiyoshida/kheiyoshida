@@ -1,6 +1,6 @@
 import { Level } from '../utils/types.ts'
 import { makeDecreasingParameter, makeIncreasingParameter } from '../utils/params.ts'
-import { player } from '../../../game/setup'
+import { player } from '../../../game'
 
 export type ScreenEffectParams = {
   blurLevel: Level

@@ -1,4 +1,4 @@
-import { mapper, maze, player } from '../../../game/setup'
+import { mapper, maze, player } from '../../../game'
 
 export const getMapInfoFromCurrentState = () => ({
   grid: mapper.map,

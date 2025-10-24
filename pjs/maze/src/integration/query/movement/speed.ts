@@ -1,7 +1,7 @@
 
 import { makeDecreasingParameter } from '../utils/params.ts'
 import { MAX_STATUS_VALUE } from '../../../config'
-import { player } from '../../../game/setup'
+import { player } from '../../../game'
 
 export const getWalkSpeedFromCurrentState = () => {
   return calcSpeed(player.status.stamina)

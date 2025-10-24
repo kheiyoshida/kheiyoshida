@@ -1,5 +1,5 @@
-import { RenderingMode } from '../game/stages'
-import { RenderingStyle } from '../game/stages/style.ts'
+import { RenderingMode } from '../game/stage'
+import { RenderingStyle } from '../game/stage/style.ts'
 
 export const debugRenderingMode: RenderingMode = RenderingMode.atmospheric
 

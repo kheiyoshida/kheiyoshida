@@ -1,7 +1,7 @@
 import { ColorParams, FloorColorParams, FrameColorParams } from './types.ts'
 import { fireByRate, makeConstrainedRandomEmitter, randomFloatBetween, randomFloatInAsymmetricRange } from 'utils'
 import { makeDecreasingParameter, makeIncreasingParameter } from '../../utils/params.ts'
-import { maze, player } from '../../../../game/setup'
+import { maze, player } from '../../../../game'
 import { Status } from '../../../../core/player/status.ts'
 
 export const getColorParams = (): ColorParams => {

@@ -1,7 +1,7 @@
-import { FloorStage } from '../stages'
+import { FloorStage } from '../stage'
 import { buildNewLevel, MazeLevel } from './level.ts'
 import { MazeLevelParams } from '../../core/level/legacy'
-import { classifyStyle } from '../stages/style.ts'
+import { classifyStyle } from '../stage/style.ts'
 import { StairType } from './object.ts'
 
 export class Maze {

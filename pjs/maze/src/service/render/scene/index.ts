@@ -9,7 +9,7 @@ import { convertRenderGridToUnitSpecList } from '../unit'
 import { DeformedBox, RenderUnit } from 'maze-gl'
 import { getMesh } from '../mesh'
 import { Structure } from '../../../integration/query'
-import { RenderingMode } from '../../../game/stages'
+import { RenderingMode } from '../../../game/stage'
 
 export const getUnits = (
   mode: RenderingMode,

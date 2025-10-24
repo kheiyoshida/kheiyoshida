@@ -1,5 +1,5 @@
 import { IntRange } from 'utils'
-import { maze, player } from '../../../game/setup'
+import { maze, player } from '../../../game'
 
 export type MusicRange = IntRange<1, 10>
 export type MusicCommand = {

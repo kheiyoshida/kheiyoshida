@@ -1,7 +1,7 @@
 import { makeColorScheme } from './scheme.ts'
 import { getMeshMaterial } from '../mesh/material'
 import { FloorColorParams, FrameColorParams } from '../../../integration/query/vision/color/types.ts'
-import { RenderingMode } from '../../../game/stages'
+import { RenderingMode } from '../../../game/stage'
 
 export * from './types'
 

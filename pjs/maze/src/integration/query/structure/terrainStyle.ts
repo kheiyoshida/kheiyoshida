@@ -1,5 +1,5 @@
-import { RenderingStyle } from '../../../game/stages/style.ts'
-import { maze } from '../../../game/setup'
+import { RenderingStyle } from '../../../game/stage/style.ts'
+import { maze } from '../../../game'
 
 export const getTerrainRenderStyle = (): TerrainStyle => {
   const style = maze.getStageContext().current.style

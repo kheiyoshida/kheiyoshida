@@ -1,5 +1,5 @@
 import { makeDecreasingParameter, makeIncreasingParameter } from '../utils/params.ts'
-import { player } from '../../../game/setup'
+import { player } from '../../../game'
 
 export type ScaffoldParams = {
   corridorWidthLevel: number

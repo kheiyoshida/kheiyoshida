@@ -1,5 +1,4 @@
-
-export type StatsUpdatePattern = 'walk' | 'constant' | 'turn' | 'downstairs' | 'idle'
+import { StatsUpdatePattern } from '../../core/player'
 
 export const StatusEventValues: Record<StatsUpdatePattern, { sanity: number; stamina: number }> = {
   walk: {

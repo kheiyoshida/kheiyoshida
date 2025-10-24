@@ -1,6 +1,6 @@
 import { clamp, randomFloatBetween, randomIntInclusiveBetween } from 'utils'
-import { MazeLevelParams } from '../../../core/level/legacy'
-import { MaxFloorSize } from '../../../config'
+import { MazeLevelParams } from '../../core/level/legacy'
+import { MaxFloorSize } from '../../config'
 
 export const paramBuild = (floor: number): MazeLevelParams => {
   const size = getFloorSize(floor)

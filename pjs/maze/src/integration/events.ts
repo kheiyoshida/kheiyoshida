@@ -1,6 +1,6 @@
 import { state } from '../game/state.ts'
 import { LR } from 'src/core/grid/direction.ts'
-import { game, maze, player } from '../game/setup'
+import { game, maze, player } from '../game'
 import { MessageQueue, RenderSignal } from './messages.ts'
 import { lightnessMoveDirection } from './query/vision/color'
 

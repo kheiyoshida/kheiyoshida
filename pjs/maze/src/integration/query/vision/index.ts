@@ -2,9 +2,9 @@ import { getLightColorIntention, LightVariables } from './light.ts'
 import { EffectParams, getEffectParams } from './effect.ts'
 import { ColorParams } from './color/types.ts'
 import { getColorParams } from './color'
-import { RenderingMode } from '../../../game/stages'
+import { RenderingMode } from '../../../game/stage'
 import { getScreenEffectParams, ScreenEffectParams } from './screenEffect.ts'
-import { maze } from '../../../game/setup'
+import { maze } from '../../../game'
 
 export type { ScreenEffectParams } from './screenEffect.ts'
 export type { ColorParams, EffectParams, LightVariables }

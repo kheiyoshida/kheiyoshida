@@ -11,7 +11,7 @@ import { musicContext } from './music'
 import { initShaders } from './render/mesh/material/shaders'
 import { initMaterialMap } from './render/mesh/material'
 import { initScreenEffects } from './render/scene/screenEffect'
-import { player } from '../game/setup'
+import { player } from '../game'
 
 const renderer = makeRenderer(FPS)
 

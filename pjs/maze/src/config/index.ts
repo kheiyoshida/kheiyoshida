@@ -1,5 +1,5 @@
 export * from './frame'
-export * from './status'
+export * from '../game/status/constants.ts'
 
 export const ww = window.innerWidth
 export const wh = window.innerHeight

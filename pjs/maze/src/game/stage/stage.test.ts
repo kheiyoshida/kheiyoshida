@@ -1,5 +1,5 @@
 import { buildStages, mapStagesToFloors, stageModeMap } from './stage.ts'
-import { FloorStage, RenderingMode, Stage } from '../stages'
+import { FloorStage, RenderingMode, Stage } from './index.ts'
 
 describe(`${buildStages.name}`, () => {
   test(`each stage lasts for 1-2 floors`, () => {

@@ -1,6 +1,6 @@
 import { Level } from '../utils/types.ts'
 import { clamp } from 'utils'
-import { maze } from '../../../game/setup'
+import { maze } from '../../../game'
 
 export type LightVariables = {
   nearVisibility: Level
