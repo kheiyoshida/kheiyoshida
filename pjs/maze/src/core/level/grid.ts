@@ -7,7 +7,7 @@ import {
   getPositionInDirection,
   Position2D,
 } from '../grid/position2d.ts'
-import { NESW } from '../grid/direction.ts'
+import { Direction, getTurnedDirection, NESW } from '../grid/direction.ts'
 
 export class MazeGrid extends Grid2D<MazeCell> {
   getDeadEnds(): Position2D[] {
@@ -24,6 +24,13 @@ export class MazeGrid extends Grid2D<MazeCell> {
       if (this.get(getAdjacent(position, dir))) count++
     }
     return count === 1
+  }
+
+  getDeadEndDirection(position: Position2D): Direction {
+    for (const dir of NESW) {
+      if (this.get(getAdjacent(position, dir))) return getTurnedDirection('opposite', dir)
+    }
+    throw new Error('not a dead end')
   }
 
   getCorridors(): Position2D[] {

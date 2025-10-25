@@ -6,12 +6,12 @@ import {
 } from './stairs.ts'
 
 test.each<[...params: Parameters<typeof getGoDownstairsAnimationType>, expected: GoDownstairsAnimationType]>([
-  ['default_', 'default_', 'descent'],
-  ['default_', 'tiles', 'warp'],
+  ['classic', 'classic', 'descent'],
+  ['classic', 'tiles', 'warp'],
   ['tiles', 'tiles', 'lift'],
   ['tiles', 'poles', 'warp'],
   ['poles', 'poles', 'proceed'],
-  ['poles', 'default_', 'warp'],
+  ['poles', 'classic', 'warp'],
 ])(`${getGoDownstairsAnimationType.name}`, (current, next, expected) => {
   expect(getGoDownstairsAnimationType(current, next)).toBe(expected)
 })
@@ -22,12 +22,12 @@ test.each<
     expected: ProceedToNextFloorAnimationType,
   ]
 >([
-  ['default_', 'default_', 'corridor'],
-  ['default_', 'tiles', 'still'],
+  ['classic', 'classic', 'corridor'],
+  ['classic', 'tiles', 'still'],
   ['tiles', 'tiles', 'corridor'],
   ['tiles', 'poles', 'still'],
   ['poles', 'poles', 'corridor'],
-  ['poles', 'default_', 'still'],
+  ['poles', 'classic', 'still'],
 ])(`${getProceedToNextFloorAnimationType.name}`, (prev, current, expected) => {
   expect(getProceedToNextFloorAnimationType(prev, current)).toBe(expected)
 })

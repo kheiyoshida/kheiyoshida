@@ -1,5 +1,5 @@
 import { connect } from './connect.ts'
-import { getCorridorBlocks, getDeadEndBlocks, MazeLevel } from '../../../game/maze/level.ts'
+import { getCorridorBlocks, getDeadEndBlocks, MazeLevel } from '../../../game/maze/legacy/level.ts'
 import { seedNodes } from './seed.ts'
 import { initializeEmptyMatrix } from '../../_legacy/matrix.ts'
 

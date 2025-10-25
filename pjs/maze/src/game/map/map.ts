@@ -1,6 +1,6 @@
 import { Position } from 'utils'
 import { initializeEmptyMatrix, iterateByPosition, Matrix } from '../../core/_legacy/matrix.ts'
-import { MazeLevel } from '../maze/level.ts'
+import { MazeLevel } from '../maze/legacy/level.ts'
 
 export type Map = Matrix<MapCell>
 type MapCell = {

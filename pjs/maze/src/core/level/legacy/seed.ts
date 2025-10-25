@@ -1,5 +1,5 @@
 import { fireByRate } from 'utils'
-import { MazeLevel } from '../../../game/maze/level.ts'
+import { MazeLevel } from '../../../game/maze/legacy/level.ts'
 import { countMatrixNodes, iterateByPosition } from '../../_legacy/matrix.ts'
 import { putBlock } from './path.ts'
 

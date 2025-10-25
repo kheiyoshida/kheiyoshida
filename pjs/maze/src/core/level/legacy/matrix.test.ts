@@ -1,4 +1,4 @@
-import { MazeLevel } from '../../../game/maze/level.ts'
+import { MazeLevel } from '../../../game/maze/legacy/level.ts'
 import { getAllAdjacentBlocks, seekPathByPosition } from './path.ts'
 import { Block } from './block.ts'
 import { countMatrixNodes } from '../../_legacy/matrix.ts'

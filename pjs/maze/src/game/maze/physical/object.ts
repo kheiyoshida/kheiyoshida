@@ -1,7 +1,14 @@
 import { Direction } from '../../../core/grid/direction.ts'
+import { ModelCode } from './models.ts'
 
-export class MazeObject {
-  constructor(public readonly modelCode: string) {}
+export type IMazeObject = {
+  readonly modelCode: ModelCode
+  direction: Direction
+}
 
-  public direction: Direction = 'n'
+export class MazeObject implements IMazeObject {
+  constructor(
+    public readonly modelCode: ModelCode,
+    public direction: Direction = 'n'
+  ) {}
 }

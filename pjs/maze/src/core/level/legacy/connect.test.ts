@@ -1,5 +1,5 @@
 import { Block } from './block.ts'
-import { MazeLevel } from '../../../game/maze/level.ts'
+import { MazeLevel } from '../../../game/maze/legacy/level.ts'
 import { iterateEachItem } from '../../_legacy/matrix.ts'
 import { seekPath } from './path.ts'
 import { connect } from './connect.ts'

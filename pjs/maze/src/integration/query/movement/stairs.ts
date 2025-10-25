@@ -1,4 +1,4 @@
-import { determineTerrainStyle, TerrainStyle } from '../structure/terrainStyle.ts'
+import { determineModelingStyle, ModelingStyle } from '../../../game/maze/physical/modelingStyle.ts'
 import { maze } from '../../../game'
 
 export type GoDownstairsAnimationType = 'descent' | 'lift' | 'proceed' | 'warp'
@@ -12,9 +12,9 @@ export type StairAnimation = {
 
 export const getStairAnimation = (): StairAnimation => {
   const { prev, current, next } = maze.getStageContext()
-  const prevStyle = prev ? determineTerrainStyle(prev.style) : null
-  const currentStyle = determineTerrainStyle(current.style)
-  const nextStyle = next ? determineTerrainStyle(next.style) : null
+  const prevStyle = prev ? determineModelingStyle(prev.style) : null
+  const currentStyle = determineModelingStyle(current.style)
+  const nextStyle = next ? determineModelingStyle(next.style) : null
 
   return {
     goDownstairs: getGoDownstairsAnimationType(currentStyle, nextStyle),
@@ -23,19 +23,19 @@ export const getStairAnimation = (): StairAnimation => {
 }
 
 export const getGoDownstairsAnimationType = (
-  current: TerrainStyle,
-  next: TerrainStyle | null
+  current: ModelingStyle,
+  next: ModelingStyle | null
 ): GoDownstairsAnimationType => {
   if (current !== next) return 'warp'
-  if (current == 'default_') return 'descent'
+  if (current == 'classic') return 'descent'
   if (current == 'tiles') return 'lift'
   if (current == 'poles') return 'proceed'
   throw new Error(`uncaught combination: ${current} & ${next}`)
 }
 
 export const getProceedToNextFloorAnimationType = (
-  prev: TerrainStyle | null,
-  current: TerrainStyle
+  prev: ModelingStyle | null,
+  current: ModelingStyle
 ): ProceedToNextFloorAnimationType => {
   if (prev === current) return 'corridor'
   return 'still'

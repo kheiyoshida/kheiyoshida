@@ -2,7 +2,7 @@ import * as utils from 'utils'
 import { Block } from './block.ts'
 import { seedNodes } from './seed.ts'
 import { countMatrixNodes, initializeEmptyMatrix } from '../../_legacy/matrix.ts'
-import { MazeLevel } from '../../../game/maze/level.ts'
+import { MazeLevel } from '../../../game/maze/legacy/level.ts'
 
 jest.mock('utils', () => ({
   __esModule: true,

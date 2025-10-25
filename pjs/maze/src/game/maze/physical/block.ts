@@ -1,5 +1,5 @@
 import { MazeObject } from './object.ts'
 
 export class MazeBlock {
-  public readonly objects: MazeObject[] = []
+  constructor(public readonly objects: MazeObject[]) {}
 }

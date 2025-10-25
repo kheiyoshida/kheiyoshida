@@ -1,19 +1,19 @@
 import { getScaffoldParams, ScaffoldParams } from './scaffold.ts'
 import { LogicalView } from '../../../game/view'
-import { getTerrainRenderStyle, TerrainStyle } from './terrainStyle.ts'
+import { getModelingStyle, ModelingStyle } from '../../../game/maze/physical/modelingStyle.ts'
 import { game } from '../../../game'
 
 export * from '../../../game/view'
-export type { ScaffoldParams, TerrainStyle }
+export type { ScaffoldParams, ModelingStyle }
 
 export type Structure = {
   scaffold: ScaffoldParams
   renderGrid: LogicalView
-  terrainStyle: TerrainStyle
+  terrainStyle: ModelingStyle
 }
 
 export const getStructure = (): Structure => ({
   renderGrid: game.getView(),
   scaffold: getScaffoldParams(),
-  terrainStyle: getTerrainRenderStyle(),
+  terrainStyle: getModelingStyle(),
 })

@@ -1,4 +1,4 @@
-import { MazeLevel } from '../../../game/maze/level.ts'
+import { MazeLevel } from '../../../game/maze/legacy/level.ts'
 import { Position } from '../../_legacy/position.ts'
 import { Direction, getTurnedDirection } from '../../grid/direction.ts'
 import { Block } from './block.ts'

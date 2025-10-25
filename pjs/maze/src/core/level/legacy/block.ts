@@ -1,6 +1,6 @@
 import { Position } from '../../_legacy/position.ts'
 import { Direction } from '../../grid/direction.ts'
-import { Stair, StairType } from '../../../game/maze/object.ts'
+import { Stair, StairType } from '../../../game/maze/legacy/object.ts'
 
 type Edges = {
   [k in Direction]: boolean

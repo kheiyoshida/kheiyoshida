@@ -1,5 +1,5 @@
 import { fireByRate as random } from 'utils'
-import { MazeLevel } from '../../../game/maze/level.ts'
+import { MazeLevel } from '../../../game/maze/legacy/level.ts'
 import { iterateEachItem } from '../../_legacy/matrix.ts'
 import { connectNodes, getAllAdjacentBlocks, makeShortestPath } from './path.ts'
 import { Block } from './block.ts'

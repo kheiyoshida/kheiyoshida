@@ -1,5 +1,5 @@
 import { Position } from 'utils'
-import { MazeLevel } from '../maze/level.ts'
+import { MazeLevel } from '../maze/legacy/level.ts'
 import { buildMap, Map, track } from './map.ts'
 
 export class Mapper {

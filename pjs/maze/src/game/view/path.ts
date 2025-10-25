@@ -1,6 +1,6 @@
 import { Direction, getTurnedDirection } from '../../core/grid/direction.ts'
 import { Block } from '../../core/level/legacy/block.ts'
-import { StairType } from '../maze/object.ts'
+import { StairType } from '../maze/legacy/object.ts'
 
 export type PathSpec = [b0: PathSpecItem, b1: PathSpecItem, b2: PathSpecItem]
 export type PathSpecItem = BlockTerrainSpec | null

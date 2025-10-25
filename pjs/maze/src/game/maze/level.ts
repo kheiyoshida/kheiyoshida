@@ -1,28 +1,17 @@
-import { Block } from '../../core/level/legacy/block.ts'
-import { filterItems, getConcreteMatrixItem, Matrix } from '../../core/_legacy/matrix.ts'
-import { buildMazeLevel, MazeLevelParams } from '../../core/level/legacy'
-import { randomItemFromArray } from 'utils'
-import { StairType } from './object.ts'
+import { MazeGrid } from '../../core/level/grid.ts'
+import { buildMazeGrid, MazeGridParams } from '../../core/level/builder'
+import { ModelingStyle } from './physical/modelingStyle.ts'
+import { PhysicalMazeGrid } from './physical/grid.ts'
 
-export type MazeLevel = Matrix<Block>
+export class MazeLevel {
+  public constructor(
+    public readonly grid: MazeGrid,
+    public readonly physicalGrid: PhysicalMazeGrid
+  ) {}
 
-export const buildNewLevel = (params: MazeLevelParams, stairType: StairType): MazeLevel => {
-  const level = buildMazeLevel(params)
-
-  const stairNode = randomItemFromArray(getDeadEndBlocks(level))
-  stairNode.setStair(stairType)
-
-  return level
+  static build(params: MazeGridParams, style: ModelingStyle): MazeLevel {
+    const grid = buildMazeGrid(params)
+    const physicalGrid = PhysicalMazeGrid.convert(grid, style)
+    return new MazeLevel(buildMazeGrid(params), physicalGrid)
+  }
 }
-
-/**
- * get corridor blocks with two edges faced on the opposite
- */
-export const getCorridorBlocks = (level: MazeLevel): Block[] => filterItems(level, (node) => node.isCorridor)
-
-/**
- * get dead-end blocks with just one edge
- */
-export const getDeadEndBlocks = (level: MazeLevel): Block[] => filterItems(level, (node) => node.isDeadEnd)
-
-export const getBlockAtPosition = getConcreteMatrixItem
