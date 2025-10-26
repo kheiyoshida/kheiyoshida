@@ -22,7 +22,7 @@ export const turnLeft = turn('left')
 
 export const callMap = () => {
   if (isControlBlocked()) return
-  if (state.current.mapOpen) {
+  if (game.mapper.isOpen) {
     closeMapEvent()
   } else {
     openMapEvent()

@@ -1,24 +1,16 @@
 import { makeStoreV2, ReducerMap } from 'utils'
 
 export type MazeState = {
-  mapOpen: boolean
   blockControl: boolean
   blockStatusChange: boolean
 }
 
 const initialState: MazeState = {
-  mapOpen: false,
   blockControl: false,
   blockStatusChange: false,
 }
 
 const reducers = {
-  openMap: (s) => () => {
-    s.mapOpen = true
-  },
-  closeMap: (s) => () => {
-    s.mapOpen = false
-  },
   updateBlockControl: (s) => (blockControl: boolean) => {
     s.blockControl = blockControl
   },

@@ -3,18 +3,30 @@ import { MazeLevel } from '../maze/legacy/level.ts'
 import { buildMap, Map, track } from './map.ts'
 
 export class Mapper {
-  #map: Map = []
-
-  get map() {
-    return this.#map
+  private _isOpen = false
+  public get isOpen(): boolean {
+    return this._isOpen
   }
 
-  resetMap(level: MazeLevel) {
-    this.#map = buildMap(level)
+  public open() {
+    this._isOpen = true
+  }
+  public close() {
+    this._isOpen = false
   }
 
-  track({ from, dest }: { from: Position; dest: Position }) {
-    const grid = this.#map.slice()
-    this.#map = track(grid, { from, dest })
+  private _map: Map = []
+
+  public get map() {
+    return this._map
+  }
+
+  public resetMap(level: MazeLevel) {
+    this._map = buildMap(level)
+  }
+
+  public track({ from, dest }: { from: Position; dest: Position }) {
+    const grid = this._map.slice()
+    this._map = track(grid, { from, dest })
   }
 }

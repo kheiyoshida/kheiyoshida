@@ -35,7 +35,7 @@ export const idleStatusChangeRequired = () => {
 
 export const recurringConstantStatusEvent = () => {
   if (state.current.blockStatusChange) return
-  if (state.current.mapOpen) return
+  if (game.mapper.isOpen) return
   game.player.updateStatus('constant')
 }
 
@@ -47,7 +47,7 @@ export const resurrectEvent = () => {
 }
 
 export const constantEvent = () => {
-  if (state.current.mapOpen) return
+  if (game.mapper.isOpen) return
   if (MessageQueue.isEmpty) {
     MessageQueue.push(RenderSignal.CurrentView)
   }
@@ -55,7 +55,7 @@ export const constantEvent = () => {
 }
 
 export const walkEvent = () => {
-  if (state.current.mapOpen) {
+  if (game.mapper.isOpen) {
     closeMapEvent()
   }
   MessageQueue.push(RenderSignal.Go)
@@ -86,7 +86,7 @@ export const goDownstairsEvent = () => {
 }
 
 export const turnEvent = (dir: LR) => {
-  if (state.current.mapOpen) {
+  if (game.mapper.isOpen) {
     closeMapEvent()
   }
   MessageQueue.push(dir === 'right' ? RenderSignal.TurnRight : RenderSignal.TurnLeft)
@@ -96,12 +96,12 @@ export const turnEvent = (dir: LR) => {
 }
 
 export const openMapEvent = () => {
-  state.openMap()
+  game.mapper.open()
   MessageQueue.push(RenderSignal.OpenMap)
 }
 
 export const closeMapEvent = () => {
-  state.closeMap()
+  game.mapper.close()
   MessageQueue.push(RenderSignal.CloseMap)
   MessageQueue.push(RenderSignal.CurrentView)
 }
