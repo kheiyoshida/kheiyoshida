@@ -60,7 +60,7 @@ export class VerticalGrid3DSlice<Item> {
   }
 
   public set(index: number, item: Item) {
-    if (index < 0 || index >= this.sizeZ) throw Error(`index out of bounds`)
+    if (index < 0 || index >= this.sizeZ) throw Error(`index out of bounds: ${index}`)
     this.items[index] = item
   }
 

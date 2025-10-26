@@ -19,6 +19,12 @@ export const getTurnedDirection = (lro: LRO, currentDirection: Direction) => {
   }
 }
 
+export const rotated = (dir: Direction, perspectiveDir: Direction) => {
+  const i = NESW.indexOf(dir)
+  const p = NESW.indexOf(perspectiveDir)
+  return NESW[(i + p) % 4]
+}
+
 export const positionalDirection = (direction: Direction, distance = 1): Position => {
   switch (direction) {
     case 'n':
