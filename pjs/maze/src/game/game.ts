@@ -1,13 +1,10 @@
 import { fireByRate, randomItemFromArray } from 'utils'
 import { getBlockAtPosition, getCorridorBlocks } from './maze/legacy/level.ts'
-import { Block } from '../core/level/legacy/block.ts'
 import { Position, sumPosition } from '../core/_legacy/position.ts'
 import { getTurnedDirection, positionalDirection } from '../core/grid/direction.ts'
-import { getMatrixItem } from '../core/_legacy/matrix.ts'
 import { Player } from './player'
 import { Maze } from './maze/legacy'
 import { Mapper } from './map'
-import { composeLogicalView, LogicalView } from './view'
 
 export class GameAggregate {
   constructor(
@@ -46,35 +43,16 @@ export class GameAggregate {
     this.mapper.track(res)
   }
 
-  get #currentPlayerBlock() {
+  get currentPlayerBlock() {
     return getBlockAtPosition(this.maze.currentLevel, this.player.position)
   }
 
   get canPlayerProceed() {
-    return this.#currentPlayerBlock.edges[this.player.direction]
+    return this.currentPlayerBlock.edges[this.player.direction]
   }
 
   get isPlayerOnStair(): boolean {
-    return !!this.#currentPlayerBlock.stair
-  }
-
-  getView(): LogicalView {
-    return composeLogicalView(this.getPath(), this.player.direction)
-  }
-
-  getPath(i = 0): Block[] {
-    if (i > 2) return []
-    const block = i === 0 ? this.#currentPlayerBlock : this.#getFrontBlock(i)
-    if (block) {
-      if (block.edges[this.player.direction]) return [block].concat(this.getPath(i + 1))
-      else return [block]
-    }
-    return []
-  }
-
-  #getFrontBlock(dist = 1) {
-    const front = this.#getPlayerFrontPosition(dist)
-    return getMatrixItem(this.maze.currentLevel, front)
+    return !!this.currentPlayerBlock.stair
   }
 
   #getPlayerFrontPosition(dist = 1): Position {
