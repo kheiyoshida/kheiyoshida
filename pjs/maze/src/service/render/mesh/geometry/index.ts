@@ -1,4 +1,4 @@
-import { GeometryCode } from '../../unit'
+import { GeometryCode } from '../../../../integration/query/structure/unit'
 import { GeometrySpec } from 'maze-gl'
 import * as rectangles from './rectangles.ts'
 import * as objects from './objects.ts'

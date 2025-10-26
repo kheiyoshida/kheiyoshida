@@ -1,6 +1,6 @@
 import { Mesh } from 'maze-gl'
 import { GeometrySpecDict } from './geometry'
-import { GeometryCode } from '../unit'
+import { GeometryCode } from '../../../integration/query/structure/unit'
 import { getMeshMaterial, MaterialType } from './material'
 import { randomFloatBetween } from 'utils'
 import { RenderingMode } from '../../../game/stage'

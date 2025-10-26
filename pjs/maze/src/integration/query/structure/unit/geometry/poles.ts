@@ -1,6 +1,6 @@
 import { GeometryCodeConverter, GeometryCodeGrid } from '../types.ts'
-import { LogicalTerrainPattern } from '../../../../game/view/logicalView.ts'
-import { buildInitialGrid, GLayer, GPosX, iterateGrid } from '../../../../integration/query'
+import { LogicalTerrainPattern } from '../../../../../game/view/logicalView.ts'
+import { buildInitialGrid, GLayer, GPosX, iterateGrid } from '../../../index.ts'
 
 export const convertToPoles: GeometryCodeConverter = (renderGrid) => {
   const codeGrid = buildInitialGrid<GeometryCodeGrid>(() => [])

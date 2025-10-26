@@ -1,5 +1,5 @@
-import type { RenderBlockPosition } from '../scaffold'
-import { Grid, LogicalView } from '../../../integration/query'
+import type { RenderBlockPosition } from '../../../../service/render/scaffold'
+import { Grid, LogicalView } from '../../index.ts'
 
 export type UnitSpec = {
   codes: GeometryCode[]

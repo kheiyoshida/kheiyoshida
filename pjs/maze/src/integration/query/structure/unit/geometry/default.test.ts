@@ -1,4 +1,4 @@
-import { LogicalView } from '../../../../integration/query'
+import { LogicalView } from '../../../index.ts'
 import { convertToClassicGeometryCodes } from './default.ts'
 
 describe(`${convertToClassicGeometryCodes.name}`, () => {

@@ -26,6 +26,7 @@ import { getEffect } from './scene/effect.ts'
 import { corridorToNextFloor } from '../../integration/query/structure/scenes.ts'
 import { getScreenEffect } from './scene/screenEffect'
 import { renderScene } from 'maze-gl'
+import { convertRenderGridToUnitSpecList } from '../../integration/query/structure/unit'
 
 export const renderCurrentView: RenderHandler = ({ structure, vision }) => {
   const drawFrame = () => {
@@ -162,7 +163,10 @@ export const renderProceedToNextFloor: RenderHandler = ({ structure, vision, mov
 
     const units = getUnits(vision.mode, {
       ...structure,
-      renderGrid: animation === 'still' ? structure.renderGrid : corridorToNextFloor,
+      renderGrid:
+        animation === 'still'
+          ? structure.renderGrid
+          : convertRenderGridToUnitSpecList(corridorToNextFloor, structure.terrainStyle),
     })
 
     const fade =

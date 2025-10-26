@@ -5,7 +5,6 @@ import {
   RenderBlockPosition,
   Scaffold,
 } from '../scaffold'
-import { convertRenderGridToUnitSpecList } from '../unit'
 import { DeformedBox, RenderUnit } from 'maze-gl'
 import { getMesh } from '../mesh'
 import { Structure } from '../../../integration/query'
@@ -17,7 +16,7 @@ export const getUnits = (
 ): RenderUnit[] => {
   const scaffoldValues = calcConcreteScaffoldValues(scaffoldParams)
   const scaffold = createScaffold(scaffoldValues)
-  const specList = convertRenderGridToUnitSpecList(renderGrid, terrainStyle)
+  const specList = renderGrid
   return specList.map((spec) => ({
     box: getDeformedBox(scaffold, spec.position),
     meshes: spec.codes.map((code) => getMesh(code, mode)),

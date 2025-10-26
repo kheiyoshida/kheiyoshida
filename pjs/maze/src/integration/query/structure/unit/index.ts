@@ -1,4 +1,4 @@
-import { LogicalView, ModelingStyle } from '../../../integration/query'
+import { LogicalView, ModelingStyle } from '../../index.ts'
 import { convertToClassicGeometryCodes } from './geometry/default.ts'
 import { GeometryCodeConverter, UnitSpec } from './types.ts'
 import { injectGridPositionToModels } from './inject.ts'
