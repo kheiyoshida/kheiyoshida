@@ -1,6 +1,6 @@
 import { Level } from '../utils/types.ts'
 import { makeDecreasingParameter, makeIncreasingParameter } from '../utils/params.ts'
-import { player } from '../../../game'
+import { game } from '../../../game'
 
 export type ScreenEffectParams = {
   blurLevel: Level
@@ -9,7 +9,7 @@ export type ScreenEffectParams = {
 }
 
 export const getScreenEffectParams = (): ScreenEffectParams => {
-  const { stamina, sanity } = player.status
+  const { stamina, sanity } = game.player.status
   return {
     blurLevel: blurParameter(stamina),
     pixelRandomizationLevel: pixelRandomizationParameter(sanity),

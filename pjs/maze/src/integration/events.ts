@@ -1,6 +1,6 @@
 import { state } from '../game/state.ts'
 import { LR } from 'src/core/grid/direction.ts'
-import { game, maze, player } from '../game'
+import { game } from '../game'
 import { MessageQueue, RenderSignal } from './messages.ts'
 import { lightnessMoveDirection } from './query/vision/color'
 
@@ -26,9 +26,9 @@ export const unblockStatusChangeRequired = () => {
 
 export const idleStatusChangeRequired = () => {
   if (state.current.blockStatusChange) return
-  player.updateStatus('idle')
+  game.player.updateStatus('idle')
 
-  if (player.isDead) {
+  if (game.player.isDead) {
     MessageQueue.push(RenderSignal.Die)
   }
 }
@@ -36,7 +36,7 @@ export const idleStatusChangeRequired = () => {
 export const recurringConstantStatusEvent = () => {
   if (state.current.blockStatusChange) return
   if (state.current.mapOpen) return
-  player.updateStatus('constant')
+  game.player.updateStatus('constant')
 }
 
 export const resurrectEvent = () => {
@@ -61,7 +61,7 @@ export const walkEvent = () => {
   MessageQueue.push(RenderSignal.Go)
   game.movePlayerToFront()
 
-  player.updateStatus('walk')
+  game.player.updateStatus('walk')
   MessageQueue.push(RenderSignal.CurrentView)
 
   if (game.isPlayerOnStair) {
@@ -73,9 +73,9 @@ export const goDownstairsEvent = () => {
   MessageQueue.push(RenderSignal.GoDownStairs)
 
   game.goDownStairs()
-  player.updateStatus('downstairs')
+  game.player.updateStatus('downstairs')
 
-  if (maze.currentFloor >= 6 && maze.currentFloor % 3 === 0) {
+  if (game.maze.currentFloor >= 6 && game.maze.currentFloor % 3 === 0) {
     lightnessMoveDirection.update()
   }
 
@@ -90,8 +90,8 @@ export const turnEvent = (dir: LR) => {
     closeMapEvent()
   }
   MessageQueue.push(dir === 'right' ? RenderSignal.TurnRight : RenderSignal.TurnLeft)
-  player.turn(dir)
-  player.updateStatus('turn')
+  game.player.turn(dir)
+  game.player.updateStatus('turn')
   MessageQueue.push(RenderSignal.CurrentView)
 }
 

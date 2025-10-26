@@ -48,5 +48,5 @@ const styles: Record<string, React.CSSProperties> = {
     overscrollBehavior: 'none',
   },
 }
-export { player } from './game'
+
 export { Actor } from './core/actor/actor.ts'

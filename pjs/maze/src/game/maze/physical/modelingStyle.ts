@@ -1,8 +1,8 @@
 import { RenderingStyle } from '../../stage/style.ts'
-import { maze } from '../../index.ts'
+import { game } from '../../index.ts'
 
 export const getModelingStyle = (): ModelingStyle => {
-  const style = maze.getStageContext().current.style
+  const style = game.maze.getStageContext().current.style
   return determineModelingStyle(style)
 }
 

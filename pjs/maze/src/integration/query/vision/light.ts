@@ -1,6 +1,6 @@
 import { Level } from '../utils/types.ts'
 import { clamp } from 'utils'
-import { maze } from '../../../game'
+import { game } from '../../../game'
 
 export type LightVariables = {
   nearVisibility: Level
@@ -9,6 +9,6 @@ export type LightVariables = {
 export const getLightColorIntention = (): LightVariables => {
   return {
     // decrease visibility as the game progresses
-    nearVisibility: clamp(4 / maze.currentFloor, 0, 1),
+    nearVisibility: clamp(4 / game.maze.currentFloor, 0, 1),
   }
 }

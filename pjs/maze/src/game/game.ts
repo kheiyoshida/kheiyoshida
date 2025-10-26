@@ -9,11 +9,11 @@ import { Maze } from './maze/legacy'
 import { Mapper } from './map'
 import { composeLogicalView, LogicalView } from './view'
 
-export class Game {
+export class GameAggregate {
   constructor(
-    private maze: Maze,
-    private player: Player,
-    private mapper: Mapper
+    public readonly maze: Maze,
+    public readonly player: Player,
+    public readonly mapper: Mapper
   ) {
     this.#setupNextLevel()
   }

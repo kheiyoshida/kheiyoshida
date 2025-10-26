@@ -1,5 +1,5 @@
 import { makeDecreasingParameter } from '../utils/params.ts'
-import { player } from '../../../game'
+import { game } from '../../../game'
 
 export type EffectParams = {
   fogLevel: number
@@ -8,6 +8,6 @@ export type EffectParams = {
 const visibilityParam = makeDecreasingParameter(0, 1, 2500, 1000)
 export const getEffectParams = (): EffectParams => {
   return {
-    fogLevel: visibilityParam(player.status.stamina),
+    fogLevel: visibilityParam(game.player.status.stamina),
   }
 }

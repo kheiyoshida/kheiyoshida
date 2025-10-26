@@ -1,5 +1,5 @@
 import { IntRange } from 'utils'
-import { maze, player } from '../../../game'
+import { game } from '../../../game'
 
 export type MusicRange = IntRange<1, 10>
 export type MusicCommand = {
@@ -8,8 +8,8 @@ export type MusicCommand = {
 }
 
 export const getMusicCommands = (): MusicCommand => ({
-  alignment: calcMusicAlignment(player.status.sanity),
-  aesthetics: maze.getStageContext().current.style as MusicRange,
+  alignment: calcMusicAlignment(game.player.status.sanity),
+  aesthetics: game.maze.getStageContext().current.style as MusicRange,
 })
 
 export const calcMusicAlignment = (sanity: number): MusicRange => {

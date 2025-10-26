@@ -1,5 +1,5 @@
 import { makeDecreasingParameter, makeIncreasingParameter } from '../utils/params.ts'
-import { player } from '../../../game'
+import { game } from '../../../game'
 
 export type ScaffoldParams = {
   corridorWidthLevel: number
@@ -9,7 +9,7 @@ export type ScaffoldParams = {
 }
 
 export const getScaffoldParams = (): ScaffoldParams => {
-  const { stamina, sanity } = player.status
+  const { stamina, sanity } = game.player.status
   return {
     corridorWidthLevel: calcWidthLevel(sanity),
     wallHeightLevel: calcHeightLevel(sanity / 2 + stamina),

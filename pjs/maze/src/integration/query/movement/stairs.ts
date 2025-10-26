@@ -1,5 +1,5 @@
 import { determineModelingStyle, ModelingStyle } from '../../../game/maze/physical/modelingStyle.ts'
-import { maze } from '../../../game'
+import { game } from '../../../game'
 
 export type GoDownstairsAnimationType = 'descent' | 'lift' | 'proceed' | 'warp'
 
@@ -11,7 +11,7 @@ export type StairAnimation = {
 }
 
 export const getStairAnimation = (): StairAnimation => {
-  const { prev, current, next } = maze.getStageContext()
+  const { prev, current, next } = game.maze.getStageContext()
   const prevStyle = prev ? determineModelingStyle(prev.style) : null
   const currentStyle = determineModelingStyle(current.style)
   const nextStyle = next ? determineModelingStyle(next.style) : null
