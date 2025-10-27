@@ -14,14 +14,11 @@ export const renderScene = ({ eye, units, lights, unlitColor, effect, screenEffe
   screenEffect?.startDraw()
 
   gl.clearColor(...unlitColor.normalizedRGB, 1.0)
-  gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT)
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
   // scene-level uniform values
   const [view, projection] = convertEyeValuesToMatrices(eye)
-  const uboData = new Float32Array([
-    ...projection,
-    ...view,
-  ])
+  const uboData = new Float32Array([...projection, ...view])
   setUBOValue(BindingPoint.Eye, uboData)
 
   const colorUboData = new Float32Array([...unlitColor.normalizedRGB, uPad])
@@ -45,6 +42,7 @@ export const renderUnit = (unit: RenderUnit) => {
   const boxNormals = calcFaceNormalsOfBox(unit.box)
 
   // unit-level uniform values
+  // prettier-ignore
   const uboData = new Float32Array([
     ...positionToNDC(unit.box.FBL), uPad,
     ...positionToNDC(unit.box.FBR), uPad,
@@ -64,7 +62,7 @@ export const renderUnit = (unit: RenderUnit) => {
   ])
   setUBOValue(BindingPoint.DeformedBox, uboData)
 
-  unit.meshes.forEach((mesh) => {
-    mesh.render()
+  unit.objects.forEach((object) => {
+    object.render()
   })
 }

@@ -13,17 +13,13 @@ import {
 import vertShaderSource from './dev.vert?raw'
 import fragShaderSource from './dev.frag?raw'
 
-import screenVert from './screen.vert?raw'
-import screenFrag from './screen.frag?raw'
-
 import objUrl from './cube.obj?url'
 import { boxSize, getDeformedBox, halfBox } from './geometries'
 import { makeRenderer } from '../frame'
-import { PointLightValues, SpotLightValues } from '../models'
+import { MaterialShader, PointLightValues, SpotLightValues } from '../models'
 import { toRadians } from '../utils/calc'
 import { Color } from '../color'
-import { MaterialShader, ScreenShader } from '../models/shader/shaders'
-import { ScreenEffect } from '../models/screenEffect/screenEffect'
+import { SceneObject } from '../models/object'
 
 const objSpec = await buildGeometrySpecFromObj(objUrl)
 
@@ -54,12 +50,12 @@ const material1 = new ColorMaterial(shader, {
 const boxMesh = new Mesh(material1, objSpec)
 
 const unit1: RenderUnit = {
-  meshes: [boxMesh],
+  objects: [new SceneObject(boxMesh)],
   box: getDeformedBox(0, 0, 0),
 }
 
 const unit2: RenderUnit = {
-  meshes: [boxMesh],
+  objects: [new SceneObject(boxMesh)],
   box: getDeformedBox(boxSize, 0, boxSize),
 }
 
@@ -103,19 +99,8 @@ const spotLight: SpotLightValues = {
   quadratic: 0.32, // Quadratic attenuation
 }
 
-//
-// offscreen frame buffer
-//
-
-const screenShader = new ScreenShader(screenVert, screenFrag)
-const effect = new ScreenEffect(screenShader)
-
-if (!gl.getExtension('EXT_color_buffer_float')) {
-  console.error('EXT_color_buffer_float not supported');
-}
-if (!gl.getExtension('OES_texture_float')) {
-  console.error('OES_texture_float not supported');
-}
+unit1.objects[0].transform.scale = 0.9
+unit2.objects[0].transform.scale = 0.9
 
 function frame(frameCount: number) {
   const scene: Scene = {
@@ -135,7 +120,7 @@ function frame(frameCount: number) {
     effect: {
       fogLevel: 0.0,
     },
-    screenEffect: effect,
+    screenEffect: undefined,
   }
 
   renderScene(scene)

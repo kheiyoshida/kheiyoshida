@@ -1,8 +1,8 @@
-import { Mesh } from './mesh'
 import { Vector3D } from '../vector'
+import { SceneObject } from './object'
 
 export type RenderUnit = {
-  meshes: Mesh[]
+  objects: SceneObject[]
   box: DeformedBox
 }
 

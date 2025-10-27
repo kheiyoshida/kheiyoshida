@@ -1,14 +1,8 @@
-import {
-  calcConcreteScaffoldValues,
-  createScaffold,
-  getRenderBlock,
-  RenderBlockPosition,
-  Scaffold,
-} from '../scaffold'
+import { calcConcreteScaffoldValues, createScaffold, getRenderBlock, RenderBlockPosition, Scaffold } from '../scaffold'
 import { DeformedBox, RenderUnit } from 'maze-gl'
-import { getMesh } from '../mesh'
 import { Structure } from '../../../integration/query'
 import { RenderingMode } from '../../../game/stage'
+import { composeSceneObject } from '../object'
 
 export const getUnits = (
   mode: RenderingMode,
@@ -19,7 +13,7 @@ export const getUnits = (
   const specList = renderGrid
   return specList.map((spec) => ({
     box: getDeformedBox(scaffold, spec.position),
-    meshes: spec.codes.map((code) => getMesh(code, mode)),
+    objects: spec.codes.map((code) => composeSceneObject(code, mode)),
   }))
 }
 

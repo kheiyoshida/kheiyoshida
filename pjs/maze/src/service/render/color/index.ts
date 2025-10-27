@@ -1,5 +1,5 @@
 import { makeColorScheme } from './scheme.ts'
-import { getMeshMaterial } from '../mesh/material'
+import { getMeshMaterial } from '../object/material'
 import { FloorColorParams, FrameColorParams } from '../../../integration/query/vision/color/types.ts'
 import { RenderingMode } from '../../../game/stage'
 
