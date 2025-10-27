@@ -1,9 +1,7 @@
 import { fireByRate, randomItemFromArray } from 'utils'
-import { getBlockAtPosition, getCorridorBlocks } from './maze/legacy/level.ts'
-import { Position, sumPosition } from '../core/_legacy/position.ts'
-import { getTurnedDirection, positionalDirection } from '../core/grid/direction.ts'
+import { getTurnedDirection } from '../core/grid/direction.ts'
 import { Player } from './player'
-import { Maze } from './maze/legacy'
+import { Maze } from './maze'
 import { Mapper } from './map'
 
 export class GameAggregate {
@@ -23,13 +21,13 @@ export class GameAggregate {
 
   #setupNextLevel() {
     this.maze.setNextLevel()
-    this.mapper.resetMap(this.maze.currentLevel)
+    // this.mapper.resetMap(this.maze.currentLevel)
 
-    const initialPlayerBlock = randomItemFromArray(getCorridorBlocks(this.maze.currentLevel))
-    this.player.position = initialPlayerBlock.position
+    const corridorCell = randomItemFromArray(this.maze.currentLevel.grid.getCorridors())
+    this.player.position = corridorCell
     this.player.direction = getTurnedDirection(
       fireByRate(0.5) ? 'right' : 'left',
-      initialPlayerBlock.corridorDirection!
+      this.maze.currentLevel.grid.getCorridorDir(corridorCell)!
     )
   }
 
@@ -38,24 +36,19 @@ export class GameAggregate {
   }
 
   movePlayerToFront() {
-    const frontPosition = this.#getPlayerFrontPosition()
-    const res = this.player.walk(frontPosition)
-    this.mapper.track(res)
+    this.player.walk()
+    // this.mapper.track(this.player.position)
   }
 
-  get currentPlayerBlock() {
-    return getBlockAtPosition(this.maze.currentLevel, this.player.position)
+  get currentPlayerCell() {
+    return this.maze.currentLevel.grid.get(this.player.position)
   }
 
   get canPlayerProceed() {
-    return this.currentPlayerBlock.edges[this.player.direction]
+    return !!this.maze.currentLevel.grid.getRelativeCell(this.player.position, this.player.direction, 2)
   }
 
   get isPlayerOnStair(): boolean {
-    return !!this.currentPlayerBlock.stair
-  }
-
-  #getPlayerFrontPosition(dist = 1): Position {
-    return sumPosition(this.player.position, positionalDirection(this.player.direction, dist))
+    return this.currentPlayerCell?.type === 'stair'
   }
 }

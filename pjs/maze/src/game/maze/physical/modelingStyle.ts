@@ -2,7 +2,7 @@ import { RenderingStyle } from '../../stage/style.ts'
 import { game } from '../../index.ts'
 
 export const getModelingStyle = (): ModelingStyle => {
-  const style = game.maze.getStageContext().current.style
+  const style = game.maze.stageContext.current.style
   return determineModelingStyle(style)
 }
 

@@ -1,12 +1,6 @@
 import { Grid2D } from '../grid/grid2d.ts'
 import { MazeCell } from './cell.ts'
-import {
-  direction,
-  equals,
-  getAdjacent,
-  getPositionInDirection,
-  Position2D,
-} from '../grid/position2d.ts'
+import { direction, equals, getAdjacent, getPositionInDirection, Position2D } from '../grid/position2d.ts'
 import { Direction, getTurnedDirection, NESW } from '../grid/direction.ts'
 
 export class MazeGrid extends Grid2D<MazeCell> {
@@ -42,9 +36,18 @@ export class MazeGrid extends Grid2D<MazeCell> {
   }
 
   isCorridor(position: Position2D): boolean {
-    const ns = (!!this.get(getAdjacent(position, 'n'))) && (!!this.get(getAdjacent(position, 's')))
-    const ew = (!!this.get(getAdjacent(position, 'e'))) && (!!this.get(getAdjacent(position, 'w')))
-    return (ns && !ew) || (!ns && ew)
+    return !!this.getCorridorDir(position);
+  }
+
+  getCorridorDir(position: Position2D): Direction | undefined {
+    const ns = !!this.get(getAdjacent(position, 'n')) && !!this.get(getAdjacent(position, 's'))
+    const ew = !!this.get(getAdjacent(position, 'e')) && !!this.get(getAdjacent(position, 'w'))
+    if (ns && !ew) return 'n'
+    if (!ns && ew) return 'e'
+  }
+
+  getRelativeCell(origin: Position2D, dir: Direction, distance: number): MazeCell | null {
+    return this.get(getPositionInDirection(origin, dir, distance))
   }
 
   /**

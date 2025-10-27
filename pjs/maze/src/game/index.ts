@@ -1,5 +1,5 @@
 import { paramBuild } from './maze/params.ts'
-import { Maze } from './maze/legacy'
+import { Maze } from './maze'
 import { buildFloorStages } from './stage/stage.ts'
 import { Player } from './player'
 import { GameAggregate } from './game.ts'

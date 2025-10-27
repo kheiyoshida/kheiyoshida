@@ -11,7 +11,7 @@ export type StairAnimation = {
 }
 
 export const getStairAnimation = (): StairAnimation => {
-  const { prev, current, next } = game.maze.getStageContext()
+  const { prev, current, next } = game.maze.stageContext
   const prevStyle = prev ? determineModelingStyle(prev.style) : null
   const currentStyle = determineModelingStyle(current.style)
   const nextStyle = next ? determineModelingStyle(next.style) : null

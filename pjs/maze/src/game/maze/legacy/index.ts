@@ -4,6 +4,7 @@ import { MazeLevelParams } from '../../../core/level/legacy'
 import { classifyStyle } from '../../stage/style.ts'
 import { StairType } from './object.ts'
 
+
 export class Maze {
   #floor = 0
   #level: MazeLevel = []
