@@ -1,5 +1,5 @@
-import { Grid3D, Position3D } from '../../core/grid/grid3d.ts'
-import { MazeBlock } from '../../game/maze/physical/block.ts'
+import { Grid3D, Position3D } from '../../../../core/grid/grid3d.ts'
+import { MazeBlock } from '../../../../game/maze/physical/block.ts'
 
 export enum ViewX {
   Left2 = -2,
@@ -55,5 +55,12 @@ export class MazeView {
   setBlock(viewPos: ViewPosition, block: MazeBlock): void {
     const gridPos = toPosition3D(viewPos)
     this.grid.set(gridPos, block)
+  }
+
+  iterate(cb: (viewPos: ViewPosition, block: MazeBlock | null) => void): void {
+    this.grid.iterate((block, gridPos) => {
+      const viewPos = toViewPosition(gridPos)
+      cb(viewPos, block)
+    })
   }
 }

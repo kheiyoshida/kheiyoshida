@@ -23,10 +23,8 @@ import { getUnits } from './scene'
 import { resetColors, resolveFloorColor, resolveFrameColor } from './color'
 import { drawButtons, hideButtons } from '../interface/buttons'
 import { getEffect } from './scene/effect.ts'
-import { corridorToNextFloor } from '../../integration/query/structure/scenes.ts'
 import { getScreenEffect } from './scene/screenEffect'
 import { renderScene } from 'maze-gl'
-import { convertRenderGridToUnitSpecList } from '../../integration/query/structure/unit'
 
 export const renderCurrentView: RenderHandler = ({ structure, vision }) => {
   const drawFrame = () => {
@@ -161,13 +159,7 @@ export const renderProceedToNextFloor: RenderHandler = ({ structure, vision, mov
     const { lightColor, unlitColor } = resolveFrameColor(vision.color.frame, vision.mode)
     const eye = getMovementEye(movement, structure.scaffold)
 
-    const units = getUnits(vision.mode, {
-      ...structure,
-      renderGrid:
-        animation === 'still'
-          ? structure.renderGrid
-          : convertRenderGridToUnitSpecList(corridorToNextFloor, structure.terrainStyle),
-    })
+    const units = getUnits(vision.mode, structure)
 
     const fade =
       i >= movementValueArray.length / 2 ? 0 : 1 - calcSmoothValue(i, movementValueArray.length / 2)

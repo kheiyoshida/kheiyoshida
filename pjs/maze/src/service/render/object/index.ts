@@ -1,10 +1,10 @@
-import { GeometryCode } from '../../../integration/query/structure/unit'
 import { RenderingMode } from '../../../game/stage'
 import { getMesh } from './mesh.ts'
 import { ObjectTransform, SceneObject } from 'maze-gl'
 import { randomFloatBetween } from 'utils'
+import { ModelCode } from '../../../game/maze/physical/models.ts'
 
-export const composeSceneObject = (code: GeometryCode, mode: RenderingMode) => {
+export const composeSceneObject = (code: ModelCode, mode: RenderingMode) => {
   const transform = new ObjectTransform({
     rotateY: 0,
     scale: 1,

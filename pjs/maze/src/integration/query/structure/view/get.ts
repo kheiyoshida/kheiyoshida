@@ -1,9 +1,9 @@
-import { getDisposition, Position2D, sumPosition } from '../../core/grid/position2d.ts'
-import { Direction, getTurnedDirection } from '../../core/grid/direction.ts'
-import { PhysicalMazeGrid } from '../../game/maze/physical/grid.ts'
+import { getDisposition, Position2D, sumPosition } from '../../../../core/grid/position2d.ts'
+import { Direction, getTurnedDirection } from '../../../../core/grid/direction.ts'
+import { PhysicalMazeGrid } from '../../../../game/maze/physical/grid.ts'
 import { MazeView, ViewPosition, ViewX, ViewY, ViewZ } from './view.ts'
-import { Grid3D } from '../../core/grid/grid3d.ts'
-import { MazeBlock } from '../../game/maze/physical/block.ts'
+import { Grid3D } from '../../../../core/grid/grid3d.ts'
+import { MazeBlock } from '../../../../game/maze/physical/block.ts'
 
 export type ViewOrigin = {
   position: Position2D

@@ -3,7 +3,7 @@ import { Maze } from './maze'
 import { buildFloorStages } from './stage/stage.ts'
 import { Player } from './player'
 import { GameAggregate } from './game.ts'
-import { Mapper } from './map'
+import { Mapper } from './map/mapper.ts'
 import { StatusEventValues } from './player/status/delta.ts'
 
 const maze = new Maze(buildFloorStages(), paramBuild)

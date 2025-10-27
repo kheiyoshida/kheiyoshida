@@ -1,5 +1,5 @@
 import { Vector3D } from 'maze-gl'
-import { GPosX } from '../../../integration/query'
+import { ViewPosition } from '../../../integration/query/structure/view/view.ts'
 
 export type ScaffoldValues = {
   floor: number
@@ -49,11 +49,7 @@ export type DistortionDelta = {
   move(range: number, speed?: number): void
 }
 
-export type RenderBlockPosition = {
-  z: number
-  x: GPosX
-  y?: number // maybe y in the future
-}
+export type RenderBlockPosition = ViewPosition
 
 export type RenderBlock = {
   front: RenderBlockLayer

@@ -3,18 +3,31 @@ import { DeformedBox, RenderUnit } from 'maze-gl'
 import { Structure } from '../../../integration/query'
 import { RenderingMode } from '../../../game/stage'
 import { composeSceneObject } from '../object'
+import { ViewX, ViewY } from '../../../integration/query/structure/view/view.ts'
 
 export const getUnits = (
   mode: RenderingMode,
-  { renderGrid, scaffold: scaffoldParams, terrainStyle }: Structure
+  { view, scaffold: scaffoldParams, terrainStyle }: Structure
 ): RenderUnit[] => {
   const scaffoldValues = calcConcreteScaffoldValues(scaffoldParams)
   const scaffold = createScaffold(scaffoldValues)
-  const specList = renderGrid
-  return specList.map((spec) => ({
-    box: getDeformedBox(scaffold, spec.position),
-    objects: spec.codes.map((code) => composeSceneObject(code, mode)),
-  }))
+
+  const units: RenderUnit[] = []
+  view.iterate((viewPos, block) => {
+    if (!block) return
+
+    // TODO: support these new layers
+    if (viewPos.x < ViewX.Left1 || viewPos.x > ViewX.Right1) return;
+    if (viewPos.y !== ViewY.Middle) return;
+
+    const unit: RenderUnit = {
+      box: getDeformedBox(scaffold, viewPos),
+      objects: block.objects.map((obj) => composeSceneObject(obj.modelCode, mode)),
+    }
+    units.push(unit)
+  })
+
+  return units
 }
 
 const getDeformedBox = (scaffold: Scaffold, position: RenderBlockPosition): DeformedBox => {

@@ -1,4 +1,3 @@
-import { GPosX } from '../../../integration/query'
 import {
   RenderBlock,
   RenderBlockLayer,
@@ -7,6 +6,7 @@ import {
   ScaffoldLayer,
   ScaffoldLayerCoordPosition,
 } from './types.ts'
+import { ViewX, ViewY } from '../../../integration/query/structure/view/view.ts'
 
 export const getRenderBlock = (scaffold: Scaffold, { x, z, y }: RenderBlockPosition): RenderBlock => {
   if (z < 0) throw Error(`z is out of range: ${z}`)
@@ -14,9 +14,10 @@ export const getRenderBlock = (scaffold: Scaffold, { x, z, y }: RenderBlockPosit
     front: getBlockLayer(scaffold[z], x),
     rear: getBlockLayer(scaffold[z + 1], x),
   }
-  if (y !== undefined) {
-    if (y !== -1) throw Error(`unsupported y value`)
-    return getAdjacentBlockY(block)
+
+  if (y !== ViewY.Middle) {
+    throw Error(`unsupported: ${y}`)
+    // return getAdjacentBlockY(block)
   }
   return block
 }
@@ -34,10 +35,12 @@ export const getBlockLayer = (
   }
 }
 
-const TranslateMap: Record<GPosX, [left: ScaffoldLayerCoordPosition, right: ScaffoldLayerCoordPosition]> = {
-  [GPosX.LEFT]: [ScaffoldLayerCoordPosition.LL, ScaffoldLayerCoordPosition.CL],
-  [GPosX.CENTER]: [ScaffoldLayerCoordPosition.CL, ScaffoldLayerCoordPosition.CR],
-  [GPosX.RIGHT]: [ScaffoldLayerCoordPosition.CR, ScaffoldLayerCoordPosition.RR],
+const TranslateMap: Record<ViewX, [left: ScaffoldLayerCoordPosition, right: ScaffoldLayerCoordPosition]> = {
+  [ViewX.Left2]: [ScaffoldLayerCoordPosition.LL, ScaffoldLayerCoordPosition.CL],
+  [ViewX.Left1]: [ScaffoldLayerCoordPosition.LL, ScaffoldLayerCoordPosition.CL],
+  [ViewX.Center]: [ScaffoldLayerCoordPosition.CL, ScaffoldLayerCoordPosition.CR],
+  [ViewX.Right1]: [ScaffoldLayerCoordPosition.CR, ScaffoldLayerCoordPosition.RR],
+  [ViewX.Right2]: [ScaffoldLayerCoordPosition.CR, ScaffoldLayerCoordPosition.RR], // TODO: implement
 }
 
 export const getAdjacentBlockY = (block: RenderBlock, position: 'above' | 'below' = 'below') => {

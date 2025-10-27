@@ -1,7 +1,7 @@
 import { MazeView, toPosition3D, toViewPosition, ViewPosition, ViewX, ViewY, ViewZ } from './view.ts'
-import { PhysicalMazeGrid, VerticalLayer } from '../../game/maze/physical/grid.ts'
-import { MazeBlock } from '../../game/maze/physical/block.ts'
-import { Position3D } from '../../core/grid/grid3d.ts'
+import { PhysicalMazeGrid, VerticalLayer } from '../../../../game/maze/physical/grid.ts'
+import { MazeBlock } from '../../../../game/maze/physical/block.ts'
+import { Position3D } from '../../../../core/grid/grid3d.ts'
 
 test.each<[ViewPosition, Position3D]>([
   [

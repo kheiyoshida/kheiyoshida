@@ -1,9 +1,9 @@
-import { makeTestGrid } from '../../__test__/grid/visualise.ts'
-import { PhysicalMazeGrid } from '../../game/maze/physical/grid.ts'
+import { makeTestGrid } from '../../../../__test__/grid/visualise.ts'
+import { PhysicalMazeGrid } from '../../../../game/maze/physical/grid.ts'
 import { buildViewGrid, iterateRelative2dViewPositions, ViewOrigin } from './get.ts'
 import { ViewPosition, ViewX, ViewY, ViewZ } from './view.ts'
-import { IMazeObject } from '../../game/maze/physical/object.ts'
-import { Position2D } from '../../core/grid/position2d.ts'
+import { IMazeObject } from '../../../../game/maze/physical/object.ts'
+import { Position2D } from '../../../../core/grid/position2d.ts'
 
 describe(`${buildViewGrid.name}`, () => {
   it(`should convert the physical maze grid into 5x6x5 grid from player's perspective`, () => {

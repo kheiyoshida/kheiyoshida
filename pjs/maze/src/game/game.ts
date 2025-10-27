@@ -2,7 +2,7 @@ import { fireByRate, randomItemFromArray } from 'utils'
 import { getTurnedDirection } from '../core/grid/direction.ts'
 import { Player } from './player'
 import { Maze } from './maze'
-import { Mapper } from './map'
+import { Mapper } from './map/mapper.ts'
 
 export class GameAggregate {
   constructor(
@@ -21,7 +21,7 @@ export class GameAggregate {
 
   #setupNextLevel() {
     this.maze.setNextLevel()
-    // this.mapper.resetMap(this.maze.currentLevel)
+    this.mapper.resetMap(this.maze.currentLevel.grid)
 
     const corridorCell = randomItemFromArray(this.maze.currentLevel.grid.getCorridors())
     this.player.position = corridorCell
@@ -37,7 +37,7 @@ export class GameAggregate {
 
   movePlayerToFront() {
     this.player.walk()
-    // this.mapper.track(this.player.position)
+    this.mapper.track(this.player.position)
   }
 
   get currentPlayerCell() {
