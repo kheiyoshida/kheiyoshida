@@ -1,5 +1,3 @@
-import { Position, sumPosition } from '../_legacy/position.ts'
-
 export type LR = 'left' | 'right'
 export type LRO = LR | 'opposite'
 
@@ -24,19 +22,3 @@ export const rotated = (dir: Direction, perspectiveDir: Direction) => {
   const p = NESW.indexOf(perspectiveDir)
   return NESW[(i + p) % 4]
 }
-
-export const positionalDirection = (direction: Direction, distance = 1): Position => {
-  switch (direction) {
-    case 'n':
-      return [-distance, 0]
-    case 'e':
-      return [0, distance]
-    case 's':
-      return [distance, 0]
-    case 'w':
-      return [0, -distance]
-  }
-}
-
-export const adjacentInDirection = (d: Direction, p: Position) =>
-  sumPosition(p, positionalDirection(d))

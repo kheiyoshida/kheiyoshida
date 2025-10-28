@@ -43,7 +43,7 @@ export const buildStages = (): Stage[] => {
 
   for (let s = 0; s < InitialNumOfStages; s++) {
     const floors = fireByRate(0.8) ? 1 : 0
-    const style = 5 //pickStyle()
+    const style = pickStyle()
 
     // update mode every 2 stages
     if (s >= 2 && s % 2 === 0) {

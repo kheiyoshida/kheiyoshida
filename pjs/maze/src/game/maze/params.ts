@@ -1,19 +1,19 @@
 import { clamp, randomFloatBetween, randomIntInclusiveBetween } from 'utils'
-import { MazeLevelParams } from '../../core/level/legacy'
 import { MaxFloorSize } from '../../config'
+import { MazeGridParams } from '../../core/level/builder'
 
-export const paramBuild = (floor: number): MazeLevelParams => {
+export const paramBuild = (floor: number): MazeGridParams => {
   const size = getFloorSize(floor)
   const fill = getFillRate(floor)
   const conn = getConnectionRate(floor)
   return [size, fill, conn]
 }
 
-export const InitialFloorSize = 12
+export const InitialSize = 12
 
 const getFloorSize = (floor: number): number => {
-  if (floor < MaxFloorSize - InitialFloorSize) {
-    return randomIntInclusiveBetween(InitialFloorSize, InitialFloorSize + floor * 2)
+  if (floor < MaxFloorSize - InitialSize) {
+    return randomIntInclusiveBetween(InitialSize, InitialSize + floor * 2)
   } else {
     return randomIntInclusiveBetween(MaxFloorSize - 4, MaxFloorSize)
   }

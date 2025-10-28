@@ -19,7 +19,7 @@ export class Maze {
     this._floor++
     this._level = MazeLevel.build(
       this.buildParams(this._floor),
-      determineModelingStyle(this.stages[this._floor].style)
+      determineModelingStyle(this.stages[this._floor - 1].style)
     )
   }
 
@@ -43,6 +43,7 @@ export class Maze {
   }
 
   get currentLevel() {
+    if (!this._level) throw Error(`Level not initialized. did you call setNextLevel()?`)
     return this._level
   }
 }

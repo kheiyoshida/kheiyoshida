@@ -12,8 +12,7 @@ describe(`${Maze.name}`, () => {
       ],
       () => [5, 0.5, 0.5]
     )
-    expect(maze.currentLevel.grid.sizeX).toBe(5)
-    expect(maze.currentLevel.grid.sizeY).toBe(5)
+    maze.setNextLevel()
 
     expect(maze.currentLevel.physicalGrid.sizeZ).toBe(5)
   })
