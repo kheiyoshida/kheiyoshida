@@ -40,10 +40,12 @@ export class MazeGrid extends Grid2D<MazeCell> {
   }
 
   getCorridorDir(position: Position2D): Direction | undefined {
-    const ns = !!this.get(getAdjacent(position, 'n')) && !!this.get(getAdjacent(position, 's'))
-    const ew = !!this.get(getAdjacent(position, 'e')) && !!this.get(getAdjacent(position, 'w'))
-    if (ns && !ew) return 'n'
-    if (!ns && ew) return 'e'
+    const n = !!this.get(getAdjacent(position, 'n'))
+    const s = !!this.get(getAdjacent(position, 's'))
+    const e = !!this.get(getAdjacent(position, 'e'))
+    const w = !!this.get(getAdjacent(position, 'w'))
+    if (n && s && !e && !w) return 'n'
+    if (!n && !s && e && w) return 'e'
   }
 
   getRelativeCell(origin: Position2D, dir: Direction, distance: number): MazeCell | null {

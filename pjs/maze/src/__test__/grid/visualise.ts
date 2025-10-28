@@ -4,6 +4,7 @@ import { VerticalLayer } from '../../game/maze/physical/grid.ts'
 import { MazeView, ViewY } from '../../integration/query/structure/view/view.ts'
 import { Grid3D } from '../../core/grid/grid3d.ts'
 import { MazeBlock } from '../../game/maze/physical/block.ts'
+import { MapGrid } from '../../game/map/grid.ts'
 
 const NumericalRepresentationMap = {
   0: null,
@@ -87,4 +88,19 @@ export const visualizeGrid3D = (grid: Grid3D<MazeBlock>, layer: VerticalLayer) =
 export const visualizeView = (view: MazeView, y: ViewY) => {
   const grid = (view as any).grid
   return visualizeGrid3D(grid, 2 - y)
+}
+
+export const visualizeMap = (grid: MapGrid) => {
+  let representation = ``
+  for (let y = 0; y < grid.sizeY; y++) {
+    representation += `\n`
+    for (let x = 0; x < grid.sizeX; x++) {
+      const cell = grid.get({ x, y })
+
+      representation += cell ? 'C' : '_'
+      representation += ' '
+    }
+  }
+
+  return representation
 }

@@ -3,7 +3,6 @@ import { getTurnedDirection } from '../core/grid/direction.ts'
 import { Player } from './player'
 import { Maze } from './maze'
 import { Mapper } from './map/mapper.ts'
-import { isEven } from '../core/grid/position2d.ts'
 
 export class GameAggregate {
   constructor(

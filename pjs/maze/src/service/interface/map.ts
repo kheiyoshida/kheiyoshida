@@ -1,15 +1,7 @@
 import { RenderPack } from '../render/pack.ts'
 import { NESW } from '../../core/grid/direction.ts'
-import { loop2D } from 'utils'
 import { getUIRenderer } from './renderer'
-import {
-  IsMobile,
-  logicalCenterX,
-  logicalCenterY,
-  logicalHeight,
-  logicalWidth,
-  MaxFloorSize,
-} from '../../config'
+import { IsMobile, logicalCenterX, logicalCenterY, logicalHeight, logicalWidth, MaxFloorSize } from '../../config'
 
 export const closeMap = () => {
   getUIRenderer().clearCanvas()
@@ -66,12 +58,10 @@ export const renderMap = ({ map: { grid, current, direction, floor } }: RenderPa
   })
 
   // current position
-  const [currentI, currentJ] = [current.x, current.y]
-
   renderer.drawTriangle({
     position: {
-      x: logicalCenterX + (currentJ - gridLength / 2) * cellSize,
-      y: logicalCenterY + (currentI - gridLength / 2) * cellSize,
+      x: logicalCenterX + (current.x - gridLength / 2) * cellSize,
+      y: logicalCenterY + (current.y - gridLength / 2) * cellSize,
     },
     points: [
       {
