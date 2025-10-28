@@ -23,7 +23,7 @@ export const renderMap = ({ map: { grid, current, direction, floor } }: RenderPa
   const renderer = getUIRenderer()
   const playerDir = NESW.indexOf(direction)
 
-  const gridLength = grid.length
+  const gridLength = grid.sizeX
 
   renderer.changeFillColor([0, 0, 0.8])
   renderer.changeStrokeColor([0, 0, 0.0])
@@ -40,10 +40,9 @@ export const renderMap = ({ map: { grid, current, direction, floor } }: RenderPa
   })
 
   // map
-  loop2D(gridLength, (i, j) => {
-    const cell = grid[i][j]
-    const offsetX = (j - gridLength / 2) * cellSize
-    const offsetY = (i - gridLength / 2) * cellSize
+  grid.iterate((cell, pos) => {
+    const offsetX = (pos.x - gridLength / 2) * cellSize
+    const offsetY = (pos.y - gridLength / 2) * cellSize
 
     if (!cell) return
     if (!cell.visited && process.env.DEBUG !== 'true') return
@@ -67,7 +66,7 @@ export const renderMap = ({ map: { grid, current, direction, floor } }: RenderPa
   })
 
   // current position
-  const [currentI, currentJ] = [current[0] * 2, current[1] * 2]
+  const [currentI, currentJ] = [current.x, current.y]
 
   renderer.drawTriangle({
     position: {

@@ -9,11 +9,11 @@ export const paramBuild = (floor: number): MazeLevelParams => {
   return [size, fill, conn]
 }
 
-export const InitialFloorSize = 6
+export const InitialFloorSize = 12
 
 const getFloorSize = (floor: number): number => {
   if (floor < MaxFloorSize - InitialFloorSize) {
-    return randomIntInclusiveBetween(InitialFloorSize, InitialFloorSize + floor)
+    return randomIntInclusiveBetween(InitialFloorSize, InitialFloorSize + floor * 2)
   } else {
     return randomIntInclusiveBetween(MaxFloorSize - 4, MaxFloorSize)
   }

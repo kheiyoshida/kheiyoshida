@@ -34,6 +34,30 @@ describe(`${buildViewGrid.name}`, () => {
       <IMazeObject>{ modelCode: 'StairSteps', direction: 'n' },
     ])
   })
+
+  test(`debug`, () => {
+    const grid = makeTestGrid([
+      [0, 0, 1, 1, 1, 0],
+      [0, 0, 1, 0, 0, 0],
+      [0, 0, 1, 0, 0, 0],
+      [0, 0, 1, 0, 0, 0],
+      [0, 0, 1, 1, 2, 0],
+      [0, 0, 0, 0, 0, 0],
+    ])
+    const physicalGrid = PhysicalMazeGrid.convert(grid, 'classic')
+    const origin: ViewOrigin = {
+      position: { x: 2, y: 3 },
+      direction: 'e',
+    }
+
+    buildViewGrid(physicalGrid, origin)
+    buildViewGrid(physicalGrid, origin)
+    buildViewGrid(physicalGrid, origin)
+
+    const view = buildViewGrid(physicalGrid, origin)
+
+    expect(view.getBlock({ x: ViewX.Center, y: ViewY.Middle, z: ViewZ.L1}).objects).toHaveLength(2)
+  })
 })
 
 test.each<[ViewOrigin, [Pick<ViewPosition, 'x' | 'z'>, Position2D][]]>([

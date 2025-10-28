@@ -1,5 +1,9 @@
 import { MazeCell, MazeCellType } from '../../core/level/cell.ts'
 import { MazeGrid } from '../../core/level/grid.ts'
+import { VerticalLayer } from '../../game/maze/physical/grid.ts'
+import { MazeView, ViewY } from '../../integration/query/structure/view/view.ts'
+import { Grid3D } from '../../core/grid/grid3d.ts'
+import { MazeBlock } from '../../game/maze/physical/block.ts'
 
 const NumericalRepresentationMap = {
   0: null,
@@ -36,22 +40,24 @@ const defaultTextRepresentationMap = {
   cell: {
     floor: '1',
     stair: '2',
-  }
+  },
 }
 
-const visualise = (map: TextPresentationMap) => (grid: MazeGrid): string => {
-  let representation = ``
-  for(let y = 0; y < grid.sizeY; y++) {
-    representation += `\n`
-    for(let x = 0; x < grid.sizeX; x++) {
-      const cell = grid.get({ x, y })
-      representation += cell ? map.cell[cell.type] : map.null
-      representation += ' '
+const visualise =
+  (map: TextPresentationMap) =>
+  (grid: MazeGrid): string => {
+    let representation = ``
+    for (let y = 0; y < grid.sizeY; y++) {
+      representation += `\n`
+      for (let x = 0; x < grid.sizeX; x++) {
+        const cell = grid.get({ x, y })
+        representation += cell ? map.cell[cell.type] : map.null
+        representation += ' '
+      }
     }
-  }
 
-  return representation
-}
+    return representation
+  }
 
 export const visualizeGrid = visualise(defaultTextRepresentationMap)
 export const visualizeGridWithSymbols = visualise({
@@ -59,5 +65,26 @@ export const visualizeGridWithSymbols = visualise({
   cell: {
     floor: 'F',
     stair: 'S',
-  }
+  },
 })
+
+export const visualizeGrid3D = (grid: Grid3D<MazeBlock>, layer: VerticalLayer) => {
+  let representation = ``
+  for (let y = 0; y < grid.sizeY; y++) {
+    representation += `\n`
+    for (let x = 0; x < grid.sizeX; x++) {
+      const block = grid.get({ x, y, z: layer })
+
+
+      representation += block ? { 2: 'F', 1: 'S', 4: '_' }[block.objects.length] : '_'
+      representation += ' '
+    }
+  }
+
+  return representation
+}
+
+export const visualizeView = (view: MazeView, y: ViewY) => {
+  const grid = (view as any).grid
+  return visualizeGrid3D(grid, 2 - y)
+}

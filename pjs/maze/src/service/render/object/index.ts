@@ -2,9 +2,12 @@ import { RenderingMode } from '../../../game/stage'
 import { getMesh } from './mesh.ts'
 import { ObjectTransform, SceneObject } from 'maze-gl'
 import { randomFloatBetween } from 'utils'
-import { ModelCode } from '../../../game/maze/physical/models.ts'
+import { MazeObject } from '../../../game/maze/physical/object.ts'
+import { NESW } from '../../../core/grid/direction.ts'
 
-export const composeSceneObject = (code: ModelCode, mode: RenderingMode) => {
+export const composeSceneObject = (mode: RenderingMode) => (obj: MazeObject) => {
+  const { modelCode: code } = obj
+
   const transform = new ObjectTransform({
     rotateY: 0,
     scale: 1,
@@ -19,6 +22,8 @@ export const composeSceneObject = (code: ModelCode, mode: RenderingMode) => {
   if (code === 'Tile') {
     transform.scale = 0.9
   }
+
+  transform.rotateY = NESW.indexOf(obj.direction) * 90
 
   return new SceneObject(getMesh(code, mode), transform)
 }

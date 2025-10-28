@@ -13,6 +13,7 @@ export const getUnits = (
   const scaffold = createScaffold(scaffoldValues)
 
   const units: RenderUnit[] = []
+
   view.iterate((viewPos, block) => {
     if (!block) return
 
@@ -22,7 +23,7 @@ export const getUnits = (
 
     const unit: RenderUnit = {
       box: getDeformedBox(scaffold, viewPos),
-      objects: block.objects.map((obj) => composeSceneObject(obj.modelCode, mode)),
+      objects: block.objects.map(composeSceneObject(mode)),
     }
     units.push(unit)
   })

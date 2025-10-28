@@ -12,6 +12,6 @@ export class MazeLevel {
   static build(params: MazeGridParams, style: ModelingStyle): MazeLevel {
     const grid = buildMazeGrid(params)
     const physicalGrid = PhysicalMazeGrid.convert(grid, style)
-    return new MazeLevel(buildMazeGrid(params), physicalGrid)
+    return new MazeLevel(grid, physicalGrid)
   }
 }

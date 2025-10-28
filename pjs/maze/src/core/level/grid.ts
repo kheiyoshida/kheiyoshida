@@ -1,6 +1,6 @@
 import { Grid2D } from '../grid/grid2d.ts'
 import { MazeCell } from './cell.ts'
-import { direction, equals, getAdjacent, getPositionInDirection, Position2D } from '../grid/position2d.ts'
+import { direction, equals, getAdjacent, getPositionInDirection, isEven, Position2D } from '../grid/position2d.ts'
 import { Direction, getTurnedDirection, NESW } from '../grid/direction.ts'
 
 export class MazeGrid extends Grid2D<MazeCell> {
@@ -30,7 +30,7 @@ export class MazeGrid extends Grid2D<MazeCell> {
   getCorridors(): Position2D[] {
     const corridors: Position2D[] = []
     this.iterateItems((_, pos) => {
-      this.isCorridor(pos) && corridors.push(pos)
+      if (this.isCorridor(pos) && isEven(pos)) corridors.push(pos)
     })
     return corridors
   }
