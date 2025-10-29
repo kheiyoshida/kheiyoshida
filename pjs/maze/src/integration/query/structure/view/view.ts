@@ -26,6 +26,10 @@ export enum ViewY {
   Down2 = -2,
 }
 
+export const TotalViewX = 5
+export const TotalViewZ = 6
+export const TotalViewY = 5
+
 export type ViewPosition = {
   x: ViewX
   y: ViewY
