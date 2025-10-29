@@ -1,9 +1,9 @@
 import { CameraZ, FOV, MaxVisibleLength, WallHeight } from '../../../config'
 import { EyeMovementValues } from './types.ts'
-import { getConcreteLengths } from '../scaffold_legacy'
 import { Eye } from 'maze-gl'
 import { toRadians } from 'utils'
 import { ScaffoldParams } from '../../../integration/query/structure/scaffold.ts'
+import { getConcreteLengths } from '../scaffold/values.ts'
 
 const eyeElevation = WallHeight / 100
 

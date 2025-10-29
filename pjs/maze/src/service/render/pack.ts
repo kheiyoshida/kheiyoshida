@@ -1,5 +1,6 @@
 import { DomainIntention } from '../../integration/query'
-import { ScaffoldValues, calcConcreteScaffoldValues } from './scaffold_legacy'
+import { ScaffoldValues } from './scaffold/scaffold.ts'
+import { translateScaffoldParams } from './scaffold/values.ts'
 
 export type RenderPack = DomainIntention & {
   scaffoldValues: ScaffoldValues
@@ -7,5 +8,5 @@ export type RenderPack = DomainIntention & {
 
 export const packRenderingInfo = (domain: DomainIntention): RenderPack => ({
   ...domain,
-  scaffoldValues: calcConcreteScaffoldValues(domain.structure.scaffold),
+  scaffoldValues: translateScaffoldParams(domain.structure.scaffold),
 })

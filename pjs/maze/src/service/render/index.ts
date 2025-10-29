@@ -16,7 +16,7 @@ import {
   GoDownstairsMovement,
   ProceedToNextFloorMovement,
 } from './scene/movement.ts'
-import { Distortion } from './scaffold_legacy/distortion'
+// import { Distortion } from './scaffold_legacy/distortion'
 import { RenderQueue } from './queue'
 import { soundPack } from './sound'
 import { getUnits } from './scene'
@@ -25,6 +25,7 @@ import { drawButtons, hideButtons } from '../interface/buttons'
 import { getEffect } from './scene/effect.ts'
 import { getScreenEffect } from './scene/screenEffect'
 import { renderScene } from 'maze-gl'
+import { scaffold } from './scaffold'
 
 export const renderCurrentView: RenderHandler = ({ structure, vision }) => {
   const drawFrame = () => {
@@ -60,7 +61,7 @@ export const renderGo: RenderHandler = ({ structure, vision, movement }) => {
 
     if (i === GoMoveMagValues.length - 1) {
       unblockControlRequired()
-      Distortion.slideGo()
+      scaffold.slide()
     }
   })
   RenderQueue.update(drawFrameSequence)
@@ -87,7 +88,7 @@ export const renderTurn =
 
       if (i === LRDeltaValues.length - 1) {
         unblockControlRequired()
-        Distortion.slideTurn(direction)
+        scaffold.turn(direction)
       }
     })
     RenderQueue.update(drawFrameSequence)

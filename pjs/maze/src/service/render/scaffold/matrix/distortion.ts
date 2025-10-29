@@ -1,22 +1,41 @@
 import { Vec3, Vector3D } from 'maze-gl'
 import { MatrixLayerXSize, MatrixLayerZSize } from './layer.ts'
 import { NumOfScaffoldMatrixLayers } from './matrix.ts'
+import { LR } from '../../../../core/grid/direction.ts'
 
 export class DistortionDelta {
   public readonly value: Vector3D = [0, 0, 0]
   public move(range: number, speed: number) {
-    const rand = Vec3.random(-speed/2, speed/2)
+    const rand = Vec3.random(-speed / 2, speed / 2)
     Vec3.add(this.value, rand)
     if (Vec3.mag(this.value) > range) {
       Vec3.normalize(this.value, range)
     }
   }
+  public turnValue(lr: LR) {
+    const [prevX, _, prevZ] = this.value.slice()
+    if (lr === 'left') {
+      this.value[0] = -prevZ
+      this.value[2] = prevX
+    } else {
+      this.value[0] = prevZ
+      this.value[2] = -prevX
+    }
+  }
 }
 
 export class DistortionMatrixLayer {
-  public readonly deltas: DistortionDelta[][]
+  private _deltas: DistortionDelta[][]
+  public get deltas() {
+    return this._deltas
+  }
+
   constructor() {
-    this.deltas = Array.from({ length: MatrixLayerZSize }, () =>
+    this._deltas = DistortionMatrixLayer.initDeltas()
+  }
+
+  static initDeltas() {
+    return Array.from({ length: MatrixLayerZSize }, () =>
       Array.from({ length: MatrixLayerXSize }, () => new DistortionDelta())
     )
   }
@@ -24,7 +43,7 @@ export class DistortionMatrixLayer {
   iterate(callback: (delta: DistortionDelta, x: number, z: number) => void) {
     for (let z = 0; z < MatrixLayerZSize; z++) {
       for (let x = 0; x < MatrixLayerXSize; x++) {
-        callback(this.deltas[z][x], x, z)
+        callback(this._deltas[z][x], x, z)
       }
     }
   }
@@ -33,8 +52,34 @@ export class DistortionMatrixLayer {
     this.iterate((delta) => delta.move(range, speed))
   }
 
-  slide() {}
-  turn() {}
+  slide(distance = 2) {
+    const newDeltas: DistortionDelta[][] = DistortionMatrixLayer.initDeltas()
+    this.iterate((_, x, z) => {
+      const nz = (z + distance)
+      newDeltas[z][x] = this._deltas[nz]?.[x] ?? new DistortionDelta()
+    })
+    this._deltas = newDeltas
+  }
+
+  private static TurnPivot = { px: 2.5, pz: 0.5 }
+
+  turn(lr: LR) {
+    const newDeltas: DistortionDelta[][] = DistortionMatrixLayer.initDeltas()
+    const { px, pz } = DistortionMatrixLayer.TurnPivot
+    this.iterate((_, x, z) => {
+      let nx, nz
+      if (lr === 'left') {
+        nx = (px + (z - pz))
+        nz = (pz - (x - px))
+      } else {
+        nx = (px - (z - pz))
+        nz = (pz + (x - px))
+      }
+      newDeltas[z][x] = this._deltas[nz]?.[nx] ?? new DistortionDelta()
+      newDeltas[z][x].turnValue(lr)
+    })
+    this._deltas = newDeltas
+  }
 }
 
 export class DistortionMatrix {
