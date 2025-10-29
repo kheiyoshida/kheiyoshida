@@ -1,8 +1,8 @@
 import { Vector3D } from 'maze-gl'
 import { TotalViewX, TotalViewZ, ViewPosition } from '../../../../integration/query/structure/view/view.ts'
 
-const MatrixLayerXSize = TotalViewX + 1 // 6
-const MatrixLayerZSize = TotalViewZ + 1 // 7
+export const MatrixLayerXSize = TotalViewX + 1 // 6
+export const MatrixLayerZSize = TotalViewZ + 1 // 7
 
 export type MatrixLayerPoints = Vector3D[][]
 
@@ -13,7 +13,7 @@ export type ScaffoldRect = {
   br: Vector3D
 }
 
-export class MatrixLayer {
+export class PointMatrixLayer {
   public readonly points: MatrixLayerPoints
 
   constructor(yValue: number, floorLength: number, pathLength: number) {
@@ -40,14 +40,6 @@ export class MatrixLayer {
       fr: this.points[front][right],
       bl: this.points[back][left],
       br: this.points[back][right],
-    }
-  }
-
-  public static iteratePointIndices(callback: (x: number, z: number) => void) {
-    for (let z = 0; z < MatrixLayerZSize; z++) {
-      for (let x = 0; x < MatrixLayerXSize; x++) {
-        callback(x, z)
-      }
     }
   }
 }

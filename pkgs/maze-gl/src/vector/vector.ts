@@ -43,7 +43,8 @@ export const sub = (left: Vector3D, right: Vector3D): Vector3D => {
 
 /**
  * add a vector to another vector
- * note that it mutates the vector
+ *
+ * note that it mutates the vector!
  */
 export const add = (target: Vector3D, delta: Vector3D): void => {
   vec3.add(target, target, delta)

@@ -30,6 +30,6 @@ describe(`${Scaffold.name}`, () => {
     expect(box).toEqual(expected)
 
     scaffold.update({...values, distortionRange: 100, distortionSpeed: 10})
-    // expect(scaffold.getBox({ x: ViewX.Center, y: ViewY.Middle, z: ViewZ.L1 })).not.toEqual(expected)
+    expect(scaffold.getBox({ x: ViewX.Center, y: ViewY.Middle, z: ViewZ.L1 })).not.toEqual(expected)
   })
 })

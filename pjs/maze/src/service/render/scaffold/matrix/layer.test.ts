@@ -1,9 +1,9 @@
-import { MatrixLayer, ScaffoldRect } from './layer.ts'
+import { PointMatrixLayer, ScaffoldRect } from './layer.ts'
 import { ViewX, ViewZ } from '../../../../integration/query/structure/view/view.ts'
 
-describe(`${MatrixLayer.name}`, () => {
+describe(`${PointMatrixLayer.name}`, () => {
   it(`should hold 3d vectors for a horizontal layer of a scaffold matrix`, () => {
-    const layer = new MatrixLayer(-200, 400, 600)
+    const layer = new PointMatrixLayer(-200, 400, 600)
 
     const rect = layer.getRect({ x: ViewX.Center, z: ViewZ.L1 })
     const expected: ScaffoldRect = {

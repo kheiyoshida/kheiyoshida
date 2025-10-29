@@ -1,6 +1,7 @@
 import { ViewPosition } from '../../../integration/query/structure/view/view.ts'
-import { DeformedBox } from 'maze-gl'
+import { DeformedBox, Vec3 } from 'maze-gl'
 import { ScaffoldPointMatrix } from './matrix/matrix.ts'
+import { DistortionMatrix } from './matrix/distortion.ts'
 
 export type ScaffoldValues = {
   floor: number
@@ -12,6 +13,7 @@ export type ScaffoldValues = {
 
 export class Scaffold {
   private pointMatrix!: ScaffoldPointMatrix
+  private distortionMatrix: DistortionMatrix = new DistortionMatrix()
 
   getBox(viewPosition: ViewPosition): DeformedBox {
     return this.pointMatrix.getBox(viewPosition)
@@ -19,5 +21,14 @@ export class Scaffold {
 
   update(values: ScaffoldValues): void {
     this.pointMatrix = new ScaffoldPointMatrix(values.floor, values.path, values.wall)
+    this.distortionMatrix.update(values.distortionRange, values.distortionSpeed)
+    this.applyDistortion()
+  }
+
+  private applyDistortion() {
+    this.distortionMatrix.iterate((delta, x, y, z) => {
+      const point = this.pointMatrix.layers[y].points[z][x]
+      Vec3.add(point, delta.value)
+    })
   }
 }
