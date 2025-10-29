@@ -17,8 +17,8 @@ export const mapSizing = IsMobile ? 0.88 : 0.6
 
 export const FOV = IsMobile ? 120 : 80
 
-export const FloorLength = 400
-export const PathLength = 600
+export const FloorLength = 500
+export const PathLength = 500
 export const WallHeight = 400
 export const FloorPathAvgLength = (FloorLength + PathLength) / 2
 

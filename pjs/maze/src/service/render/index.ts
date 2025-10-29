@@ -16,7 +16,7 @@ import {
   GoDownstairsMovement,
   ProceedToNextFloorMovement,
 } from './scene/movement.ts'
-import { Distortion } from './scaffold/distortion'
+import { Distortion } from './scaffold_legacy/distortion'
 import { RenderQueue } from './queue'
 import { soundPack } from './sound'
 import { getUnits } from './scene'

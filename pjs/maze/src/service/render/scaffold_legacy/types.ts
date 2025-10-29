@@ -18,7 +18,9 @@ export type Scaffold<T extends ScaffoldEntity = Vector3D> = ScaffoldLayer<T>[]
 
 export type ScaffoldEntity = Vector3D | DistortionDelta | unknown
 
+// TODO: make this enum
 export type ScaffoldLayerPartKey = 'upper' | 'lower'
+
 export type ScaffoldLayer<T extends ScaffoldEntity = Vector3D> = {
   [k in ScaffoldLayerPartKey]: ScaffoldLayerPart<T>
 }

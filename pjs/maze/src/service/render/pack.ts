@@ -1,5 +1,5 @@
 import { DomainIntention } from '../../integration/query'
-import { ScaffoldValues, calcConcreteScaffoldValues } from './scaffold'
+import { ScaffoldValues, calcConcreteScaffoldValues } from './scaffold_legacy'
 
 export type RenderPack = DomainIntention & {
   scaffoldValues: ScaffoldValues

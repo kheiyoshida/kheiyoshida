@@ -1,4 +1,4 @@
-import { calcConcreteScaffoldValues, createScaffold, getRenderBlock, RenderBlockPosition, Scaffold } from '../scaffold'
+import { calcConcreteScaffoldValues, createScaffold, getRenderBlock, RenderBlockPosition, Scaffold } from '../scaffold_legacy'
 import { DeformedBox, RenderUnit } from 'maze-gl'
 import { Structure } from '../../../integration/query'
 import { RenderingMode } from '../../../game/stage'
