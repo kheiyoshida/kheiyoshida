@@ -1,7 +1,7 @@
 import { getDisposition, Position2D, sumPosition } from '../../../../core/grid/position2d.ts'
 import { Direction, getTurnedDirection } from '../../../../core/grid/direction.ts'
 import { PhysicalMazeGrid } from '../../../../game/maze/physical/grid.ts'
-import { MazeView, ViewPosition, ViewX, ViewY, ViewZ } from './view.ts'
+import { MazeView, ViewPos2D, ViewX, ViewY, ViewZ } from './view.ts'
 import { Grid3D } from '../../../../core/grid/grid3d.ts'
 import { MazeBlock } from '../../../../game/maze/physical/block.ts'
 
@@ -25,7 +25,7 @@ export const buildViewGrid = (mazeGrid: PhysicalMazeGrid, origin: ViewOrigin): M
 
 export function* iterateRelative2dViewPositions(
   origin: ViewOrigin
-): Generator<[Pick<ViewPosition, 'x' | 'z'>, Position2D]> {
+): Generator<[ViewPos2D, Position2D]> {
   for (let h = ViewX.Left2; h <= ViewX.Right2; h++) {
     for (let v = ViewZ.L1; v <= ViewZ.L6; v++) {
       const horizontal = getDisposition(getTurnedDirection('right', origin.direction), h)

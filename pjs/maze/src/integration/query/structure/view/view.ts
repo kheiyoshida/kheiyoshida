@@ -36,6 +36,8 @@ export type ViewPosition = {
   z: ViewZ
 }
 
+export type ViewPos2D = Pick<ViewPosition, 'x' | 'z'>
+
 export const toPosition3D = (viewPosition: ViewPosition): Position3D => ({
   x: 2 - viewPosition.x,
   y: viewPosition.z,

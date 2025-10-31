@@ -35,6 +35,35 @@ describe(`${buildViewGrid.name}`, () => {
     ])
   })
 
+  it(`should convert the physical maze grid into 5x6x5 grid from player's perspective`, () => {
+    const grid = makeTestGrid([
+      [0, 0, 0],
+      [1, 1, 2],
+      [0, 0, 0],
+    ])
+    const physicalGrid = PhysicalMazeGrid.convert(grid, 'classic')
+    const origin: ViewOrigin = {
+      position: { x: 0, y: 1 },
+      direction: 'e',
+    }
+
+    const view = buildViewGrid(physicalGrid, origin)
+
+    expect(view.getBlock({ x: ViewX.Center, y: ViewY.Middle, z: ViewZ.L1 }).objects).toEqual([
+      <IMazeObject>{ modelCode: 'Floor', direction: 'w' },
+      <IMazeObject>{ modelCode: 'Ceil', direction: 'w' },
+    ])
+    expect(view.getBlock({ x: ViewX.Left1, y: ViewY.Middle, z: ViewZ.L1 }).objects).toEqual([
+      { modelCode: 'Wall', direction: 'w' },
+      { modelCode: 'Wall', direction: 'n' },
+      { modelCode: 'Wall', direction: 'e' },
+      { modelCode: 'Wall', direction: 's' },
+    ])
+    expect(view.getBlock({x: ViewX.Center, y: ViewY.Down1, z: ViewZ.L3 }).objects).toEqual([
+      <IMazeObject>{ modelCode: 'StairSteps', direction: 'n' },
+    ])
+  })
+
   test(`debug`, () => {
     const grid = makeTestGrid([
       [0, 0, 1, 1, 1, 0],

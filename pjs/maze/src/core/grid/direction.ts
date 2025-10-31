@@ -18,7 +18,7 @@ export const getTurnedDirection = (lro: LRO, currentDirection: Direction) => {
 }
 
 export const rotated = (dir: Direction, perspectiveDir: Direction) => {
-  const i = NESW.indexOf(dir)
+  const d = NESW.indexOf(dir)
   const p = NESW.indexOf(perspectiveDir)
-  return NESW[(i + p) % 4]
+  return NESW[(d - p + 4) % 4]
 }
