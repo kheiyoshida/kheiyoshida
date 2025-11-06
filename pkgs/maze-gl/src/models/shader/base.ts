@@ -2,7 +2,7 @@ import { generateRandomNumber } from '../../utils/calc'
 import { getGL } from '../../webgl'
 import type { mat3, mat4, vec3, vec4 } from 'gl-matrix'
 
-export abstract class Shader {
+export class Shader {
   protected program: WebGLProgram
   protected gl: WebGL2RenderingContext
 
