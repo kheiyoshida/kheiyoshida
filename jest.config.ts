@@ -94,6 +94,11 @@ const JestConfig: Config = {
     },
     {
       ...RootConfig,
+      displayName: 'maze-models',
+      rootDir: './pkgs/maze-models',
+    },
+    {
+      ...RootConfig,
       displayName: 'graph-gl',
       rootDir: './pkgs/graph-gl',
       setupFilesAfterEnv: [

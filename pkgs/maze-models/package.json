@@ -1,0 +1,17 @@
+{
+  "name": "maze-models",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "vite",
+    "test": "cd ../.. && jest --selectProjects maze-models"
+  },
+  "dependencies": {
+    "gl-matrix": "^3.4.3",
+    "utils": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/gl-matrix": "^3.2.0",
+    "typescript": "^5.7.2",
+    "vite": "7.1.11"
+  }
+}

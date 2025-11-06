@@ -427,6 +427,25 @@ importers:
         specifier: 7.1.11
         version: 7.1.11(@types/node@20.19.24)(terser@5.39.2)(tsx@4.19.3)
 
+  pkgs/maze-models:
+    dependencies:
+      gl-matrix:
+        specifier: ^3.4.3
+        version: 3.4.3
+      utils:
+        specifier: workspace:^
+        version: link:../utils
+    devDependencies:
+      '@types/gl-matrix':
+        specifier: ^3.2.0
+        version: 3.2.0
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.3
+      vite:
+        specifier: 7.1.11
+        version: 7.1.11(@types/node@20.19.24)(terser@5.39.2)(tsx@4.19.3)
+
   pkgs/p5utils:
     dependencies:
       p5:
@@ -4862,8 +4881,8 @@ snapshots:
 
   '@jridgewell/source-map@0.3.6':
     dependencies:
-      '@jridgewell/gen-mapping': 0.3.8
-      '@jridgewell/trace-mapping': 0.3.25
+      '@jridgewell/gen-mapping': 0.3.13
+      '@jridgewell/trace-mapping': 0.3.31
 
   '@jridgewell/sourcemap-codec@1.4.15': {}
 
@@ -8066,7 +8085,7 @@ snapshots:
 
   terser-webpack-plugin@5.3.14(webpack@5.93.0):
     dependencies:
-      '@jridgewell/trace-mapping': 0.3.25
+      '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
       schema-utils: 4.3.2
       serialize-javascript: 6.0.2
