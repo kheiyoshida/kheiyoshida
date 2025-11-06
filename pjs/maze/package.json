@@ -20,14 +20,14 @@
     "maze-gl": "workspace:^"
   },
   "devDependencies": {
-    "@types/node": "^20.10.4",
+    "@types/node": "^20.18",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react": "^4.2.1",
     "jest-canvas-mock": "^2.5.2",
     "test-utils": "workspace:^",
     "typescript": "^4.8.4",
-    "vite": "5.4.6",
+    "vite": "7.1.11",
     "vite-plugin-environment": "^1.1.3"
   }
 }

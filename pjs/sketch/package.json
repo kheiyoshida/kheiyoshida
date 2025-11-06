@@ -16,7 +16,7 @@
     "utils": "workspace:^"
   },
   "devDependencies": {
-    "@types/node": "^20.10.4",
+    "@types/node": "^20.18",
     "@types/p5": "^1.7.4",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
@@ -24,6 +24,6 @@
     "jest-canvas-mock": "^2.5.2",
     "test-utils": "workspace:^",
     "typescript": "^4.8.4",
-    "vite": "^5.1.4"
+    "vite": "7.1.11"
   }
 }
