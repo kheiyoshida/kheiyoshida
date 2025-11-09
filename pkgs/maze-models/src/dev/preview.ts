@@ -7,7 +7,7 @@ export class GeometryPreviewer {
   private geometry: GeometrySpec
   private program!: WebGLProgram
   private wireframe = false
-  private showNormals = false
+  private showNormals = true
   private cameraPos = vec3.fromValues(3, 3, 3)
   private cameraTarget = vec3.fromValues(0, 0, 0)
   private viewMat = mat4.create()
