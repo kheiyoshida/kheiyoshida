@@ -6,11 +6,13 @@
     "test": "cd ../.. && jest --selectProjects maze-models"
   },
   "dependencies": {
+    "delaunator": "^5.0.1",
     "gl-matrix": "^3.4.3",
     "maze-gl": "workspace:^",
     "utils": "workspace:^"
   },
   "devDependencies": {
+    "@types/delaunator": "^5.0.3",
     "@types/gl-matrix": "^3.2.0",
     "typescript": "^5.7.2",
     "vite": "7.1.11"

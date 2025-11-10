@@ -125,8 +125,14 @@ export class GeometryPreviewer {
     gl.uniform1i(gl.getUniformLocation(this.program, 'uShowNormals'), this.showNormals ? 1 : 0)
     gl.bindVertexArray((this as any).vao)
 
-    const mode = this.wireframe ? gl.LINES : gl.TRIANGLES
-    gl.drawArrays(mode, 0, (this as any).vertexCount)
+    if (this.wireframe) {
+      // Draw each triangle as a line loop for correct wireframe
+      for (let i = 0; i < (this as any).vertexCount; i += 3) {
+        gl.drawArrays(gl.LINE_LOOP, i, 3);
+      }
+    } else {
+      gl.drawArrays(gl.TRIANGLES, 0, (this as any).vertexCount);
+    }
 
     this.drawGizmos()
   }

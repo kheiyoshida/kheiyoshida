@@ -3,7 +3,7 @@ import type { Config } from 'jest'
 const RootConfig: Config = {
   preset: 'ts-jest',
   transform: {
-    '^.+\\.(ts|tsx)?$': 'ts-jest',
+    '^.+\\.(ts|tsx|js)?$': 'ts-jest',
   },
   moduleNameMapper: {
     '^src/(.*)': '<rootDir>/src/$1',
@@ -12,6 +12,7 @@ const RootConfig: Config = {
   testMatch: ['<rootDir>/src/**/*.test.ts'],
   prettierPath: require.resolve('prettier-2'),
   setupFiles: ['../../jest/globalSetup.ts'],
+
 }
 
 const JestConfig: Config = {
@@ -96,6 +97,9 @@ const JestConfig: Config = {
       ...RootConfig,
       displayName: 'maze-models',
       rootDir: './pkgs/maze-models',
+      transformIgnorePatterns: [
+        '<rootDir>/node_modules/(?!delaunator)',
+      ]
     },
     {
       ...RootConfig,

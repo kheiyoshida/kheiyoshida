@@ -1,23 +1,21 @@
-import { boxSpec } from './box'
+import * as geometries from './geometries'
 import { GeometryPreviewer } from './preview'
 import { runPipeline } from '../pipeline/pipeline'
 import { tesselateGeometry } from '../pipeline/processors/tessellation'
 import { triangulateFaces } from '../pipeline/processors/triangulation'
 import { mergeGeometry } from '../pipeline/processors/merge'
 import { weldVertices } from '../pipeline/processors/welding'
-import { recomputeNormals } from '../pipeline/processors/normals'
 
-const base = boxSpec
+const base = geometries.rectangle
 
 const final = runPipeline(base, [
-  tesselateGeometry,
+  tesselateGeometry(4),
   triangulateFaces,
-  mergeGeometry,
-  weldVertices,
+  // mergeGeometry,
+  // weldVertices,
   // recomputeNormals,
 ])
 
-console.log(base.normals)
-console.log(final.normals)
+console.log(final)
 
 new GeometryPreviewer(final)
