@@ -15,6 +15,8 @@ export const tesselateGeometry =
       const v2 = vertices[face.vertexIndices[2]]
       for (let i = 0; i < insertionsPerFace; i++) {
         vertices.push(randomPointOnFace(v0, v1, v2))
+
+        // mutate directly for now, maybe make this pure later
         face.vertexIndices.push(vertices.length - 1)
         face.normalIndices.push(face.normalIndices[0]) // duplicate for now
       }
