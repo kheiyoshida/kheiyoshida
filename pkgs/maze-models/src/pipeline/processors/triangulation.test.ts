@@ -1,5 +1,6 @@
 import { get2dProjection, getNormal, triangulateFace, triangulateFaces } from './triangulation'
 import { GeometrySpec, Vector3D } from '../types'
+import { sub } from 'maze-gl/src/vector/vector'
 
 describe(`${triangulateFaces.name}`, () => {
   it(`should divide the face with many vertices into triangle faces with just three vertices`, () => {

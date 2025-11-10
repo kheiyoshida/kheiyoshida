@@ -139,7 +139,11 @@ export const dot = (v1: Vector3D, v2: Vector3D): number => {
 }
 
 /**
- * calculate the cross product for given 2 vectors
+ * calculate cross-product for given 2 vectors
+ *
+ * in a right-handed coordinate system (WebGL),
+ * - CW points away from you
+ * - CCW points towards you
  */
 export const cross = (v1: Vector3D, v2: Vector3D): Vector3D => {
   const result = vec3.create()

@@ -88,10 +88,7 @@ function ensureWindingOrder(
   const n: Vector3D = getNormal([a, b, c])
 
   // dot with reference normal
-  const dot =
-    n[0] * referenceNormal[0] +
-    n[1] * referenceNormal[1] +
-    n[2] * referenceNormal[2]
+  const dot = n[0] * referenceNormal[0] + n[1] * referenceNormal[1] + n[2] * referenceNormal[2]
 
   // flip winding if facing opposite
   if (dot < 0) return [i0, i2, i1]
@@ -100,7 +97,7 @@ function ensureWindingOrder(
 
 export const getNormal = (triangle: Vector3D[]): Vector3D => {
   const [a, b, c] = triangle
-  const normal = cross(sub(b,a),sub(c,a))
+  const normal = cross(sub(b, a), sub(c, a))
   normalize(normal, 1)
   return normal
 }
