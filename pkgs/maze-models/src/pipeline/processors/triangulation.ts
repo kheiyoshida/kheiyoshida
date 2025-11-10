@@ -1,3 +1,4 @@
+import { cross, normalize, sub } from 'maze-gl/src/vector/vector'
 import { GeometrySpec, Index, TriangleIndexData, Vector3D } from '../types'
 import Delaunator from 'delaunator'
 
@@ -17,9 +18,9 @@ export function triangulateFaces(input: GeometrySpec): GeometrySpec {
     const faceNormal = input.normals[normalIndex] // same for every vertex for now
     const localTriangles = triangulateFace(faceVertices, faceNormal)
     for (const triangle of localTriangles) {
-      const globalIndices = triangle.map((i) => face.vertexIndices[i])
+      const globalIndices = triangle.map((i) => face.vertexIndices[i]) as TriangleIndices
       newFaces.push({
-        vertexIndices: globalIndices,
+        vertexIndices: ensureWindingOrder(globalIndices, input.vertices, faceNormal),
         normalIndices: [normalIndex, normalIndex, normalIndex],
       })
     }
@@ -63,4 +64,43 @@ export function get2dProjection(vertices: Vector3D[], faceNormal: Vector3D): Vec
 
 function dropDimension(vertex: Vector3D, drop: number): Vector2D {
   return vertex.filter((_, i) => i !== drop) as Vector2D
+}
+
+/**
+ * Ensures a triangle's winding order matches the given reference normal.
+ * If the normal points opposite to the reference, it swaps the last two indices.
+ *
+ * @param tri The triangle's vertex indices (mutable)
+ * @param vertices The vertex array in 3D
+ * @param referenceNormal The face's intended normal
+ * @returns The same triangle array, possibly reversed
+ */
+function ensureWindingOrder(
+  tri: TriangleIndices,
+  vertices: Vector3D[],
+  referenceNormal: Vector3D
+): TriangleIndices {
+  const [i0, i1, i2] = tri
+  const a = vertices[i0]
+  const b = vertices[i1]
+  const c = vertices[i2]
+
+  const n: Vector3D = getNormal([a, b, c])
+
+  // dot with reference normal
+  const dot =
+    n[0] * referenceNormal[0] +
+    n[1] * referenceNormal[1] +
+    n[2] * referenceNormal[2]
+
+  // flip winding if facing opposite
+  if (dot < 0) return [i0, i2, i1]
+  return tri
+}
+
+export const getNormal = (triangle: Vector3D[]): Vector3D => {
+  const [a, b, c] = triangle
+  const normal = cross(sub(b,a),sub(c,a))
+  normalize(normal, 1)
+  return normal
 }

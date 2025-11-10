@@ -1,4 +1,4 @@
-import { get2dProjection, triangulateFace, triangulateFaces } from './triangulation'
+import { get2dProjection, getNormal, triangulateFace, triangulateFaces } from './triangulation'
 import { GeometrySpec, Vector3D } from '../types'
 
 describe(`${triangulateFaces.name}`, () => {
@@ -39,6 +39,14 @@ describe(`${triangulateFaces.name}`, () => {
     // every vertex should be used at least once
     for (let i = 0; i < spec.vertices.length; i++) {
       expect(visited.includes(i)).toBe(true)
+    }
+
+    // each triangle's winding order is CCW (gl default)
+    for (const face of result.faces) {
+      const normal = result.normals[face.normalIndices[0]]
+      const [v0, v1, v2] = face.vertexIndices.map((idx) => spec.vertices[idx])
+      const computedNormal = getNormal([v0, v1, v2])
+      computedNormal.forEach((v, i) => expect(v).toBeCloseTo(normal[i]))
     }
   })
 
@@ -86,5 +94,12 @@ describe(`${triangulateFaces.name}`, () => {
       expect(v2d.includes(y)).toBe(false)
       expect(v2d).toHaveLength(2)
     })
+  })
+
+  test(`${getNormal.name}`, () => {
+    const p1: Vector3D = [-1, 0, 0]
+    const p2: Vector3D = [0, 1, 0]
+    const p3: Vector3D = [1, 0, 0]
+    expect(getNormal([p1, p2, p3])).toEqual([0, 0, -1])
   })
 })
