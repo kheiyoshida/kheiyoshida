@@ -24,3 +24,11 @@ export const BaseGeometryMap: Record<BaseGeometryCode, GeometrySpec> = {
   StairTile: objects.Tile,
   Tile: objects.Tile,
 }
+
+/**
+ * get the base geometry spec. it deep-copies the geometry spec
+ * @param code
+ */
+export const getBaseGeometry = (code: BaseGeometryCode) => {
+  return JSON.parse(JSON.stringify(BaseGeometryMap[code]))
+}

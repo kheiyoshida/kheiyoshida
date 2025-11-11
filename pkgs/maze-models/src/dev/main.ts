@@ -5,6 +5,7 @@ import { tesselateGeometry } from '../pipeline/processors/tessellation'
 import { triangulateFaces } from '../pipeline/processors/triangulation'
 import { recomputeNormals } from '../pipeline/processors/normals'
 import { deformGeometry } from '../pipeline/processors/deformation'
+import { generateGeometry } from '../models'
 
 const base = geometries.boxSpec
 
@@ -19,6 +20,6 @@ const final = runPipeline(base, [
   recomputeNormals,
 ])
 
-console.log(final)
+const ceil = generateGeometry('Ceil')
 
-new GeometryPreviewer(final)
+new GeometryPreviewer(ceil)

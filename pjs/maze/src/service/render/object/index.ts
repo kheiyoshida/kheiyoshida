@@ -27,5 +27,5 @@ export const composeSceneObject = (mode: RenderingMode) => (obj: MazeObject) => 
 
   transform.rotateY = NESW.indexOf(obj.direction) * 90
 
-  return new SceneObject(getMesh(code, mode), transform)
+  return new SceneObject(getMesh(obj.model, mode), transform)
 }
