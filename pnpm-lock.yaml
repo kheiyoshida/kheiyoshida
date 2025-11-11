@@ -194,6 +194,9 @@ importers:
       maze-gl:
         specifier: workspace:^
         version: link:../../pkgs/maze-gl
+      maze-models:
+        specifier: workspace:^
+        version: link:../../pkgs/maze-models
       music:
         specifier: workspace:^
         version: link:../music

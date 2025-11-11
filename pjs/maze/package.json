@@ -17,7 +17,8 @@
     "utils": "workspace:^",
     "music": "workspace:^",
     "sound": "workspace:^",
-    "maze-gl": "workspace:^"
+    "maze-gl": "workspace:^",
+    "maze-models": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "^20.18",

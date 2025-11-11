@@ -1,5 +1,4 @@
-import { GeometrySpec, Vec3 } from 'maze-gl'
-import { Vector3D } from 'maze-gl'
+import { GeometrySpec, Vec3, Vector3D } from 'maze-gl'
 
 const FBL: Vector3D = [-1, -1, 1] // front-bottom-left
 const FBR: Vector3D = [1, -1, 1] // front-bottom-right

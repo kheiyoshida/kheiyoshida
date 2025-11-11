@@ -1,8 +1,7 @@
 import { Mesh } from 'maze-gl'
-import { GeometrySpecDict } from './geometry'
 import { getMeshMaterial, MaterialType } from './material'
 import { RenderingMode } from '../../../game/stage'
-import { ModelCode } from '../../../game/maze/physical/models.ts'
+import { generateGeometry, ModelCode } from 'maze-models'
 
 type CompositeMeshKey = `${RenderingMode}:${ModelCode}`
 
@@ -19,7 +18,8 @@ export const getMesh = (code: ModelCode, mode: RenderingMode): Mesh => {
   if (!meshMap.has(key)) {
     const materialType = materialSpecificationMap[code] || 'default'
     const material = getMeshMaterial(materialType, mode)
-    const mesh = new Mesh(material, GeometrySpecDict[code])
+    const geometry = generateGeometry(code)
+    const mesh = new Mesh(material, geometry)
     meshMap.set(key, mesh)
   }
 
