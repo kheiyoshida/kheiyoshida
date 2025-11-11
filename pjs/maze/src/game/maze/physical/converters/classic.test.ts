@@ -20,10 +20,10 @@ describe(`${classicGridConverter.name}`, () => {
     // should have 4 walls surrounding the block
     const slice00 = physicalGrid.getSliceByLogicalPosition({ x: 0, y: 0 })
     const expected00Middle: IMazeObject[] = [
-      { modelCode: 'Wall', direction: 'n' },
-      { modelCode: 'Wall', direction: 'e' },
-      { modelCode: 'Wall', direction: 's' },
-      { modelCode: 'Wall', direction: 'w' },
+      { model: { code: 'Wall' }, direction: 'n' },
+      { model: { code: 'Wall' }, direction: 'e' },
+      { model: { code: 'Wall' }, direction: 's' },
+      { model: { code: 'Wall' }, direction: 'w' },
     ]
     expect(slice00.get(VerticalLayer.Middle)?.objects).toEqual(expected00Middle)
     expect(slice00.get(VerticalLayer.Up1)).toBeNull()
@@ -32,41 +32,41 @@ describe(`${classicGridConverter.name}`, () => {
     // should have a floor and a ceil for floor cells
     const slice10 = physicalGrid.getSliceByLogicalPosition({ x: 1, y: 0 })
     expect(slice10.get(VerticalLayer.Middle)?.objects).toEqual([
-      { modelCode: 'Floor', direction: 'n' },
-      { modelCode: 'Ceil', direction: 'n' },
-    ])
+      { model: { code: 'Floor' }, direction: 'n' },
+      { model: { code: 'Ceil' }, direction: 'n' },
+    ] as IMazeObject[])
     expect(slice10.get(VerticalLayer.Up1)).toBeNull()
     expect(slice10.get(VerticalLayer.Down1)).toBeNull()
 
     // stair
     const slice22 = physicalGrid.getSliceByLogicalPosition({ x: 2, y: 2 })
     expect(slice22.get(VerticalLayer.Middle)?.objects).toEqual([
-      { modelCode: 'StairCeil', direction: 'e' }, // should look forward
-    ])
-    expect(slice22.get(VerticalLayer.Down1)?.objects).toEqual([{ modelCode: 'StairSteps', direction: 'e' }])
+      { model: { code: 'StairCeil' }, direction: 'e' }, // should look forward
+    ] as IMazeObject[])
+    expect(slice22.get(VerticalLayer.Down1)?.objects).toEqual([{ model: { code: 'StairSteps' }, direction: 'e' }])
 
     // walls surrounding stair step
     const slice21 = physicalGrid.getSliceByLogicalPosition({ x: 2, y: 1 })
     const slice23 = physicalGrid.getSliceByLogicalPosition({ x: 2, y: 3 })
-    expect(slice21.get(VerticalLayer.Down1)?.objects).toEqual([{ modelCode: 'Wall', direction: 's' }])
-    expect(slice23.get(VerticalLayer.Down1)?.objects).toEqual([{ modelCode: 'Wall', direction: 'n' }])
+    expect(slice21.get(VerticalLayer.Down1)?.objects).toEqual([{ model: { code: 'Wall' }, direction: 's' }])
+    expect(slice23.get(VerticalLayer.Down1)?.objects).toEqual([{ model: { code: 'Wall' }, direction: 'n' }])
 
     // stair corridor
     const slice31 = physicalGrid.getSliceByLogicalPosition({ x: 3, y: 1 })
     const slice32 = physicalGrid.getSliceByLogicalPosition({ x: 3, y: 2 })
     const slice33 = physicalGrid.getSliceByLogicalPosition({ x: 3, y: 3 })
     expect(slice32.get(VerticalLayer.Down1)?.objects).toEqual([
-      { modelCode: 'Floor', direction: 'n' },
-      { modelCode: 'Ceil', direction: 'n' },
-    ])
-    expect(slice31.get(VerticalLayer.Down1)?.objects).toEqual([{ modelCode: 'Wall', direction: 's' }])
-    expect(slice33.get(VerticalLayer.Down1)?.objects).toEqual([{ modelCode: 'Wall', direction: 'n' }])
+      { model: { code: 'Floor' }, direction: 'n' },
+      { model: { code: 'Ceil' }, direction: 'n' },
+    ] as IMazeObject[])
+    expect(slice31.get(VerticalLayer.Down1)?.objects).toEqual([{ model: { code: 'Wall' }, direction: 's' }])
+    expect(slice33.get(VerticalLayer.Down1)?.objects).toEqual([{ model: { code: 'Wall' }, direction: 'n' }])
 
     const slice62 = physicalGrid.getSliceByLogicalPosition({ x: 6, y: 2 })
     expect(slice62.get(VerticalLayer.Down1)?.objects).toEqual([
-      { modelCode: 'Floor', direction: 'n' },
-      { modelCode: 'Ceil', direction: 'n' },
-    ])
+      { model: { code: 'Floor' }, direction: 'n' },
+      { model: { code: 'Ceil' }, direction: 'n' },
+    ] as IMazeObject[])
 
     // surrounding
     expect(physicalGrid.grid2D.sizeX).toBe(logicalGrid.sizeX + PhysicalMazeGrid.SurroundingBlocks * 2)
@@ -78,11 +78,11 @@ describe(`${classicGridConverter.name}`, () => {
       z: VerticalLayer.Middle,
     })
     expect(outside1?.objects).toEqual([
-      { modelCode: 'Wall', direction: 'n' },
-      { modelCode: 'Wall', direction: 'e' },
-      { modelCode: 'Wall', direction: 's' },
-      { modelCode: 'Wall', direction: 'w' },
-    ])
+      { model: { code: 'Wall' }, direction: 'n' },
+      { model: { code: 'Wall' }, direction: 'e' },
+      { model: { code: 'Wall' }, direction: 's' },
+      { model: { code: 'Wall' }, direction: 'w' },
+    ] as IMazeObject[])
     const outside2 = physicalGrid.get({
       x: PhysicalMazeGrid.SurroundingBlocks - 2,
       y: PhysicalMazeGrid.SurroundingBlocks - 2,

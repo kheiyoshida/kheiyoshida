@@ -1,4 +1,4 @@
-import { makeTestGrid } from '../../../../__test__/grid/visualise.ts'
+  import { makeTestGrid } from '../../../../__test__/grid/visualise.ts'
 import { PhysicalMazeGrid } from '../../../../game/maze/physical/grid.ts'
 import { buildViewGrid, iterateRelative2dViewPositions, ViewOrigin } from './get.ts'
 import { ViewPosition, ViewX, ViewY, ViewZ } from './view.ts'
@@ -21,17 +21,17 @@ describe(`${buildViewGrid.name}`, () => {
     const view = buildViewGrid(physicalGrid, origin)
 
     expect(view.getBlock({ x: ViewX.Center, y: ViewY.Middle, z: ViewZ.L1 }).objects).toEqual([
-      <IMazeObject>{ modelCode: 'Floor', direction: 's' },
-      <IMazeObject>{ modelCode: 'Ceil', direction: 's' },
+      <IMazeObject>{ model: { code: 'Floor' }, direction: 's' },
+      <IMazeObject>{ model: { code: 'Ceil' }, direction: 's' },
     ])
     expect(view.getBlock({ x: ViewX.Left1, y: ViewY.Middle, z: ViewZ.L1 }).objects).toEqual([
-      { modelCode: 'Wall', direction: 's' },
-      { modelCode: 'Wall', direction: 'w' },
-      { modelCode: 'Wall', direction: 'n' },
-      { modelCode: 'Wall', direction: 'e' },
-    ])
+      { model: { code: 'Wall' }, direction: 's' },
+      { model: { code: 'Wall' }, direction: 'w' },
+      { model: { code: 'Wall' }, direction: 'n' },
+      { model: { code: 'Wall' }, direction: 'e' },
+    ] as IMazeObject[])
     expect(view.getBlock({x: ViewX.Center, y: ViewY.Down1, z: ViewZ.L3 }).objects).toEqual([
-      <IMazeObject>{ modelCode: 'StairSteps', direction: 'n' },
+      <IMazeObject>{ model: { code: 'StairSteps' }, direction: 'n' },
     ])
   })
 
@@ -50,17 +50,17 @@ describe(`${buildViewGrid.name}`, () => {
     const view = buildViewGrid(physicalGrid, origin)
 
     expect(view.getBlock({ x: ViewX.Center, y: ViewY.Middle, z: ViewZ.L1 }).objects).toEqual([
-      <IMazeObject>{ modelCode: 'Floor', direction: 'w' },
-      <IMazeObject>{ modelCode: 'Ceil', direction: 'w' },
+      <IMazeObject>{ model: { code: 'Floor' }, direction: 'w' },
+      <IMazeObject>{ model: { code: 'Ceil' }, direction: 'w' },
     ])
     expect(view.getBlock({ x: ViewX.Left1, y: ViewY.Middle, z: ViewZ.L1 }).objects).toEqual([
-      { modelCode: 'Wall', direction: 'w' },
-      { modelCode: 'Wall', direction: 'n' },
-      { modelCode: 'Wall', direction: 'e' },
-      { modelCode: 'Wall', direction: 's' },
-    ])
+      { model: { code: 'Wall' }, direction: 'w' },
+      { model: { code: 'Wall' }, direction: 'n' },
+      { model: { code: 'Wall' }, direction: 'e' },
+      { model: { code: 'Wall' }, direction: 's' },
+    ] as IMazeObject[])
     expect(view.getBlock({x: ViewX.Center, y: ViewY.Down1, z: ViewZ.L3 }).objects).toEqual([
-      <IMazeObject>{ modelCode: 'StairSteps', direction: 'n' },
+      <IMazeObject>{ model: { code: 'StairSteps' }, direction: 'n' },
     ])
   })
 

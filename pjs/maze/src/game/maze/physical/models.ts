@@ -1,4 +1,9 @@
 
+export type ModelId = {
+  code: ModelCode
+  variant?: number
+}
+
 export type ModelCode =
   | 'Floor'
   | 'Ceil'

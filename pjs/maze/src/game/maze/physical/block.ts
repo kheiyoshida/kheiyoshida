@@ -6,7 +6,7 @@ export class MazeBlock {
 
   public rotated(perspectiveDir: Direction): MazeBlock {
     return new MazeBlock(
-      this.objects.map((obj) => new MazeObject(obj.modelCode, rotated(obj.direction, perspectiveDir)))
+      this.objects.map((obj) => new MazeObject(obj.model, rotated(obj.direction, perspectiveDir)))
     )
   }
 }

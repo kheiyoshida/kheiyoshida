@@ -6,7 +6,9 @@ import { MazeObject } from '../../../game/maze/physical/object.ts'
 import { NESW } from '../../../core/grid/direction.ts'
 
 export const composeSceneObject = (mode: RenderingMode) => (obj: MazeObject) => {
-  const { modelCode: code } = obj
+  const {
+    model: { code },
+  } = obj
 
   const transform = new ObjectTransform({
     rotateY: 0,

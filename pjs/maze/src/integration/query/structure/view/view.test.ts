@@ -2,6 +2,7 @@ import { MazeView, toPosition3D, toViewPosition, ViewPosition, ViewX, ViewY, Vie
 import { PhysicalMazeGrid, VerticalLayer } from '../../../../game/maze/physical/grid.ts'
 import { MazeBlock } from '../../../../game/maze/physical/block.ts'
 import { Position3D } from '../../../../core/grid/grid3d.ts'
+import { MazeObject } from '../../../../game/maze/physical/object.ts'
 
 test.each<[ViewPosition, Position3D]>([
   [
@@ -24,7 +25,7 @@ test.each<[ViewPosition, Position3D]>([
 describe(`${MazeView.name}`, () => {
   it(`can query blocks in logical left-handed view position`, () => {
     const physicalGrid = new PhysicalMazeGrid(5, 6, 5)
-    const block = new MazeBlock([{ modelCode: 'Floor', direction: 'n' }])
+    const block = new MazeBlock([new MazeObject('Floor', 'n')])
     physicalGrid.set({ x: 2, y: 0, z: VerticalLayer.Middle }, block)
 
     const view = new MazeView(physicalGrid)
