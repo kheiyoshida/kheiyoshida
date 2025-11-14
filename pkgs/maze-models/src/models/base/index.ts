@@ -9,6 +9,7 @@ export type BaseGeometryCode =
   | 'Octahedron'
   | 'Pole'
   | 'Tile'
+  | 'BottomTile'
   | 'StairTile'
   | 'StairCeil'
   | 'StairSteps'
@@ -23,6 +24,7 @@ export const BaseGeometryMap: Record<BaseGeometryCode, GeometrySpec> = {
   StairSteps: rectangles.StairSteps,
   StairTile: objects.Tile,
   Tile: objects.Tile,
+  BottomTile: objects.BottomTile,
 }
 
 /**

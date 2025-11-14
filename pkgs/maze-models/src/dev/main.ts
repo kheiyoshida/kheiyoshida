@@ -7,19 +7,19 @@ import { recomputeNormals } from '../pipeline/processors/normals'
 import { deformGeometry } from '../pipeline/processors/deformation'
 import { generateGeometry } from '../models'
 
-const base = geometries.boxSpec
+// const base = geometries.boxSpec
 
-const final = runPipeline(base, [
-  tesselateGeometry(4),
-  triangulateFaces,
-  deformGeometry((v) => [
-    v[0] + (Math.random() - 0.5) * 0.1,
-    v[1] + (Math.random() - 0.5) * 0.1,
-    v[2] + (Math.random() - 0.5) * 0.1,
-  ]),
-  recomputeNormals,
-])
+// const final = runPipeline(base, [
+//   tesselateGeometry(4),
+//   triangulateFaces,
+//   deformGeometry((v) => [
+//     v[0] + (Math.random() - 0.5) * 0.1,
+//     v[1] + (Math.random() - 0.5) * 0.1,
+//     v[2] + (Math.random() - 0.5) * 0.1,
+//   ]),
+//   recomputeNormals,
+// ])
 
-const ceil = generateGeometry('Ceil')
+const geo = generateGeometry('BottomTile')
 
-new GeometryPreviewer(ceil)
+new GeometryPreviewer(geo)

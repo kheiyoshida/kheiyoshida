@@ -8,7 +8,7 @@ export class GeometryPreviewer {
   private program!: WebGLProgram
   private wireframe = false
   private showNormals = true
-  private cameraPos = vec3.fromValues(3, 3, 3)
+  private cameraPos = vec3.fromValues(2, 4, 4)
   private cameraTarget = vec3.fromValues(0, 0, 0)
   private viewMat = mat4.create()
   private projMat = mat4.create()
@@ -49,6 +49,8 @@ export class GeometryPreviewer {
     void main(){
       if(uShowNormals){
         outColor = vec4(normalize(vNormal)*0.5+0.5,1.0);
+        // outColor = vec4(normalize(vNormal),1.0);
+        // outColor = vec4(1.0, 0.0, 1.0, 1.0);
       } else {
         outColor = vec4(0.9,0.9,0.9,1.0);
       }

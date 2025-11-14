@@ -57,15 +57,15 @@ export const Pole: GeometrySpec = {
   ],
 }
 
-const LowFrontBottomMiddle: Vector3D = [0, -0.8, 1]
-const LowBackBottomMiddle: Vector3D = [0, -0.8, -1]
-const LowRightBottomMiddle: Vector3D = [1, -0.8, 0]
-const LowLeftBottomMiddle: Vector3D = [-1, -0.8, 0]
+const LowFrontBottomMiddle: Vector3D = [0, 1, 1]
+const LowBackBottomMiddle: Vector3D = [0, 1, -1]
+const LowRightBottomMiddle: Vector3D = [1, 1, 0]
+const LowLeftBottomMiddle: Vector3D = [-1, 1, 0]
 
-const LowerFrontBottomMiddle: Vector3D = [0, -1, 1]
-const LowerBackBottomMiddle: Vector3D = [0, -1, -1]
-const LowerRightBottomMiddle: Vector3D = [1, -1, 0]
-const LowerLeftBottomMiddle: Vector3D = [-1, -1, 0]
+const LowerFrontBottomMiddle: Vector3D = [0, 0.8, 1]
+const LowerBackBottomMiddle: Vector3D = [0, 0.8, -1]
+const LowerRightBottomMiddle: Vector3D = [1, 0.8, 0]
+const LowerLeftBottomMiddle: Vector3D = [-1, 0.8, 0]
 
 const NTop: Vector3D = [0, 1, 0]
 
@@ -95,8 +95,8 @@ export const Tile: GeometrySpec = {
   ],
 }
 
-const yLayerDown = ([x, y, z]: Vector3D): Vector3D => [x, y - 4, z] // down by 2 floors
-export const LowerTile: GeometrySpec = {
+const yLayerDown = ([x, y, z]: Vector3D): Vector3D => [x, y - 2, z] // put the top face on the ground
+export const BottomTile: GeometrySpec = {
   ...Tile,
   vertices: Tile.vertices.map(yLayerDown),
 }
