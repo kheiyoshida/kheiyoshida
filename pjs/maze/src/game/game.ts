@@ -45,7 +45,7 @@ export class GameAggregate {
   }
 
   get canPlayerProceed() {
-    return !!this.maze.currentLevel.grid.getRelativeCell(this.player.position, this.player.direction, 2)
+    return !!this.maze.currentLevel.grid.getRelativeCell(this.player.position, this.player.direction, 1)
   }
 
   get isPlayerOnStair(): boolean {
