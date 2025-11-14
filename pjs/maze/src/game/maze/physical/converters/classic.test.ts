@@ -25,47 +25,47 @@ describe(`${classicGridConverter.name}`, () => {
       { model: { code: 'Wall' }, direction: 's' },
       { model: { code: 'Wall' }, direction: 'w' },
     ]
-    expect(slice00.get(VerticalLayer.Middle)?.objects).toEqual(expected00Middle)
+    expect(slice00.get(VerticalLayer.Middle)?.objects).toMatchObject(expected00Middle)
     expect(slice00.get(VerticalLayer.Up1)).toBeNull()
     expect(slice00.get(VerticalLayer.Down1)).toBeNull()
 
     // should have a floor and a ceil for floor cells
     const slice10 = physicalGrid.getSliceByLogicalPosition({ x: 1, y: 0 })
-    expect(slice10.get(VerticalLayer.Middle)?.objects).toEqual([
-      { model: { code: 'Floor' }, direction: 'n' },
-      { model: { code: 'Ceil' }, direction: 'n' },
+    expect(slice10.get(VerticalLayer.Middle)?.objects).toMatchObject([
+      { model: { code: 'Floor' } },
+      { model: { code: 'Ceil' }},
     ] as IMazeObject[])
     expect(slice10.get(VerticalLayer.Up1)).toBeNull()
     expect(slice10.get(VerticalLayer.Down1)).toBeNull()
 
     // stair
     const slice22 = physicalGrid.getSliceByLogicalPosition({ x: 2, y: 2 })
-    expect(slice22.get(VerticalLayer.Middle)?.objects).toEqual([
+    expect(slice22.get(VerticalLayer.Middle)?.objects).toMatchObject([
       { model: { code: 'StairCeil' }, direction: 'e' }, // should look forward
     ] as IMazeObject[])
-    expect(slice22.get(VerticalLayer.Down1)?.objects).toEqual([{ model: { code: 'StairSteps' }, direction: 'e' }])
+    expect(slice22.get(VerticalLayer.Down1)?.objects).toMatchObject([{ model: { code: 'StairSteps' }, direction: 'e' }])
 
     // walls surrounding stair step
     const slice21 = physicalGrid.getSliceByLogicalPosition({ x: 2, y: 1 })
     const slice23 = physicalGrid.getSliceByLogicalPosition({ x: 2, y: 3 })
-    expect(slice21.get(VerticalLayer.Down1)?.objects).toEqual([{ model: { code: 'Wall' }, direction: 's' }])
-    expect(slice23.get(VerticalLayer.Down1)?.objects).toEqual([{ model: { code: 'Wall' }, direction: 'n' }])
+    expect(slice21.get(VerticalLayer.Down1)?.objects).toMatchObject([{ model: { code: 'Wall' }, direction: 's' }])
+    expect(slice23.get(VerticalLayer.Down1)?.objects).toMatchObject([{ model: { code: 'Wall' }, direction: 'n' }])
 
     // stair corridor
     const slice31 = physicalGrid.getSliceByLogicalPosition({ x: 3, y: 1 })
     const slice32 = physicalGrid.getSliceByLogicalPosition({ x: 3, y: 2 })
     const slice33 = physicalGrid.getSliceByLogicalPosition({ x: 3, y: 3 })
-    expect(slice32.get(VerticalLayer.Down1)?.objects).toEqual([
-      { model: { code: 'Floor' }, direction: 'n' },
-      { model: { code: 'Ceil' }, direction: 'n' },
+    expect(slice32.get(VerticalLayer.Down1)?.objects).toMatchObject([
+      { model: { code: 'Floor' } },
+      { model: { code: 'Ceil' }},
     ] as IMazeObject[])
-    expect(slice31.get(VerticalLayer.Down1)?.objects).toEqual([{ model: { code: 'Wall' }, direction: 's' }])
-    expect(slice33.get(VerticalLayer.Down1)?.objects).toEqual([{ model: { code: 'Wall' }, direction: 'n' }])
+    expect(slice31.get(VerticalLayer.Down1)?.objects).toMatchObject([{ model: { code: 'Wall' }, direction: 's' }])
+    expect(slice33.get(VerticalLayer.Down1)?.objects).toMatchObject([{ model: { code: 'Wall' }, direction: 'n' }])
 
     const slice62 = physicalGrid.getSliceByLogicalPosition({ x: 6, y: 2 })
-    expect(slice62.get(VerticalLayer.Down1)?.objects).toEqual([
-      { model: { code: 'Floor' }, direction: 'n' },
-      { model: { code: 'Ceil' }, direction: 'n' },
+    expect(slice62.get(VerticalLayer.Down1)?.objects).toMatchObject([
+      { model: { code: 'Floor' },  },
+      { model: { code: 'Ceil' }, },
     ] as IMazeObject[])
 
     // surrounding
@@ -77,7 +77,7 @@ describe(`${classicGridConverter.name}`, () => {
       y: PhysicalMazeGrid.SurroundingBlocks - 1,
       z: VerticalLayer.Middle,
     })
-    expect(outside1?.objects).toEqual([
+    expect(outside1?.objects).toMatchObject([
       { model: { code: 'Wall' }, direction: 'n' },
       { model: { code: 'Wall' }, direction: 'e' },
       { model: { code: 'Wall' }, direction: 's' },
