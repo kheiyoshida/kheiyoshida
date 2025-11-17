@@ -1,7 +1,8 @@
 import { MazeGrid } from '../grid.ts'
 import { seedCells } from './seed.ts'
 import { connectCells } from './connect.ts'
-import { randomItemFromArray } from 'utils'
+import { fireByRate, randomItemFromArray } from 'utils'
+import { getTurnedDirection } from '../../grid/direction.ts'
 
 const BuildRetryLimit = 20
 
@@ -18,6 +19,7 @@ export type StartPositionConstraint = 'evenPositionCellExceptStair' | 'shouldFac
 
 export const buildMazeGrid = (params: BuildMazeGridParams, retry = 0): MazeGrid => {
   const grid = _buildMazeGrid(params)
+
   if (!isValidMazeLevel(grid)) {
     if (retry < BuildRetryLimit) return buildMazeGrid(adjustParams(params), retry + 1)
     else throw Error(`could not build valid matrix`)
@@ -26,6 +28,12 @@ export const buildMazeGrid = (params: BuildMazeGridParams, retry = 0): MazeGrid 
   // set stair
   const deadEndPos = randomItemFromArray(grid.getDeadEnds())
   grid.get(deadEndPos)!.type = 'stair'
+
+  // set start
+  console.log(params.startPositionConstraint)
+  const startPos = randomItemFromArray(grid.getCorridors())
+  const dir = grid.getCorridorDir(startPos)!
+  grid.get(startPos)!.start = { direction: getTurnedDirection(fireByRate(0.5) ? 'right' : 'left', dir) }
 
   return grid
 }

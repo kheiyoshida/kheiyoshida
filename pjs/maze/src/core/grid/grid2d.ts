@@ -31,7 +31,7 @@ export class Grid2D<Item> {
     this.items.forEach((row, y) => row.forEach((item, x) => item && cb(item, { x, y })))
   }
 
-  public filter(predicate: (item: Item, position: Position2D) => boolean): Item[] {
+  public filterItems(predicate: (item: Item, position: Position2D) => boolean): Item[] {
     const result: Item[] = []
     this.iterate((item, position) => {
       if (item !== null && predicate(item, position)) {
@@ -39,6 +39,18 @@ export class Grid2D<Item> {
       }
     })
     return result
+  }
+
+  public filterPositions(predicate: (position: Position2D, item: Item | null) => boolean): Position2D[] {
+    const result: Position2D[] = []
+    this.iterate((item, position) => {
+      if (predicate(position, item)) result.push(position)
+    })
+    return result
+  }
+
+  public findPosition(predicate: (position: Position2D, item: Item | null) => boolean): Position2D | null {
+    return this.filterPositions(predicate)[0] || null
   }
 
   public count(): number {

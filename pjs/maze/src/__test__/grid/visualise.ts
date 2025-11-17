@@ -5,6 +5,7 @@ import { MazeView, ViewY } from '../../integration/query/structure/view/view.ts'
 import { Grid3D } from '../../core/grid/grid3d.ts'
 import { MazeBlock } from '../../game/maze/physical/block.ts'
 import { MapGrid } from '../../game/map/grid.ts'
+import { randomItemFromArray } from 'utils'
 
 const NumericalRepresentationMap = {
   0: null,
@@ -27,6 +28,10 @@ export const makeTestGrid = (input: NumericRepresentation[][]) => {
       }
     }
   }
+
+  // need to set one start position anyway
+  const pos = randomItemFromArray(grid.filterPositions((pos, item) => item !== null))
+  grid.get(pos)!.start = { direction: 'n'}
 
   return grid
 }
