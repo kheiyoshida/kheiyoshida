@@ -1,66 +1,63 @@
-import { FloorStage, Stage } from './index.ts'
+import { Stage } from './index.ts'
 import {
   clamp,
   fireByRate,
+  IntRange,
   makeConstrainedRandomEmitter,
   makeRangeMap,
   randomIntInclusiveBetween,
 } from 'utils'
-import { debugRenderingMode, InitialStyle } from '../../config/debug.ts'
-import { classifyStyle, RenderingStyle } from './style.ts'
-import { Atmosphere } from '../world'
+import { InitialStyle } from '../../config/debug.ts'
+import { Ambience, Atmosphere, Structure } from '../world'
 
 export const InitialNumOfStages = 20
 
-export const buildFloorStages = () => {
-  const stages = buildStages()
-  const floorStages = mapStagesToFloors(stages)
+export type Pivot = IntRange<1, 10>
 
-  if (process.env.DEBUG === 'true') {
-    floorStages[0].mode = debugRenderingMode
-    floorStages[1].mode = debugRenderingMode
-  }
-
-  return floorStages
+export const classifyPivot = (p: Pivot) => {
+  if (p >= 1 && p <= 3) return 0
+  if (p >= 4 && p <= 6) return 1
+  if (p >= 7 && p <= 9) return 2
 }
 
 export const buildStages = (): Stage[] => {
-  // return fixedStages
-
   const stages: Stage[] = []
   let currentFloor = 1
 
-  let currentStyle: RenderingStyle = 5
-  const pickStyle = makeConstrainedRandomEmitter(
+  let currentStyle: Pivot = 5
+  const pickPivot = makeConstrainedRandomEmitter(
     () => {
       if (currentFloor === 1) return InitialStyle // initial style
-      return clamp(currentStyle + randomIntInclusiveBetween(-3, 3), 1, 9) as RenderingStyle
+      return clamp(currentStyle + randomIntInclusiveBetween(-3, 3), 1, 9) as Pivot
     },
-    (v, p) => classifyStyle(v) === classifyStyle(p),
+    (val, prev) => classifyPivot(val) === classifyPivot(prev),
     2 // can stay in the same rendering style for 2 stages in a row, but not more than that
   )
 
-  let currentMode = Atmosphere.atmospheric
+  let atmosphere = Atmosphere.atmospheric
 
-  for (let s = 0; s < InitialNumOfStages; s++) {
+  for (let stg = 0; stg < InitialNumOfStages; stg++) {
     const floors = fireByRate(0.8) ? 1 : 0
-    const style = pickStyle()
+    const pivot = pickPivot()
 
-    // update mode every 2 stages
-    if (s >= 2 && s % 2 === 0) {
-      const [min, max] = stageModeMap.get(s)
-      currentMode = clamp(currentMode + (fireByRate(0.5) ? 1 : -1), min, max)
+    // update atmosphere every 2 stages
+    if (stg !== 0 && stg % 2 === 0) {
+      const [min, max] = stageModeMap.get(stg)
+      atmosphere = clamp(atmosphere + (fireByRate(0.5) ? 1 : -1), min, max)
     }
 
     stages.push({
-      number: s,
-      mode: currentMode,
-      startFloor: currentFloor,
-      endFloor: currentFloor + floors,
-      style,
+      number: stg,
+      startLevel: currentFloor,
+      endLevel: currentFloor + floors,
+      world: {
+        atmosphere,
+        structure: getStructure(pivot),
+        ambience: pivot as Ambience,
+      },
     })
     currentFloor += floors + 1
-    currentStyle = style
+    currentStyle = pivot
   }
 
   return stages
@@ -80,15 +77,8 @@ export const stageModeMap = makeRangeMap<ModeRange>([
   [[14, 15], [Atmosphere.atmospheric, Atmosphere.digital]], // full range
 ])
 
-export const mapStagesToFloors = (stages: Stage[]): FloorStage[] => {
-  const floorStages: FloorStage[] = []
-  for (const stage of stages) {
-    for (let i = stage.startFloor; i <= stage.endFloor; i++) {
-      floorStages.push({
-        mode: stage.mode,
-        style: stage.style,
-      })
-    }
-  }
-  return floorStages
+export const getStructure = (p: Pivot): Structure => {
+  if (p <= 3) return 'poles'
+  if (p >= 7) return 'tiles'
+  return 'classic'
 }

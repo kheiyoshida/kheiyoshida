@@ -21,6 +21,6 @@ export const getVision = (): Vision => ({
   light: getLightColorIntention(),
   effectParams: getEffectParams(),
   color: getColorParams(),
-  mode: game.maze.stageContext.current.mode,
+  mode: game.maze.structureContext.current.mode,
   screenEffectParams: getScreenEffectParams(),
 })

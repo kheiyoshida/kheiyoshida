@@ -1,6 +1,6 @@
-import { RenderingStyle } from '../game/stage/style.ts'
 import { Atmosphere } from '../game/world'
+import { Pivot } from '../game/stage/stage.ts'
 
 export const debugRenderingMode: Atmosphere = Atmosphere.atmospheric
 
-export const InitialStyle: RenderingStyle = 5
+export const InitialStyle: Pivot = 5

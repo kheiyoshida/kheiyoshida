@@ -1,6 +1,5 @@
-
 import { game } from '../../../game'
-import { determineModelingStyle, Structure } from '../../../game/world'
+import { Structure } from '../../../game/world'
 
 export type GoDownstairsAnimationType = 'descent' | 'lift' | 'proceed' | 'warp'
 
@@ -12,20 +11,17 @@ export type StairAnimation = {
 }
 
 export const getStairAnimation = (): StairAnimation => {
-  const { prev, current, next } = game.maze.stageContext
-  const prevStyle = prev ? determineModelingStyle(prev.style) : null
-  const currentStyle = determineModelingStyle(current.style)
-  const nextStyle = next ? determineModelingStyle(next.style) : null
+  const { prev, current, next } = game.maze.structureContext
 
   return {
-    goDownstairs: getGoDownstairsAnimationType(currentStyle, nextStyle),
-    proceedToNextFloor: getProceedToNextFloorAnimationType(prevStyle, currentStyle),
+    goDownstairs: getGoDownstairsAnimationType(current, next),
+    proceedToNextFloor: getProceedToNextFloorAnimationType(prev, current),
   }
 }
 
 export const getGoDownstairsAnimationType = (
   current: Structure,
-  next: Structure | null
+  next: Structure | undefined
 ): GoDownstairsAnimationType => {
   if (current !== next) return 'warp'
   if (current == 'classic') return 'descent'
@@ -35,7 +31,7 @@ export const getGoDownstairsAnimationType = (
 }
 
 export const getProceedToNextFloorAnimationType = (
-  prev: Structure | null,
+  prev: Structure | undefined,
   current: Structure
 ): ProceedToNextFloorAnimationType => {
   if (prev === current) return 'corridor'

@@ -1,8 +1,6 @@
-import { FloorStage } from '../stage'
 import { MazeLevel } from './level.ts'
 import { MazeGridParams } from '../../core/level/builder'
-
-import { determineModelingStyle } from '../world'
+import { StageContext } from '../stage'
 
 /**
  * manages maze grids over levels
@@ -12,7 +10,7 @@ export class Maze {
   private _level!: MazeLevel
 
   constructor(
-    private stages: FloorStage[],
+    private stages: StageContext,
     private buildParams: (floor: number) => MazeGridParams
   ) {}
 
@@ -20,19 +18,19 @@ export class Maze {
     this._levelNumber++
     this._level = MazeLevel.build(
       this.buildParams(this._levelNumber),
-      determineModelingStyle(this.stages[this._levelNumber - 1].style)
+      this.stages.getWorld(this._levelNumber)!.structure
     )
   }
 
-  get stageContext() {
+  get structureContext() {
     return {
-      prev: this.stages[this._levelNumber - 2] || null,
-      current: this.stages[this._levelNumber - 1], // B1F = index:0
-      next: this.stages[this._levelNumber] || null,
+      prev: this.stages.getWorld(this._levelNumber -1)?.structure,
+      current: this.stages.getWorld(this._levelNumber)!.structure,
+      next: this.stages.getWorld(this._levelNumber +1)?.structure,
     }
   }
 
-  restart(floorStages?: FloorStage[]) {
+  restart(floorStages?: StageContext) {
     if (floorStages) {
       this.stages = floorStages
     }

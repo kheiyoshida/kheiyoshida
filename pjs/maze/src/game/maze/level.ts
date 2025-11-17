@@ -1,7 +1,7 @@
 import { MazeGrid } from '../../core/level/grid.ts'
 import { buildMazeGrid, MazeGridParams } from '../../core/level/builder'
 import { PhysicalMazeGrid } from './physical/grid.ts'
-import { Structure } from '../world'
+import { Structure, World } from '../world'
 
 export class MazeLevel {
   public constructor(
@@ -14,4 +14,9 @@ export class MazeLevel {
     const physicalGrid = PhysicalMazeGrid.convert(grid, style)
     return new MazeLevel(grid, physicalGrid)
   }
+}
+
+export type LevelDefinition = {
+  params: MazeGridParams
+  world: World
 }
