@@ -19,6 +19,12 @@ export enum Atmosphere {
 
 export type Structure = 'classic' | 'poles' | 'tiles'
 
+export type StructureContext = {
+  prev: Structure | undefined
+  current: Structure
+  next: Structure | undefined
+}
+
 export const determineModelingStyle = (style: Pivot): Structure => {
   if (style <= 3) return 'poles'
   if (style >= 7) return 'tiles'

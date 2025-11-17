@@ -1,4 +1,3 @@
-
 import { MazeGrid } from '../grid.ts'
 import { seedCells } from './seed.ts'
 import { connectCells } from './connect.ts'
@@ -6,10 +5,19 @@ import { randomItemFromArray } from 'utils'
 
 const BuildRetryLimit = 20
 
-export type MazeGridParams = [size: number, fillRate: number, connRate: number]
+export type BuildMazeGridParams = {
+  size: number
+  fillRate: number
+  connRate: number
+  stairPositionConstraint: StairPositionConstraint
+  startPositionConstraint: StartPositionConstraint
+}
 
-export const buildMazeGrid = (params: MazeGridParams, retry = 0): MazeGrid => {
-  const grid = _buildMazeGrid(...params)
+export type StairPositionConstraint = 'deadEnd' | 'horizontalExit'
+export type StartPositionConstraint = 'evenPositionCellExceptStair' | 'shouldFaceCorridorWall'
+
+export const buildMazeGrid = (params: BuildMazeGridParams, retry = 0): MazeGrid => {
+  const grid = _buildMazeGrid(params)
   if (!isValidMazeLevel(grid)) {
     if (retry < BuildRetryLimit) return buildMazeGrid(adjustParams(params), retry + 1)
     else throw Error(`could not build valid matrix`)
@@ -22,16 +30,10 @@ export const buildMazeGrid = (params: MazeGridParams, retry = 0): MazeGrid => {
   return grid
 }
 
-const _buildMazeGrid = (...[size, fillRate, connRate]: MazeGridParams): MazeGrid => {
-  // init
+const _buildMazeGrid = ({ size, fillRate, connRate }: BuildMazeGridParams): MazeGrid => {
   const grid = new MazeGrid(size, size)
-
-  // seed
   seedCells(grid, fillRate)
-
-  // connect
   connectCells(grid, connRate)
-
   return grid
 }
 
@@ -43,6 +45,10 @@ const isValidMazeLevel = (grid: MazeGrid) => {
   return true
 }
 
-const adjustParams = ([size, fill, conn]: MazeGridParams): MazeGridParams => {
-  return [size + 1, fill * 1.05, conn]
+const adjustParams = (params: BuildMazeGridParams): BuildMazeGridParams => {
+  return {
+    ...params,
+    size: params.size + 1,
+    fillRate: params.fillRate * 1.05,
+  }
 }

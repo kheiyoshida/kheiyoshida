@@ -2,7 +2,6 @@ import { GeometrySpec } from 'maze-gl'
 import * as rectangles from './rectangles'
 import * as objects from './objects'
 import { ModelCode } from '../code'
-import { BottomTile } from './objects'
 
 export type BaseGeometryCode =
   | 'Floor'

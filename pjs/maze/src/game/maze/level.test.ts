@@ -13,7 +13,20 @@ describe(`${MazeLevel.name}`, () => {
       [0, 0, 1, 1, 1],
     ])
     jest.spyOn(builder, 'buildMazeGrid').mockReturnValue(mockGrid)
-    const level = MazeLevel.build([5, 0.3, 0.3], 'classic', 'classic')
+    const level = MazeLevel.build(
+      {
+        size: 5,
+        fillRate: 0.3,
+        connRate: 0.3,
+        stairPositionConstraint: 'deadEnd',
+        startPositionConstraint: 'shouldFaceCorridorWall',
+      },
+      {
+        prev: 'classic',
+        current: 'classic',
+        next: 'classic',
+      }
+    )
     const physicalGrid = level.physicalGrid
 
     console.log(visualizeGrid3D(physicalGrid, VerticalLayer.Middle))

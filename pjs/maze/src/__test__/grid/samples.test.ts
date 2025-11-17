@@ -9,5 +9,15 @@ test.each([
   [14, 0.3, 0.2],
 ])(`maze grid samples: size=%n fill=%n conn=%n`, (size, fill, conn) => {
   for (let i = 0; i < samplesPerParam; i++)
-    console.log(visualizeGridWithSymbols(buildMazeGrid([size, fill, conn])))
+    console.log(
+      visualizeGridWithSymbols(
+        buildMazeGrid({
+          size,
+          fillRate: fill,
+          connRate: conn,
+          stairPositionConstraint: 'deadEnd',
+          startPositionConstraint: 'shouldFaceCorridorWall',
+        })
+      )
+    )
 })

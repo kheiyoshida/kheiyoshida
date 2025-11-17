@@ -1,6 +1,7 @@
 import { MazeLevel } from './level.ts'
-import { MazeGridParams } from '../../core/level/builder'
+import { BuildMazeGridParams } from '../../core/level/builder'
 import { StageContext } from '../stage'
+import { StructureContext } from '../world'
 
 /**
  * manages maze grids over levels
@@ -11,23 +12,22 @@ export class Maze {
 
   constructor(
     private stages: StageContext,
-    private buildParams: (floor: number) => MazeGridParams
+    private buildParams: (level: number, structureContext: StructureContext) => BuildMazeGridParams
   ) {}
 
   setNextLevel() {
     this._levelNumber++
     this._level = MazeLevel.build(
-      this.buildParams(this._levelNumber),
-      this.stages.getWorld(this._levelNumber)!.structure,
-      this.stages.getWorld(this._levelNumber + 1)!.structure,
+      this.buildParams(this._levelNumber, this.structureContext),
+      this.structureContext
     )
   }
 
-  get structureContext() {
+  get structureContext(): StructureContext {
     return {
-      prev: this.stages.getWorld(this._levelNumber -1)?.structure,
+      prev: this.stages.getWorld(this._levelNumber - 1)?.structure,
       current: this.stages.getWorld(this._levelNumber)!.structure,
-      next: this.stages.getWorld(this._levelNumber +1)?.structure,
+      next: this.stages.getWorld(this._levelNumber + 1)?.structure,
     }
   }
 
