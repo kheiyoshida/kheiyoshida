@@ -1,4 +1,4 @@
-export type ModelCode = ClassicModelCode | 'Octahedron' | 'Pole' | 'Tile' | 'StairTile' | 'BottomTile'
+export type ModelCode = ClassicModelCode | 'Warp' | 'Pole' | 'Tile' | 'StairTile' | 'BottomTile'
 
 export type ClassicModelCode = 'Floor' | 'Ceil' | 'Wall' | 'StairCeil' | 'StairSteps'
 

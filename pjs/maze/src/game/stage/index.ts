@@ -1,4 +1,4 @@
-import { Structure, World } from '../world'
+import { World } from '../world'
 import { buildStages } from './stage.ts'
 
 export type Stage = {
@@ -8,12 +8,6 @@ export type Stage = {
   endLevel: number
 
   world: World
-}
-
-export type StructureContext = {
-  prev: Structure | null
-  current: Structure
-  next: Structure | null
 }
 
 export class StageContext {
@@ -26,14 +20,16 @@ export class StageContext {
 
     this.cache = {}
 
-    for(const stage of this.stages) {
-      for(let level = stage.startLevel; level <= stage.endLevel; level++) {
+    for (const stage of this.stages) {
+      for (let level = stage.startLevel; level <= stage.endLevel; level++) {
         this.cache[level] = stage.world
       }
     }
+
+    console.log(this.cache)
   }
 
   public getWorld(level: number): World | null {
-   return this.cache[level] ?? null
+    return this.cache[level] ?? null
   }
 }

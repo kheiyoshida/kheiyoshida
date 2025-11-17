@@ -11,7 +11,7 @@ describe(`${classicGridConverter.name}`, () => {
       [1, 1, 2],
     ])
 
-    const physicalGrid = classicGridConverter(logicalGrid)
+    const physicalGrid = classicGridConverter(logicalGrid, 'normal')
 
     physicalGrid.grid2D.iterate((slice) => {
       expect(slice).toBeDefined()
@@ -89,5 +89,23 @@ describe(`${classicGridConverter.name}`, () => {
       z: VerticalLayer.Middle,
     })
     expect(outside2).toBeNull()
+  })
+
+  it (`can convert the grid when stair type is warp`, () => {
+    const logicalGrid = makeTestGrid([
+      [0, 0, 0],
+      [0, 0, 0],
+      [1, 1, 2],
+    ])
+
+    const physicalGrid = classicGridConverter(logicalGrid, 'warp')
+
+    const slice22 = physicalGrid.getSliceByLogicalPosition({ x: 2, y: 2 })
+    expect(slice22.get(VerticalLayer.Middle)?.objects).toMatchObject([
+      { model: { code: 'Floor' } },
+      { model: { code: 'Ceil' }},
+      { model: { code: 'Warp' } },
+    ])
+    expect(slice22.get(VerticalLayer.Down1)).toBeNull()
   })
 })

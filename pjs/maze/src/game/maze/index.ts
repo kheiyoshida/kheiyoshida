@@ -18,7 +18,8 @@ export class Maze {
     this._levelNumber++
     this._level = MazeLevel.build(
       this.buildParams(this._levelNumber),
-      this.stages.getWorld(this._levelNumber)!.structure
+      this.stages.getWorld(this._levelNumber)!.structure,
+      this.stages.getWorld(this._levelNumber + 1)!.structure,
     )
   }
 
@@ -28,6 +29,10 @@ export class Maze {
       current: this.stages.getWorld(this._levelNumber)!.structure,
       next: this.stages.getWorld(this._levelNumber +1)?.structure,
     }
+  }
+
+  get currentWorld() {
+    return this.stages.getWorld(this._levelNumber)
   }
 
   restart(floorStages?: StageContext) {

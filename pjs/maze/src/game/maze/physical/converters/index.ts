@@ -4,8 +4,9 @@ import { classicGridConverter } from './classic.ts'
 import { polesGridConverter } from './poles.ts'
 import { tilesGridConverter } from './tiles.ts'
 import { Structure } from '../../../world'
+import { PhysicalStairType } from '../stair.ts'
 
-export type GridConverter = (grid: MazeGrid) => PhysicalMazeGrid
+export type GridConverter = (grid: MazeGrid, stairType: PhysicalStairType) => PhysicalMazeGrid
 
 export const gridConverterMap: Record<Structure, GridConverter> = {
   classic: classicGridConverter,

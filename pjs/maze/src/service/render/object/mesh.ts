@@ -9,7 +9,7 @@ type CompositeMeshKey = `${Atmosphere}:${ModelCode}_${number}`
 const meshMap = new Map<CompositeMeshKey, Mesh>()
 
 const materialSpecificationMap: Partial<Record<ModelCode, MaterialType>> = {
-  Octahedron: 'distinct',
+  Warp: 'distinct',
   StairTile: 'distinct',
 }
 

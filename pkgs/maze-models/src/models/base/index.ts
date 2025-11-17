@@ -1,6 +1,8 @@
 import { GeometrySpec } from 'maze-gl'
 import * as rectangles from './rectangles'
 import * as objects from './objects'
+import { ModelCode } from '../code'
+import { BottomTile } from './objects'
 
 export type BaseGeometryCode =
   | 'Floor'
@@ -27,10 +29,23 @@ export const BaseGeometryMap: Record<BaseGeometryCode, GeometrySpec> = {
   BottomTile: objects.BottomTile,
 }
 
+const conversionMap: Record<ModelCode, BaseGeometryCode> = {
+  BottomTile: 'BottomTile',
+  Ceil: 'Ceil',
+  Floor: 'Floor',
+  Pole: 'Pole',
+  StairCeil: 'StairCeil',
+  StairSteps: 'StairSteps',
+  StairTile: 'StairTile',
+  Tile: 'Tile',
+  Wall: 'Wall',
+  Warp: 'Octahedron',
+}
+
 /**
  * get the base geometry spec. it deep-copies the geometry spec
  * @param code
  */
-export const getBaseGeometry = (code: BaseGeometryCode) => {
-  return JSON.parse(JSON.stringify(BaseGeometryMap[code]))
+export const getBaseGeometry = (code: ModelCode) => {
+  return JSON.parse(JSON.stringify(BaseGeometryMap[conversionMap[code]]))
 }

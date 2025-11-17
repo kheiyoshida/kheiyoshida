@@ -12,7 +12,7 @@ describe(`${buildViewGrid.name}`, () => {
       [0, 1, 0],
       [0, 2, 0],
     ])
-    const physicalGrid = PhysicalMazeGrid.convert(grid, 'classic')
+    const physicalGrid = PhysicalMazeGrid.convert(grid, 'classic','normal')
     const origin: ViewOrigin = {
       position: { x: 1, y: 0 },
       direction: 's',
@@ -41,7 +41,7 @@ describe(`${buildViewGrid.name}`, () => {
       [1, 1, 2],
       [0, 0, 0],
     ])
-    const physicalGrid = PhysicalMazeGrid.convert(grid, 'classic')
+    const physicalGrid = PhysicalMazeGrid.convert(grid, 'classic', 'normal')
     const origin: ViewOrigin = {
       position: { x: 0, y: 1 },
       direction: 'e',
@@ -73,7 +73,7 @@ describe(`${buildViewGrid.name}`, () => {
       [0, 0, 1, 1, 2, 0],
       [0, 0, 0, 0, 0, 0],
     ])
-    const physicalGrid = PhysicalMazeGrid.convert(grid, 'classic')
+    const physicalGrid = PhysicalMazeGrid.convert(grid, 'classic', 'normal')
     const origin: ViewOrigin = {
       position: { x: 2, y: 3 },
       direction: 'e',

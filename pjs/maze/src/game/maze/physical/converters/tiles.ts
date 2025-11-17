@@ -4,7 +4,7 @@ import { MazeBlock } from '../block.ts'
 import { MazeObject } from '../object.ts'
 import { getPositionInDirection } from '../../../../core/grid/position2d.ts'
 
-export const tilesGridConverter: GridConverter = (grid) => {
+export const tilesGridConverter: GridConverter = (grid, stairType) => {
   const physicalGrid = new PhysicalMazeGrid(
     grid.sizeX + PhysicalMazeGrid.SurroundingBlocks * 2,
     grid.sizeY + PhysicalMazeGrid.SurroundingBlocks * 2,
@@ -18,17 +18,26 @@ export const tilesGridConverter: GridConverter = (grid) => {
         .set(VerticalLayer.Down1, new MazeBlock([new MazeObject({ code: 'Tile' })]))
     }
     if (item?.type === 'stair') {
-      physicalGrid
-        .getSliceByLogicalPosition(pos)
-        .set(VerticalLayer.Down1, new MazeBlock([new MazeObject({ code: 'StairTile' })]))
-
-      const stairDir = grid.getDeadEndDirection(pos)
-      const corridorLength = 4
-      for (let i = 1; i <= corridorLength; i++) {
-        const corridorPos = getPositionInDirection(pos, stairDir, i)
+      if (stairType === 'normal') {
         physicalGrid
-          .getSliceByLogicalPosition(corridorPos)
-          .set(VerticalLayer.Down2, new MazeBlock([new MazeObject({ code: 'BottomTile' })]))
+          .getSliceByLogicalPosition(pos)
+          .set(VerticalLayer.Down1, new MazeBlock([new MazeObject({ code: 'StairTile' })]))
+
+        const stairDir = grid.getDeadEndDirection(pos)
+        const corridorLength = 4
+        for (let i = 1; i <= corridorLength; i++) {
+          const corridorPos = getPositionInDirection(pos, stairDir, i)
+          physicalGrid
+            .getSliceByLogicalPosition(corridorPos)
+            .set(VerticalLayer.Down2, new MazeBlock([new MazeObject({ code: 'BottomTile' })]))
+        }
+      } else {
+        physicalGrid
+          .getSliceByLogicalPosition(pos)
+          .set(VerticalLayer.Down1, new MazeBlock([new MazeObject('Tile')]))
+        physicalGrid
+          .getSliceByLogicalPosition(pos)
+          .set(VerticalLayer.Middle, new MazeBlock([new MazeObject('Warp')]))
       }
     }
   })

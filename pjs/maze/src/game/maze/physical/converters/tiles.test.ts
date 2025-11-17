@@ -11,7 +11,7 @@ describe(`${tilesGridConverter.name}`, () => {
       [1, 1, 2],
     ])
 
-    const physicalGrid = tilesGridConverter(logicalGrid)
+    const physicalGrid = tilesGridConverter(logicalGrid, 'normal')
 
     expect(physicalGrid.sizeX).toBe(logicalGrid.sizeX + PhysicalMazeGrid.SurroundingBlocks * 2)
     expect(physicalGrid.sizeY).toBe(logicalGrid.sizeY + PhysicalMazeGrid.SurroundingBlocks * 2)
@@ -33,6 +33,24 @@ describe(`${tilesGridConverter.name}`, () => {
     const slice32 = physicalGrid.getSliceByLogicalPosition({ x: 3, y: 2 })
     expect(slice32.get(VerticalLayer.Down2)?.objects).toMatchObject([
       { model: { code: 'BottomTile' } },
+    ] as IMazeObject[])
+  })
+
+  it(`can convert warp stair`, () => {
+    const logicalGrid = makeTestGrid([
+      [0, 1, 0],
+      [0, 1, 0],
+      [1, 1, 2],
+    ])
+
+    const physicalGrid = tilesGridConverter(logicalGrid, 'warp')
+
+    const slice = physicalGrid.getSliceByLogicalPosition({ x: 2, y: 2 })
+    expect(slice.get(VerticalLayer.Middle)?.objects).toMatchObject([
+      { model: { code: 'Warp' } },
+    ] as IMazeObject[])
+    expect(slice.get(VerticalLayer.Down1)?.objects).toMatchObject([
+      { model: { code: 'Tile' } },
     ] as IMazeObject[])
   })
 })

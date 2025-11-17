@@ -15,7 +15,7 @@ export const composeSceneObject = (mode: Atmosphere) => (obj: MazeObject) => {
     scale: 1,
   })
 
-  if (code === 'Octahedron') {
+  if (code === 'Warp') {
     transform.scale = randomFloatBetween(0.2, 0.4)
   }
   if (code === 'Pole') {
