@@ -2,6 +2,7 @@ import { IntRange } from 'utils'
 import { game } from '../../../game'
 
 export type MusicRange = IntRange<1, 10>
+
 export type MusicCommand = {
   alignment: MusicRange
   aesthetics: MusicRange,

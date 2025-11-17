@@ -1,5 +1,6 @@
 import { Maze } from './index.ts'
-import { RenderingMode } from '../stage'
+
+import { Atmosphere } from '../world'
 
 describe(`${Maze.name}`, () => {
   it(`should build the first level based on stage data & param data`, () => {
@@ -7,7 +8,7 @@ describe(`${Maze.name}`, () => {
       [
         {
           style: 5,
-          mode: RenderingMode.atmospheric,
+          mode: Atmosphere.atmospheric,
         },
       ],
       () => [5, 0.5, 0.5]

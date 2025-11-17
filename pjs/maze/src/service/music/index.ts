@@ -2,7 +2,8 @@ import { makeContextManager, maze } from 'music'
 import { RenderHandler } from '../consumer'
 
 import { MusicRange } from '../../integration/query'
-import { RenderingMode } from '../../game/stage'
+
+import { Atmosphere } from '../../game/world'
 
 let buffer: [MusicRange, MusicRange]
 let changeModeRequired = false
@@ -30,7 +31,7 @@ export const updateMusicDest: RenderHandler = (pack) => {
 }
 
 const checkNewMusicModeRequired = ((): RenderHandler => {
-  let currentMode: RenderingMode | undefined
+  let currentMode: Atmosphere | undefined
   return ({ vision }) => {
     if (currentMode === undefined) {
       currentMode = vision.mode

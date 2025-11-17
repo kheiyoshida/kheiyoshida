@@ -1,11 +1,11 @@
-import { RenderingMode } from '../../../game/stage'
 import { getMesh } from './mesh.ts'
 import { ObjectTransform, SceneObject } from 'maze-gl'
 import { randomFloatBetween } from 'utils'
 import { MazeObject } from '../../../game/maze/physical/object.ts'
 import { NESW } from '../../../core/grid/direction.ts'
+import { Atmosphere } from '../../../game/world'
 
-export const composeSceneObject = (mode: RenderingMode) => (obj: MazeObject) => {
+export const composeSceneObject = (mode: Atmosphere) => (obj: MazeObject) => {
   const {
     model: { code },
   } = obj

@@ -1,4 +1,4 @@
-import { FloorStage, RenderingMode, Stage } from './index.ts'
+import { FloorStage, Stage } from './index.ts'
 import {
   clamp,
   fireByRate,
@@ -8,6 +8,7 @@ import {
 } from 'utils'
 import { debugRenderingMode, InitialStyle } from '../../config/debug.ts'
 import { classifyStyle, RenderingStyle } from './style.ts'
+import { Atmosphere } from '../world'
 
 export const InitialNumOfStages = 20
 
@@ -39,7 +40,7 @@ export const buildStages = (): Stage[] => {
     2 // can stay in the same rendering style for 2 stages in a row, but not more than that
   )
 
-  let currentMode = RenderingMode.atmospheric
+  let currentMode = Atmosphere.atmospheric
 
   for (let s = 0; s < InitialNumOfStages; s++) {
     const floors = fireByRate(0.8) ? 1 : 0
@@ -65,18 +66,18 @@ export const buildStages = (): Stage[] => {
   return stages
 }
 
-type ModeRange = [min: RenderingMode, max: RenderingMode]
+type ModeRange = [min: Atmosphere, max: Atmosphere]
 
 // prettier-ignore
 export const stageModeMap = makeRangeMap<ModeRange>([
-  [[0, 1], [RenderingMode.atmospheric, RenderingMode.atmospheric]],
-  [[2, 3], [RenderingMode.smooth, RenderingMode.smooth]],
-  [[4, 5], [RenderingMode.smooth, RenderingMode.ambient]],
-  [[6, 7], [RenderingMode.ambient, RenderingMode.digital]],
-  [[8, 9], [RenderingMode.digital, RenderingMode.abstract]],
-  [[10, 11], [RenderingMode.abstract, RenderingMode.abstract]],
-  [[12, 13], [RenderingMode.digital, RenderingMode.abstract]],
-  [[14, 15], [RenderingMode.atmospheric, RenderingMode.digital]], // full range
+  [[0, 1], [Atmosphere.atmospheric, Atmosphere.atmospheric]],
+  [[2, 3], [Atmosphere.smooth, Atmosphere.smooth]],
+  [[4, 5], [Atmosphere.smooth, Atmosphere.ambient]],
+  [[6, 7], [Atmosphere.ambient, Atmosphere.digital]],
+  [[8, 9], [Atmosphere.digital, Atmosphere.abstract]],
+  [[10, 11], [Atmosphere.abstract, Atmosphere.abstract]],
+  [[12, 13], [Atmosphere.digital, Atmosphere.abstract]],
+  [[14, 15], [Atmosphere.atmospheric, Atmosphere.digital]], // full range
 ])
 
 export const mapStagesToFloors = (stages: Stage[]): FloorStage[] => {

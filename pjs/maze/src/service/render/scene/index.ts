@@ -1,13 +1,13 @@
 import { RenderUnit } from 'maze-gl'
-import { Structure } from '../../../integration/query'
-import { RenderingMode } from '../../../game/stage'
+import { StructureData } from '../../../integration/query'
 import { composeSceneObject } from '../object'
 import { translateScaffoldParams } from '../scaffold/values.ts'
 import { scaffold } from '../scaffold'
+import { Atmosphere } from '../../../game/world'
 
 export const getUnits = (
-  mode: RenderingMode,
-  { view, scaffold: scaffoldParams, terrainStyle }: Structure
+  mode: Atmosphere,
+  { view, scaffold: scaffoldParams, terrainStyle }: StructureData
 ): RenderUnit[] => {
   scaffold.update(translateScaffoldParams(scaffoldParams))
 

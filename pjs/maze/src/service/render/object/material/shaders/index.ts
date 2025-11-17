@@ -3,16 +3,17 @@ import vert from './default.vert?raw'
 import litFogFrag from './default.frag?raw'
 import unlitFogFrag from './unlitFog.frag?raw'
 import edgeRenderingFrag from './edgeRendering.frag?raw'
-import { RenderingMode } from '../../../../../game/stage'
+
+import { Atmosphere } from '../../../../../game/world'
 
 export type MaterialShaderType = 'litFog' | 'unlitFog' | 'edgeRendering'
 
-export const RenderingModeShaderTypeMap: Record<RenderingMode, MaterialShaderType> = {
-  [RenderingMode.atmospheric]: 'litFog',
-  [RenderingMode.smooth]: 'unlitFog',
-  [RenderingMode.ambient]: 'unlitFog',
-  [RenderingMode.digital]: 'edgeRendering',
-  [RenderingMode.abstract]: 'edgeRendering',
+export const RenderingModeShaderTypeMap: Record<Atmosphere, MaterialShaderType> = {
+  [Atmosphere.atmospheric]: 'litFog',
+  [Atmosphere.smooth]: 'unlitFog',
+  [Atmosphere.ambient]: 'unlitFog',
+  [Atmosphere.digital]: 'edgeRendering',
+  [Atmosphere.abstract]: 'edgeRendering',
 }
 
 export const ShaderMap = new Map<MaterialShaderType, MaterialShader>()

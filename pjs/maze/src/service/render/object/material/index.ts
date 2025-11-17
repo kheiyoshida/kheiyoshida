@@ -1,8 +1,8 @@
 import { getShader, MaterialShaderType, RenderingModeShaderTypeMap } from './shaders'
 import { getGL } from 'maze-gl/src/webgl'
 import { DefaultMaterial, DistinctMaterial, MeshMaterial } from './materials.ts'
-import { RenderingMode } from '../../../../game/stage'
 import { randomFloatBetween } from 'utils'
+import { Atmosphere } from '../../../../game/world'
 
 export type MaterialType = 'default' | 'distinct'
 
@@ -18,7 +18,7 @@ export const initMaterialMap = () => {
   })
 }
 
-export const getMeshMaterial = (type: MaterialType, mode: RenderingMode): MeshMaterial => {
+export const getMeshMaterial = (type: MaterialType, mode: Atmosphere): MeshMaterial => {
   const shaderType: MaterialShaderType = RenderingModeShaderTypeMap[mode]
   const key: CompositeMaterialKey = `${shaderType}:${type}`
   if (!MaterialMap.has(key)) {

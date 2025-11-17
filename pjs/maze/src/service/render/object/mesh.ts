@@ -1,10 +1,10 @@
 import { Mesh } from 'maze-gl'
 import { getMeshMaterial, MaterialType } from './material'
-import { RenderingMode } from '../../../game/stage'
 import { generateGeometry, ModelCode } from 'maze-models'
 import { ModelId } from '../../../game/maze/physical/models.ts'
+import { Atmosphere } from '../../../game/world'
 
-type CompositeMeshKey = `${RenderingMode}:${ModelCode}_${number}`
+type CompositeMeshKey = `${Atmosphere}:${ModelCode}_${number}`
 
 const meshMap = new Map<CompositeMeshKey, Mesh>()
 
@@ -13,7 +13,7 @@ const materialSpecificationMap: Partial<Record<ModelCode, MaterialType>> = {
   StairTile: 'distinct',
 }
 
-export const getMesh = (model: ModelId, mode: RenderingMode): Mesh => {
+export const getMesh = (model: ModelId, mode: Atmosphere): Mesh => {
   const {code, variant} = model
 
   const key: CompositeMeshKey = `${mode}:${code}_${variant ?? 0}`

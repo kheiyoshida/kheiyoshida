@@ -8,7 +8,6 @@ import { Mapper } from './map/mapper.ts'
 import { makeTestGrid, visualizeGrid3D } from '../__test__/grid/visualise.ts'
 import * as builder from '../core/level/builder'
 import { VerticalLayer } from './maze/physical/grid.ts'
-import { MazeLevel } from './maze/level.ts'
 
 describe(`${GameAggregate.name}`, () => {
   it(`should provide aggregate access point for integration layer`, () => {

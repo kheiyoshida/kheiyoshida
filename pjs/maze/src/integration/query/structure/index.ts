@@ -1,17 +1,17 @@
 import { getScaffoldParams, ScaffoldParams } from './scaffold.ts'
-import { ModelingStyle } from '../../../game/maze/physical/modelingStyle.ts'
 import { buildViewGrid } from './view/get.ts'
 import { game } from '../../../game'
 import { MazeView } from './view/view.ts'
 import { getModelingStyle } from './getModelingStyle.ts'
+import { Structure } from '../../../game/world'
 
-export type Structure = {
+export type StructureData = {
   scaffold: ScaffoldParams
   view: MazeView
-  terrainStyle: ModelingStyle
+  terrainStyle: Structure
 }
 
-export const getStructure = (): Structure => ({
+export const getStructure = (): StructureData => ({
   view: buildViewGrid(game.maze.currentLevel.physicalGrid, game.player),
   scaffold: getScaffoldParams(),
   terrainStyle: getModelingStyle(),

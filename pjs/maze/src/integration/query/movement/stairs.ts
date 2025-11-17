@@ -1,5 +1,6 @@
-import { determineModelingStyle, ModelingStyle } from '../../../game/maze/physical/modelingStyle.ts'
+
 import { game } from '../../../game'
+import { determineModelingStyle, Structure } from '../../../game/world'
 
 export type GoDownstairsAnimationType = 'descent' | 'lift' | 'proceed' | 'warp'
 
@@ -23,8 +24,8 @@ export const getStairAnimation = (): StairAnimation => {
 }
 
 export const getGoDownstairsAnimationType = (
-  current: ModelingStyle,
-  next: ModelingStyle | null
+  current: Structure,
+  next: Structure | null
 ): GoDownstairsAnimationType => {
   if (current !== next) return 'warp'
   if (current == 'classic') return 'descent'
@@ -34,8 +35,8 @@ export const getGoDownstairsAnimationType = (
 }
 
 export const getProceedToNextFloorAnimationType = (
-  prev: ModelingStyle | null,
-  current: ModelingStyle
+  prev: Structure | null,
+  current: Structure
 ): ProceedToNextFloorAnimationType => {
   if (prev === current) return 'corridor'
   return 'still'

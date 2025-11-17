@@ -1,7 +1,7 @@
 import { game } from '../../../game'
-import { determineModelingStyle, ModelingStyle } from '../../../game/maze/physical/modelingStyle.ts'
+import { determineModelingStyle, Structure } from '../../../game/world'
 
-export const getModelingStyle = (): ModelingStyle => {
+export const getModelingStyle = (): Structure => {
   const style = game.maze.stageContext.current.style
   return determineModelingStyle(style)
 }

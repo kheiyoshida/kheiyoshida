@@ -1,9 +1,9 @@
 import { Grid3D, VerticalGrid3DSlice } from '../../../core/grid/grid3d.ts'
 import { MazeBlock } from './block.ts'
 import { MazeGrid } from '../../../core/level/grid.ts'
-import { ModelingStyle } from './modelingStyle.ts'
 import { gridConverterMap } from './converters'
 import { Position2D } from '../../../core/grid/position2d.ts'
+import { Structure } from '../../world'
 
 export enum VerticalLayer {
   Up2 = 0,
@@ -22,7 +22,7 @@ export class PhysicalMazeGrid extends Grid3D<MazeBlock> {
 
   static readonly VerticalSliceSize = 5
 
-  static convert(grid: MazeGrid, style: ModelingStyle): PhysicalMazeGrid {
+  static convert(grid: MazeGrid, style: Structure): PhysicalMazeGrid {
     return gridConverterMap[style](grid)
   }
 

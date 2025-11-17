@@ -1,4 +1,3 @@
-import { RenderingMode } from '../../../../game/stage'
 import {
   AbstractEffect,
   AmbientEffect,
@@ -9,6 +8,7 @@ import {
 } from './effects.ts'
 import { ScreenEffectParams } from '../../../../integration/query'
 import { Color } from 'maze-gl'
+import { Atmosphere } from '../../../../game/world'
 
 export type ScreenEffectType = 'atmospheric' | 'smooth' | 'ambient' | 'digital' | 'abstract'
 
@@ -22,15 +22,15 @@ export const initScreenEffects = () => {
   ScreenEffectMap.set('abstract', new AbstractEffect())
 }
 
-const modeEffectMap: Record<RenderingMode, ScreenEffectType> = {
-  [RenderingMode.atmospheric]: 'atmospheric',
-  [RenderingMode.smooth]: 'smooth',
-  [RenderingMode.ambient]: 'ambient',
-  [RenderingMode.digital]: 'digital',
-  [RenderingMode.abstract]: 'abstract',
+const modeEffectMap: Record<Atmosphere, ScreenEffectType> = {
+  [Atmosphere.atmospheric]: 'atmospheric',
+  [Atmosphere.smooth]: 'smooth',
+  [Atmosphere.ambient]: 'ambient',
+  [Atmosphere.digital]: 'digital',
+  [Atmosphere.abstract]: 'abstract',
 }
 
-export const getScreenEffect = (mode: RenderingMode, params: ScreenEffectParams, baseColor: Color, fade?: number): MazeScreenEffect => {
+export const getScreenEffect = (mode: Atmosphere, params: ScreenEffectParams, baseColor: Color, fade?: number): MazeScreenEffect => {
   const type = modeEffectMap[mode]
   if (!ScreenEffectMap.has(type)) {
     throw Error(`screen effect map was not initialized`)

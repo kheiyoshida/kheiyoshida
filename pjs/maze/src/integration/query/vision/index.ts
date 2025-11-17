@@ -2,9 +2,9 @@ import { getLightColorIntention, LightVariables } from './light.ts'
 import { EffectParams, getEffectParams } from './effect.ts'
 import { ColorParams } from './color/types.ts'
 import { getColorParams } from './color'
-import { RenderingMode } from '../../../game/stage'
 import { getScreenEffectParams, ScreenEffectParams } from './screenEffect.ts'
 import { game } from '../../../game'
+import { Atmosphere } from '../../../game/world'
 
 export type { ScreenEffectParams } from './screenEffect.ts'
 export type { ColorParams, EffectParams, LightVariables }
@@ -13,7 +13,7 @@ export type Vision = {
   light: LightVariables
   effectParams: EffectParams
   color: ColorParams
-  mode: RenderingMode
+  mode: Atmosphere
   screenEffectParams: ScreenEffectParams
 }
 
