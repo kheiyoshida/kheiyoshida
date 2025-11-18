@@ -3,7 +3,7 @@ import { GeometryPreviewer } from './preview'
 import { runPipeline } from '../pipeline/pipeline'
 import { tesselateGeometry } from '../pipeline/processors/tessellation'
 import { triangulateFaces } from '../pipeline/processors/triangulation'
-import { recomputeNormals } from '../pipeline/processors/normals'
+import { recomputeFaceNormals } from '../pipeline/processors/normals'
 import { deformGeometry } from '../pipeline/processors/deformation'
 import { generateGeometry } from '../models'
 
@@ -20,6 +20,6 @@ import { generateGeometry } from '../models'
 //   recomputeNormals,
 // ])
 
-const geo = generateGeometry('BottomTile')
+const geo = generateGeometry('Tile')
 
 new GeometryPreviewer(geo)

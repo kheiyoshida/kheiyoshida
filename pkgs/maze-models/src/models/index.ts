@@ -12,13 +12,13 @@ export const generateGeometry = (modelCode: ModelCode): GeometrySpec => {
 
   const base = getBaseGeometry(modelCode)
   const params: ModifierParams = {
-    tesselation: randomIntInclusiveBetween(2, 5),
+    tesselation: randomIntInclusiveBetween(1, 2),
     deform: (v) => [
-      v[0] + (Math.random() - 0.5) * 0.2,
-      v[1] + (Math.random() - 0.5) * 0.2,
-      v[2] + (Math.random() - 0.5) * 0.2,
+      v[0] + (Math.random() - 0.5) * 0.1,
+      v[1] + (Math.random() - 0.5) * 0.1,
+      v[2] + (Math.random() - 0.5) * 0.1,
     ],
-    computeNormals: undefined,
+    computeNormals: 'vertex',
   }
   return defaultModifier(params)(base)
   // return BaseGeometryMap[modelCode]

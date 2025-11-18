@@ -4,7 +4,7 @@ import { runPipeline } from '../pipeline/pipeline'
 import { tesselateGeometry } from '../pipeline/processors/tessellation'
 import { triangulateFaces } from '../pipeline/processors/triangulation'
 import { deformGeometry } from '../pipeline/processors/deformation'
-import { recomputeNormals } from '../pipeline/processors/normals'
+import { computeVertexNormals, recomputeFaceNormals } from '../pipeline/processors/normals'
 
 export type ModifierParams = {
   tesselation: number
@@ -19,6 +19,7 @@ export const defaultModifier =
       tesselateGeometry(tesselation),
       triangulateFaces,
       deformGeometry(deform),
-      computeNormals == 'face' ? recomputeNormals : (g) => g,
+      // computeNormals == 'face' ? recomputeFaceNormals : g => g,
+      computeNormals == 'vertex' ? computeVertexNormals : g => g,
     ])
   }

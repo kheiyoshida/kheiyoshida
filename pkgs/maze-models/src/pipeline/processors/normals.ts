@@ -1,10 +1,11 @@
 import { GeometrySpec, Vector3D } from '../types'
 import { getNormal } from './triangulation'
+import * as Vec3 from 'maze-gl/src/vector/vector'
 
 /**
- * Recomputes vertex normals
+ * Recomputes face normals and assign them to vertices
  */
-export function recomputeNormals(input: GeometrySpec): GeometrySpec {
+export function recomputeFaceNormals(input: GeometrySpec): GeometrySpec {
   const vertexNormals: Vector3D[] = []
 
   for (const face of input.faces) {
@@ -26,5 +27,29 @@ export function recomputeNormals(input: GeometrySpec): GeometrySpec {
     ...input,
     normals: vertexNormals,
     meta: { ...input.meta, stage: 'final' },
+  }
+}
+
+/**
+ * compute vertex normals by getting belonging triangles' normals
+ */
+export function computeVertexNormals(input: GeometrySpec): GeometrySpec {
+  const normals = input.vertices.map(() => [0, 0, 0] as Vector3D)
+
+  for (const face of input.faces) {
+    const faceNormal = input.normals[face.normalIndices[0]] // same for all vertices
+
+    for (let i = 0; i < 3; i++) {
+      const vIndex = face.vertexIndices[i]
+      normals[vIndex] = Vec3.sum2(normals[vIndex], faceNormal)
+      face.normalIndices[i] = vIndex
+    }
+  }
+
+  normals.forEach((n) => Vec3.normalize(n, 1))
+
+  return {
+    ...input,
+    normals,
   }
 }

@@ -7,9 +7,9 @@ import { randomIntInclusiveBetween } from 'utils'
 export const generateClassicModel = (code: ClassicModelCode): GeometrySpec => {
   const base = getBaseGeometry(code)
   const params: ModifierParams = {
-    tesselation: randomIntInclusiveBetween(2, 5),
+    tesselation: randomIntInclusiveBetween(1, 3),
     deform: classicDeform,
-    computeNormals: undefined,
+    computeNormals: 'vertex',
   }
   return defaultModifier(params)(base)
 }
