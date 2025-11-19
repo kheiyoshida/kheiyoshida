@@ -8,41 +8,40 @@ export type TileParams = {
   thicknessDelta: number
 }
 
+const generateCircle = (numOfCorners: number, getRadius: () => number) => (getY: () => number): Vector3D[] => {
+  const center: Vector3D = [0, getY(), 0]
+  const vertices: Vector3D[] = [center]
+
+  const angle = (Math.PI * 2) / numOfCorners
+  for (let i = 0; i < numOfCorners; i++) {
+    const r = getRadius()
+    const x = Math.cos(angle * i) * r
+    const z = -Math.sin(angle * i) * r
+    vertices.push([x, getY(), z])
+  }
+  return vertices
+}
+
 export const generateTileGeometry = (params: TileParams): GeometrySpec => {
   // prepare vertices for the top and bottom faces
-  const angle = (Math.PI * 2) / params.numOfCorners
 
   const radius = () => params.radiusBase + params.radiusDelta * (Math.random() - 0.5)
 
-  const topY = 1
-  const topCenter: Vector3D = [0, topY, 0]
-  const topVertices: Vector3D[] = []
-  for (let i = 0; i < params.numOfCorners; i++) {
-    const r = radius()
-    const x = Math.cos(angle * i) * r
-    const z = -Math.sin(angle * i) * r
-    topVertices.push([x, topY, z])
-  }
+  const genCircle = generateCircle(params.numOfCorners, radius)
+
+  const topVertices: Vector3D[] = genCircle(() => 1)
 
   const thickness = () => params.thicknessBase + params.thicknessDelta * (Math.random() - 0.5)
-  const bottomY = 1 - thickness()
-  const bottomCenter: Vector3D = [0, bottomY, 0]
-  const bottomVertices: Vector3D[] = []
-  for (let i = 0; i < params.numOfCorners; i++) {
-    const r = radius()
-    const x = Math.cos(angle * i) *  r
-    const z = -Math.sin(angle * i) * r
-    bottomVertices.push([x, 1 - thickness(), z])
-  }
+  const getY = () => 1 - thickness()
+  const bottomVertices: Vector3D[] = genCircle(getY)
 
-  const vertices: Vector3D[] = [topCenter, ...topVertices, bottomCenter, ...bottomVertices]
+  const vertices: Vector3D[] = [...topVertices, ...bottomVertices]
 
   // connect vertices to form triangles on top, side, bottom
   const topCenterIndex = 0
   const topStart = 1
   const n = params.numOfCorners
-  const bottomCenterIndex = n + 1
-  const bottomStart = n + 2
+
   const faces: { vertexIndices: number[]; normalIndices: number[] }[] = []
 
   // top face triangles (triangle fan)
@@ -52,6 +51,9 @@ export const generateTileGeometry = (params: TileParams): GeometrySpec => {
       normalIndices: [0, 0, 0],
     })
   }
+
+  const bottomCenterIndex = (n + 1)
+  const bottomStart = bottomCenterIndex + 1
 
   // bottom face triangles (reverse winding)
   for (let i = 0; i < n; i++) {

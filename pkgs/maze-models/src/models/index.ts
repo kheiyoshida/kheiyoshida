@@ -7,11 +7,30 @@ import { randomIntInclusiveBetween } from 'utils'
 import { generateTileGeometry } from './generators/tile'
 import { runPipeline } from '../pipeline/pipeline'
 import { computeVertexNormals, recomputeFaceNormals } from '../pipeline/processors/normals'
+import { generatePoleGeometry } from './generators/pole'
 
 export type { ModelCode } from './code'
 
 export const generateGeometry = (modelCode: ModelCode): GeometrySpec => {
   if (isClassic(modelCode)) return generateClassicModel(modelCode)
+
+  if (modelCode === 'Pole') {
+    const pole = generatePoleGeometry({
+      type: 'pole',
+      radiusBase: 1,
+      radiusDelta: 0.8,
+      numOfCorners: 8,
+      heightBase: 8,
+      heightDelta: 4,
+      heightPerSegment: 0.5,
+      segmentYDelta: 0.3
+    })
+    const geo = runPipeline(pole, [
+      recomputeFaceNormals,
+      computeVertexNormals
+    ])
+    return geo
+  }
 
   if (modelCode === 'Tile') {
     const tile = generateTileGeometry({
