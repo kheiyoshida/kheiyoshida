@@ -4,11 +4,28 @@ import { BaseGeometryMap, getBaseGeometry } from './base'
 import { generateClassicModel } from './generators/classic'
 import { defaultModifier, ModifierParams } from './modifiers'
 import { randomIntInclusiveBetween } from 'utils'
+import { generateTileGeometry } from './generators/tile'
+import { runPipeline } from '../pipeline/pipeline'
+import { computeVertexNormals, recomputeFaceNormals } from '../pipeline/processors/normals'
 
 export type { ModelCode } from './code'
 
 export const generateGeometry = (modelCode: ModelCode): GeometrySpec => {
   if (isClassic(modelCode)) return generateClassicModel(modelCode)
+
+  if (modelCode === 'Tile') {
+    const tile = generateTileGeometry({
+      numOfCorners: 20,
+      radiusBase: 0.8,
+      radiusDelta: 0.7,
+      thicknessBase: 1.5,
+      thicknessDelta: 1.0,
+    })
+    return runPipeline(tile, [
+      recomputeFaceNormals,
+      computeVertexNormals
+    ])
+  }
 
   const base = getBaseGeometry(modelCode)
   const params: ModifierParams = {

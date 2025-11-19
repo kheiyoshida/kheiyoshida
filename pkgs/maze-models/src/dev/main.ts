@@ -1,25 +1,29 @@
-import * as geometries from './geometries'
 import { GeometryPreviewer } from './preview'
 import { runPipeline } from '../pipeline/pipeline'
+import { computeVertexNormals, recomputeFaceNormals } from '../pipeline/processors/normals'
+import { generateTileGeometry } from '../models/generators/tile'
 import { tesselateGeometry } from '../pipeline/processors/tessellation'
-import { triangulateFaces } from '../pipeline/processors/triangulation'
-import { recomputeFaceNormals } from '../pipeline/processors/normals'
 import { deformGeometry } from '../pipeline/processors/deformation'
-import { generateGeometry } from '../models'
+import { triangulateFaces } from '../pipeline/processors/triangulation'
 
 // const base = geometries.boxSpec
 
-// const final = runPipeline(base, [
-//   tesselateGeometry(4),
-//   triangulateFaces,
-//   deformGeometry((v) => [
-//     v[0] + (Math.random() - 0.5) * 0.1,
-//     v[1] + (Math.random() - 0.5) * 0.1,
-//     v[2] + (Math.random() - 0.5) * 0.1,
-//   ]),
-//   recomputeNormals,
-// ])
+const tile = generateTileGeometry({
+  numOfCorners: 17,
+  radiusBase: 0.8,
+  radiusDelta: 0.7,
+  thicknessBase: 1.5,
+  thicknessDelta: 1.0,
+})
 
-const geo = generateGeometry('Tile')
+
+const tileGeo = JSON.parse(JSON.stringify(tile))
+const geo = runPipeline(tileGeo, [
+  recomputeFaceNormals,
+  computeVertexNormals
+])
+
+console.log(tile)
+console.log(geo)
 
 new GeometryPreviewer(geo)

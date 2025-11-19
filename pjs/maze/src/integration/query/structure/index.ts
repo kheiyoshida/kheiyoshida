@@ -8,11 +8,11 @@ import { Structure } from '../../../game/world'
 export type StructureData = {
   scaffold: ScaffoldParams
   view: MazeView
-  terrainStyle: Structure
+  // terrainStyle: Structure
 }
 
 export const getStructure = (): StructureData => ({
   view: buildViewGrid(game.maze.currentLevel.physicalGrid, game.player),
   scaffold: getScaffoldParams(),
-  terrainStyle: getModelingStyle(),
+  // terrainStyle: getModelingStyle(),
 })
