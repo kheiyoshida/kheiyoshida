@@ -27,7 +27,8 @@ export const getGoDownstairsAnimationType = (
   if (current == 'classic') return 'descent'
   if (current == 'tiles') return 'lift'
   if (current == 'poles') return 'proceed'
-  throw new Error(`uncaught combination: ${current} & ${next}`)
+  return 'warp'
+  // throw new Error(`uncaught combination: ${current} & ${next}`)
 }
 
 export const getProceedToNextFloorAnimationType = (
