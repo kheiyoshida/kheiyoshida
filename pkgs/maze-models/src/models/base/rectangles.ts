@@ -91,16 +91,6 @@ export const StairSteps = completeRectSpec({
   vertices: [FBR, FBL, yLayerDown(BBL), yLayerDown(BBR)],
 })
 
-export const StairRightWall = completeRectSpec({
-  normals: [NLeft],
-  vertices: [FTR, FBR, yLayerDown(BBR), BBR],
-})
-
-export const StairLeftWall = completeRectSpec({
-  normals: [NRight],
-  vertices: [FTL, BBL, yLayerDown(BBL), FBL],
-})
-
 const zBack = (num: number, [x, y, z]: Vector3D): Vector3D => [x, y, z - 2 * num]
 
 const stairCorridor = {

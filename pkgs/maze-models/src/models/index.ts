@@ -1,6 +1,6 @@
-import { isClassic, ModelCode } from './code'
+import { isClassic, isFloatingBox, isPole, isStackableBox, isTile, ModelCode } from './code'
 import { GeometrySpec } from '../pipeline/types'
-import { BaseGeometryMap, getBaseGeometry } from './base'
+import { getBaseGeometry } from './base'
 import { generateClassicModel } from './generators/classic'
 import { defaultModifier, ModifierParams } from './modifiers'
 import { randomIntInclusiveBetween } from 'utils'
@@ -8,13 +8,31 @@ import { generateTileGeometry } from './generators/tile'
 import { runPipeline } from '../pipeline/pipeline'
 import { computeVertexNormals, recomputeFaceNormals } from '../pipeline/processors/normals'
 import { generatePoleGeometry } from './generators/pole'
+import { generateFloatingBox, generateStackableBox } from './generators/box'
 
 export type { ModelCode } from './code'
 
 export const generateGeometry = (modelCode: ModelCode): GeometrySpec => {
   if (isClassic(modelCode)) return generateClassicModel(modelCode)
 
-  if (modelCode === 'Pole') {
+  if (isFloatingBox(modelCode)) {
+    return generateFloatingBox(getBaseGeometry(modelCode), {
+      tesselation: 3,
+      sizeRange: [0.8, 0.9],
+      computeNormals: 'vertex',
+      distortion: 0.1,
+    })
+  }
+
+  if (isStackableBox(modelCode))
+    return generateStackableBox(getBaseGeometry(modelCode), {
+      tesselation: 3,
+      sizeRange: [0.8, 1.0],
+      computeNormals: 'vertex',
+      distortion: 0.1,
+    })
+
+  if (isPole(modelCode)) {
     const pole = generatePoleGeometry({
       type: 'pole',
       radiusBase: 1,
@@ -23,16 +41,12 @@ export const generateGeometry = (modelCode: ModelCode): GeometrySpec => {
       heightBase: 8,
       heightDelta: 4,
       heightPerSegment: 0.5,
-      segmentYDelta: 0.3
+      segmentYDelta: 0.3,
     })
-    const geo = runPipeline(pole, [
-      recomputeFaceNormals,
-      computeVertexNormals
-    ])
-    return geo
+    return runPipeline(pole, [recomputeFaceNormals, computeVertexNormals])
   }
 
-  if (modelCode === 'Tile') {
+  if (isTile(modelCode)) {
     const tile = generateTileGeometry({
       numOfCorners: 20,
       radiusBase: 0.8,
@@ -40,10 +54,7 @@ export const generateGeometry = (modelCode: ModelCode): GeometrySpec => {
       thicknessBase: 1.5,
       thicknessDelta: 1.0,
     })
-    return runPipeline(tile, [
-      recomputeFaceNormals,
-      computeVertexNormals
-    ])
+    return runPipeline(tile, [recomputeFaceNormals, computeVertexNormals])
   }
 
   const base = getBaseGeometry(modelCode)
