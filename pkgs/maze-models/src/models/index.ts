@@ -19,7 +19,7 @@ export const generateGeometry = (modelCode: ModelCode): GeometrySpec => {
     return generateFloatingBox(getBaseGeometry(modelCode), {
       tesselation: 3,
       sizeRange: [0.8, 0.9],
-      computeNormals: 'vertex',
+      computeNormals: undefined,
       distortion: 0.1,
     })
   }
@@ -27,8 +27,8 @@ export const generateGeometry = (modelCode: ModelCode): GeometrySpec => {
   if (isStackableBox(modelCode))
     return generateStackableBox(getBaseGeometry(modelCode), {
       tesselation: 3,
-      sizeRange: [0.8, 1.0],
-      computeNormals: 'vertex',
+      sizeRange: [0.5, 1.0],
+      computeNormals: undefined,
       distortion: 0.1,
     })
 

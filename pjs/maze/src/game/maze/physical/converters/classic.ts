@@ -4,7 +4,6 @@ import { MazeBlock } from '../block.ts'
 import { MazeObject } from '../object.ts'
 import { Direction, getTurnedDirection, NESW } from '../../../../core/grid/direction.ts'
 import { getAdjacent, getPositionInDirection } from '../../../../core/grid/position2d.ts'
-import { Maze } from '../../index.ts'
 
 export const classicGridConverter: GridConverter = (grid, stairType) => {
   const physicalGrid = new PhysicalMazeGrid(
