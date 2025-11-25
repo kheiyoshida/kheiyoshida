@@ -26,7 +26,7 @@ import { getEffect } from './scene/effect.ts'
 import { getScreenEffect } from './scene/screenEffect'
 import { renderScene } from 'maze-gl'
 import { scaffold } from './scaffold'
-import { ClassicCorridorView } from '../../integration/query/structure/view/corridor.ts'
+import { alternativeViewService } from '../../integration/query'
 
 export const renderCurrentView: RenderHandler = ({ structure, vision }) => {
   const drawFrame = () => {
@@ -161,7 +161,10 @@ export const renderProceedToNextFloor: RenderHandler = ({ structure, vision, mov
     const { lightColor, unlitColor } = resolveFrameColor(vision.color.frame, vision.mode)
     const eye = getMovementEye(movement, structure.scaffold)
 
-    const units = getUnits(vision.mode, { ...structure, view: ClassicCorridorView })
+    const units = getUnits(vision.mode, {
+      ...structure,
+      view: alternativeViewService.getNextLevelView(structure.view),
+    })
 
     const fade =
       i >= movementValueArray.length / 2 ? 0 : 1 - calcSmoothValue(i, movementValueArray.length / 2)

@@ -42,7 +42,7 @@ export class Maze {
     this._levelNumber = 0
   }
 
-  get currentFloor() {
+  get currentLevelNumber() {
     return this._levelNumber
   }
 

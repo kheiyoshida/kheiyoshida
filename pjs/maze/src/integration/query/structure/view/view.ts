@@ -51,7 +51,7 @@ export const toViewPosition = (position3d: Position3D): ViewPosition => ({
 })
 
 export class MazeView {
-  constructor(private grid: Grid3D<MazeBlock>) {}
+  constructor(readonly grid: Grid3D<MazeBlock>) {}
 
   getBlock(viewPos: ViewPosition): MazeBlock {
     const gridPos = toPosition3D(viewPos)

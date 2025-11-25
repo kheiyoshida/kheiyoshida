@@ -21,12 +21,10 @@ export class GameAggregate {
     this.maze.setNextLevel()
     this.mapper.resetMap(this.maze.currentLevel.grid)
 
-    console.log(this.maze.currentLevel.grid.filterItems((cell) => cell.start !== undefined))
     const startCellPos = this.maze.currentLevel.grid.findPosition(
       (_, cell) => cell !== null && cell.start !== undefined
     )!
 
-    console.log(startCellPos)
     const startCell = this.maze.currentLevel.grid.get(startCellPos)!
     this.player.position = startCellPos
     this.player.direction = startCell.start!.direction

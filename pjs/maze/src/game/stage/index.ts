@@ -15,8 +15,8 @@ export class StageContext {
 
   private readonly cache: Record<number, World>
 
-  constructor() {
-    this.stages = buildStages()
+  constructor(stages: Stage[] = buildStages()) {
+    this.stages = stages
 
     this.cache = {}
 
@@ -25,8 +25,6 @@ export class StageContext {
         this.cache[level] = stage.world
       }
     }
-
-    console.log(this.cache)
   }
 
   public getWorld(level: number): World | null {

@@ -9,6 +9,6 @@ export type LightVariables = {
 export const getLightColorIntention = (): LightVariables => {
   return {
     // decrease visibility as the game progresses
-    nearVisibility: clamp(4 / game.maze.currentFloor, 0, 1),
+    nearVisibility: clamp(4 / game.maze.currentLevelNumber, 0, 1),
   }
 }

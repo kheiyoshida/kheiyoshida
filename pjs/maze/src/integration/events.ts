@@ -75,7 +75,7 @@ export const goDownstairsEvent = () => {
   game.goDownStairs()
   game.player.updateStatus('downstairs')
 
-  if (game.maze.currentFloor >= 6 && game.maze.currentFloor % 3 === 0) {
+  if (game.maze.currentLevelNumber >= 6 && game.maze.currentLevelNumber % 3 === 0) {
     lightnessMoveDirection.update()
   }
 

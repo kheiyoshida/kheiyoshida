@@ -5,7 +5,7 @@ import { game } from '../../../../game'
 import { Status } from '../../../../game/player/status/status.ts'
 
 export const getColorParams = (): ColorParams => {
-  const floor = game.maze.currentFloor
+  const floor = game.maze.currentLevelNumber
   const status = game.player.status
   return {
     floor: getFloorColorParams(floor),
