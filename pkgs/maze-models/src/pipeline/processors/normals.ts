@@ -53,3 +53,13 @@ export function computeVertexNormals(input: GeometrySpec): GeometrySpec {
     normals,
   }
 }
+
+export type NormalComputeType = 'vertex' | 'face' | 'preserve'
+export const computeNormals =
+  (type: NormalComputeType = 'preserve') =>
+  (input: GeometrySpec): GeometrySpec =>
+    type === 'preserve'
+      ? input
+      : type === 'vertex'
+        ? computeVertexNormals(recomputeFaceNormals(input))
+        : recomputeFaceNormals(input)

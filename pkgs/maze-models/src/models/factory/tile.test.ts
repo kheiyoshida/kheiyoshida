@@ -1,8 +1,8 @@
-import { generateTileGeometry, TileParams } from './tile'
+import { tileGeometryFactory, TileParams } from './tile'
 
-describe(`${generateTileGeometry.name}`, () => {
+describe(`${tileGeometryFactory.name}`, () => {
   it(`should generate a tile with thickness`, () => {
-    const geo = generateTileGeometry({
+    const geo = tileGeometryFactory({
       radiusBase: 1,
       radiusDelta: 0,
       numOfCorners: 4,
@@ -28,7 +28,7 @@ describe(`${generateTileGeometry.name}`, () => {
       thicknessBase: 0.3,
       thicknessDelta: 0.1,
     }
-    const geo = generateTileGeometry(params)
+    const geo = tileGeometryFactory(params)
 
     expect(geo.vertices).toHaveLength(10) // top 5 + bottom 5
     expect(geo.faces).toHaveLength(16) // top 4 + bottom 4 + side 8

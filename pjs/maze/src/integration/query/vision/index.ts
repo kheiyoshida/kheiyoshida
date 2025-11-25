@@ -3,7 +3,6 @@ import { EffectParams, getEffectParams } from './effect.ts'
 import { ColorParams } from './color/types.ts'
 import { getColorParams } from './color'
 import { getScreenEffectParams, ScreenEffectParams } from './screenEffect.ts'
-import { game } from '../../../game'
 import { Atmosphere } from '../../../game/world'
 
 export type { ScreenEffectParams } from './screenEffect.ts'
@@ -21,6 +20,7 @@ export const getVision = (): Vision => ({
   light: getLightColorIntention(),
   effectParams: getEffectParams(),
   color: getColorParams(),
-  mode: game.maze.currentWorld!.atmosphere ?? 'normal',
+  // mode: game.maze.currentWorld!.atmosphere ?? Atmosphere.atmospheric,
+  mode: Atmosphere.smooth,
   screenEffectParams: getScreenEffectParams(),
 })

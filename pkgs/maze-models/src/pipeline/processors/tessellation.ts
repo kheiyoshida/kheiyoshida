@@ -6,8 +6,9 @@ import { GeometrySpec, Vector3D } from '../types'
  * interior points randomly within the face.
  */
 export const tesselateGeometry =
-  (insertionsPerFace: number) =>
+  (insertionsPerFace?: number) =>
   (input: GeometrySpec): GeometrySpec => {
+    if (!insertionsPerFace) return input
     const vertices = input.vertices.slice()
     for (const face of input.faces) {
       const v0 = vertices[face.vertexIndices[0]]

@@ -1,39 +1,38 @@
 import { isClassic, isFloatingBox, isPole, isStackableBox, isTile, ModelCode } from './code'
 import { GeometrySpec } from '../pipeline/types'
-import { getBaseGeometry } from './base'
+import { getBaseGeometry } from './factory'
 import { generateClassicModel } from './generators/classic'
-import { defaultModifier, ModifierParams } from './modifiers'
-import { randomIntInclusiveBetween } from 'utils'
-import { generateTileGeometry } from './generators/tile'
-import { runPipeline } from '../pipeline/pipeline'
-import { computeVertexNormals, recomputeFaceNormals } from '../pipeline/processors/normals'
-import { generatePoleGeometry } from './generators/pole'
 import { generateFloatingBox, generateStackableBox } from './generators/box'
+import { generatePole } from './generators/pole'
+import { generateTile } from './generators/tile'
 
 export type { ModelCode } from './code'
 
 export const generateGeometry = (modelCode: ModelCode): GeometrySpec => {
-  if (isClassic(modelCode)) return generateClassicModel(modelCode)
+  if (isClassic(modelCode))
+    return generateClassicModel(modelCode, {
+      tesselation: 2,
+      normalComputeType: 'preserve',
+    })
 
-  if (isFloatingBox(modelCode)) {
-    return generateFloatingBox(getBaseGeometry(modelCode), {
+  if (isFloatingBox(modelCode))
+    return generateFloatingBox(modelCode, {
       tesselation: 3,
       sizeRange: [0.8, 0.9],
-      computeNormals: undefined,
+      normalComputeType: undefined,
       distortion: 0.1,
     })
-  }
 
   if (isStackableBox(modelCode))
-    return generateStackableBox(getBaseGeometry(modelCode), {
+    return generateStackableBox(modelCode, {
       tesselation: 3,
       sizeRange: [0.5, 1.0],
-      computeNormals: undefined,
+      normalComputeType: undefined,
       distortion: 0.1,
     })
 
   if (isPole(modelCode)) {
-    const pole = generatePoleGeometry({
+    return generatePole(modelCode, {
       type: 'pole',
       radiusBase: 1,
       radiusDelta: 0.8,
@@ -42,31 +41,23 @@ export const generateGeometry = (modelCode: ModelCode): GeometrySpec => {
       heightDelta: 4,
       heightPerSegment: 0.5,
       segmentYDelta: 0.3,
+      normalComputeType: 'preserve',
+      distortion: 0,
     })
-    return runPipeline(pole, [recomputeFaceNormals, computeVertexNormals])
   }
 
   if (isTile(modelCode)) {
-    const tile = generateTileGeometry({
+    return generateTile(modelCode, {
       numOfCorners: 20,
       radiusBase: 0.8,
       radiusDelta: 0.7,
       thicknessBase: 1.5,
       thicknessDelta: 1.0,
+      distortion: 0,
+      tesselation: 0,
+      normalComputeType: 'preserve',
     })
-    return runPipeline(tile, [recomputeFaceNormals, computeVertexNormals])
   }
 
-  const base = getBaseGeometry(modelCode)
-  const params: ModifierParams = {
-    tesselation: randomIntInclusiveBetween(1, 2),
-    deform: (v) => [
-      v[0] + (Math.random() - 0.5) * 0.1,
-      v[1] + (Math.random() - 0.5) * 0.1,
-      v[2] + (Math.random() - 0.5) * 0.1,
-    ],
-    computeNormals: 'vertex',
-  }
-  return defaultModifier(params)(base)
-  // return BaseGeometryMap[modelCode]
+  return getBaseGeometry(modelCode)
 }

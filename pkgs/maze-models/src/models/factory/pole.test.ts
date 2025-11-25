@@ -1,8 +1,8 @@
-import { generatePoleGeometry, PoleParams } from './pole'
+import { poleGeometryFactory, PoleGeometryParams } from './pole'
 
-describe(`${generatePoleGeometry.name}`, () => {
+describe(`${poleGeometryFactory.name}`, () => {
   it(`should generate geometry`, () => {
-    const params: PoleParams = {
+    const params: PoleGeometryParams = {
       type: 'pole',
       radiusBase: 1,
       radiusDelta: 0,
@@ -13,7 +13,7 @@ describe(`${generatePoleGeometry.name}`, () => {
       segmentYDelta: 0,
     }
 
-    const geo = generatePoleGeometry(params)
+    const geo = poleGeometryFactory(params)
 
     expect(geo.vertices).toHaveLength(14) // top (4 + 1) + middle 4 + bottom (4 + 1)
     expect(geo.faces).toHaveLength(24) // top circle 4 + 8 triangles for segment 1 and 2 + bottom circle 4
