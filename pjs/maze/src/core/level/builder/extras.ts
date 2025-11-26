@@ -7,9 +7,8 @@ import { getTurnedDirection, NESW } from '../../grid/direction.ts'
 export const setStairMethods: Record<StairPositionConstraint, (grid: MazeGrid) => void> = {
   deadEnd: (grid) => {
     const deadEnds = grid.getDeadEnds()
-    if (deadEnds.length === 0) return null
+    if (deadEnds.length === 0) throw new BuildMazeGridError(`could not find any dead end`)
     const stairPos = randomItemFromArray(deadEnds)
-    if (!stairPos) throw new BuildMazeGridError(`could not find stair position`)
     grid.get(stairPos)!.type = 'stair'
   },
   horizontalExit: (grid) => {

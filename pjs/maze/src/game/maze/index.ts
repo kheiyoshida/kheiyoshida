@@ -15,12 +15,14 @@ export class Maze {
     private buildParams: (level: number, structureContext: StructureContext) => BuildMazeGridParams
   ) {}
 
+  // debugging params
+  public debugParams?: BuildMazeGridParams
+
   setNextLevel() {
     this._levelNumber++
-    this._level = MazeLevel.build(
-      this.buildParams(this._levelNumber, this.structureContext),
-      this.structureContext
-    )
+    const params = this.buildParams(this._levelNumber, this.structureContext)
+    this._level = MazeLevel.build(params, this.structureContext)
+    this.debugParams = params
   }
 
   get structureContext(): StructureContext {
