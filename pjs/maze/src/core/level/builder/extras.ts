@@ -19,7 +19,7 @@ export const setStairMethods: Record<StairPositionConstraint, (grid: MazeGrid) =
       const deadEndDir = grid.getDeadEndDirection(deadEnd)
 
       let isPathClear = true
-      for (let i = 1; i <= 4; i++) {
+      for (let i = 1; i <= 5; i++) {
         if (grid.get(getPositionInDirection(deadEnd, deadEndDir, i)) !== null) {
           isPathClear = false
           break

@@ -78,6 +78,7 @@ export const stageModeMap = makeRangeMap<ModeRange>([
 ])
 
 export const getStructure = (p: Pivot): Structure => {
+  return 'poles'
   if (p <= 2) return 'poles'
   if (p <= 4) return 'stackableBox'
   if (p === 5) return 'classic'

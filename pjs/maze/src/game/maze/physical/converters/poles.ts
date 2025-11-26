@@ -37,7 +37,7 @@ export const polesGridConverter: GridConverter = (grid, stairType) => {
     if (stairType == 'normal') {
       // pathway to the next level
       const stairDir = grid.getDeadEndDirection(stairPos)
-      const pathwayLength = 4
+      const pathwayLength = 5
       for (let i = 1; i <= pathwayLength; i++) {
         const pathwayPos = getPositionInDirection(stairPos, stairDir, i)
         const leftPos = getAdjacent(pathwayPos, getTurnedDirection('left', stairDir))

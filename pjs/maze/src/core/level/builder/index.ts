@@ -38,6 +38,6 @@ export const buildMazeGrid = (params: BuildMazeGridParams, retry = 0): MazeGrid 
 const adjustParams = (params: BuildMazeGridParams): BuildMazeGridParams => {
   return {
     ...params,
-    size: params.size + 1,
+    size: params.size + 1, // TODO: level gets too big
   }
 }
