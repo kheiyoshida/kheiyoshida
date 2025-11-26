@@ -21,6 +21,6 @@ export const getVision = (): Vision => ({
   effectParams: getEffectParams(),
   color: getColorParams(),
   // mode: game.maze.currentWorld!.atmosphere ?? Atmosphere.atmospheric,
-  mode: Atmosphere.smooth,
+  mode: Atmosphere.digital,
   screenEffectParams: getScreenEffectParams(),
 })

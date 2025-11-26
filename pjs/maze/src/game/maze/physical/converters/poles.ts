@@ -23,7 +23,7 @@ export const polesGridConverter: GridConverter = (grid, stairType) => {
     }
   })
 
-  let stairPos!: Position2D
+  let stairPos: Position2D | undefined = undefined
   grid.iterate((item, pos) => {
     if (item === null) {
       physicalGrid.getSliceByLogicalPosition(pos).set(VerticalLayer.Middle, poleBlock())
@@ -33,22 +33,24 @@ export const polesGridConverter: GridConverter = (grid, stairType) => {
     }
   })
 
-  if (stairType == 'normal') {
-    // pathway to the next level
-    const stairDir = grid.getDeadEndDirection(stairPos)
-    const pathwayLength = 4
-    for (let i = 1; i <= pathwayLength; i++) {
-      const pathwayPos = getPositionInDirection(stairPos, stairDir, i)
-      const leftPos = getAdjacent(pathwayPos, getTurnedDirection('left', stairDir))
-      const rightPos = getAdjacent(pathwayPos, getTurnedDirection('right', stairDir))
-      physicalGrid.getSliceByLogicalPosition(pathwayPos).set(VerticalLayer.Middle, new MazeBlock([]))
-      physicalGrid.getSliceByLogicalPosition(leftPos).set(VerticalLayer.Middle, poleBlock())
-      physicalGrid.getSliceByLogicalPosition(rightPos).set(VerticalLayer.Middle, poleBlock())
+  if (stairPos !== undefined) {
+    if (stairType == 'normal') {
+      // pathway to the next level
+      const stairDir = grid.getDeadEndDirection(stairPos)
+      const pathwayLength = 4
+      for (let i = 1; i <= pathwayLength; i++) {
+        const pathwayPos = getPositionInDirection(stairPos, stairDir, i)
+        const leftPos = getAdjacent(pathwayPos, getTurnedDirection('left', stairDir))
+        const rightPos = getAdjacent(pathwayPos, getTurnedDirection('right', stairDir))
+        physicalGrid.getSliceByLogicalPosition(pathwayPos).set(VerticalLayer.Middle, new MazeBlock([]))
+        physicalGrid.getSliceByLogicalPosition(leftPos).set(VerticalLayer.Middle, poleBlock())
+        physicalGrid.getSliceByLogicalPosition(rightPos).set(VerticalLayer.Middle, poleBlock())
+      }
+    } else {
+      physicalGrid
+        .getSliceByLogicalPosition(stairPos)
+        .set(VerticalLayer.Middle, new MazeBlock([new MazeObject('Warp')]))
     }
-  } else {
-    physicalGrid
-      .getSliceByLogicalPosition(stairPos)
-      .set(VerticalLayer.Middle, new MazeBlock([new MazeObject('Warp')]))
   }
 
   return physicalGrid

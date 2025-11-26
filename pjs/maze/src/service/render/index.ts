@@ -163,7 +163,7 @@ export const renderProceedToNextFloor: RenderHandler = ({ structure, vision, mov
 
     const units = getUnits(vision.mode, {
       ...structure,
-      view: alternativeViewService.getNextLevelView(structure.view),
+      view: animation === 'still' ? structure.view : alternativeViewService.getNextLevelView(structure.view),
     })
 
     const fade =

@@ -27,7 +27,7 @@ export const floatingBoxConverter: GridConverter = (grid, stairType) => {
     }
   })
 
-  let stairPos!: Position2D
+  let stairPos: Position2D | undefined = undefined
   grid.iterate((item, pos) => {
     if (item === null) {
       const slice = physicalGrid.getSliceByLogicalPosition(pos)
@@ -46,9 +46,11 @@ export const floatingBoxConverter: GridConverter = (grid, stairType) => {
   })
 
   // handle stair
-  const stairSlice = physicalGrid.getSliceByLogicalPosition(stairPos)
-  stairSlice.set(VerticalLayer.Middle, new MazeBlock([new MazeObject('Warp')]))
-  stairSlice.set(VerticalLayer.Down1, boxBlock())
+  if (stairPos !== undefined) {
+    const stairSlice = physicalGrid.getSliceByLogicalPosition(stairPos)
+    stairSlice.set(VerticalLayer.Middle, new MazeBlock([new MazeObject('Warp')]))
+    stairSlice.set(VerticalLayer.Down1, boxBlock())
+  }
 
   return physicalGrid
 }

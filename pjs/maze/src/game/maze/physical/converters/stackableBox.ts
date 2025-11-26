@@ -28,7 +28,7 @@ export const stackableBoxConverter: GridConverter = (grid, stairType) => {
     }
   })
 
-  let stairPos!: Position2D
+  let stairPos: Position2D | undefined = undefined
   grid.iterate((item, pos) => {
     if (item === null) {
       applyWallSlice(physicalGrid.getSliceByLogicalPosition(pos), optional)
@@ -44,32 +44,34 @@ export const stackableBoxConverter: GridConverter = (grid, stairType) => {
   })
 
   // stair
-  if (stairType === 'normal') {
-    const stairDir = grid.getDeadEndDirection(stairPos)
+  if (stairPos !== undefined) {
+    if (stairType === 'normal') {
+      const stairDir = grid.getDeadEndDirection(stairPos)
 
-    physicalGrid
-      .getSliceByLogicalPosition(stairPos)
-      .set(VerticalLayer.Down1, new MazeBlock([new MazeObject('StackableStairBox', stairDir)]))
-    physicalGrid
-      .getSliceByLogicalPosition(stairPos)
-      .set(VerticalLayer.Down2, new MazeBlock([new MazeObject('StackableBox')]))
-
-    // corridor
-    const corridorLength = 4
-    for (let i = 1; i <= corridorLength; i++) {
-      const corridorPos = getPositionInDirection(stairPos, stairDir, i)
-      physicalGrid.getSliceByLogicalPosition(corridorPos).set(VerticalLayer.Down1, new MazeBlock([]))
       physicalGrid
-        .getSliceByLogicalPosition(corridorPos)
+        .getSliceByLogicalPosition(stairPos)
+        .set(VerticalLayer.Down1, new MazeBlock([new MazeObject('StackableStairBox', stairDir)]))
+      physicalGrid
+        .getSliceByLogicalPosition(stairPos)
         .set(VerticalLayer.Down2, new MazeBlock([new MazeObject('StackableBox')]))
+
+      // corridor
+      const corridorLength = 4
+      for (let i = 1; i <= corridorLength; i++) {
+        const corridorPos = getPositionInDirection(stairPos, stairDir, i)
+        physicalGrid.getSliceByLogicalPosition(corridorPos).set(VerticalLayer.Down1, new MazeBlock([]))
+        physicalGrid
+          .getSliceByLogicalPosition(corridorPos)
+          .set(VerticalLayer.Down2, new MazeBlock([new MazeObject('StackableBox')]))
+      }
+    } else {
+      physicalGrid
+        .getSliceByLogicalPosition(stairPos)
+        .set(VerticalLayer.Middle, new MazeBlock([new MazeObject('Warp')]))
+      physicalGrid
+        .getSliceByLogicalPosition(stairPos)
+        .set(VerticalLayer.Down1, new MazeBlock([new MazeObject('StackableBox')]))
     }
-  } else {
-    physicalGrid
-      .getSliceByLogicalPosition(stairPos)
-      .set(VerticalLayer.Middle, new MazeBlock([new MazeObject('Warp')]))
-    physicalGrid
-      .getSliceByLogicalPosition(stairPos)
-      .set(VerticalLayer.Down1, new MazeBlock([new MazeObject('StackableBox')]))
   }
 
   return physicalGrid
