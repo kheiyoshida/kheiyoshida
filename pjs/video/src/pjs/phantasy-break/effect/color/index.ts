@@ -39,7 +39,7 @@ export class ColorEffect extends ScreenEffectModel {
   public set saturation(value: [number, number, number]) {
     this._saturation = value
     this.shader.use()
-    this.shader.setUniform3fv('uSaturation', [
+    this.shader.setUniformVec3('uSaturation', [
       this._saturation[0] + this.saturationOffset[0],
       this._saturation[1] + this.saturationOffset[1],
       this._saturation[2] + this.saturationOffset[2],

@@ -30,7 +30,7 @@ export const getMeshMaterial = (type: MaterialType, mode: Atmosphere): MeshMater
 export const updateRandomValues = () => {
   const shader = getShader('litFog')
   shader.use()
-  shader.setFloat('uTime', randomFloatBetween(0.0, 1.0))
+  shader.setUniformFloat('uTime', randomFloatBetween(0.0, 1.0))
   const gl = getGL()
-  shader.setVec3('resolution', [gl.canvas.width, gl.canvas.height, 0])
+  shader.setUniformVec3('resolution', [gl.canvas.width, gl.canvas.height, 0])
 }

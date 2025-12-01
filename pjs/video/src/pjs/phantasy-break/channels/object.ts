@@ -49,7 +49,7 @@ class CubeModel extends GenericModel {
     gl.bindVertexArray(null)
 
     this.shader.use()
-    this.shader.setUniform3fv('uColor', color)
+    this.shader.setUniformVec3('uColor', color)
   }
 
   // uniform location
@@ -82,7 +82,7 @@ class CubeModel extends GenericModel {
 
     this.shader.use()
     gl.bindVertexArray(this.vao)
-    this.shader.setUniformMatrix4fv('uModel', this.computeModel())
+    this.shader.setUniformMatrix4('uModel', this.computeModel())
 
     for (let i = 0; i < 8; i++) gl.uniform3fv(this.uOffsets[i], this.offsets[i])
 

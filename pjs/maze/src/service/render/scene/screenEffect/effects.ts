@@ -25,10 +25,10 @@ export class MazeScreenEffect extends ScreenEffect<ConcreteScreenEffectParams> {
   }
 
   applyParameters(): void {
-    this.screenShader.setFloat('uTime', performance.now())
-    this.screenShader.setVec3('uResolution', this.effectParams.resolution)
-    this.screenShader.setVec3('uBaseColor', this.effectParams.baseColor)
-    this.screenShader.setFloat('uFadeoutPercentage', this.effectParams.fadeoutPercentage)
+    this.screenShader.setUniformFloat('uTime', performance.now())
+    this.screenShader.setUniformVec3('uResolution', this.effectParams.resolution)
+    this.screenShader.setUniformVec3('uBaseColor', this.effectParams.baseColor)
+    this.screenShader.setUniformFloat('uFadeoutPercentage', this.effectParams.fadeoutPercentage)
   }
 }
 
@@ -39,7 +39,7 @@ export class AtmosphericEffect extends MazeScreenEffect {
 
   applyParameters(): void {
     super.applyParameters()
-    this.screenShader.setFloat('uBlurLevel', this.effectParams.blurLevel)
+    this.screenShader.setUniformFloat('uBlurLevel', this.effectParams.blurLevel)
   }
 }
 
@@ -50,7 +50,7 @@ export class SmoothEffect extends MazeScreenEffect {
 
   applyParameters(): void {
     super.applyParameters()
-    this.screenShader.setFloat('uBlurLevel', this.effectParams.blurLevel)
+    this.screenShader.setUniformFloat('uBlurLevel', this.effectParams.blurLevel)
   }
 }
 
@@ -61,8 +61,8 @@ export class AmbientEffect extends MazeScreenEffect {
 
   applyParameters(): void {
     super.applyParameters()
-    this.screenShader.setFloat('uBlurLevel', this.effectParams.blurLevel)
-    this.screenShader.setFloat('uRandomizationLevel', this.effectParams.pixelRandomizationLevel)
+    this.screenShader.setUniformFloat('uBlurLevel', this.effectParams.blurLevel)
+    this.screenShader.setUniformFloat('uRandomizationLevel', this.effectParams.pixelRandomizationLevel)
   }
 }
 
@@ -73,9 +73,9 @@ export class DigitalEffect extends MazeScreenEffect {
 
   applyParameters(): void {
     super.applyParameters()
-    this.screenShader.setFloat('uBlurLevel', this.effectParams.blurLevel)
-    this.screenShader.setFloat('uRandomizationLevel', this.effectParams.pixelRandomizationLevel)
-    this.screenShader.setFloat('uEdgeRenderingLevel', this.effectParams.edgeRenderingIntensityLevel)
+    this.screenShader.setUniformFloat('uBlurLevel', this.effectParams.blurLevel)
+    this.screenShader.setUniformFloat('uRandomizationLevel', this.effectParams.pixelRandomizationLevel)
+    this.screenShader.setUniformFloat('uEdgeRenderingLevel', this.effectParams.edgeRenderingIntensityLevel)
   }
 }
 
@@ -86,6 +86,6 @@ export class AbstractEffect extends MazeScreenEffect {
 
   applyParameters(): void {
     super.applyParameters()
-    this.screenShader.setFloat('uEdgeRenderingLevel', this.effectParams.edgeRenderingIntensityLevel)
+    this.screenShader.setUniformFloat('uEdgeRenderingLevel', this.effectParams.edgeRenderingIntensityLevel)
   }
 }

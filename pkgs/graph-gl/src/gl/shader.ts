@@ -3,9 +3,11 @@ import { mat4, vec3, vec4 } from 'gl-matrix'
 
 export class Shader {
   public program: WebGLProgram
+  protected gl: WebGL2RenderingContext
 
   constructor(vsSrc: string, fsSrc: string) {
     const gl = getGL()
+    this.gl = gl
     const vs = compileShader(vsSrc, gl.VERTEX_SHADER)
     const fs = compileShader(fsSrc, gl.FRAGMENT_SHADER)
     const program = gl.createProgram()!
@@ -39,16 +41,24 @@ export class Shader {
     getGL().uniform2f(this.getUniformLoc(name), x, y)
   }
 
-  setUniformMatrix4fv(name: string, matrix: Float32Array | mat4) {
+  setUniformMatrix4(name: string, matrix: Float32Array | mat4) {
     getGL().uniformMatrix4fv(this.getUniformLoc(name), false, matrix)
   }
 
-  setUniform3fv(name: string, value: Float32Array | vec3) {
+  setUniformVec3(name: string, value: Float32Array | vec3) {
     getGL().uniform3fv(this.getUniformLoc(name), value)
   }
 
   setUniform4fv(name: string, value: vec4) {
     getGL().uniform4fv(this.getUniformLoc(name), value)
+  }
+
+  /**
+   * get the location of shader attribute
+   * @param name attribute name
+   */
+  getAttribLoc(name: string): number {
+    return getGL().getAttribLocation(this.program, name)
   }
 
   private getUniformLoc(name: string) {

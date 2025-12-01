@@ -75,10 +75,10 @@ export class NormalDepthFrameBuffer extends FrameBuffer {
   drawOffscreenFrame(screenShader: Shader, drawScreen: () => void): void {
     // Pass the depthTexture unit to the shader
     this.depthTexture.activate()
-    screenShader.setInt('DepthTexture', this.depthTexture.unit)
+    screenShader.setUniformInt('DepthTexture', this.depthTexture.unit)
 
     this.normalTexture.activate()
-    screenShader.setInt('ColorTexture', this.normalTexture.unit)
+    screenShader.setUniformInt('ColorTexture', this.normalTexture.unit)
 
     drawScreen()
   }
@@ -108,13 +108,13 @@ export class NormalColorDepthFrameBuffer extends FrameBuffer {
 
   drawOffscreenFrame(screenShader: Shader, drawScreen: () => void): void {
     this.colorTexture.activate()
-    screenShader.setInt('ColorTexture', this.colorTexture.unit)
+    screenShader.setUniformInt('ColorTexture', this.colorTexture.unit)
 
     this.normalTexture.activate()
-    screenShader.setInt('NormalTexture', this.normalTexture.unit)
+    screenShader.setUniformInt('NormalTexture', this.normalTexture.unit)
 
     this.depthTexture.activate()
-    screenShader.setInt('DepthTexture', this.depthTexture.unit)
+    screenShader.setUniformInt('DepthTexture', this.depthTexture.unit)
 
     drawScreen()
   }
