@@ -1,14 +1,5 @@
 import { getGL, resizeCanvas } from '../webgl'
-import {
-  buildGeometrySpecFromObj,
-  ColorMaterial,
-  Mesh,
-  renderScene,
-  RenderUnit,
-  Scene,
-  Vec3,
-  Vector3D,
-} from '../'
+import { buildGeometrySpecFromObj, ColorMaterial, Mesh, renderScene, RenderUnit, Scene, Vec3, Vector3D } from '../'
 
 import vertShaderSource from './dev.vert?raw'
 import fragShaderSource from './dev.frag?raw'
@@ -16,10 +7,10 @@ import fragShaderSource from './dev.frag?raw'
 import objUrl from './cube.obj?url'
 import { boxSize, getDeformedBox, halfBox } from './geometries'
 import { makeRenderer } from '../frame'
-import { MaterialShader, PointLightValues, SpotLightValues } from '../models'
+import { MaterialShader, PointLightValues, SceneObject, SpotLightValues } from '../models'
 import { toRadians } from '../utils/calc'
 import { Color } from '../color'
-import { SceneObject } from '../models/object'
+import * as shaders from './shaders'
 
 const objSpec = await buildGeometrySpecFromObj(objUrl)
 
@@ -62,7 +53,6 @@ const unit2: RenderUnit = {
 //
 // lights
 //
-
 const pointLight1: PointLightValues = {
   position: [0, 0, halfBox * 4],
 
@@ -84,8 +74,8 @@ const calcDirectionalVector = (delta: number): Vector3D => {
   return [Math.cos(theta), 0, -Math.sin(theta)]
 }
 const spotLight: SpotLightValues = {
-  position: [-400.0, 0.0, halfBox * 12.01], // forget spotlight for now
-  direction: calcDirectionalVector(180), // I don't know why this is inverted only in dev environment
+  position: [-400.0, 0.0, halfBox * 12.01], // forget the spotlight for now
+  direction: calcDirectionalVector(180), // I don't know why this is inverted only in the dev environment
 
   ambient: [0.1, 0.1, 0.1],
   diffuse: [0.8, 0.8, 0.8],
@@ -102,6 +92,10 @@ const spotLight: SpotLightValues = {
 unit1.objects[0].transform.scale = 0.9
 unit2.objects[0].transform.scale = 0.9
 
+let eyeX = 0
+let eyeY = 0
+let eyeZ = 3000
+
 function frame(frameCount: number) {
   const scene: Scene = {
     unlitColor: unlitColor,
@@ -113,7 +107,7 @@ function frame(frameCount: number) {
     eye: {
       sight: 8000,
       fov: toRadians(60),
-      position: [0, 0, 3000],
+      position: [eyeX, eyeY, eyeZ],
       direction: 0,
       aspectRatio: window.innerWidth / window.innerHeight,
     },
@@ -125,6 +119,15 @@ function frame(frameCount: number) {
 
   renderScene(scene)
 }
+
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'w') eyeZ -= 100
+  if (e.key === 's') eyeZ += 100
+  if (e.key === 'd') eyeX += 100
+  if (e.key === 'a') eyeX -= 100
+  if (e.key === 'e') eyeY += 100
+  if (e.key === 'q') eyeY -= 100
+})
 
 const renderer = makeRenderer(30)
 renderer.start(frame)

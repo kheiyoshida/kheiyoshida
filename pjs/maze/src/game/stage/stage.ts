@@ -7,7 +7,7 @@ import {
   makeRangeMap,
   randomIntInclusiveBetween,
 } from 'utils'
-import { InitialStyle } from '../../config/debug.ts'
+import { debugStructure, InitialStyle } from '../../config/debug.ts'
 import { Ambience, Atmosphere, Structure } from '../world'
 
 export const InitialNumOfStages = 20
@@ -78,7 +78,7 @@ export const stageModeMap = makeRangeMap<ModeRange>([
 ])
 
 export const getStructure = (p: Pivot): Structure => {
-  return 'poles'
+  if (debugStructure) return debugStructure
   if (p <= 2) return 'poles'
   if (p <= 4) return 'stackableBox'
   if (p === 5) return 'classic'
