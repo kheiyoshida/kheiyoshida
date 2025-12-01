@@ -1,4 +1,4 @@
-export * from './mesh'
+export * from './model'
 export * from './geometry'
 export * from './material'
 export * from './scene'

@@ -1,16 +1,16 @@
-import { Mesh } from './mesh'
+import { MazeModel } from './model'
 import { mat4 } from 'gl-matrix'
 import { toRadians } from 'utils'
 import { Vec3 } from '../vector'
 
 export class SceneObject {
   constructor(
-    private readonly mesh: Mesh,
+    private readonly mesh: MazeModel,
     public readonly transform: ObjectTransform = new ObjectTransform()
   ) {}
 
-  render() {
-    this.mesh.render(this.transform.getModelMatrix())
+  draw() {
+    this.mesh.drawAtTransform(this.transform.getModelMatrix())
   }
 }
 

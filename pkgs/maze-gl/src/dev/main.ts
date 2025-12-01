@@ -1,5 +1,5 @@
 import { getGL, resizeCanvas } from '../webgl'
-import { buildGeometrySpecFromObj, ColorMaterial, Mesh, renderScene, RenderUnit, Scene, Vec3, Vector3D } from '../'
+import { buildGeometrySpecFromObj, ColorMaterial, MazeModel, renderScene, RenderUnit, Scene, Vec3, Vector3D } from '../'
 
 import vertShaderSource from './dev.vert?raw'
 import fragShaderSource from './dev.frag?raw'
@@ -32,13 +32,13 @@ lightColor.lightness = 0.5
 const materialColor = baseColor.clone()
 materialColor.lightness = 0.3
 
-const material1 = new ColorMaterial(shader, {
+const material1 = new ColorMaterial(shaders.unlitFog, {
   diffuse: materialColor.normalizedRGB,
   specular: materialColor.normalizedRGB,
   shininess: 1.0,
 })
 
-const boxMesh = new Mesh(material1, objSpec)
+const boxMesh = new MazeModel(material1, objSpec)
 
 const unit1: RenderUnit = {
   objects: [new SceneObject(boxMesh)],

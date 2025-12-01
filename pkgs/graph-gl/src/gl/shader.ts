@@ -20,7 +20,7 @@ export class Shader {
     this.program = program
   }
 
-  static currentProgram: WebGLProgram | null = null
+  private static currentProgram: WebGLProgram | null = null
 
   use() {
     if (Shader.currentProgram != this.program) {

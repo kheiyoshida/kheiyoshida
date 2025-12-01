@@ -55,7 +55,7 @@ export const loadGeometry = (spec: GeometrySpec): DrawRef => {
   }
 }
 
-const parseGeometrySpecToArray = (spec: GeometrySpec): Float32Array => {
+export const parseGeometrySpecToArray = (spec: GeometrySpec): Float32Array => {
   const arr: number[] = []
 
   for (const triangle of spec.faces) {

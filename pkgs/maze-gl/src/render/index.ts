@@ -63,6 +63,6 @@ export const renderUnit = (unit: RenderUnit) => {
   setUBOValue(BindingPoint.DeformedBox, uboData)
 
   unit.objects.forEach((object) => {
-    object.render()
+    object.draw()
   })
 }
