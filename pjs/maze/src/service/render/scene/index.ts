@@ -7,7 +7,7 @@ import { Atmosphere } from '../../../game/world'
 
 export const getUnits = (
   mode: Atmosphere,
-  { view, scaffold: scaffoldParams, terrainStyle }: StructureData
+  { view, scaffold: scaffoldParams }: StructureData
 ): RenderUnit[] => {
   scaffold.update(translateScaffoldParams(scaffoldParams))
 

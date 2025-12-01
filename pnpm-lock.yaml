@@ -413,6 +413,9 @@ importers:
       gl-matrix:
         specifier: ^3.4.3
         version: 3.4.3
+      graph-gl:
+        specifier: workspace:^
+        version: link:../graph-gl
       utils:
         specifier: workspace:^
         version: link:../utils
