@@ -27,7 +27,7 @@ export abstract class ModelRenderingNode<
 
   public render() {
     this.gl.clearColor(...this.backgroundColor)
-    this.gl.clear(this.gl.COLOR_BUFFER_BIT)
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT| this.gl.DEPTH_BUFFER_BIT)
     this.drawables.forEach((drawable) => drawable.draw())
   }
 }

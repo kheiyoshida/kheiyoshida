@@ -57,33 +57,6 @@ export abstract class FrameBuffer {
   abstract drawOffscreenFrame(screenShader: Shader, drawScreen: () => void): void
 }
 
-export class NormalDepthFrameBuffer extends FrameBuffer {
-  constructor(
-    gl: WebGL2RenderingContext,
-    private normalTexture: NormalTexture,
-    private depthTexture: DepthTexture
-  ) {
-    super(gl)
-  }
-
-  initFrameBuffer() {
-    const gl = this.gl
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.normalTexture.id, 0)
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, this.depthTexture.id, 0)
-  }
-
-  drawOffscreenFrame(screenShader: Shader, drawScreen: () => void): void {
-    // Pass the depthTexture unit to the shader
-    this.depthTexture.activate()
-    screenShader.setUniformInt('DepthTexture', this.depthTexture.unit)
-
-    this.normalTexture.activate()
-    screenShader.setUniformInt('ColorTexture', this.normalTexture.unit)
-
-    drawScreen()
-  }
-}
-
 /**
  * frame buffer that stores normal, color, and depth
  */
@@ -99,9 +72,9 @@ export class NormalColorDepthFrameBuffer extends FrameBuffer {
 
   initFrameBuffer(): void {
     const gl = this.gl
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.colorTexture.id, 0)
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT1, gl.TEXTURE_2D, this.normalTexture.id, 0)
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, this.depthTexture.id, 0)
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.colorTexture.tex, 0)
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT1, gl.TEXTURE_2D, this.normalTexture.tex, 0)
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, this.depthTexture.tex, 0)
 
     gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1]) // Color, Normal
   }

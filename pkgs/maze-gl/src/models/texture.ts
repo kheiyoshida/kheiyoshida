@@ -1,8 +1,8 @@
 export abstract class Texture {
-  static globalTextureNumber: number|null = null
+  static globalTextureNumber: number | null = null
 
   protected gl: WebGL2RenderingContext
-  id: WebGLTexture
+  tex: WebGLTexture
   width: number
   height: number
 
@@ -15,7 +15,7 @@ export abstract class Texture {
     internalFormat: number,
     format: number,
     type: number,
-    params: [pname: number, param: number][],
+    params: [pname: number, param: number][]
   ) {
     this.gl = gl
 
@@ -24,11 +24,11 @@ export abstract class Texture {
       throw Error(`failed to create texture`)
     }
 
-    this.id = id;
+    this.tex = id
     this.width = width
     this.height = height
 
-    gl.bindTexture(gl.TEXTURE_2D, this.id)
+    gl.bindTexture(gl.TEXTURE_2D, this.tex)
     gl.texImage2D(gl.TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, null)
     params.forEach(([pname, param]) => gl.texParameteri(gl.TEXTURE_2D, pname, param))
     gl.bindTexture(gl.TEXTURE_2D, null)
@@ -47,11 +47,10 @@ export abstract class Texture {
    */
   activate(): void {
     this.gl.activeTexture(this.gl.TEXTURE0 + this.unit)
-    this.gl.bindTexture(this.gl.TEXTURE_2D, this.id)
+    this.gl.bindTexture(this.gl.TEXTURE_2D, this.tex)
   }
 
   deactivate(): void {
     this.gl.bindTexture(this.gl.TEXTURE_2D, null)
   }
 }
-
