@@ -1,0 +1,80 @@
+import { Structure, StructureContext } from '../world/types.ts'
+
+export type StairType = 'stair' | 'lift' | 'path'
+export type StairPosition = 'deadEnd' | 'exit'
+
+export type StairSpec = {
+  position: StairPosition
+  type: StairType
+}
+
+type StructureType = 'stacked' | 'classic' | 'floating'
+const classify = (structure: Structure): StructureType => {
+  switch (structure) {
+    case 'stackableBox':
+      return 'stacked'
+    case 'poles':
+      return 'stacked'
+    case 'classic':
+      return 'classic'
+    case 'floatingBox':
+      return 'floating'
+    case 'tiles':
+      return 'floating'
+  }
+}
+
+const table: Record<StructureType, Record<StructureType, StairSpec>> = {
+  stacked: {
+    stacked: {
+      position: 'exit',
+      type: 'stair',
+    },
+    classic: {
+      position: 'exit',
+      type: 'path',
+    },
+    floating: {
+      position: 'deadEnd',
+      type: 'lift',
+    },
+  },
+  classic: {
+    stacked: {
+      position: 'exit',
+      type: 'path',
+    },
+    classic: {
+      position: 'deadEnd',
+      type: 'stair',
+    },
+    floating: {
+      position: 'deadEnd',
+      type: 'lift',
+    },
+  },
+  floating: {
+    stacked: {
+      position: 'exit',
+      type: 'stair',
+    },
+    classic: {
+      position: 'exit',
+      type: 'path',
+    },
+    floating: {
+      position: 'deadEnd',
+      type: 'lift',
+    },
+  },
+}
+
+export const getStairSpec = (structureContext: StructureContext): StairSpec => {
+  const { current, next } = structureContext
+  if (!next) throw new Error('next structure not defined')
+
+  const currentType = classify(current)
+  const nextType = classify(next)
+
+  return table[currentType][nextType]
+}

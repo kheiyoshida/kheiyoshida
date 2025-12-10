@@ -25,7 +25,8 @@ export class WorldProvider {
   }
 
   /**
-   * generate world making sure current & next worlds are available
+   * generate world context for a level,
+   * making sure current & next worlds are available
    * @param level starts from 1
    */
   public generateWorld(level: number): void {
