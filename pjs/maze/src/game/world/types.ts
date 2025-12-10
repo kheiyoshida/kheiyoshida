@@ -16,7 +16,7 @@ export enum Atmosphere {
   'abstract',
 }
 
-export type Structure = 'classic' | 'poles' | 'tiles' | 'floatingBox' | 'stackableBox'
+export type Structure = 'classic' | 'floatingBoxes' | 'stackedBoxes' | 'poles' | 'tiles'
 
 export type StructureContext = {
   prev: Structure | undefined

@@ -13,7 +13,7 @@ export type BuildMazeGridParams = {
   startPositionConstraint: StartPositionConstraint
 }
 
-export type StairPositionConstraint = 'deadEnd' | 'horizontalExit'
+export type StairPositionConstraint = 'deadEnd' | 'exit'
 export type StartPositionConstraint = 'evenPositionCellExceptStair' | 'shouldFaceCorridorWall'
 
 export class BuildMazeGridError extends Error {}

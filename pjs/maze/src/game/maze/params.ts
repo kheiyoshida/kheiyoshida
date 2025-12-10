@@ -1,22 +1,21 @@
 import { clamp, randomFloatBetween, randomIntInclusiveBetween } from 'utils'
 import { MaxFloorSize } from '../../config'
-import {
-  BuildMazeGridParams,
-  StairPositionConstraint,
-  StartPositionConstraint,
-} from '../../core/level/builder'
+import { BuildMazeGridParams } from '../../core/level/builder'
 import { StructureContext } from '../world/types.ts'
+import { getStairSpec } from './stair.ts'
 
 export const paramBuild = (level: number, structureContext: StructureContext): BuildMazeGridParams => {
   const size = getLevelSize(level)
   const fillRate = getFillRate(level)
   const connRate = getConnectionRate(level)
+  const stairSpec = getStairSpec(structureContext)
   return {
     size,
     fillRate,
     connRate,
-    stairPositionConstraint: getStairConstraint(structureContext),
-    startPositionConstraint: getStartPositionConstraint(structureContext),
+    // stairPositionConstraint: stairSpec.position,
+    stairPositionConstraint: 'deadEnd',
+    startPositionConstraint: 'shouldFaceCorridorWall',
   }
 }
 
@@ -30,8 +29,8 @@ const getLevelSize = (floor: number): number => {
   }
 }
 
-const DefaultFillRate = 0.44
-const MaxFillRate = 0.88
+const DefaultFillRate = 0.4
+const MaxFillRate = 0.66
 
 const getFillRate = (floor: number): number => {
   if (floor % 10 === 0) return 0.25
@@ -59,14 +58,4 @@ const getConnectionRate = (floor: number): number => {
       0.3,
       0.8
     )
-}
-
-const getStairConstraint = (ctx: StructureContext): StairPositionConstraint => {
-  if (ctx.current === 'poles' && ctx.next === 'poles') return 'deadEnd'
-  return 'deadEnd'
-}
-
-const getStartPositionConstraint = (ctx: StructureContext): StartPositionConstraint => {
-  if (ctx.prev !== ctx.current) return 'evenPositionCellExceptStair'
-  return 'shouldFaceCorridorWall'
 }

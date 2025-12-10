@@ -1,35 +1,18 @@
 import { AlternativeViewService } from './corridor.ts'
 import { Maze } from '../../../../game/maze'
-import { StageContext } from '../../../../game/stage'
 import { buildViewGrid } from './get.ts'
 import { ViewX, ViewY, ViewZ } from './view.ts'
 import { IMazeObject } from '../../../../game/maze/physical/object.ts'
-import { Atmosphere } from '../../../../game/world/types.ts'
-import { VerticalLayer } from '../../../../game/maze/physical/grid.ts'
 
 describe(`corridor service`, () => {
   it(`can combine corridor view with the next level's initial view`, () => {
-    const maze = new Maze(
-      new StageContext([
-        {
-          startLevel: 0,
-          endLevel: 10,
-          number: 0,
-          world: {
-            atmosphere: Atmosphere.atmospheric,
-            structure: 'tiles',
-            ambience: 5,
-          },
-        },
-      ]),
-      () => ({
-        size: 5,
-        fillRate: 0.5,
-        connRate: 0.5,
-        startPositionConstraint: 'shouldFaceCorridorWall',
-        stairPositionConstraint: 'deadEnd',
-      })
-    )
+    const maze = new Maze(() => ({
+      size: 5,
+      fillRate: 0.5,
+      connRate: 0.5,
+      startPositionConstraint: 'shouldFaceCorridorWall',
+      stairPositionConstraint: 'deadEnd',
+    }))
     maze.setNextLevel()
     expect(maze.currentLevel.physicalGrid.sizeZ).toBe(5)
 

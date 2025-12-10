@@ -1,7 +1,8 @@
 import { Structure, StructureContext } from '../world/types.ts'
+import { StairPositionConstraint } from '../../core/level/builder'
 
 export type StairType = 'stair' | 'lift' | 'path'
-export type StairPosition = 'deadEnd' | 'exit'
+export type StairPosition = StairPositionConstraint
 
 export type StairSpec = {
   position: StairPosition
@@ -11,13 +12,13 @@ export type StairSpec = {
 type StructureType = 'stacked' | 'classic' | 'floating'
 const classify = (structure: Structure): StructureType => {
   switch (structure) {
-    case 'stackableBox':
+    case 'stackedBoxes':
       return 'stacked'
     case 'poles':
       return 'stacked'
     case 'classic':
       return 'classic'
-    case 'floatingBox':
+    case 'floatingBoxes':
       return 'floating'
     case 'tiles':
       return 'floating'

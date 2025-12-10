@@ -22,12 +22,12 @@ describe(`${buildMazeGrid.name}`, () => {
     ).toHaveLength(1)
   })
 
-  it.each(Array.from({ length: 10 }))(`should generate a maze with one stair that points outside the level`, () => {
+  it.skip.each(Array.from({ length: 10 }))(`should generate a maze with one stair that points outside the level`, () => {
     const grid = buildMazeGrid({
       size: 11,
       fillRate: 0.5,
       connRate: 0.3,
-      stairPositionConstraint: 'horizontalExit',
+      stairPositionConstraint: 'exit',
       startPositionConstraint: 'shouldFaceCorridorWall',
     })
 

@@ -14,6 +14,6 @@ export const gridConverterMap: Record<Structure, GridConverter> = {
   classic: classicGridConverter,
   poles: polesGridConverter,
   tiles: tilesGridConverter,
-  floatingBox: floatingBoxConverter,
-  stackableBox: stackableBoxConverter
+  floatingBoxes: floatingBoxConverter,
+  stackedBoxes: stackableBoxConverter
 }

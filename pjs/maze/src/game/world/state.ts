@@ -20,8 +20,8 @@ export class WorldState {
   public get structure(): Structure {
     if (this.density > 0.8) return 'classic'
     if (this.density > 0.5) {
-      if (this.gravity < 0.5) return 'floatingBox'
-      else return 'stackableBox'
+      if (this.gravity < 0.5) return 'floatingBoxes'
+      else return 'stackedBoxes'
     } else {
       if (this.gravity < 0.5) return 'tiles'
       else return 'poles'

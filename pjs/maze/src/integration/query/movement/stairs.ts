@@ -27,8 +27,8 @@ export const getGoDownstairsAnimationType = (
   if (current == 'classic') return 'descent'
   if (current == 'tiles') return 'lift'
   if (current == 'poles') return 'proceed'
-  if (current == 'floatingBox') return 'warp'
-  if (current == 'stackableBox') return 'descent'
+  if (current == 'floatingBoxes') return 'warp'
+  if (current == 'stackedBoxes') return 'descent'
   throw Error(`unknown structure: ${current}`)
 }
 

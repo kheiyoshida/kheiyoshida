@@ -11,7 +11,7 @@ export const setStairMethods: Record<StairPositionConstraint, (grid: MazeGrid) =
     const stairPos = randomItemFromArray(deadEnds)
     grid.get(stairPos)!.type = 'stair'
   },
-  horizontalExit: (grid) => {
+  exit: (grid) => {
     const deadEnds = grid.getDeadEnds()
     if (deadEnds.length === 0) throw new BuildMazeGridError(`no dead ends found`)
 

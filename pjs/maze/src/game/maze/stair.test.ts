@@ -3,7 +3,7 @@ import { Structure } from '../world/types.ts'
 
 test.each<[from: Structure, toStacked: StairSpec, toClassic: StairSpec, toFloating: StairSpec]>([
   [
-    'stackableBox',
+    'stackedBoxes',
     { position: 'exit', type: 'stair' },
     { position: 'exit', type: 'path' },
     { position: 'deadEnd', type: 'lift' },
@@ -15,13 +15,13 @@ test.each<[from: Structure, toStacked: StairSpec, toClassic: StairSpec, toFloati
     { position: 'deadEnd', type: 'lift' },
   ],
   [
-    'floatingBox',
+    'floatingBoxes',
     { position: 'exit', type: 'stair' },
     { position: 'exit', type: 'path' },
     { position: 'deadEnd', type: 'lift' },
   ],
 ])(`${getStairSpec.name}`, (from, toStacked, toClassic, toFloating) => {
-  expect(getStairSpec({ prev: undefined, current: from, next: 'stackableBox' })).toMatchObject(toStacked)
+  expect(getStairSpec({ prev: undefined, current: from, next: 'stackedBoxes' })).toMatchObject(toStacked)
   expect(getStairSpec({ prev: undefined, current: from, next: 'classic' })).toMatchObject(toClassic)
-  expect(getStairSpec({ prev: undefined, current: from, next: 'floatingBox' })).toMatchObject(toFloating)
+  expect(getStairSpec({ prev: undefined, current: from, next: 'floatingBoxes' })).toMatchObject(toFloating)
 })

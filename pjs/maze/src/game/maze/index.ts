@@ -1,7 +1,7 @@
 import { MazeLevel } from './level.ts'
 import { BuildMazeGridParams } from '../../core/level/builder'
-import { StageContext } from '../stage'
 import { StructureContext } from '../world/types.ts'
+import { WorldProvider } from '../world'
 
 /**
  * manages maze grids over levels
@@ -11,8 +11,8 @@ export class Maze {
   private _level!: MazeLevel
 
   constructor(
-    private stages: StageContext,
-    private buildParams: (level: number, structureContext: StructureContext) => BuildMazeGridParams
+    private buildParams: (level: number, structureContext: StructureContext) => BuildMazeGridParams,
+    private worldProvider: WorldProvider = new WorldProvider()
   ) {}
 
   // debugging params
@@ -20,27 +20,23 @@ export class Maze {
 
   setNextLevel() {
     this._levelNumber++
+    this.worldProvider.generateWorld(this._levelNumber)
     const params = this.buildParams(this._levelNumber, this.structureContext)
+    // console.log({ level: this._levelNumber, params })
     this._level = MazeLevel.build(params, this.structureContext)
     this.debugParams = params
   }
 
   get structureContext(): StructureContext {
-    return {
-      prev: this.stages.getWorld(this._levelNumber - 1)?.structure,
-      current: this.stages.getWorld(this._levelNumber)!.structure,
-      next: this.stages.getWorld(this._levelNumber + 1)?.structure,
-    }
+    return this.worldProvider.getStructureContext(this._levelNumber)
   }
 
   get currentWorld() {
-    return this.stages.getWorld(this._levelNumber)
+    return this.worldProvider.getWorld(this._levelNumber)
   }
 
-  restart(floorStages?: StageContext) {
-    if (floorStages) {
-      this.stages = floorStages
-    }
+  restart() {
+    this.worldProvider = new WorldProvider()
     this._levelNumber = 0
   }
 

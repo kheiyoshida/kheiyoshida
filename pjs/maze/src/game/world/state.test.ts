@@ -22,8 +22,8 @@ describe(`${WorldState.name}`, () => {
 
   it(`provides structure for the state`, () => {
     expect(new WorldState(0.82, 0.5).structure).toBe('classic')
-    expect(new WorldState(0.55, 0.23).structure).toBe('floatingBox' as Structure)
-    expect(new WorldState(0.55, 0.83).structure).toBe('stackableBox' as Structure)
+    expect(new WorldState(0.55, 0.23).structure).toBe('floatingBoxes' as Structure)
+    expect(new WorldState(0.55, 0.83).structure).toBe('stackedBoxes' as Structure)
     expect(new WorldState(0.33, 0.23).structure).toBe('tiles' as Structure)
     expect(new WorldState(0.33, 0.88).structure).toBe('poles' as Structure)
   })
