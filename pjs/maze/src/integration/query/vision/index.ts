@@ -3,7 +3,7 @@ import { EffectParams, getEffectParams } from './effect.ts'
 import { ColorParams } from './color/types.ts'
 import { getColorParams } from './color'
 import { getScreenEffectParams, ScreenEffectParams } from './screenEffect.ts'
-import { Atmosphere } from '../../../game/world'
+import { Atmosphere } from '../../../game/world/types.ts'
 import { game } from '../../../game'
 import { debugRenderingMode } from '../../../config/debug.ts'
 

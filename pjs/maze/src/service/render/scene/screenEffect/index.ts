@@ -8,7 +8,7 @@ import {
 } from './effects.ts'
 import { ScreenEffectParams } from '../../../../integration/query'
 import { Color } from 'maze-gl'
-import { Atmosphere } from '../../../../game/world'
+import { Atmosphere } from '../../../../game/world/types.ts'
 
 export type ScreenEffectType = 'atmospheric' | 'smooth' | 'ambient' | 'digital' | 'abstract'
 

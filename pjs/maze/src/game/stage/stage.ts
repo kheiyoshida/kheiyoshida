@@ -8,7 +8,7 @@ import {
   randomIntInclusiveBetween,
 } from 'utils'
 import { debugStructure, InitialStyle } from '../../config/debug.ts'
-import { Ambience, Atmosphere, Structure } from '../world'
+import { Ambience, Atmosphere, Structure } from '../world/types.ts'
 
 export const InitialNumOfStages = 20
 

@@ -1,7 +1,7 @@
 import { MazeGrid } from '../../core/level/grid.ts'
 import { buildMazeGrid, BuildMazeGridParams } from '../../core/level/builder'
 import { PhysicalMazeGrid } from './physical/grid.ts'
-import { StructureContext } from '../world'
+import { StructureContext } from '../world/types.ts'
 import { getPhysicalStairType } from './physical/stair.ts'
 
 export class MazeLevel {

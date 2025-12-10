@@ -3,7 +3,7 @@ import { StructureData } from '../../../integration/query'
 import { composeSceneObject } from '../object'
 import { translateScaffoldParams } from '../scaffold/values.ts'
 import { scaffold } from '../scaffold'
-import { Atmosphere } from '../../../game/world'
+import { Atmosphere } from '../../../game/world/types.ts'
 
 export const getUnits = (
   mode: Atmosphere,

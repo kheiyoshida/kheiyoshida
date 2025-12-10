@@ -1,5 +1,5 @@
 import { buildStages, stageModeMap } from './stage.ts'
-import { Atmosphere } from '../world'
+import { Atmosphere } from '../world/types.ts'
 
 // use case changed
 describe.skip(`${buildStages.name}`, () => {

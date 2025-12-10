@@ -5,7 +5,7 @@ import { buildViewGrid } from './get.ts'
 import { PhysicalMazeGrid } from '../../../../game/maze/physical/grid.ts'
 import { Maze } from '../../../../game/maze'
 import { game } from '../../../../game'
-import { Structure } from '../../../../game/world'
+import { Structure } from '../../../../game/world/types.ts'
 
 const NumericalRepresentationMap = {
   0: null,

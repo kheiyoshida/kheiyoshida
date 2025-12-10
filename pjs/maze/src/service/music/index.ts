@@ -3,7 +3,7 @@ import { RenderHandler } from '../consumer'
 
 import { MusicRange } from '../../integration/query'
 
-import { Atmosphere } from '../../game/world'
+import { Atmosphere } from '../../game/world/types.ts'
 
 let buffer: [MusicRange, MusicRange]
 let changeModeRequired = false

@@ -4,7 +4,7 @@ import { StageContext } from '../../../../game/stage'
 import { buildViewGrid } from './get.ts'
 import { ViewX, ViewY, ViewZ } from './view.ts'
 import { IMazeObject } from '../../../../game/maze/physical/object.ts'
-import { Atmosphere } from '../../../../game/world'
+import { Atmosphere } from '../../../../game/world/types.ts'
 import { VerticalLayer } from '../../../../game/maze/physical/grid.ts'
 
 describe(`corridor service`, () => {

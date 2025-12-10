@@ -2,7 +2,7 @@ import { makeColorScheme } from './scheme.ts'
 import { getMeshMaterial } from '../object/material'
 import { FloorColorParams, FrameColorParams } from '../../../integration/query/vision/color/types.ts'
 
-import { Atmosphere } from '../../../game/world'
+import { Atmosphere } from '../../../game/world/types.ts'
 
 export * from './types'
 

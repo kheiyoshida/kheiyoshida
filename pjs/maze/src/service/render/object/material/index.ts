@@ -2,7 +2,7 @@ import { getShader, MaterialShaderType, RenderingModeShaderTypeMap } from './sha
 import { getGL } from 'maze-gl/src/webgl'
 import { DefaultMaterial, DistinctMaterial, MeshMaterial } from './materials.ts'
 import { randomFloatBetween } from 'utils'
-import { Atmosphere } from '../../../../game/world'
+import { Atmosphere } from '../../../../game/world/types.ts'
 
 export type MaterialType = 'default' | 'distinct'
 

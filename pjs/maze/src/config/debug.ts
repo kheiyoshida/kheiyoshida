@@ -1,7 +1,7 @@
-import { Atmosphere, Structure } from '../game/world'
+import { Atmosphere, Structure } from '../game/world/types.ts'
 import { Pivot } from '../game/stage/stage.ts'
 
-export const debugRenderingMode: Atmosphere | undefined = Atmosphere.digital
+export const debugRenderingMode: Atmosphere | undefined = Atmosphere.smooth
 
 export const debugStructure: Structure | undefined = 'classic'
 

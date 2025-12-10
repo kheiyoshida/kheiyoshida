@@ -1,4 +1,4 @@
-import { Structure } from '../../world'
+import { Structure } from '../../world/types.ts'
 
 export type PhysicalStairType = 'normal' | 'warp'
 

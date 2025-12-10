@@ -2,7 +2,7 @@ import { MazeModel } from 'maze-gl'
 import { getMeshMaterial, MaterialType } from './material'
 import { generateGeometry, ModelCode } from 'maze-models'
 import { ModelId } from '../../../game/maze/physical/models.ts'
-import { Atmosphere } from '../../../game/world'
+import { Atmosphere } from '../../../game/world/types.ts'
 
 type CompositeMeshKey = `${Atmosphere}:${ModelCode}_${number}`
 

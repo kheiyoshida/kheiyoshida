@@ -3,7 +3,7 @@ import { MazeBlock } from './block.ts'
 import { MazeGrid } from '../../../core/level/grid.ts'
 import { gridConverterMap } from './converters'
 import { Position2D } from '../../../core/grid/position2d.ts'
-import { Structure } from '../../world'
+import { Structure } from '../../world/types.ts'
 import { PhysicalStairType } from './stair.ts'
 
 export enum VerticalLayer {

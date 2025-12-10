@@ -3,7 +3,7 @@ import { ObjectTransform, SceneObject } from 'maze-gl'
 import { randomFloatBetween } from 'utils'
 import { MazeObject } from '../../../game/maze/physical/object.ts'
 import { NESW } from '../../../core/grid/direction.ts'
-import { Atmosphere } from '../../../game/world'
+import { Atmosphere } from '../../../game/world/types.ts'
 
 export const composeSceneObject = (mode: Atmosphere) => (obj: MazeObject) => {
   const {

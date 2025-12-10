@@ -1,5 +1,5 @@
 import { Stage, StageContext } from './index.ts'
-import { Atmosphere } from '../world'
+import { Atmosphere } from '../world/types.ts'
 import * as stage from './stage.ts'
 
 describe(`${StageContext.name}`, () => {

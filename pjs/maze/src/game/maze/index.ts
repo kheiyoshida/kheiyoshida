@@ -1,7 +1,7 @@
 import { MazeLevel } from './level.ts'
 import { BuildMazeGridParams } from '../../core/level/builder'
 import { StageContext } from '../stage'
-import { StructureContext } from '../world'
+import { StructureContext } from '../world/types.ts'
 
 /**
  * manages maze grids over levels

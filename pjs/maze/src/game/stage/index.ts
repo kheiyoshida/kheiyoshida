@@ -1,4 +1,4 @@
-import { World } from '../world'
+import { World } from '../world/types.ts'
 import { buildStages } from './stage.ts'
 
 export type Stage = {

@@ -1,5 +1,5 @@
 import { game } from '../../../game'
-import { Structure } from '../../../game/world'
+import { Structure } from '../../../game/world/types.ts'
 
 export type GoDownstairsAnimationType = 'descent' | 'lift' | 'proceed' | 'warp'
 

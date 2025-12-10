@@ -5,7 +5,7 @@ import {
   StairPositionConstraint,
   StartPositionConstraint,
 } from '../../core/level/builder'
-import { StructureContext } from '../world'
+import { StructureContext } from '../world/types.ts'
 
 export const paramBuild = (level: number, structureContext: StructureContext): BuildMazeGridParams => {
   const size = getLevelSize(level)
