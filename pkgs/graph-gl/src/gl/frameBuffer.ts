@@ -64,9 +64,31 @@ export class FrameBuffer {
 
     gl.drawBuffers(this.normalTexture ? [gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1] : [gl.COLOR_ATTACHMENT0])
 
+    this.validateFrameBufferStatus()
+
     gl.bindFramebuffer(gl.FRAMEBUFFER, null)
 
+    // prepare pixel array
     this.pixels = new Uint8Array(width * height * 4) // 4 values per rgba
+  }
+
+  private gl = getGL()
+
+  private validateFrameBufferStatus() {
+    const status = this.gl.checkFramebufferStatus(this.gl.FRAMEBUFFER)
+    if (status !== this.gl.FRAMEBUFFER_COMPLETE) {
+      if (status === this.gl.FRAMEBUFFER_INCOMPLETE_ATTACHMENT) {
+        throw Error('Framebuffer incomplete: Attachment is missing or invalid')
+      } else if (status === this.gl.FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT) {
+        throw Error('Framebuffer incomplete: No attachments')
+      } else if (status === this.gl.FRAMEBUFFER_INCOMPLETE_DIMENSIONS) {
+        throw Error('Framebuffer incomplete: Attachments have different dimensions')
+      } else if (status === this.gl.FRAMEBUFFER_UNSUPPORTED) {
+        throw Error('Framebuffer incomplete: Unsupported configuration')
+      } else {
+        throw Error(`Framebuffer incomplete: Unknown error ${status.toString(16)}`)
+      }
+    }
   }
 
   /**
