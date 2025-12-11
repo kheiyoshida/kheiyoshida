@@ -35,6 +35,6 @@ export const DefaultTurnFrames = 4
 export const GoDownstairsFramesLength = 32
 
 /**
- * the maximum rooms in a row/col in a floor
+ * the maximum floors in a row/col in a level
  */
-export const MaxFloorSize = 26
+export const MaxFloorSize = 25

@@ -1,7 +1,7 @@
 import { connectCells } from './connect.ts'
-import { findPath } from '../path.ts'
-import { makeTestGrid, visualizeGridWithSymbols } from '../../../__test__/grid/visualise.ts'
-import { equals } from '../../grid/position2d.ts'
+import { findPath } from '../../path.ts'
+import { makeTestGrid, visualizeGridWithSymbols } from '../../../../__test__/grid/visualise.ts'
+import { equals } from '../../../grid/position2d.ts'
 
 describe(`${connectCells.name}`, () => {
   it(`should connect cells so that every cell is reachable from every other cell`, () => {

@@ -2,7 +2,7 @@ import { MazeGrid } from './grid.ts'
 
 import { equals, getAdjacent, Position2D } from '../grid/position2d.ts'
 import { NESW } from '../grid/direction.ts'
-import { PositionSet } from './builder/set.ts'
+import { PositionSet } from '../grid/positionSet.ts'
 
 /**
  * find a path in the given grid from start to end using BFS algorithm

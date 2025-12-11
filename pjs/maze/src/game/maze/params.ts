@@ -19,13 +19,15 @@ export const paramBuild = (level: number, structureContext: StructureContext): B
   }
 }
 
-export const InitialSize = 12
+export const InitialSize = 7 // 4 * 2 - 1
+
+const oddize = (n: number) => n % 2 === 0 ? n - 1 : n
 
 const getLevelSize = (floor: number): number => {
   if (floor < MaxFloorSize - InitialSize) {
-    return randomIntInclusiveBetween(InitialSize, InitialSize + floor * 2)
+    return oddize(randomIntInclusiveBetween(InitialSize, InitialSize + floor))
   } else {
-    return randomIntInclusiveBetween(MaxFloorSize - 4, MaxFloorSize)
+    return oddize(randomIntInclusiveBetween(MaxFloorSize - 8, MaxFloorSize))
   }
 }
 

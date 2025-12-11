@@ -1,8 +1,10 @@
-import { BuildMazeGridError, StairPositionConstraint, StartPositionConstraint } from './index.ts'
+import { StairPositionConstraint, StartPositionConstraint } from './index.ts'
 import { MazeGrid } from '../grid.ts'
 import { fireByRate, randomItemFromArray } from 'utils'
 import { getPositionInDirection } from '../../grid/position2d.ts'
 import { getTurnedDirection, NESW } from '../../grid/direction.ts'
+
+export class BuildMazeGridError extends Error {}
 
 export const setStairMethods: Record<StairPositionConstraint, (grid: MazeGrid) => void> = {
   deadEnd: (grid) => {

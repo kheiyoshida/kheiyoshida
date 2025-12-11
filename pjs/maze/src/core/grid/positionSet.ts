@@ -1,4 +1,4 @@
-import { Position2D } from '../../grid/position2d.ts'
+import { Position2D } from './position2d.ts'
 
 const positionKey = (pos: Position2D) => `${pos.x},${pos.y}`
 type PositionKey = ReturnType<typeof positionKey>

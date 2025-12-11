@@ -1,5 +1,5 @@
-import { MazeGrid } from '../grid.ts'
-import { MazeCell } from '../cell.ts'
+import { MazeGrid } from '../../grid.ts'
+import { MazeCell } from '../../cell.ts'
 
 /**
  * seed floor cells in classic style.

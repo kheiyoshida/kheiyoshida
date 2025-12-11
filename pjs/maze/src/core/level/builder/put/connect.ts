@@ -1,6 +1,6 @@
-import { MazeGrid } from '../grid.ts'
-import { distance, isEven, Position2D } from '../../grid/position2d.ts'
-import { PositionSet } from './set.ts'
+import { MazeGrid } from '../../grid.ts'
+import { distance, isEven, Position2D } from '../../../grid/position2d.ts'
+import { PositionSet } from '../../../grid/positionSet.ts'
 import { fireByRate } from 'utils'
 
 /**

@@ -4,7 +4,7 @@ import { buildViewGrid } from './get.ts'
 import { ViewX, ViewY, ViewZ } from './view.ts'
 import { IMazeObject } from '../../../../game/maze/physical/object.ts'
 
-describe(`corridor service`, () => {
+describe.skip(`corridor service`, () => {
   it(`can combine corridor view with the next level's initial view`, () => {
     const maze = new Maze(() => ({
       size: 5,

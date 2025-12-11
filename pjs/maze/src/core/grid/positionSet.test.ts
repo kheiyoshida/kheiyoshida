@@ -1,4 +1,4 @@
-import { PositionSet } from './set.ts'
+import { PositionSet } from './positionSet.ts'
 
 describe(`${PositionSet.name}`, () => {
   it(`behaves as a set for anonymous Position2D objects`, () => {

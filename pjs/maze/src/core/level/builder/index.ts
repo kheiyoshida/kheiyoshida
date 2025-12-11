@@ -1,14 +1,16 @@
 import { MazeGrid } from '../grid.ts'
-import { seedCells } from './seed.ts'
-import { connectCells } from './connect.ts'
+import { seedCells } from './put/seed.ts'
+import { connectCells } from './put/connect.ts'
 import { setStairMethods, setStartMethods } from './extras.ts'
+import { MazeBuilder } from './builder.ts'
 
-const BuildRetryLimit = 20
-
-export type BuildMazeGridParams = {
+export type MazeParams = {
   size: number
   fillRate: number
   connRate: number
+}
+
+export type BuildMazeGridParams = MazeParams & {
   stairPositionConstraint: StairPositionConstraint
   startPositionConstraint: StartPositionConstraint
 }
@@ -16,28 +18,25 @@ export type BuildMazeGridParams = {
 export type StairPositionConstraint = 'deadEnd' | 'exit'
 export type StartPositionConstraint = 'evenPositionCellExceptStair' | 'shouldFaceCorridorWall'
 
-export class BuildMazeGridError extends Error {}
-
-export const buildMazeGrid = (params: BuildMazeGridParams, retry = 0): MazeGrid => {
-  const { size, fillRate, connRate } = params
-  const grid = new MazeGrid(size, size)
-  seedCells(grid, fillRate)
-  connectCells(grid, connRate)
-
-  try {
-    setStairMethods[params.stairPositionConstraint](grid)
-    setStartMethods[params.startPositionConstraint](grid)
-  } catch (e) {
-    if (retry < BuildRetryLimit) return buildMazeGrid(adjustParams(params), retry + 1)
-    else throw Error(`could not build valid matrix`)
+export const buildMazeGrid = (params: BuildMazeGridParams): MazeGrid => {
+  const putCells = (grid: MazeGrid, fillRate: number, connRate: number) => {
+    seedCells(grid, fillRate)
+    connectCells(grid, connRate)
   }
 
-  return grid
+  const builder = new MazeBuilder(
+    putCells,
+    setStairMethods[params.stairPositionConstraint],
+    setStartMethods[params.startPositionConstraint],
+    adjustParams
+  )
+
+  return builder.build(params)
 }
 
-const adjustParams = (params: BuildMazeGridParams): BuildMazeGridParams => {
+const adjustParams = (params: MazeParams): MazeParams => {
   return {
     ...params,
-    size: params.size + 1, // TODO: level gets too big
+    size: params.size + 2, // TODO: level gets too big
   }
 }
