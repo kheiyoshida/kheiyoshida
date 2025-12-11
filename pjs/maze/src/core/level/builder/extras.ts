@@ -30,7 +30,7 @@ export const setStairMethods: Record<StairPositionConstraint, (grid: MazeGrid) =
 
       if (isPathClear) {
         grid.get(deadEnd)!.type = 'stair'
-        break
+        return
       }
     }
 

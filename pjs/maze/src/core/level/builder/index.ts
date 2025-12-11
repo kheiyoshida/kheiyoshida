@@ -1,8 +1,7 @@
 import { MazeGrid } from '../grid.ts'
-import { seedCells } from './put/seed.ts'
-import { connectCells } from './put/connect.ts'
 import { setStairMethods, setStartMethods } from './extras.ts'
 import { MazeBuilder } from './builder.ts'
+import { putCellsWithExit, putCellsWithoutConstraints } from './put'
 
 export type MazeParams = {
   size: number
@@ -19,13 +18,8 @@ export type StairPositionConstraint = 'deadEnd' | 'exit'
 export type StartPositionConstraint = 'evenPositionCellExceptStair' | 'shouldFaceCorridorWall'
 
 export const buildMazeGrid = (params: BuildMazeGridParams): MazeGrid => {
-  const putCells = (grid: MazeGrid, fillRate: number, connRate: number) => {
-    seedCells(grid, fillRate)
-    connectCells(grid, connRate)
-  }
-
   const builder = new MazeBuilder(
-    putCells,
+    params.stairPositionConstraint === 'exit' ? putCellsWithExit : putCellsWithoutConstraints,
     setStairMethods[params.stairPositionConstraint],
     setStartMethods[params.startPositionConstraint],
     adjustParams
@@ -37,6 +31,7 @@ export const buildMazeGrid = (params: BuildMazeGridParams): MazeGrid => {
 const adjustParams = (params: MazeParams): MazeParams => {
   return {
     ...params,
-    size: params.size + 2, // TODO: level gets too big
+    fillRate: Math.max(0.1, params.fillRate * 0.9),
+    size: params.size,
   }
 }

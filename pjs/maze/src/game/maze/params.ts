@@ -13,8 +13,7 @@ export const paramBuild = (level: number, structureContext: StructureContext): B
     size,
     fillRate,
     connRate,
-    // stairPositionConstraint: stairSpec.position,
-    stairPositionConstraint: 'deadEnd',
+    stairPositionConstraint: stairSpec.position,
     startPositionConstraint: 'shouldFaceCorridorWall',
   }
 }

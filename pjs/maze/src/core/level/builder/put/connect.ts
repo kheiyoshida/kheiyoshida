@@ -2,6 +2,7 @@ import { MazeGrid } from '../../grid.ts'
 import { distance, isEven, Position2D } from '../../../grid/position2d.ts'
 import { PositionSet } from '../../../grid/positionSet.ts'
 import { fireByRate } from 'utils'
+import { isOuterCircle } from './seed.ts'
 
 /**
  * connect cells so that each cell has at least one path to every other cell
@@ -63,7 +64,7 @@ const shortestPathBetweenClusters = (
 
 const randomConnect = (grid: MazeGrid, connRate: number) => {
   grid.iterateItems((_, pos) => {
-    if (isEven(pos) && fireByRate(connRate)) {
+    if (isEven(pos) && !isOuterCircle(grid.sizeX, pos) && fireByRate(connRate)) {
       grid.connect(pos, grid.getRandomEvenPosition())
     }
   })

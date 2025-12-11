@@ -1,5 +1,6 @@
 import { buildMazeGrid } from './index.ts'
 import { getPositionInDirection } from '../../grid/position2d.ts'
+import { visualizeGridWithSymbols } from '../../../__test__/grid/visualise.ts'
 
 describe(`${buildMazeGrid.name}`, () => {
   it(`should generate a maze with one stair at a dead end position and one start cell with wall facing direction`, () => {
@@ -22,14 +23,16 @@ describe(`${buildMazeGrid.name}`, () => {
     ).toHaveLength(1)
   })
 
-  it.skip.each(Array.from({ length: 10 }))(`should generate a maze with one stair that points outside the level`, () => {
+  it.only.each(Array.from({ length: 10 }))(`should generate a maze with one stair that points outside the level`, () => {
     const grid = buildMazeGrid({
       size: 11,
-      fillRate: 0.5,
+      fillRate: 0.3,
       connRate: 0.3,
       stairPositionConstraint: 'exit',
       startPositionConstraint: 'shouldFaceCorridorWall',
     })
+
+    // console.log(visualizeGridWithSymbols(grid))
 
     const stairCellPos = grid.findPosition((pos, cell) => cell !== null && cell.type === 'stair')!
     const stairDir = grid.getDeadEndDirection(stairCellPos)

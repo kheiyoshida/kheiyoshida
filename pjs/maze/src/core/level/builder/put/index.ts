@@ -1,16 +1,24 @@
 import { MazeGrid } from '../../grid.ts'
-import { StairPositionConstraint } from '../index.ts'
-import { seedCells } from './seed.ts'
+import { seedCells, seedOuterCells } from './seed.ts'
 import { connectCells } from './connect.ts'
 
 export type PutCellsMethod = (grid: MazeGrid, fillRate: number, connRate: number) => void
 
-export const putCellsMethods: Record<StairPositionConstraint, PutCellsMethod> = {
-  deadEnd: (grid: MazeGrid, fillRate: number, connRate: number): void => {
-    seedCells(grid, fillRate)
-    connectCells(grid, connRate)
-  },
-  exit: (grid: MazeGrid, fillRate: number, connRate: number): void => {
-    // TODO: implement
-  },
+export const putCellsWithoutConstraints: PutCellsMethod = (
+  grid: MazeGrid,
+  fillRate: number,
+  connRate: number
+): void => {
+  seedCells(grid, fillRate)
+  connectCells(grid, connRate)
+}
+
+export const putCellsWithExit: PutCellsMethod = (
+  grid: MazeGrid,
+  fillRate: number,
+  connRate: number
+): void => {
+  seedCells(grid, fillRate, true)
+  seedOuterCells(grid, 2) // todo: consider the right number
+  connectCells(grid, connRate)
 }
