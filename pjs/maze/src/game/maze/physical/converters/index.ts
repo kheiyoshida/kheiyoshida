@@ -8,7 +8,16 @@ import { PhysicalStairType } from '../stair.ts'
 import { floatingBoxConverter } from './floatingBox.ts'
 import { stackableBoxConverter } from './stackableBox.ts'
 
-export type GridConverter = (grid: MazeGrid, stairType: PhysicalStairType) => PhysicalMazeGrid
+export type GridConverter = (
+  grid: MazeGrid,
+  params: PhysicalGridParams
+) => PhysicalMazeGrid
+
+export type PhysicalGridParams = {
+  stairType: PhysicalStairType
+  gravity: number
+  density: number
+}
 
 export const gridConverterMap: Record<Structure, GridConverter> = {
   classic: classicGridConverter,

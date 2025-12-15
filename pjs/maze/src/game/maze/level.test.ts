@@ -25,6 +25,10 @@ describe(`${MazeLevel.name}`, () => {
         prev: 'classic',
         current: 'classic',
         next: 'classic',
+      },
+      {
+        gravity: 0.5,
+        density: 0.5,
       }
     )
     const physicalGrid = level.physicalGrid

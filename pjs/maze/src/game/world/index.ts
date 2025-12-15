@@ -3,7 +3,7 @@ import { StructureContext, World } from './types.ts'
 import { getAtmosphere } from './atmosphere.ts'
 
 export class WorldProvider {
-  private state: WorldState = new WorldState()
+  public state: WorldState = new WorldState()
 
   public history: World[] = []
 

@@ -5,6 +5,7 @@ import { gridConverterMap } from './converters'
 import { Position2D } from '../../../core/grid/position2d.ts'
 import { Structure } from '../../world/types.ts'
 import { PhysicalStairType } from './stair.ts'
+import { IWorldState } from '../../world/state.ts'
 
 export enum VerticalLayer {
   Up2 = 0,
@@ -23,8 +24,13 @@ export class PhysicalMazeGrid extends Grid3D<MazeBlock> {
 
   static readonly VerticalSliceSize = 5
 
-  static convert(grid: MazeGrid, style: Structure, stairType: PhysicalStairType): PhysicalMazeGrid {
-    return gridConverterMap[style](grid, stairType)
+  static convert(
+    grid: MazeGrid,
+    style: Structure,
+    stairType: PhysicalStairType,
+    worldState: IWorldState
+  ): PhysicalMazeGrid {
+    return gridConverterMap[style](grid, { stairType, ...worldState })
   }
 
   getSliceByLogicalPosition(position: Position2D): VerticalGrid3DSlice<MazeBlock> {

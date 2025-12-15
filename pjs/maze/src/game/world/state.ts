@@ -1,7 +1,12 @@
 import { clamp, randomFloatInAsymmetricRange } from 'utils'
 import { Ambience, Structure } from './types.ts'
 
-export class WorldState {
+export type IWorldState = {
+  density: number
+  gravity: number
+}
+
+export class WorldState implements IWorldState {
   constructor(initialDensity = 1.0, initialGravity = 0.5) {
     this.density = initialDensity
     this.gravity = initialGravity
@@ -29,6 +34,6 @@ export class WorldState {
   }
 
   public get ambience(): Ambience {
-    return 10 - Math.min(9, Math.floor((this.gravity  * 9)) + 1) as Ambience
+    return (10 - Math.min(9, Math.floor(this.gravity * 9) + 1)) as Ambience
   }
 }
