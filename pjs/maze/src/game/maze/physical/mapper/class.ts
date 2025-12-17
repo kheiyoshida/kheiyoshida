@@ -37,4 +37,11 @@ export class ModelClassEmitter {
     }
     return null
   }
+
+  emitModelClassEnsured(avoidModelType: ModelType, retry = 0): ModelClass {
+    if (retry > 100) throw new Error('Retry of model class ensured')
+    const cls = this.emitModelClass(avoidModelType)
+    if (cls != null) return cls
+    return this.emitModelClassEnsured(avoidModelType, retry + 1)
+  }
 }

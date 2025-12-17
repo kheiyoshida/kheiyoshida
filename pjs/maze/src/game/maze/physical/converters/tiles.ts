@@ -11,36 +11,36 @@ export const tilesGridConverter: GridConverter = (grid, stairType) => {
     PhysicalMazeGrid.VerticalSliceSize
   )
 
-  grid.iterate((item, pos) => {
-    if (item?.type === 'floor') {
-      physicalGrid
-        .getSliceByLogicalPosition(pos)
-        .set(VerticalLayer.Down1, new MazeBlock([new MazeObject({ code: 'Tile' })]))
-    }
-    if (item?.type === 'stair') {
-      if (stairType === 'normal') {
-        physicalGrid
-          .getSliceByLogicalPosition(pos)
-          .set(VerticalLayer.Down1, new MazeBlock([new MazeObject({ code: 'StairTile' })]))
-
-        const stairDir = grid.getDeadEndDirection(pos)
-        const corridorLength = 4
-        for (let i = 1; i <= corridorLength; i++) {
-          const corridorPos = getPositionInDirection(pos, stairDir, i)
-          physicalGrid
-            .getSliceByLogicalPosition(corridorPos)
-            .set(VerticalLayer.Down2, new MazeBlock([new MazeObject({ code: 'BottomTile' })]))
-        }
-      } else {
-        physicalGrid
-          .getSliceByLogicalPosition(pos)
-          .set(VerticalLayer.Down1, new MazeBlock([new MazeObject('Tile')]))
-        physicalGrid
-          .getSliceByLogicalPosition(pos)
-          .set(VerticalLayer.Middle, new MazeBlock([new MazeObject('Warp')]))
-      }
-    }
-  })
+  // grid.iterate((item, pos) => {
+  //   if (item?.type === 'floor') {
+  //     physicalGrid
+  //       .getSliceByLogicalPosition(pos)
+  //       .set(VerticalLayer.Down1, new MazeBlock([new MazeObject({ code: 'Tile' })]))
+  //   }
+  //   if (item?.type === 'stair') {
+  //     if (stairType === 'normal') {
+  //       physicalGrid
+  //         .getSliceByLogicalPosition(pos)
+  //         .set(VerticalLayer.Down1, new MazeBlock([new MazeObject({ code: 'StairTile' })]))
+  //
+  //       const stairDir = grid.getDeadEndDirection(pos)
+  //       const corridorLength = 4
+  //       for (let i = 1; i <= corridorLength; i++) {
+  //         const corridorPos = getPositionInDirection(pos, stairDir, i)
+  //         physicalGrid
+  //           .getSliceByLogicalPosition(corridorPos)
+  //           .set(VerticalLayer.Down2, new MazeBlock([new MazeObject({ code: 'BottomTile' })]))
+  //       }
+  //     } else {
+  //       physicalGrid
+  //         .getSliceByLogicalPosition(pos)
+  //         .set(VerticalLayer.Down1, new MazeBlock([new MazeObject('Tile')]))
+  //       physicalGrid
+  //         .getSliceByLogicalPosition(pos)
+  //         .set(VerticalLayer.Middle, new MazeBlock([new MazeObject('Warp')]))
+  //     }
+  //   }
+  // })
 
   return physicalGrid
 }
