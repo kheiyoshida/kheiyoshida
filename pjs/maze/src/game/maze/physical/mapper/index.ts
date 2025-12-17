@@ -3,6 +3,7 @@ import { PhysicalMazeGrid } from '../grid'
 import { SliceMapper } from './slice.ts'
 import { Position2D } from '../../../../core/grid/position2d.ts'
 import { StairType } from '../../stair.ts'
+import { StairMapper } from './stair.ts'
 
 export type PhysicalGridParams = {
   stairType: StairType
@@ -12,6 +13,7 @@ export type PhysicalGridParams = {
 
 export const gridConverter = (grid: MazeGrid, params: PhysicalGridParams) => {
   const sliceMapper = new SliceMapper(params)
+  const stairMapper = new StairMapper(params)
 
   const physicalGrid = new PhysicalMazeGrid(
     grid.sizeX + PhysicalMazeGrid.SurroundingBlocks * 2,
@@ -47,12 +49,9 @@ export const gridConverter = (grid: MazeGrid, params: PhysicalGridParams) => {
   })
 
   if (stairPos !== undefined) {
-    const slice = physicalGrid.getVerticalSlice(stairPos)
-    sliceMapper.map(slice, 'stairSlice')
-
-    // TODO: construct the stair pathway
+    const dir = grid.getDeadEndDirection(stairPos)
+    stairMapper.mapStairSlices(physicalGrid, stairPos, dir)
   }
 
   return physicalGrid
 }
-

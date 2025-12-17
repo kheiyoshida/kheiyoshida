@@ -59,7 +59,7 @@ export class VerticalGrid3DSlice<Item> {
     this.items = Array.from({ length: sizeZ }).map(() => null)
   }
 
-  public set(index: number, item: Item) {
+  public set(index: number, item: Item | null) {
     if (index < 0 || index >= this.sizeZ) throw Error(`index out of bounds: ${index}`)
     this.items[index] = item
   }
