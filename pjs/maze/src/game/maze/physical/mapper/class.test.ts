@@ -1,0 +1,55 @@
+import { getModelWeight, ModelClassEmitter } from './class'
+
+describe(`${getModelWeight.name}`, () => {
+  test(`density and gravity should affect the ratio of model classes`, () => {
+    const r1 = getModelWeight(1, 0.5)
+    expect(r1.floatingBox).toBe(r1.stackedBox)
+    expect(r1.pole).toBe(0)
+    expect(r1.tile).toBe(0)
+
+    const r2 = getModelWeight(0.8, 0.5)
+    expect(r2.pole).toBe(0)
+    expect(r2.tile).toBe(0)
+
+    const r3 = getModelWeight(0.4, 0.5)
+    expect(r3.pole).toBeGreaterThan(0)
+    expect(r3.tile).toBeGreaterThan(0)
+
+    const r4 = getModelWeight(0.4, 0.8)
+    expect(r4.pole).toBeGreaterThan(r4.tile)
+    expect(r4.tile).toBeGreaterThan(0)
+  })
+})
+
+describe(`${ModelClassEmitter.name}`, () => {
+  test(`emit random model classes based on weight`, () => {
+    const emitter = new ModelClassEmitter({
+      floatingBox: 0.5,
+      stackedBox: 0.5,
+      pole: 0,
+      tile: 0,
+    })
+
+    // console.log((emitter as any).thresholds!)
+    for (let i = 0; i < 100; i++) {
+      expect(emitter.emitModelClass()).not.toBe('pole')
+      expect(emitter.emitModelClass()).not.toBe('tile')
+    }
+  })
+
+  it(`can avoid specified classes`, () => {
+    const emitter = new ModelClassEmitter({
+      floatingBox: 0.3,
+      stackedBox: 0.3,
+      pole: 0.2,
+      tile: 0.2,
+    })
+
+    // console.log((emitter as any).thresholds!)
+    for (let i = 0; i < 100; i++) {
+      const modelClass = emitter.emitModelClass('stacked')
+      expect(modelClass).not.toBe('stackedBox')
+      expect(modelClass).not.toBe('pole')
+    }
+  })
+})

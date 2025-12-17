@@ -1,0 +1,58 @@
+import { MazeGrid } from '../../../../core/level/grid'
+import { PhysicalMazeGrid } from '../grid'
+import { SliceMapper } from './slice.ts'
+import { Position2D } from '../../../../core/grid/position2d.ts'
+import { StairType } from '../../stair.ts'
+
+export type PhysicalGridParams = {
+  stairType: StairType
+  gravity: number
+  density: number
+}
+
+export const gridConverter = (grid: MazeGrid, params: PhysicalGridParams) => {
+  const sliceMapper = new SliceMapper(params)
+
+  const physicalGrid = new PhysicalMazeGrid(
+    grid.sizeX + PhysicalMazeGrid.SurroundingBlocks * 2,
+    grid.sizeY + PhysicalMazeGrid.SurroundingBlocks * 2,
+    PhysicalMazeGrid.VerticalSliceSize
+  )
+
+  // surrounding
+  physicalGrid.grid2D.iterate((block, pos) => {
+    if (
+      pos.x === PhysicalMazeGrid.SurroundingBlocks - 1 ||
+      pos.y === PhysicalMazeGrid.SurroundingBlocks - 1 ||
+      pos.x === grid.sizeX + PhysicalMazeGrid.SurroundingBlocks ||
+      pos.y === grid.sizeY + PhysicalMazeGrid.SurroundingBlocks
+    ) {
+      const slice = physicalGrid.getVerticalSlice(pos)
+      sliceMapper.map(slice, 'fillSlice')
+    }
+  })
+
+  let stairPos: Position2D | undefined = undefined
+
+  grid.iterate((cell, pos2d) => {
+    if (cell === null) {
+      const slice = physicalGrid.getVerticalSlice(pos2d)
+      sliceMapper.map(slice, 'nullSlice')
+    } else if (cell.type === 'floor') {
+      const slice = physicalGrid.getVerticalSlice(pos2d)
+      sliceMapper.map(slice, 'floorSlice')
+    } else if (cell.type === 'stair') {
+      stairPos = pos2d
+    }
+  })
+
+  if (stairPos !== undefined) {
+    const slice = physicalGrid.getVerticalSlice(stairPos)
+    sliceMapper.map(slice, 'stairSlice')
+
+    // TODO: construct the stair pathway
+  }
+
+  return physicalGrid
+}
+
