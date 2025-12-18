@@ -47,7 +47,7 @@ export const generateStackableBox: ModelGenerator<StackableBoxModelCode, Stackab
     triangulateFaces,
     deformGeometry((v) => [
       v[0] + (Math.random() - 0.5) * params.distortion,
-      v[1] + (Math.random() - 0.5) * params.distortion * 0.1,
+      v[1],
       v[2] + (Math.random() - 0.5) * params.distortion,
     ]),
     computeNormals(params.normalComputeType),

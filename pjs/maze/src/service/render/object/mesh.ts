@@ -14,14 +14,14 @@ const materialSpecificationMap: Partial<Record<ModelCode, MaterialType>> = {
 }
 
 export const getMesh = (model: ModelId, mode: Atmosphere): MazeModel => {
-  const {code, variant} = model
+  const { code, variant, length } = model
 
   const key: CompositeMeshKey = `${mode}:${code}_${variant ?? 0}`
 
   if (!meshMap.has(key)) {
     const materialType = materialSpecificationMap[code] || 'default'
     const material = getMeshMaterial(materialType, mode)
-    const geometry = generateGeometry(code)
+    const geometry = generateGeometry(code, length)
     const mesh = new MazeModel(material, geometry)
     meshMap.set(key, mesh)
   }

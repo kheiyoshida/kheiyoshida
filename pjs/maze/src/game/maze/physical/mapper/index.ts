@@ -30,7 +30,7 @@ export const gridConverter = (grid: MazeGrid, params: PhysicalGridParams) => {
       pos.y === grid.sizeY + PhysicalMazeGrid.SurroundingBlocks
     ) {
       const slice = physicalGrid.getVerticalSlice(pos)
-      sliceMapper.map(slice, 'fillSlice')
+      sliceMapper.map(slice, 'nullSlice')
     }
   })
 

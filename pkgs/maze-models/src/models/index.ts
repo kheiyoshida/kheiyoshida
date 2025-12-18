@@ -8,7 +8,7 @@ import { generateTile } from './generators/tile'
 
 export type { ModelCode } from './code'
 
-export const generateGeometry = (modelCode: ModelCode): GeometrySpec => {
+export const generateGeometry = (modelCode: ModelCode, length?: number): GeometrySpec => {
   if (isClassic(modelCode))
     return generateClassicModel(modelCode, {
       tesselation: 2,
@@ -32,13 +32,14 @@ export const generateGeometry = (modelCode: ModelCode): GeometrySpec => {
     })
 
   if (isPole(modelCode)) {
+
     return generatePole(modelCode, {
       type: 'pole',
-      radiusBase: 1,
+      radiusBase: 0.6,
       radiusDelta: 0.8,
       numOfCorners: 8,
-      heightBase: 8,
-      heightDelta: 4,
+      heightBase: 2, // will be overridden
+      heightDelta: 0,
       heightPerSegment: 0.5,
       segmentYDelta: 0.3,
       normalComputeType: 'preserve',

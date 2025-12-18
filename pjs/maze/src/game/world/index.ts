@@ -1,5 +1,5 @@
 import { WorldState } from './state.ts'
-import { Atmosphere, StructureContext, World } from './types.ts'
+import { StructureContext, World } from './types.ts'
 import { debugRenderingMode } from '../../config/debug.ts'
 import { getAtmosphere } from './atmosphere.ts'
 

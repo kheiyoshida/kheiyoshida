@@ -28,7 +28,7 @@ export class ModelEntity {
   }
 
   getModelCode(usage: ModelUsage = 'normal'): ModelCode {
-    return concreteModelCodeService[this.modelClass].getCode(usage)
+    return concreteModelCodeService[this.modelClass].getCode(usage, this.verticalLength)
   }
 }
 
@@ -45,8 +45,8 @@ export class ModelEntityEmitter {
     return Math.random() < this.density
   }
 
-  emitNullable(avoidModelType?: ModelType, maxLength?: number): ModelEntity | null {
-    if (!this.shouldEmit()) return null
+  emitNullable(avoidModelType?: ModelType, maxLength?: number, ensure = false): ModelEntity | null {
+    if (!ensure && !this.shouldEmit()) return null
     const modelClass = this.classEmitter.emitModelClass(avoidModelType)
     if (!modelClass) return null
     const length = modelClass === 'pole' && maxLength ? randomIntInclusiveBetween(1, maxLength) : 1
@@ -54,15 +54,16 @@ export class ModelEntityEmitter {
   }
 
   emitEnsured(avoidModelType?: ModelType, maxLength?: number, retry = 0): ModelEntity {
-    if (retry > 1) {
+    if (retry > 100) {
       throw new Error(
         `Retry of model class ensured. avoidModelType=${avoidModelType}, maxLength=${maxLength} ${
           (this.classEmitter as any).thresholds
         }`
       )
     }
-    const cls = this.emitNullable(avoidModelType, maxLength)
+    const cls = this.emitNullable(avoidModelType, maxLength, true)
     if (cls != null) return cls
-    return this.emitEnsured(avoidModelType, retry + 1)
+
+    return this.emitEnsured(avoidModelType, maxLength, retry + 1)
   }
 }

@@ -21,7 +21,7 @@ describe(`${poleGeometryFactory.name}`, () => {
     for (const [x, y, z] of geo.vertices) {
       if (x === 0 && z === 0) continue
       expect(Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2))).toBeCloseTo(1) // radius
-      expect(y === 3 || y === 1 || y === -1).toBeTruthy()
+      expect(y === 1 || y === -1 || y === -3).toBeTruthy()
     }
   })
 })

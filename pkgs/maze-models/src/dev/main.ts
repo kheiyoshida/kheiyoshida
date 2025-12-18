@@ -1,20 +1,17 @@
 import { GeometryPreviewer } from './preview'
-import { generateFloatingBox, generateStackableBox } from '../models/generators/box'
-import { boxSpec } from './geometries'
-import { stairBoxSpec } from '../models/factory/primitives/box'
+import { generatePole } from '../models/generators/pole'
 
-// const geo = generateFloatingBox(boxSpec, {
-//   tesselation: 3,
-//   sizeRange: [0.8, 0.9],
-//   computeNormals: 'vertex',
-//   distortion: 0.1,
-// })
-
-const geo = generateStackableBox(stairBoxSpec, {
-  tesselation: 3,
-  sizeRange: [0.8, 1.0],
-  normalComputeType: 'vertex',
-  distortion: 0.1,
+const geo = generatePole('Pole', {
+  type: 'pole',
+  radiusBase: 1,
+  radiusDelta: 0.8,
+  numOfCorners: 8,
+  heightBase: 4,
+  heightDelta: 0,
+  heightPerSegment: 0.5,
+  segmentYDelta: 1.2,
+  normalComputeType: 'preserve',
+  distortion: 0,
 })
 
 new GeometryPreviewer(geo)

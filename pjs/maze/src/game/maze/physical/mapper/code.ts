@@ -1,10 +1,11 @@
 import { ModelCode } from 'maze-models'
 import { ModelClass } from './entity.ts'
+import { PoleModelCode } from 'maze-models/src/models/code.ts'
 
 export type ModelUsage = 'normal' | 'stair'
 
 type ConcreteCodeService = {
-  getCode(usage: ModelUsage): ModelCode
+  getCode(usage: ModelUsage, length: number): ModelCode
 }
 
 export const concreteModelCodeService: Record<ModelClass, ConcreteCodeService> = {
@@ -15,8 +16,9 @@ export const concreteModelCodeService: Record<ModelClass, ConcreteCodeService> =
     },
   },
   pole: {
-    getCode(): ModelCode {
-      return 'Pole'
+    getCode(usage: ModelUsage, length: number): ModelCode {
+      if (usage === 'stair') return 'StackableStairBox'
+      return `Pole${length}` as PoleModelCode
     },
   },
   stackedBox: {

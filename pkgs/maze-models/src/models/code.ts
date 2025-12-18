@@ -8,11 +8,11 @@ export type ModelCode =
 
 export type ClassicModelCode = 'Floor' | 'Ceil' | 'Wall' | 'StairCeil' | 'StairSteps'
 export type TileModelCode = 'Tile' | 'StairTile' | 'BottomTile'
-export type PoleModelCode = 'Pole'
+export type PoleModelCode = 'Pole1' | 'Pole2' | 'Pole3' | 'Pole4' | 'Pole5'
 export type FloatingBoxModelCode = 'FloatingBox' | 'FloatingStairBox' | 'FloatingFloorBox'
 export type StackableBoxModelCode = 'StackableBox' | 'StackableStairBox'
 
-export const isPole = (code: ModelCode): code is PoleModelCode => code === 'Pole'
+export const isPole = (code: ModelCode): code is PoleModelCode => code.includes('Pole')
 
 export const isTile = (code: ModelCode): code is TileModelCode =>
   code === 'Tile' || code === 'StairTile' || code === 'BottomTile'

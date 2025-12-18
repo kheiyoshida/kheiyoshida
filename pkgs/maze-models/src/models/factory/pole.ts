@@ -30,7 +30,7 @@ export const poleGeometryFactory = (params: PoleGeometryParams): GeometrySpec =>
   const height = params.heightBase + params.heightDelta * (Math.random() - 0.5)
   const numOfSegments = Math.round(height / params.heightPerSegment)
   const heightPerSegment = height / numOfSegments
-  const topY = -1 + height
+  const topY = 1
 
   const radius = () => params.radiusBase + params.radiusDelta * (Math.random() - 0.5)
   const genCircle = generateCircle(params.numOfCorners, radius)
@@ -38,7 +38,10 @@ export const poleGeometryFactory = (params: PoleGeometryParams): GeometrySpec =>
   // generate vertices for each slice
   const vertices: Vector3D[] = []
   for (let i = 0; i <= numOfSegments; i++) {
-    const getY = () => topY - heightPerSegment * i + params.segmentYDelta * (Math.random() - 0.5)
+    const getY = () => {
+      const delta = i !== 0 && i !== numOfSegments ? params.segmentYDelta * (Math.random() - 0.5) : 0
+      return topY - heightPerSegment * i + delta
+    }
     vertices.push(...genCircle(getY))
   }
 
