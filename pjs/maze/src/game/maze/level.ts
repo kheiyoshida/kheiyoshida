@@ -2,8 +2,8 @@ import { MazeGrid } from '../../core/level/grid.ts'
 import { buildMazeGrid, BuildMazeGridParams } from '../../core/level/builder'
 import { PhysicalMazeGrid } from './physical/grid.ts'
 import { StructureContext } from '../world/types.ts'
-import { getPhysicalStairType } from './physical/stair.ts'
 import { IWorldState } from '../world/state.ts'
+import { getStairSpec } from './stair.ts'
 
 export class MazeLevel {
   public constructor(
@@ -17,9 +17,8 @@ export class MazeLevel {
     worldState: IWorldState
   ): MazeLevel {
     const grid = buildMazeGrid(params)
-
-    const physicalStairType = getPhysicalStairType(structureContext.current, structureContext.next!)
-    const physicalGrid = PhysicalMazeGrid.convert(grid, structureContext.current, physicalStairType, worldState)
+    const { type } = getStairSpec(structureContext)
+    const physicalGrid = PhysicalMazeGrid.convert(grid, type, worldState)
     return new MazeLevel(grid, physicalGrid)
   }
 }

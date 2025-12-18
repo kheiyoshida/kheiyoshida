@@ -82,7 +82,7 @@ export const visualizeGrid3D = (grid: Grid3D<MazeBlock>, layer: VerticalLayer) =
       const block = grid.get({ x, y, z: layer })
 
 
-      representation += block ? { 2: 'F', 1: 'S', 4: '_' }[block.objects.length] : '_'
+      representation += block == null ? "_"  : 'X'
       representation += ' '
     }
   }

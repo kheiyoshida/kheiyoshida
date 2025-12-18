@@ -2,6 +2,7 @@ import { MazeLevel } from './level.ts'
 import { BuildMazeGridParams } from '../../core/level/builder'
 import { StructureContext } from '../world/types.ts'
 import { WorldProvider } from '../world'
+import { WorldState } from '../world/state.ts'
 
 /**
  * manages maze grids over levels
@@ -22,7 +23,8 @@ export class Maze {
     this._levelNumber++
     this.worldProvider.generateWorld(this._levelNumber)
     const params = this.buildParams(this._levelNumber, this.structureContext)
-    this._level = MazeLevel.build(params, this.structureContext, this.worldProvider.state)
+    console.log(this.worldState)
+    this._level = MazeLevel.build(params, this.structureContext, this.worldState)
     this.debugParams = params
   }
 
@@ -46,5 +48,9 @@ export class Maze {
   get currentLevel() {
     if (!this._level) throw Error(`Level not initialized. did you call setNextLevel()?`)
     return this._level
+  }
+
+  get worldState(): WorldState {
+    return this.worldProvider.state
   }
 }

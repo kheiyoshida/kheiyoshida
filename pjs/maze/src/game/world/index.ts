@@ -1,5 +1,6 @@
 import { WorldState } from './state.ts'
-import { StructureContext, World } from './types.ts'
+import { Atmosphere, StructureContext, World } from './types.ts'
+import { debugRenderingMode } from '../../config/debug.ts'
 import { getAtmosphere } from './atmosphere.ts'
 
 export class WorldProvider {
@@ -41,7 +42,7 @@ export class WorldProvider {
 
     const nextWorld: World = {
       ambience: this.state.ambience,
-      atmosphere: getAtmosphere(level),
+      atmosphere: debugRenderingMode ? debugRenderingMode : getAtmosphere(level),
       structure: this.state.structure,
     }
     this.history.push(nextWorld)

@@ -38,10 +38,10 @@ export const gridConverter = (grid: MazeGrid, params: PhysicalGridParams) => {
 
   grid.iterate((cell, pos2d) => {
     if (cell === null) {
-      const slice = physicalGrid.getVerticalSlice(pos2d)
+      const slice = physicalGrid.getSliceByLogicalPosition(pos2d)
       sliceMapper.map(slice, 'nullSlice')
     } else if (cell.type === 'floor') {
-      const slice = physicalGrid.getVerticalSlice(pos2d)
+      const slice = physicalGrid.getSliceByLogicalPosition(pos2d)
       sliceMapper.map(slice, 'floorSlice')
     } else if (cell.type === 'stair') {
       stairPos = pos2d

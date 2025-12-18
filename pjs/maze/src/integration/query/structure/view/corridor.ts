@@ -40,7 +40,7 @@ const corridorGrid = makeGrid([
 ])
 
 const buildCorridorViewForStructure = (structure: Structure) => {
-  return buildViewGrid(PhysicalMazeGrid.convert(corridorGrid, structure, 'normal'), {
+  return buildViewGrid(PhysicalMazeGrid.convert(corridorGrid, 'path', game.maze.worldState), {
     position: { x: 2, y: 3 },
     direction: 'n',
   })

@@ -14,6 +14,7 @@ export const getModelWeight = (density: number, gravity: number): ModelClassWeig
 
 export class ModelClassEmitter {
   static build(density: number, gravity: number) {
+    console.log(density, gravity, getModelWeight(density, gravity))
     return new ModelClassEmitter(getModelWeight(density, gravity))
   }
 
@@ -36,12 +37,5 @@ export class ModelClassEmitter {
       }
     }
     return null
-  }
-
-  emitModelClassEnsured(avoidModelType: ModelType, retry = 0): ModelClass {
-    if (retry > 100) throw new Error('Retry of model class ensured')
-    const cls = this.emitModelClass(avoidModelType)
-    if (cls != null) return cls
-    return this.emitModelClassEnsured(avoidModelType, retry + 1)
   }
 }
