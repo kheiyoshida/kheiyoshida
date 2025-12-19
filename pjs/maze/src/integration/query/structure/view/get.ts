@@ -11,11 +11,11 @@ export type ViewOrigin = {
 }
 
 export const buildViewGrid = (mazeGrid: PhysicalMazeGrid, origin: ViewOrigin): MazeView => {
-  const viewGrid = new Grid3D<MazeBlock>(5, 6, 5)
+  const viewGrid = new Grid3D<MazeBlock>(5, 6, 6)
   const view = new MazeView(viewGrid)
   for (const [viewPos2d, gridPosition] of iterateRelative2dViewPositions(origin)) {
     const slice = mazeGrid.getSliceByLogicalPosition(gridPosition)
-    for (let y = ViewY.Down2; y <= ViewY.Up2; y++) {
+    for (let y = ViewY.Down3; y <= ViewY.Up2; y++) {
       const block = slice.get(2 - y)
       if (block) view.setBlock({ ...viewPos2d, y }, block.rotated(origin.direction))
     }

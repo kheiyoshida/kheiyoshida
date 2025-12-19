@@ -58,7 +58,7 @@ export class StairMapper {
       const corridorPos = getPositionInDirection(stairPos, direction, i)
       const slice = grid.getSliceByLogicalPosition(corridorPos)
       slice.set(VerticalLayer.Down2, null)
-      // slice.set(VerticalLayer.Down3, new MazeBlock([new MazeObject(this.entityEmitter.emitEnsured())]))
+      if (i !== 0) slice.set(VerticalLayer.Down3, new MazeBlock([new MazeObject(this.entityEmitter.emitEnsured())]))
     }
   }
 

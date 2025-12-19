@@ -7,7 +7,7 @@ export type IWorldState = {
 }
 
 export class WorldState implements IWorldState {
-  constructor(initialDensity = 1.0, initialGravity = 1.0) {
+  constructor(initialDensity = 0.0, initialGravity = 0.0) {
     this.density = initialDensity
     this.gravity = initialGravity
   }

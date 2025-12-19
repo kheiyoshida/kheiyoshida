@@ -24,11 +24,12 @@ export enum ViewY {
   Middle = 0,
   Down1 = -1,
   Down2 = -2,
+  Down3 = -3,
 }
 
 export const TotalViewX = 5
 export const TotalViewZ = 6
-export const TotalViewY = 5
+export const TotalViewY = 6
 
 export type ViewPosition = {
   x: ViewX

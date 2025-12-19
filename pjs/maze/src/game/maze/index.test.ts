@@ -12,7 +12,7 @@ describe(`${Maze.name}`, () => {
     }))
     maze.setNextLevel()
 
-    expect(maze.currentLevel.physicalGrid.sizeZ).toBe(5)
+    expect(maze.currentLevel.physicalGrid.sizeZ).toBe(6)
   })
 
   it.each(Array.from({ length: 10 }))(`generates valid maze consistently throughout the game`, () => {

@@ -2,7 +2,7 @@ import { PointMatrixLayer } from './layer.ts'
 import { TotalViewY, ViewPosition } from '../../../../integration/query/structure/view/view.ts'
 import { DeformedBox } from 'maze-gl'
 
-export const NumOfScaffoldMatrixLayers = TotalViewY + 1 // 6
+export const NumOfScaffoldMatrixLayers = TotalViewY + 1 // 7
 
 export abstract class ScaffoldMatrix {
   public readonly layers: PointMatrixLayer[] = []
@@ -37,9 +37,16 @@ export class ScaffoldPointMatrix extends ScaffoldMatrix {
 
 const getYValues = (wallLength: number) => [
   wallLength / 2 + wallLength * 2,
+  // Up2
   wallLength / 2 + wallLength,
+  // Up1
   wallLength / 2,
+  // Middle
   -wallLength / 2,
+  // Down1
   -wallLength / 2 - wallLength,
+  // Down2
   -wallLength / 2 - wallLength * 2,
+  // Down3
+  -wallLength / 2 - wallLength * 4,
 ]

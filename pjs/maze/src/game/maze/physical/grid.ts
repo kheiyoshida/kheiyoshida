@@ -12,6 +12,7 @@ export enum VerticalLayer {
   Middle = 2,
   Down1 = 3,
   Down2 = 4,
+  Down3 = 5,
 }
 
 export class PhysicalMazeGrid extends Grid3D<MazeBlock> {
@@ -21,7 +22,7 @@ export class PhysicalMazeGrid extends Grid3D<MazeBlock> {
    */
   static readonly SurroundingBlocks = 5
 
-  static readonly VerticalSliceSize = 5
+  static readonly VerticalSliceSize = 6
 
   static convert(
     grid: MazeGrid,

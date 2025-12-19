@@ -39,7 +39,7 @@ describe(`stair mapping`, () => {
       stairType: 'lift',
     })
 
-    const grid = new PhysicalMazeGrid(15, 15, 5)
+    const grid = new PhysicalMazeGrid(15, 15, 6)
 
     const stairPos: Position2D = { x: 2, y: 0 }
     stairMapper.mapStairSlices(grid, stairPos, 'n')

@@ -29,6 +29,8 @@ export class ObjectTransform {
   /** in degrees */
   rotateY: number = 0
 
+  translateY: number = 0
+
   scale: number = 1.0
 
   // todo: consider caching the matrix result
@@ -36,6 +38,7 @@ export class ObjectTransform {
     const mat = mat4.create()
     mat4.scale(mat, mat, Vec3.create(this.scale)) // scale first for consistency
     mat4.rotateY(mat, mat, toRadians(this.rotateY))
+    mat4.translate(mat, mat, [0, this.translateY, 0])
     return mat
   }
 }

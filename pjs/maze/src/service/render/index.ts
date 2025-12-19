@@ -119,7 +119,7 @@ export const renderGoDownstairs: RenderHandler = ({ structure, vision, movement 
     const { lightColor, unlitColor } = resolveFrameColor(vision.color.frame, vision.mode)
 
     const eye = getMovementEye(movement, structure.scaffold)
-    const units = getUnits(vision.mode, structure)
+    const units = getUnits(vision.mode, structure, eye.position[1])
 
     const halfFrames = movementValueArray.length / 2
     const fade = i > halfFrames ? calcSmoothValue(i - halfFrames, halfFrames) : 0
