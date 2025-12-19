@@ -14,7 +14,7 @@ import {
   getGoDeltaArray,
   getTurnLRDeltaArray,
   GoDownstairsMovement,
-  ProceedToNextFloorMovement,
+  proceedToNextFloorMovement,
 } from './scene/movement.ts'
 // import { Distortion } from './scaffold_legacy/distortion'
 import { RenderQueue } from './queue'
@@ -106,11 +106,7 @@ export const renderGoDownstairs: RenderHandler = ({ structure, vision, movement 
       blockStatusChangeRequired()
     }
 
-    if (animation === 'warp') {
-      if (i === 0) {
-        soundPack.playWarp()
-      }
-    } else if (animation === 'lift') {
+    if (animation === 'lift') {
       if (i === 0) {
         soundPack.playLift()
       }
@@ -141,18 +137,16 @@ export const renderGoDownstairs: RenderHandler = ({ structure, vision, movement 
 }
 
 export const renderProceedToNextFloor: RenderHandler = ({ structure, vision, movement }) => {
-  const animation = movement.stairAnimation.proceedToNextFloor
-  const movementValueArray = ProceedToNextFloorMovement[animation](movement.speed)
+  const movementValueArray = proceedToNextFloorMovement(movement.speed)
   const drawFrameSequence = movementValueArray.map((movement, i) => () => {
     if (i === 0) {
       hideButtons()
       blockControlRequired()
       blockStatusChangeRequired()
     }
-    if (animation === 'corridor') {
-      if (i % 12 === 0) {
-        soundPack.playWalk()
-      }
+
+    if (i % 12 === 0) {
+      soundPack.playWalk()
     }
     if (i < 16) {
       resolveFloorColor(vision.color.floor) // 16x
@@ -163,7 +157,7 @@ export const renderProceedToNextFloor: RenderHandler = ({ structure, vision, mov
 
     const units = getUnits(vision.mode, {
       ...structure,
-      view: animation === 'still' ? structure.view : alternativeViewService.getNextLevelView(structure.view),
+      view: alternativeViewService.getNextLevelView(structure.view),
     })
 
     const fade =
