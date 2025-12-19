@@ -1,3 +1,6 @@
+export { getGL } from 'graph-gl'
+import { getGL } from 'graph-gl'
+
 const getCanvasElement = (canvasId: string = 'canvas') => {
   const canvas = document.getElementById(canvasId)
   if (!canvas) {
@@ -5,28 +8,6 @@ const getCanvasElement = (canvasId: string = 'canvas') => {
   }
   return canvas as HTMLCanvasElement
 }
-
-const getWebglContext = (canvas: HTMLCanvasElement) => {
-  const context = canvas.getContext('webgl2')
-  if (!context) {
-    throw Error('No WebGL context could be found.')
-  }
-  return context
-}
-
-/**
- * get a persistent WebGL context on the default canvas
- */
-export const getGL = (() => {
-  let gl: WebGL2RenderingContext;
-  return () => {
-    if (!gl) {
-      const canvas = getCanvasElement()
-      gl = getWebglContext(canvas)
-    }
-    return gl;
-  }
-})()
 
 /**
  * explicitly set the default canvas's logical & physical size
@@ -45,10 +26,7 @@ export const resizeCanvas = (
   const canvas = getCanvasElement()
   canvas.setAttribute('width', pxWidth.toString())
   canvas.setAttribute('height', pxHeight.toString())
-  canvas.setAttribute(
-    'style',
-    `width: ${clientWidth.toString()}px; height: ${clientHeight.toString()}px;`
-  )
+  canvas.setAttribute('style', `width: ${clientWidth.toString()}px; height: ${clientHeight.toString()}px;`)
   getGL().viewport(0, 0, canvas.width, canvas.height)
 }
 

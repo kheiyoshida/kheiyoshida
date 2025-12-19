@@ -28,7 +28,7 @@ export const MaxDistortionSpeed = 10
 export const MaxDistortionRange = 0.4
 
 const ModelGridLength = 6
-export const MaxVisibleLength = FloorPathAvgLength * (ModelGridLength)
+export const MaxVisibleLength = FloorPathAvgLength * ModelGridLength
 
 export const DefaultGoFrames = 8
 export const DefaultTurnFrames = 4
