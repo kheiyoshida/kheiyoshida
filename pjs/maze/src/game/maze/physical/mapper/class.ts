@@ -14,17 +14,25 @@ export const getModelWeight = (density: number, gravity: number): ModelClassWeig
 
 export class ModelClassEmitter {
   static build(density: number, gravity: number) {
-    console.log(density, gravity, getModelWeight(density, gravity))
     return new ModelClassEmitter(getModelWeight(density, gravity))
   }
 
-  private thresholds: [number, ModelClass][]
+  private readonly percentages: [number, ModelClass][]
+
+  private readonly thresholds: [number, ModelClass][]
+  private readonly thresholdsAvoidFloating: [number, ModelClass][]
+  private readonly thresholdsAvoidStacked: [number, ModelClass][]
 
   constructor(readonly ratio: ModelClassWeightValues) {
-    this.thresholds = mapPercentageThresholds(
-      ratioToPercentage(Object.entries(ratio).map(([k, v]) => [v, k as ModelClass])).filter(
-        ([t, _]) => t !== 0
-      )
+    this.percentages = ratioToPercentage(Object.entries(ratio).map(([k, v]) => [v, k as ModelClass])).filter(
+      ([t, _]) => t !== 0
+    )
+    this.thresholds = mapPercentageThresholds(this.percentages)
+    this.thresholdsAvoidFloating = mapPercentageThresholds(
+      this.percentages.filter(([, v]) => modelTypeMap[v] !== 'floating')
+    )
+    this.thresholdsAvoidStacked = mapPercentageThresholds(
+      this.percentages.filter(([, v]) => modelTypeMap[v] !== 'stacked')
     )
   }
 
@@ -37,5 +45,19 @@ export class ModelClassEmitter {
       }
     }
     return null
+  }
+
+  emitModelClassEnsured(avoidModelType?: ModelType): ModelClass {
+    const thresholds = avoidModelType
+      ? avoidModelType === 'floating'
+        ? this.thresholdsAvoidFloating
+        : this.thresholdsAvoidStacked
+      : this.thresholds
+
+    const r = Math.random()
+    for (const [t, v] of thresholds) {
+      if (r <= t) return v
+    }
+    throw new Error(`emitModelClassEnsured failed`)
   }
 }

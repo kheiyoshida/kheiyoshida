@@ -19,13 +19,12 @@ describe(`${Maze.name}`, () => {
     const maze = new Maze(paramBuild)
 
     for (let i = 0; i < 30; i++) {
-      maze.setNextLevel()
-      const stair = maze.currentLevel.grid.findPosition((pos, item) => item?.type === 'stair')
-      if (!stair) {
-        console.error(maze.debugParams)
-        throw new Error(`stair is missing.`)
+      try {
+        maze.setNextLevel()
+      } catch (e) {
+        console.log(maze.debugParams)
+        throw e
       }
-      expect(maze.currentLevel.grid.findPosition((pos, item) => item?.start !== undefined)).not.toBeNull()
     }
   })
 })

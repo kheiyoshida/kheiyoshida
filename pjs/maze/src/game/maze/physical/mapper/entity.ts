@@ -53,17 +53,9 @@ export class ModelEntityEmitter {
     return new ModelEntity(modelClass, length)
   }
 
-  emitEnsured(avoidModelType?: ModelType, maxLength?: number, retry = 0): ModelEntity {
-    if (retry > 100) {
-      throw new Error(
-        `Retry of model class ensured. avoidModelType=${avoidModelType}, maxLength=${maxLength} ${
-          (this.classEmitter as any).thresholds
-        }`
-      )
-    }
-    const cls = this.emitNullable(avoidModelType, maxLength, true)
-    if (cls != null) return cls
-
-    return this.emitEnsured(avoidModelType, maxLength, retry + 1)
+  emitEnsured(avoidModelType?: ModelType, maxLength?: number): ModelEntity {
+    const cls = this.classEmitter.emitModelClassEnsured(avoidModelType)
+    const length = cls === 'pole' && maxLength ? randomIntInclusiveBetween(1, maxLength) : 1
+    return new ModelEntity(cls, length!)
   }
 }

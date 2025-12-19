@@ -1,32 +1,8 @@
 import { PhysicalGridSlice, SliceMapper } from './slice.ts'
 import { VerticalGrid3DSlice } from '../../../../core/grid/grid3d.ts'
 import { VerticalLayer } from '../grid.ts'
-import { ModelEntity, ModelType } from './entity.ts'
-import { ModelCode } from 'maze-models'
+import { ModelEntity } from './entity.ts'
 import { MazeBlock } from '../block.ts'
-
-const modelType = (code: ModelCode): ModelType => {
-  switch (code) {
-    case 'Floor':
-    case 'Ceil':
-    case 'Wall':
-    case 'StairSteps':
-    case 'StackableBox':
-    case 'StackableStairBox':
-    case 'Pole':
-      return 'stacked'
-
-    case 'StairCeil':
-    case 'Tile':
-    case 'StairTile':
-    case 'BottomTile':
-    case 'FloatingBox':
-    case 'FloatingStairBox':
-    case 'FloatingFloorBox':
-    case 'Warp':
-      return 'floating'
-  }
-}
 
 const getBlockEntity = (block: MazeBlock): ModelEntity => block.objects[0].entity!
 
@@ -57,8 +33,8 @@ describe(`${SliceMapper.name}`, () => {
       // Up1 and Up2 should be empty or come with floating model
       const up1 = slice.get(VerticalLayer.Up1)
       const up2 = slice.get(VerticalLayer.Up2)
-      expect(up1 === null || modelType(up1.objects[0].model.code) === 'floating').toBe(true)
-      expect(up2 === null || modelType(up2.objects[0].model.code) === 'floating').toBe(true)
+      expect(up1 === null || getBlockEntity(up1).modelType === 'floating').toBe(true)
+      expect(up2 === null || getBlockEntity(up2).modelType === 'floating').toBe(true)
 
       // middle should be empty
       expect(slice.get(VerticalLayer.Middle)).toBeNull()
@@ -71,10 +47,10 @@ describe(`${SliceMapper.name}`, () => {
       const down2 = slice.get(VerticalLayer.Down2)
 
       // but down2 should be stacked if down1 is stacked
-      if (modelType(down1.objects[0].model.code) == 'stacked') {
+      if (getBlockEntity(down1).modelType == 'stacked') {
         if (down1.objects[0].model.code.includes('2')) continue
         expect(down2).not.toBeNull()
-        expect(modelType(down2!.objects[0].model.code)).toBe('stacked')
+        expect(getBlockEntity(down2!).modelType).toBe('stacked')
       }
     }
   })

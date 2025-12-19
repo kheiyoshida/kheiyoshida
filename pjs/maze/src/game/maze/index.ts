@@ -23,7 +23,6 @@ export class Maze {
     this._levelNumber++
     this.worldProvider.generateWorld(this._levelNumber)
     const params = this.buildParams(this._levelNumber, this.structureContext)
-    console.log(this.worldState)
     this._level = MazeLevel.build(params, this.structureContext, this.worldState)
     this.debugParams = params
   }

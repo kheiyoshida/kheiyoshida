@@ -13,7 +13,7 @@ describe(`${ModelEntityEmitter.name}`, () => {
     }
 
     const classes = []
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 100; i++) {
       const entity2 = emitter.emitNullable()
       if (entity2) {
         classes.push(entity2!.modelClass)
