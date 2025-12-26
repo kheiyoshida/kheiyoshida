@@ -9,6 +9,7 @@ export type TextureParams = {
   internalFormat?: number
   format?: number
   type?: number
+  filter?: number
 }
 
 export enum TextureUnit {
@@ -23,7 +24,7 @@ export class Texture {
 
   public yFlip: boolean = false
 
-  constructor({ yFlip, repeat, unit, size, internalFormat, format, type }: TextureParams = {}) {
+  constructor({ yFlip, repeat, unit, size, internalFormat, format, type, filter }: TextureParams = {}) {
     const gl = getGL()
     this.tex = gl.createTexture()!
     gl.bindTexture(gl.TEXTURE_2D, this.tex)
@@ -32,12 +33,12 @@ export class Texture {
       gl.texImage2D(gl.TEXTURE_2D, 0, internalFormat, size.width, size.height, 0, format, type, null)
     }
 
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter ?? gl.LINEAR)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter ?? gl.LINEAR)
 
     const wrap = repeat ? gl.REPEAT : gl.CLAMP_TO_EDGE
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrap)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrap)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
 
     this.unit = unit ?? TextureUnit.Color
     this.yFlip = yFlip ?? false
@@ -126,6 +127,7 @@ export class FrameBufferDepthTexture extends FrameBufferTexture {
       internalFormat: params.internalFormat ?? gl.DEPTH_COMPONENT24,
       format: params.format ?? gl.DEPTH_COMPONENT,
       type: params.type ?? gl.UNSIGNED_INT,
+      filter: gl.NEAREST,
     })
   }
 }

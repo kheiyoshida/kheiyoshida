@@ -37,6 +37,9 @@ export class ScreenEffectModel extends GenericModel {
     gl.activeTexture(gl.TEXTURE1)
     gl.bindTexture(gl.TEXTURE_2D, this.normalTexture!)
 
+    gl.activeTexture(gl.TEXTURE2)
+    gl.bindTexture(gl.TEXTURE_2D, this.depthTexture!)
+
     super.draw(getGL().TRIANGLE_STRIP)
   }
 

@@ -14,8 +14,8 @@ void main() {
     fragColor = texture(uNormalTexture, vUV);
     fragColor = texture(uColorTexture, vUV);
 
-//    vec4 d = texture(uDepthTexture, vUV);
-//    d = 1.0 - d;
+//    float d = texture(uDepthTexture, vUV).r;
+//    d = pow(d, 20.0);
 //    fragColor = vec4(vec3(d), 1.0);
 
     fragNormal = vec4(1, 1, 1, 1);
