@@ -28,7 +28,7 @@ export class InputColorRenderingNode extends ModelRenderingNode {
   }
 
   public setInput(node: RenderingNode<DrawTarget>) {
-    this.screenRect.tex = node.renderTarget!.frameBuffer.tex
+    this.screenRect.tex = node.renderTarget!.frameBuffer.colorTexture.tex
   }
 
   public override render() {

@@ -17,7 +17,10 @@ export class UnitsRenderingNode extends OffscreenDrawNode {
   }
 
   public override render() {
-    super.render()
+    // super.render()
+
+    // TODO: refactor this
+    this.renderTarget!.frameBuffer.activate()
 
     const { eye, units, lights, unlitColor, effect } = this.scene
 
@@ -40,6 +43,8 @@ export class UnitsRenderingNode extends OffscreenDrawNode {
     setUBOValue(BindingPoint.Effect, new Float32Array([effect.fogLevel, uPad, uPad, uPad]))
 
     units.forEach(renderUnit)
+
+    this.renderTarget!.frameBuffer.deactivate()
   }
 }
 

@@ -5,7 +5,6 @@ import {
   FrameBufferNormalTexture,
   FrameBufferTextureParams,
 } from './texture'
-import { ImageResolution } from '../graph'
 
 export type FrameBufferCapabilities = {
   normal?: boolean | FrameBufferTextureParams

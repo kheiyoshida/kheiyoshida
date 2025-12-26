@@ -1,6 +1,7 @@
 import { Scene } from '../models'
 import { UnitsRenderingNode } from './units'
 import { DrawTarget, FrameBuffer, getGL, ImageResolution, InputColorRenderingNode } from 'graph-gl'
+import { ScreenEffectNode } from './screenEffect/node'
 
 const setupGraph = () => {
   const gl = getGL()
@@ -15,12 +16,20 @@ const setupGraph = () => {
   const unitsRenderingNode = new UnitsRenderingNode()
   unitsRenderingNode.renderTarget = renderTargetA
 
+  const effectNode = new ScreenEffectNode(undefined as any)
+  effectNode.enabled = false;
+  effectNode.renderTarget = renderTargetB
+
   const screenNode = new InputColorRenderingNode()
-  screenNode.setInput(unitsRenderingNode)
+
+  effectNode.setInput(unitsRenderingNode)
+  screenNode.setInput(effectNode)
 
   return function renderScene(scene: Scene) {
     unitsRenderingNode.updateScene(scene)
     unitsRenderingNode.render()
+    effectNode.render()
+    screenNode.render()
   }
 }
 
