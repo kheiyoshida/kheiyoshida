@@ -2,38 +2,48 @@ import { Scene } from '../models'
 import { UnitsRenderingNode } from './units'
 import { DrawTarget, FrameBuffer, getGL, ImageResolution, InputColorRenderingNode } from 'graph-gl'
 import { EdgeRenderingNode } from './screenEffect/edge/node'
+import { FogEffectNode } from './screenEffect/fog/node'
 
 const setupGraph = () => {
   const gl = getGL()
   const resolution: ImageResolution = { width: gl.canvas.width, height: gl.canvas.height }
 
-  const frameBufferA = new FrameBuffer(resolution.width, resolution.height, { normal: true, depth: true })
-  const frameBufferB = new FrameBuffer(resolution.width, resolution.height, { normal: true, depth: true })
+  const sceneFrameBuffer = new FrameBuffer(resolution.width, resolution.height, { normal: true, depth: true })
+  const frameBufferA = new FrameBuffer(resolution.width, resolution.height, { normal: true, depth: false })
+  const frameBufferB = new FrameBuffer(resolution.width, resolution.height, { normal: true, depth: false })
 
+  const sceneTarget: DrawTarget = { frameBuffer: sceneFrameBuffer }
   const renderTargetA: DrawTarget = { frameBuffer: frameBufferA }
   const renderTargetB: DrawTarget = { frameBuffer: frameBufferB }
 
-  const unitsRenderingNode = new UnitsRenderingNode()
-  unitsRenderingNode.renderTarget = renderTargetA
+  const sceneNode = new UnitsRenderingNode()
+  sceneNode.renderTarget = sceneTarget
 
-  const effectNode = new EdgeRenderingNode()
-  effectNode.enabled = true;
-  effectNode.renderTarget = renderTargetB
+  const edgeRenderingNode = new EdgeRenderingNode()
+  edgeRenderingNode.enabled = true
+  edgeRenderingNode.renderTarget = renderTargetB
+
+  const fogEffectNode = new FogEffectNode()
+  fogEffectNode.enabled = true
+  fogEffectNode.renderTarget = renderTargetA
 
   const screenNode = new InputColorRenderingNode()
 
-  effectNode.setInput(unitsRenderingNode)
-  screenNode.setInput(effectNode)
+  edgeRenderingNode.setInput(sceneNode, sceneFrameBuffer)
+  fogEffectNode.setInput(edgeRenderingNode, sceneFrameBuffer)
+  screenNode.setInput(fogEffectNode)
 
   return function renderScene(scene: Scene) {
-    unitsRenderingNode.updateScene(scene)
-    unitsRenderingNode.render()
+    sceneNode.updateScene(scene)
+    sceneNode.render()
 
-    effectNode.updateParams({
+    edgeRenderingNode.updateParams({
       time: performance.now(),
       edgeRenderingLevel: 1.0
     })
-    effectNode.render()
+    edgeRenderingNode.render()
+
+    fogEffectNode.render()
 
     screenNode.render()
   }

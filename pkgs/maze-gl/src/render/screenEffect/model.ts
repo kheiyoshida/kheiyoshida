@@ -53,10 +53,10 @@ export class ScreenEffectModel extends GenericModel {
     this.shader.setUniformInt('uReverseVertical', bool ? 1 : 0)
   }
 
-  public setInput(inputFrameBuffer: FrameBuffer): void {
+  public setInput(inputFrameBuffer: FrameBuffer, sceneFrameBuffer: FrameBuffer): void {
     this.colorTexture = inputFrameBuffer.colorTexture.tex
     this.normalTexture = inputFrameBuffer.normalTexture?.tex
-    this.depthTexture = inputFrameBuffer.depthTexture?.tex
+    this.depthTexture = sceneFrameBuffer.depthTexture?.tex
   }
 
   public enabled = true

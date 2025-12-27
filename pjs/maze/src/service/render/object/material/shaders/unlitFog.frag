@@ -81,14 +81,8 @@ void main()
         closeColor = farColor + distanceDiff;
     }
 
-//    vec3 closeColor = vec3(1.0, 0.0, 0.0);
-//    vec3 farColor = vec3(0.0, 1.0, 0.0);
-
-    // distance fog
     float distance = length(viewPosToFragment);
     float fogFar = minFogFar + fogLevel * fogFarRange;
-
-//    float fogFactor = clamp((distance - fogNear) / (fogFar - fogNear), 0.0, 1.0);
 
     float fogFactor = 0.01 + clamp(1.0 - exp(-distance * pow(3.0, fogLevel)), 0.0, 0.99);
 

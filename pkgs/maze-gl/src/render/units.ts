@@ -22,6 +22,8 @@ export class UnitsRenderingNode extends OffscreenDrawNode {
     // TODO: refactor this
     this.renderTarget!.frameBuffer.activate()
 
+    this.gl.depthMask(true)
+
     const { eye, units, lights, unlitColor, effect } = this.scene
 
     this.gl.clearColor(...unlitColor.normalizedRGB, 1.0)
