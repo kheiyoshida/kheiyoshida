@@ -23,7 +23,8 @@ const shader = new MaterialShader(vertShaderSource, fragShaderSource)
 const baseColor = new Color(0, 0.0, 0.0)
 
 const unlitColor = baseColor.clone()
-unlitColor.lightness = 0.1
+unlitColor.lightness = 0.8
+unlitColor.saturation = 0.0
 
 const lightColor = baseColor.clone()
 lightColor.saturation = 0.0

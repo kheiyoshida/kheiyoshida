@@ -15,16 +15,16 @@ export enum BindingPoint {
  * key: the shared uniform block name in shaders
  * value: binding point index
  */
-export const UniformNameBPMap: Record<string, BindingPoint> = {
+export const UniformNameBPMap = {
   DeformedBox: BindingPoint.DeformedBox,
   Eye: BindingPoint.Eye,
   Lights: BindingPoint.Lights,
   Color: BindingPoint.Color,
   Effect: BindingPoint.Effect,
-}
+} as const satisfies Record<string, BindingPoint>
 
 /**
- * prepare UBOs we need w/ fixed binding points
+ * Prepare UBOs we need w/ fixed binding points
  */
 const initUBOMap = () => {
   const gl = getGL()
@@ -49,6 +49,13 @@ export const setUBOValue = (() => {
     const ubo = uboMap.get(bp)
     if (!ubo) throw Error(`ubo is null`)
     gl.bindBuffer(gl.UNIFORM_BUFFER, ubo)
-    gl.bufferData(gl.UNIFORM_BUFFER, data, gl.STATIC_DRAW);
+    gl.bufferData(gl.UNIFORM_BUFFER, data, gl.STATIC_DRAW)
   }
 })()
+
+export const bindUBO = (program: WebGLProgram, uboName: keyof typeof UniformNameBPMap) => {
+  const gl = getGL()
+  const bp = UniformNameBPMap[uboName]
+  const blockIndex = gl.getUniformBlockIndex(program, uboName)
+  gl.uniformBlockBinding(program, blockIndex, bp)
+}
