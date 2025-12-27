@@ -1,13 +1,13 @@
 import { OffscreenDrawNode, Shader } from 'graph-gl'
-import vert from './shaders/screen.vert?raw'
-import frag from './shaders/noOp.frag?raw'
+import vert from './shared/screen.vert?raw'
+import frag from './shared/noOp.frag?raw'
 import { ScreenEffectModel } from './model'
 
-export class ScreenEffectNode extends OffscreenDrawNode {
+export abstract class ScreenEffectNode extends OffscreenDrawNode {
   public readonly effect: ScreenEffectModel
   private readonly noOpFx: ScreenEffectModel
 
-  public constructor(effect: ScreenEffectModel) {
+  protected constructor(effect: ScreenEffectModel) {
     super()
     this.effect = effect
     this.noOpFx = new ScreenEffectModel(new Shader(vert, frag))
@@ -20,7 +20,7 @@ export class ScreenEffectNode extends OffscreenDrawNode {
 
   public setInput(node: OffscreenDrawNode): void {
     const inputFrameBuffer = node.renderTarget!.frameBuffer
-    // this.effect.setInput(inputFrameBuffer)
+    this.effect.setInput(inputFrameBuffer)
     this.noOpFx.setInput(inputFrameBuffer)
   }
 
