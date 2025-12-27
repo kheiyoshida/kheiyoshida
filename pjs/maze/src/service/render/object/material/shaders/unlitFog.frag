@@ -43,13 +43,6 @@ struct SpotLight {
     float quadratic;
 };
 
-layout (std140) uniform Lights
-{
-    vec4 viewPos;
-    PointLight pointLights[2];
-    SpotLight spotLight;
-};
-
 layout (std140) uniform Color
 {
     vec3 unlitColor;

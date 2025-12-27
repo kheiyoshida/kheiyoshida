@@ -6,10 +6,9 @@ import { Effect } from './effect'
 import { ScreenEffect } from './screenEffect/screenEffect'
 
 export type Scene = {
-  unlitColor: Color
-  units: RenderUnit[]
   eye: Eye
-  lights: SceneLights
+  units: RenderUnit[]
+  unlitColor: Color
   effect: Effect
   screenEffect?: ScreenEffect
 }

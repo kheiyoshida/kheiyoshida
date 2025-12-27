@@ -1,7 +1,6 @@
 import { OffscreenDrawNode } from 'graph-gl'
 import { convertEyeValuesToMatrices } from './eye'
 import { BindingPoint, setUBOValue } from '../models/uniformBlock'
-import { convertLightsToUboData } from './lights'
 
 import { RenderUnit, Scene } from '../models'
 import { calcFaceNormalsOfBox } from './box'
@@ -24,7 +23,7 @@ export class UnitsRenderingNode extends OffscreenDrawNode {
 
     this.gl.depthMask(true)
 
-    const { eye, units, lights, unlitColor, effect } = this.scene
+    const { eye, units, unlitColor, effect } = this.scene
 
     this.gl.clearColor(...unlitColor.normalizedRGB, 1.0)
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
@@ -36,10 +35,6 @@ export class UnitsRenderingNode extends OffscreenDrawNode {
 
     const colorUboData = new Float32Array([...unlitColor.normalizedRGB, uPad])
     setUBOValue(BindingPoint.Color, colorUboData)
-
-    // apply lights
-    const lightsUBOData = convertLightsToUboData(lights, eye.position)
-    setUBOValue(BindingPoint.Lights, lightsUBOData)
 
     // apply effects
     setUBOValue(BindingPoint.Effect, new Float32Array([effect.fogLevel, uPad, uPad, uPad]))
