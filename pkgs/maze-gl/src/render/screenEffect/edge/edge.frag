@@ -3,7 +3,6 @@
 precision highp float;
 
 layout (location=0) out vec4 fragColor;// To COLOR_ATTACHMENT0
-layout (location=1) out vec4 fragNormal;// To COLOR_ATTACHMENT1
 
 in vec2 vUV;
 
@@ -97,6 +96,4 @@ void main() {
     vec3 finalColor = isEdge ? finalLineColor : originalColor;
 
     fragColor = vec4(finalColor, 1.0);
-
-    fragNormal = texture(uNormalTexture, vUV);
 }

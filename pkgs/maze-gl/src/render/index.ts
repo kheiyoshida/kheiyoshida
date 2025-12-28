@@ -11,8 +11,8 @@ const setupGraph = () => {
   const resolution: ImageResolution = { width: gl.canvas.width, height: gl.canvas.height }
 
   const sceneFrameBuffer = new FrameBuffer(resolution.width, resolution.height, { normal: true, depth: true })
-  const frameBufferA = new FrameBuffer(resolution.width, resolution.height, { normal: true, depth: false })
-  const frameBufferB = new FrameBuffer(resolution.width, resolution.height, { normal: true, depth: false })
+  const frameBufferA = new FrameBuffer(resolution.width, resolution.height)
+  const frameBufferB = new FrameBuffer(resolution.width, resolution.height)
 
   const sceneTarget: DrawTarget = { frameBuffer: sceneFrameBuffer }
   const renderTargetA: DrawTarget = { frameBuffer: frameBufferA }

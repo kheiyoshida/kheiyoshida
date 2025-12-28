@@ -56,7 +56,7 @@ export class ScreenEffectModel extends GenericModel {
 
   public setInput(inputFrameBuffer: FrameBuffer, sceneFrameBuffer: FrameBuffer): void {
     this.colorTexture = inputFrameBuffer.colorTexture.tex
-    this.normalTexture = inputFrameBuffer.normalTexture?.tex
+    this.normalTexture = sceneFrameBuffer.normalTexture?.tex
     this.depthTexture = sceneFrameBuffer.depthTexture?.tex
   }
 

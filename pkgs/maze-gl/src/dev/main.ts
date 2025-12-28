@@ -78,10 +78,10 @@ function frame(frameCount: number) {
         edgeRenderingLevel: 1.0,
       },
       blur: {
-        blurLevel: 0.6
+        blurLevel: 10
       },
       distortion: {
-        distortionLevel: 0.1
+        distortionLevel: 0.8
       }
     },
   }
