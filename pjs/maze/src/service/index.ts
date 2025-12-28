@@ -15,6 +15,7 @@ const renderer = makeRenderer(FPS)
 export const initializeServices = () => {
   bindControl()
   musicContext.startPlaying()
+
 }
 
 export const setupRenderingCycle = () => {

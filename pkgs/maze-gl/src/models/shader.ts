@@ -1,6 +1,8 @@
 import { Shader } from 'graph-gl'
 import { bindUBO } from './uniformBlock'
 
+export { Shader } from 'graph-gl'
+
 export class MaterialShader extends Shader {
   constructor(...params: ConstructorParameters<typeof Shader>) {
     super(...params)

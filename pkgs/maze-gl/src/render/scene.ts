@@ -17,7 +17,7 @@ export class UnitsRenderingNode extends OffscreenDrawNode {
 
   public override render() {
     // TODO: refactor this
-    // this.renderTarget!.frameBuffer.activate()
+    this.renderTarget!.frameBuffer.activate()
 
     this.gl.depthMask(true)
 
@@ -47,7 +47,7 @@ export class UnitsRenderingNode extends OffscreenDrawNode {
 
     units.forEach(renderUnit)
 
-    // this.renderTarget!.frameBuffer.deactivate()
+    this.renderTarget!.frameBuffer.deactivate()
   }
 }
 

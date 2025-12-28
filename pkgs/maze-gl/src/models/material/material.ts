@@ -1,6 +1,7 @@
-import { Shader } from '../shader'
+
 import { generateRandomNumber } from '../../utils/calc'
 import { Color, RGB } from '../../color'
+import { Shader } from 'graph-gl'
 
 type UniformValues = Record<string, unknown>
 

@@ -15,24 +15,20 @@ export const getEffectParams = (): EffectParams => {
   // todo: switch based on atmosphere
   const atmosphere = game.maze.currentWorld!.atmosphere
   params.edge = {
-    // edgeRenderingLevel: edgeRenderingParameter(stamina + sanity),
-    edgeRenderingLevel: 1,
+    edgeRenderingLevel: edgeRenderingParameter(stamina + sanity),
   }
 
   params.fog = {
-    // fogLevel: visibilityParam(stamina)
-    fogLevel: 1,
+    fogLevel: visibilityParam(stamina)
   }
 
   params.blur = {
-    // blurLevel: blurParameter(stamina)
-    blurLevel: 1,
+    blurLevel: blurParameter(stamina)
   }
 
-  // params.distortion = {
-  //   // distortionLevel: pixelRandomizationParameter(sanity),
-  //   distortionLevel: 0.3,
-  // }
+  params.distortion = {
+    distortionLevel: pixelRandomizationParameter(sanity),
+  }
 
   return params
 }
