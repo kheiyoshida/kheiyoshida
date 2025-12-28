@@ -6,10 +6,9 @@ import { bindUBO } from '../../../models/uniformBlock'
 
 export class EdgeRenderingEffect extends ScreenEffectModel {
   constructor() {
-    const shader = new Shader(vert, frag)
-    super(shader)
-    bindUBO(shader.program, 'Color')
-    bindUBO(shader.program, 'Effect')
+    super(new Shader(vert, frag))
+    bindUBO(this.shader.program, 'Color')
+    bindUBO(this.shader.program, 'Effect')
   }
 
   updateParams(params: EdgeRenderingParams) {

@@ -19,6 +19,7 @@ export class ScreenEffectModel extends GenericModel {
       { name: 'aUV', size: 2, stride: 16, offset: 8 },
     ])
 
+    // TODO: distribute on demand
     this.shader.use()
     this.shader.setUniformInt('uColorTexture', TextureUnit.Color)
     this.shader.setUniformInt('uNormalTexture', TextureUnit.Normal)

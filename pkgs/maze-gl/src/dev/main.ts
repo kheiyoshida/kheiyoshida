@@ -57,6 +57,8 @@ let eyeX = 0
 let eyeY = 0
 let eyeZ = 3000
 
+const resolution: [number, number] = [gl.canvas.width, gl.canvas.height]
+
 function frame(frameCount: number) {
   const scene: Scene = {
     baseColor: unlitColor,
@@ -70,7 +72,7 @@ function frame(frameCount: number) {
     },
     effect: {
       time: performance.now(),
-      resolution: [window.innerWidth, window.innerHeight],
+      resolution: resolution,
       edge: {
         edgeRenderingLevel: 1.0,
       }
