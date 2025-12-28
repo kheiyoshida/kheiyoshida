@@ -4,7 +4,6 @@ precision mediump float;
 in vec2 vUV;
 
 layout (location=0) out vec4 fragColor;// To COLOR_ATTACHMENT0
-layout (location=1) out vec4 fragNormal;// To COLOR_ATTACHMENT1
 
 layout (std140) uniform Effect
 {
@@ -41,6 +40,4 @@ void main() {
     result = color + randomDelta;
 
     fragColor = vec4(result, 1.0);
-
-    fragNormal = vec4(1, 1, 1, 1);
 }

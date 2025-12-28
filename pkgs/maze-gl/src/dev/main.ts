@@ -10,7 +10,6 @@ import { makeRenderer } from '../frame'
 import { MaterialShader, SceneObject } from '../models'
 import { toRadians } from '../utils/calc'
 import { Color } from '../color'
-import { randomFloatBetween } from 'utils'
 
 const objSpec = await buildGeometrySpecFromObj(objUrl)
 
@@ -23,7 +22,7 @@ const shader = new MaterialShader(vertShaderSource, fragShaderSource)
 const baseColor = new Color(0, 0.0, 0.0)
 
 const unlitColor = baseColor.clone()
-unlitColor.lightness = 0.9
+unlitColor.lightness = 0.0
 unlitColor.saturation = 0.0
 
 const lightColor = baseColor.clone()
@@ -78,10 +77,13 @@ function frame(frameCount: number) {
         edgeRenderingLevel: 1.0,
       },
       blur: {
-        blurLevel: 10
+        blurLevel: 1
       },
       distortion: {
-        distortionLevel: 0.8
+        distortionLevel: 0.3
+      },
+      fade: {
+        fadeLevel: 0.0
       }
     },
   }
