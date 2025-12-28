@@ -23,7 +23,6 @@ const setupGraph = () => {
   sceneNode.renderTarget = sceneTarget
 
   const edgeRenderingNode = new EdgeRenderingNode()
-  edgeRenderingNode.enabled = true
   edgeRenderingNode.renderTarget = renderTargetB
 
   const fogEffectNode = new FogEffectNode()
@@ -39,7 +38,6 @@ const setupGraph = () => {
   distortionNode.renderTarget = renderTargetB
 
   const fadeNode = new FadeNode()
-  fadeNode.enabled = true
   fadeNode.renderTarget = renderTargetA
 
   const screenNode = new InputColorRenderingNode()

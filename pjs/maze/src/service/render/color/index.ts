@@ -1,5 +1,5 @@
 import { makeColorScheme } from './scheme.ts'
-import { getMeshMaterial } from '../object/material'
+import { getMaterial } from '../object/material'
 import { FloorColorParams, FrameColorParams } from '../../../integration/query/vision/color/types.ts'
 
 import { Atmosphere } from '../../../game/world/types.ts'
@@ -9,8 +9,8 @@ export * from './types'
 const ColorScheme = makeColorScheme()
 
 export const applyMaterialColor = (mode: Atmosphere) => {
-  getMeshMaterial('default', mode).setColor(ColorScheme.materialColor)
-  getMeshMaterial('distinct', mode).setColor(ColorScheme.materialColor)
+  getMaterial('default', mode).setColor(ColorScheme.materialColor)
+  getMaterial('distinct', mode).setColor(ColorScheme.materialColor)
 }
 
 export const resolveFloorColor = (params: FloorColorParams) => {

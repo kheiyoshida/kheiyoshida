@@ -1,14 +1,9 @@
-import { getMesh } from './mesh.ts'
+import { getModel } from './model.ts'
 import { ObjectTransform, SceneObject } from 'maze-gl'
 import { MazeObject } from '../../../game/maze/physical/object.ts'
 import { NESW } from '../../../core/grid/direction.ts'
-import { Atmosphere } from '../../../game/world/types.ts'
 
-export const composeSceneObject = (mode: Atmosphere) => (obj: MazeObject) => {
-  const {
-    model: { code },
-  } = obj
-
+export const composeSceneObject = (obj: MazeObject) => {
   const transform = new ObjectTransform({
     rotateY: 0,
     scale: 1,
@@ -16,5 +11,5 @@ export const composeSceneObject = (mode: Atmosphere) => (obj: MazeObject) => {
 
   transform.rotateY = NESW.indexOf(obj.direction) * 90
 
-  return new SceneObject(getMesh(obj.model, mode), transform)
+  return new SceneObject(getModel(obj.model), transform)
 }

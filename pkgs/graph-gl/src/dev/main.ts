@@ -1,6 +1,6 @@
 // config
-import { ImageResolution, InputColorRenderingNode, OffscreenDrawNode, OnscreenRenderingNode } from '../graph'
-import { FullFrameBuffer, FrameBuffer, getGL } from '../gl'
+import { ImageResolution, InputColorRenderingNode, OffscreenDrawNode } from '../graph'
+import { FullFrameBuffer, getGL } from '../gl'
 import { CubeModel } from './cube/cube'
 import { getView } from './view'
 

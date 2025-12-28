@@ -12,7 +12,6 @@ export class EdgeRenderingEffect extends ScreenEffectModel {
   }
 
   updateParams(params: EdgeRenderingParams) {
-    if (!this.enabled) return;
     this.shader.use()
     this.shader.setUniformFloat('uEdgeRenderingLevel', params.edgeRenderingLevel)
   }

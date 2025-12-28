@@ -32,13 +32,13 @@ lightColor.lightness = 0.5
 const materialColor = baseColor.clone()
 materialColor.lightness = 0.3
 
-const material1 = new ColorMaterial(shader, {
+const material = new ColorMaterial(shader, {
   diffuse: materialColor.normalizedRGB,
   specular: materialColor.normalizedRGB,
   shininess: 1.0,
 })
 
-const boxMesh = new MazeModel(material1, objSpec)
+const boxMesh = new MazeModel(material, objSpec)
 
 const unit1: RenderUnit = {
   objects: [new SceneObject(boxMesh)],
@@ -76,15 +76,15 @@ function frame(frameCount: number) {
       edge: {
         edgeRenderingLevel: 1.0,
       },
-      blur: {
-        blurLevel: 1
-      },
-      distortion: {
-        distortionLevel: 0.3
-      },
-      fade: {
-        fadeLevel: 0.0
-      }
+      // blur: {
+      //   blurLevel: 1
+      // },
+      // distortion: {
+      //   distortionLevel: 0.3
+      // },
+      // fade: {
+      //   fadeLevel: 0.0
+      // }
     },
   }
 

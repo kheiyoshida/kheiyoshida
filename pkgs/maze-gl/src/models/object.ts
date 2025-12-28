@@ -36,9 +36,18 @@ export class ObjectTransform {
   // todo: consider caching the matrix result
   getModelMatrix(): mat4 {
     const mat = mat4.create()
-    mat4.scale(mat, mat, Vec3.create(this.scale)) // scale first for consistency
-    mat4.rotateY(mat, mat, toRadians(this.rotateY))
-    mat4.translate(mat, mat, [0, this.translateY, 0])
+    if (this.scale !== 1) {
+      mat4.scale(mat, mat, Vec3.create(this.scale)) // scale first for consistency
+    }
+
+    if (this.rotateY !== 0) {
+      mat4.rotateY(mat, mat, toRadians(this.rotateY))
+    }
+
+    if (this.translateY !== 0) {
+      mat4.translate(mat, mat, [0, this.translateY, 0])
+    }
+
     return mat
   }
 }
