@@ -17,13 +17,14 @@ export class UnitsRenderingNode extends OffscreenDrawNode {
 
   public override render() {
     // TODO: refactor this
-    this.renderTarget!.frameBuffer.activate()
+    // this.renderTarget!.frameBuffer.activate()
 
     this.gl.depthMask(true)
 
     const { eye, units, baseColor, effect } = this.scene
 
-    this.gl.clearColor(...baseColor.normalizedRGB, 1.0)
+    const [r,g,b] = baseColor.normalizedRGB
+    this.gl.clearColor(0, 1, 0, 1.0)
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
 
     // scene-level uniform values
@@ -46,7 +47,7 @@ export class UnitsRenderingNode extends OffscreenDrawNode {
 
     units.forEach(renderUnit)
 
-    this.renderTarget!.frameBuffer.deactivate()
+    // this.renderTarget!.frameBuffer.deactivate()
   }
 }
 

@@ -1,5 +1,5 @@
-import { Shader } from './base'
-import { bindUBO } from '../uniformBlock'
+import { Shader } from 'graph-gl'
+import { bindUBO } from './uniformBlock'
 
 export class MaterialShader extends Shader {
   constructor(...params: ConstructorParameters<typeof Shader>) {
@@ -11,5 +11,3 @@ export class MaterialShader extends Shader {
     bindUBO(this.program, 'Color')
   }
 }
-
-export class ScreenShader extends Shader {}
