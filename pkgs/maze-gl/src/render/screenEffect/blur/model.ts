@@ -7,7 +7,7 @@ import { bindUBO } from '../../../models/uniformBlock'
 
 export type BlurDir = 'horizontal' | 'vertical'
 
-export class BlurModel extends ScreenEffectModel {
+export class BlurEffect extends ScreenEffectModel {
   constructor(blurDir: BlurDir) {
     super(new Shader(vert, blurDir === 'horizontal' ? fragHori : fragVert))
     bindUBO(this.shader.program, 'Effect')

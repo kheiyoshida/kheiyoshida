@@ -79,6 +79,9 @@ function frame(frameCount: number) {
       },
       blur: {
         blurLevel: 0.6
+      },
+      distortion: {
+        distortionLevel: 0.1
       }
     },
   }

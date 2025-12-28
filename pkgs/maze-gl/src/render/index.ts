@@ -4,6 +4,7 @@ import { DrawTarget, FrameBuffer, getGL, ImageResolution, InputColorRenderingNod
 import { EdgeRenderingNode } from './screenEffect/edge/node'
 import { FogEffectNode } from './screenEffect/fog/node'
 import { BlurNode } from './screenEffect/blur/node'
+import { DistortionNode } from './screenEffect/distortion/node'
 
 const setupGraph = () => {
   const gl = getGL()
@@ -30,11 +31,12 @@ const setupGraph = () => {
 
   const blurHoriNode = new BlurNode('horizontal')
   const blurVertNode = new BlurNode('vertical')
-  blurHoriNode.enabled = true
-  blurVertNode.enabled = true
-
   blurHoriNode.renderTarget = renderTargetB
   blurVertNode.renderTarget = renderTargetA
+
+  const distortionNode = new DistortionNode()
+  distortionNode.enabled = false
+  distortionNode.renderTarget = renderTargetB
 
   const screenNode = new InputColorRenderingNode()
 
@@ -42,7 +44,8 @@ const setupGraph = () => {
   fogEffectNode.setInput(edgeRenderingNode, sceneFrameBuffer)
   blurHoriNode.setInput(fogEffectNode, sceneFrameBuffer)
   blurVertNode.setInput(blurHoriNode, sceneFrameBuffer)
-  screenNode.setInput(blurVertNode)
+  distortionNode.setInput(blurVertNode, sceneFrameBuffer)
+  screenNode.setInput(distortionNode)
 
   return function renderScene(scene: Scene) {
     sceneNode.updateScene(scene)
@@ -58,6 +61,9 @@ const setupGraph = () => {
 
     blurVertNode.updateParams(scene.effect.blur)
     blurVertNode.render()
+
+    distortionNode.updateParams(scene.effect.distortion)
+    distortionNode.render()
 
     screenNode.render()
   }
