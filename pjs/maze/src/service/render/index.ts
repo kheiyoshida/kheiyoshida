@@ -38,7 +38,7 @@ export const renderCurrentView: RenderHandler = ({ structure, vision }) => {
     const lights = getLights(eye, lightColor, vision.light)
     const effect = getEffect(vision.effectParams)
     const screenEffect = getScreenEffect(vision.mode, vision.screenEffectParams, unlitColor)
-    renderScene({ units, eye, lights, unlitColor, effect, screenEffect })
+    renderScene({ units, eye, lights, baseColor: unlitColor, effect, screenEffect })
   }
   RenderQueue.push(drawFrame)
 }
@@ -57,7 +57,7 @@ export const renderGo: RenderHandler = ({ structure, vision, movement }) => {
     const lights = getLights(eye, lightColor, vision.light)
     const effect = getEffect(vision.effectParams)
     const screenEffect = getScreenEffect(vision.mode, vision.screenEffectParams, unlitColor)
-    renderScene({ units, eye, lights, unlitColor, effect, screenEffect })
+    renderScene({ units, eye, lights, baseColor: unlitColor, effect, screenEffect })
 
     if (i === GoMoveMagValues.length - 1) {
       unblockControlRequired()
@@ -84,7 +84,7 @@ export const renderTurn =
       const effect = getEffect(vision.effectParams)
       const screenEffect = getScreenEffect(vision.mode, vision.screenEffectParams, unlitColor)
 
-      renderScene({ units, eye, lights, unlitColor, effect, screenEffect })
+      renderScene({ units, eye, lights, baseColor: unlitColor, effect, screenEffect })
 
       if (i === LRDeltaValues.length - 1) {
         unblockControlRequired()
@@ -126,7 +126,7 @@ export const renderGoDownstairs: RenderHandler = ({ structure, vision, movement 
     const lights = getLights(eye, lightColor, vision.light)
     const screenEffect = getScreenEffect(vision.mode, vision.screenEffectParams, unlitColor, fade)
     const effect = getEffect(vision.effectParams)
-    renderScene({ units, eye, lights, unlitColor, effect, screenEffect })
+    renderScene({ units, eye, lights, baseColor: unlitColor, effect, screenEffect })
     if (i === movementValueArray.length - 1) {
       unblockControlRequired()
       unblockStatusChangeRequired()
@@ -165,7 +165,7 @@ export const renderProceedToNextFloor: RenderHandler = ({ structure, vision, mov
 
     const effect = getEffect(vision.effectParams)
     const screenEffect = getScreenEffect(vision.mode, vision.screenEffectParams, unlitColor, fade)
-    renderScene({ units, eye, lights, unlitColor, effect, screenEffect })
+    renderScene({ units, eye, lights, baseColor: unlitColor, effect, screenEffect })
     if (i === movementValueArray.length - 1) {
       unblockControlRequired()
       unblockStatusChangeRequired()
@@ -189,7 +189,7 @@ export const renderDie: RenderHandler = ({ structure, vision }) => {
     const lights = getLights(eye, lightColor, vision.light)
     const effect = getEffect(vision.effectParams)
     const screenEffect = getScreenEffect(vision.mode, vision.screenEffectParams, unlitColor, fade)
-    renderScene({ units, eye, lights, unlitColor, effect, screenEffect })
+    renderScene({ units, eye, lights, baseColor: unlitColor, effect, screenEffect })
     if (i === DieFrames - 1) {
       resurrectEvent()
     }
@@ -213,7 +213,7 @@ export const renderResurrect: RenderHandler = ({ structure, vision }) => {
     const lights = getLights(eye, lightColor, vision.light)
     const effect = getEffect(vision.effectParams)
     const screenEffect = getScreenEffect(vision.mode, vision.screenEffectParams, unlitColor, fade)
-    renderScene({ units, eye, lights, unlitColor, effect, screenEffect })
+    renderScene({ units, eye, lights, baseColor: unlitColor, effect, screenEffect })
     if (i === ResurrectFrames - 1) {
       unblockControlRequired()
       unblockStatusChangeRequired()

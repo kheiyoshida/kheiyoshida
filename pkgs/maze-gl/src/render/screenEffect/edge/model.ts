@@ -1,21 +1,20 @@
 import { ScreenEffectModel } from '../model'
 import vert from '../shared/screen.vert?raw'
 import frag from './edge.frag?raw'
-import { Shader } from '../../../models'
-
-export type EdgeRenderingEffectParams = {
-  time: number
-  edgeRenderingLevel: number
-}
+import { EdgeRenderingParams, Shader } from '../../../models'
+import { bindUBO } from '../../../models/uniformBlock'
 
 export class EdgeRenderingEffect extends ScreenEffectModel {
   constructor() {
-    super(new Shader(vert, frag))
+    const shader = new Shader(vert, frag)
+    super(shader)
+    bindUBO(shader.program, 'Color')
+    bindUBO(shader.program, 'Effect')
   }
 
-  updateParams(params: EdgeRenderingEffectParams) {
+  updateParams(params: EdgeRenderingParams) {
+    if (!this.enabled) return;
     this.shader.use()
-    this.shader.setUniformFloat('uTime', params.time)
     this.shader.setUniformFloat('uEdgeRenderingLevel', params.edgeRenderingLevel)
   }
 }

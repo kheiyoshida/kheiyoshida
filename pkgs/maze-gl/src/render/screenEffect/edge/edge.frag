@@ -11,8 +11,16 @@ uniform sampler2D uColorTexture;
 uniform sampler2D uNormalTexture;
 uniform sampler2D uDepthTexture;
 
-// common uniforms
-uniform float uTime;
+layout (std140) uniform Effect
+{
+    float uTime;
+    vec3 uResolution;
+};
+
+layout (std140) uniform Color
+{
+    vec3 uBaseColor;
+};
 
 // shader-specific
 uniform float uEdgeRenderingLevel;

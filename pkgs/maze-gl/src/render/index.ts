@@ -37,10 +37,10 @@ const setupGraph = () => {
     sceneNode.updateScene(scene)
     sceneNode.render()
 
-    edgeRenderingNode.updateParams({
-      time: performance.now(),
-      edgeRenderingLevel: 1.0
-    })
+    if (scene.effect.edge) {
+      edgeRenderingNode.updateParams(scene.effect.edge)
+    }
+
     edgeRenderingNode.render()
 
     fogEffectNode.render()

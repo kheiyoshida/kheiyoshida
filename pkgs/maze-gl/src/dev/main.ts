@@ -22,7 +22,7 @@ const shader = new MaterialShader(vertShaderSource, fragShaderSource)
 const baseColor = new Color(0, 0.0, 0.0)
 
 const unlitColor = baseColor.clone()
-unlitColor.lightness = 0.8
+unlitColor.lightness = 0.9
 unlitColor.saturation = 0.0
 
 const lightColor = baseColor.clone()
@@ -59,7 +59,7 @@ let eyeZ = 3000
 
 function frame(frameCount: number) {
   const scene: Scene = {
-    unlitColor: unlitColor,
+    baseColor: unlitColor,
     units: [unit1, unit2],
     eye: {
       sight: 8000,
@@ -69,9 +69,12 @@ function frame(frameCount: number) {
       aspectRatio: window.innerWidth / window.innerHeight,
     },
     effect: {
-      fogLevel: 0.0,
+      time: performance.now(),
+      resolution: [window.innerWidth, window.innerHeight],
+      edge: {
+        edgeRenderingLevel: 1.0,
+      }
     },
-    screenEffect: undefined,
   }
 
   renderScene(scene)

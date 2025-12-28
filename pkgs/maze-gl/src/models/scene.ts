@@ -1,21 +1,12 @@
 import { RenderUnit } from './unit'
 import { Vector3D } from '../vector'
-import { PointLightValues, SpotLightValues } from './light'
 import { Color } from '../color'
-import { Effect } from './effect'
-import { ScreenEffect } from './screenEffect/screenEffect'
 
 export type Scene = {
   eye: Eye
   units: RenderUnit[]
-  unlitColor: Color
-  effect: Effect
-  screenEffect?: ScreenEffect
-}
-
-export type SceneLights = {
-  pointLights: [PointLightValues, PointLightValues]
-  spotLight: SpotLightValues
+  baseColor: Color
+  effect: EffectParams
 }
 
 export type Eye = {
@@ -41,4 +32,34 @@ export type Eye = {
    * usually width/height, but can be adjusted
    */
   aspectRatio: number
+}
+
+export type EffectParams = {
+  time: number
+  resolution: [number, number]
+  edge?: EdgeRenderingParams
+  fog?: FogParams
+  blur?: BlurParams
+  distortion?: DistortionParams
+  fade?: FadeParams
+}
+
+export type EdgeRenderingParams = {
+  edgeRenderingLevel: number
+}
+
+export type FogParams = {
+  fogLevel: number
+}
+
+export type BlurParams = {
+  blurLevel: number
+}
+
+export type DistortionParams = {
+  distortionLevel: number
+}
+
+export type FadeParams = {
+  fadeLevel: number
 }

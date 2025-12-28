@@ -17,10 +17,8 @@ const float distanceDiff = 0.4;
 
 layout (std140) uniform Color
 {
-    vec3 unlitColor;
+    vec3 baseColor;
 };
-
-const float fogLevel = 10.0;
 
 const float near = 0.01;
 const float far = 1.0;
@@ -32,7 +30,7 @@ float linearizeDepth(float depth)
 }
 
 void main() {
-    vec3 farColor = unlitColor;
+    vec3 farColor = baseColor;
     vec3 closeColor = texture(uColorTexture, vUV).xyz;
 
     float depth = texture(uDepthTexture, vUV).r;

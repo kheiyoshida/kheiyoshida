@@ -16,16 +16,14 @@ export class UnitsRenderingNode extends OffscreenDrawNode {
   }
 
   public override render() {
-    // super.render()
-
     // TODO: refactor this
     this.renderTarget!.frameBuffer.activate()
 
     this.gl.depthMask(true)
 
-    const { eye, units, unlitColor, effect } = this.scene
+    const { eye, units, baseColor, effect } = this.scene
 
-    this.gl.clearColor(...unlitColor.normalizedRGB, 1.0)
+    this.gl.clearColor(...baseColor.normalizedRGB, 1.0)
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
 
     // scene-level uniform values
@@ -33,11 +31,18 @@ export class UnitsRenderingNode extends OffscreenDrawNode {
     const uboData = new Float32Array([...projection, ...view])
     setUBOValue(BindingPoint.Eye, uboData)
 
-    const colorUboData = new Float32Array([...unlitColor.normalizedRGB, uPad])
+    const colorUboData = new Float32Array([...baseColor.normalizedRGB, uPad])
     setUBOValue(BindingPoint.Color, colorUboData)
 
     // apply effects
-    setUBOValue(BindingPoint.Effect, new Float32Array([effect.fogLevel, uPad, uPad, uPad]))
+    // prettier-ignore
+    setUBOValue(
+      BindingPoint.Effect,
+      new Float32Array([
+        effect.time, uPad, uPad, uPad,
+        effect.resolution[0], effect.resolution[1], uPad, uPad,
+      ])
+    )
 
     units.forEach(renderUnit)
 
