@@ -1,5 +1,5 @@
 import { ScreenEffectModel } from '../model'
-import { Shader } from '../../../models'
+import { BlurParams, Shader } from '../../../models'
 import vert from '../shared/screen.vert?raw'
 import fragVert from './blurVert.frag?raw'
 import fragHori from './blurHori.frag?raw'
@@ -11,5 +11,10 @@ export class BlurModel extends ScreenEffectModel {
   constructor(blurDir: BlurDir) {
     super(new Shader(vert, blurDir === 'horizontal' ? fragHori : fragVert))
     bindUBO(this.shader.program, 'Effect')
+  }
+
+  updateParams(params: BlurParams) {
+    this.shader.use()
+    this.shader.setUniformFloat('uBlurIntensity', params.blurLevel)
   }
 }

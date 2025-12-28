@@ -16,9 +16,10 @@ uniform sampler2D uColorTexture;
 uniform sampler2D uNormalTexture;
 uniform sampler2D uDepthTexture;
 
+uniform float uBlurIntensity;
+
 void main() {
     vec2 texelSize = vec2(1.0 / uResolution.x, 1.0 / uResolution.y);
-//    vec2 texelSize = vec2(1.0 / 800.0, 1.0 / 400.0);
 
     vec3 result = vec3(0.0);
 
@@ -30,18 +31,14 @@ void main() {
     float w4 = 0.016216;
 
     result += texture(uColorTexture, vUV).rgb * w0;
-
-    result += texture(uColorTexture, vUV + vec2(texelSize.x * 1.0, 0.0)).rgb * w1;
-    result += texture(uColorTexture, vUV - vec2(texelSize.x * 1.0, 0.0)).rgb * w1;
-
-    result += texture(uColorTexture, vUV + vec2(texelSize.x * 2.0, 0.0)).rgb * w2;
-    result += texture(uColorTexture, vUV - vec2(texelSize.x * 2.0, 0.0)).rgb * w2;
-
-    result += texture(uColorTexture, vUV + vec2(texelSize.x * 3.0, 0.0)).rgb * w3;
-    result += texture(uColorTexture, vUV - vec2(texelSize.x * 3.0, 0.0)).rgb * w3;
-
-    result += texture(uColorTexture, vUV + vec2(texelSize.x * 4.0, 0.0)).rgb * w4;
-    result += texture(uColorTexture, vUV - vec2(texelSize.x * 4.0, 0.0)).rgb * w4;
+    result += texture(uColorTexture, vUV + vec2(texelSize.x * 1.0 * uBlurIntensity, 0.0)).rgb * w1;
+    result += texture(uColorTexture, vUV - vec2(texelSize.x * 1.0 * uBlurIntensity, 0.0)).rgb * w1;
+    result += texture(uColorTexture, vUV + vec2(texelSize.x * 2.0 * uBlurIntensity, 0.0)).rgb * w2;
+    result += texture(uColorTexture, vUV - vec2(texelSize.x * 2.0 * uBlurIntensity, 0.0)).rgb * w2;
+    result += texture(uColorTexture, vUV + vec2(texelSize.x * 3.0 * uBlurIntensity, 0.0)).rgb * w3;
+    result += texture(uColorTexture, vUV - vec2(texelSize.x * 3.0 * uBlurIntensity, 0.0)).rgb * w3;
+    result += texture(uColorTexture, vUV + vec2(texelSize.x * 4.0 * uBlurIntensity, 0.0)).rgb * w4;
+    result += texture(uColorTexture, vUV - vec2(texelSize.x * 4.0 * uBlurIntensity, 0.0)).rgb * w4;
 
     fragColor = vec4(result, 1.0);
 

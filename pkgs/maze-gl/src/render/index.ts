@@ -48,15 +48,15 @@ const setupGraph = () => {
     sceneNode.updateScene(scene)
     sceneNode.render()
 
-    if (scene.effect.edge) {
-      edgeRenderingNode.updateParams(scene.effect.edge)
-    }
-
+    edgeRenderingNode.updateParams(scene.effect.edge)
     edgeRenderingNode.render()
 
     fogEffectNode.render()
 
+    blurHoriNode.updateParams(scene.effect.blur)
     blurHoriNode.render()
+
+    blurVertNode.updateParams(scene.effect.blur)
     blurVertNode.render()
 
     screenNode.render()

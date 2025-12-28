@@ -10,6 +10,7 @@ import { makeRenderer } from '../frame'
 import { MaterialShader, SceneObject } from '../models'
 import { toRadians } from '../utils/calc'
 import { Color } from '../color'
+import { randomFloatBetween } from 'utils'
 
 const objSpec = await buildGeometrySpecFromObj(objUrl)
 
@@ -75,6 +76,9 @@ function frame(frameCount: number) {
       resolution: resolution,
       edge: {
         edgeRenderingLevel: 1.0,
+      },
+      blur: {
+        blurLevel: 0.6
       }
     },
   }

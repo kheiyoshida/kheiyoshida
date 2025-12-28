@@ -7,8 +7,9 @@ export class EdgeRenderingNode extends ScreenEffectNode {
     super(new EdgeRenderingEffect())
   }
 
-  updateParams(params: EdgeRenderingParams) {
+  updateParams(params?: EdgeRenderingParams) {
     const fx = this.effect as EdgeRenderingEffect
-    fx.updateParams(params)
+    if (params) fx.updateParams(params)
+    else fx.enabled = false
   }
 }
