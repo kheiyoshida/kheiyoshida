@@ -1,6 +1,6 @@
 import { GeometrySpec, Vector3D } from '../types'
 import { getNormal } from './triangulation'
-import * as Vec3 from 'maze-gl/src/vector/vector'
+import { Vec3 } from 'maze-gl'
 
 /**
  * Recomputes face normals and assign them to vertices

@@ -1,4 +1,4 @@
-import { cross, normalize, sub } from 'maze-gl/src/vector/vector'
+import { cross, normalize, sub } from 'maze-gl/src/models/supporting/vector/vector'
 import { GeometrySpec, Index, TriangleIndexData, Vector3D } from '../types'
 import Delaunator from 'delaunator'
 

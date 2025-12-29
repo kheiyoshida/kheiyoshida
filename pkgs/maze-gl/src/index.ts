@@ -1,6 +1,4 @@
-export * from './models/core'
-export * from './models/supporting/vector'
-export * from './models/supporting/color'
+export * from './models'
 export * from './runtime'
 
 export { getGL } from 'graph-gl'

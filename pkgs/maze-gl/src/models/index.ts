@@ -1,7 +1,4 @@
-export * from './core/unit/model/model'
+export * from './core'
 export * from './supporting/geometry'
-
-export * from './core/scene'
-export * from './core/unit/unit'
-export * from './core/unit/object'
-export * from './core/unit/model/shader'
+export * from './supporting/vector'
+export * from './supporting/color'
