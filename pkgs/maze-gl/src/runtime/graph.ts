@@ -6,8 +6,11 @@ import { FogEffectNode } from '../models/core/effect/fog/node'
 import { BlurNode } from '../models/core/effect/blur/node'
 import { DistortionNode } from '../models/core/effect/distortion/node'
 import { FadeNode } from '../models/core/effect/fade/node'
+import { ScreenEffectNode } from '../models/core/effect/node'
 
-const setupGraph = () => {
+type RenderGraph = (scene: Scene) => void
+
+export const connectGraph = (nodes: ScreenEffectNode[]): RenderGraph => {
   const gl = getGL()
   const resolution: ImageResolution = { width: gl.canvas.width, height: gl.canvas.height }
 
@@ -22,57 +25,51 @@ const setupGraph = () => {
   const sceneNode = new UnitsRenderingNode()
   sceneNode.renderTarget = sceneTarget
 
-  const edgeRenderingNode = new EdgeRenderingNode()
-  edgeRenderingNode.renderTarget = renderTargetB
-
-  const fogEffectNode = new FogEffectNode()
-  fogEffectNode.enabled = true
-  fogEffectNode.renderTarget = renderTargetA
-
-  const blurHoriNode = new BlurNode('horizontal')
-  const blurVertNode = new BlurNode('vertical')
-  blurHoriNode.renderTarget = renderTargetB
-  blurVertNode.renderTarget = renderTargetA
-
-  const distortionNode = new DistortionNode()
-  distortionNode.renderTarget = renderTargetB
-
-  const fadeNode = new FadeNode()
-  fadeNode.renderTarget = renderTargetA
-
   const screenNode = new InputColorRenderingNode()
 
-  edgeRenderingNode.setInput(sceneNode, sceneFrameBuffer)
-  fogEffectNode.setInput(edgeRenderingNode, sceneFrameBuffer)
-  blurHoriNode.setInput(fogEffectNode, sceneFrameBuffer)
-  blurVertNode.setInput(blurHoriNode, sceneFrameBuffer)
-  distortionNode.setInput(blurVertNode, sceneFrameBuffer)
-  fadeNode.setInput(distortionNode, sceneFrameBuffer)
-  screenNode.setInput(fadeNode)
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i]
+    if (i % 2 === 0) {
+      node.renderTarget = renderTargetA
+    } else {
+      node.renderTarget = renderTargetB
+    }
+
+    if (i === 0) {
+      node.setInput(sceneNode, sceneFrameBuffer)
+    } else {
+      node.setInput(nodes[i - 1], sceneFrameBuffer)
+    }
+  }
+
+  screenNode.setInput(nodes[nodes.length - 1])
 
   return function renderScene(scene: Scene) {
     sceneNode.updateScene(scene)
     sceneNode.render()
 
-    edgeRenderingNode.updateParams(scene.effect.edge)
-    edgeRenderingNode.render()
-
-    fogEffectNode.render()
-
-    blurHoriNode.updateParams(scene.effect.blur)
-    blurHoriNode.render()
-
-    blurVertNode.updateParams(scene.effect.blur)
-    blurVertNode.render()
-
-    distortionNode.updateParams(scene.effect.distortion)
-    distortionNode.render()
-
-    fadeNode.updateParams(scene.effect.fade)
-    fadeNode.render()
+    for (const node of nodes) node.renderEffect(scene.effect)
 
     screenNode.render()
   }
+}
+
+const setupGraph = () => {
+  const edgeRenderingNode = new EdgeRenderingNode()
+  const fogEffectNode = new FogEffectNode()
+  const blurHoriNode = new BlurNode('horizontal')
+  const blurVertNode = new BlurNode('vertical')
+  const distortionNode = new DistortionNode()
+  const fadeNode = new FadeNode()
+
+  return connectGraph([
+    edgeRenderingNode,
+    fogEffectNode,
+    distortionNode,
+    blurHoriNode,
+    blurVertNode,
+    fadeNode,
+  ])
 }
 
 let graph: ReturnType<typeof setupGraph>

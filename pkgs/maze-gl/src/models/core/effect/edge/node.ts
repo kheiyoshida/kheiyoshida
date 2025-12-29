@@ -1,16 +1,17 @@
 import { ScreenEffectNode } from '../node'
-import { EdgeRenderingEffect, EdgeRenderingParams } from './model'
+import { EdgeRenderingEffect } from './model'
+import { EffectParams } from '../index'
 
 export class EdgeRenderingNode extends ScreenEffectNode {
   constructor() {
     super(new EdgeRenderingEffect())
   }
 
-  updateParams(params?: EdgeRenderingParams) {
+  updateParams(params: EffectParams) {
     const fx = this.effect as EdgeRenderingEffect
-    if (params) {
+    if (params.edge) {
       this.enabled = true
-      fx.updateParams(params)
+      fx.updateParams(params.edge)
     }
     else this.enabled = false
   }

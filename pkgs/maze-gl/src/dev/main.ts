@@ -1,6 +1,6 @@
 import { getGL, resizeCanvas } from '../runtime/webgl'
 import { renderScene, Scene } from '../'
-import { makeRenderer } from '../runtime/frame'
+import { makeRenderer } from '../runtime'
 import { toRadians } from '../utils/calc'
 import { getDebugScene } from './debugScene'
 
@@ -32,15 +32,18 @@ function frame(frameCount: number) {
       edge: {
         edgeRenderingLevel: 1.0,
       },
-      // blur: {
-      //   blurLevel: 1
-      // },
-      // distortion: {
-      //   distortionLevel: 0.3
-      // },
-      // fade: {
-      //   fadeLevel: 0.0
-      // }
+      fog: {
+        fogLevel: 1.0
+      },
+      blur: {
+        blurLevel: 5
+      },
+      distortion: {
+        distortionLevel: 1
+      },
+      fade: {
+        fadeLevel: 0.0
+      }
     },
   }
 

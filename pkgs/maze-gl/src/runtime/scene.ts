@@ -24,7 +24,7 @@ export class UnitsRenderingNode extends OffscreenDrawNode {
     const { eye, units, baseColor, effect } = this.scene
 
     const [r,g,b] = baseColor.normalizedRGB
-    this.gl.clearColor(0, 1, 0, 1.0)
+    this.gl.clearColor(r, g, b, 1.0)
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
 
     // scene-level uniform values

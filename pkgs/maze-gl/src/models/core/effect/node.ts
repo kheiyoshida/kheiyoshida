@@ -2,6 +2,7 @@ import { FrameBuffer, OffscreenDrawNode, Shader } from 'graph-gl'
 import vert from './shared/screen.vert?raw'
 import frag from './shared/noOp.frag?raw'
 import { ScreenEffectModel } from './model'
+import { EffectParams } from './index'
 
 export abstract class ScreenEffectNode extends OffscreenDrawNode {
   public readonly effect: ScreenEffectModel
@@ -29,5 +30,12 @@ export abstract class ScreenEffectNode extends OffscreenDrawNode {
   public override render() {
     this.gl.depthMask(false) // so depth texture won't get overwritten by the screen rect
     super.render()
+  }
+
+  public abstract updateParams(params: EffectParams): void
+
+  public renderEffect(params: EffectParams): void {
+    this.updateParams(params)
+    this.render()
   }
 }
