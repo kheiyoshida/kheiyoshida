@@ -12,7 +12,8 @@ export class FogEffectNode extends ScreenEffectNode {
       this.enabled = true
       const fx = this.effect as FogEffect
       fx.updateParams(params.fog)
+    } else {
+      this.enabled = false
     }
-    this.enabled = false
   }
 }

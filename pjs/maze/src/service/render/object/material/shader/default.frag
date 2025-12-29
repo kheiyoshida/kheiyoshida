@@ -12,15 +12,17 @@ layout (std140) uniform Color
     vec3 unlitColor;
 };
 
+const float distanceDiff = 0.4;
+
 void main()
 {
     vec3 norm = normalize(vNormal);
 
     vec3 finalColor;
     if (unlitColor.x > 0.5 && unlitColor.y > 0.5 && unlitColor.z > 0.5) {
-        finalColor = unlitColor - 0.1;
+        finalColor = unlitColor - distanceDiff;
     } else {
-        finalColor = unlitColor + 0.1;
+        finalColor = unlitColor + distanceDiff;
     }
 
     fragColor = vec4(finalColor, 1.0);

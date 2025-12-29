@@ -2,6 +2,18 @@ import { makeDecreasingParameter, makeIncreasingParameter } from '../utils/param
 import { game } from '../../../game'
 import { EffectParams } from 'maze-gl'
 import { logicalHeight, logicalWidth } from '../../../config'
+import { Atmosphere } from '../../../game/world/types.ts'
+import { debugAtmosphere } from '../../../config/debug.ts'
+
+type EffectType = Exclude<keyof EffectParams, 'time' | 'resolution'>
+
+const AtmosphereEffectMap: Record<Atmosphere, EffectType[]> = {
+  [Atmosphere.atmospheric]: ['fog', 'blur'],
+  [Atmosphere.smooth]: ['fog', 'blur'],
+  [Atmosphere.ambient]: ['fog', 'blur', 'distortion'],
+  [Atmosphere.digital]: ['fog', 'blur', 'distortion', 'edge'],
+  [Atmosphere.abstract]: ['fog', 'blur', 'edge'],
+}
 
 export const getEffectParams = (): EffectParams => {
   const { stamina, sanity } = game.player.status
@@ -9,25 +21,16 @@ export const getEffectParams = (): EffectParams => {
   const params: EffectParams = {
     resolution: [logicalWidth, logicalHeight],
     time: performance.now(),
-
   }
 
-  // todo: switch based on atmosphere
-  const atmosphere = game.maze.currentWorld!.atmosphere
-  params.edge = {
-    edgeRenderingLevel: edgeRenderingParameter(stamina + sanity),
-  }
+  const atmosphere = debugAtmosphere ?? game.maze.currentWorld!.atmosphere
+  const enableEffects = AtmosphereEffectMap[atmosphere]
 
-  params.fog = {
-    fogLevel: visibilityParam(stamina)
-  }
-
-  params.blur = {
-    blurLevel: blurParameter(stamina)
-  }
-
-  params.distortion = {
-    distortionLevel: pixelRandomizationParameter(sanity),
+  for (const fx of enableEffects) {
+    if (fx === 'fog') params.fog = { fogLevel: visibilityParam(stamina) }
+    if (fx === 'blur') params.blur = { blurLevel: blurParameter(stamina) }
+    if (fx === 'distortion') params.distortion = { distortionLevel: pixelRandomizationParameter(sanity) }
+    if (fx === 'edge') params.edge = { edgeRenderingLevel: edgeRenderingParameter(stamina + sanity) }
   }
 
   return params
