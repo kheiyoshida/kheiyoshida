@@ -1,6 +1,6 @@
-import { Scene, SceneObject } from '../models'
-import { getGL } from '../webgl'
-import { buildGeometrySpecFromObj, ColorMaterial, MazeModel, RenderUnit } from '../'
+import { buildGeometrySpecFromObj, MaterialShader, Scene, SceneObject } from '../models'
+import { getGL } from '../runtime/webgl'
+import { ColorMaterial, MazeModel, RenderUnit } from '../'
 
 import vertShaderSource from './dev.vert?raw'
 import fragShaderSource from './dev.frag?raw'
@@ -8,8 +8,7 @@ import fragShaderSource from './dev.frag?raw'
 import objUrl from './cube.obj?url'
 import { boxSize, getDeformedBox } from './geometries'
 import { toRadians } from '../utils/calc'
-import { Color } from '../color'
-import { MaterialShader } from '../models/shader'
+import { Color } from '../models/supporting/color'
 
 const objSpec = await buildGeometrySpecFromObj(objUrl)
 

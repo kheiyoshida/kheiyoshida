@@ -1,6 +1,6 @@
-export * from './models'
-export * from './render'
-export * from './frame'
-export * from './vector'
-export * from './color'
-export * from './webgl'
+export * from './models/core'
+export * from './models/supporting/vector'
+export * from './models/supporting/color'
+export * from './runtime'
+
+export { getGL } from 'graph-gl'

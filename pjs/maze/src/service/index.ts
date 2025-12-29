@@ -6,7 +6,7 @@ import { renderDebugText } from './interface/debug.tsx'
 import { trackTime } from './utils/time.ts'
 import { consumeMessageQueue } from './consumer.ts'
 import { RenderQueue } from './render/queue.ts'
-import { setupMazeGL } from 'maze-gl/src/webgl.ts'
+import { setupMazeGL } from 'maze-gl'
 import { musicContext } from './music'
 import { game } from '../game'
 

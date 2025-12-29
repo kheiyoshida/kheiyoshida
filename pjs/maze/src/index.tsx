@@ -1,4 +1,4 @@
-import { getGL, resizeCanvas } from 'maze-gl/src/webgl'
+import { getGL, resizeCanvas } from 'maze-gl'
 import pjson from '../package.json'
 import { initializeServices, setupRenderingCycle } from './service'
 import { Interface } from './service/interface'

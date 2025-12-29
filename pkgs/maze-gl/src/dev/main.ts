@@ -1,6 +1,6 @@
-import { getGL, resizeCanvas } from '../webgl'
+import { getGL, resizeCanvas } from '../runtime/webgl'
 import { renderScene, Scene } from '../'
-import { makeRenderer } from '../frame'
+import { makeRenderer } from '../runtime/frame'
 import { toRadians } from '../utils/calc'
 import { getDebugScene } from './debugScene'
 
