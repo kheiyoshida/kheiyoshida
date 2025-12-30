@@ -35,7 +35,7 @@ export const getEffectParams = (): EffectParams => {
   return params
 }
 
-const blurParameter = makeIncreasingParameter(0, 1, 2500, 1200)
+const blurParameter = makeIncreasingParameter(0, 5, 2000, 800)
 const pixelRandomizationParameter = makeIncreasingParameter(0, 1, 2500, 750)
 const edgeRenderingParameter = makeDecreasingParameter(0, 1, 6000, 0)
 

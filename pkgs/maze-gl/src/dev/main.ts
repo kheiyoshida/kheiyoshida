@@ -36,7 +36,7 @@ function frame(frameCount: number) {
         fogLevel: 1.0
       },
       blur: {
-        blurLevel: 5
+        blurLevel: 1
       },
       distortion: {
         distortionLevel: 1
