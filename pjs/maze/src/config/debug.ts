@@ -1,5 +1,3 @@
-import { Atmosphere, Structure } from '../game/world/types.ts'
+import { Atmosphere } from '../game/world/types.ts'
 
-export const debugAtmosphere: Atmosphere | undefined = Atmosphere.abstract
-
-export const debugStructure: Structure | undefined = 'classic'
+export const debugAtmosphere: Atmosphere | undefined = undefined

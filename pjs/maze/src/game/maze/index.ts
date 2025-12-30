@@ -3,6 +3,7 @@ import { BuildMazeGridParams } from '../../core/level/builder'
 import { StructureContext } from '../world/types.ts'
 import { WorldProvider } from '../world'
 import { WorldState } from '../world/state.ts'
+import { debugAtmosphere } from '../../config/debug.ts'
 
 /**
  * manages maze grids over levels
@@ -32,7 +33,11 @@ export class Maze {
   }
 
   get currentWorld() {
-    return this.worldProvider.getWorld(this._levelNumber)
+    const world = this.worldProvider.getWorld(this._levelNumber)
+    if (debugAtmosphere) {
+      world.atmosphere = debugAtmosphere
+    }
+    return world
   }
 
   restart() {

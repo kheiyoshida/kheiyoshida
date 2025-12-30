@@ -8,17 +8,20 @@ export * from './types'
 
 const ColorScheme = makeColorScheme()
 
-export const applyMaterialColor = (mode: Atmosphere) => {
-  getMaterial('default', mode).setColor(ColorScheme.materialColor)
-  getMaterial('distinct', mode).setColor(ColorScheme.materialColor)
-}
-
 export const resolveFloorColor = (params: FloorColorParams) => {
   ColorScheme.moveLightnessRange(params.lightnessMoveDelta)
   ColorScheme.increaseSaturation(params.saturationDelta, params.maxSaturation)
 }
 
-export const resolveFrameColor = (params: FrameColorParams, mode: Atmosphere) => {
+const ColorMagnifyValues: Record<Atmosphere, number> = {
+  [Atmosphere['atmospheric']]: 2.0,
+  [Atmosphere['smooth']]: 0.8,
+  [Atmosphere['ambient']]: 0.5,
+  [Atmosphere['digital']]: 0.2,
+  [Atmosphere['abstract']]: 0,
+}
+
+export const resolveFrameColor = (params: FrameColorParams, atmosphere: Atmosphere) => {
   // hue
   ColorScheme.rotateHue(params.hueDelta * 180)
 
@@ -26,7 +29,10 @@ export const resolveFrameColor = (params: FrameColorParams, mode: Atmosphere) =>
   ColorScheme.setLightLevel(params.litLevel * 0.4)
 
   // apply material color
-  applyMaterialColor(mode)
+  const col = ColorScheme.materialColor.clone()
+  col.lightness *= ColorMagnifyValues[atmosphere]
+  getMaterial().setColor(col)
+
 
   return {
     lightColor: ColorScheme.lightColor,

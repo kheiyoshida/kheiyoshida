@@ -3,7 +3,6 @@ import { game } from '../../../game'
 import { EffectParams } from 'maze-gl'
 import { logicalHeight, logicalWidth } from '../../../config'
 import { Atmosphere } from '../../../game/world/types.ts'
-import { debugAtmosphere } from '../../../config/debug.ts'
 
 type EffectType = Exclude<keyof EffectParams, 'time' | 'resolution'>
 
@@ -23,7 +22,7 @@ export const getEffectParams = (): EffectParams => {
     time: performance.now(),
   }
 
-  const atmosphere = debugAtmosphere ?? game.maze.currentWorld!.atmosphere
+  const atmosphere = game.maze.currentWorld!.atmosphere
   const enableEffects = AtmosphereEffectMap[atmosphere]
 
   for (const fx of enableEffects) {

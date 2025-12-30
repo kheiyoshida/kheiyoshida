@@ -14,7 +14,7 @@ const lightnessRangeToAvoid = {
 const litInversionThreshold = 0.5
 
 const defaultLitDelta = 0.1 // 0.1
-const materialLightness = 0.1 // 0.1
+const materialLightness = 0.3 // 0.1
 
 const minLightnessSum = 0.1
 const maxLightnessSum = 0.6

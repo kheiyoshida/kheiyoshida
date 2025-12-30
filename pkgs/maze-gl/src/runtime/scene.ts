@@ -23,7 +23,7 @@ export class UnitsRenderingNode extends OffscreenDrawNode {
 
     const { eye, units, baseColor, effect } = this.scene
 
-    const [r,g,b] = baseColor.normalizedRGB
+    const [r, g, b] = baseColor.normalizedRGB
     this.gl.clearColor(r, g, b, 1.0)
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
 
@@ -32,7 +32,7 @@ export class UnitsRenderingNode extends OffscreenDrawNode {
     const uboData = new Float32Array([...projection, ...view])
     setUBOValue(BindingPoint.Eye, uboData)
 
-    const colorUboData = new Float32Array([...baseColor.normalizedRGB, uPad])
+    const colorUboData = new Float32Array([r, g, b, uPad])
     setUBOValue(BindingPoint.Color, colorUboData)
 
     // apply effects

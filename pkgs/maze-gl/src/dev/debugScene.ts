@@ -34,6 +34,7 @@ export const getDebugScene = (): Scene => {
     diffuse: materialColor.normalizedRGB,
     specular: materialColor.normalizedRGB,
     shininess: 1.0,
+    relativeColor: [0.1, 0.1, 0.1]
   })
 
   const boxMesh = new MazeModel(material, objSpec)
