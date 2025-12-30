@@ -110,6 +110,8 @@ export const renderGoDownstairs: RenderHandler = ({ structure, vision, movement 
     const halfFrames = movementValueArray.length / 2
     const fade = i > halfFrames ? calcSmoothValue(i - halfFrames, halfFrames) : 0
 
+    console.log(fade)
+
     renderScene({
       units,
       eye,
@@ -148,8 +150,7 @@ export const renderProceedToNextFloor: RenderHandler = ({ structure, vision, mov
       view: alternativeViewService.getNextLevelView(structure.view),
     })
 
-    const fade =
-      i >= movementValueArray.length / 2 ? 0 : 1 - calcSmoothValue(i, movementValueArray.length / 2)
+    const fade = 1.0 - calcSmoothValue(i, movementValueArray.length)
 
     renderScene({
       units,
