@@ -17,6 +17,7 @@ export class FogEffect extends ScreenEffectModel {
   }
 
   updateParams(params: FogParams) {
-    // todo: implement
+    this.shader.use()
+    this.shader.setUniformFloat('uVisibility', params.fogLevel)
   }
 }

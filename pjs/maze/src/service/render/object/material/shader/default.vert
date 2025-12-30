@@ -13,6 +13,7 @@ layout (std140) uniform Eye
 {
     mat4 projection;
     mat4 view;
+    float far;
 };
 
 layout (std140) uniform DeformedBox

@@ -20,7 +20,9 @@ layout (std140) uniform Color
 };
 
 const float near = 0.01;
-const float far = 1.0;
+const float far = 2.5; // ndcscale(eye.sight)
+
+uniform float uVisibility;
 
 float linearizeDepth(float depth)
 {
@@ -35,6 +37,14 @@ void main() {
     float depth = texture(uDepthTexture, vUV).r;
     float distance = linearizeDepth(depth);
 
-    vec3 finalColor = mix(closeColor, farColor, distance);
+    float fogEnd = uVisibility * (far - 0.5);
+    float fogDensity = 1.0 / fogEnd;
+
+    // exponential squared fog
+    float fogFactor = 1.0 - exp(-pow(distance * fogDensity, 2.0));
+    float fogFactor2 = distance / fogEnd;
+    fogFactor = clamp(fogFactor * 0.5 + fogFactor2, 0.0, 1.0);
+
+    vec3 finalColor = mix(closeColor, farColor, fogFactor);
     fragColor = vec4(finalColor, 1.0);
 }

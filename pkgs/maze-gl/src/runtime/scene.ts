@@ -4,7 +4,7 @@ import { BindingPoint, setUBOValue } from '../models/supporting/uniformBlock'
 
 import { RenderUnit, Scene } from '../models'
 import { calcFaceNormalsOfBox } from './box'
-import { positionToNDC } from './scale'
+import { ndcScale, positionToNDC } from './scale'
 
 const uPad = 0.0
 
@@ -29,7 +29,12 @@ export class UnitsRenderingNode extends OffscreenDrawNode {
 
     // scene-level uniform values
     const [view, projection] = convertEyeValuesToMatrices(eye)
-    const uboData = new Float32Array([...projection, ...view])
+    // prettier-ignore
+    const uboData = new Float32Array([
+      ...projection,
+      ...view,
+      ndcScale(eye.sight), uPad, uPad, uPad
+    ])
     setUBOValue(BindingPoint.Eye, uboData)
 
     const colorUboData = new Float32Array([r, g, b, uPad])

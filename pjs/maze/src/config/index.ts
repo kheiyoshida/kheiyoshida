@@ -27,8 +27,7 @@ export const CameraZ = IsMobile ? FloorLength / 12 : FloorLength / 8
 export const MaxDistortionSpeed = 10
 export const MaxDistortionRange = 0.4
 
-const ModelGridLength = 6
-export const MaxVisibleLength = FloorPathAvgLength * ModelGridLength
+export const MaxVisibleLength = FloorPathAvgLength * 5
 
 export const DefaultGoFrames = 8
 export const DefaultTurnFrames = 4
