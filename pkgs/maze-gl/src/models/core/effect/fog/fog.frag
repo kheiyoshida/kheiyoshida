@@ -43,8 +43,10 @@ void main() {
     // exponential squared fog
     float fogFactor = 1.0 - exp(-pow(distance * fogDensity, 2.0));
     float fogFactor2 = distance / fogEnd;
-    fogFactor = clamp(fogFactor * 0.5 + fogFactor2, 0.0, 1.0);
+    fogFactor = clamp(fogFactor, 0.0, 1.0);
 
-    vec3 finalColor = mix(closeColor, farColor, fogFactor);
+    float finalFogFactor = clamp(fogFactor * 0.5 + fogFactor2, 0.0, 1.0);
+
+    vec3 finalColor = mix(closeColor, farColor, finalFogFactor);
     fragColor = vec4(finalColor, 1.0);
 }

@@ -1,6 +1,5 @@
 import { WorldState } from './state.ts'
 import { StructureContext, World } from './types.ts'
-import { debugAtmosphere } from '../../config/debug.ts'
 import { getAtmosphere } from './atmosphere.ts'
 
 export class WorldProvider {

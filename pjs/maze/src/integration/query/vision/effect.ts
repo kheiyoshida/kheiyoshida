@@ -7,11 +7,19 @@ import { Atmosphere } from '../../../game/world/types.ts'
 type EffectType = Exclude<keyof EffectParams, 'time' | 'resolution'>
 
 const AtmosphereEffectMap: Record<Atmosphere, EffectType[]> = {
-  [Atmosphere.atmospheric]: ['fog', 'blur'],
-  [Atmosphere.smooth]: ['fog', 'blur'],
+  [Atmosphere.atmospheric]: ['fog', 'blur', 'distortion'],
+  [Atmosphere.smooth]: ['fog', 'blur', 'distortion'],
   [Atmosphere.ambient]: ['fog', 'blur', 'distortion'],
   [Atmosphere.digital]: ['fog', 'blur', 'distortion', 'edge'],
   [Atmosphere.abstract]: ['fog', 'blur', 'edge'],
+}
+
+const distMagValues: Record<Atmosphere, number> = {
+  [Atmosphere['atmospheric']]: 0.1,
+  [Atmosphere['smooth']]: 0.2,
+  [Atmosphere['ambient']]: 0.8,
+  [Atmosphere['digital']]: 1.5,
+  [Atmosphere['abstract']]: 0,
 }
 
 export const getEffectParams = (): EffectParams => {
@@ -28,7 +36,9 @@ export const getEffectParams = (): EffectParams => {
   for (const fx of enableEffects) {
     if (fx === 'fog') params.fog = { fogLevel: visibilityParam(stamina) }
     if (fx === 'blur') params.blur = { blurLevel: blurParameter(stamina) }
-    if (fx === 'distortion') params.distortion = { distortionLevel: pixelRandomizationParameter(sanity) }
+    if (fx === 'distortion') {
+      params.distortion = { distortionLevel: pixelRandomizationParameter(sanity) * distMagValues[atmosphere] }
+    }
     if (fx === 'edge') params.edge = { edgeRenderingLevel: edgeRenderingParameter(stamina + sanity) }
   }
 
@@ -40,4 +50,4 @@ const pixelRandomizationParameter = makeIncreasingParameter(0, 1, 2500, 750)
 const edgeRenderingParameter = makeDecreasingParameter(0, 1, 6000, 0)
 
 // decrease visibility when stamina is low
-const visibilityParam = makeDecreasingParameter(0, 1, 2500, 1000)
+const visibilityParam = makeDecreasingParameter(0, 1, 3000, 0)

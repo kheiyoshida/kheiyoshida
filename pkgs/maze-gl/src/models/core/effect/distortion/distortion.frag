@@ -36,7 +36,7 @@ void main() {
     vec3 colorDelta = vec3(min(min(randomVector.r, randomVector.g), randomVector.b));
     colorDelta = (colorDelta - 0.5) * 2.0; // normalize to [-1, 1] range
 
-    vec3 randomDelta = colorDelta * mix(0.01, 0.4, uRandomizationLevel);
+    vec3 randomDelta = colorDelta * mix(0.0, 0.4, uRandomizationLevel);
     result = color + randomDelta;
 
     fragColor = vec4(result, 1.0);
