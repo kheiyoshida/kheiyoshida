@@ -126,8 +126,8 @@ export class FrameBuffer {
  * frame buffer with color, normal and depth texture attached
  */
 export class FullFrameBuffer extends FrameBuffer {
-  public readonly normalTexture!: FrameBufferNormalTexture
-  public readonly depthTexture!: FrameBufferDepthTexture
+  declare public readonly normalTexture: FrameBufferNormalTexture
+  declare public readonly depthTexture: FrameBufferDepthTexture
 
   constructor(
     width: number,

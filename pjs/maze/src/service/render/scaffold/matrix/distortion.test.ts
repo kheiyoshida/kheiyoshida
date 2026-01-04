@@ -110,7 +110,7 @@ describe(`${DistortionMatrixLayer.name}`, () => {
 describe(`${DistortionMatrix.name}`, () => {
   it(`can update deltas in bulk`, () => {
     const distortionMatrix = new DistortionMatrix()
-    expect(distortionMatrix.layers.length).toBe(6)
+    expect(distortionMatrix.layers.length).toBe(7)
     distortionMatrix.update(100, 10)
     distortionMatrix.iterate((delta) => {
       expect(delta.value).not.toEqual([0, 0, 0])

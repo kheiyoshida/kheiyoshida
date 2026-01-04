@@ -7,12 +7,12 @@ const RootConfig: Config = {
   },
   moduleNameMapper: {
     '^src/(.*)': '<rootDir>/src/$1',
+    '\\.(vert|frag|glsl)\\?raw$': '<rootDir>/../../jest/__mock__/rawShader.ts',
   },
   testEnvironment: 'jsdom',
   testMatch: ['<rootDir>/src/**/*.test.ts'],
   prettierPath: require.resolve('prettier-2'),
   setupFiles: ['../../jest/globalSetup.ts'],
-
 }
 
 const JestConfig: Config = {

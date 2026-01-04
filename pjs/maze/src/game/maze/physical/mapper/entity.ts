@@ -34,6 +34,7 @@ export class ModelEntity {
 
 export class ModelEntityEmitter {
   private classEmitter: ModelClassEmitter
+
   constructor(
     private readonly density: number,
     gravity: number
@@ -54,8 +55,8 @@ export class ModelEntityEmitter {
   }
 
   emitEnsured(avoidModelType?: ModelType, maxLength?: number): ModelEntity {
-    const cls = this.classEmitter.emitModelClassEnsured(avoidModelType)
-    const length = cls === 'pole' && maxLength ? randomIntInclusiveBetween(1, maxLength) : 1
-    return new ModelEntity(cls, length!)
+    const modelClass = this.classEmitter.emitModelClassEnsured(avoidModelType)
+    const length = modelClass === 'pole' && maxLength ? randomIntInclusiveBetween(1, maxLength) : 1
+    return new ModelEntity(modelClass, length!)
   }
 }
