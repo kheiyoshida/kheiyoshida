@@ -13,6 +13,13 @@ export const modelTypeMap: Record<ModelClass, ModelType> = {
   pole: 'stacked',
 }
 
+export enum ModelSize {
+  Small = 0,
+  Medium = 1,
+  Large = 2,
+  Expand = 3,
+}
+
 export class ModelEntity {
   public modelClass: ModelClass
 
@@ -22,20 +29,25 @@ export class ModelEntity {
 
   public readonly verticalLength: number = 1
 
-  constructor(modelClass: ModelClass, length = 1) {
+  constructor(modelClass: ModelClass, size: ModelSize, usage: ModelUsage = 'normal', length = 1) {
     this.modelClass = modelClass
+    this.usage = usage
     this.verticalLength = length
+
+    this.code = concreteModelCodeService[this.modelClass].getCode(this.usage, this.verticalLength)
+
+    // TODO: set variant
   }
 
-  public usage: ModelUsage | undefined = undefined
+  public usage: ModelUsage
 
-  getModelCode(usage: ModelUsage = 'normal'): ModelCode {
-    return concreteModelCodeService[this.modelClass].getCode(usage, this.verticalLength)
-  }
+  public readonly code: ModelCode
+}
 
-  get code() {
-    return this.getModelCode(this.usage ?? 'normal')
-  }
+type EntityOptions = {
+  avoidModelType?: ModelType
+  usage?: ModelUsage
+  maxLength?: number
 }
 
 export class ModelEntityEmitter {
@@ -52,17 +64,29 @@ export class ModelEntityEmitter {
     return Math.random() < this.density
   }
 
-  emitNullable(avoidModelType?: ModelType, maxLength?: number, ensure = false): ModelEntity | null {
-    if (!ensure && !this.shouldEmit()) return null
+  static defaultOptions: EntityOptions = {
+    avoidModelType: undefined,
+    usage: 'normal',
+    maxLength: undefined,
+  }
+
+  emitNullable(
+    { avoidModelType, maxLength, usage }: EntityOptions = ModelEntityEmitter.defaultOptions
+  ): ModelEntity | null {
+    if (!this.shouldEmit()) return null
     const modelClass = this.classEmitter.emitModelClass(avoidModelType)
     if (!modelClass) return null
     const length = modelClass === 'pole' && maxLength ? randomIntInclusiveBetween(1, maxLength) : 1
-    return new ModelEntity(modelClass, length)
+    const size = ModelSize.Large
+    return new ModelEntity(modelClass, size, usage, length)
   }
 
-  emitEnsured(avoidModelType?: ModelType, maxLength?: number): ModelEntity {
+  emitEnsured(
+    { avoidModelType, maxLength, usage }: EntityOptions = ModelEntityEmitter.defaultOptions
+  ): ModelEntity {
     const modelClass = this.classEmitter.emitModelClassEnsured(avoidModelType)
     const length = modelClass === 'pole' && maxLength ? randomIntInclusiveBetween(1, maxLength) : 1
-    return new ModelEntity(modelClass, length!)
+    const size = ModelSize.Large
+    return new ModelEntity(modelClass, size, usage, length)
   }
 }

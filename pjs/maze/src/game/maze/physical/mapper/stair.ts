@@ -33,10 +33,10 @@ export class StairMapper {
 
   private mapStairStair(grid: PhysicalMazeGrid, stairPos: Position2D, direction: Direction) {
     const stairPosSlice = grid.getSliceByLogicalPosition(stairPos)
-    stairPosSlice.set(VerticalLayer.Middle, null)// TODO: put ceiling for classic structure
+    stairPosSlice.set(VerticalLayer.Middle, null) // TODO: put ceiling for classic structure
     stairPosSlice.set(
       VerticalLayer.Down1,
-      new MazeBlock([new MazeObject(this.entityEmitter.emitEnsured(), direction, 'stair')])
+      new MazeBlock([new MazeObject(this.entityEmitter.emitEnsured({ usage: 'stair' }), direction)])
     )
 
     for (let i = 1; i <= 4; i++) {
@@ -51,14 +51,15 @@ export class StairMapper {
     const stairPosSlice = grid.getSliceByLogicalPosition(stairPos)
     stairPosSlice.set(
       VerticalLayer.Down1,
-      new MazeBlock([new MazeObject(this.entityEmitter.emitEnsured(), direction, 'stair')])
+      new MazeBlock([new MazeObject(this.entityEmitter.emitEnsured({ usage: 'stair' }), direction)])
     )
 
     for (let i = 1; i <= 4; i++) {
       const corridorPos = getPositionInDirection(stairPos, direction, i)
       const slice = grid.getSliceByLogicalPosition(corridorPos)
       slice.set(VerticalLayer.Down2, null)
-      if (i !== 0) slice.set(VerticalLayer.Down3, new MazeBlock([new MazeObject(this.entityEmitter.emitEnsured())]))
+      if (i !== 0)
+        slice.set(VerticalLayer.Down3, new MazeBlock([new MazeObject(this.entityEmitter.emitEnsured())]))
     }
   }
 

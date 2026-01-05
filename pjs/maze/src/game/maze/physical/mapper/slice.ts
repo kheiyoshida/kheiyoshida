@@ -44,17 +44,17 @@ export class SliceMapper {
   }
 
   private mapFloorSlice(slice: PhysicalGridSlice) {
-    const up2 = this.entityEmitter.emitNullable('stacked')
-    const up1 = this.entityEmitter.emitNullable('stacked')
+    const up2 = this.entityEmitter.emitNullable({ avoidModelType: 'stacked' })
+    const up1 = this.entityEmitter.emitNullable({ avoidModelType: 'stacked' })
 
     if (up2) slice.set(VerticalLayer.Up2, new MazeBlock([new MazeObject(up2)]))
     if (up1) slice.set(VerticalLayer.Up1, new MazeBlock([new MazeObject(up1)]))
 
-    const down1 = this.entityEmitter.emitEnsured(undefined, 2)
+    const down1 = this.entityEmitter.emitEnsured({ maxLength: 2 })
     slice.set(VerticalLayer.Down1, new MazeBlock([new MazeObject(down1)]))
 
     if (down1.modelType == 'stacked') {
-      const down2 = this.entityEmitter.emitEnsured('floating', 1)
+      const down2 = this.entityEmitter.emitEnsured({ avoidModelType: 'floating' })
       slice.set(VerticalLayer.Down2, new MazeBlock([new MazeObject(down2)]))
     } else {
       const down2 = this.entityEmitter.emitNullable()
@@ -68,11 +68,11 @@ export class SliceMapper {
     while (cursor <= VerticalLayer.Down2) {
       let entity: ModelEntity | null = null
       if (stack) {
-        entity = this.entityEmitter.emitEnsured('floating', 5)
+        entity = this.entityEmitter.emitEnsured({ avoidModelType: 'floating', maxLength: 5 })
       } else if (cursor === VerticalLayer.Middle) {
-        entity = this.entityEmitter.emitEnsured(undefined, 5)
+        entity = this.entityEmitter.emitEnsured({ maxLength: 5 })
       } else {
-        entity = this.entityEmitter.emitNullable(undefined, 5)
+        entity = this.entityEmitter.emitNullable({ maxLength: 5 })
       }
 
       if (entity) {
@@ -89,10 +89,10 @@ export class SliceMapper {
   }
 
   private mapEmptySlice(slice: PhysicalGridSlice) {
-    const up2 = this.entityEmitter.emitNullable('stacked')
+    const up2 = this.entityEmitter.emitNullable({ avoidModelType: 'stacked' })
     if (up2) slice.set(VerticalLayer.Up2, new MazeBlock([new MazeObject(up2)]))
 
-    const up1 = this.entityEmitter.emitNullable('stacked')
+    const up1 = this.entityEmitter.emitNullable({ avoidModelType: 'stacked' })
     if (up1) slice.set(VerticalLayer.Up1, new MazeBlock([new MazeObject(up1)]))
 
     const down2 = this.entityEmitter.emitNullable()

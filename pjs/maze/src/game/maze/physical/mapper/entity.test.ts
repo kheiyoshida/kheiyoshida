@@ -5,7 +5,7 @@ describe(`${ModelEntityEmitter.name}`, () => {
     const emitter = new ModelEntityEmitter(0.5, 0.5)
 
     for (let i = 0; i < 10; i++) {
-      const entity = emitter.emitNullable('stacked', 3)
+      const entity = emitter.emitNullable({avoidModelType: 'stacked', maxLength: 3})
       if (entity) {
         expect(modelTypeMap[entity!.modelClass]).not.toBe('stacked')
         expect(entity.verticalLength).toBeLessThanOrEqual(3)
