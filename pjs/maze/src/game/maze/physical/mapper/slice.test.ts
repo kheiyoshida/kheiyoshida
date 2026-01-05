@@ -1,8 +1,8 @@
 import { PhysicalGridSlice, SliceMapper } from './slice.ts'
 import { VerticalGrid3DSlice } from '../../../../core/grid/grid3d.ts'
 import { VerticalLayer } from '../grid.ts'
-import { ModelEntity } from './entity.ts'
 import { MazeBlock } from '../block.ts'
+import { ModelEntity } from 'maze-models'
 
 const getBlockEntity = (block: MazeBlock): ModelEntity => block.objects[0].model!
 

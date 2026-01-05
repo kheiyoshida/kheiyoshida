@@ -1,5 +1,5 @@
+import { ModelEntity } from 'maze-models'
 import { Direction, NESW } from '../../../core/grid/direction.ts'
-import { ModelEntity } from './mapper/entity.ts'
 
 export type IMazeObject = {
   readonly model: ModelEntity

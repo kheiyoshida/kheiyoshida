@@ -1,48 +1,6 @@
-import { ModelCode } from 'maze-models'
-import { concreteModelCodeService, ModelUsage } from './code.ts'
 import { ModelClassEmitter } from './class.ts'
 import { randomIntInclusiveBetween } from 'utils'
-
-export type ModelClass = 'floatingBox' | 'stackedBox' | 'tile' | 'pole'
-export type ModelType = 'floating' | 'stacked'
-
-export const modelTypeMap: Record<ModelClass, ModelType> = {
-  floatingBox: 'floating',
-  tile: 'floating',
-  stackedBox: 'stacked',
-  pole: 'stacked',
-}
-
-export enum ModelSize {
-  Small = 0,
-  Medium = 1,
-  Large = 2,
-  Expand = 3,
-}
-
-export class ModelEntity {
-  public modelClass: ModelClass
-
-  get modelType(): ModelType {
-    return modelTypeMap[this.modelClass]
-  }
-
-  public readonly verticalLength: number = 1
-
-  constructor(modelClass: ModelClass, size: ModelSize, usage: ModelUsage = 'normal', length = 1) {
-    this.modelClass = modelClass
-    this.usage = usage
-    this.verticalLength = length
-
-    this.code = concreteModelCodeService[this.modelClass].getCode(this.usage, this.verticalLength)
-
-    // TODO: set variant
-  }
-
-  public usage: ModelUsage
-
-  public readonly code: ModelCode
-}
+import { ModelEntity, ModelSize, ModelType, ModelUsage } from 'maze-models'
 
 type EntityOptions = {
   avoidModelType?: ModelType

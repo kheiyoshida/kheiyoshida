@@ -34,10 +34,14 @@ export const BaseGeometryMap: Record<BaseGeometryCode, GeometrySpec> = {
 }
 
 const conversionMap: Record<ModelCode, BaseGeometryCode> = {
+  Pole1: 'Pole',
+  Pole2: 'Pole',
+  Pole3: 'Pole',
+  Pole4: 'Pole',
+  Pole5: 'Pole',
   BottomTile: 'BottomTile',
   Ceil: 'Ceil',
   Floor: 'Floor',
-  Pole: 'Pole',
   StairCeil: 'StairCeil',
   StairSteps: 'StairSteps',
   StairTile: 'StairTile',
@@ -48,7 +52,7 @@ const conversionMap: Record<ModelCode, BaseGeometryCode> = {
   FloatingFloorBox: 'Box',
   FloatingStairBox: 'Box',
   StackableBox: 'Box',
-  StackableStairBox: 'StairBox'
+  StackableStairBox: 'StairBox',
 }
 
 /**

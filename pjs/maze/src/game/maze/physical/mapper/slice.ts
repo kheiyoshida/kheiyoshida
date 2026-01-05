@@ -1,9 +1,10 @@
 import { VerticalGrid3DSlice } from '../../../../core/grid/grid3d.ts'
 import { MazeBlock } from '../block.ts'
-import { ModelEntity, ModelEntityEmitter } from './entity.ts'
+import { ModelEntityEmitter } from './entity.ts'
 import { PhysicalGridParams } from './index.ts'
 import { VerticalLayer } from '../grid.ts'
 import { MazeObject } from '../object.ts'
+import { ModelEntity } from 'maze-models'
 
 export type PhysicalGridSlice = VerticalGrid3DSlice<MazeBlock>
 

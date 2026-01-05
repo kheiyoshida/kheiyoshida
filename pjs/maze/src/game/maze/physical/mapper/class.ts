@@ -1,4 +1,4 @@
-import { ModelClass, ModelType, modelTypeMap } from './entity.ts'
+import { ModelClass, ModelType, modelTypeMap } from 'maze-models'
 import { mapPercentageThresholds, ratioToPercentage } from 'utils'
 
 export type ModelClassWeightValues = Record<ModelClass, number>

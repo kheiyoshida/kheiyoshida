@@ -7,6 +7,7 @@ import { generatePole } from './generators/pole'
 import { generateTile } from './generators/tile'
 
 export type { ModelCode } from './code'
+export * from './entity'
 
 export const generateGeometry = (modelCode: ModelCode, length?: number): GeometrySpec => {
   if (isClassic(modelCode))

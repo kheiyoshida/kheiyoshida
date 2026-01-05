@@ -1,3 +1,5 @@
+import { ModelClass, ModelUsage } from './entity'
+
 export type ModelCode =
   | ClassicModelCode
   | TileModelCode
@@ -24,3 +26,34 @@ export const isStackableBox = (code: ModelCode): code is StackableBoxModelCode =
   code === 'StackableBox' || code === 'StackableStairBox'
 export const isFloatingBox = (code: ModelCode): code is FloatingBoxModelCode =>
   code === 'FloatingBox' || code === 'FloatingStairBox' || code === 'FloatingFloorBox'
+
+type ConcreteCodeService = {
+  getCode(usage: ModelUsage, length: number): ModelCode
+}
+
+export const concreteModelCodeService: Record<ModelClass, ConcreteCodeService> = {
+  floatingBox: {
+    getCode(usage: ModelUsage): ModelCode {
+      if (usage == 'stair') return 'FloatingStairBox'
+      return 'FloatingBox'
+    },
+  },
+  pole: {
+    getCode(usage: ModelUsage, length: number): ModelCode {
+      if (usage === 'stair') return 'StackableStairBox'
+      return `Pole${length}` as PoleModelCode
+    },
+  },
+  stackedBox: {
+    getCode(usage: ModelUsage): ModelCode {
+      if (usage == 'stair') return 'StackableStairBox'
+      return 'StackableBox'
+    },
+  },
+  tile: {
+    getCode(usage: ModelUsage): ModelCode {
+      if (usage == 'stair') return 'StairTile'
+      return 'Tile'
+    },
+  },
+}

@@ -45,6 +45,9 @@ const JestConfig: Config = {
       ...RootConfig,
       displayName: 'maze',
       rootDir: './pjs/maze',
+      transformIgnorePatterns: [
+        '<rootDir>/node_modules/(?!delaunator)',
+      ]
     },
     {
       ...RootConfig,

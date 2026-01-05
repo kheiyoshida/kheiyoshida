@@ -1,4 +1,4 @@
-import { ModelEntityEmitter, modelTypeMap } from './entity.ts'
+import { ModelEntityEmitter } from './entity.ts'
 
 describe(`${ModelEntityEmitter.name}`, () => {
   it(`emits model entity`, () => {
@@ -7,7 +7,7 @@ describe(`${ModelEntityEmitter.name}`, () => {
     for (let i = 0; i < 10; i++) {
       const entity = emitter.emitNullable({avoidModelType: 'stacked', maxLength: 3})
       if (entity) {
-        expect(modelTypeMap[entity!.modelClass]).not.toBe('stacked')
+        expect(entity.modelType).not.toBe('stacked')
         expect(entity.verticalLength).toBeLessThanOrEqual(3)
       }
     }

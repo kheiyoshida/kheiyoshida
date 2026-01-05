@@ -1,7 +1,7 @@
 import { StairMapper } from './stair.ts'
 import { PhysicalMazeGrid, VerticalLayer } from '../grid.ts'
 import { getPositionInDirection, Position2D } from '../../../../core/grid/position2d.ts'
-import { ModelUsage } from './code.ts'
+import { ModelUsage } from 'maze-models'
 
 describe(`stair mapping`, () => {
   test(`stair`, () => {

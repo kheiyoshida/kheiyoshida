@@ -3,7 +3,7 @@ import { PhysicalMazeGrid, VerticalLayer } from '../../../../game/maze/physical/
 import { MazeBlock } from '../../../../game/maze/physical/block.ts'
 import { Position3D } from '../../../../core/grid/grid3d.ts'
 import { MazeObject } from '../../../../game/maze/physical/object.ts'
-import { ModelEntity, ModelSize } from '../../../../game/maze/physical/mapper/entity.ts'
+import { ModelEntity, ModelSize } from 'maze-models'
 
 test.each<[ViewPosition, Position3D]>([
   [
