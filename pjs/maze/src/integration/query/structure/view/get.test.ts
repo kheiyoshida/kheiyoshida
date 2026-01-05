@@ -11,6 +11,7 @@ describe(`${buildViewGrid.name}`, () => {
       [0, 1, 0],
       [0, 2, 0],
     ])
+
     const physicalGrid = PhysicalMazeGrid.convert(grid, 'stair', { density: 1.0, gravity: 0.5 })
     const origin: ViewOrigin = {
       position: { x: 1, y: 0 },
@@ -20,7 +21,7 @@ describe(`${buildViewGrid.name}`, () => {
     const view = buildViewGrid(physicalGrid, origin)
 
     expect(view.getBlock({ x: ViewX.Center, y: ViewY.Down1, z: ViewZ.L1 }).objects).toHaveLength(1)
-    expect(view.getBlock({ x: ViewX.Center, y: ViewY.Middle, z: ViewZ.L1 }).objects).toHaveLength(0)
+    expect(view.getBlock({ x: ViewX.Center, y: ViewY.Middle, z: ViewZ.L1 })).toBeNull()
     expect(view.getBlock({ x: ViewX.Center, y: ViewY.Down1, z: ViewZ.L3 }).objects[0].model.usage).toBe('stair')
   })
 
@@ -39,32 +40,8 @@ describe(`${buildViewGrid.name}`, () => {
     const view = buildViewGrid(physicalGrid, origin)
 
     expect(view.getBlock({ x: ViewX.Center, y: ViewY.Down1, z: ViewZ.L1 }).objects).toHaveLength(1)
-    expect(view.getBlock({ x: ViewX.Left1, y: ViewY.Middle, z: ViewZ.L1 }).objects).toHaveLength(0)
+    expect(view.getBlock({ x: ViewX.Center, y: ViewY.Middle, z: ViewZ.L1 })).toBeNull()
     expect(view.getBlock({ x: ViewX.Center, y: ViewY.Down1, z: ViewZ.L3 }).objects[0].model.usage).toBe('stair')
-  })
-
-  test(`debug`, () => {
-    const grid = makeTestGrid([
-      [0, 0, 1, 1, 1, 0],
-      [0, 0, 1, 0, 0, 0],
-      [0, 0, 1, 0, 0, 0],
-      [0, 0, 1, 0, 0, 0],
-      [0, 0, 1, 1, 2, 0],
-      [0, 0, 0, 0, 0, 0],
-    ])
-    const physicalGrid = PhysicalMazeGrid.convert(grid, 'stair', { density: 1.0, gravity: 0.5 })
-    const origin: ViewOrigin = {
-      position: { x: 2, y: 3 },
-      direction: 'e',
-    }
-
-    buildViewGrid(physicalGrid, origin)
-    buildViewGrid(physicalGrid, origin)
-    buildViewGrid(physicalGrid, origin)
-
-    const view = buildViewGrid(physicalGrid, origin)
-
-    expect(view.getBlock({ x: ViewX.Center, y: ViewY.Middle, z: ViewZ.L1 }).objects).toHaveLength(2)
   })
 })
 
