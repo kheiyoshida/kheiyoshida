@@ -18,10 +18,14 @@ export enum ModelSize {
   Expand = 3,
 }
 
+// code + variant
+export type GeometryId = `${ModelCode}_${number}`
+
 export class ModelEntity {
   public modelClass: ModelClass
   public readonly verticalLength: number = 1
   public readonly usage: ModelUsage
+  public variant: number = 0
 
   get modelType(): ModelType {
     return modelTypeMap[this.modelClass]
@@ -38,4 +42,8 @@ export class ModelEntity {
   }
 
   public readonly code: ModelCode
+
+  public get id(): GeometryId {
+    return `${this.code}_${this.variant}`
+  }
 }

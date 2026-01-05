@@ -1,7 +1,7 @@
 import { GeometryPreviewer } from './preview'
 import { generatePole } from '../models/generators/pole'
 
-const geo = generatePole('Pole', {
+const geo = generatePole('Pole3', {
   type: 'pole',
   radiusBase: 1,
   radiusDelta: 0.8,

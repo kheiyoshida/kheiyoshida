@@ -1,22 +1,24 @@
 import { MazeModel } from 'maze-gl'
 import { getMaterial } from './material'
-import { generateGeometry, ModelCode } from 'maze-models'
-import { ModelEntity } from '../../../game/maze/physical/mapper/entity.ts'
+import { getGeometry, ModelEntity, GeometryId } from 'maze-models'
 
-type CompositeModelKey = `${ModelCode}_${number}`
+export enum MaterialId {
+  Default = 0,
+}
+
+type CompositeModelKey = `${GeometryId}_${MaterialId}`
 
 const modelMap = new Map<CompositeModelKey, MazeModel>()
 
 export const getModel = (model: ModelEntity): MazeModel => {
-  const { code } = model
+  // just one material for now
+  const materialId = MaterialId.Default
 
-  const variant = 0 // TODO: implement variants in entity
-
-  const key: CompositeModelKey = `${code}_${variant ?? 0}`
+  const key: CompositeModelKey = `${model.id}_${materialId}`
 
   if (!modelMap.has(key)) {
     const material = getMaterial()
-    const geometry = generateGeometry(code, length)
+    const geometry = getGeometry(model)
     const mesh = new MazeModel(material, geometry)
     modelMap.set(key, mesh)
   }
