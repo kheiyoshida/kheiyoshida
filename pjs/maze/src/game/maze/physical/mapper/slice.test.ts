@@ -4,14 +4,14 @@ import { VerticalLayer } from '../grid.ts'
 import { ModelEntity } from './entity.ts'
 import { MazeBlock } from '../block.ts'
 
-const getBlockEntity = (block: MazeBlock): ModelEntity => block.objects[0].entity!
+const getBlockEntity = (block: MazeBlock): ModelEntity => block.objects[0].model!
 
 const printSlice = (slice: PhysicalGridSlice): void => {
   console.log(
     slice.items
       .map((item) =>
         item
-          ? `${item?.objects[0].model.code} ${item?.objects[0].entity?.modelType} ${item?.objects[0].entity?.verticalLength}`
+          ? `${item?.objects[0].model.code} ${item?.objects[0].model?.modelType} ${item?.objects[0].model?.verticalLength}`
           : 'null'
       )
       .join(', ')

@@ -1,6 +1,7 @@
 import { StairMapper } from './stair.ts'
 import { PhysicalMazeGrid, VerticalLayer } from '../grid.ts'
 import { getPositionInDirection, Position2D } from '../../../../core/grid/position2d.ts'
+import { ModelUsage } from './code.ts'
 
 describe(`stair mapping`, () => {
   test(`stair`, () => {
@@ -16,13 +17,9 @@ describe(`stair mapping`, () => {
     stairMapper.mapStairSlices(grid, stairPos, 'n')
 
     // stair pos should have stair and ceil
-    expect(
-      grid
-        .getSliceByLogicalPosition(stairPos)
-        .get(VerticalLayer.Down1)
-        ?.objects[0].model.code.toLowerCase()
-        .includes('stair')
-    ).toBe(true)
+    expect(grid.getSliceByLogicalPosition(stairPos).get(VerticalLayer.Down1)?.objects[0].model.usage).toBe(
+      <ModelUsage>'stair'
+    )
 
     // corridor path
     for (let i = 1; i <= 4; i++) {
@@ -46,13 +43,9 @@ describe(`stair mapping`, () => {
 
     // stair pos should have stair and ceil
     expect(grid.getSliceByLogicalPosition(stairPos).get(VerticalLayer.Middle)).toBeNull()
-    expect(
-      grid
-        .getSliceByLogicalPosition(stairPos)
-        .get(VerticalLayer.Down1)
-        ?.objects[0].model.code.toLowerCase()
-        .includes('stair')
-    ).toBe(true)
+    expect(grid.getSliceByLogicalPosition(stairPos).get(VerticalLayer.Down1)?.objects[0].model.usage).toBe(
+      <ModelUsage>'stair'
+    )
 
     // corridor path
     for (let i = 1; i <= 4; i++) {

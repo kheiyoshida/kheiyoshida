@@ -27,8 +27,14 @@ export class ModelEntity {
     this.verticalLength = length
   }
 
+  public usage: ModelUsage | undefined = undefined
+
   getModelCode(usage: ModelUsage = 'normal'): ModelCode {
     return concreteModelCodeService[this.modelClass].getCode(usage, this.verticalLength)
+  }
+
+  get code() {
+    return this.getModelCode(this.usage ?? 'normal')
   }
 }
 
