@@ -4,6 +4,7 @@ import { StructureContext } from '../world/types.ts'
 import { WorldProvider } from '../world'
 import { WorldState } from '../world/state.ts'
 import { debugAtmosphere } from '../../config/debug.ts'
+import { ModelEntity } from 'maze-models'
 
 /**
  * manages maze grids over levels
@@ -24,6 +25,7 @@ export class Maze {
     this._levelNumber++
     this.worldProvider.generateWorld(this._levelNumber)
     const params = this.buildParams(this._levelNumber, this.structureContext)
+    ModelEntity.variantRange.max = Math.min(3 + Math.floor(this._levelNumber / 3), 9)
     this._level = MazeLevel.build(params, this.structureContext, this.worldState)
     this.debugParams = params
   }

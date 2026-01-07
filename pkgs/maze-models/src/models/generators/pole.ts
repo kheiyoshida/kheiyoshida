@@ -4,7 +4,7 @@ import { runPipeline } from '../../pipeline/pipeline'
 import { computeNormals, recomputeFaceNormals } from '../../pipeline/processors/normals'
 import { deformGeometry, randomiseVertex } from '../../pipeline/processors/deformation'
 import { ModelSize } from '../entity'
-import { randomFloatBetween, randomIntInclusiveBetween } from 'utils'
+import { randomFloatBetween, randomFloatInAsymmetricRange, randomIntInclusiveBetween } from 'utils'
 
 const SizeRangeMap: Record<ModelSize, [number, number]> = {
   [ModelSize.Expand]: [1, 1],
@@ -25,7 +25,7 @@ export const generatePole = (length: number): GeometryGenerator => (size, varian
   const distortion = 0.1
   const sizeRange = SizeRangeMap[size]
   const radiusBase = randomFloatBetween(...sizeRange)
-  const radiusDelta = Math.max(0.1, radiusBase * 2.0 - 0.4)
+  const radiusDelta = Math.max(0.1, radiusBase * 3 * variant * 0.1)
   const numOfCorners = randomIntInclusiveBetween(...CornersRange[size])
 
   const poleParams: PoleGeometryParams = {
@@ -35,14 +35,14 @@ export const generatePole = (length: number): GeometryGenerator => (size, varian
     numOfCorners,
     heightBase: length * 2,
     heightDelta: 0,
-    heightPerSegment: 0.5,
-    segmentYDelta: 0.3,
+    heightPerSegment: 1.0 + randomFloatInAsymmetricRange(variant * 0.1),
+    segmentYDelta: 0.8,
   }
 
   const pole = poleGeometryFactory(poleParams)
   return runPipeline(pole, [
     recomputeFaceNormals,
     deformGeometry(randomiseVertex(distortion, false)),
-    computeNormals('preserve'),
+    computeNormals('face'),
   ])
 }

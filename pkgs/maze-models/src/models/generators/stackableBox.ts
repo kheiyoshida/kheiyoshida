@@ -31,7 +31,7 @@ export const generateStackableBox =
   (size, variant) => {
     const sizeRange = StackableBoxSizeRange[size]
     const expand = size === ModelSize.Expand
-    const distortion = 0.5 // TODO: determine distortion based on variant?
+    const distortion = variant * 0.1
 
     const tesselation = StackableBoxTesselation[size]
 

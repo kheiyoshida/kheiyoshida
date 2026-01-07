@@ -21,8 +21,9 @@ const generators: Record<ModelCode, GeometryGenerator> = {
   Pole4: generatePole(4),
   Pole5: generatePole(5),
 
-  StairTile: generateTile,
-  Tile: generateTile,
+  StairTile: generateTile(true),
+  Tile: generateTile(false),
+  FloorTile: generateTile(true),
 }
 
 export const generateGeometry = (modelEntity: ModelEntity): GeometrySpec => {

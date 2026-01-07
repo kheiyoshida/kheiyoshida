@@ -1,4 +1,5 @@
 import { concreteModelCodeService, ModelCode } from './code'
+import { randomIntInclusiveBetween } from 'utils'
 
 export type ModelClass = 'floatingBox' | 'stackedBox' | 'tile' | 'pole'
 export type ModelUsage = 'normal' | 'stair' // TODO: introduce floor to make sure visual consistency
@@ -18,8 +19,7 @@ export enum ModelSize {
   Expand = 3,
 }
 
-// code + variant
-export type GeometryId = `${ModelCode}_${number}`
+export type GeometryId = `${ModelCode}_${ModelSize}_${number}`
 
 export class ModelEntity {
   public modelClass: ModelClass
@@ -40,12 +40,14 @@ export class ModelEntity {
 
     this.code = concreteModelCodeService[this.modelClass].getCode(this.usage, this.verticalLength)
 
-    // TODO: set variant
+    this.variant = randomIntInclusiveBetween(ModelEntity.variantRange.min, ModelEntity.variantRange.max)
   }
+
+  static variantRange = { min: 1, max: 3 }
 
   public readonly code: ModelCode
 
   public get id(): GeometryId {
-    return `${this.code}_${this.variant}`
+    return `${this.code}_${this.size}_${this.variant}`
   }
 }

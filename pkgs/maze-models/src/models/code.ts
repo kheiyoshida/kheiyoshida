@@ -6,7 +6,7 @@ import { ModelClass, ModelUsage } from './entity'
  */
 export type ModelCode = TileModelCode | PoleModelCode | FloatingBoxModelCode | StackableBoxModelCode
 
-export type TileModelCode = 'Tile' | 'StairTile'
+export type TileModelCode = 'Tile' | 'StairTile' | 'FloorTile'
 export type PoleModelCode = 'Pole1' | 'Pole2' | 'Pole3' | 'Pole4' | 'Pole5'
 export type FloatingBoxModelCode = 'FloatingBox' | 'FloatingStairBox' | 'FloatingFloorBox'
 export type StackableBoxModelCode = 'StackableBox' | 'StackableStairBox'
@@ -37,7 +37,7 @@ export const concreteModelCodeService: Record<ModelClass, ConcreteCodeService> =
   tile: {
     getCode(usage: ModelUsage): ModelCode {
       if (usage == 'stair') return 'StairTile'
-      return 'Tile'
+      return 'FloorTile'
     },
   },
 }
