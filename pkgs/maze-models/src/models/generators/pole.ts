@@ -3,7 +3,7 @@ import { poleGeometryFactory, PoleGeometryParams } from '../factory/pole'
 import { runPipeline } from '../../pipeline/pipeline'
 import { computeNormals, recomputeFaceNormals } from '../../pipeline/processors/normals'
 import { tesselateGeometry } from '../../pipeline/processors/tessellation'
-import { deformGeometry, randomiseVertexWithPreserveY } from '../../pipeline/processors/deformation'
+import { deformGeometry, randomiseVertex } from '../../pipeline/processors/deformation'
 
 export type PoleModelParams = BaseParams & PoleGeometryParams & {
   distortion: number
@@ -28,7 +28,7 @@ export const generatePole = (length: number): GeometryGenerator => (size, varian
   return runPipeline(pole, [
     recomputeFaceNormals,
     tesselateGeometry(params.tesselation),
-    deformGeometry(randomiseVertexWithPreserveY(params.distortion, 0)),
+    deformGeometry(randomiseVertex(params.distortion, false)),
     computeNormals(params.normalComputeType),
   ])
 }

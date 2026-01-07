@@ -8,14 +8,24 @@ type EntityOptions = {
   maxLength?: number
 }
 
+const getSize = (density: number) => {
+  if (density > 0.8) return ModelSize.Expand
+  if (density > 0.5) return ModelSize.Large
+  if (density > 0.3) return ModelSize.Medium
+  return ModelSize.Small
+}
+
 export class ModelEntityEmitter {
   private classEmitter: ModelClassEmitter
+
+  private modelSize: ModelSize
 
   constructor(
     private readonly density: number,
     gravity: number
   ) {
     this.classEmitter = ModelClassEmitter.build(density, gravity)
+    this.modelSize = getSize(density)
   }
 
   private shouldEmit(): boolean {
@@ -35,8 +45,7 @@ export class ModelEntityEmitter {
     const modelClass = this.classEmitter.emitModelClass(avoidModelType)
     if (!modelClass) return null
     const length = modelClass === 'pole' && maxLength ? randomIntInclusiveBetween(1, maxLength) : 1
-    const size = ModelSize.Large
-    return new ModelEntity(modelClass, size, usage, length)
+    return new ModelEntity(modelClass, this.modelSize, usage, length)
   }
 
   emitEnsured(
@@ -44,7 +53,6 @@ export class ModelEntityEmitter {
   ): ModelEntity {
     const modelClass = this.classEmitter.emitModelClassEnsured(avoidModelType)
     const length = modelClass === 'pole' && maxLength ? randomIntInclusiveBetween(1, maxLength) : 1
-    const size = ModelSize.Large
-    return new ModelEntity(modelClass, size, usage, length)
+    return new ModelEntity(modelClass, this.modelSize, usage, length)
   }
 }

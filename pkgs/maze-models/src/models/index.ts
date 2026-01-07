@@ -1,5 +1,5 @@
 import { GeometrySpec } from '../pipeline/types'
-import { generateGeometry } from './generate'
+import { generateGeometry } from './generators'
 import { ModelEntity, GeometryId } from './entity'
 
 export type { ModelCode } from './code'

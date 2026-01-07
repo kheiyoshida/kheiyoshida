@@ -1,7 +1,7 @@
 import { concreteModelCodeService, ModelCode } from './code'
 
 export type ModelClass = 'floatingBox' | 'stackedBox' | 'tile' | 'pole'
-export type ModelUsage = 'normal' | 'stair'
+export type ModelUsage = 'normal' | 'stair' // TODO: introduce floor to make sure visual consistency
 export type ModelType = 'floating' | 'stacked'
 
 export const modelTypeMap: Record<ModelClass, ModelType> = {
