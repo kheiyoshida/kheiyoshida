@@ -1,31 +1,15 @@
 import { ModelClass, ModelUsage } from './entity'
 
-export type ModelCode =
-  | ClassicModelCode
-  | TileModelCode
-  | PoleModelCode
-  | FloatingBoxModelCode
-  | StackableBoxModelCode
-  | 'Warp'
+/**
+ * logical code that represents the algorithm to generate geometries.
+ * as long as the code is the same, the algorithm is the same (variant and size differ).
+ */
+export type ModelCode = TileModelCode | PoleModelCode | FloatingBoxModelCode | StackableBoxModelCode
 
-export type ClassicModelCode = 'Floor' | 'Ceil' | 'Wall' | 'StairCeil' | 'StairSteps'
-export type TileModelCode = 'Tile' | 'StairTile' | 'BottomTile'
+export type TileModelCode = 'Tile' | 'StairTile'
 export type PoleModelCode = 'Pole1' | 'Pole2' | 'Pole3' | 'Pole4' | 'Pole5'
 export type FloatingBoxModelCode = 'FloatingBox' | 'FloatingStairBox' | 'FloatingFloorBox'
 export type StackableBoxModelCode = 'StackableBox' | 'StackableStairBox'
-
-export const isPole = (code: ModelCode): code is PoleModelCode => code.includes('Pole')
-
-export const isTile = (code: ModelCode): code is TileModelCode =>
-  code === 'Tile' || code === 'StairTile' || code === 'BottomTile'
-
-export const isClassic = (code: ModelCode): code is ClassicModelCode =>
-  code === 'Floor' || code === 'Ceil' || code === 'Wall' || code === 'StairCeil' || code === 'StairSteps'
-
-export const isStackableBox = (code: ModelCode): code is StackableBoxModelCode =>
-  code === 'StackableBox' || code === 'StackableStairBox'
-export const isFloatingBox = (code: ModelCode): code is FloatingBoxModelCode =>
-  code === 'FloatingBox' || code === 'FloatingStairBox' || code === 'FloatingFloorBox'
 
 type ConcreteCodeService = {
   getCode(usage: ModelUsage, length: number): ModelCode

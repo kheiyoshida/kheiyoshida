@@ -25,6 +25,7 @@ export class ModelEntity {
   public modelClass: ModelClass
   public readonly verticalLength: number = 1
   public readonly usage: ModelUsage
+  public size: ModelSize
   public variant: number = 0
 
   get modelType(): ModelType {
@@ -35,6 +36,7 @@ export class ModelEntity {
     this.modelClass = modelClass
     this.usage = usage
     this.verticalLength = length
+    this.size = size
 
     this.code = concreteModelCodeService[this.modelClass].getCode(this.usage, this.verticalLength)
 

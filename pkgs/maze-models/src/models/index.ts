@@ -8,12 +8,9 @@ export * from './entity'
 const geometryCache = new Map<GeometryId, GeometrySpec>()
 
 export const getGeometry = (modelEntity: ModelEntity): GeometrySpec => {
-  const modelCode = modelEntity.code
-
   const id = modelEntity.id
   if (!geometryCache.has(id)) {
-    geometryCache.set(id, generateGeometry(modelCode))
+    geometryCache.set(id, generateGeometry(modelEntity))
   }
-
   return geometryCache.get(id)!
 }

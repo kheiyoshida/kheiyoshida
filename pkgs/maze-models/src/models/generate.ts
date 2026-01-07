@@ -1,62 +1,31 @@
 import { GeometrySpec } from '../pipeline/types'
-import { isClassic, isFloatingBox, isPole, isStackableBox, isTile, ModelCode } from './code'
-import { generateClassicModel } from './generators/classic'
 import { generateFloatingBox, generateStackableBox } from './generators/box'
 import { generatePole } from './generators/pole'
 import { generateTile } from './generators/tile'
-import { getBaseGeometry } from './factory'
+import { ModelEntity } from './entity'
+import { ModelCode } from './code'
+import { GeometryGenerator } from './generators/types'
 
-export const generateGeometry = (modelCode: ModelCode): GeometrySpec => {
-  if (isClassic(modelCode))
-    return generateClassicModel(modelCode, {
-      tesselation: 2,
-      normalComputeType: 'preserve',
-    })
+const generators: Record<ModelCode, GeometryGenerator> = {
+  // TODO: use different algorithm for stair
+  FloatingBox: generateFloatingBox,
+  FloatingFloorBox: generateFloatingBox,
+  FloatingStairBox: generateFloatingBox,
 
-  if (isFloatingBox(modelCode))
-    return generateFloatingBox(modelCode, {
-      tesselation: 3,
-      sizeRange: [0.8, 0.9],
-      normalComputeType: undefined,
-      distortion: 0.1,
-    })
+  StackableBox: generateStackableBox({ stair: false }),
+  StackableStairBox: generateStackableBox({ stair: true }),
 
-  if (isStackableBox(modelCode))
-    return generateStackableBox(modelCode, {
-      tesselation: 3,
-      sizeRange: [0.5, 1.0],
-      normalComputeType: undefined,
-      distortion: 0.1,
-    })
+  Pole1: generatePole(1),
+  Pole2: generatePole(2),
+  Pole3: generatePole(3),
+  Pole4: generatePole(4),
+  Pole5: generatePole(5),
 
-  if (isPole(modelCode)) {
+  StairTile: generateTile,
+  BottomTile: generateTile,
+  Tile: generateTile,
+}
 
-    return generatePole(modelCode, {
-      type: 'pole',
-      radiusBase: 0.6,
-      radiusDelta: 0.8,
-      numOfCorners: 8,
-      heightBase: 2, // will be overridden
-      heightDelta: 0,
-      heightPerSegment: 0.5,
-      segmentYDelta: 0.3,
-      normalComputeType: 'preserve',
-      distortion: 0,
-    })
-  }
-
-  if (isTile(modelCode)) {
-    return generateTile(modelCode, {
-      numOfCorners: 20,
-      radiusBase: 0.8,
-      radiusDelta: 0.7,
-      thicknessBase: 1.5,
-      thicknessDelta: 1.0,
-      distortion: 0,
-      tesselation: 0,
-      normalComputeType: 'preserve',
-    })
-  }
-
-  return getBaseGeometry(modelCode)
+export const generateGeometry = (modelEntity: ModelEntity): GeometrySpec => {
+  return generators[modelEntity.code](modelEntity.size, modelEntity.variant)
 }
