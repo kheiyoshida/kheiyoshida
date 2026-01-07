@@ -1,9 +1,10 @@
 import { WorldState } from './state.ts'
 import { StructureContext, World } from './types.ts'
 import { getAtmosphere } from './atmosphere.ts'
+import { debugDensity, debugGravity } from '../../config/debug.ts'
 
 export class WorldProvider {
-  public state: WorldState = new WorldState()
+  public state: WorldState = new WorldState(debugDensity, debugGravity)
 
   public history: World[] = []
 

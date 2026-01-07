@@ -50,6 +50,6 @@ export const generateFloatingBox =
       deformGeometry(
         expand ? skipCorners(randomiseVertex(distortion)) : skipTopFace(randomiseVertex(distortion))
       ),
-      computeNormals('vertex'),
+      computeNormals('preserve'),
     ])
   }

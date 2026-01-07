@@ -1,34 +1,48 @@
-import { BaseParams, GeometryGenerator } from './types'
+import { GeometryGenerator } from './types'
 import { poleGeometryFactory, PoleGeometryParams } from '../factory/pole'
 import { runPipeline } from '../../pipeline/pipeline'
 import { computeNormals, recomputeFaceNormals } from '../../pipeline/processors/normals'
-import { tesselateGeometry } from '../../pipeline/processors/tessellation'
 import { deformGeometry, randomiseVertex } from '../../pipeline/processors/deformation'
+import { ModelSize } from '../entity'
+import { randomFloatBetween, randomIntInclusiveBetween } from 'utils'
 
-export type PoleModelParams = BaseParams & PoleGeometryParams & {
-  distortion: number
+const SizeRangeMap: Record<ModelSize, [number, number]> = {
+  [ModelSize.Expand]: [1, 1],
+  [ModelSize.Large]: [0.7, 0.8],
+  [ModelSize.Medium]: [0.8, 1.0],
+  [ModelSize.Small]: [0.7, 0.9],
+}
+
+const CornersRange: Record<ModelSize, [number, number]> = {
+  [ModelSize.Expand]: [8, 8],
+  [ModelSize.Large]: [7, 12],
+  [ModelSize.Medium]: [6, 10],
+  [ModelSize.Small]: [5, 8],
 }
 
 export const generatePole = (length: number): GeometryGenerator => (size, variant) => {
 
-  const params: PoleModelParams = {
+  const distortion = 0.1
+  const sizeRange = SizeRangeMap[size]
+  const radiusBase = randomFloatBetween(...sizeRange)
+  const radiusDelta = Math.max(0.1, radiusBase * 2.0 - 0.4)
+  const numOfCorners = randomIntInclusiveBetween(...CornersRange[size])
+
+  const poleParams: PoleGeometryParams = {
     type: 'pole',
-    radiusBase: 0.6, // todo: apply size
-    radiusDelta: 0.8,
-    numOfCorners: 8,
-    heightBase: length * 2, // will be overridden
+    radiusBase,
+    radiusDelta,
+    numOfCorners,
+    heightBase: length * 2,
     heightDelta: 0,
     heightPerSegment: 0.5,
     segmentYDelta: 0.3,
-    normalComputeType: 'preserve',
-    distortion: 0,
   }
 
-  const pole = poleGeometryFactory(params)
+  const pole = poleGeometryFactory(poleParams)
   return runPipeline(pole, [
     recomputeFaceNormals,
-    tesselateGeometry(params.tesselation),
-    deformGeometry(randomiseVertex(params.distortion, false)),
-    computeNormals(params.normalComputeType),
+    deformGeometry(randomiseVertex(distortion, false)),
+    computeNormals('preserve'),
   ])
 }

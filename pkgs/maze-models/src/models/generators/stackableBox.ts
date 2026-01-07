@@ -42,6 +42,6 @@ export const generateStackableBox =
       tesselateGeometry(tesselation),
       triangulateFaces,
       deformGeometry(skipCorners(randomiseVertex(distortion, true))),
-      computeNormals('vertex'),
+      computeNormals('preserve'),
     ])
   }

@@ -1,7 +1,8 @@
 import { GeometryPreviewer } from './preview'
 import { ModelSize } from '../models'
-import { generateFloatingBox } from '../models/generators/floatingBox'
+import { generateTile } from '../models/generators/tile'
+import { generatePole } from '../models/generators/pole'
 
-const geo = generateFloatingBox(true)(ModelSize.Expand, 0)
+const geo = generatePole(1)(ModelSize.Small, 0)
 
 new GeometryPreviewer(geo)
