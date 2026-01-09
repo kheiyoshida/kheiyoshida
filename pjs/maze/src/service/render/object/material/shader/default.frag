@@ -14,16 +14,32 @@ layout (std140) uniform Color
 
 uniform vec3 relativeColor;
 
+// https://rendermeapangolin.wordpress.com/2015/05/07/gooch-shading/
 void main()
 {
     vec3 norm = normalize(vNormal);
 
-    vec3 finalColor;
+    vec3 warmColor;
     if (unlitColor.x > 0.5 && unlitColor.y > 0.5 && unlitColor.z > 0.5) {
-        finalColor = unlitColor - relativeColor;
+        warmColor = unlitColor - relativeColor;
     } else {
-        finalColor = unlitColor + relativeColor;
+        warmColor = unlitColor + relativeColor;
     }
+    vec3 coldColor = mix(warmColor, unlitColor, 0.33);
+
+    // comptue gooch shading
+    float a = 0.2;
+    float b = 0.6;
+
+    vec3 lightDir = normalize(vec3(1, -1, -1));
+
+    float NL = dot(norm, lightDir);
+    float t = (NL + 1.0) * 0.5;
+
+    vec3 cool = coldColor + a * vec3(1.0);
+    vec3 warm = warmColor + b * vec3(1.0);
+
+    vec3 finalColor = mix(warmColor, coldColor, t);
 
     fragColor = vec4(finalColor, 1.0);
 

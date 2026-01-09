@@ -32,7 +32,7 @@ export const generateFloatingBox =
   (size, variant) => {
     const sizeRange = FloatingBoxSizeRange[size]
     const tesselation = FloatingBoxTesselation[size]
-    const distortion = variant * 0.1
+    const distortion = variant * 0.05
 
     const expand = size === ModelSize.Expand
 

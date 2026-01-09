@@ -20,7 +20,7 @@ const StackableBoxSizeRange: Record<ModelSize, [number, number]> = {
 }
 
 const StackableBoxTesselation: Record<ModelSize, number> = {
-  [ModelSize.Expand]: 3,
+  [ModelSize.Expand]: 5,
   [ModelSize.Large]: 3,
   [ModelSize.Medium]: 2,
   [ModelSize.Small]: 1,
@@ -31,7 +31,7 @@ export const generateStackableBox =
   (size, variant) => {
     const sizeRange = StackableBoxSizeRange[size]
     const expand = size === ModelSize.Expand
-    const distortion = variant * 0.1
+    const distortion = variant * 0.05
 
     const tesselation = StackableBoxTesselation[size]
 

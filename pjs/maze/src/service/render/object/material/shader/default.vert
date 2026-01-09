@@ -117,16 +117,19 @@ void main() {
     normalizedPosition.x * normalizedPosition.y * (1.0 - normalizedPosition.z) * BTR;
 
     bool isPositionOnEdge = isVertexOnEdge(aPosition);
-    if (isPositionOnEdge) {
-        vNormal = aNormal;
-    } else {
-        vec3 positionsFaceNormal = determineFaceNormal(aNormal);
-        if (positionsFaceNormal != dNone) {
-            vNormal = normalize(positionsFaceNormal);
-        } else {
-            vNormal = mix(aNormal, blendBoxNormalsForAVertex(normalizedPosition), 0.5);
-        }
-    }
+
+    vNormal = mat3(view) * mat3(model) * aNormal;
+
+//    if (isPositionOnEdge) {
+//        vNormal = aNormal;
+//    } else {
+//        vec3 positionsFaceNormal = determineFaceNormal(aNormal);
+//        if (positionsFaceNormal != dNone) {
+//            vNormal = normalize(positionsFaceNormal);
+//        } else {
+//            vNormal = mix(aNormal, blendBoxNormalsForAVertex(normalizedPosition), 0.5);
+//        }
+//    }
 
     fragPos = transformedPosition;
     gl_Position = projection * view * vec4(transformedPosition, 1.0);
