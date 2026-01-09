@@ -10,7 +10,7 @@ export type MusicCommand = {
 
 export const getMusicCommands = (): MusicCommand => ({
   alignment: calcMusicAlignment(game.player.status.sanity),
-  aesthetics: game.maze.structureContext.current.style as MusicRange,
+  aesthetics: game.maze.currentWorld.ambience,
 })
 
 export const calcMusicAlignment = (sanity: number): MusicRange => {
