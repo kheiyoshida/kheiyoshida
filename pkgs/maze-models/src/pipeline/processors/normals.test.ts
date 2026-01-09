@@ -1,7 +1,6 @@
 import { computeVertexNormals, recomputeFaceNormals } from './normals'
 import { GeometrySpec, Vector3D } from '../types'
 import { getNormal } from './triangulation'
-import { normalize } from 'maze-gl/src/vector/vector'
 
 describe(`${recomputeFaceNormals.name}`, () => {
   it(`should recompute normals for each triangle`, () => {

@@ -41,8 +41,8 @@ void main()
 
     vec3 finalColor = mix(warmColor, coldColor, t);
 
-    fragColor = vec4(finalColor, 1.0);
-
     vec3 ndcNormal = norm * 0.5 + 0.5;
+
+    fragColor = vec4(finalColor, 1.0);
     fragNormal = vec4(ndcNormal, 1.0);
 }

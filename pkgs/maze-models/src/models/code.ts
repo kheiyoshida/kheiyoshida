@@ -19,7 +19,9 @@ export const concreteModelCodeService: Record<ModelClass, ConcreteCodeService> =
   floatingBox: {
     getCode(usage: ModelUsage): ModelCode {
       if (usage == 'stair') return 'FloatingStairBox'
-      return 'FloatingBox'
+      // TODO: differentiate between floor and object
+      return 'FloatingFloorBox'
+      // return 'FloatingBox'
     },
   },
   pole: {

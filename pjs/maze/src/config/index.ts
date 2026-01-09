@@ -4,7 +4,7 @@ export * from '../game/player/status/constants.ts'
 export const ww = window.innerWidth
 export const wh = window.innerHeight
 
-export const logicalWidth = Math.floor(Math.max(480, window.innerWidth / 2.5))
+export const logicalWidth = Math.floor(Math.max(480, window.innerWidth / 2.0))
 export const logicalHeight = Math.floor(logicalWidth * (window.innerHeight / window.innerWidth))
 
 export const logicalCenterX = logicalWidth / 2
