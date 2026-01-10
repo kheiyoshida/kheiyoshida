@@ -5,6 +5,7 @@ import { makeButtonState } from './state.ts'
 import { btnSize, centerX, centerY } from './constants.ts'
 import { IsMobile } from '../../../config'
 import { state } from '../../../game/state.ts'
+import { game } from '../../../game'
 
 export const getButtons = () => {
   const map = document.getElementById(Map.id)
@@ -54,7 +55,7 @@ export type ButtonMember = 'up' | 'right' | 'left' | 'map'
 
 export const drawButtons = (pressedButton?: ButtonMember) => {
   if (!IsMobile) return
-  if (state.current.mapOpen) return
+  if (game.mapper.isOpen) return
 
   const renderer = getUIRenderer()
 

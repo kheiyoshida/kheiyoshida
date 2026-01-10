@@ -1,16 +1,17 @@
 import { getUIRenderer } from './renderer'
-import { IsMobile, logicalCenterY } from '../../config'
+import { IsMobile, logicalCenterX, logicalCenterY } from '../../config'
+import { randomIntInclusiveBetween } from 'utils'
 
 const interval = 100
 
-const fontSize = IsMobile ? 24 : 10
+const fontSize = IsMobile ? 24 : 12
 
-let currentFloor = 'B1F'
+let currentFloor = ''
 
 const drawFloor = (opacity = 1.0) => {
   const renderer = getUIRenderer()
   renderer.lock('floor')
-  renderer.changeFillColor([0, 0, 1.0])
+  renderer.changeFillColor([0, 0, 0.8])
   renderer.clearCanvas('floor')
   renderer.drawText({
     positionX: fontSize * 4,
@@ -23,7 +24,7 @@ const drawFloor = (opacity = 1.0) => {
 }
 
 export const renderFloor = (floor: number) => {
-  currentFloor = `B${floor}F`
+  currentFloor = `${floor}`
   fadeIn()
 }
 
