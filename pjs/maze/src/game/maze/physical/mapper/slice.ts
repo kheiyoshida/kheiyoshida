@@ -51,7 +51,7 @@ export class SliceMapper {
     if (up2) slice.set(VerticalLayer.Up2, new MazeBlock([new MazeObject(up2)]))
     if (up1) slice.set(VerticalLayer.Up1, new MazeBlock([new MazeObject(up1)]))
 
-    const down1 = this.entityEmitter.emitEnsured({ maxLength: 2 })
+    const down1 = this.entityEmitter.emitEnsured({ maxLength: 2, usage: 'floor' })
     slice.set(VerticalLayer.Down1, new MazeBlock([new MazeObject(down1)]))
 
     if (down1.modelType == 'stacked') {

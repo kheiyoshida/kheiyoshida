@@ -17,9 +17,7 @@ describe(`stair mapping`, () => {
     stairMapper.mapStairSlices(grid, stairPos, 'n')
 
     // stair pos should have stair and ceil
-    expect(grid.getSliceByLogicalPosition(stairPos).get(VerticalLayer.Down1)?.objects[0].model.usage).toBe(
-      <ModelUsage>'stair'
-    )
+    expect(grid.getSliceByLogicalPosition(stairPos).get(VerticalLayer.Down1)?.objects[0].model.usage === 'stair').toBe(true)
 
     // corridor path
     for (let i = 1; i <= 4; i++) {

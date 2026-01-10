@@ -2,7 +2,7 @@ import { concreteModelCodeService, ModelCode } from './code'
 import { randomIntInclusiveBetween } from 'utils'
 
 export type ModelClass = 'floatingBox' | 'stackedBox' | 'tile' | 'pole'
-export type ModelUsage = 'normal' | 'stair' // TODO: introduce floor to make sure visual consistency
+export type ModelUsage = 'fill' | 'floor' | 'stair'
 export type ModelType = 'floating' | 'stacked'
 
 export const modelTypeMap: Record<ModelClass, ModelType> = {
@@ -32,7 +32,7 @@ export class ModelEntity {
     return modelTypeMap[this.modelClass]
   }
 
-  constructor(modelClass: ModelClass, size: ModelSize, usage: ModelUsage = 'normal', length = 1) {
+  constructor(modelClass: ModelClass, size: ModelSize, usage: ModelUsage = 'fill', length = 1) {
     this.modelClass = modelClass
     this.usage = usage
     this.verticalLength = length

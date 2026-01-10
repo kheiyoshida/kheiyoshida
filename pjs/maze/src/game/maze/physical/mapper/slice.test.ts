@@ -30,18 +30,19 @@ describe(`${SliceMapper.name}`, () => {
       const slice: PhysicalGridSlice = new VerticalGrid3DSlice(5)
       sliceMapper.map(slice, 'floorSlice')
 
-      // Up1 and Up2 should be empty or come with floating model
+      // Up1 and Up2 should be empty or come with a floating model
       const up1 = slice.get(VerticalLayer.Up1)
       const up2 = slice.get(VerticalLayer.Up2)
       expect(up1 === null || getBlockEntity(up1).modelType === 'floating').toBe(true)
       expect(up2 === null || getBlockEntity(up2).modelType === 'floating').toBe(true)
 
-      // middle should be empty
+      // the middle should be empty
       expect(slice.get(VerticalLayer.Middle)).toBeNull()
 
-      // Down1 should not be null
+      // Down1 should be a floor
       const down1 = slice.get(VerticalLayer.Down1)!
       expect(down1).not.toBeNull()
+      expect(down1.objects[0].model.usage === 'floor').toBe(true)
 
       // Down2 can either be empty, Stacked or Floating
       const down2 = slice.get(VerticalLayer.Down2)

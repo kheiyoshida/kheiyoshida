@@ -8,10 +8,6 @@ import { GeometryGenerator } from './types'
 import { generateFloatingBox } from './floatingBox'
 
 const generators: Record<ModelCode, GeometryGenerator> = {
-  FloatingBox: generateFloatingBox(false),
-  FloatingFloorBox: generateFloatingBox(true),
-  FloatingStairBox: generateFloatingBox(true),
-
   StackableBox: generateStackableBox({ stair: false }),
   StackableStairBox: generateStackableBox({ stair: true }),
 
@@ -21,8 +17,10 @@ const generators: Record<ModelCode, GeometryGenerator> = {
   Pole4: generatePole(4),
   Pole5: generatePole(5),
 
-  StairTile: generateTile(true),
-  Tile: generateTile(false),
+  FloatingBox: generateFloatingBox(false),
+  FloatingFloorBox: generateFloatingBox(true),
+
+  BlockingTile: generateTile(false),
   FloorTile: generateTile(true),
 }
 

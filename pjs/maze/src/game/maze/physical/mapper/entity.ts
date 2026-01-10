@@ -34,7 +34,7 @@ export class ModelEntityEmitter {
 
   static defaultOptions: EntityOptions = {
     avoidModelType: undefined,
-    usage: 'normal',
+    usage: 'fill',
     maxLength: undefined,
   }
 

@@ -6,22 +6,20 @@ import { ModelClass, ModelUsage } from './entity'
  */
 export type ModelCode = TileModelCode | PoleModelCode | FloatingBoxModelCode | StackableBoxModelCode
 
-export type TileModelCode = 'Tile' | 'StairTile' | 'FloorTile'
-export type PoleModelCode = 'Pole1' | 'Pole2' | 'Pole3' | 'Pole4' | 'Pole5'
-export type FloatingBoxModelCode = 'FloatingBox' | 'FloatingStairBox' | 'FloatingFloorBox'
 export type StackableBoxModelCode = 'StackableBox' | 'StackableStairBox'
+export type PoleModelCode = 'Pole1' | 'Pole2' | 'Pole3' | 'Pole4' | 'Pole5'
+export type FloatingBoxModelCode = 'FloatingBox' | 'FloatingFloorBox'
+export type TileModelCode = 'BlockingTile' | 'FloorTile'
 
 type ConcreteCodeService = {
   getCode(usage: ModelUsage, length: number): ModelCode
 }
 
 export const concreteModelCodeService: Record<ModelClass, ConcreteCodeService> = {
-  floatingBox: {
+  stackedBox: {
     getCode(usage: ModelUsage): ModelCode {
-      if (usage == 'stair') return 'FloatingStairBox'
-      // TODO: differentiate between floor and object
-      return 'FloatingFloorBox'
-      // return 'FloatingBox'
+      if (usage == 'stair') return 'StackableStairBox'
+      return 'StackableBox'
     },
   },
   pole: {
@@ -30,15 +28,15 @@ export const concreteModelCodeService: Record<ModelClass, ConcreteCodeService> =
       return `Pole${length}` as PoleModelCode
     },
   },
-  stackedBox: {
+  floatingBox: {
     getCode(usage: ModelUsage): ModelCode {
-      if (usage == 'stair') return 'StackableStairBox'
-      return 'StackableBox'
+      if (usage == 'fill') return 'FloatingBox'
+      return 'FloatingFloorBox'
     },
   },
   tile: {
     getCode(usage: ModelUsage): ModelCode {
-      if (usage == 'stair') return 'StairTile'
+      if (usage == 'fill') return 'BlockingTile'
       return 'FloorTile'
     },
   },
