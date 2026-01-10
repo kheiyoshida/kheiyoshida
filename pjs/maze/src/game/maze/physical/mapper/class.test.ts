@@ -52,4 +52,28 @@ describe(`${ModelClassEmitter.name}`, () => {
       expect(modelClass).not.toBe('pole')
     }
   })
+
+  it(`can ensure a concrete class to be emitted`, () => {
+    const emitter = new ModelClassEmitter({
+      floatingBox: 0.3,
+      stackedBox: 0.3,
+      pole: 0.2,
+      tile: 0.2,
+    })
+
+    for (let i = 0; i < 100; i++) {
+      const modelClass = emitter.emitModelClassEnsured('stacked')
+      expect(modelClass).not.toBe('stackedBox')
+      expect(modelClass).not.toBe('pole')
+      expect(modelClass).not.toBeNull()
+    }
+
+    for (let i = 0; i < 100; i++) {
+      const modelClass = emitter.emitModelClassEnsured('floating')
+      expect(modelClass).not.toBe('floatingBox')
+      expect(modelClass).not.toBe('tile')
+      expect(modelClass).not.toBeNull()
+    }
+  })
 })
+

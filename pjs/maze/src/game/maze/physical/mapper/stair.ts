@@ -36,7 +36,16 @@ export class StairMapper {
     stairPosSlice.set(VerticalLayer.Middle, null) // TODO: put ceiling for classic structure
     stairPosSlice.set(
       VerticalLayer.Down1,
-      new MazeBlock([new MazeObject(this.entityEmitter.emitEnsured({ usage: 'stair' }), direction)])
+      new MazeBlock([
+        new MazeObject(
+          this.entityEmitter.emitEnsured({ usage: 'stair', avoidModelType: 'floating' }),
+          direction
+        ),
+      ])
+    )
+    stairPosSlice.set(
+      VerticalLayer.Down2,
+      new MazeBlock([new MazeObject(this.entityEmitter.emitEnsured({ avoidModelType: 'floating' }))])
     )
 
     for (let i = 1; i <= 4; i++) {

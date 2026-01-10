@@ -58,6 +58,9 @@ export class ModelClassEmitter {
     for (const [t, v] of thresholds) {
       if (r <= t) return v
     }
+
+    if (thresholds.length === 0) return avoidModelType === 'floating' ? 'stackedBox' : 'floatingBox'
+
     throw new Error(`emitModelClassEnsured failed`)
   }
 }
