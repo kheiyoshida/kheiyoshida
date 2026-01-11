@@ -8,9 +8,9 @@ export type IWorldState = {
 
 const debug = true
 const debugState: IWorldState[] = [
-  { density: 1.0, gravity: 0.5 },
-  { density: 0.0, gravity: 0.5 },
-  { density: 0.5, gravity: 0.5 },
+  { density: 0.3, gravity: 0.2 },
+  { density: 0.4, gravity: 0.2 },
+  { density: 0.5, gravity: 0.3 },
 ]
 
 export class WorldState implements IWorldState {
@@ -23,7 +23,6 @@ export class WorldState implements IWorldState {
   public gravity: number
 
   public update(delta: number = 0.1, avoid?: Structure, retry = 0): void {
-    console.log('update')
     if (debug) return this.updateDebug()
     if (retry > 10) return
     this.density = clamp(this.density + randomFloatInAsymmetricRange(delta), 0, 1)

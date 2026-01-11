@@ -22,7 +22,8 @@ void main() {
     vec3 result;
     if (uFadeoutPercentage == 0.0) {
         result = color;
-    } else {
+    }
+    else {
         result = mix(color, uBaseColor, uFadeoutPercentage);
     }
     fragColor = vec4(result, 1.0);

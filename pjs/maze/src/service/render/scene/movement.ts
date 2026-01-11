@@ -47,8 +47,11 @@ const LiftMovementValueArray: EyeMovementValues[] = [...Array(GoDownstairsFrames
 })
 
 const getProceedMovementValueArray = (speed: number): EyeMovementValues[] => {
-  return getGoDeltaArray(speed / 2).map((zDelta) => ({
-    move: zDelta * 2, // proceed 2 cells
+  const delta = getGoDeltaArray(speed / 2)
+  const delta2 = delta.map(d => 1 + d)
+  const delta3 = delta2.map(_ => 2)
+  return delta.concat(delta2).concat(delta3).map((zDelta) => ({
+    move: zDelta,
   }))
 }
 
@@ -59,5 +62,8 @@ export const GoDownstairsMovement: Record<GoDownstairsAnimationType, (speed: num
     path: getProceedMovementValueArray,
   }
 
-export const proceedToNextFloorMovement = (speed: number) =>
-  getGoDeltaArray(speed / 2).map((delta) => ({ move: delta * 2 })) // proceed 2 cells
+export const proceedToNextFloorMovement = (speed: number) => {
+  const delta = getGoDeltaArray(speed / 2)
+  const delta2 = delta.map(_ => 0)
+  return delta2.concat(delta).map((delta) => ({ move: delta * 2 }))
+}
