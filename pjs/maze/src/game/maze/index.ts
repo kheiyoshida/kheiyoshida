@@ -23,10 +23,14 @@ export class Maze {
 
   setNextLevel() {
     this._levelNumber++
+
+    const stateSnapshot = { ...this.worldProvider.state }
+
     this.worldProvider.generateWorld(this._levelNumber)
+
     const params = this.buildParams(this._levelNumber, this.structureContext)
     ModelEntity.variantRange.max = Math.min(3 + Math.floor(this._levelNumber / 3), 9)
-    this._level = MazeLevel.build(params, this.structureContext, this.worldState)
+    this._level = MazeLevel.build(params, this.structureContext, stateSnapshot)
     this.debugParams = params
   }
 

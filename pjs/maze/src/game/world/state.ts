@@ -6,6 +6,13 @@ export type IWorldState = {
   gravity: number
 }
 
+const debug = true
+const debugState: IWorldState[] = [
+  { density: 1.0, gravity: 0.5 },
+  { density: 0.0, gravity: 0.5 },
+  { density: 0.5, gravity: 0.5 },
+]
+
 export class WorldState implements IWorldState {
   constructor(initialDensity = 1.0, initialGravity = 1.0) {
     this.density = initialDensity
@@ -16,10 +23,19 @@ export class WorldState implements IWorldState {
   public gravity: number
 
   public update(delta: number = 0.1, avoid?: Structure, retry = 0): void {
+    console.log('update')
+    if (debug) return this.updateDebug()
     if (retry > 10) return
     this.density = clamp(this.density + randomFloatInAsymmetricRange(delta), 0, 1)
     this.gravity = clamp(this.gravity + randomFloatInAsymmetricRange(delta), 0, 1)
     if (this.structure === avoid) this.update(delta + 0.1, avoid, retry + 1)
+  }
+
+  private updateDebug() {
+
+    const state = debugState.shift()
+    this.density = state?.density ?? this.density
+    this.gravity = state?.gravity ?? this.gravity
   }
 
   public get structure(): Structure {
