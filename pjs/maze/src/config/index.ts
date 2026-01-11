@@ -36,4 +36,4 @@ export const GoDownstairsFramesLength = 32
 /**
  * the maximum floors in a row/col in a level
  */
-export const MaxFloorSize = 25
+export const MaxFloorSize = 23

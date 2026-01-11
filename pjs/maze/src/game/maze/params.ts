@@ -18,7 +18,7 @@ export const paramBuild = (level: number, structureContext: StructureContext): B
   }
 }
 
-export const InitialSize = 7 // 4 * 2 - 1
+export const InitialSize = 9
 
 const oddize = (n: number) => n % 2 === 0 ? n - 1 : n
 
@@ -51,7 +51,6 @@ const getFillRate = (floor: number): number => {
 const DefaultConnectionRate = 0.5
 
 const getConnectionRate = (floor: number): number => {
-  if (floor % 5 === 0) return 0.88
   if (floor < 5) return 0.25 + floor * 0.05
   else
     return clamp(
