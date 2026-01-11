@@ -5,21 +5,35 @@ import { LR } from '../../../../core/grid/direction.ts'
 
 export class DistortionDelta {
   public readonly value: Vector3D = [0, 0, 0]
+  public movement: Vector3D = Vec3.random()
+
+  public reachedBorder = false
+
   public move(range: number, speed: number) {
-    const rand = Vec3.random(-speed / 2, speed / 2)
-    Vec3.add(this.value, rand)
+    this.reachedBorder = false
+    Vec3.normalize(this.movement, speed)
+    Vec3.add(this.value, this.movement)
+
     if (Vec3.mag(this.value) > range) {
+      this.reachedBorder = true
       Vec3.normalize(this.value, range)
+      this.movement = Vec3.randomMag(speed)
     }
   }
+
   public turnValue(lr: LR) {
     const [prevX, _, prevZ] = this.value.slice()
+    const [pmX, __, pmZ] = this.movement.slice()
     if (lr === 'left') {
       this.value[0] = -prevZ
       this.value[2] = prevX
+      this.movement[0] = -pmZ
+      this.movement[2] = pmX
     } else {
       this.value[0] = prevZ
       this.value[2] = -prevX
+      this.movement[0] = -pmZ
+      this.movement[2] = pmX
     }
   }
 }

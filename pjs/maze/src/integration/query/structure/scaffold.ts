@@ -21,4 +21,9 @@ export const getScaffoldParams = (): ScaffoldParams => {
 const calcWidthLevel = makeDecreasingParameter(0.3, 1, 1200, 300)
 const calcHeightLevel = makeIncreasingParameter(1, 1.5, 3000)
 const calcCorridorLengthLevel = makeIncreasingParameter(1, 2, 1500)
-const calcDistortion = makeIncreasingParameter(0.05, 2, 2000)
+
+const calc = makeIncreasingParameter(0.01, 2.0, 2500)
+const calcDistortion = (sanity: number) => {
+  const dist = calc(sanity)
+  return dist > 1 ? dist * dist : dist
+}

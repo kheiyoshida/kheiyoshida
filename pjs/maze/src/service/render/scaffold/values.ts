@@ -8,7 +8,7 @@ export const translateScaffoldParams = (params: ScaffoldParams): ScaffoldValues 
     ...lengths,
     distortionRange:
       (MaxDistortionRange / 2) * lengths.floor +
-      params.distortionLevel * (MaxDistortionRange / 2) * lengths.floor,
+      params.distortionLevel * MaxDistortionRange * lengths.floor,
     distortionSpeed: params.distortionLevel * MaxDistortionSpeed,
   }
 }

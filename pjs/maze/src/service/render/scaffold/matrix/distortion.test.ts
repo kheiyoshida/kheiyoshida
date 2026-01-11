@@ -3,21 +3,37 @@ import { DistortionDelta, DistortionMatrix, DistortionMatrixLayer } from './dist
 import { MatrixLayerXSize, MatrixLayerZSize } from './layer.ts'
 
 describe(`${DistortionDelta.name}`, () => {
-  it(`should update values with given range/speed constraints`, () => {
+  it(`should update values with consistent speed within range`, () => {
     const delta = new DistortionDelta()
 
-    let prev: Vector3D = [0, 0, 0]
+    let prevValue: Vector3D = [0, 0, 0]
+    let prevMovement: Vector3D | undefined
     for (let i = 0; i < 100; i++) {
       delta.move(100, 10)
-      expect(delta.value).not.toEqual(prev)
-      expect(Vec3.mag(delta.value)).toBeLessThanOrEqual(100)
 
-      const speed = Vec3.sub(delta.value, prev)
-      expect(Math.abs(speed[0])).toBeLessThanOrEqual(10)
-      expect(Math.abs(speed[1])).toBeLessThanOrEqual(10)
-      expect(Math.abs(speed[2])).toBeLessThanOrEqual(10)
+      expect(Vec3.mag(delta.movement)).toBeCloseTo(10)
 
-      prev = delta.value.slice() as Vector3D
+      const deltaMag = Vec3.mag(delta.value)
+      expect(deltaMag - 0.001).toBeLessThanOrEqual(100)
+
+      if (prevMovement) {
+        // when reaching the border, the movement should be updated
+        if (delta.reachedBorder) {
+          expect(delta.movement).not.toEqual(prevMovement)
+        }
+
+        // otherwise it should preserve the previous movement (except speed can be updated)
+        else {
+          expect(delta.movement[0]).toBeCloseTo(prevMovement[0])
+          expect(delta.movement[1]).toBeCloseTo(prevMovement[1])
+          expect(delta.movement[2]).toBeCloseTo(prevMovement[2])
+
+          expect(delta.value).not.toEqual(prevValue)
+        }
+      }
+
+      prevValue = delta.value.slice() as Vector3D
+      prevMovement = delta.movement.slice() as Vector3D
     }
   })
 })

@@ -6,11 +6,11 @@ export type IWorldState = {
   gravity: number
 }
 
-const debug = true
+const debug = false
 const debugState: IWorldState[] = [
-  { density: 0.3, gravity: 0.2 },
-  { density: 0.4, gravity: 0.2 },
-  { density: 0.5, gravity: 0.3 },
+  { density: 0.3, gravity: 1.0 },
+  { density: 0.4, gravity: 1.0 },
+  { density: 0.5, gravity: 1.0 },
 ]
 
 export class WorldState implements IWorldState {

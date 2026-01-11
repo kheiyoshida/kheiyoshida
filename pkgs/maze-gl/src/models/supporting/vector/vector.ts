@@ -110,6 +110,15 @@ export const random = (min = -1, max = 1): Vector3D => {
 }
 
 /**
+ * create a random vector with the given magnitude
+ */
+export const randomMag = (magnitude: number): Vector3D => {
+  const v = random()
+  normalize(v, magnitude)
+  return v
+}
+
+/**
  * get the "length" of the given vector
  */
 export const mag = (v: Vector3D): number => {
