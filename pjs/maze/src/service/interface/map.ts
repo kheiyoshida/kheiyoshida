@@ -7,7 +7,7 @@ export const closeMap = () => {
   getUIRenderer().clearCanvas()
 }
 
-const maxNumOfCells = MaxFloorSize * 2 - 1
+const maxNumOfCells = MaxFloorSize
 const cellSize = IsMobile ? 16 : 8
 const mapSize = maxNumOfCells * cellSize
 
@@ -86,6 +86,6 @@ export const renderMap = ({ map: { grid, current, direction, floor } }: RenderPa
     positionX: logicalCenterX - mapSize / 2,
     positionY: logicalCenterY - mapSize / 2 - cellSize,
     fontSize: cellSize * 1.2,
-    text: `B${floor}F`,
+    text: `${floor}`,
   })
 }
