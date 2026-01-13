@@ -69,7 +69,7 @@ export const drawButtons = (pressedButton?: ButtonMember) => {
   }
 
   renderer.clearCanvas()
-  renderer.changeStrokeColor([0, 0.0, 0.5])
+  renderer.changeStrokeColor([0, 1, 0])
 
   renderer.drawLineShape({
     points: [
