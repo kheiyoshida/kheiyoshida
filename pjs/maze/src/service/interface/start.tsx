@@ -4,7 +4,7 @@ import { getUIRenderer } from './renderer'
 
 let titleLoop: NodeJS.Timeout
 
-const fontSize = IsMobile ? 36 : 20
+const fontSize = IsMobile ? 36 : 16
 const drawTitle = (version: string) => {
   if (titleLoop) return
 
@@ -13,10 +13,11 @@ const drawTitle = (version: string) => {
   titleLoop = setInterval(() => {
     renderer.clearCanvas()
 
-    const head = fontSize * 4
+    const head = fontSize * 2
+    const left = fontSize
 
     renderer.drawText({
-      positionX: fontSize * 2 + 1,
+      positionX: left + 1,
       positionY: head,
       fontSize,
       text: 'MAZE',
@@ -24,32 +25,41 @@ const drawTitle = (version: string) => {
     })
 
     renderer.drawText({
-      positionX: fontSize * 2,
+      positionX: left,
       positionY: head,
       fontSize,
       text: 'MAZE',
       temporaryFillColor: [0, 0, 1],
     })
 
+    const smallFont = fontSize / 2
+
     renderer.drawText({
-      positionX: fontSize * 2,
+      positionX: left,
       positionY: head + fontSize * 2,
-      fontSize: fontSize / 2,
-      text: 'Click/Tap to start.',
+      fontSize: smallFont,
+      text: !IsMobile ? 'Click to start.' : 'Tap to start.',
       temporaryFillColor: [0, 0, 0.88],
     })
 
     renderer.drawText({
-      positionX: fontSize * 2,
-      positionY: head + fontSize *4,
-      fontSize: fontSize / 2,
+      positionX: left,
+      positionY: head + fontSize * 3,
+      fontSize: smallFont,
+      text: !IsMobile ? 'WASD/Arrow Keys to move.' : 'Use buttons to move.',
+      temporaryFillColor: [0, 0, 0.88],
+    })
+
+    renderer.drawText({
+      positionX: left,
+      positionY: head + fontSize * 4,
+      fontSize: smallFont,
       text: 'Turn on sound before playing.',
       temporaryFillColor: [0, 0, 0.88],
     })
 
-    const smallFont = fontSize / 2
     renderer.drawText({
-      positionX: fontSize * 2,
+      positionX: left,
       positionY: logicalHeight - smallFont * 1.5,
       fontSize: smallFont,
       text: version,

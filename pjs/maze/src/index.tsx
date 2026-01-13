@@ -40,7 +40,7 @@ const styles: Record<string, React.CSSProperties> = {
     width: '100vw',
     height: '100dvh',
     overflow: 'hidden',
-    backgroundColor: 'black',
+    backgroundColor: 'dimgrey',
     margin: '0 auto',
     touchAction: 'manipulation',
     overflowX: 'hidden',
