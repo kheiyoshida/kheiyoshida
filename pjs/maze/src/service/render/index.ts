@@ -165,6 +165,8 @@ export const renderProceedToNextFloor: RenderHandler = ({ structure, vision, mov
     if (i === movementValueArray.length - 1) {
       unblockControlRequired()
       unblockStatusChangeRequired()
+      scaffold.slide()
+      scaffold.slide()
     }
   })
   RenderQueue.push(...drawFrameSequence)
