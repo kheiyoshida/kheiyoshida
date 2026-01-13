@@ -1,6 +1,5 @@
 import { getUIRenderer } from './renderer'
-import { IsMobile, logicalCenterX, logicalCenterY } from '../../config'
-import { randomIntInclusiveBetween } from 'utils'
+import { IsMobile, logicalCenterY } from '../../config'
 
 const interval = 100
 

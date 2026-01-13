@@ -4,7 +4,6 @@ import { physicalToLogicalPoint } from '../renderer/utils.ts'
 import { makeButtonState } from './state.ts'
 import { btnSize, centerX, centerY } from './constants.ts'
 import { IsMobile } from '../../../config'
-import { state } from '../../../game/state.ts'
 import { game } from '../../../game'
 
 export const getButtons = () => {

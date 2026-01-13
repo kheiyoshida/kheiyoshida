@@ -6,6 +6,7 @@ import { lightnessMoveDirection } from './query/vision/color'
 
 export const initializeEvent = () => {
   MessageQueue.push(RenderSignal.ShowFloor)
+  MessageQueue.push(RenderSignal.ProceedToNextFloor)
 }
 
 export const blockControlRequired = () => {
