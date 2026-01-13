@@ -1,6 +1,7 @@
 import { Player } from './player'
 import { Maze } from './maze'
 import { Mapper } from './map/mapper.ts'
+import { getAdjacent } from '../core/grid/position2d.ts'
 
 export class GameAggregate {
   constructor(
@@ -35,6 +36,8 @@ export class GameAggregate {
   }
 
   movePlayerToFront() {
+    const front = getAdjacent(this.player.position, this.player.direction)
+    this.mapper.track(front)
     this.player.walk()
     this.mapper.track(this.player.position)
   }
