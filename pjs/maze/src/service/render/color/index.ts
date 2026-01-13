@@ -33,7 +33,6 @@ export const resolveFrameColor = (params: FrameColorParams, atmosphere: Atmosphe
   col.lightness *= ColorMagnifyValues[atmosphere]
   getMaterial().setColor(col)
 
-
   return {
     lightColor: ColorScheme.lightColor,
     unlitColor: ColorScheme.unlitColor,
