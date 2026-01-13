@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { IsMobile, logicalCenterY } from '../../config'
+import { IsMobile, logicalHeight } from '../../config'
 import { getUIRenderer } from './renderer'
 
 let titleLoop: NodeJS.Timeout
@@ -13,19 +13,47 @@ const drawTitle = (version: string) => {
   titleLoop = setInterval(() => {
     renderer.clearCanvas()
 
+    const head = fontSize * 4
+
     renderer.drawText({
-      positionX: fontSize + 1,
-      positionY: logicalCenterY + 1,
+      positionX: fontSize * 2 + 1,
+      positionY: head,
       fontSize,
-      text: 'MAZE ' + version,
+      text: 'MAZE',
       temporaryFillColor: [0, 0, 0.3],
     })
+
     renderer.drawText({
-      positionX: fontSize,
-      positionY: logicalCenterY,
+      positionX: fontSize * 2,
+      positionY: head,
       fontSize,
       text: 'MAZE',
       temporaryFillColor: [0, 0, 1],
+    })
+
+    renderer.drawText({
+      positionX: fontSize * 2,
+      positionY: head + fontSize * 2,
+      fontSize: fontSize / 2,
+      text: 'Click/Tap to start.',
+      temporaryFillColor: [0, 0, 0.88],
+    })
+
+    renderer.drawText({
+      positionX: fontSize * 2,
+      positionY: head + fontSize *4,
+      fontSize: fontSize / 2,
+      text: 'Turn on sound before playing.',
+      temporaryFillColor: [0, 0, 0.88],
+    })
+
+    const smallFont = fontSize / 2
+    renderer.drawText({
+      positionX: fontSize * 2,
+      positionY: logicalHeight - smallFont * 1.5,
+      fontSize: smallFont,
+      text: version,
+      temporaryFillColor: [0, 0, 0.8],
     })
   }, 100)
 }
