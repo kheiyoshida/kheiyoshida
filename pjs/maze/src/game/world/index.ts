@@ -9,7 +9,7 @@ export class WorldProvider {
   public history: World[] = []
 
   public constructor() {
-    this.generateWorld(0)
+    this.generateNextWorld(0)
   }
 
   private get numOfRepeatedStructure(): number {
@@ -30,7 +30,7 @@ export class WorldProvider {
    * making sure current & next worlds are available
    * @param level starts from 1
    */
-  public generateWorld(level: number): void {
+  public generateNextWorld(level: number): void {
     if (this.history.length >= level + 1) return;
 
     const delta = this.getDelta(level)
