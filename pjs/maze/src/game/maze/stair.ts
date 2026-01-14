@@ -46,11 +46,11 @@ const table: Record<StructureType, Record<StructureType, StairSpec>> = {
       type: 'path',
     },
     classic: {
-      position: 'deadEnd',
+      position: 'exit',
       type: 'stair',
     },
     floating: {
-      position: 'deadEnd',
+      position: 'exit',
       type: 'lift',
     },
   },
