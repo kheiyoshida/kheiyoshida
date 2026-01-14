@@ -8,9 +8,9 @@ import { randomFloatBetween } from 'utils'
 
 const StackableBoxSizeRange: Record<ModelSize, [number, number]> = {
   [ModelSize.Expand]: [1, 1.1],
-  [ModelSize.Large]: [0.7, 1.0],
-  [ModelSize.Medium]: [0.5, 0.8],
-  [ModelSize.Small]: [0.3, 0.6],
+  [ModelSize.Large]: [0.88, 0.99],
+  [ModelSize.Medium]: [0.85, 0.9],
+  [ModelSize.Small]: [0.8, 0.88],
 }
 
 export const generateStackableBox =

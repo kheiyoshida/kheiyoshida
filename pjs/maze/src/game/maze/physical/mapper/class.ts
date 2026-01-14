@@ -5,8 +5,8 @@ export type ModelClassWeightValues = Record<ModelClass, number>
 
 export const getModelWeight = (density: number, gravity: number): ModelClassWeightValues => {
   return {
-    floatingBox: density * (1 - gravity),
-    stackedBox: density * gravity,
+    floatingBox: (0.7 - density) * (1 - gravity),
+    stackedBox: (0.7 - density) * gravity,
     tile: density < 0.5 ? (0.5 - density) * 2 * (1 - gravity) : 0,
     pole: density < 0.5 ? (0.5 - density) * 2 * gravity : 0,
   }

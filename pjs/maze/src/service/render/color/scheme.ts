@@ -3,7 +3,7 @@ import { IColorScheme } from './types.ts'
 import { Color } from 'maze-gl'
 
 const defaultHue = randomIntInclusiveBetween(120, 359)
-const defaultSaturation = 0.1 // 0.0
+const defaultSaturation = 0.4 // 0.0
 
 // lit
 const defaultUnlitLightness = 0.1 // 0.0
@@ -19,7 +19,7 @@ const materialLightness = 0.3 // 0.1
 const minLightnessSum = 0.1
 const maxLightnessSum = 0.6
 
-Color.MaxSaturation = 0.3
+Color.MaxSaturation = 0.33
 
 export const makeColorScheme = (): IColorScheme => {
   const unlitColor = new Color(defaultHue, defaultSaturation, defaultUnlitLightness)

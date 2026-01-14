@@ -12,7 +12,7 @@ export const atmosphereRangeMap = makeRangeMap<ModeRange>([
   [[8, 9], [Atmosphere.digital, Atmosphere.abstract]],
   [[10, 11], [Atmosphere.abstract, Atmosphere.abstract]],
   [[12, 13], [Atmosphere.digital, Atmosphere.abstract]],
-  [[14, 15], [Atmosphere.atmospheric, Atmosphere.digital]], // full range
+  [[14, 15], [Atmosphere.atmospheric, Atmosphere.abstract]], // full range
 ])
 
 let atmosphere = Atmosphere.atmospheric

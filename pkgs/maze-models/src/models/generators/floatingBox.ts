@@ -8,9 +8,9 @@ import { ModelSize } from '../entity'
 
 const FloatingBoxSizeRange: Record<ModelSize, [number, number]> = {
   [ModelSize.Expand]: [1, 1.1],
-  [ModelSize.Large]: [0.7, 1.0],
-  [ModelSize.Medium]: [0.5, 0.8],
-  [ModelSize.Small]: [0.3, 0.6],
+  [ModelSize.Large]: [0.87, 0.95],
+  [ModelSize.Medium]: [0.82, 0.9],
+  [ModelSize.Small]: [0.77, 0.85],
 }
 
 export const generateFloatingBox =

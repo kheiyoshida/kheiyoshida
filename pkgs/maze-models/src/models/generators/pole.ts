@@ -8,9 +8,9 @@ import { randomFloatBetween, randomFloatInAsymmetricRange, randomIntInclusiveBet
 
 const SizeRangeMap: Record<ModelSize, [number, number]> = {
   [ModelSize.Expand]: [1, 1],
-  [ModelSize.Large]: [0.7, 0.8],
-  [ModelSize.Medium]: [0.8, 1.0],
-  [ModelSize.Small]: [0.7, 0.9],
+  [ModelSize.Large]: [0.85, 0.96],
+  [ModelSize.Medium]: [0.75, 0.88],
+  [ModelSize.Small]: [0.7, 0.8],
 }
 
 const CornersRange: Record<ModelSize, [number, number]> = {
