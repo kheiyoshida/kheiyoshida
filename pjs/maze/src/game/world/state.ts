@@ -1,5 +1,6 @@
-import { clamp, randomFloatInAsymmetricRange } from 'utils'
+import { clamp, randomFloatBetween, randomFloatInAsymmetricRange } from 'utils'
 import { Ambience, Structure } from './types.ts'
+import { direction } from '../../core/grid/position2d.ts'
 
 export type IWorldState = {
   density: number
@@ -49,5 +50,46 @@ export class WorldState implements IWorldState {
 
   public get ambience(): Ambience {
     return (10 - Math.min(9, Math.floor(this.gravity * 9) + 1)) as Ambience
+  }
+}
+
+abstract class WorldStateValue {
+  protected constructor(initialValue: number) {
+    this.value = initialValue
+  }
+  public value: number
+  public abstract update(maxDelta: number): number
+}
+
+export class DirectedValue extends WorldStateValue {
+  public constructor(initialValue: number, private directionSign: boolean) {
+    super(initialValue)
+  }
+  public update(maxDelta: number): number {
+    const delta = randomFloatBetween(0, maxDelta) * (this.directionSign ? 1 : -1)
+    this.value += delta
+
+    if (this.value < 0) {
+      this.value = 0
+      this.directionSign = true
+    }
+    if (this.value > 1) {
+      this.value = 1
+      this.directionSign = false
+    }
+
+    return this.value
+  }
+}
+
+export class RandomValue extends WorldStateValue {
+  public constructor(initialValue: number) {
+    super(initialValue)
+  }
+  public update(maxDelta: number): number {
+    this.value = clamp(this.value + randomFloatInAsymmetricRange(maxDelta), 0, 1)
+    if (this.value === 0) this.value = 0.1
+    if (this.value === 1) this.value = 0.9
+    return this.value
   }
 }

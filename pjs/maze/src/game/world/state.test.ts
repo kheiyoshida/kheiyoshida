@@ -1,5 +1,6 @@
-import { WorldState } from './state.ts'
+import { DirectedValue, RandomValue, WorldState } from './state.ts'
 import { Structure } from './types.ts'
+import { describe } from 'node:test'
 
 describe(`${WorldState.name}`, () => {
   it(`changes values within normalised range`, () => {
@@ -39,5 +40,36 @@ describe(`${WorldState.name}`, () => {
   it(`provides ambience conversion`, () => {
     expect(new WorldState(1, 0).ambience).toBe(9)
     expect(new WorldState(1, 1).ambience).toBe(1)
+  })
+})
+
+describe(`sate values`, () => {
+  test(`${DirectedValue.name} should update values but retain sign until it hits the end`, () => {
+    const state = new DirectedValue(0.5, false)
+
+    let previousValue = 0.5
+    let expectIncrease = false
+    for (let i = 0; i < 100; i++) {
+      const value = state.update(0.1)
+      if (expectIncrease) {
+        expect(value).toBeGreaterThanOrEqual(previousValue)
+      } else {
+        expect(value).toBeLessThanOrEqual(previousValue)
+      }
+      if (value === 1 || value === 0) expectIncrease = !expectIncrease
+
+      previousValue = value
+    }
+  })
+
+  test(`${RandomValue.name} should update values randomly`, () => {
+    const state = new RandomValue(0.5)
+    let prev = 0.5
+    for(let i = 0; i < 100; i++) {
+      state.update(0.1)
+      expect(state.value).not.toBe(prev)
+      expect(Math.abs(state.value - prev)).toBeLessThanOrEqual(0.1)
+      prev = state.value
+    }
   })
 })
