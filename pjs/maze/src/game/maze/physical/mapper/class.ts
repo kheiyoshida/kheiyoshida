@@ -3,6 +3,15 @@ import { mapPercentageThresholds, ratioToPercentage } from 'utils'
 
 export type ModelClassWeightValues = Record<ModelClass, number>
 
+const filterValues = (
+  ratio: ModelClassWeightValues,
+  filter: (c: ModelClass) => boolean
+): ModelClassWeightValues => {
+  return Object.fromEntries(
+    Object.entries(ratio).filter(([k, v]) => filter(k as ModelClass))
+  ) as ModelClassWeightValues
+}
+
 export const getModelWeight = (density: number, gravity: number): ModelClassWeightValues => {
   return {
     floatingBox: (0.7 - density) * (1 - gravity),
@@ -17,50 +26,53 @@ export class ModelClassEmitter {
     return new ModelClassEmitter(getModelWeight(density, gravity))
   }
 
-  private readonly percentages: [number, ModelClass][]
-
-  private readonly thresholds: [number, ModelClass][]
-  private readonly thresholdsAvoidFloating: [number, ModelClass][]
-  private readonly thresholdsAvoidStacked: [number, ModelClass][]
+  private readonly picker: RandomRatioPicker<ModelClass>
+  private readonly pickerWithoutFloating: RandomRatioPicker<ModelClass>
+  private readonly pickerWithoutStacked: RandomRatioPicker<ModelClass>
 
   constructor(readonly ratio: ModelClassWeightValues) {
-    this.percentages = ratioToPercentage(Object.entries(ratio).map(([k, v]) => [v, k as ModelClass])).filter(
-      ([t, _]) => t !== 0
+    this.picker = new RandomRatioPicker(ratio)
+    this.pickerWithoutFloating = new RandomRatioPicker(
+      filterValues(ratio, (c) => modelTypeMap[c] !== 'floating')
     )
-    this.thresholds = mapPercentageThresholds(this.percentages)
-    this.thresholdsAvoidFloating = mapPercentageThresholds(
-      this.percentages.filter(([, v]) => modelTypeMap[v] !== 'floating')
-    )
-    this.thresholdsAvoidStacked = mapPercentageThresholds(
-      this.percentages.filter(([, v]) => modelTypeMap[v] !== 'stacked')
+    this.pickerWithoutStacked = new RandomRatioPicker(
+      filterValues(ratio, (c) => modelTypeMap[c] !== 'stacked')
     )
   }
 
   emitModelClass(avoidModelType?: ModelType): ModelClass | null {
-    const r = Math.random()
-    for (const [t, v] of this.thresholds) {
-      if (r <= t) {
-        if (modelTypeMap[v] == avoidModelType) return null
-        return v
-      }
-    }
-    return null
+    const v = this.picker.pickValue()
+    if (modelTypeMap[v] === avoidModelType) return null
+    return v
   }
 
   emitModelClassEnsured(avoidModelType?: ModelType): ModelClass {
-    const thresholds = avoidModelType
+    const picker = avoidModelType
       ? avoidModelType === 'floating'
-        ? this.thresholdsAvoidFloating
-        : this.thresholdsAvoidStacked
-      : this.thresholds
+        ? this.pickerWithoutFloating
+        : this.pickerWithoutStacked
+      : this.picker
+    return picker.pickValue()
+  }
+}
 
+export class RandomRatioPicker<T extends string> {
+  private readonly thresholds: [number, T][]
+  constructor(readonly ratio: Record<T, number>) {
+    const percentages = ratioToPercentage(
+      Object.entries(ratio).map(([k, v]) => [v as number, k as T])
+    ).filter(([t, _]) => t !== 0)
+    if (percentages.length === 0) throw new Error(`ratio is empty: ${JSON.stringify(ratio)}`)
+    this.thresholds = mapPercentageThresholds(percentages)
+  }
+
+  pickValue(): T {
     const r = Math.random()
-    for (const [t, v] of thresholds) {
+    for (const [t, v] of this.thresholds) {
       if (r <= t) return v
     }
 
-    if (thresholds.length === 0) return avoidModelType === 'floating' ? 'stackedBox' : 'floatingBox'
-
-    throw new Error(`emitModelClassEnsured failed`)
+    console.error(`pickRandom failed: ${JSON.stringify(this.ratio)} ${JSON.stringify(this.thresholds)}`)
+    return this.thresholds[this.thresholds.length - 1][1] as T
   }
 }

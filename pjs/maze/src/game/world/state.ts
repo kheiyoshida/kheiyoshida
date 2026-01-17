@@ -31,7 +31,6 @@ export class WorldState implements IWorldState {
   }
 
   private updateDebug() {
-
     const state = debugState.shift()
     this.density = state?.density ?? this.density
     this.gravity = state?.gravity ?? this.gravity

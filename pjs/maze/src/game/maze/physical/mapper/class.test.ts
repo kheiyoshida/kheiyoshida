@@ -1,4 +1,4 @@
-import { getModelWeight, ModelClassEmitter } from './class'
+import { getModelWeight, ModelClassEmitter, RandomRatioPicker } from './class'
 
 describe(`${getModelWeight.name}`, () => {
   test(`density and gravity should affect the ratio of model classes`, () => {
@@ -77,3 +77,22 @@ describe(`${ModelClassEmitter.name}`, () => {
   })
 })
 
+describe(`${RandomRatioPicker.name}`, () => {
+  it(`can pick a value randomly by given ratio`, () => {
+    const picker = new RandomRatioPicker({
+      a: 0.2,
+      b: 0.2,
+      c: 0,
+      d: 0.8,
+    })
+
+    const result = {a: 0, b: 0, c: 0, d: 0}
+    for(let i = 0; i < 100; i++) {
+      result[picker.pickValue()] += 1
+    }
+
+    expect(result.d).toBeGreaterThan(result.a)
+    expect(result.d).toBeGreaterThan(result.b)
+    expect(result.c).toBe(0)
+  })
+})
