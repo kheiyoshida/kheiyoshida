@@ -27,6 +27,8 @@ describe(`${MazeLevel.name}`, () => {
         next: 'classic',
       },
       {
+        order: 1,
+        scale: 1,
         gravity: 0.5,
         density: 0.5,
       }

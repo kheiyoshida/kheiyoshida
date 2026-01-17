@@ -12,7 +12,7 @@ describe(`${buildViewGrid.name}`, () => {
       [0, 2, 0],
     ])
 
-    const physicalGrid = PhysicalMazeGrid.convert(grid, 'stair', { density: 1.0, gravity: 0.5 })
+    const physicalGrid = PhysicalMazeGrid.convert(grid, 'stair', { order: 1, scale: 1, density: 1.0, gravity: 0.5 })
     const origin: ViewOrigin = {
       position: { x: 1, y: 0 },
       direction: 's',
@@ -31,7 +31,7 @@ describe(`${buildViewGrid.name}`, () => {
       [1, 1, 2],
       [0, 0, 0],
     ])
-    const physicalGrid = PhysicalMazeGrid.convert(grid, 'stair', { density: 1.0, gravity: 0.5 })
+    const physicalGrid = PhysicalMazeGrid.convert(grid, 'stair', { order: 1, scale: 1,density: 1.0, gravity: 0.5 })
     const origin: ViewOrigin = {
       position: { x: 0, y: 1 },
       direction: 'e',

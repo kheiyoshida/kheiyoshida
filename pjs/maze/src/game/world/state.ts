@@ -1,40 +1,60 @@
 import { clamp, randomFloatBetween, randomFloatInAsymmetricRange } from 'utils'
 import { Ambience, Structure } from './types.ts'
-import { direction } from '../../core/grid/position2d.ts'
 
 export type IWorldState = {
-  density: number
+  order: number
   gravity: number
+  density: number
+  scale: number
 }
 
 const debug = false
 const debugState: IWorldState[] = [
-  { density: 0.3, gravity: 1.0 },
-  { density: 0.4, gravity: 1.0 },
-  { density: 0.5, gravity: 1.0 },
+  { density: 0.3, gravity: 1.0, order: 1.0, scale: 0.9 },
+  { density: 0.4, gravity: 1.0, order: 1.0, scale: 0.9 },
+  { density: 0.5, gravity: 1.0, order: 1.0, scale: 0.9 },
 ]
 
 export class WorldState implements IWorldState {
-  constructor(initialDensity = 1.0, initialGravity = 1.0) {
-    this.density = initialDensity
-    this.gravity = initialGravity
+  private orderState: WorldStateValue
+  private gravityState: WorldStateValue
+  private densityState: WorldStateValue
+  private scaleState: WorldStateValue
+
+  constructor(initialDensity = 1.0, initialGravity = 0.5) {
+    this.orderState = new DirectedValue(1.0, false)
+    this.gravityState = new RandomValue(initialGravity)
+    this.densityState = new DirectedValue(initialDensity, false)
+    this.scaleState = new RandomValue(1.0)
   }
 
-  public density: number
-  public gravity: number
+  public get order(): number {
+    return this.orderState.value
+  }
+  public get gravity(): number {
+    return this.gravityState.value
+  }
+  public get density(): number {
+    return this.densityState.value
+  }
+  public get scale(): number {
+    return this.scaleState.value
+  }
 
   public update(delta: number = 0.1, avoid?: Structure, retry = 0): void {
     if (debug) return this.updateDebug()
-    if (retry > 10) return
-    this.density = clamp(this.density + randomFloatInAsymmetricRange(delta), 0, 1)
-    this.gravity = clamp(this.gravity + randomFloatInAsymmetricRange(delta), 0, 1)
+    if (retry > 100) return
+    this.orderState.update(delta)
+    this.gravityState.update(delta)
+    this.densityState.update(delta)
+    this.scaleState.update(delta)
     if (this.structure === avoid) this.update(delta + 0.1, avoid, retry + 1)
   }
 
   private updateDebug() {
     const state = debugState.shift()
-    this.density = state?.density ?? this.density
-    this.gravity = state?.gravity ?? this.gravity
+    this.densityState.value = state?.density ?? this.density
+    this.gravityState.value = state?.gravity ?? this.gravity
   }
 
   public get structure(): Structure {
@@ -51,6 +71,10 @@ export class WorldState implements IWorldState {
   public get ambience(): Ambience {
     return (10 - Math.min(9, Math.floor(this.gravity * 9) + 1)) as Ambience
   }
+
+  public getSnapShot(): IWorldState {
+    return { order: this.order, density: this.density, gravity: this.gravity, scale: this.scale }
+  }
 }
 
 abstract class WorldStateValue {
@@ -62,7 +86,10 @@ abstract class WorldStateValue {
 }
 
 export class DirectedValue extends WorldStateValue {
-  public constructor(initialValue: number, private directionSign: boolean) {
+  public constructor(
+    initialValue: number,
+    private directionSign: boolean
+  ) {
     super(initialValue)
   }
   public update(maxDelta: number): number {

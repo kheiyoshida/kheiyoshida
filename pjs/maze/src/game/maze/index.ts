@@ -17,7 +17,7 @@ export class Maze {
     private buildParams: (level: number, structureContext: StructureContext) => BuildMazeGridParams,
     private worldProvider: WorldProvider = new WorldProvider()
   ) {
-    this.worldState = { ...this.worldProvider.state }
+    this.worldState = this.worldProvider.state.getSnapShot()
   }
 
   // debugging params
@@ -26,7 +26,7 @@ export class Maze {
   setNextLevel() {
     this._levelNumber++
 
-    this.worldState = { ...this.worldProvider.state }
+    this.worldState = this.worldProvider.state.getSnapShot()
 
     this.worldProvider.generateNextWorld(this._levelNumber)
 
