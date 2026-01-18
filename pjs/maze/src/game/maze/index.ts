@@ -5,6 +5,7 @@ import { WorldProvider } from '../world'
 import { IWorldState } from '../world/state.ts'
 import { debugAtmosphere } from '../../config/debug.ts'
 import { ModelEntity } from 'maze-models'
+import { paramBuild } from './params.ts'
 
 /**
  * manages maze grids over levels
@@ -14,7 +15,6 @@ export class Maze {
   private _level!: MazeLevel
 
   constructor(
-    private buildParams: (level: number, structureContext: StructureContext) => BuildMazeGridParams,
     private worldProvider: WorldProvider = new WorldProvider()
   ) {
     this.worldState = this.worldProvider.state.getSnapShot()
@@ -30,7 +30,7 @@ export class Maze {
 
     this.worldProvider.generateNextWorld(this._levelNumber)
 
-    const params = this.buildParams(this._levelNumber, this.structureContext)
+    const params = paramBuild(this._levelNumber, this.structureContext, this.worldState)
     ModelEntity.variantRange.max = Math.min(3 + Math.floor(this._levelNumber / 3), 9)
     this._level = MazeLevel.build(params, this.structureContext, this.worldState)
     this.debugParams = params

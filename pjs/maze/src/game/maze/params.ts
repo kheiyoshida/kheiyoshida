@@ -1,12 +1,17 @@
-import { clamp, randomFloatBetween, randomIntInclusiveBetween } from 'utils'
+import { clamp, randomFloatBetween, randomFloatInAsymmetricRange, randomIntInclusiveBetween } from 'utils'
 import { MaxFloorSize } from '../../config'
 import { BuildMazeGridParams } from '../../core/level/builder'
 import { StructureContext } from '../world/types.ts'
 import { getStairSpec } from './stair.ts'
+import { IWorldState } from '../world/state.ts'
 
-export const paramBuild = (level: number, structureContext: StructureContext): BuildMazeGridParams => {
+export const paramBuild = (
+  level: number,
+  structureContext: StructureContext,
+  worldState: IWorldState
+): BuildMazeGridParams => {
   const size = getLevelSize(level)
-  const fillRate = getFillRate(level)
+  const fillRate = getFillRate(level, worldState.density)
   const connRate = getConnectionRate(level)
   const stairSpec = getStairSpec(structureContext)
   return {
@@ -20,7 +25,7 @@ export const paramBuild = (level: number, structureContext: StructureContext): B
 
 export const InitialSize = 9
 
-const oddize = (n: number) => n % 2 === 0 ? n - 1 : n
+const oddize = (n: number) => (n % 2 === 0 ? n - 1 : n)
 
 const getLevelSize = (floor: number): number => {
   if (floor < MaxFloorSize - InitialSize) {
@@ -33,7 +38,7 @@ const getLevelSize = (floor: number): number => {
 const DefaultFillRate = 0.4
 const MaxFillRate = 0.66
 
-const getFillRate = (floor: number): number => {
+const getFillRate = (floor: number, density: number): number => {
   if (floor % 10 === 0) return 0.25
   if (floor % 5 === 0) return 0.75
   if (floor < 5) {
@@ -45,7 +50,13 @@ const getFillRate = (floor: number): number => {
     }[floor]!
     return randomFloatBetween(min, min + 0.2)
   }
-  return Math.min(randomFloatBetween(DefaultFillRate - floor / 100, DefaultFillRate), MaxFillRate)
+  const scarcity = 1.0 - density
+  const rate = randomFloatBetween(
+    DefaultFillRate - randomFloatBetween(0, DefaultFillRate) * scarcity,
+    MaxFillRate
+  )
+  if (rate < 0.1) return 0.1
+  return rate
 }
 
 const DefaultConnectionRate = 0.5
