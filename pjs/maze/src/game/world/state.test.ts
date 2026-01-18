@@ -22,11 +22,11 @@ describe(`${WorldState.name}`, () => {
   })
 
   it(`provides structure for the state`, () => {
-    expect(new WorldState(0.82, 0.5).structure).toBe('classic')
-    expect(new WorldState(0.55, 0.23).structure).toBe('floatingBoxes' as Structure)
-    expect(new WorldState(0.55, 0.83).structure).toBe('stackedBoxes' as Structure)
-    expect(new WorldState(0.33, 0.23).structure).toBe('tiles' as Structure)
-    expect(new WorldState(0.33, 0.88).structure).toBe('poles' as Structure)
+    expect(new WorldState({ order:0.82, gravity: 0.5 }).structure).toBe('classic')
+    expect(new WorldState({ order:0.55, gravity: 0.23 }).structure).toBe('floatingBoxes' as Structure)
+    expect(new WorldState({ order:0.55, gravity: 0.83 }).structure).toBe('stackedBoxes' as Structure)
+    expect(new WorldState({ order:0.33, gravity: 0.23 }).structure).toBe('tiles' as Structure)
+    expect(new WorldState({ order:0.33, gravity: 0.88 }).structure).toBe('poles' as Structure)
   })
 
   it(`can update state until it gets different world structure`, () => {
@@ -38,8 +38,8 @@ describe(`${WorldState.name}`, () => {
   })
 
   it(`provides ambience conversion`, () => {
-    expect(new WorldState(1, 0).ambience).toBe(9)
-    expect(new WorldState(1, 1).ambience).toBe(1)
+    expect(new WorldState({ gravity: 0 }).ambience).toBe(9)
+    expect(new WorldState({ gravity: 1 }).ambience).toBe(1)
   })
 })
 

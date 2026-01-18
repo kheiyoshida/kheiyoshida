@@ -1,5 +1,6 @@
 import { clamp, randomFloatBetween, randomFloatInAsymmetricRange } from 'utils'
 import { Ambience, Structure } from './types.ts'
+import { debugState, enableDebugState } from '../../config/debug.ts'
 
 export type IWorldState = {
   order: number
@@ -8,24 +9,17 @@ export type IWorldState = {
   scale: number
 }
 
-const debug = false
-const debugState: IWorldState[] = [
-  { density: 0.3, gravity: 1.0, order: 1.0, scale: 0.9 },
-  { density: 0.4, gravity: 1.0, order: 1.0, scale: 0.9 },
-  { density: 0.5, gravity: 1.0, order: 1.0, scale: 0.9 },
-]
-
 export class WorldState implements IWorldState {
   private orderState: WorldStateValue
   private gravityState: WorldStateValue
   private densityState: WorldStateValue
   private scaleState: WorldStateValue
 
-  constructor(initialDensity = 1.0, initialGravity = 0.5) {
-    this.orderState = new DirectedValue(1.0, false)
-    this.gravityState = new RandomValue(initialGravity)
-    this.densityState = new DirectedValue(initialDensity, false)
-    this.scaleState = new RandomValue(1.0)
+  constructor(initial?: Partial<IWorldState>) {
+    this.orderState = new DirectedValue(initial?.order ?? 1.0, false)
+    this.gravityState = new RandomValue(initial?.gravity ?? 0.5)
+    this.densityState = new DirectedValue(initial?.density ?? 1.0, false)
+    this.scaleState = new RandomValue(initial?.scale ?? 1.0)
   }
 
   public get order(): number {
@@ -42,7 +36,7 @@ export class WorldState implements IWorldState {
   }
 
   public update(delta: number = 0.1, avoid?: Structure, retry = 0): void {
-    if (debug) return this.updateDebug()
+    if (enableDebugState) return this.updateDebug()
     if (retry > 100) return
     this.orderState.update(delta)
     this.gravityState.update(delta)
@@ -58,8 +52,8 @@ export class WorldState implements IWorldState {
   }
 
   public get structure(): Structure {
-    if (this.density > 0.8) return 'classic'
-    if (this.density > 0.5) {
+    if (this.order > 0.8) return 'classic'
+    if (this.order > 0.5) {
       if (this.gravity < 0.5) return 'floatingBoxes'
       else return 'stackedBoxes'
     } else {
