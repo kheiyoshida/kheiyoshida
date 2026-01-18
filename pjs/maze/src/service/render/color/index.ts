@@ -25,16 +25,12 @@ export const resolveFrameColor = (params: FrameColorParams, atmosphere: Atmosphe
   // hue
   ColorScheme.rotateHue(params.hueDelta * 180)
 
-  // lightness
-  ColorScheme.setLightLevel(params.litLevel * 0.4)
-
   // apply material color
   const col = ColorScheme.materialColor.clone()
   col.lightness *= ColorMagnifyValues[atmosphere]
   getMaterial().setColor(col)
 
   return {
-    lightColor: ColorScheme.lightColor,
     unlitColor: ColorScheme.unlitColor,
   }
 }

@@ -39,7 +39,7 @@ bool detectEdge() {
     vec4 normalSample = texture(uNormalTexture, vUV);
 
     float noiseVal = random(vec2(gl_FragCoord.x, gl_FragCoord.y));
-    float offset = (noiseVal) / 691.0; // depth texture resolution = canvas.width
+    float offset = (1.0 + noiseVal - 0.5) / uResolution.x; // depth texture resolution = canvas.width
 
     // sample the color value off color texture(i.e. offscreen buffer)
     vec3 normalCenter = convertNormalToOriginalRange(texture(uNormalTexture, vUV));
@@ -84,7 +84,7 @@ void main() {
     vec3 originalColor = vec3(texture(uColorTexture, vUV));
 
     vec3 lineColor;
-    if (originalColor.x > 0.5 && originalColor.y > 0.5 && originalColor.z > 0.5) {
+    if (uBaseColor.x > 0.5 && uBaseColor.y > 0.5 && uBaseColor.z > 0.5) {
         lineColor = originalColor - edgeStrokeColorDiff;
     } else {
         lineColor = originalColor + edgeStrokeColorDiff;
@@ -96,5 +96,4 @@ void main() {
     vec3 finalColor = isEdge ? finalLineColor : originalColor;
 
     fragColor = vec4(finalColor, 1.0);
-//    fragColor = vec4(1, 0, 0, 1);
 }

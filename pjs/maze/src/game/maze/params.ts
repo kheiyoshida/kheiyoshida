@@ -1,4 +1,4 @@
-import { clamp, randomFloatBetween, randomFloatInAsymmetricRange, randomIntInclusiveBetween } from 'utils'
+import { clamp, randomFloatBetween, randomIntInclusiveBetween } from 'utils'
 import { MaxFloorSize } from '../../config'
 import { BuildMazeGridParams } from '../../core/level/builder'
 import { StructureContext } from '../world/types.ts'

@@ -8,8 +8,8 @@ type EffectType = Exclude<keyof EffectParams, 'time' | 'resolution'>
 
 const AtmosphereEffectMap: Record<Atmosphere, EffectType[]> = {
   [Atmosphere.atmospheric]: ['fog', 'blur', 'distortion'],
-  [Atmosphere.smooth]: ['fog', 'blur', 'distortion'],
-  [Atmosphere.ambient]: ['fog', 'blur', 'distortion'],
+  [Atmosphere.smooth]: ['fog', 'blur', 'distortion', 'edge'],
+  [Atmosphere.ambient]: ['fog', 'blur', 'distortion', 'edge'],
   [Atmosphere.digital]: ['fog', 'blur', 'distortion', 'edge'],
   [Atmosphere.abstract]: ['fog', 'blur', 'edge'],
 }
@@ -20,6 +20,14 @@ const distMagValues: Record<Atmosphere, number> = {
   [Atmosphere['ambient']]: 0.8,
   [Atmosphere['digital']]: 1.5,
   [Atmosphere['abstract']]: 0,
+}
+
+const edgeMagValues: Record<Atmosphere, number> = {
+  [Atmosphere['atmospheric']]: 0.1,
+  [Atmosphere['smooth']]: 0.1,
+  [Atmosphere['ambient']]: 0.3,
+  [Atmosphere['digital']]: 1,
+  [Atmosphere['abstract']]: 1,
 }
 
 export const getEffectParams = (): EffectParams => {
@@ -39,7 +47,11 @@ export const getEffectParams = (): EffectParams => {
     if (fx === 'distortion') {
       params.distortion = { distortionLevel: pixelRandomizationParameter(sanity) * distMagValues[atmosphere] }
     }
-    if (fx === 'edge') params.edge = { edgeRenderingLevel: edgeRenderingParameter(stamina + sanity) }
+    if (fx === 'edge') {
+      params.edge = {
+        edgeRenderingLevel: edgeRenderingParameter(sanity) * edgeMagValues[atmosphere],
+      }
+    }
   }
 
   return params
@@ -47,7 +59,7 @@ export const getEffectParams = (): EffectParams => {
 
 const blurParameter = makeIncreasingParameter(0, 5, 2000, 800)
 const pixelRandomizationParameter = makeIncreasingParameter(0, 1, 2500, 750)
-const edgeRenderingParameter = makeDecreasingParameter(0, 1, 6000, 0)
+const edgeRenderingParameter = makeIncreasingParameter(0, 1, 3000, 1000)
 
 // decrease visibility when stamina is low
 const visibilityParam = makeDecreasingParameter(0, 1, 3000, 0)
