@@ -35,10 +35,10 @@ export class WorldState implements IWorldState {
     return this.scaleState.value
   }
 
-  public update(delta: number = 0.1, avoid?: Structure, retry = 0): void {
+  public update(delta: number = 0.25, avoid?: Structure, retry = 0): void {
     if (enableDebugState) return this.updateDebug()
     if (retry > 100) return
-    this.orderState.update(delta)
+    this.orderState.update(delta * 2)
     this.gravityState.update(delta)
     this.densityState.update(delta)
     this.scaleState.update(delta)

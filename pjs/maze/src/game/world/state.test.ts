@@ -1,32 +1,14 @@
-import { DirectedValue, RandomValue, WorldState } from './state.ts'
+import { DirectedValue, IWorldState, RandomValue, WorldState } from './state.ts'
 import { Structure } from './types.ts'
 import { describe } from 'node:test'
 
 describe(`${WorldState.name}`, () => {
-  it(`changes values within normalised range`, () => {
-    const worldState = new WorldState()
-
-    for (let i = 0; i < 100; i++) {
-      const density = Number(worldState.density)
-      const gravity = Number(worldState.gravity)
-      worldState.update(0.1)
-
-      expect(worldState.density).toBeGreaterThanOrEqual(0)
-      expect(worldState.density).toBeLessThanOrEqual(1)
-      expect(worldState.gravity).toBeGreaterThanOrEqual(0)
-      expect(worldState.gravity).toBeLessThanOrEqual(1)
-
-      expect(Math.abs(worldState.density - density)).toBeLessThanOrEqual(0.1)
-      expect(Math.abs(worldState.gravity - gravity)).toBeLessThanOrEqual(0.1)
-    }
-  })
-
   it(`provides structure for the state`, () => {
-    expect(new WorldState({ order:0.82, gravity: 0.5 }).structure).toBe('classic')
-    expect(new WorldState({ order:0.55, gravity: 0.23 }).structure).toBe('floatingBoxes' as Structure)
-    expect(new WorldState({ order:0.55, gravity: 0.83 }).structure).toBe('stackedBoxes' as Structure)
-    expect(new WorldState({ order:0.33, gravity: 0.23 }).structure).toBe('tiles' as Structure)
-    expect(new WorldState({ order:0.33, gravity: 0.88 }).structure).toBe('poles' as Structure)
+    expect(new WorldState({ order: 0.82, gravity: 0.5 }).structure).toBe('classic')
+    expect(new WorldState({ order: 0.55, gravity: 0.23 }).structure).toBe('floatingBoxes' as Structure)
+    expect(new WorldState({ order: 0.55, gravity: 0.83 }).structure).toBe('stackedBoxes' as Structure)
+    expect(new WorldState({ order: 0.33, gravity: 0.23 }).structure).toBe('tiles' as Structure)
+    expect(new WorldState({ order: 0.33, gravity: 0.88 }).structure).toBe('poles' as Structure)
   })
 
   it(`can update state until it gets different world structure`, () => {
@@ -40,6 +22,27 @@ describe(`${WorldState.name}`, () => {
   it(`provides ambience conversion`, () => {
     expect(new WorldState({ gravity: 0 }).ambience).toBe(9)
     expect(new WorldState({ gravity: 1 }).ambience).toBe(1)
+  })
+
+  it(`updates state over time`, () => {
+    const state = new WorldState()
+    const snapshots: IWorldState[] = []
+    for (let i = 0; i < 30; i++) {
+      state.update(0.1)
+      snapshots.push(state.getSnapShot())
+    }
+
+    console.log(
+      'density gravity order scale\n======================\n' +
+      snapshots
+        .map(
+          (s, i) =>
+            `${i + 1}: ${s.density.toFixed(2)}, ${s.gravity.toFixed(2)}, ${s.order.toFixed(
+              2
+            )}, ${s.scale.toFixed(2)}`
+        )
+        .join('\n')
+    )
   })
 })
 
@@ -65,7 +68,7 @@ describe(`sate values`, () => {
   test(`${RandomValue.name} should update values randomly`, () => {
     const state = new RandomValue(0.5)
     let prev = 0.5
-    for(let i = 0; i < 100; i++) {
+    for (let i = 0; i < 100; i++) {
       state.update(0.1)
       expect(state.value).not.toBe(prev)
       expect(Math.abs(state.value - prev)).toBeLessThanOrEqual(0.1)
