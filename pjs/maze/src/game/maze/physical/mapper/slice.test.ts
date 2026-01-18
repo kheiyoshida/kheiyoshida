@@ -21,9 +21,11 @@ const printSlice = (slice: PhysicalGridSlice): void => {
 describe(`${SliceMapper.name}`, () => {
   test(`floor slice`, () => {
     const sliceMapper = new SliceMapper({
+      stairType: 'stair',
       density: 0.5,
       gravity: 0.5,
-      stairType: 'stair',
+      order: 1,
+      scale: 1,
     })
 
     for (let i = 0; i < 10; i++) {
@@ -60,6 +62,8 @@ describe(`${SliceMapper.name}`, () => {
     const sliceMapper = new SliceMapper({
       density: 0.3,
       gravity: 0.5,
+      order: 1,
+      scale: 1,
       stairType: 'stair',
     })
 
@@ -107,6 +111,8 @@ describe(`${SliceMapper.name}`, () => {
       density: 0.2,
       gravity: 0.5,
       stairType: 'stair',
+      order: 1,
+      scale: 1,
     })
 
     for (let i = 0; i < 10; i++) {

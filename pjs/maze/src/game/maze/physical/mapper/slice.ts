@@ -16,7 +16,7 @@ export class SliceMapper {
   private density: number
 
   constructor(params: PhysicalGridParams) {
-    this.entityEmitter = new ModelEntityEmitter(params.density, params.gravity)
+    this.entityEmitter = new ModelEntityEmitter(params)
     this.density = params.density
   }
 

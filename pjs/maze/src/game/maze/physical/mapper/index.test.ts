@@ -12,7 +12,13 @@ describe(`${gridConverter.name}`, () => {
       [0, 0, 1, 0, 0],
     ])
 
-    const physicalGrid = gridConverter(grid, { stairType: 'stair', gravity: 1.0, density: 0.5 })
+    const physicalGrid = gridConverter(grid, {
+      stairType: 'stair',
+      gravity: 1.0,
+      density: 0.5,
+      scale: 0.5,
+      order: 0.5,
+    })
 
     const slice22 = physicalGrid.getSliceByLogicalPosition({ x: 2, y: 2 })
 

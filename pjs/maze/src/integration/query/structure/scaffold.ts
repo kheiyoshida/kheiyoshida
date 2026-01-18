@@ -10,12 +10,12 @@ export type ScaffoldParams = {
 
 export const getScaffoldParams = (): ScaffoldParams => {
   const { stamina, sanity } = game.player.status
-  const density = game.maze.worldState.density
+  const order = game.maze.worldState.order
   return {
     corridorWidthLevel: calcWidthLevel(sanity),
     wallHeightLevel: calcHeightLevel(sanity / 2 + stamina),
     corridorLengthLevel: calcCorridorLengthLevel(stamina),
-    distortionLevel: calcDistortion(sanity, density),
+    distortionLevel: calcDistortion(sanity, order),
   }
 }
 
@@ -24,7 +24,7 @@ const calcHeightLevel = makeIncreasingParameter(1, 1.5, 3000)
 const calcCorridorLengthLevel = makeIncreasingParameter(1, 2, 1500)
 
 const calc = makeIncreasingParameter(0.01, 2.0, 2500)
-const calcDistortion = (sanity: number, density: number) => {
-  const dist = calc(sanity) * (1 - density * 0.5)
+const calcDistortion = (sanity: number, order: number) => {
+  const dist = calc(sanity) * (1 - order * 0.5)
   return dist > 1 ? dist * dist : dist
 }

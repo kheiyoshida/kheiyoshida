@@ -2,10 +2,15 @@ import { ModelEntityEmitter } from './entity.ts'
 
 describe(`${ModelEntityEmitter.name}`, () => {
   it(`emits model entity`, () => {
-    const emitter = new ModelEntityEmitter(0.5, 0.5)
+    const emitter = new ModelEntityEmitter({
+      gravity: 0.5,
+      order: 0.5,
+      scale: 0.5,
+      density: 0.5,
+    })
 
     for (let i = 0; i < 10; i++) {
-      const entity = emitter.emitNullable({avoidModelType: 'stacked', maxLength: 3})
+      const entity = emitter.emitNullable({ avoidModelType: 'stacked', maxLength: 3 })
       if (entity) {
         expect(entity.modelType).not.toBe('stacked')
         expect(entity.verticalLength).toBeLessThanOrEqual(3)
@@ -21,7 +26,6 @@ describe(`${ModelEntityEmitter.name}`, () => {
     }
     expect(classes.includes('stackedBox')).toBe(true)
     expect(classes.includes('floatingBox')).toBe(true)
-
 
     for (let i = 0; i < 10; i++) {
       const entity3 = emitter.emitEnsured()

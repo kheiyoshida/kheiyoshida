@@ -12,7 +12,7 @@ export class StairMapper {
   private stairType: StairType
 
   public constructor(params: PhysicalGridParams) {
-    this.entityEmitter = new ModelEntityEmitter(params.density, params.gravity)
+    this.entityEmitter = new ModelEntityEmitter(params)
     this.stairType = params.stairType
   }
 

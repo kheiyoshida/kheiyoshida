@@ -12,18 +12,18 @@ const filterValues = (
   ) as ModelClassWeightValues
 }
 
-export const getModelWeight = (density: number, gravity: number): ModelClassWeightValues => {
+export const getModelWeight = (order: number, gravity: number): ModelClassWeightValues => {
   return {
-    floatingBox: (0.7 - density) * (1 - gravity),
-    stackedBox: (0.7 - density) * gravity,
-    tile: density < 0.5 ? (0.5 - density) * 2 * (1 - gravity) : 0,
-    pole: density < 0.5 ? (0.5 - density) * 2 * gravity : 0,
+    floatingBox: (0.7 - order) * (1 - gravity),
+    stackedBox: (0.7 - order) * gravity,
+    tile: order < 0.5 ? (0.5 - order) * 2 * (1 - gravity) : 0,
+    pole: order < 0.5 ? (0.5 - order) * 2 * gravity : 0,
   }
 }
 
 export class ModelClassEmitter {
-  static build(density: number, gravity: number) {
-    return new ModelClassEmitter(getModelWeight(density, gravity))
+  static build(order: number, gravity: number) {
+    return new ModelClassEmitter(getModelWeight(order, gravity))
   }
 
   private readonly picker: RandomRatioPicker<ModelClass>
@@ -31,6 +31,7 @@ export class ModelClassEmitter {
   private readonly pickerWithoutStacked: RandomRatioPicker<ModelClass>
 
   constructor(readonly ratio: ModelClassWeightValues) {
+    console.log(ratio)
     this.picker = new RandomRatioPicker(ratio)
     this.pickerWithoutFloating = new RandomRatioPicker(
       filterValues(ratio, (c) => modelTypeMap[c] !== 'floating')

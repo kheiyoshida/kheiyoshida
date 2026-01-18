@@ -1,13 +1,14 @@
 import { StairMapper } from './stair.ts'
 import { PhysicalMazeGrid, VerticalLayer } from '../grid.ts'
 import { getPositionInDirection, Position2D } from '../../../../core/grid/position2d.ts'
-import { ModelUsage } from 'maze-models'
 
 describe(`stair mapping`, () => {
   test(`stair`, () => {
     const stairMapper = new StairMapper({
       density: 0.5,
       gravity: 0.5,
+      order: 1,
+      scale: 1,
       stairType: 'stair',
     })
 
@@ -33,6 +34,8 @@ describe(`stair mapping`, () => {
     const stairMapper = new StairMapper({
       density: 0.5,
       gravity: 0.5,
+      order: 1,
+      scale: 1,
       stairType: 'lift',
     })
 
@@ -59,6 +62,8 @@ describe(`stair mapping`, () => {
     const stairMapper = new StairMapper({
       density: 0.5,
       gravity: 0.5,
+      order: 1,
+      scale: 1,
       stairType: 'path',
     })
 

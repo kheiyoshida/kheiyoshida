@@ -4,11 +4,10 @@ import { SliceMapper } from './slice.ts'
 import { Position2D } from '../../../../core/grid/position2d.ts'
 import { StairType } from '../../stair.ts'
 import { StairMapper } from './stair.ts'
+import { IWorldState } from '../../../world/state.ts'
 
-export type PhysicalGridParams = {
+export type PhysicalGridParams = IWorldState & {
   stairType: StairType
-  gravity: number
-  density: number
 }
 
 export const gridConverter = (grid: MazeGrid, params: PhysicalGridParams) => {

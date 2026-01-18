@@ -1,6 +1,7 @@
 import { ModelClassEmitter } from './class.ts'
 import { randomIntInclusiveBetween } from 'utils'
 import { ModelEntity, ModelSize, ModelType, ModelUsage } from 'maze-models'
+import { IWorldState } from '../../../world/state.ts'
 
 type EntityOptions = {
   avoidModelType?: ModelType
@@ -18,14 +19,14 @@ const getSize = (density: number) => {
 export class ModelEntityEmitter {
   private classEmitter: ModelClassEmitter
 
-  private modelSize: ModelSize
+  private readonly modelSize: ModelSize
 
-  constructor(
-    private readonly density: number,
-    gravity: number
-  ) {
-    this.classEmitter = ModelClassEmitter.build(density, gravity)
-    this.modelSize = getSize(density)
+  private readonly density: number
+
+  constructor({ density, order, gravity, scale }: IWorldState) {
+    this.classEmitter = ModelClassEmitter.build(order, gravity)
+    this.modelSize = getSize(scale)
+    this.density = density
   }
 
   private shouldEmit(): boolean {
@@ -38,14 +39,9 @@ export class ModelEntityEmitter {
     maxLength: undefined,
   }
 
-  emitNullable(
-    { avoidModelType, maxLength, usage }: EntityOptions = ModelEntityEmitter.defaultOptions
-  ): ModelEntity | null {
+  emitNullable(options: EntityOptions = ModelEntityEmitter.defaultOptions): ModelEntity | null {
     if (!this.shouldEmit()) return null
-    const modelClass = this.classEmitter.emitModelClass(avoidModelType)
-    if (!modelClass) return null
-    const length = modelClass === 'pole' && maxLength ? randomIntInclusiveBetween(1, maxLength) : 1
-    return new ModelEntity(modelClass, this.modelSize, usage, length)
+    return this.emitEnsured(options)
   }
 
   emitEnsured(
