@@ -19,6 +19,18 @@ describe(`${getModelWeight.name}`, () => {
     expect(r4.pole).toBeGreaterThan(r4.tile)
     expect(r4.tile).toBeGreaterThan(0)
   })
+
+  test.skip(`order should curve out the model ratio nicely`, () => {
+    const history = []
+    for (let i = 10; i >= 0; i--) {
+      const order = i / 10
+      const ratio = getModelWeight(order, 0)
+      history.push(ratio)
+    }
+
+    console.log(history.map((r) => `${r.floatingBox.toFixed(2)} ${r.tile.toFixed(2)}`).join(`\n`))
+    throw new Error('stop')
+  })
 })
 
 describe(`${ModelClassEmitter.name}`, () => {
@@ -86,8 +98,8 @@ describe(`${RandomRatioPicker.name}`, () => {
       d: 0.8,
     })
 
-    const result = {a: 0, b: 0, c: 0, d: 0}
-    for(let i = 0; i < 100; i++) {
+    const result = { a: 0, b: 0, c: 0, d: 0 }
+    for (let i = 0; i < 100; i++) {
       result[picker.pickValue()] += 1
     }
 

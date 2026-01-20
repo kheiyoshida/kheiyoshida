@@ -12,12 +12,14 @@ const filterValues = (
   ) as ModelClassWeightValues
 }
 
+// box 0.3 ~ 1.0
+// others 0.7 ~ 0.0
 export const getModelWeight = (order: number, gravity: number): ModelClassWeightValues => {
   return {
-    floatingBox: (0.7 - order) * (1 - gravity),
-    stackedBox: (0.7 - order) * gravity,
-    tile: order < 0.5 ? (0.5 - order) * 2 * (1 - gravity) : 0,
-    pole: order < 0.5 ? (0.5 - order) * 2 * gravity : 0,
+    floatingBox: Math.max(0, order - 0.3) * (1 - gravity),
+    stackedBox: Math.max(0, order - 0.3) * gravity,
+    tile: Math.max(0, 0.7 - order) * 0.5 * (1 - gravity),
+    pole: Math.max(0, 0.7 - order) * 0.5 * gravity,
   }
 }
 
