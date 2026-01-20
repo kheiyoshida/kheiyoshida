@@ -7,7 +7,7 @@ import {
   ScaleType,
   ToneOutlet,
 } from 'mgnr-tone'
-import { InstChannel } from 'mgnr-tone/src/mixer/Channel'
+import { InstChannel } from 'mgnr-tone'
 import * as Tone from 'tone'
 import { randomItemFromArray } from 'utils'
 import * as instruments from './components/instruments'

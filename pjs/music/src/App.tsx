@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { makeMusic as demo } from './pjs/demo'
 import { makeMusic as maze } from './pjs/maze'
 import { makeMusicGrid } from './ui/grid'
+import { TestInstApp } from './dev/instrument/App.tsx'
 
 const Projects = {
   demo,
@@ -18,6 +19,7 @@ const App: React.FC = () => {
     const Ui = makeMusicGrid(makeMusic)
     return <Ui />
   }
+  if (pj === 'dev') return <TestInstApp />
   return (
     <div>
       {Object.keys(Projects).map((k, i) => (

@@ -1,6 +1,6 @@
-import { MakeScene } from 'mgnr-tone'
 import { makeGridPositionManager, translateToPositionIndex } from './position'
 import { GridDirection, GridPosition, GridPositionIndex, GridSubPosition } from './types'
+import { MakeScene } from './scene.ts'
 
 export type SceneShiftInfo = {
   makeScene: MakeScene
