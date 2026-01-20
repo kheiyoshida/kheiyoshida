@@ -26,8 +26,8 @@ export const makeMusic = (): Music => {
   function applyInitialScene() {
     const makeScene = scenes.getInitialScene()
     const scene = makeScene(scaleSource, 'center-middle')
-    const result = state.applyScene(scene, Tone.Transport.toSeconds('@4m')) // @4m
-    // const result = state.applyScene(scene, 0) // why can't start at 0?
+    // const result = state.applyScene(scene, Tone.Transport.toSeconds('@4m')) // @4m
+    const result = state.applyScene(scene, 0) // why can't start at 0?
     Object.values(result.in).forEach((outlet) => {
       const ch = channels[outlet as AvailableOutlets]
       if (!ch) throw Error(`channel not found: ${outlet}`)

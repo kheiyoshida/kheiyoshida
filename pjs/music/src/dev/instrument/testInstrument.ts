@@ -1,11 +1,16 @@
 import * as mgnr from 'mgnr-tone'
-import { droneBass } from '../../pjs/demo/components/instruments'
 import * as Tone from  'tone'
+import * as instruments from '../../pjs/maze/components/instruments'
+
+let done = false
 
 export const main = () => {
+  if (done) return
+  done = true
+
   const mixer = mgnr.getMixer()
   const channel = mixer.createInstChannel({
-    inst: droneBass(),
+    inst: instruments.thinSynth(),
   })
 
   navigator.requestMIDIAccess().then((midi) => {
@@ -17,7 +22,7 @@ export const main = () => {
         if (!isNoteOn) return;
 
         const noteName = Tone.Frequency(note, "midi").toNote()
-        console.log(noteName)
+        console.log(note, noteName)
         channel.inst.triggerAttackRelease(noteName, '8n')
       };
     }

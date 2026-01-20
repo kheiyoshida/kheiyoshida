@@ -17,7 +17,7 @@ import { makeGridFader } from '../../grid/fade.ts'
 export const createDefaultTheme = () => {
   const pickScaleConfig = (): Omit<ScaleConf, 'range'> => ({
     key: pickRandomPitchName(),
-    pref: randomItemFromArray<ScaleType>(['omit25', 'major']),
+    pref: randomItemFromArray<ScaleType>(['omit47', 'omit27']),
   })
   const scaleSource = createScaleSource({ ...pickScaleConfig(), range: { min: 20, max: 100 } })
 
@@ -47,7 +47,11 @@ export const createDefaultTheme = () => {
       max: -6,
       min: -40,
     },
-    effects: [new Tone.Filter(300, 'highpass', -12), new Tone.Filter(1400, 'highshelf', -96)],
+    effects: [
+      new Tone.Filter(300, 'highpass', -12),
+      new Tone.Filter(1400, 'highshelf', -96),
+      new Tone.PingPongDelay('4n.', 0.12),
+    ],
   })
   const padCh = mixer.createInstChannel({
     inst: instruments.darkPad(),
@@ -59,7 +63,7 @@ export const createDefaultTheme = () => {
     effects: [
       new Tone.Filter(800, 'highpass', -12),
       new Tone.Filter(840, 'notch', -24),
-      new Tone.Filter(1200, 'highshelf', -48),
+      new Tone.Filter(1200, 'lowshelf', -96),
       new Tone.Compressor(-20, 4),
       new Tone.Gain(4),
     ],
