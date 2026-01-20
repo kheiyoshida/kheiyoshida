@@ -31,7 +31,6 @@ export class ModelClassEmitter {
   private readonly pickerWithoutStacked: RandomRatioPicker<ModelClass>
 
   constructor(readonly ratio: ModelClassWeightValues) {
-    console.log(ratio)
     this.picker = new RandomRatioPicker(ratio)
     this.pickerWithoutFloating = new RandomRatioPicker(
       filterValues(ratio, (c) => modelTypeMap[c] !== 'floating')

@@ -1,6 +1,5 @@
 import { GameAggregate } from './game.ts'
 import { Maze } from './maze'
-import { paramBuild } from './maze/params.ts'
 import { Player } from './player'
 import { StatusEventValues } from './player/status/delta.ts'
 import { Mapper } from './map/mapper.ts'
@@ -20,7 +19,7 @@ describe(`${GameAggregate.name}`, () => {
     jest.spyOn(builder, 'buildMazeGrid').mockReturnValueOnce(mockGrid)
     jest.spyOn(builder, 'buildMazeGrid').mockReturnValueOnce(mockGrid)
 
-    const maze = new Maze(paramBuild)
+    const maze = new Maze()
     const player = new Player(StatusEventValues)
     const mapper = new Mapper()
     const game = new GameAggregate(maze, player, mapper)

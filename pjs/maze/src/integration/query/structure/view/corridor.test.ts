@@ -6,13 +6,7 @@ import { IMazeObject } from '../../../../game/maze/physical/object.ts'
 
 describe.skip(`corridor service`, () => {
   it(`can combine corridor view with the next level's initial view`, () => {
-    const maze = new Maze(() => ({
-      size: 5,
-      fillRate: 0.5,
-      connRate: 0.5,
-      startPositionConstraint: 'shouldFaceCorridorWall',
-      stairPositionConstraint: 'deadEnd',
-    }))
+    const maze = new Maze()
     maze.setNextLevel()
     expect(maze.currentLevel.physicalGrid.sizeZ).toBe(5)
 
