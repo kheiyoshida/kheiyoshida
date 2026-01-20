@@ -3,8 +3,6 @@ import { RenderHandler } from '../consumer'
 
 import { MusicRange } from '../../integration/query'
 
-import { Atmosphere } from '../../game/world/types.ts'
-
 let buffer: [MusicRange, MusicRange]
 let changeModeRequired = false
 
@@ -15,6 +13,7 @@ const setupMusic = () => {
     initialise: () => music.applyInitialScene(),
     onInterval: () => {
       music.moveToDest(buffer)
+      console.log(music.currentPosition.parentGridPosition, music.currentPosition.childGridPosition)
       if (changeModeRequired) {
         music.changeMode()
         changeModeRequired = false
@@ -31,14 +30,10 @@ export const updateMusicDest: RenderHandler = (pack) => {
 }
 
 const checkNewMusicModeRequired = ((): RenderHandler => {
-  let currentMode: Atmosphere | undefined
-  return ({ vision }) => {
-    if (currentMode === undefined) {
-      currentMode = vision.mode
-      return
-    }
-    if (currentMode !== vision.mode) {
-      currentMode = vision.mode
+  let currentLevel: number
+  return ({ map }) => {
+    if (currentLevel !== map.floor && map.floor % 10 === 0) {
+      currentLevel = map.floor
       changeModeRequired = true
     }
   }

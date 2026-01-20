@@ -63,7 +63,7 @@ export class WorldState implements IWorldState {
   }
 
   public get ambience(): Ambience {
-    return (10 - Math.min(9, Math.floor(this.gravity * 9) + 1)) as Ambience
+    return (10 - Math.min(9, Math.floor(this.density * 9) + 1)) as Ambience
   }
 
   public getSnapShot(): IWorldState {

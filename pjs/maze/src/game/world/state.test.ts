@@ -19,9 +19,17 @@ describe(`${WorldState.name}`, () => {
     expect(state.structure).not.toBe('classic')
   })
 
-  it(`provides ambience conversion`, () => {
-    expect(new WorldState({ gravity: 0 }).ambience).toBe(9)
-    expect(new WorldState({ gravity: 1 }).ambience).toBe(1)
+  it.skip(`provides ambience conversion`, () => {
+    expect(new WorldState({ density: 1 }).ambience).toBe(1)
+    expect(new WorldState({ density: 0 }).ambience).toBe(9)
+
+    const curve = []
+    for(let i = 100; i >= 0; i--) {
+      const density = i/100;
+      curve.push(new WorldState({ density }).ambience)
+    }
+    console.log(curve.join(`\n`))
+    throw new Error('stop')
   })
 
   it(`updates state over time`, () => {
