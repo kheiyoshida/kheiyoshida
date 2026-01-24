@@ -6,6 +6,7 @@ import { getPositionInDirection, Position2D } from '../../../../core/grid/positi
 import { Direction } from '../../../../core/grid/direction.ts'
 import { MazeObject } from '../object.ts'
 import { MazeBlock } from '../block.ts'
+import { VerticalGrid3DSlice } from '../../../../core/grid/grid3d.ts'
 
 export class StairMapper {
   private entityEmitter: ModelEntityEmitter
@@ -51,6 +52,7 @@ export class StairMapper {
     for (let i = 1; i <= 4; i++) {
       const corridorPos = getPositionInDirection(stairPos, direction, i)
       const slice = grid.getSliceByLogicalPosition(corridorPos)
+      this.removePole(slice)
       slice.set(VerticalLayer.Down1, null)
       slice.set(VerticalLayer.Down2, new MazeBlock([new MazeObject(this.entityEmitter.emitEnsured())]))
     }
@@ -66,6 +68,7 @@ export class StairMapper {
     for (let i = 1; i <= 4; i++) {
       const corridorPos = getPositionInDirection(stairPos, direction, i)
       const slice = grid.getSliceByLogicalPosition(corridorPos)
+      this.removePole(slice)
       slice.set(VerticalLayer.Down2, null)
       if (i !== 0)
         slice.set(VerticalLayer.Down3, new MazeBlock([new MazeObject(this.entityEmitter.emitEnsured())]))
@@ -76,8 +79,17 @@ export class StairMapper {
     for (let i = 0; i <= 4; i++) {
       const corridorPos = getPositionInDirection(stairPos, direction, i)
       const slice = grid.getSliceByLogicalPosition(corridorPos)
+      this.removePole(slice)
       slice.set(VerticalLayer.Middle, null)
       slice.set(VerticalLayer.Down1, new MazeBlock([new MazeObject(this.entityEmitter.emitEnsured())]))
+    }
+  }
+
+  private removePole(slice: VerticalGrid3DSlice<MazeBlock>) {
+    for(let layer = VerticalLayer.Up2; layer <= VerticalLayer.Middle; layer++) {
+      if (slice.get(layer)?.objects.some(o => o.model.modelClass === 'pole')) {
+        slice.set(layer, null)
+      }
     }
   }
 }
