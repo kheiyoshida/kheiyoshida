@@ -119,6 +119,8 @@ export const ContentData = {
       `You make progress as you walk through the Maze, but it doesn't necessarily mean you're in control. You walk. You turn. You stop. You make decisions. The Maze watches you. It changes its shape, music, and colours based on your actions. It forms an infinite matrix of experience, which still requires your input.`,
     ],
     changeLog: [
+      '[v0.7] Introduced new 3d modelling patterns and new generative music patterns',
+      '[v0.6] Introduced new rendering algorithms',
       '[v0.5] Migrated the graphics rendering to WebGL / Polished the aesthetics and the gameplay',
       '[v0.4] Introduced generative music that changes based on the game state',
       '[v0.3] Migrated the graphics from pseudo-3D to actual 3D rendering',

@@ -12,7 +12,7 @@ const _WorkEntities: WithoutId<WorkPageInfo>[] = [
     date: maze.date,
     contents: maze.sketch,
     thumbnail: { images: makePathsWithLink(maze.title, [...maze.images], maze.placeholder) },
-    caption: `This is the maze of experience.\nControl: Touch the buttons (mobile) / Arrow or WASD keys (desktop). \nTurn on the sound of your device when playing.`,
+    caption: `An interactive, infinite matrix of procedurally generated music and visuals. \n Turn on sound before playing.`,
   },
   {
     title: shinjuku.title,
