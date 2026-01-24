@@ -34,29 +34,29 @@ const drawTitle = (version: string) => {
 
     const smallFont = fontSize / 3
 
-    // renderer.drawText({
-    //   positionX: left,
-    //   positionY: head + fontSize * 2,
-    //   fontSize: smallFont,
-    //   text: !IsMobile ? 'Click to start.' : 'Tap to start.',
-    //   temporaryFillColor: [0, 0, 0.88],
-    // })
+    renderer.drawText({
+      positionX: left,
+      positionY: logicalHeight - fontSize * 2,
+      fontSize: smallFont,
+      text: !IsMobile ? 'Click to start.' : 'Tap to start.',
+      temporaryFillColor: [0, 0, 0.88],
+    })
 
-    // renderer.drawText({
-    //   positionX: left,
-    //   positionY: head + fontSize * 3,
-    //   fontSize: smallFont,
-    //   text: !IsMobile ? 'WASD/Arrow Keys to move.' : 'Use buttons to move.',
-    //   temporaryFillColor: [0, 0, 0.88],
-    // })
-    //
-    // renderer.drawText({
-    //   positionX: left,
-    //   positionY: head + fontSize * 4,
-    //   fontSize: smallFont,
-    //   text: 'Turn on sound before playing.',
-    //   temporaryFillColor: [0, 0, 0.88],
-    // })
+    renderer.drawText({
+      positionX: left,
+      positionY: logicalHeight - fontSize * 3,
+      fontSize: smallFont,
+      text: !IsMobile ? 'WASD/Arrow Keys to move.' : 'Use buttons to move.',
+      temporaryFillColor: [0, 0, 0.88],
+    })
+
+    renderer.drawText({
+      positionX: left,
+      positionY: logicalHeight - fontSize * 4,
+      fontSize: smallFont,
+      text: 'Turn on sound.',
+      temporaryFillColor: [0, 0, 0.88],
+    })
 
     renderer.drawText({
       positionX: left,
