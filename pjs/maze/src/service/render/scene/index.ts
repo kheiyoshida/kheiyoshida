@@ -1,39 +1,37 @@
-import {
-  calcConcreteScaffoldValues,
-  createScaffold,
-  getRenderBlock,
-  RenderBlockPosition,
-  Scaffold,
-} from '../scaffold'
-import { convertRenderGridToUnitSpecList } from '../unit'
-import { DeformedBox, RenderUnit } from 'maze-gl'
-import { getMesh } from '../mesh'
-import { Structure } from '../../../domain/query'
-import { RenderingMode } from '../../../domain/entities/maze/stages'
+import { RenderUnit } from 'maze-gl'
+import { StructureData } from '../../../integration/query'
+import { composeSceneObject } from '../object'
+import { translateScaffoldParams } from '../scaffold/values.ts'
+import { scaffold } from '../scaffold'
+import { ViewX, ViewY, ViewZ } from '../../../integration/query/structure/view/view.ts'
 
 export const getUnits = (
-  mode: RenderingMode,
-  { renderGrid, scaffold: scaffoldParams, terrainStyle }: Structure
+  { view, scaffold: scaffoldParams }: StructureData,
+  liftY?: number
 ): RenderUnit[] => {
-  const scaffoldValues = calcConcreteScaffoldValues(scaffoldParams)
-  const scaffold = createScaffold(scaffoldValues)
-  const specList = convertRenderGridToUnitSpecList(renderGrid, terrainStyle)
-  return specList.map((spec) => ({
-    box: getDeformedBox(scaffold, spec.position),
-    meshes: spec.codes.map((code) => getMesh(code, mode)),
-  }))
-}
+  scaffold.update(translateScaffoldParams(scaffoldParams))
 
-const getDeformedBox = (scaffold: Scaffold, position: RenderBlockPosition): DeformedBox => {
-  const block = getRenderBlock(scaffold, position)
-  return {
-    FBL: block.front.bl,
-    FBR: block.front.br,
-    FTL: block.front.tl,
-    FTR: block.front.tr,
-    BBL: block.rear.bl,
-    BBR: block.rear.br,
-    BTL: block.rear.tl,
-    BTR: block.rear.tr,
-  }
+  const units: RenderUnit[] = []
+
+  view.iterate((viewPos, block) => {
+    if (!block) return
+
+    if (liftY && viewPos.x === ViewX.Center && viewPos.y === ViewY.Down1 && viewPos.z === ViewZ.L1) {
+      const objects = block.objects.map(composeSceneObject)
+      objects.forEach((obj) => obj.transform.translateY = liftY)
+      const unit: RenderUnit = {
+        box: scaffold.getBox(viewPos),
+        objects: objects
+      }
+      units.push(unit)
+    } else {
+      const unit: RenderUnit = {
+        box: scaffold.getBox(viewPos),
+        objects: block.objects.map(composeSceneObject),
+      }
+      units.push(unit)
+    }
+  })
+
+  return units
 }

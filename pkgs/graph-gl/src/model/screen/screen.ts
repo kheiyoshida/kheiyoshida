@@ -1,5 +1,5 @@
 import { GenericModel } from '../model'
-import { getGL, Shader } from '../../gl'
+import { getGL, Shader, TextureUnit } from '../../gl'
 import screenVert from './screen.vert?raw'
 import screenFrag from './screen.frag?raw'
 
@@ -15,7 +15,7 @@ export class Texture2dModel extends GenericModel {
     this.tex = tex
 
     this.shader.use()
-    this.shader.setUniformInt('uTexture', 0) // always use color unit
+    this.shader.setUniformInt('uTexture', TextureUnit.Color)
   }
 
   validate() {
@@ -24,6 +24,7 @@ export class Texture2dModel extends GenericModel {
 
   override draw() {
     const gl = getGL()
+    gl.activeTexture(gl.TEXTURE0)
     gl.bindTexture(gl.TEXTURE_2D, this.tex!)
     super.draw(getGL().TRIANGLE_STRIP)
   }

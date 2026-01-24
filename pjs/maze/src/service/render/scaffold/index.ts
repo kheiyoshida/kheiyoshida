@@ -1,4 +1,4 @@
-export * from './types.ts'
-export * from './create.ts'
-export * from './params.ts'
-export * from './block.ts'
+import { Scaffold } from './scaffold.ts'
+
+export const scaffold = new Scaffold()
+

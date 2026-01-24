@@ -1,5 +1,4 @@
 export * from './models'
-export * from './render'
-export * from './frame'
-export * from './vector'
-export * from './color'
+export * from './runtime'
+
+export { getGL } from 'graph-gl'

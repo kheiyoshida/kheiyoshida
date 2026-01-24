@@ -1,6 +1,11 @@
-import { RenderingMode } from '../domain/entities/maze/stages'
-import { RenderingStyle } from '../domain/entities/maze/stages/style.ts'
+import { Atmosphere } from '../game/world/types.ts'
+import { IWorldState } from '../game/world/state.ts'
 
-export const debugRenderingMode: RenderingMode = RenderingMode.atmospheric
+export const debugAtmosphere: Atmosphere | undefined = undefined
 
-export const InitialStyle: RenderingStyle = 5
+export const enableDebugState = false
+export const debugState: IWorldState[] = [
+  { density: 1.0, gravity: 1.0, order: 0.3, scale: 0.9 },
+  { density: 1.0, gravity: 1.0, order: 0.3, scale: 0.9 },
+  { density: 1.0, gravity: 1.0, order: 0.3, scale: 0.9 },
+]

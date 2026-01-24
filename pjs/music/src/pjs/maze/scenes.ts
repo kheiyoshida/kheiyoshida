@@ -35,13 +35,14 @@ export type DemoSceneMaker = MakeScene<AvailableOutlets>
 
 const thin = (meta: Randomness): DemoSceneMaker =>
   injectSceneMakerDeps({
-    left: cp.synth(meta),
+    left: cp.thinSynth(meta),
     center: cp.thinPad(meta),
     ...(meta === 'static' ? {} : { bottom: cp.defaultNoise(meta) }),
   })
 
 const neutral = (meta: Randomness): DemoSceneMaker =>
   injectSceneMakerDeps({
+    left: cp.melodicSynth(meta),
     center: cp.defaultPad(meta),
     ...(meta === 'static' ? {} : { bottom: cp.defaultNoise(meta) }),
   })
@@ -68,6 +69,6 @@ export const makeDefaultScenes = () =>
       'right-middle': thick('hybrid'),
       'right-bottom': thick('dynamic'),
     },
-    'center-middle',
+    'left-middle',
     'center-middle'
   )

@@ -1,10 +1,10 @@
 export * from './frame'
-export * from './status'
+export * from '../game/player/status/constants.ts'
 
 export const ww = window.innerWidth
 export const wh = window.innerHeight
 
-export const logicalWidth = Math.floor(Math.max(480, window.innerWidth / 2.5))
+export const logicalWidth = Math.floor(Math.max(480, window.innerWidth / 2.0))
 export const logicalHeight = Math.floor(logicalWidth * (window.innerHeight / window.innerWidth))
 
 export const logicalCenterX = logicalWidth / 2
@@ -27,14 +27,13 @@ export const CameraZ = IsMobile ? FloorLength / 12 : FloorLength / 8
 export const MaxDistortionSpeed = 10
 export const MaxDistortionRange = 0.4
 
-const ModelGridLength = 6
-export const MaxVisibleLength = FloorPathAvgLength * (ModelGridLength)
+export const MaxVisibleLength = FloorPathAvgLength * 5
 
 export const DefaultGoFrames = 8
 export const DefaultTurnFrames = 4
 export const GoDownstairsFramesLength = 32
 
 /**
- * the maximum rooms in a row/col in a floor
+ * the maximum floors in a row/col in a level
  */
-export const MaxFloorSize = 13
+export const MaxFloorSize = 23

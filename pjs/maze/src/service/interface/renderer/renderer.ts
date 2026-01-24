@@ -152,7 +152,7 @@ const makeUIRenderer = (): UIRenderer => {
   })
 
   const drawText = draw((spec: TextSpec) => {
-    ctx.font = `${spec.fontSize}px sans-serif`
+    ctx.font = `${spec.fontSize}px monospace`
     ctx.fillText(spec.text, ...roundArgs(spec.positionX, spec.positionY))
   })
   

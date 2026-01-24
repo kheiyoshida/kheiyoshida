@@ -52,9 +52,9 @@ export const thinPad =
     const { randomness, saturation } = translate(alignment)
     const randomLevel = convertRandomLevel(metaRandomness, randomness)
     const CenterOctaveMap: Record<Saturation, [number, number]> = {
-      thin: [84, 1],
-      neutral: [76, 1.4],
-      thick: [74, 2],
+      thin: [60, 3],
+      neutral: [60, 2],
+      thick: [60, 2],
     }
     const scale = source.createScale({ range: createScaleRange(...CenterOctaveMap[saturation]) })
     return {
@@ -66,21 +66,20 @@ export const thinPad =
             sequence: {
               length: SequenceLengthMap[metaRandomness],
               division: divisionMap[randomLevel],
-              density: 2,
-              polyphony: 'mono',
+              density: 1,
+              polyphony: 'poly',
               fillStrategy: 'fill',
             },
             note: {
               duration: NoteLengthMap[randomLevel],
               harmonizer: {
                 degree: ['6'],
-              }
+              },
             },
           },
           loops: 1,
           onElapsed: () => undefined,
           onEnded: (g) => {
-            g.mutate({ rate: randomLevel / 10, strategy: 'inPlace' })
             g.resetNotes()
           },
         },
@@ -101,7 +100,7 @@ export const defaultPad =
     const scale = source.createScale({ range: createScaleRange(...CenterOctaveMap[saturation]) })
     const MultiLayerDensityMap: Record<Randomness, number> = {
       static: 1,
-      hybrid: 1,
+      hybrid: 2,
       dynamic: 1.5,
     }
     return {
@@ -187,8 +186,8 @@ export const thickPad =
             note: {
               duration: NoteLengthMap[randomLevel],
               harmonizer: {
-                degree: ['6']
-              }
+                degree: ['6'],
+              },
             },
           },
           loops: 1,

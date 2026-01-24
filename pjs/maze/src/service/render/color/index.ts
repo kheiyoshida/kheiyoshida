@@ -1,34 +1,36 @@
 import { makeColorScheme } from './scheme.ts'
-import { getMeshMaterial } from '../mesh/material'
-import { FloorColorParams, FrameColorParams } from '../../../domain/query/vision/color/types.ts'
-import { RenderingMode } from '../../../domain/entities/maze/stages'
+import { getMaterial } from '../object/material'
+import { FloorColorParams, FrameColorParams } from '../../../integration/query/vision/color/types.ts'
+
+import { Atmosphere } from '../../../game/world/types.ts'
 
 export * from './types'
 
 const ColorScheme = makeColorScheme()
-
-export const applyMaterialColor = (mode: RenderingMode) => {
-  getMeshMaterial('default', mode).setColor(ColorScheme.materialColor)
-  getMeshMaterial('distinct', mode).setColor(ColorScheme.materialColor)
-}
 
 export const resolveFloorColor = (params: FloorColorParams) => {
   ColorScheme.moveLightnessRange(params.lightnessMoveDelta)
   ColorScheme.increaseSaturation(params.saturationDelta, params.maxSaturation)
 }
 
-export const resolveFrameColor = (params: FrameColorParams, mode: RenderingMode) => {
+const ColorMagnifyValues: Record<Atmosphere, number> = {
+  [Atmosphere['atmospheric']]: 2.0,
+  [Atmosphere['smooth']]: 0.8,
+  [Atmosphere['ambient']]: 0.5,
+  [Atmosphere['digital']]: 0.2,
+  [Atmosphere['abstract']]: 0,
+}
+
+export const resolveFrameColor = (params: FrameColorParams, atmosphere: Atmosphere) => {
   // hue
   ColorScheme.rotateHue(params.hueDelta * 180)
 
-  // lightness
-  ColorScheme.setLightLevel(params.litLevel * 0.4)
-
   // apply material color
-  applyMaterialColor(mode)
+  const col = ColorScheme.materialColor.clone()
+  col.lightness *= ColorMagnifyValues[atmosphere]
+  getMaterial().setColor(col)
 
   return {
-    lightColor: ColorScheme.lightColor,
     unlitColor: ColorScheme.unlitColor,
   }
 }

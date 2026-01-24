@@ -4,7 +4,7 @@ import { physicalToLogicalPoint } from '../renderer/utils.ts'
 import { makeButtonState } from './state.ts'
 import { btnSize, centerX, centerY } from './constants.ts'
 import { IsMobile } from '../../../config'
-import { state } from '../../../domain/state.ts'
+import { game } from '../../../game'
 
 export const getButtons = () => {
   const map = document.getElementById(Map.id)
@@ -54,7 +54,7 @@ export type ButtonMember = 'up' | 'right' | 'left' | 'map'
 
 export const drawButtons = (pressedButton?: ButtonMember) => {
   if (!IsMobile) return
-  if (state.current.mapOpen) return
+  if (game.mapper.isOpen) return
 
   const renderer = getUIRenderer()
 
@@ -69,7 +69,7 @@ export const drawButtons = (pressedButton?: ButtonMember) => {
   }
 
   renderer.clearCanvas()
-  renderer.changeStrokeColor([0, 0.0, 0.5])
+  renderer.changeStrokeColor([0, 1, 0])
 
   renderer.drawLineShape({
     points: [

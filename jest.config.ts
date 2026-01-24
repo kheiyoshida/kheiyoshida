@@ -3,10 +3,11 @@ import type { Config } from 'jest'
 const RootConfig: Config = {
   preset: 'ts-jest',
   transform: {
-    '^.+\\.(ts|tsx)?$': 'ts-jest',
+    '^.+\\.(ts|tsx|js)?$': 'ts-jest',
   },
   moduleNameMapper: {
     '^src/(.*)': '<rootDir>/src/$1',
+    '\\.(vert|frag|glsl)\\?raw$': '<rootDir>/../../jest/__mock__/rawShader.ts',
   },
   testEnvironment: 'jsdom',
   testMatch: ['<rootDir>/src/**/*.test.ts'],
@@ -44,6 +45,9 @@ const JestConfig: Config = {
       ...RootConfig,
       displayName: 'maze',
       rootDir: './pjs/maze',
+      transformIgnorePatterns: [
+        '<rootDir>/node_modules/(?!delaunator)',
+      ]
     },
     {
       ...RootConfig,
@@ -91,6 +95,14 @@ const JestConfig: Config = {
       ...RootConfig,
       displayName: 'maze-gl',
       rootDir: './pkgs/maze-gl',
+    },
+    {
+      ...RootConfig,
+      displayName: 'maze-models',
+      rootDir: './pkgs/maze-models',
+      transformIgnorePatterns: [
+        '<rootDir>/node_modules/(?!delaunator)',
+      ]
     },
     {
       ...RootConfig,

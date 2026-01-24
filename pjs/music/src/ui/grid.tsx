@@ -1,8 +1,9 @@
-import { GridPosition, makeContextManager } from 'mgnr-tone'
+import { makeContextManager } from 'mgnr-tone'
 import { useEffect, useState } from 'react'
 import { fireByRate } from 'utils'
 import { Music } from '../pjs/demo'
 import { Commands, Expressions, commandBuffer } from './buttons'
+import { GridPosition } from '../grid'
 
 export const makeMusicGrid = (makeMusic: () => Music): React.FC => {
   const music = makeMusic()

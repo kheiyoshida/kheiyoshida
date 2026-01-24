@@ -12,11 +12,6 @@ export type IColorScheme = {
   readonly unlitColor: Color
 
   /**
-   * the half part of "delta" to the final color result.
-   */
-  readonly lightColor: Color
-
-  /**
    * another half part of "delta" to the final color result.
    */
   readonly materialColor: Color
@@ -41,11 +36,6 @@ export type IColorScheme = {
    * make the color range lighter or darker
    */
   moveLightnessRange(delta: number): void
-
-  /**
-   * set the lightness of light color
-   */
-  setLightLevel(lightness: number): void
 
   /**
    * reset colors to default starting values

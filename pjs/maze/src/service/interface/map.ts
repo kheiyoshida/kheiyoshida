@@ -1,21 +1,13 @@
 import { RenderPack } from '../render/pack.ts'
-import { NESW } from '../../domain/entities/utils/direction.ts'
-import { loop2D } from 'utils'
+import { NESW } from '../../core/grid/direction.ts'
 import { getUIRenderer } from './renderer'
-import {
-  IsMobile,
-  logicalCenterX,
-  logicalCenterY,
-  logicalHeight,
-  logicalWidth,
-  MaxFloorSize,
-} from '../../config'
+import { IsMobile, logicalCenterX, logicalCenterY, logicalHeight, logicalWidth, MaxFloorSize } from '../../config'
 
 export const closeMap = () => {
   getUIRenderer().clearCanvas()
 }
 
-const maxNumOfCells = MaxFloorSize * 2 - 1
+const maxNumOfCells = MaxFloorSize
 const cellSize = IsMobile ? 16 : 8
 const mapSize = maxNumOfCells * cellSize
 
@@ -23,7 +15,7 @@ export const renderMap = ({ map: { grid, current, direction, floor } }: RenderPa
   const renderer = getUIRenderer()
   const playerDir = NESW.indexOf(direction)
 
-  const gridLength = grid.length
+  const gridLength = grid.sizeX
 
   renderer.changeFillColor([0, 0, 0.8])
   renderer.changeStrokeColor([0, 0, 0.0])
@@ -40,10 +32,9 @@ export const renderMap = ({ map: { grid, current, direction, floor } }: RenderPa
   })
 
   // map
-  loop2D(gridLength, (i, j) => {
-    const cell = grid[i][j]
-    const offsetX = (j - gridLength / 2) * cellSize
-    const offsetY = (i - gridLength / 2) * cellSize
+  grid.iterate((cell, pos) => {
+    const offsetX = (pos.x - gridLength / 2) * cellSize
+    const offsetY = (pos.y - gridLength / 2) * cellSize
 
     if (!cell) return
     if (!cell.visited && process.env.DEBUG !== 'true') return
@@ -67,12 +58,10 @@ export const renderMap = ({ map: { grid, current, direction, floor } }: RenderPa
   })
 
   // current position
-  const [currentI, currentJ] = [current[0] * 2, current[1] * 2]
-
   renderer.drawTriangle({
     position: {
-      x: logicalCenterX + (currentJ - gridLength / 2) * cellSize,
-      y: logicalCenterY + (currentI - gridLength / 2) * cellSize,
+      x: logicalCenterX + (current.x - gridLength / 2) * cellSize,
+      y: logicalCenterY + (current.y - gridLength / 2) * cellSize,
     },
     points: [
       {
@@ -97,6 +86,6 @@ export const renderMap = ({ map: { grid, current, direction, floor } }: RenderPa
     positionX: logicalCenterX - mapSize / 2,
     positionY: logicalCenterY - mapSize / 2 - cellSize,
     fontSize: cellSize * 1.2,
-    text: `B${floor}F`,
+    text: `${floor}`,
   })
 }

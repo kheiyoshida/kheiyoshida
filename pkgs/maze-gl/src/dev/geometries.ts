@@ -1,5 +1,5 @@
 import { DeformedBox, GeometrySpec } from '../models'
-import { Vector3D } from '../vector'
+import { Vector3D } from '../models/supporting/vector'
 
 export const triangleSpec: GeometrySpec = {
   faces: [
