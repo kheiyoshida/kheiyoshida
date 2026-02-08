@@ -2,11 +2,9 @@ import instanceVert from './instance.vert?raw'
 import instanceFrag from './instance.frag?raw'
 import { getGL, InstancedModel, Shader } from 'graph-gl'
 
-export class MotionInstance extends InstancedModel {
+export class MotionLineInstance extends InstancedModel {
   constructor(maxInstanceCount: number) {
     const instanceShader = new Shader(instanceVert, instanceFrag)
-
-    const gl = getGL()
 
     // prettier-ignore
     const vertices = new Float32Array([

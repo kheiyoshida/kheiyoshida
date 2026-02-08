@@ -52,14 +52,14 @@ export class FeatureTracker {
 
     const trackedFeatures: TrackedFeature[] = []
 
-    const PATCH_RADIUS = 2
-    const SEARCH_RADIUS = 6
-    const MAX_ERROR = 0.01
+    const PATCH_RADIUS = 3
+    const SEARCH_RADIUS = 4
+    const MAX_ERROR = 0.12
 
     const BORDER = PATCH_RADIUS + SEARCH_RADIUS
 
     for (const prevFeature of this.prevFeatures) {
-      if (prevFeature.strength < 0.4) continue
+      if (prevFeature.strength < 0.3) continue
       let bestError = Infinity
       let bestSearchX = 0
       let bestSearchY = 0
@@ -71,7 +71,7 @@ export class FeatureTracker {
           const y1 = prevFeature.y + sy
 
           if (sx === 0 && sy === 0) continue
-          // if (sx * sx + sy * sy < 1) continue // 1 pixel square
+          if (sx * sx + sy * sy < 1) continue // 1 pixel square
 
           if (
             x1 < BORDER ||
