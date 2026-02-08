@@ -1,10 +1,12 @@
 import { VideoSource } from '../lib/source/source'
 
+type DeviceCameraType = "BackCamera"
+
 export class CameraInputSource implements VideoSource {
   currentVideo: HTMLVideoElement
 
-  static async create(deviceLabel?: string): Promise<CameraInputSource> {
-    const stream = await getCameraInputStream(deviceLabel)
+  static async create(deviceLabel?: string, cameraType?: DeviceCameraType): Promise<CameraInputSource> {
+    const stream = await getCameraInputStream(deviceLabel, cameraType)
     const videoEl = document.createElement('video')
     videoEl.srcObject = stream;
     await videoEl.play() // needs user gesture on iOS
@@ -38,7 +40,7 @@ export class CameraInputSource implements VideoSource {
   }
 }
 
-export async function getCameraInputStream(cameraName?: string) {
+export async function getCameraInputStream(cameraName?: string, cameType?: DeviceCameraType) {
   let deviceId: string | undefined = undefined
   if (cameraName) {
     deviceId = await searchDeviceId(cameraName)
@@ -48,6 +50,7 @@ export async function getCameraInputStream(cameraName?: string) {
     video: {
       width: { ideal: 1280 },
       height: { ideal: 720 },
+      ...(cameType === "BackCamera" ? { facingMode: "environment" } : {}),
       ...(deviceId ? { deviceId: { exact: deviceId } } : {}),
     },
     audio: false,

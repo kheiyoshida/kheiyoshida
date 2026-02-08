@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function */
 import { IKnobParamsControlAdapter } from '../../../lib/params/adapter'
 import { LinePresentation } from '../presentation/line'
-import { PixelPresentation } from '../../../lib/presentation'
+
 import { DotPresentation } from '../presentation/dot'
 import { GlyphPresentation } from '../presentation/glyph'
 import { MultiplyEffectModel } from '../effect/multiply'
@@ -10,6 +10,7 @@ import { ColorEffect } from '../effect/color'
 import { SoundLevel } from './soundLevel'
 import { CameraChannel } from '../../../lib-node/channel/camera/camera'
 import { DebugPresentation } from '../presentation/debug'
+import { PixelPresentation } from '../../../lib-node/presentation/presentation'
 
 export class ChannelControl implements IKnobParamsControlAdapter {
   constructor(

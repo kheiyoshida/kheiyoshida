@@ -12,13 +12,16 @@ export class PixelDataRTHandle implements ChannelPixelTarget {
 
   constructor(
     public readonly frameBuffer: FrameBuffer,
-    resultResolutionWidth: number
+    resultResolutionWidth: number = frameBuffer.width
   ) {
     this.scope = new ImageScope(frameBuffer, resultResolutionWidth)
     this.parser = new PixelParser(this.scope)
   }
 
   get pixelDataArray() {
+    if (this.frameBuffer.width === this.scope.finalResolution.width) return (
+      this.frameBuffer.pixels
+    )
     return this.parser.parsePixelData(this.frameBuffer.pixels)
   }
 }

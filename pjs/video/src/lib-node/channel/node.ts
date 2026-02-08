@@ -1,4 +1,4 @@
-import { OffscreenPixelDrawNode } from 'graph-gl'
+import { OffscreenDrawNode, OffscreenPixelDrawNode } from 'graph-gl'
 import { Channel } from './channel'
 import { ChannelManager } from './manager'
 import { PixelDataRTHandle } from './target'
@@ -29,5 +29,15 @@ export class MultiChannelNode extends PixelDataProviderNode {
 
   override get drawables() {
     return [this.channelManager.getChannel()]
+  }
+}
+
+// without readPixels
+export class ChannelNode extends OffscreenDrawNode {
+  constructor(protected channel: Channel) {
+    super()
+  }
+  override get drawables() {
+    return [this.channel]
   }
 }
