@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './pjs/experiment'
+import App from './pjs/outline'
 
 const root = document.getElementById('root')
 if (root) {
