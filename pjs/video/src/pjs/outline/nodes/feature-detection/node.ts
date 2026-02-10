@@ -23,6 +23,7 @@ export class FeatureDetectionNode extends PixelDataProviderNode {
     this.drawables.push(this.screenRect)
 
     this.tileSize = tileSize
+    this.setThreshold(0.3)
   }
 
   public setInput(node: RenderingNode<DrawTarget>) {
@@ -38,5 +39,10 @@ export class FeatureDetectionNode extends PixelDataProviderNode {
   private setTileSize(tileSize: number) {
     this.shader.use()
     this.shader.setUniformFloat('uTileSize', tileSize)
+  }
+
+  public setThreshold(threshold: number) {
+    this.shader.use()
+    this.shader.setUniformFloat('uThreshold', threshold)
   }
 }

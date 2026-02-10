@@ -9,7 +9,7 @@ uniform vec2 uGradientTexelSize; // greyscale pass size
 
 uniform float uTileSize;
 
-#define THRESH 0.2
+uniform float uThreshold;
 
 // The output framebuffer size should be (uTexelSize.x/uTileSize, uTexelSize.y/uTileSize)
 
@@ -38,7 +38,7 @@ void main() {
         }
     }
 
-    if (best < THRESH) {
+    if (best < uThreshold) {
         fragColor = vec4(0.0);
         return;
     }

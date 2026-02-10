@@ -22,7 +22,7 @@ export class OutlineDetectionNode extends PixelDataProviderNode {
     this.screenRect = new ScreenRect(this.shader)
     this.drawables.push(this.screenRect)
     this.tileSize = tileSize
-    this.setRadiusSize(1)
+    this.setRadiusSize(3)
   }
 
   public setInput(featureDetectionNode: RenderingNode<DrawTarget>) {

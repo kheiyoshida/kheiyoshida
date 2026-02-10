@@ -21,28 +21,55 @@ void main() {
 
     vec2 bestOffset;
 
-    for(int x = -radius; x <= radius; x++) {
-        for(int y = -radius; y <= radius; y++) {
-            if (x == 0 && y == 0) continue;
+    for(int r = 1; r <= radius; r++) {
+        for(int signX = -1; signX <=1; signX++) {
+            for(int signY = -1; signY <=1; signY++) {
+                int x = signX * r;
+                int y = signY * r;
 
-            vec2 targetTileUV = vUV + vec2(x,y) * uFeaturePassTexelSize;
-            vec4 targetTileFeature = texture(uTexture, targetTileUV);
-            if (targetTileFeature.a == 0.0) continue;
+                vec2 targetTileUV = vUV + vec2(x,y) * uFeaturePassTexelSize;
+                vec4 targetTileFeature = texture(uTexture, targetTileUV);
+                if (targetTileFeature.a == 0.0) continue;
 
-            float score = targetTileFeature.b;
-            if (score > bestFeatureScore) {
-                secondBestFeatureScore = bestFeatureScore;
-                secondBestFeatureUV = secondBestFeatureUV;
-                bestFeatureScore = score;
-                bestFeatureUV = targetTileFeature.rg;
-                bestOffset = vec2(x,y);
-            }
-            else if (score > secondBestFeatureScore) {
-                secondBestFeatureScore = score;
-                secondBestFeatureUV = targetTileFeature.rg;
+                float score = targetTileFeature.b;
+                if (score > bestFeatureScore) {
+                    secondBestFeatureScore = bestFeatureScore;
+                    secondBestFeatureUV = secondBestFeatureUV;
+                    bestFeatureScore = score;
+                    bestFeatureUV = targetTileFeature.rg;
+                    bestOffset = vec2(x,y);
+                }
+                else if (score > secondBestFeatureScore) {
+                    secondBestFeatureScore = score;
+                    secondBestFeatureUV = targetTileFeature.rg;
+                }
             }
         }
+        if (bestFeatureScore != -1.0 && secondBestFeatureScore != -1.0) break;
     }
+
+//    for(int x = -radius; x <= radius; x++) {
+//        for(int y = -radius; y <= radius; y++) {
+//            if (x == 0 && y == 0) continue;
+//
+//            vec2 targetTileUV = vUV + vec2(x,y) * uFeaturePassTexelSize;
+//            vec4 targetTileFeature = texture(uTexture, targetTileUV);
+//            if (targetTileFeature.a == 0.0) continue;
+//
+//            float score = targetTileFeature.b;
+//            if (score > bestFeatureScore) {
+//                secondBestFeatureScore = bestFeatureScore;
+//                secondBestFeatureUV = secondBestFeatureUV;
+//                bestFeatureScore = score;
+//                bestFeatureUV = targetTileFeature.rg;
+//                bestOffset = vec2(x,y);
+//            }
+//            else if (score > secondBestFeatureScore) {
+//                secondBestFeatureScore = score;
+//                secondBestFeatureUV = targetTileFeature.rg;
+//            }
+//        }
+//    }
 
     if (bestFeatureScore == -1.0) {
         fragColor = vec4(0);
