@@ -22,11 +22,15 @@ export class OutlineDetectionNode extends PixelDataProviderNode {
     this.screenRect = new ScreenRect(this.shader)
     this.drawables.push(this.screenRect)
     this.tileSize = tileSize
+    this.setRadiusSize(1)
   }
 
   public setInput(featureDetectionNode: RenderingNode<DrawTarget>) {
     this.screenRect.tex = featureDetectionNode.renderTarget!.frameBuffer.colorTexture.tex
-    this.setFeaturePassTexelSize(1 / featureDetectionNode.renderTarget!.frameBuffer.width, 1 / featureDetectionNode.renderTarget!.frameBuffer.height)
+    this.setFeaturePassTexelSize(
+      1 / featureDetectionNode.renderTarget!.frameBuffer.width,
+      1 / featureDetectionNode.renderTarget!.frameBuffer.height
+    )
   }
 
   private setFeaturePassTexelSize(x: number, y: number) {
@@ -37,5 +41,10 @@ export class OutlineDetectionNode extends PixelDataProviderNode {
   private setTileSize(tileSize: number) {
     this.shader.use()
     this.shader.setUniformFloat('uTileSize', tileSize)
+  }
+
+  public setRadiusSize(r: number) {
+    this.shader.use()
+    this.shader.setUniformInt('uSearchRadius', r)
   }
 }

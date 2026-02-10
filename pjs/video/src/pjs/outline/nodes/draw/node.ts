@@ -73,14 +73,6 @@ export class DrawNode extends OffscreenDrawNode {
 
     this.outline.updateInstances(k)
 
-    // this.outline.instanceDataArray[0] = 0
-    // this.outline.instanceDataArray[1] = 0
-    // this.outline.instanceDataArray[2] = 0.5
-    // this.outline.instanceDataArray[3] = 0.5
-    // this.outline.instanceDataArray[4] = 1
-    // this.outline.instanceDataArray[5] = 0
-    // this.outline.updateInstances(1)
-
     super.render()
   }
 

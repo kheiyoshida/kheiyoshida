@@ -8,9 +8,10 @@ uniform sampler2D uTexture; // texture result from feature detection pass
 uniform vec2 uFeaturePassTexelSize;
 
 uniform float uTileSize;
+uniform int uSearchRadius;
 
 void main() {
-    int radius = 1;
+    int radius = uSearchRadius;
 
     float bestFeatureScore = -1.0;
     vec2 bestFeatureUV;
