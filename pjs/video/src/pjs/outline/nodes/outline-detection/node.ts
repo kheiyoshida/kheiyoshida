@@ -1,7 +1,7 @@
 import { DrawTarget, RenderingNode, ScreenRect, Shader } from 'graph-gl'
 import { PixelDataProviderNode } from '../../../../lib-node/channel/node'
 import vert from './screen.vert?raw'
-import feature from './outline.frag?raw'
+import feature from './outline2.frag?raw'
 
 export class OutlineDetectionNode extends PixelDataProviderNode {
   private readonly shader: Shader

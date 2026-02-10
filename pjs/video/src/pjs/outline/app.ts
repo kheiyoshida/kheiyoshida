@@ -15,7 +15,9 @@ let tilePassResolution: ImageResolution
 const tileSize: number = 8
 
 if (window.innerWidth < window.innerHeight) {
-  resolution = { width: 576, height: 960 }
+  console.log(window.innerWidth, window.innerHeight)
+  // resolution = { width: 576, height: 960 }
+  resolution = { width: window.innerWidth, height: window.innerHeight }
   dataResolution = { width: 192, height: 320 }
   tilePassResolution = { width: 192 / tileSize, height: 320 / tileSize }
 } else {
@@ -56,6 +58,9 @@ export async function app() {
 
   const screen = new InputColorRenderingNode()
   screen.setInput(drawNode)
+
+  featureDetectionNode.setThreshold(0.2)
+  // drawNode.backgroundColor = [0, 0, 0, 1]
 
   function renderLoop(f:number) {
     chNode.render()

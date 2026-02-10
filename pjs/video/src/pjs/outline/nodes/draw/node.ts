@@ -37,9 +37,9 @@ export class DrawNode extends OffscreenDrawNode {
 
   constructor() {
     super()
-    this.drawables.push(this.screenRect)
+    // this.drawables.push(this.screenRect)
     this.drawables.push(this.outline)
-    this.drawables.push(this.triangle)
+    // this.drawables.push(this.triangle)
   }
 
   private bindColourTex() {
@@ -60,7 +60,7 @@ export class DrawNode extends OffscreenDrawNode {
       for (let y = 0; y < height; y++) {
         const index = y * width * 4 + x * 4
 
-        if (features[index + 3] === 0) continue
+        if (features[index + 2] === 0 && features[index + 3] === 0) continue
 
         const middleX = features[index]
         const middleY = features[index + 1]
@@ -97,9 +97,5 @@ export class DrawNode extends OffscreenDrawNode {
     this.bindColourTex()
 
     super.render()
-  }
-
-  private getRGBA(arr: Uint8Array, index: number): [number, number, number, number] {
-    return [arr[index], arr[index + 1], arr[index + 2], arr[index + 3]]
   }
 }

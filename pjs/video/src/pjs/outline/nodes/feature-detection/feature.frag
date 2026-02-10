@@ -22,18 +22,24 @@ void main() {
     float best = -1.0;
     ivec2 bestIJ = ivec2(0, 0);
 
-    // TODO: improve the accuracy
+    float bestDiffX = 0.0;
+    float bestDiffY = 0.0;
+
     int TILE_H = int(uTileSize);
     int TILE_W = int(uTileSize);
     for(int j = 0; j < TILE_H; ++j) {
         for(int i = 0; i < TILE_W; ++i) {
             vec2 gradientTexelUV = tileOriginUV + vec2(float(i) * uGradientTexelSize.x, float(j) * uGradientTexelSize.y);
 
-            float score = texture(uTexture, gradientTexelUV).r;
+            vec4 fragment = texture(uTexture, gradientTexelUV);
+            float score = fragment.r;
 
             if (score > best) {
                 best = score;
                 bestIJ = ivec2(i, j);
+
+                bestDiffX = fragment.g;
+                bestDiffY = fragment.b;
             }
         }
     }
@@ -47,5 +53,5 @@ void main() {
 
     vec2 position = tileOriginUV + offset01; // in greyscale pass dimension
 
-    fragColor = vec4(position, best, 1.0);
+    fragColor = vec4(position, bestDiffX, bestDiffY);
 }
