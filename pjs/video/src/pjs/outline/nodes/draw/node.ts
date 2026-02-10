@@ -1,7 +1,8 @@
-import { ImageResolution, OffscreenDrawNode } from 'graph-gl'
+import { ImageResolution, OffscreenDrawNode, ScreenRect } from 'graph-gl'
 import { FeatureDetectionNode } from '../feature-detection/node'
 import { OutlineDetectionNode } from '../outline-detection/node'
 import { OutlineInstance } from './line/instance'
+import { TriangleInstance } from './triangle/instance'
 
 export class DrawNode extends OffscreenDrawNode {
   // colour input
@@ -10,6 +11,7 @@ export class DrawNode extends OffscreenDrawNode {
     this._originalColourNode = node
     this.outline.shader.use()
     this.outline.shader.setUniformInt('uColourTexture', 0)
+    this.screenRect.tex = node.renderTarget!.frameBuffer.colorTexture.tex
   }
 
   // feature input
@@ -29,10 +31,23 @@ export class DrawNode extends OffscreenDrawNode {
 
   // instances
   private outline: OutlineInstance = new OutlineInstance(1000)
+  private triangle: TriangleInstance = new TriangleInstance(1000)
+
+  private screenRect: ScreenRect = new ScreenRect()
 
   constructor() {
     super()
+    this.drawables.push(this.screenRect)
     this.drawables.push(this.outline)
+    this.drawables.push(this.triangle)
+  }
+
+  private bindColourTex() {
+    this.gl.activeTexture(this.gl.TEXTURE0)
+    this.gl.bindTexture(
+      this.gl.TEXTURE_2D,
+      this._originalColourNode.renderTarget!.frameBuffer.colorTexture.tex
+    )
   }
 
   render() {
@@ -55,23 +70,31 @@ export class DrawNode extends OffscreenDrawNode {
         const x2 = outlines[index + 2]
         const y2 = outlines[index + 3]
 
-        if (x1 === 0 && y1 === 0) continue;
-        if (x2 === 0 && y2 === 0) continue;
+        if (x1 === 0 && y1 === 0) continue
+        if (x2 === 0 && y2 === 0) continue
 
         this.outline.instanceDataArray[k * 6] = x1 / 255
         this.outline.instanceDataArray[k * 6 + 1] = y1 / 255
-
         this.outline.instanceDataArray[k * 6 + 2] = middleX / 255
         this.outline.instanceDataArray[k * 6 + 3] = middleY / 255
-
         this.outline.instanceDataArray[k * 6 + 4] = x2 / 255
         this.outline.instanceDataArray[k * 6 + 5] = y2 / 255
+
+        this.triangle.instanceDataArray[k * 6] = x1 / 255
+        this.triangle.instanceDataArray[k * 6 + 1] = y1 / 255
+        this.triangle.instanceDataArray[k * 6 + 2] = middleX / 255
+        this.triangle.instanceDataArray[k * 6 + 3] = middleY / 255
+        this.triangle.instanceDataArray[k * 6 + 4] = x2 / 255
+        this.triangle.instanceDataArray[k * 6 + 5] = y2 / 255
 
         k++
       }
     }
 
     this.outline.updateInstances(k)
+    this.triangle.updateInstances(k)
+
+    this.bindColourTex()
 
     super.render()
   }
