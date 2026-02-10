@@ -39,7 +39,7 @@ export class DrawNode extends OffscreenDrawNode {
     super()
     // this.drawables.push(this.screenRect)
     this.drawables.push(this.outline)
-    // this.drawables.push(this.triangle)
+    this.drawables.push(this.triangle)
   }
 
   private bindColourTex() {
@@ -90,6 +90,7 @@ export class DrawNode extends OffscreenDrawNode {
         k++
       }
     }
+
 
     this.outline.updateInstances(k)
     this.triangle.updateInstances(k)

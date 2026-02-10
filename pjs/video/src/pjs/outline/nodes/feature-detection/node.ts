@@ -23,7 +23,7 @@ export class FeatureDetectionNode extends PixelDataProviderNode {
     this.drawables.push(this.screenRect)
 
     this.tileSize = tileSize
-    this.setThreshold(0.1)
+    this.setThreshold(0.6)
   }
 
   public setInput(node: RenderingNode<DrawTarget>) {

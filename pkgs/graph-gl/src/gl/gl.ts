@@ -14,3 +14,14 @@ export const getGL = (): WebGL2RenderingContext => {
 
   return canvas.getContext('webgl2')!
 }
+
+export const adjustMobileCanvas = () => {
+  const gl = getGL()
+
+  const canvas = gl.canvas
+  const dpr = window.devicePixelRatio
+
+  canvas.width = window.innerWidth * dpr
+  canvas.height = window.innerHeight * dpr
+  gl.viewport(0, 0, canvas.width, canvas.height)
+}

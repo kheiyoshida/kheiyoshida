@@ -1,4 +1,10 @@
-import { DrawRTHandle, FrameBuffer, ImageResolution, InputColorRenderingNode } from 'graph-gl'
+import {
+  adjustMobileCanvas,
+  DrawRTHandle,
+  FrameBuffer,
+  ImageResolution,
+  InputColorRenderingNode,
+} from 'graph-gl'
 import { startRenderingLoop } from '../../lib/pipeline'
 import { ChannelNode } from '../../lib-node/channel/node'
 import { PixelDataRTHandle } from '../../lib-node/channel/target'
@@ -9,24 +15,24 @@ import { FeatureDetectionNode } from './nodes/feature-detection/node'
 import { OutlineDetectionNode } from './nodes/outline-detection/node'
 import { DrawNode } from './nodes/draw/node'
 
-let resolution: ImageResolution
-let dataResolution: ImageResolution
-let tilePassResolution: ImageResolution
-const tileSize: number = 8
-
-if (window.innerWidth < window.innerHeight) {
-  console.log(window.innerWidth, window.innerHeight)
-  // resolution = { width: 576, height: 960 }
-  resolution = { width: window.innerWidth, height: window.innerHeight }
-  dataResolution = { width: 192, height: 320 }
-  tilePassResolution = { width: 192 / tileSize, height: 320 / tileSize }
-} else {
-  resolution = { width: 960, height: 576 }
-  dataResolution = { width: 320, height: 192 }
-  tilePassResolution = { width: 320 / tileSize, height: 192 / tileSize }
-}
-
 export async function app() {
+  let resolution: ImageResolution
+  let dataResolution: ImageResolution
+  let tilePassResolution: ImageResolution
+  const tileSize: number = 8
+
+  if (window.innerWidth < window.innerHeight) {
+    adjustMobileCanvas()
+    // resolution = { width: 576, height: 960 }
+    resolution = { width: window.innerWidth, height: window.innerHeight }
+    dataResolution = { width: 192, height: 320 }
+    tilePassResolution = { width: 192 / tileSize, height: 320 / tileSize }
+  } else {
+    resolution = { width: 960, height: 576 }
+    dataResolution = { width: 320, height: 192 }
+    tilePassResolution = { width: 320 / tileSize, height: 192 / tileSize }
+  }
+
   // set up camera
   const cameraSource = await CameraInputSource.create(undefined, 'BackCamera')
   const cameraCh = new CameraChannel(cameraSource)
@@ -62,13 +68,15 @@ export async function app() {
   featureDetectionNode.setThreshold(0.2)
   // drawNode.backgroundColor = [0, 0, 0, 1]
 
-  function renderLoop(f:number) {
+  function renderLoop(f: number) {
     chNode.render()
     greyNode.render()
     featureDetectionNode.render()
     outlineDetectionNode.render()
     drawNode.render()
     screen.render()
+
+    // if (f > 10) throw new Error('test')
   }
 
   startRenderingLoop(renderLoop)

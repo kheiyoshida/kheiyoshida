@@ -9,6 +9,7 @@ uniform vec2 uFeaturePassTexelSize;
 
 uniform float uTileSize;
 uniform int uSearchRadius;
+uniform float uDiffThreshold;
 
 void main() {
     vec4 centerFeature = texture(uTexture, vUV);
@@ -18,7 +19,7 @@ void main() {
 
     int radius = uSearchRadius;
 
-    float diffThreshold = 0.2;
+    float diffThreshold = uDiffThreshold;
 
     float bestFeatureDiff = diffThreshold;
     vec2 bestFeatureUV;
@@ -27,8 +28,8 @@ void main() {
     vec2 secondBestFeatureUV;
 
     for(int r = 1; r <= radius; r++) {
-        for(int signX = -1; signX <=1; signX++) {
-            for(int signY = -1; signY <=1; signY++) {
+        for(int signX = -1; signX <=1; signX+=2) {
+            for(int signY = -1; signY <=1; signY+=2) {
                 int x = signX * r;
                 int y = signY * r;
 

@@ -23,6 +23,7 @@ export class OutlineDetectionNode extends PixelDataProviderNode {
     this.drawables.push(this.screenRect)
     this.tileSize = tileSize
     this.setRadiusSize(3)
+    this.setDiffThreshold(0.1)
   }
 
   public setInput(featureDetectionNode: RenderingNode<DrawTarget>) {
@@ -46,5 +47,10 @@ export class OutlineDetectionNode extends PixelDataProviderNode {
   public setRadiusSize(r: number) {
     this.shader.use()
     this.shader.setUniformInt('uSearchRadius', r)
+  }
+
+  public setDiffThreshold(t: number) {
+    this.shader.use()
+    this.shader.setUniformFloat('uDiffThreshold', t)
   }
 }
