@@ -52,7 +52,7 @@ export class ScreenEffectModel extends Texture2dModel implements IEffectModel {
   }
 
   public setInput(inputFrameBuffer: FrameBuffer): void {
-    this.tex = inputFrameBuffer.tex
+    this.tex = inputFrameBuffer.colorTexture.tex
   }
 
   public enabled = true

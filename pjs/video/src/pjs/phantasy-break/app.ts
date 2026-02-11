@@ -1,6 +1,6 @@
 import { Message } from '../shinjuku/message'
 import { startRenderingLoop } from '../../lib/pipeline'
-import { videoSourceList, videoSourceList as shinjukuVideoSourceList } from '../shinjuku/videos'
+import { videoSourceList as shinjukuVideoSourceList } from '../shinjuku/videos'
 import { DotPresentation } from './presentation/dot'
 import { LinePresentation } from './presentation/line'
 import { ColorEffect } from './effect/color'
@@ -36,7 +36,7 @@ import { DrawRTHandle, FrameBuffer, getGL, InputColorRenderingNode } from 'graph
 import { ChannelManager } from '../../lib-node/channel/manager'
 import { MultiChannelNode } from '../../lib-node/channel/node'
 import { VideoChannel } from '../../lib-node/channel/channel'
-import { cityVideoList } from './channel'
+import { cityVideoList, youtubeVideoList } from './channel'
 import { AdditivePresentationNode, PresentationNode } from '../../lib-node/presentation/node'
 import { EffectNode } from '../../lib-node/effect/node'
 import { PixelDataRTHandle } from '../../lib-node/channel/target'
@@ -44,8 +44,13 @@ import { PixelDataRTHandle } from '../../lib-node/channel/target'
 // config
 const videoAspectRatio = 16 / 9
 const frameBufferWidth = 960
-const outputResolutionWidth = frameBufferWidth / 4
+const outputResolutionWidth = 240 // frameBufferWidth / 4
 const backgroundColor: [number, number, number, number] = [0, 0, 0, 1]
+
+const videoSourceResolution: ImageResolution = {
+  width: outputResolutionWidth,
+  height: outputResolutionWidth / videoAspectRatio, // 135
+}
 
 const frameBufferResolution: ImageResolution = {
   width: frameBufferWidth,
@@ -60,23 +65,23 @@ export const app = async () => {
 
   // sound input control
   const deviceName = 'Zen Go'
-  const soundLevel = new SoundLevel(await createAudioInputSource())
+  const soundLevel = new SoundLevel(await createAudioInputSource(deviceName))
 
   // set up camera
   const cameraName = 'Video Control'
-  const cameraSource = await CameraInputSource.create(cameraName)
+  const cameraSource = await CameraInputSource.create()
 
   // channels
   const cameraCh = new CameraChannel(cameraSource)
   cameraCh.reverse(true)
   const objectCh = new CubeRenderingChannel()
   const shinjukuVideoCh = new VideoChannel(shinjukuVideoSourceList)
-  const youtubeCh = new VideoChannel(videoSourceList)
+  const youtubeCh = new VideoChannel(youtubeVideoList)
   const cityCh = new VideoChannel(cityVideoList)
 
   const channelManager = new ChannelManager([cameraCh, objectCh, shinjukuVideoCh, youtubeCh, cityCh])
   const chNode = new MultiChannelNode(channelManager)
-  chNode.renderTarget = new PixelDataRTHandle(new FrameBuffer(width, height), outputResolutionWidth)
+  chNode.renderTarget = new PixelDataRTHandle(new FrameBuffer(videoSourceResolution.width, videoSourceResolution.height))
 
   // presentations
   const linePresentation = new LinePresentation(chNode.outputResolution)
@@ -183,7 +188,7 @@ export const app = async () => {
   const launchControl = new LaunchControl(params)
   await bindMidiInputMessage((m) => launchControl.handle(m))
 
-  let dualshock = await PS3DualShock.Connect()
+  let dualshock: PS3DualShock | null
   let shooterControl: DualShockKaleidoscopeShooterControl
 
   let score = 0
@@ -234,8 +239,9 @@ export const app = async () => {
   const message = new Message()
 
   message.text = 'loading...'
-  await shinjukuVideoCh.waitForReady((progress) => (message.text = `loading: ${progress}%`))
-  await youtubeCh.waitForReady((_) => undefined)
+  await shinjukuVideoCh.waitForReady((progress) => (message.text = `loading ch 3: ${progress}%`))
+  await youtubeCh.waitForReady((progress) => message.text = `loading ch 4: ${progress}%`)
+  await cityCh.waitForReady((progress) => (message.text = `loading ch 5: ${progress}%`))
 
   kaleidoscopeFx.enabled = false
   document.body.onclick = async (e) => {

@@ -23,7 +23,7 @@ export class PresentationNode extends OffscreenDrawNode {
 
   render() {
     const data = this.pixelDataInput!.renderTarget!.pixelDataArray
-    const tex = this.pixelDataInput!.renderTarget!.frameBuffer.tex
+    const tex = this.pixelDataInput!.renderTarget!.frameBuffer.colorTexture.tex
 
     for (const presentation of this.presentations) {
       if (presentation.enabled) presentation.represent(data, tex)

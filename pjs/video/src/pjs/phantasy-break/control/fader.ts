@@ -1,5 +1,5 @@
 import { IFaderParamsControlAdapter } from '../../../lib/params/adapter'
-import { ChannelManager } from '../../../lib/channel/manager'
+import { ChannelManager } from '../../../lib-node/channel/manager'
 
 export class ChannelParamsControl implements IFaderParamsControlAdapter {
   constructor(private readonly channelManager: ChannelManager) {}
