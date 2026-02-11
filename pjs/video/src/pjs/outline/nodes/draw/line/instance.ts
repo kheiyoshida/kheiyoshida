@@ -53,4 +53,9 @@ export class OutlineInstance extends InstancedModel {
   override draw() {
     super.draw(getGL().LINE_STRIP)
   }
+
+  setColour(c: [number, number, number]) {
+    this.shader.use()
+    this.shader.setUniformVec3('uColour', c)
+  }
 }

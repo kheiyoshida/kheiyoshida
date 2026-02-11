@@ -19,8 +19,10 @@ export const appState = {
   featureThreshold: 0.29,
   searchRadius: 4,
   diffThreshold: 0.3,
-  backgroundColor: [0, 0, 0, 1],
-  enableTriangles: false
+  backgroundColour: [0, 0, 0],
+  colour: [0, 1, 0],
+  enableTriangles: false,
+  enableOriginal: false,
 }
 
 export async function app() {
@@ -77,8 +79,10 @@ export async function app() {
     featureDetectionNode.setThreshold(appState.featureThreshold)
     outlineDetectionNode.setRadiusSize(appState.searchRadius)
     outlineDetectionNode.setDiffThreshold(appState.diffThreshold)
-    drawNode.backgroundColor = appState.backgroundColor as [number, number, number, number]
+    drawNode.backgroundColor = [...appState.backgroundColour, 1] as [number, number, number, number]
+    drawNode.setColour(appState.colour as [number, number, number])
     drawNode.enableTriangle = appState.enableTriangles
+    drawNode.enableOriginal = appState.enableOriginal
 
     chNode.render()
     greyNode.render()

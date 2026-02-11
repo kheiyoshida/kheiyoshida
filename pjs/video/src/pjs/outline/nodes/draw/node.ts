@@ -50,6 +50,10 @@ export class DrawNode extends OffscreenDrawNode {
     )
   }
 
+  public setColour(c: [number, number, number]) {
+    this.outline.setColour(c)
+  }
+
   render() {
     const features = this._featureDetectionNode.renderTarget!.pixelDataArray
     const outlines = this._outlineDetectionNode.renderTarget!.pixelDataArray
@@ -93,9 +97,7 @@ export class DrawNode extends OffscreenDrawNode {
 
 
     this.outline.updateInstances(k)
-
-    if (this.enableTriangle) this.triangle.updateInstances(k)
-    else this.triangle.updateInstances(0)
+    this.triangle.updateInstances(k)
 
     this.bindColourTex()
 
@@ -103,4 +105,13 @@ export class DrawNode extends OffscreenDrawNode {
   }
 
   public enableTriangle = true
+  public enableOriginal = true;
+
+  public override get drawables() {
+    const drawables = []
+    if (this.enableOriginal) drawables.push(this.screenRect)
+    if (this.enableTriangle) drawables.push(this.triangle)
+    drawables.push(this.outline)
+    return drawables
+  }
 }

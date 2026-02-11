@@ -24,7 +24,7 @@ const Control: React.FC = () => {
   return (
     <div style={styles.modalContainer} onClick={() => setOpen(!open)}>
       {open ? (
-        <div style={styles.modalBackground}>
+        <div style={styles.modalBackground} onClick={(e) => e.stopPropagation()}>
           <div>
             <div>Feature Threshold: {values.featureThreshold}</div>
             <input
@@ -33,8 +33,8 @@ const Control: React.FC = () => {
               max={0.3}
               step={0.01}
               defaultValue={values.featureThreshold}
-              onChange={(v) => {
-                appState.featureThreshold = Number(v.target.value)
+              onChange={(e) => {
+                appState.featureThreshold = Number(e.target.value)
               }}
             />
           </div>
@@ -47,8 +47,8 @@ const Control: React.FC = () => {
               max={5}
               step={1}
               defaultValue={values.searchRadius}
-              onChange={(v) => {
-                appState.searchRadius = Number(v.target.value)
+              onChange={(e) => {
+                appState.searchRadius = Number(e.target.value)
               }}
             />
           </div>
@@ -61,8 +61,41 @@ const Control: React.FC = () => {
               max={0.3}
               step={0.001}
               defaultValue={values.diffThreshold}
-              onChange={(v) => {
-                appState.diffThreshold = Number(v.target.value)
+              onChange={(e) => {
+                appState.diffThreshold = Number(e.target.value)
+              }}
+            />
+          </div>
+
+          <div>
+            <div>Background Colour</div>
+            <input
+              type="color"
+              defaultValue="#000000"
+              onInput={(e) => {
+                appState.backgroundColour = hexToVec3((e.target as HTMLInputElement).value)
+              }}
+            />
+          </div>
+
+          <div>
+            <div>Line Colour</div>
+            <input
+              type="color"
+              defaultValue="#00ff00"
+              onInput={(e) => {
+                appState.colour = hexToVec3((e.target as HTMLInputElement).value)
+              }}
+            />
+          </div>
+
+          <div>
+            <div>Show Original</div>
+            <input
+              type="checkbox"
+              defaultChecked={appState.enableOriginal}
+              onChange={(e) => {
+                appState.enableOriginal = (e.target as HTMLInputElement).checked
               }}
             />
           </div>
@@ -105,7 +138,7 @@ const styles: Record<string, React.CSSProperties> = {
     height: '100dvh',
   },
   modalBackground: {
-    width: '100%',
+    width: '300px',
     height: '100%',
     padding: '16px',
     backgroundColor: 'white',
@@ -117,3 +150,9 @@ const styles: Record<string, React.CSSProperties> = {
     color: 'black',
   },
 }
+
+const hexToVec3 = (hex: string) => [
+  parseInt(hex.slice(1, 3), 16) / 255,
+  parseInt(hex.slice(3, 5), 16) / 255,
+  parseInt(hex.slice(5, 7), 16) / 255,
+]
