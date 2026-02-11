@@ -40,6 +40,7 @@ import { cityVideoList, youtubeVideoList } from './channel'
 import { AdditivePresentationNode, PresentationNode } from '../../lib-node/presentation/node'
 import { EffectNode } from '../../lib-node/effect/node'
 import { PixelDataRTHandle } from '../../lib-node/channel/target'
+import { GreyScaleGradientNode } from './effect/greyscale/node'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -51,6 +52,8 @@ const videoSourceResolution: ImageResolution = {
   width: outputResolutionWidth,
   height: outputResolutionWidth / videoAspectRatio, // 135
 }
+const videoWidth = videoSourceResolution.width
+const videoHeight = videoSourceResolution.height
 
 const frameBufferResolution: ImageResolution = {
   width: frameBufferWidth,
@@ -81,7 +84,12 @@ export const app = async () => {
 
   const channelManager = new ChannelManager([cameraCh, objectCh, shinjukuVideoCh, youtubeCh, cityCh])
   const chNode = new MultiChannelNode(channelManager)
-  chNode.renderTarget = new PixelDataRTHandle(new FrameBuffer(videoSourceResolution.width, videoSourceResolution.height))
+  chNode.renderTarget = new PixelDataRTHandle(new FrameBuffer(videoWidth, videoHeight))
+
+  // greyscale
+  const greyscaleNode = new GreyScaleGradientNode()
+  greyscaleNode.renderTarget = new PixelDataRTHandle(new FrameBuffer(videoWidth, videoHeight))
+  greyscaleNode.setInput(chNode)
 
   // presentations
   const linePresentation = new LinePresentation(chNode.outputResolution)
@@ -151,10 +159,12 @@ export const app = async () => {
   finalFxNode.renderTarget = rtB
   finalFxNode.setInput(postPresentationNode)
 
-  screenNode.setInput(finalFxNode)
+  // screenNode.setInput(finalFxNode)
+  screenNode.setInput(greyscaleNode)
   screenNode.backgroundColor = backgroundColor
 
   chNode.validate()
+  greyscaleNode.validate()
   presentationNode.validate()
   fxNode.validate()
   postPresentationNode.validate()
@@ -163,6 +173,7 @@ export const app = async () => {
 
   function renderGraph() {
     chNode.render()
+    greyscaleNode.render()
     presentationNode.render()
     fxNode.render()
     postPresentationNode.render()
@@ -240,7 +251,7 @@ export const app = async () => {
 
   message.text = 'loading...'
   await shinjukuVideoCh.waitForReady((progress) => (message.text = `loading ch 3: ${progress}%`))
-  await youtubeCh.waitForReady((progress) => message.text = `loading ch 4: ${progress}%`)
+  await youtubeCh.waitForReady((progress) => (message.text = `loading ch 4: ${progress}%`))
   await cityCh.waitForReady((progress) => (message.text = `loading ch 5: ${progress}%`))
 
   kaleidoscopeFx.enabled = false
