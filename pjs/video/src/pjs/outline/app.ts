@@ -15,6 +15,14 @@ import { FeatureDetectionNode } from './nodes/feature-detection/node'
 import { OutlineDetectionNode } from './nodes/outline-detection/node'
 import { DrawNode } from './nodes/draw/node'
 
+export const appState = {
+  featureThreshold: 0.29,
+  searchRadius: 4,
+  diffThreshold: 0.3,
+  backgroundColor: [0, 0, 0, 1],
+  enableTriangles: false
+}
+
 export async function app() {
   let resolution: ImageResolution
   let dataResolution: ImageResolution
@@ -65,10 +73,13 @@ export async function app() {
   const screen = new InputColorRenderingNode()
   screen.setInput(drawNode)
 
-  featureDetectionNode.setThreshold(0.2)
-  // drawNode.backgroundColor = [0, 0, 0, 1]
-
   function renderLoop(f: number) {
+    featureDetectionNode.setThreshold(appState.featureThreshold)
+    outlineDetectionNode.setRadiusSize(appState.searchRadius)
+    outlineDetectionNode.setDiffThreshold(appState.diffThreshold)
+    drawNode.backgroundColor = appState.backgroundColor as [number, number, number, number]
+    drawNode.enableTriangle = appState.enableTriangles
+
     chNode.render()
     greyNode.render()
     featureDetectionNode.render()

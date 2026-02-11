@@ -93,10 +93,14 @@ export class DrawNode extends OffscreenDrawNode {
 
 
     this.outline.updateInstances(k)
-    this.triangle.updateInstances(k)
+
+    if (this.enableTriangle) this.triangle.updateInstances(k)
+    else this.triangle.updateInstances(0)
 
     this.bindColourTex()
 
     super.render()
   }
+
+  public enableTriangle = true
 }
