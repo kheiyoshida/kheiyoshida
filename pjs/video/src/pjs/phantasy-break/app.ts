@@ -41,6 +41,7 @@ import { AdditivePresentationNode, PresentationNode } from '../../lib-node/prese
 import { EffectNode } from '../../lib-node/effect/node'
 import { PixelDataRTHandle } from '../../lib-node/channel/target'
 import { GreyScaleGradientNode } from './effect/greyscale/node'
+import { OutlinePresentation } from './presentation/outline/presentation'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -89,11 +90,11 @@ export const app = async () => {
   // greyscale
   const greyscaleNode = new GreyScaleGradientNode()
   greyscaleNode.renderTarget = new PixelDataRTHandle(new FrameBuffer(videoWidth, videoHeight))
-  greyscaleNode.setInput(chNode)
 
   // presentations
   const linePresentation = new LinePresentation(chNode.outputResolution)
   const dotPresentation = new DotPresentation(chNode.outputResolution, 1)
+  const outlinePresentation = new OutlinePresentation(videoSourceResolution, 5)
 
   const aaTextData = new AATextData()
   const alphabetTextData = new AlphabetTextData('PHANTASY BREAK ')
@@ -104,7 +105,7 @@ export const app = async () => {
     katakanaTextData,
   ])
 
-  const presentationNode = new PresentationNode([linePresentation, dotPresentation, glyphPresentation])
+  const presentationNode = new PresentationNode([outlinePresentation, dotPresentation, glyphPresentation])
 
   // post effects
   const multiplyFx = new MultiplyEffectModel(16)
@@ -148,8 +149,12 @@ export const app = async () => {
   const rtA = new DrawRTHandle(new FrameBuffer(width, height))
   const rtB = new DrawRTHandle(new FrameBuffer(width, height))
 
+  greyscaleNode.setInput(chNode)
+
   presentationNode.renderTarget = rtA
   presentationNode.setPixelDataInput(chNode)
+  presentationNode.setTextureInput(greyscaleNode)
+
   fxNode.renderTarget = rtB
   fxNode.setInput(presentationNode)
   postPresentationNode.renderTarget = rtA
@@ -159,8 +164,8 @@ export const app = async () => {
   finalFxNode.renderTarget = rtB
   finalFxNode.setInput(postPresentationNode)
 
-  // screenNode.setInput(finalFxNode)
-  screenNode.setInput(greyscaleNode)
+  screenNode.setInput(finalFxNode)
+  // screenNode.setInput(greyscaleNode)
   screenNode.backgroundColor = backgroundColor
 
   chNode.validate()

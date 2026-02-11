@@ -14,6 +14,12 @@ export class PresentationNode extends OffscreenDrawNode {
   private pixelDataInput?: PixelDataProviderNode
   public setPixelDataInput(node: PixelDataProviderNode) {
     this.pixelDataInput = node
+    if (!this.textureInput) this.setTextureInput(node)
+  }
+
+  private textureInput?: OffscreenNode
+  public setTextureInput(node: OffscreenNode) {
+    this.textureInput = node
   }
 
   validate() {
@@ -23,7 +29,7 @@ export class PresentationNode extends OffscreenDrawNode {
 
   render() {
     const data = this.pixelDataInput!.renderTarget!.pixelDataArray
-    const tex = this.pixelDataInput!.renderTarget!.frameBuffer.colorTexture.tex
+    const tex = this.textureInput!.renderTarget!.frameBuffer.colorTexture.tex
 
     for (const presentation of this.presentations) {
       if (presentation.enabled) presentation.represent(data, tex)
