@@ -2,6 +2,9 @@
 @use '../../module/vars';
 
 .feed {
+  // TODO: fix properly
+  overflow-y: auto;
+  height: 100vh;
   &__item {
     margin-bottom: 4 * vars.$space;
     > a {

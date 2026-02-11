@@ -2,6 +2,10 @@
 @use '../../module/style';
 
 .work {
+  // TODO: fix properly
+  overflow-y: auto;
+  height: 100vh;
+
   &__title {
     color: rgba(vars.$text-color, 0.7);
     font-size: vars.$txt-small;
