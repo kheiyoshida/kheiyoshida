@@ -26,12 +26,14 @@ export const appState = {
 }
 
 export async function app() {
+  const isMobile = window.innerWidth < window.innerHeight
+
   let resolution: ImageResolution
   let dataResolution: ImageResolution
   let tilePassResolution: ImageResolution
   const tileSize: number = 8
 
-  if (window.innerWidth < window.innerHeight) {
+  if (isMobile) {
     adjustMobileCanvas()
     // resolution = { width: 576, height: 960 }
     resolution = { width: window.innerWidth, height: window.innerHeight }
@@ -46,6 +48,9 @@ export async function app() {
   // set up camera
   const cameraSource = await CameraInputSource.create(undefined, 'BackCamera')
   const cameraCh = new CameraChannel(cameraSource)
+  if (!isMobile) {
+    cameraCh.screenRect.setReverseHorizontal(true)
+  }
 
   const chNode = new ChannelNode(cameraCh)
   chNode.renderTarget = new DrawRTHandle(new FrameBuffer(resolution.width, resolution.height))

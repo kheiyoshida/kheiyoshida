@@ -15,6 +15,8 @@ export const Canvas = ({ sketch }: { sketch: Sketch }) => {
 
 const getSketchComponent = (sketch: Sketch) => {
   switch (sketch) {
+    case Sketch.shapeFinder:
+      return dynamic(() => import('video/src/pjs/outline'), { ssr: false })
     case Sketch.mandala:
       return dynamic(() => import('music/src/pjs/demo/app'), { ssr: false })
     case Sketch.wasted:
