@@ -4,16 +4,18 @@ import { OutlineInstance } from './line/instance'
 import { FeatureDetectionNode } from './feature-detection/node'
 import { OutlineDetectionNode } from './outline-detection/node'
 import { PixelDataRTHandle } from '../../../../lib-node/channel/target'
-import { FrameBuffer } from 'graph-gl'
+import { FrameBuffer, getGL } from 'graph-gl'
+import { TriangleInstance } from './triangle/instance'
 
 export class OutlinePresentation extends PixelPresentation {
   private lineInstance: OutlineInstance
+  private triangleInstance: TriangleInstance
 
   private featureDetectionNode: FeatureDetectionNode
   private outlineDetectionNode: OutlineDetectionNode
   private tilePassResolution: ImageResolution
 
-  constructor(videoSourceResolution: ImageResolution, tileSize = 5) {
+  constructor(videoSourceResolution: ImageResolution, private originalColourTex: WebGLTexture, tileSize = 5) {
     const tilePassResolution: ImageResolution = {
       width: videoSourceResolution.width / tileSize,
       height: videoSourceResolution.height / tileSize,
@@ -27,10 +29,12 @@ export class OutlinePresentation extends PixelPresentation {
 
     const maxInstanceCount = tilePassResolution.width * tilePassResolution.height
     const lineInstance = new OutlineInstance(maxInstanceCount)
+    const triangleInstance = new TriangleInstance(maxInstanceCount)
 
     super(lineInstance, tilePassResolution)
 
     this.lineInstance = lineInstance
+    this.triangleInstance = triangleInstance
 
     this.featureDetectionNode = new FeatureDetectionNode(tileSize)
     this.featureDetectionNode.renderTarget = new PixelDataRTHandle(
@@ -45,6 +49,11 @@ export class OutlinePresentation extends PixelPresentation {
     this.outlineDetectionNode.setInput(this.featureDetectionNode)
 
     this.tilePassResolution = tilePassResolution
+
+    this.lineInstance.shader.use()
+    this.lineInstance.shader.setUniformInt('uColourTexture', 0)
+    this.triangleInstance.shader.use()
+    this.triangleInstance.shader.setUniformInt('uColourTexture', 0)
   }
 
   represent(_: Uint8Array, greyscaleTex: WebGLTexture | undefined): void {
@@ -77,16 +86,54 @@ export class OutlinePresentation extends PixelPresentation {
         if (x1 === 0 && y1 === 0) continue
         if (x2 === 0 && y2 === 0) continue
 
-        this.lineInstance.instanceDataArray[k * 6] = x1 / 255
-        this.lineInstance.instanceDataArray[k * 6 + 1] = y1 / 255
-        this.lineInstance.instanceDataArray[k * 6 + 2] = middleX / 255
-        this.lineInstance.instanceDataArray[k * 6 + 3] = middleY / 255
-        this.lineInstance.instanceDataArray[k * 6 + 4] = x2 / 255
-        this.lineInstance.instanceDataArray[k * 6 + 5] = y2 / 255
+        if (this.enableTriangle) {
+          this.triangleInstance.instanceDataArray[k * 6] = x1 / 255
+          this.triangleInstance.instanceDataArray[k * 6 + 1] = y1 / 255
+          this.triangleInstance.instanceDataArray[k * 6 + 2] = middleX / 255
+          this.triangleInstance.instanceDataArray[k * 6 + 3] = middleY / 255
+          this.triangleInstance.instanceDataArray[k * 6 + 4] = x2 / 255
+          this.triangleInstance.instanceDataArray[k * 6 + 5] = y2 / 255
+        } else {
+          this.lineInstance.instanceDataArray[k * 6] = x1 / 255
+          this.lineInstance.instanceDataArray[k * 6 + 1] = y1 / 255
+          this.lineInstance.instanceDataArray[k * 6 + 2] = middleX / 255
+          this.lineInstance.instanceDataArray[k * 6 + 3] = middleY / 255
+          this.lineInstance.instanceDataArray[k * 6 + 4] = x2 / 255
+          this.lineInstance.instanceDataArray[k * 6 + 5] = y2 / 255
+        }
 
         k++
       }
     }
-    this.lineInstance.updateInstances(k)
+
+    if (this.enableTriangle) this.triangleInstance.updateInstances(k)
+    else this.lineInstance.updateInstances(k)
+
+    getGL().bindTexture(getGL().TEXTURE_2D, this.originalColourTex)
+  }
+
+  public override get instance() {
+    if (this.enableTriangle) return this.triangleInstance
+    return this.lineInstance
+  }
+
+  public setFeatureThreshold(t: number) {
+    this.featureDetectionNode.setThreshold(t)
+  }
+  public setRadiusSize(r: number) {
+    this.outlineDetectionNode.setRadiusSize(r)
+  }
+  public setDiffThreshold(t: number) {
+    this.outlineDetectionNode.setDiffThreshold(t)
+  }
+  public enableTriangle = false;
+
+  public setColourTexture(tex: WebGLTexture) {
+    this.lineInstance.shader.use()
+    this.lineInstance.shader.setUniformInt('uColourTexture', 0)
+  }
+
+  public setJitterLevel(level: number) {
+    this.lineInstance.setJitterLevel(level * (3 / this.tilePassResolution.width))
   }
 }

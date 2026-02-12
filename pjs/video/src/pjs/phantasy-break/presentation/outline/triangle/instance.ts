@@ -2,7 +2,7 @@ import instanceVert from './instance.vert?raw'
 import instanceFrag from './instance.frag?raw'
 import { getGL, InstancedModel, Shader } from 'graph-gl'
 
-export class OutlineInstance extends InstancedModel {
+export class TriangleInstance extends InstancedModel {
   constructor(maxInstanceCount: number) {
     const instanceShader = new Shader(instanceVert, instanceFrag)
 
@@ -51,13 +51,6 @@ export class OutlineInstance extends InstancedModel {
   }
 
   override draw() {
-    this.shader.use()
-    this.shader.setUniformFloat('uTime', performance.now())
-    super.draw(getGL().LINE_STRIP)
-  }
-
-  public setJitterLevel(level: number) {
-    this.shader.use()
-    this.shader.setUniformFloat('uJitterLevel', level)
+    super.draw(getGL().TRIANGLES)
   }
 }

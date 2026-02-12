@@ -19,7 +19,7 @@ import {
   DotPresentationControl,
   GlyphPresentationControl,
   InputControl,
-  LinePresentationControl,
+  OutlinePresentationControl,
   PostEffectControl,
 } from './control/knobs'
 import { MultiplyEffectModel } from './effect/multiply'
@@ -94,7 +94,11 @@ export const app = async () => {
   // presentations
   const linePresentation = new LinePresentation(chNode.outputResolution)
   const dotPresentation = new DotPresentation(chNode.outputResolution, 1)
-  const outlinePresentation = new OutlinePresentation(videoSourceResolution, 5)
+  const outlinePresentation = new OutlinePresentation(
+    videoSourceResolution,
+    chNode.renderTarget.frameBuffer.colorTexture.tex,
+    5
+  )
 
   const aaTextData = new AATextData()
   const alphabetTextData = new AlphabetTextData('PHANTASY BREAK ')
@@ -154,6 +158,7 @@ export const app = async () => {
   presentationNode.renderTarget = rtA
   presentationNode.setPixelDataInput(chNode)
   presentationNode.setTextureInput(greyscaleNode)
+  presentationNode.backgroundColor = backgroundColor
 
   fxNode.renderTarget = rtB
   fxNode.setInput(presentationNode)
@@ -192,7 +197,7 @@ export const app = async () => {
     knob: [
       new ChannelControl(objectCh, soundLevel, debugPresentation), // 1
       new InputControl(cameraCh, glyphPresentation), // 2
-      new LinePresentationControl(linePresentation), //3
+      new OutlinePresentationControl(outlinePresentation), //3
       new DotPresentationControl(dotPresentation), // 4
       new GlyphPresentationControl(glyphPresentation), // 5
       new PostEffectControl(multiplyFx), // 6
@@ -219,6 +224,7 @@ export const app = async () => {
     dotPresentation.densityX.updateValue(effectLevel)
     dotPresentation.densityY.updateValue(effectLevel)
     glyphPresentation.dotSize.updateValue(effectLevel)
+    outlinePresentation.setJitterLevel(effectLevel)
     objectCh.cube.scale.updateValue(effectLevel)
     objectCh.cube.scale.updateValue(effectLevel)
     objectCh.applyEffect(effectLevel)
