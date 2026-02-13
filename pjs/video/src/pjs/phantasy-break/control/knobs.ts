@@ -102,13 +102,13 @@ export class OutlinePresentationControl extends PresentationControl<OutlinePrese
   initialValues: IKnobParamsControlAdapter['initialValues'] = [60, 0, 10, true, false]
 
   applyKnobValueA(value: number): void {
-    this.presentation.setFeatureThreshold(0.31 - (value / 127) * 0.30)
+    this.presentation.setFeatureThreshold(0.31 - (value / 127) * 0.3)
   }
   applyKnobValueB(value: number): void {
     this.presentation.setRadiusSize(1 + Math.floor((value / 127) * 4))
   }
   applyKnobValueC(value: number) {
-    this.presentation.setDiffThreshold(0.01 + (value / 127) * 0.30)
+    this.presentation.setDiffThreshold(0.01 + (value / 127) * 0.3)
   }
   applySwitchValueB(value: boolean) {
     this.presentation.enableTriangle = value
