@@ -34,7 +34,7 @@ const getAudioInputStream = async (audioInputName?: string) => {
 
 const searchDeviceId = async (deviceName: string) => {
   const list = await navigator.mediaDevices.enumerateDevices()
-  console.log(list)
+  console.log('device list', list)
   const found = list.find((m) => m.label.includes(deviceName))
   if (!found)
     throw new Error(`No device found for device ${deviceName}. 

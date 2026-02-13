@@ -68,6 +68,10 @@ export const app = async () => {
   // init gl
   getGL()
 
+  // ask permission first
+  const media = await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+  console.log(media)
+
   // sound input control
   const deviceName = 'Zen Go'
   const soundLevel = new SoundLevel(await createAudioInputSource(deviceName))

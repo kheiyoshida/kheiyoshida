@@ -11,7 +11,6 @@ export const youtubeVideoList = [
   `/assets/footage/youtube/baroque.mp4`,
   // `/assets/footage/youtube/darksouls.mp4`,
   // `/assets/footage/youtube/systemshock2.mp4`,
-  // `/assets/footage/youtube/alien.mp4`,
   `/assets/footage/youtube/baroque2.mp4`,
   // `/assets/footage/youtube/dq3.mp4`,
   `/assets/footage/youtube/seaman.mp4`,
@@ -23,15 +22,18 @@ export const youtubeVideoList = [
 
   // `/assets/footage/youtube/Breaking Bad.mp4`,
 
-  // `/assets/footage/youtube/Chargeman.mp4`,
-  // `/assets/footage/youtube/Noriaki.mp4`,
+  `/assets/footage/youtube/Chargeman.mp4`,
+  `/assets/footage/youtube/Noriaki.mp4`,
   `/assets/footage/youtube/Nonomura.mp4`,
+  `/assets/footage/youtube/blade runner.mp4`,
+  `/assets/footage/youtube/AngelsEgg.mp4`,
+  `/assets/footage/youtube/AngelsEgg2.mp4`,
+  `/assets/footage/youtube/Koudai.mp4`,
 ]
 
 export const cityVideoList = [
-  `/assets/footage/youtube/blade runner.mp4`,
-  `/assets/footage/youtube/seventh seal.mp4`,
-  `/assets/footage/youtube/chunking express.mp4`,
+  // `/assets/footage/youtube/seventh seal.mp4`,
+  // `/assets/footage/youtube/chunking express.mp4`,
   `/assets/footage/city/qqq.mp4`,
   `/assets/footage/city/city.mp4`,
   `/assets/footage/city/city2.mp4`,
@@ -42,4 +44,7 @@ export const cityVideoList = [
   `/assets/footage/city/city7.mp4`,
   `/assets/footage/city/city8.mp4`,
   `/assets/footage/city/city9.mp4`,
+  `/assets/footage/city/city10.mp4`,
+  `/assets/footage/city/city11.mp4`,
+  `/assets/footage/city/city12.mp4`,
 ]
