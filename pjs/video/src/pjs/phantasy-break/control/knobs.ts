@@ -12,19 +12,22 @@ import { CameraChannel } from '../../../lib-node/channel/camera/camera'
 import { DebugPresentation } from '../presentation/debug'
 import { PixelPresentation } from '../../../lib-node/presentation/presentation'
 import { OutlinePresentation } from '../presentation/outline/presentation'
+import { AfterImageEffect } from '../effect/afterimage/node'
 
 export class ChannelControl implements IKnobParamsControlAdapter {
   constructor(
     private cubeCh: CubeRenderingChannel,
     private soundLevel: SoundLevel,
-    private debugPresentation: DebugPresentation
+    private debugPresentation: DebugPresentation,
+    private afterimageEffect: AfterImageEffect
   ) {}
 
   initialValues: IKnobParamsControlAdapter['initialValues'] = [60, 0, 0, true, false]
 
   applyKnobValueA(value: number): void {
-    this.cubeCh.cube.scale.anchor = 2 * (value / 127)
-    this.cubeCh.cube2.scale.anchor = 2 * (value / 127)
+    this.afterimageEffect.setAmount((value / 127) * 0.88)
+    // this.cubeCh.cube.scale.anchor = 2 * (value / 127)
+    // this.cubeCh.cube2.scale.anchor = 2 * (value / 127)
   }
   applyKnobValueB(value: number): void {
     this.soundLevel.maxLoudness = -3 - 2 * (value / 127)

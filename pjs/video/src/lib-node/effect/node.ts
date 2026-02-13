@@ -11,7 +11,7 @@ export type IEffectModel = GenericModel & IEffect
 
 export class EffectNode extends OffscreenDrawNode {
   public effects: IEffectModel[] = []
-  private readonly noOpFx: IEffectModel
+  protected readonly noOpFx: IEffectModel
 
   public constructor(effects: IEffectModel[]) {
     super()

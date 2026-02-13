@@ -42,6 +42,7 @@ import { EffectNode } from '../../lib-node/effect/node'
 import { PixelDataRTHandle } from '../../lib-node/channel/target'
 import { GreyScaleGradientNode } from './effect/greyscale/node'
 import { OutlinePresentation } from './presentation/outline/presentation'
+import { AfterImageNode } from './effect/afterimage/node'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -73,7 +74,7 @@ export const app = async () => {
 
   // set up camera
   const cameraName = 'Video Control'
-  const cameraSource = await CameraInputSource.create()
+  const cameraSource = await CameraInputSource.create(cameraName)
 
   // channels
   const cameraCh = new CameraChannel(cameraSource)
@@ -115,6 +116,9 @@ export const app = async () => {
   const multiplyFx = new MultiplyEffectModel(16)
   const kaleidoscopeFx = new KaleidoscopeEffectModel(16)
   const fxNode = new EffectNode([multiplyFx, kaleidoscopeFx])
+
+  // afterimage
+  const afterImageNode = new AfterImageNode(frameBufferResolution)
 
   // post presentations
   const textPresentation = new TextPresentation(frameBufferResolution, 50)
@@ -162,15 +166,19 @@ export const app = async () => {
 
   fxNode.renderTarget = rtB
   fxNode.setInput(presentationNode)
-  postPresentationNode.renderTarget = rtA
-  postPresentationNode.setFrameInput(fxNode)
+
+  afterImageNode.renderTarget = rtA
+  afterImageNode.setInput(fxNode)
+
+  postPresentationNode.renderTarget = rtB
+  postPresentationNode.setFrameInput(afterImageNode)
   postPresentationNode.setPixelDataInput(chNode) // TODO: make object node
 
-  finalFxNode.renderTarget = rtB
+  finalFxNode.renderTarget = rtA
   finalFxNode.setInput(postPresentationNode)
 
   screenNode.setInput(finalFxNode)
-  // screenNode.setInput(greyscaleNode)
+  // screenNode.setInput(afterImageNode.historyRT.frameBuffer)
   screenNode.backgroundColor = backgroundColor
 
   chNode.validate()
@@ -186,6 +194,7 @@ export const app = async () => {
     greyscaleNode.render()
     presentationNode.render()
     fxNode.render()
+    afterImageNode.render()
     postPresentationNode.render()
     finalFxNode.render()
     screenNode.render()
@@ -195,7 +204,7 @@ export const app = async () => {
   const channelParams = new ChannelParamsControl(channelManager)
   const params = new ParamsManager({
     knob: [
-      new ChannelControl(objectCh, soundLevel, debugPresentation), // 1
+      new ChannelControl(objectCh, soundLevel, debugPresentation, afterImageNode.afterImageFx), // 1
       new InputControl(cameraCh, glyphPresentation), // 2
       new OutlinePresentationControl(outlinePresentation), //3
       new DotPresentationControl(dotPresentation), // 4

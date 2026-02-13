@@ -16,6 +16,7 @@ export enum TextureUnit {
   Color = 0,
   Normal = 1,
   Depth = 2,
+  Extra = 3
 }
 
 // TODO: make this abstract and use specific type of texture
