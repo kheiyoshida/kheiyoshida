@@ -110,8 +110,8 @@ export class CubeRenderingChannel extends ObjectRenderingChannel {
   public readonly cube: CubeModel
   public readonly cube2: CubeModel
   constructor() {
-    const cube = new CubeModel([0, 1, 0])
-    const cube2 = new CubeModel([0, 0, 1])
+    const cube = new CubeModel([0.1, 1, 0.1])
+    const cube2 = new CubeModel([0.1, 0.1, 1])
     super([cube, cube2])
     this.cube = cube
     this.cube2 = cube2

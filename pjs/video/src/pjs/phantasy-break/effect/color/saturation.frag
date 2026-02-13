@@ -12,11 +12,15 @@ uniform float uLuminanceBase;
 uniform int uEnableSaturation;
 uniform int uMonotone;
 
+float luminance(vec3 rgb) {
+    return dot(rgb, vec3(0.299, 0.587, 0.114));
+}
+
 void main() {
     vec4 col = texture(uTexture, vUV);
 
     if (uMonotone == 1) {
-        float val = max(col.x, max(col.y, col.z));
+        float val = luminance(col.rgb);
         fragColor = vec4(
             max(uLuminanceBase, min(uLuminanceCap, val)),
             max(uLuminanceBase, min(uLuminanceCap, val)),
