@@ -1,0 +1,22 @@
+{
+  "name": "shaderlab",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "18.2.0",
+    "react-dom": "^18.2.0",
+    "graph-gl": "workspace:^",
+    "gl-matrix": "^3.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.18",
+    "@types/react": "^18.2.56",
+    "@types/react-dom": "^18.2.19",
+    "@vitejs/plugin-react": "^5.1.0",
+    "typescript": "^4.8.4",
+    "vite": "7.1.11"
+  }
+}
