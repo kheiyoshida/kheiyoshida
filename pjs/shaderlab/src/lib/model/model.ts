@@ -19,6 +19,10 @@ export class ModelBase extends GenericModel {
     )
   }
 
+  public override draw() {
+    super.draw(getGL().TRIANGLES)
+  }
+
   public static async buildFromPath(objFilePath: string) {
     const objFileContent = await loadFileContent(objFilePath)
     return this.build(objFileContent)
