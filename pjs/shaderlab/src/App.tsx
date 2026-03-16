@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import Depth from './labs/depth'
+import Surface from './labs/surface'
 
 const Projects = {
   depth: <Depth />,
+  surface: <Surface />,
 } as const
 
 export default () => {

@@ -81,8 +81,6 @@ export async function app() {
       object.setProjectionMatrix(camera.getProjectionMatrix())
     }
 
-    camera.getViewMatrix()
-
     gl.depthMask(true)
     sceneNode.render()
     effectNode.render()

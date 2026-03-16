@@ -80,18 +80,21 @@ export const parseObjData = (objText: string): GeometrySpec => {
   return { vertices, normals, faces }
 }
 
-export const parseGeometrySpecToArray = (spec: GeometrySpec): Float32Array => {
+export const parseGeometrySpecToArray = (spec: GeometrySpec, includeNormal = true): Float32Array => {
   const arr: number[] = []
 
   for (const triangle of spec.faces) {
     for (let i = 0; i < 3; i++) {
       const vertex = spec.vertices[triangle.vertexIndices[i]]
       const normal = spec.normals[triangle.normalIndices[i]]
-      if (!vertex || !normal) {
+      if (!vertex || (includeNormal && !normal)) {
         throw Error(`insufficient vertex or normal`)
       }
       arr.push(...vertex)
-      arr.push(...normal)
+
+      if (includeNormal) {
+        arr.push(...normal)
+      }
       // TODO: add texCoords here
     }
   }

@@ -3,7 +3,7 @@ import { mat4, quat, vec3 } from 'gl-matrix'
 
 import vert from './default.vert?raw'
 import frag from './default.frag?raw'
-import { GeometrySpec, loadFileContent, parseGeometrySpecToArray, parseObjData } from './parse.ts'
+import { GeometrySpec, parseGeometrySpecToArray, parseObjData } from './parse.ts'
 
 export class ModelBase extends GenericModel {
   constructor(geometry: GeometrySpec, shader = new Shader(vert, frag)) {
@@ -17,15 +17,11 @@ export class ModelBase extends GenericModel {
       ],
       getGL().STATIC_DRAW
     )
+    this.setModelMatrix()
   }
 
   public override draw() {
-    super.draw(getGL().TRIANGLES)
-  }
-
-  public static async buildFromPath(objFilePath: string) {
-    const objFileContent = await loadFileContent(objFilePath)
-    return this.build(objFileContent)
+    super.draw(getGL().LINES)
   }
 
   public static build(objFileContent: string) {
