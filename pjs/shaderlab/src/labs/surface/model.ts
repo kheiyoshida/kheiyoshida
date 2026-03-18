@@ -6,7 +6,7 @@ import { mat4, quat, vec3 } from 'gl-matrix'
 
 export class ParticleModel extends InstancedModel {
   constructor(instanceGeometry: GeometrySpec, geometry: GeometrySpec, shader = new Shader(vert, frag)) {
-    const numOfParticles = 100
+    const numOfParticles = 300
 
     const instanceGeometryVertices = parseGeometrySpecToArray(instanceGeometry, false).map(v => v * 0.01)
     super(
@@ -29,20 +29,12 @@ export class ParticleModel extends InstancedModel {
     let count = 0
     for (const tri of geometry.faces) {
       for (let i = 0; i < numOfParticles; i++) {
-        // TODO: refactor
-        const v0 = geometry.vertices[tri.vertexIndices[0]]
-        const v1 = geometry.vertices[tri.vertexIndices[1]]
-        const v2 = geometry.vertices[tri.vertexIndices[2]]
-        this.instanceDataArray[count * 9] = v0[0]
-        this.instanceDataArray[count * 9 + 1] = v0[1]
-        this.instanceDataArray[count * 9 + 2] = v0[2]
-        this.instanceDataArray[count * 9 + 3] = v1[0]
-        this.instanceDataArray[count * 9 + 4] = v1[1]
-        this.instanceDataArray[count * 9 + 5] = v1[2]
-        this.instanceDataArray[count * 9 + 6] = v2[0]
-        this.instanceDataArray[count * 9 + 7] = v2[1]
-        this.instanceDataArray[count * 9 + 8] = v2[2]
-
+        for(let j = 0; j < 3; j++) {
+          const v = geometry.vertices[tri.vertexIndices[j]]
+          this.instanceDataArray[count * 9 + j * 3] = v[0]
+          this.instanceDataArray[count * 9 + j * 3 + 1] = v[1]
+          this.instanceDataArray[count * 9 + j * 3 + 2] = v[2]
+        }
         count++
       }
     }

@@ -15,11 +15,18 @@ export async function app() {
   gl.enable(gl.CULL_FACE)
   gl.cullFace(gl.BACK)
 
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
   const sceneNode = new OnscreenRenderingNode()
-  sceneNode.backgroundColor = [0.0, 0.0, 0.0, 1.0]
+  sceneNode.backgroundColor = [0.1, 0.1, 0.1, 1.0]
 
   const particleObj = new ParticleModel(parseObjData(dodecahedron), parseObjData(cube))
+  const particleObj2 = new ParticleModel(parseObjData(dodecahedron), parseObjData(cube))
+  particleObj2.position = vec3.fromValues(2, 0, 0)
+
   const cubeObj = new ModelBase(parseObjData(cube))
+
   sceneNode.drawables = [particleObj]
 
   const camera = new Camera()
@@ -47,9 +54,17 @@ export async function app() {
       camera.proceed(false)
     }
 
-    particleObj.setTime(performance.now() / 100000)
+    const t = (performance.now() - 1000) / 10000
+
+    particleObj.rotation = vec3.fromValues(t * 20.0, t * 10.0, t * 10.0)
+
+    particleObj.setTime(t)
     particleObj.setViewMatrix(camera.getViewMatrix())
     particleObj.setProjectionMatrix(camera.getProjectionMatrix())
+
+    particleObj2.setTime(t)
+    particleObj2.setViewMatrix(camera.getViewMatrix())
+    particleObj2.setProjectionMatrix(camera.getProjectionMatrix())
 
     cubeObj.setViewMatrix(camera.getViewMatrix())
     cubeObj.setProjectionMatrix(camera.getProjectionMatrix())
