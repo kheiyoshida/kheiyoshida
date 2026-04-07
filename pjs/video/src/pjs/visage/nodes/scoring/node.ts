@@ -1,9 +1,8 @@
-import { DrawTarget, RenderingNode, ScreenRect, Shader } from 'graph-gl'
-import { PixelDataProviderNode } from '../../../../lib-node/channel/node'
+import { DrawTarget, OffscreenDrawNode, RenderingNode, ScreenRect, Shader } from 'graph-gl'
 import vert from './screen.vert?raw'
-import feature from './outline2.frag?raw'
+import feature from './scoring.frag?raw'
 
-export class OutlineDetectionNode extends PixelDataProviderNode {
+export class FeatureScoringNode extends OffscreenDrawNode {
   private readonly shader: Shader
   public readonly screenRect: ScreenRect
 

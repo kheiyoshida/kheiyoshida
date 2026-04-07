@@ -19,15 +19,11 @@ void main() {
 
     int radius = uSearchRadius;
 
-    float diffThreshold = uDiffThreshold;
-
-    float bestFeatureDiff = diffThreshold;
-    vec2 bestFeatureUV;
-
-    float secondBestFeatureDiff = diffThreshold;
-    vec2 secondBestFeatureUV;
+    float score = 0.0;
+    float maxScore = 0.0;
 
     for(int r = 1; r <= radius; r++) {
+        float weightedScore = 1.0 / float(r);
         for(int signX = -1; signX <=1; signX+=2) {
             for(int signY = -1; signY <=1; signY+=2) {
                 int x = signX * r;
@@ -38,31 +34,17 @@ void main() {
 
                 float diffX = targetTileFeature.b;
                 float diffY = targetTileFeature.a;
+
+                maxScore += weightedScore;
                 if (diffX == 0.0 && diffY == 0.0) continue;
 
                 float diff = abs(centerDiffX - diffX) + abs(centerDiffY - diffY);
-                if (diff < bestFeatureDiff) {
-                    secondBestFeatureDiff = bestFeatureDiff;
-                    secondBestFeatureUV = secondBestFeatureUV;
-
-                    bestFeatureDiff = diff;
-                    bestFeatureUV = targetTileFeature.rg;
-                }
-                else if (diff < secondBestFeatureDiff) {
-                    secondBestFeatureDiff = diff;
-                    secondBestFeatureUV = targetTileFeature.rg;
+                if (diff > uDiffThreshold) {
+                    score += weightedScore;
                 }
             }
         }
-        if (bestFeatureDiff != diffThreshold && secondBestFeatureDiff != diffThreshold) break;
     }
 
-    if (bestFeatureDiff == diffThreshold) {
-        fragColor = vec4(0);
-        return;
-    } else if (secondBestFeatureDiff == diffThreshold) {
-        secondBestFeatureUV = bestFeatureUV;
-    }
-
-    fragColor = vec4(bestFeatureUV, secondBestFeatureUV);
+    fragColor = vec4(score / maxScore, 0, 0, 1);
 }

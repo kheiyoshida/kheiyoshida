@@ -5,6 +5,8 @@ in vec2 vUV;
 out vec4 fragColor;
 
 uniform sampler2D uTexture;
+uniform sampler2D uScoreTexture;
+uniform float uTileSize;
 uniform vec2 uResolution;
 uniform float uTime;
 
@@ -20,6 +22,25 @@ float noise (in vec2 st) {
     float b = random(i + vec2(1.0, 0.0));
     float c = random(i + vec2(0.0, 1.0));
     float d = random(i + vec2(1.0, 1.0));
+
+    vec2 u = f * f * (3.0 - 2.0 * f);
+
+    return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+}
+
+// TODO: improve the smoothness
+float smoothScore (in vec2 uv) {
+    vec2 tileSpanUV = vec2(uTileSize / uResolution.x, uTileSize / uResolution.y);
+
+    vec2 tileIndex = floor(uv / tileSpanUV);
+    vec2 tileOriginUV = tileIndex * tileSpanUV;
+
+    float a = texture(uScoreTexture, tileOriginUV).r;
+    float b = texture(uScoreTexture, tileOriginUV + tileSpanUV * vec2(1.0, 0.0)).r;
+    float c = texture(uScoreTexture, tileOriginUV + tileSpanUV * vec2(0.0, 1.0)).r;
+    float d = texture(uScoreTexture, tileOriginUV + tileSpanUV * vec2(1.0, 1.0)).r;
+
+    vec2 f = fract(vUV / tileSpanUV);
 
     vec2 u = f * f * (3.0 - 2.0 * f);
 
@@ -60,7 +81,9 @@ void main() {
     float ux = 1.0 / uResolution.x;
     float uy = 1.0 / uResolution.y;
 
-    float strength = 100.0;
+    float score = smoothScore(vUV);
+
+    float strength = score * 100.0;
     vec2 remoteUV = vUV + vec2(signVal(fx) * ux, signVal(fy) * uy) * strength;
     vec3 color = texture(uTexture, remoteUV).rgb;
 

@@ -1,10 +1,4 @@
-import {
-  adjustMobileCanvas,
-  DrawRTHandle,
-  FrameBuffer,
-  ImageResolution,
-  InputColorRenderingNode,
-} from 'graph-gl'
+import { adjustMobileCanvas, DrawRTHandle, FrameBuffer, ImageResolution, InputColorRenderingNode } from 'graph-gl'
 import { startRenderingLoop } from '../../lib/pipeline'
 import { ChannelNode } from '../../lib-node/channel/node'
 import { PixelDataRTHandle } from '../../lib-node/channel/target'
@@ -12,8 +6,7 @@ import { CameraChannel } from '../../lib-node/channel/camera/camera'
 import { CameraInputSource } from '../../media/camera'
 import { GreyScaleGradientNode } from './nodes/greyscale/node'
 import { FeatureDetectionNode } from './nodes/feature-detection/node'
-import { OutlineDetectionNode } from './nodes/outline-detection/node'
-import { DrawNode } from './nodes/draw/node'
+import { FeatureScoringNode } from './nodes/scoring/node'
 import { DistortionNode } from './nodes/distortion/node'
 
 export const appState = {
@@ -47,11 +40,10 @@ export async function app() {
   }
 
   // set up camera
-  const cameraSource = await CameraInputSource.create(undefined, 'BackCamera')
+  const cameraSource = await CameraInputSource.create(undefined, 'FrontCamera')
   const cameraCh = new CameraChannel(cameraSource)
-  if (!isMobile) {
-    cameraCh.screenRect.setReverseHorizontal(true)
-  }
+
+  cameraCh.screenRect.setReverseHorizontal(true)
 
   const chNode = new ChannelNode(cameraCh)
   chNode.renderTarget = new DrawRTHandle(new FrameBuffer(resolution.width, resolution.height))
@@ -66,15 +58,16 @@ export async function app() {
   )
   featureDetectionNode.setInput(greyNode)
 
-  const outlineDetectionNode = new OutlineDetectionNode(tileSize)
-  outlineDetectionNode.renderTarget = new PixelDataRTHandle(
+  const featureScoringNode = new FeatureScoringNode(tileSize)
+  featureScoringNode.renderTarget = new DrawRTHandle(
     new FrameBuffer(tilePassResolution.width, tilePassResolution.height)
   )
-  outlineDetectionNode.setInput(featureDetectionNode)
+  featureScoringNode.setInput(featureDetectionNode)
 
-  const distortionNode = new DistortionNode()
+  const distortionNode = new DistortionNode(tileSize)
   distortionNode.renderTarget = new DrawRTHandle(new FrameBuffer(resolution.width, resolution.height))
   distortionNode.setInput(chNode)
+  distortionNode.setScoreInput(featureScoringNode)
   distortionNode.setResolution()
 
   const screen = new InputColorRenderingNode()
@@ -82,13 +75,13 @@ export async function app() {
 
   function renderLoop(f: number) {
     featureDetectionNode.setThreshold(appState.featureThreshold)
-    outlineDetectionNode.setRadiusSize(appState.searchRadius)
-    outlineDetectionNode.setDiffThreshold(appState.diffThreshold)
+    featureScoringNode.setRadiusSize(appState.searchRadius)
+    featureScoringNode.setDiffThreshold(appState.diffThreshold)
 
     chNode.render()
     greyNode.render()
     featureDetectionNode.render()
-    outlineDetectionNode.render()
+    featureScoringNode.render()
     distortionNode.render()
     screen.render()
 
