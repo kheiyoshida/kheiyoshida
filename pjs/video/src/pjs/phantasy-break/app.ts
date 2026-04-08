@@ -38,7 +38,7 @@ import { MultiChannelNode } from '../../lib-node/channel/node'
 import { VideoChannel } from '../../lib-node/channel/channel'
 import { cityVideoList, youtubeVideoList } from './channel'
 import { AdditivePresentationNode, PresentationNode } from '../../lib-node/presentation/node'
-import { EffectNode } from '../../lib-node/effect/node'
+import { ScreenEffectNode } from '../../lib-node/effect/node'
 import { PixelDataRTHandle } from '../../lib-node/channel/target'
 import { GreyScaleGradientNode } from './effect/greyscale/node'
 import { OutlinePresentation } from './presentation/outline/presentation'
@@ -119,7 +119,7 @@ export const app = async () => {
   // post effects
   const multiplyFx = new MultiplyEffectModel(16)
   const kaleidoscopeFx = new KaleidoscopeEffectModel(16)
-  const fxNode = new EffectNode([multiplyFx, kaleidoscopeFx])
+  const fxNode = new ScreenEffectNode([multiplyFx, kaleidoscopeFx])
 
   // afterimage
   const afterImageNode = new AfterImageNode(frameBufferResolution)
@@ -151,7 +151,7 @@ export const app = async () => {
 
   // final effects
   const colorFx = new ColorEffect()
-  const finalFxNode = new EffectNode([colorFx])
+  const finalFxNode = new ScreenEffectNode([colorFx])
 
   // screen
   const screenNode = new InputColorRenderingNode()

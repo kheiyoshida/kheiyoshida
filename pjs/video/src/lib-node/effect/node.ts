@@ -9,7 +9,7 @@ export type IEffect = {
 
 export type IEffectModel = GenericModel & IEffect
 
-export class EffectNode extends OffscreenDrawNode {
+export class ScreenEffectNode extends OffscreenDrawNode {
   public effects: IEffectModel[] = []
   protected readonly noOpFx: IEffectModel
 

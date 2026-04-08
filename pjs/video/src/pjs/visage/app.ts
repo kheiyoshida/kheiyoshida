@@ -11,7 +11,7 @@ import { DistortionNode } from './nodes/distortion/node'
 
 export const appState = {
   featureThreshold: 0.29,
-  searchRadius: 4,
+  searchRadius: 3,
   diffThreshold: 0.3,
   backgroundColour: [0, 0, 0],
   colour: [0, 1, 0],
