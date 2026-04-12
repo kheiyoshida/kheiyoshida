@@ -31,13 +31,16 @@ export async function app() {
 
   const scene = new OffscreenDrawNode()
   scene.renderTarget = new DrawRTHandle(new FrameBuffer(resolution.width, resolution.height, { depth: true }))
-  const tet = new TetraGraph(5)
-  scene.drawables = [tet]
+  const tet = new TetraGraph(2)
+  const tet2 = new TetraGraph(2)
+  scene.drawables = [tet, tet2]
 
-  tet.position = [0, 0, 0]
+  tet.position = [-2, 0, 0]
+  tet2.position = [2, 0, 0]
 
   const cam = new OrbitCamera()
   tet.setProjectionMatrix(cam.getProjectionMatrix())
+  tet2.setProjectionMatrix(cam.getProjectionMatrix())
 
   const screen = new InputColorRenderingNode()
   screen.setInput(scene)
@@ -56,18 +59,23 @@ export async function app() {
       cam.theta += 0.1
     }
   })
+  scene.backgroundColor = [0.1, 0.1, 0.1, 1]
 
   function renderLoop(f: number) {
-    cam.theta += 0.01;
-    cam.phi += 0.1;
-    // cam.r = Math.sin(performance.now() / 1000) * 10.0 + 15
-    cam.r = 3
+    cam.theta += 0.001;
+    cam.phi += 0.01;
+    cam.r = Math.sin(performance.now() / 1000) * 10.0 + 13
 
     const s = (Math.sin(performance.now() / 1000) + 1) / 2.0
-    tet.setScale(s * 0.9)
-    tet.setLength(s * 30)
+    tet.setScale(0.1 + s * 0.5)
+    tet.setLength(s * 200)
+
+    const s2 = (Math.cos(performance.now() / 1000) + 1) / 2.0
+    tet2.setScale(0.1 + s2 * 0.5)
+    tet2.setLength(s2 * 80)
 
     tet.setViewMatrix(cam.getViewMatrix())
+    tet2.setViewMatrix(cam.getViewMatrix())
 
     scene.render()
     screen.render()
