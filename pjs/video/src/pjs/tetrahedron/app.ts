@@ -8,7 +8,7 @@ import {
   OffscreenDrawNode,
 } from 'graph-gl'
 import { startRenderingLoop } from '../../lib/pipeline'
-import { TetraChain } from './model/tetrahedron'
+import { TetraChain, TetraGraph } from './model/tetrahedron'
 import { OrbitCamera } from '../../lib/camera'
 
 export async function app() {
@@ -31,7 +31,7 @@ export async function app() {
 
   const scene = new OffscreenDrawNode()
   scene.renderTarget = new DrawRTHandle(new FrameBuffer(resolution.width, resolution.height, { depth: true }))
-  const tet = new TetraChain()
+  const tet = new TetraGraph(5)
   scene.drawables = [tet]
 
   tet.position = [0, 0, 0]
@@ -58,9 +58,15 @@ export async function app() {
   })
 
   function renderLoop(f: number) {
-    // cam.phi += 0.1;
+    cam.theta += 0.01;
+    cam.phi += 0.1;
     // cam.r = Math.sin(performance.now() / 1000) * 10.0 + 15
-    cam.r = 3.0
+    cam.r = 3
+
+    const s = (Math.sin(performance.now() / 1000) + 1) / 2.0
+    tet.setScale(s * 0.9)
+    tet.setLength(s * 30)
+
     tet.setViewMatrix(cam.getViewMatrix())
 
     scene.render()

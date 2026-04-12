@@ -4,7 +4,7 @@ import { GeometrySpec, Vector3D } from '../../../lib/model/parse'
 glMatrix.setMatrixArrayType(Array)
 
 export class Tetrahedron {
-  constructor(private geometrySpec: GeometrySpec) {
+  constructor(private geometrySpec: GeometrySpec, private avoidIndex?: number) {
     const sum = geometrySpec.vertices.reduce((pre, acc) => vec3.add(pre, pre, acc), vec3.create())
     this.center = vec3.div(sum, sum, vec3.fromValues(4, 4, 4)) as Vector3D
   }
@@ -36,7 +36,13 @@ export class Tetrahedron {
     Tetrahedron.reflectionCoefficient
   )
 
-  public extend(vertexIndex: number): Tetrahedron {
+  private getExtendIndex(): number {
+    const i = Math.floor(Math.random() * 3) // 0, 1, 2
+    if (i === this.avoidIndex) return i + 1 // 0 ~ 3
+    return i
+  }
+
+  public extend(vertexIndex: number = this.getExtendIndex()): Tetrahedron {
     const newGeometrySpec: GeometrySpec = {
       vertices: [...this.geometrySpec.vertices],
       normals: [...this.geometrySpec.normals],
@@ -75,6 +81,6 @@ export class Tetrahedron {
       newGeometrySpec.normals[face.normalIndices[0]] = normal as Vector3D
     }
 
-    return new Tetrahedron(newGeometrySpec)
+    return new Tetrahedron(newGeometrySpec, vertexIndex)
   }
 }
