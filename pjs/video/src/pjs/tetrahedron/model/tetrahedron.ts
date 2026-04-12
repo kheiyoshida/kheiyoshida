@@ -6,6 +6,7 @@ import tetra from './tetrahedron.obj?raw'
 import { Generic3DModel } from '../../../lib/model/model'
 import { Tetrahedron } from './data'
 import { mat4 } from 'gl-matrix'
+import debug from './debug.obj?raw'
 
 const stride = (3 + 3 + 3) * 4
 

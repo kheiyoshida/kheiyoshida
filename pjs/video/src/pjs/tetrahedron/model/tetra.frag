@@ -20,8 +20,9 @@ void main() {
 
     fragColor = vec4(finalColor, 1);
 
-//    fragColor = vec4((vNormal + 1.0) / 2.0 , 1.0);
 
     vec3 ndcNormal = norm * 0.5 + 0.5;
     fragNormal = vec4(ndcNormal, 1);
+
+    fragColor = vec4(vNormal , 1.0);
 }

@@ -52,13 +52,13 @@ vec3 distTexture(in vec2 st) {
     vec2 adjacent = 1.0 / uResolution;
 
     vec2 n = vec2(fbm(st * 2.0),  fbm(st * 3.3));
-    vec2 offsetLevel = (n - 0.5) * 2.0 * 3.0;
+    vec2 offsetLevel = (n - 0.5) * 2.0 * 8.0;
 
     return texture(uTexture, vUV + offsetLevel * adjacent).xyz;
 }
 
 void main() {
-    vec2 st = gl_FragCoord.xy * 13.0 / uResolution;
+    vec2 st = gl_FragCoord.xy * 5.0 / uResolution;
 
 //    float r = distTexture(st * 2.3).x;
     float g = distTexture(st * 3.5).y;

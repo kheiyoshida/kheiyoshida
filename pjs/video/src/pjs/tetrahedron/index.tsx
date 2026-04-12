@@ -40,7 +40,6 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'block',
     width: '100vw',
     height: 'auto',
-    aspectRatio: 16 / 9,
     border: '1px solid black',
   },
   message: {

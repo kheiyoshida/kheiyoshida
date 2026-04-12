@@ -9,7 +9,7 @@ import {
 } from 'graph-gl'
 import { startRenderingLoop } from '../../lib/pipeline'
 import { TetraGraph } from './model/tetrahedron'
-import { OrbitCamera } from '../../lib/camera'
+import { OrbitCamera, OrbitCameraControl } from '../../lib/camera'
 import { DistortionNode, EdgeDrawNode } from './nodes/edge/node'
 
 export async function app() {
@@ -25,7 +25,10 @@ export async function app() {
 
   if (isMobile) {
     adjustMobileCanvas()
-    resolution = { width: window.innerWidth, height: window.innerHeight }
+    const canvas = getGL().canvas!
+    const ratio = canvas.height / canvas.width
+    const w = 380
+    resolution = { width: w, height: w * ratio }
   } else {
     resolution = { width: 960, height: 576 }
   }
@@ -56,23 +59,27 @@ export async function app() {
 
   window.addEventListener('keydown', (k) => {
     if (k.key === 'ArrowRight') {
-      cam.phi += 0.1
-    }
-    if (k.key === 'ArrowLeft') {
-      cam.phi -= 0.1
-    }
-    if (k.key === 'ArrowUp') {
       cam.theta -= 0.1
     }
-    if (k.key === 'ArrowDown') {
+    if (k.key === 'ArrowLeft') {
       cam.theta += 0.1
     }
+    if (k.key === 'ArrowUp') {
+      cam.phi += 0.1
+    }
+    if (k.key === 'ArrowDown') {
+      cam.phi -= 0.1
+    }
   })
+
+  cam.r = 30
+
+  const control = new OrbitCameraControl(cam, document.body)
   scene.backgroundColor = [0.1, 0.1, 0.1, 1]
 
   function renderLoop(f: number) {
     cam.theta += 0.001;
-    cam.phi += 0.01;
+    cam.phi = Math.sin(performance.now() / 5000) * Math.PI/2;
     cam.r = Math.sin(performance.now() / 2000) * 10.0 + 13
 
     const s = (Math.sin(performance.now() / 1000) + 1) / 2.0
@@ -82,7 +89,7 @@ export async function app() {
     const s2 = (Math.cos(performance.now() / 1000) + 1) / 2.0
     tet2.setScale(0.1 + s2 * 0.8)
     tet2.setLength(s2 * 80)
-
+    //
     tet.setViewMatrix(cam.getViewMatrix())
     tet2.setViewMatrix(cam.getViewMatrix())
 
