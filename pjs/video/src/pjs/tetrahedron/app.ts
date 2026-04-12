@@ -8,8 +8,9 @@ import {
   OffscreenDrawNode,
 } from 'graph-gl'
 import { startRenderingLoop } from '../../lib/pipeline'
-import { TetraChain, TetraGraph } from './model/tetrahedron'
+import { TetraGraph } from './model/tetrahedron'
 import { OrbitCamera } from '../../lib/camera'
+import { DistortionNode, EdgeDrawNode } from './nodes/edge/node'
 
 export async function app() {
   const gl = getGL()
@@ -30,7 +31,7 @@ export async function app() {
   }
 
   const scene = new OffscreenDrawNode()
-  scene.renderTarget = new DrawRTHandle(new FrameBuffer(resolution.width, resolution.height, { depth: true }))
+  scene.renderTarget = new DrawRTHandle(new FrameBuffer(resolution.width, resolution.height, { depth: true, normal: true }))
   const tet = new TetraGraph(2)
   const tet2 = new TetraGraph(2)
   scene.drawables = [tet, tet2]
@@ -42,8 +43,16 @@ export async function app() {
   tet.setProjectionMatrix(cam.getProjectionMatrix())
   tet2.setProjectionMatrix(cam.getProjectionMatrix())
 
+  const edge = new EdgeDrawNode()
+  edge.renderTarget = new DrawRTHandle(new FrameBuffer(resolution.width, resolution.height))
+  edge.setInput(scene)
+
+  const dist = new DistortionNode()
+  dist.renderTarget = new DrawRTHandle(new FrameBuffer(resolution.width, resolution.height))
+  dist.setInput(edge)
+
   const screen = new InputColorRenderingNode()
-  screen.setInput(scene)
+  screen.setInput(dist)
 
   window.addEventListener('keydown', (k) => {
     if (k.key === 'ArrowRight') {
@@ -64,20 +73,22 @@ export async function app() {
   function renderLoop(f: number) {
     cam.theta += 0.001;
     cam.phi += 0.01;
-    cam.r = Math.sin(performance.now() / 1000) * 10.0 + 13
+    cam.r = Math.sin(performance.now() / 2000) * 10.0 + 13
 
     const s = (Math.sin(performance.now() / 1000) + 1) / 2.0
-    tet.setScale(0.1 + s * 0.5)
+    tet.setScale(0.1 + s * 0.8)
     tet.setLength(s * 200)
 
     const s2 = (Math.cos(performance.now() / 1000) + 1) / 2.0
-    tet2.setScale(0.1 + s2 * 0.5)
+    tet2.setScale(0.1 + s2 * 0.8)
     tet2.setLength(s2 * 80)
 
     tet.setViewMatrix(cam.getViewMatrix())
     tet2.setViewMatrix(cam.getViewMatrix())
 
     scene.render()
+    edge.render()
+    dist.render()
     screen.render()
   }
 
