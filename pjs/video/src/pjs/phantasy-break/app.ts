@@ -74,7 +74,7 @@ export const app = async () => {
 
   // sound input control
   const deviceName = 'Zen Go'
-  const soundLevel = new SoundLevel(await createAudioInputSource(deviceName))
+  const soundLevel = new SoundLevel(await createAudioInputSource())
 
   // set up camera
   const cameraName = 'Video Control'

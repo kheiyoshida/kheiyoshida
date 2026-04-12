@@ -20,7 +20,7 @@ export async function app() {
     resolution = { width: 960, height: 576 }
   }
 
-  const channel = new VideoChannel(videoSourceList)
+  const channel = new VideoChannel(noiseSourceVideoList)
   const chNode = new ChannelNode(channel)
   chNode.renderTarget = new DrawRTHandle(new FrameBuffer(resolution.width, resolution.height, {}, { repeat: true }))
 

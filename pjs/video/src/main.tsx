@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './pjs/noise'
+import App from './pjs/tetrahedron'
 
 const root = document.getElementById('root')
 if (root) {

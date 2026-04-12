@@ -42,7 +42,7 @@ float textureSourceFbm(in vec2 st, in int octaves, float initialTileSize) {
 void main() {
     vec2 st = gl_FragCoord.xy / uResolution.xy;
 
-    float f = textureSourceFbm(st, 6, 400.0);
+    float f = textureSourceFbm(st, 5, 64.0);
 
     fragColor = vec4(vec3(f), 1);
 }

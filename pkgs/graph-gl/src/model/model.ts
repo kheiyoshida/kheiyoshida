@@ -2,7 +2,7 @@ import { Shader } from '../gl'
 import { getGL } from '../gl'
 import { Drawable } from '../graph'
 
-type AttributeDescriptor = {
+export type AttributeDescriptor = {
   /**
    * name of the attribute.
    * e.g. aPos, aColor
