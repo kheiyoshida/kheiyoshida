@@ -23,8 +23,11 @@ export class TetraChain extends Generic3DModel {
     const tetraRoot = new Tetrahedron(geometry)
     this.tetrahedra = [tetraRoot]
 
-    const extra = tetraRoot.extend(2)
-    this.tetrahedra.push(extra)
+    const ex1 = tetraRoot.extend(0)
+    const ex2 = ex1.extend(1)
+    const ex3 = ex2.extend(0)
+    const ex4 = ex3.extend(1)
+    this.tetrahedra.push(ex1, ex2, ex3, ex4)
 
     const arr = this.tetrahedra.flatMap(tet => tet.mapToArray())
     for(let i = 0; i < arr.length; i++) {

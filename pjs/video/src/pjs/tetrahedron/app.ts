@@ -49,6 +49,12 @@ export async function app() {
     if (k.key === 'ArrowLeft') {
       cam.phi -= 0.1
     }
+    if (k.key === 'ArrowUp') {
+      cam.theta -= 0.1
+    }
+    if (k.key === 'ArrowDown') {
+      cam.theta += 0.1
+    }
   })
 
   function renderLoop(f: number) {

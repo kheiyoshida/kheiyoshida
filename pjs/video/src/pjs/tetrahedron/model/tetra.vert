@@ -15,12 +15,9 @@ uniform mat4 uProjection;
 void main() {
 
     vNormal = aNormal;
-    vec3 pos = aCenter + (aPosition - aCenter) * 0.9;
+    vec3 pos = aCenter + (aPosition - aCenter) * 1.0;
     vec4 modelPos = uModel * vec4(pos, 1.0);
     vPos = modelPos.xyz;
 
-//    if (aCenter.x == 0.0) {
-//        gl_Position = vec4(0.0);
-//    }
     gl_Position   = uProjection * uView * modelPos;
 }
