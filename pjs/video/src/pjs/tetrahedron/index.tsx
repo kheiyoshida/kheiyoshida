@@ -11,10 +11,9 @@ export default () => {
   }, [initialised])
   return (
     <div style={styles.canvasContainer}>
-    <canvas id={'canvas'} style={styles.canvas} />
-  <div id={'message'} style={styles.message}></div>
+      <canvas id={'canvas'} style={styles.canvas} />
     </div>
-)
+  )
 }
 
 const styles: Record<string, React.CSSProperties> = {
@@ -41,15 +40,5 @@ const styles: Record<string, React.CSSProperties> = {
     width: '100vw',
     height: 'auto',
     border: '1px solid black',
-  },
-  message: {
-    position: 'fixed',
-    top: window.innerHeight / 2,
-    left: window.innerWidth / 2 - 100,
-    width: 200,
-    height: 300,
-    textAlign: 'center',
-    zIndex: 100,
-    cursor: 'pointer',
   },
 }

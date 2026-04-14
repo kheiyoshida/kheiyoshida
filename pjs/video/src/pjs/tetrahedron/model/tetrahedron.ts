@@ -92,41 +92,57 @@ export class TetraGraph implements Drawable {
     for (let i = 0; i < chains; i++) {
       this.chains.push(new TetraChain(shader))
     }
+    this.updateActiveChains()
+  }
+
+  private updateActiveChains() {
+    this.numOfActiveChain = Math.floor(Math.random() * (this.chains.length)) + 1
+  }
+
+  private numOfActiveChain = 1
+
+  private *getActiveChains(): Generator<TetraChain> {
+    for (let i = 0; i < this.numOfActiveChain; i++) {
+      yield this.chains[i]
+    }
   }
 
   public setScale(s: number) {
-    for (let i = 0; i < this.chains.length; i++) {
-      this.chains[i].setScale(s)
+    for (const chain of this.getActiveChains()) {
+      chain.setScale(s)
     }
   }
 
   public setLength(l: number) {
-    for (let i = 0; i < this.chains.length; i++) {
-      this.chains[i].setLength(l)
+    if (l == 1) {
+      this.updateActiveChains()
+    }
+    for (const chain of this.getActiveChains()) {
+      chain.setLength(l)
     }
   }
 
   public set position(v: [number, number, number]) {
-    for (let i = 0; i < this.chains.length; i++) {
-      this.chains[i].position = v
+    for (const chain of this.getActiveChains()) {
+      chain.position = v
     }
   }
 
   public setProjectionMatrix(m: mat4) {
-    for (let i = 0; i < this.chains.length; i++) {
-      this.chains[i].setProjectionMatrix(m)
+    for (const chain of this.getActiveChains()) {
+      chain.setProjectionMatrix(m)
     }
   }
 
   public setViewMatrix(m: mat4) {
-    for (let i = 0; i < this.chains.length; i++) {
-      this.chains[i].setViewMatrix(m)
+    for (const chain of this.getActiveChains()) {
+      chain.setViewMatrix(m)
     }
   }
 
   draw(): void {
-    for (let i = 0; i < this.chains.length; i++) {
-      this.chains[i].draw()
+    for (const chain of this.getActiveChains()) {
+      chain.draw()
     }
   }
 }
