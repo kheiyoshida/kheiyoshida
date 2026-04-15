@@ -58,8 +58,7 @@ export async function app() {
   const screen = new InputColorRenderingNode()
   screen.setInput(dist)
 
-
-  const control = new OrbitCameraControl(cam, document.body)
+  const control = new OrbitCameraControl(cam, gl.canvas as HTMLElement)
 
   let interactiveMode = false;
   window.addEventListener('pointerdown', (k) => {

@@ -31,6 +31,8 @@ const getSketchComponent = (sketch: Sketch) => {
       return dynamic(() => import('sketch/src/projects/regrets'), { ssr: false })
     case Sketch.tp4:
       return dynamic(() => import('sketch/src/projects/tp4'), { ssr: false })
+    case Sketch.twinStructures:
+      return dynamic(() => import('video/src/pjs/tetrahedron'), { ssr: false })
     default:
       throw Error(`couldn't resolve the sketch: ${sketch}`)
   }
