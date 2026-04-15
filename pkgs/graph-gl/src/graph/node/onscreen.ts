@@ -1,6 +1,7 @@
 import { ModelRenderingNode, RenderingNode } from './node'
 import { DrawTarget } from '../target'
 import { ScreenRect } from '../../model'
+import { FrameBuffer } from '../../gl'
 
 /**
  * simply draws models on screen
@@ -27,8 +28,12 @@ export class InputColorRenderingNode extends ModelRenderingNode {
     this.drawables.push(this.screenRect)
   }
 
-  public setInput(node: RenderingNode<DrawTarget>) {
-    this.screenRect.tex = node.renderTarget!.frameBuffer.colorTexture.tex
+  public setInput(node: RenderingNode<DrawTarget> | FrameBuffer) {
+    if (node instanceof FrameBuffer) {
+      this.screenRect.tex = node.colorTexture.tex
+    } else {
+      this.screenRect.tex = node.renderTarget!.frameBuffer.colorTexture.tex
+    }
   }
 
   public override render() {

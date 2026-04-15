@@ -128,67 +128,6 @@ importers:
         specifier: 7.1.11
         version: 7.1.11(@types/node@20.19.24)(terser@5.39.2)(tsx@4.19.3)
 
-  pjs/lab:
-    dependencies:
-      '@mgnr/tone':
-        specifier: ^0.0.6
-        version: 0.0.6(tone@14.7.77)
-      '@types/webmidi':
-        specifier: ^2.0.10
-        version: 2.0.10
-      maze:
-        specifier: workspace:^
-        version: link:../maze
-      p5:
-        specifier: ^1.9.0
-        version: 1.9.0
-      p5utils:
-        specifier: workspace:^
-        version: link:../../pkgs/p5utils
-      react:
-        specifier: 18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.2.0(react@18.2.0)
-      tone:
-        specifier: ^14.7.77
-        version: 14.7.77
-      utils:
-        specifier: workspace:^
-        version: link:../../pkgs/utils
-      webmidi:
-        specifier: ^3.1.8
-        version: 3.1.8
-    devDependencies:
-      '@types/node':
-        specifier: ^20.18
-        version: 20.19.24
-      '@types/p5':
-        specifier: ^1.7.4
-        version: 1.7.6
-      '@types/react':
-        specifier: ^18.2.56
-        version: 18.2.56
-      '@types/react-dom':
-        specifier: ^18.2.19
-        version: 18.2.19
-      '@vitejs/plugin-react':
-        specifier: ^5.1.0
-        version: 5.1.0(vite@7.1.11(@types/node@20.19.24)(terser@5.39.2)(tsx@4.19.3))
-      jest-canvas-mock:
-        specifier: ^2.5.2
-        version: 2.5.2
-      test-utils:
-        specifier: workspace:^
-        version: link:../../pkgs/test-utils
-      typescript:
-        specifier: ^4.8.4
-        version: 4.9.4
-      vite:
-        specifier: 7.1.11
-        version: 7.1.11(@types/node@20.19.24)(terser@5.39.2)(tsx@4.19.3)
-
   pjs/maze:
     dependencies:
       maze-gl:
@@ -294,6 +233,40 @@ importers:
         specifier: 7.1.11
         version: 7.1.11(@types/node@20.19.24)(terser@5.39.2)(tsx@4.19.3)
 
+  pjs/shaderlab:
+    dependencies:
+      gl-matrix:
+        specifier: ^3.4.3
+        version: 3.4.3
+      graph-gl:
+        specifier: workspace:^
+        version: link:../../pkgs/graph-gl
+      react:
+        specifier: 18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+    devDependencies:
+      '@types/node':
+        specifier: ^20.18
+        version: 20.19.24
+      '@types/react':
+        specifier: ^18.2.56
+        version: 18.2.56
+      '@types/react-dom':
+        specifier: ^18.2.19
+        version: 18.2.19
+      '@vitejs/plugin-react':
+        specifier: ^5.1.0
+        version: 5.1.0(vite@7.1.11(@types/node@20.19.24)(terser@5.39.2)(tsx@4.19.3))
+      typescript:
+        specifier: ^4.8.4
+        version: 4.9.4
+      vite:
+        specifier: 7.1.11
+        version: 7.1.11(@types/node@20.19.24)(terser@5.39.2)(tsx@4.19.3)
+
   pjs/sketch:
     dependencies:
       p5:
@@ -336,6 +309,67 @@ importers:
       typescript:
         specifier: ^4.8.4
         version: 4.9.5
+      vite:
+        specifier: 7.1.11
+        version: 7.1.11(@types/node@20.19.24)(terser@5.39.2)(tsx@4.19.3)
+
+  pjs/soundlab:
+    dependencies:
+      '@mgnr/tone':
+        specifier: ^0.0.6
+        version: 0.0.6(tone@14.7.77)
+      '@types/webmidi':
+        specifier: ^2.0.10
+        version: 2.1.0
+      maze:
+        specifier: workspace:^
+        version: link:../maze
+      p5:
+        specifier: ^1.9.0
+        version: 1.9.0
+      p5utils:
+        specifier: workspace:^
+        version: link:../../pkgs/p5utils
+      react:
+        specifier: 18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+      tone:
+        specifier: ^14.7.77
+        version: 14.7.77
+      utils:
+        specifier: workspace:^
+        version: link:../../pkgs/utils
+      webmidi:
+        specifier: ^3.1.8
+        version: 3.1.8
+    devDependencies:
+      '@types/node':
+        specifier: ^20.18
+        version: 20.19.24
+      '@types/p5':
+        specifier: ^1.7.4
+        version: 1.7.6
+      '@types/react':
+        specifier: ^18.2.56
+        version: 18.2.56
+      '@types/react-dom':
+        specifier: ^18.2.19
+        version: 18.2.19
+      '@vitejs/plugin-react':
+        specifier: ^5.1.0
+        version: 5.1.0(vite@7.1.11(@types/node@20.19.24)(terser@5.39.2)(tsx@4.19.3))
+      jest-canvas-mock:
+        specifier: ^2.5.2
+        version: 2.5.2
+      test-utils:
+        specifier: workspace:^
+        version: link:../../pkgs/test-utils
+      typescript:
+        specifier: ^4.8.4
+        version: 4.9.4
       vite:
         specifier: 7.1.11
         version: 7.1.11(@types/node@20.19.24)(terser@5.39.2)(tsx@4.19.3)
@@ -1574,9 +1608,6 @@ packages:
 
   '@types/w3c-web-hid@1.0.6':
     resolution: {integrity: sha512-IWyssXmRDo6K7s31dxf+U+x/XUWuVsl9qUIYbJmpUHPcTv/COfBCKw/F0smI45+gPV34brjyP30BFcIsHgYWLA==}
-
-  '@types/webmidi@2.0.10':
-    resolution: {integrity: sha512-4RmTFMB6mN2h8XbJa1x3cOs9IOkXvFyHGcPUpUvWfmATuKg/J+dsFiMVgCE2EkpS+/8a8AP2tE3rQT1mLG7vEg==}
 
   '@types/webmidi@2.1.0':
     resolution: {integrity: sha512-k898MjEUSHB+6rSeCPQk/kLgie0wgWZ2t78GlWj86HbTQ+XmtbBafYg5LNjn8bVHfItEhPGZPf579Xfc6keV6w==}
@@ -5230,8 +5261,6 @@ snapshots:
   '@types/tough-cookie@4.0.5': {}
 
   '@types/w3c-web-hid@1.0.6': {}
-
-  '@types/webmidi@2.0.10': {}
 
   '@types/webmidi@2.1.0': {}
 

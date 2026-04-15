@@ -16,6 +16,7 @@ export enum TextureUnit {
   Color = 0,
   Normal = 1,
   Depth = 2,
+  Extra = 3
 }
 
 // TODO: make this abstract and use specific type of texture
@@ -36,9 +37,10 @@ export class Texture {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter ?? gl.LINEAR)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter ?? gl.LINEAR)
 
+    // TODO: might affect other projects
     const wrap = repeat ? gl.REPEAT : gl.CLAMP_TO_EDGE
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrap)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrap)
 
     this.unit = unit ?? TextureUnit.Color
     this.yFlip = yFlip ?? false

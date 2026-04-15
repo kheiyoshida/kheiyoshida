@@ -2,7 +2,7 @@ import { Shader } from '../gl'
 import { getGL } from '../gl'
 import { Drawable } from '../graph'
 
-type AttributeDescriptor = {
+export type AttributeDescriptor = {
   /**
    * name of the attribute.
    * e.g. aPos, aColor
@@ -28,7 +28,10 @@ type AttributeDescriptor = {
 export class GenericModel implements Drawable {
   public vao: WebGLVertexArrayObject
   public vbo: WebGLBuffer
-  protected vertexCount: number
+
+  public readonly dataArray: Float32Array
+  public vertexCount: number
+  protected vertexSize: number
 
   constructor(
     public shader: Shader,
@@ -60,7 +63,9 @@ export class GenericModel implements Drawable {
 
     gl.bindVertexArray(null)
 
-    this.vertexCount = data.length / attributes.reduce((pre, cur) => pre + cur.size, 0)
+    this.dataArray = data
+    this.vertexSize = attributes.reduce((pre, cur) => pre + cur.size, 0)
+    this.vertexCount = data.length / this.vertexSize
   }
 
   draw(mode: number = getGL().TRIANGLE_STRIP) {

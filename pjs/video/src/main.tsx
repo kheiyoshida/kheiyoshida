@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './pjs/outline'
+// import App from './pjs/phantasy-break'
+import App from './pjs/tetrahedron'
 
 const root = document.getElementById('root')
 if (root) {

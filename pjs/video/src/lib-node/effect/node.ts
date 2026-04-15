@@ -9,9 +9,9 @@ export type IEffect = {
 
 export type IEffectModel = GenericModel & IEffect
 
-export class EffectNode extends OffscreenDrawNode {
+export class ScreenEffectNode extends OffscreenDrawNode {
   public effects: IEffectModel[] = []
-  private readonly noOpFx: IEffectModel
+  protected readonly noOpFx: IEffectModel
 
   public constructor(effects: IEffectModel[]) {
     super()
@@ -52,7 +52,7 @@ export class ScreenEffectModel extends Texture2dModel implements IEffectModel {
   }
 
   public setInput(inputFrameBuffer: FrameBuffer): void {
-    this.tex = inputFrameBuffer.tex
+    this.tex = inputFrameBuffer.colorTexture.tex
   }
 
   public enabled = true

@@ -1,9 +1,9 @@
-import { ObjectRenderingChannel } from '../../../lib-node/channel/object'
-import { ImageResolution } from '../../../media/pixels/types'
+import { ObjectRenderingChannel } from '../../../../lib-node/channel/object'
+import { ImageResolution } from '../../../../media/pixels/types'
 import vert from './cube.vert?raw'
 import frag from './cube.frag?raw'
 import { mat4, vec3 } from 'gl-matrix'
-import { RangedValue } from '../utils/rangedValue'
+import { RangedValue } from '../../utils/rangedValue'
 import { randomIntInclusiveBetween } from 'utils'
 import { GenericModel, getGL, Shader } from 'graph-gl'
 
@@ -110,8 +110,8 @@ export class CubeRenderingChannel extends ObjectRenderingChannel {
   public readonly cube: CubeModel
   public readonly cube2: CubeModel
   constructor() {
-    const cube = new CubeModel([0, 1, 0])
-    const cube2 = new CubeModel([0, 0, 1])
+    const cube = new CubeModel([0.1, 1, 0.1])
+    const cube2 = new CubeModel([0.1, 0.1, 1])
     super([cube, cube2])
     this.cube = cube
     this.cube2 = cube2

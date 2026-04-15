@@ -13,7 +13,7 @@ uniform float uTextureOffset;
 out vec2 vUV;
 
 void main() {
-    vUV = vec2(aUV.x + uTextureOffset, aUV.y);
+    vUV = vec2(aUV.x + fract(uTextureOffset), aUV.y);
 
     if (aPos.x == 0.0 && aPos.y == 0.0) {
         gl_Position = vec4(uCenterPos, 0, 1);

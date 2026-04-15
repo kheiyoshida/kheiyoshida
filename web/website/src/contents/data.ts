@@ -12,6 +12,7 @@ export const titleToSlug = (title: string) => title.replaceAll(' ', '-').toLower
 export const worksLink = (title: string) => '/' + [Slug.play, titleToSlug(title)].join('/')
 
 export enum Sketch {
+  twinStructures = 'twinStructures',
   shapeFinder = 'shapeFinder',
   wasted = 'wasted',
   shinjuku = 'shinjuku',
@@ -23,6 +24,13 @@ export enum Sketch {
 }
 
 export const ContentData = {
+  twinStructures: {
+    title: "Twin Structures",
+    date: '2026',
+    sketch: Sketch.twinStructures,
+    caption: '',
+    thumbnail: thumbnailPath('twinStructures.png'),
+  },
   shapeFinder: {
     title: "Finding Shapes",
     date: '2026',

@@ -1,6 +1,6 @@
 import { VideoSource } from '../lib/source/source'
 
-type DeviceCameraType = "BackCamera"
+type DeviceCameraType = 'BackCamera' | 'FrontCamera'
 
 export class CameraInputSource implements VideoSource {
   currentVideo: HTMLVideoElement
@@ -8,7 +8,7 @@ export class CameraInputSource implements VideoSource {
   static async create(deviceLabel?: string, cameraType?: DeviceCameraType): Promise<CameraInputSource> {
     const stream = await getCameraInputStream(deviceLabel, cameraType)
     const videoEl = document.createElement('video')
-    videoEl.srcObject = stream;
+    videoEl.srcObject = stream
     await videoEl.play() // needs user gesture on iOS
     return new CameraInputSource(videoEl, stream)
   }
@@ -16,25 +16,25 @@ export class CameraInputSource implements VideoSource {
   private constructor(cameraVideoEl: HTMLVideoElement, stream: MediaStream) {
     this.currentVideo = cameraVideoEl
 
-    const videoTrack = stream.getVideoTracks()[0];
+    const videoTrack = stream.getVideoTracks()[0]
 
-    videoTrack.addEventListener("ended", () => {
-      console.warn("Camera track ended (device removed?)");
+    videoTrack.addEventListener('ended', () => {
+      console.warn('Camera track ended (device removed?)')
       this.health = false
-    });
+    })
 
-    videoTrack.addEventListener("mute", () => {
-      console.warn("Camera track muted (device temporarily unavailable?)");
+    videoTrack.addEventListener('mute', () => {
+      console.warn('Camera track muted (device temporarily unavailable?)')
       this.health = false
-    });
+    })
 
-    videoTrack.addEventListener("unmute", () => {
-      console.log("Camera track restored");
+    videoTrack.addEventListener('unmute', () => {
+      console.log('Camera track restored')
       this.health = true
-    });
+    })
   }
 
-  private health = true;
+  private health = true
   public get isAvailable(): boolean {
     return this.health
   }
@@ -50,7 +50,7 @@ export async function getCameraInputStream(cameraName?: string, cameType?: Devic
     video: {
       width: { ideal: 1280 },
       height: { ideal: 720 },
-      ...(cameType === "BackCamera" ? { facingMode: "environment" } : {}),
+      ...(cameType === 'BackCamera' ? { facingMode: 'environment' } : { facingMode: 'user' }),
       ...(deviceId ? { deviceId: { exact: deviceId } } : {}),
     },
     audio: false,

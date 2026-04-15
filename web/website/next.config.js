@@ -36,7 +36,7 @@ const nextConfig = {
 
     // to load GLSL files
     config.module.rules.push({
-      test: /\.(frag|vert)$/,
+      test: /\.(frag|vert|obj)$/,
       use: 'raw-loader',
     })
     return config

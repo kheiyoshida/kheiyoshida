@@ -5,25 +5,29 @@ import { LinePresentation } from '../presentation/line'
 import { DotPresentation } from '../presentation/dot'
 import { GlyphPresentation } from '../presentation/glyph'
 import { MultiplyEffectModel } from '../effect/multiply'
-import { CubeRenderingChannel } from '../channels/object'
+import { CubeRenderingChannel } from '../channels/cube/object'
 import { ColorEffect } from '../effect/color'
 import { SoundLevel } from './soundLevel'
 import { CameraChannel } from '../../../lib-node/channel/camera/camera'
 import { DebugPresentation } from '../presentation/debug'
 import { PixelPresentation } from '../../../lib-node/presentation/presentation'
+import { OutlinePresentation } from '../presentation/outline/presentation'
+import { AfterImageEffect } from '../effect/afterimage/node'
 
 export class ChannelControl implements IKnobParamsControlAdapter {
   constructor(
     private cubeCh: CubeRenderingChannel,
     private soundLevel: SoundLevel,
-    private debugPresentation: DebugPresentation
+    private debugPresentation: DebugPresentation,
+    private afterimageEffect: AfterImageEffect
   ) {}
 
   initialValues: IKnobParamsControlAdapter['initialValues'] = [60, 0, 0, true, false]
 
   applyKnobValueA(value: number): void {
-    this.cubeCh.cube.scale.anchor = 2 * (value / 127)
-    this.cubeCh.cube2.scale.anchor = 2 * (value / 127)
+    this.afterimageEffect.setAmount((value / 127) * 0.88)
+    // this.cubeCh.cube.scale.anchor = 2 * (value / 127)
+    // this.cubeCh.cube2.scale.anchor = 2 * (value / 127)
   }
   applyKnobValueB(value: number): void {
     this.soundLevel.maxLoudness = -3 - 2 * (value / 127)
@@ -91,6 +95,23 @@ export class LinePresentationControl extends PresentationControl<LinePresentatio
   }
   applySwitchValueB(value: boolean) {
     this.presentation.setVertical(value)
+  }
+}
+
+export class OutlinePresentationControl extends PresentationControl<OutlinePresentation> {
+  initialValues: IKnobParamsControlAdapter['initialValues'] = [60, 0, 10, true, false]
+
+  applyKnobValueA(value: number): void {
+    this.presentation.setFeatureThreshold(0.31 - (value / 127) * 0.3)
+  }
+  applyKnobValueB(value: number): void {
+    this.presentation.setRadiusSize(1 + Math.floor((value / 127) * 4))
+  }
+  applyKnobValueC(value: number) {
+    this.presentation.setDiffThreshold(0.01 + (value / 127) * 0.3)
+  }
+  applySwitchValueB(value: boolean) {
+    this.presentation.enableTriangle = value
   }
 }
 

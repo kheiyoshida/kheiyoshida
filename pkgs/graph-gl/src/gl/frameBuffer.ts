@@ -3,7 +3,7 @@ import {
   FrameBufferColorTexture,
   FrameBufferDepthTexture,
   FrameBufferNormalTexture,
-  FrameBufferTextureParams,
+  FrameBufferTextureParams, TextureParams,
 } from './texture'
 
 export type FrameBufferCapabilities = {
@@ -30,14 +30,15 @@ export class FrameBuffer {
   constructor(
     readonly width: number,
     readonly height: number,
-    capabilities: FrameBufferCapabilities = {}
+    capabilities: FrameBufferCapabilities = {},
+    textureParams: TextureParams = {}
   ) {
     const gl = getGL()
     const size = { width, height }
 
     // set up texture
     this.colorTexture = new FrameBufferColorTexture({
-      repeat: true,
+      ...textureParams,
       size,
     })
 

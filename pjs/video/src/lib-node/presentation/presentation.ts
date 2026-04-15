@@ -1,8 +1,8 @@
-import { InstancedModel } from 'graph-gl'
+import { Drawable, InstancedModel } from 'graph-gl'
 import { ImageResolution } from '../../media/pixels/types'
 
 export abstract class PixelPresentation<I extends InstancedModel = InstancedModel> {
-  public get instance(): I {
+  public get instance(): Drawable {
     return this._instance
   }
 

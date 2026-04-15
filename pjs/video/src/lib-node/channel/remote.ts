@@ -26,9 +26,7 @@ export class ChannelRemote {
 
   random(): number {
     const result = weightedRandomIndex(this.switchRate)
-    // console.log('picker', result)
     this.channelNumber = result
-    // console.log('random', this.channelNumber)
     return this.channelNumber
   }
 }
