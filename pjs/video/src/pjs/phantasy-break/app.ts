@@ -49,7 +49,7 @@ import { TetrahedraChannel } from './channels/tetrahedra/channel'
 const videoAspectRatio = 16 / 9
 const frameBufferWidth = 960
 const outputResolutionWidth = 240 // frameBufferWidth / 4
-const backgroundColor: [number, number, number, number] = [0, 0, 0, 1]
+const backgroundColor: [number, number, number, number] = [0.1, 0.1, 0.1, 1]
 
 const videoSourceResolution: ImageResolution = {
   width: outputResolutionWidth,
@@ -67,7 +67,12 @@ const height = frameBufferResolution.height
 
 export const app = async () => {
   // init gl
-  getGL()
+  const gl = getGL()
+
+  gl.enable(gl.DEPTH_TEST)
+  gl.depthFunc(gl.LEQUAL)
+  gl.enable(gl.CULL_FACE)
+  gl.cullFace(gl.BACK)
 
   // ask permission first
   const media = await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
@@ -92,7 +97,8 @@ export const app = async () => {
 
   const channelManager = new ChannelManager([tetraCh, objectCh, shinjukuVideoCh, youtubeCh, cityCh])
   const chNode = new MultiChannelNode(channelManager)
-  chNode.renderTarget = new PixelDataRTHandle(new FrameBuffer(videoWidth, videoHeight))
+  chNode.renderTarget = new PixelDataRTHandle(new FrameBuffer(videoWidth, videoHeight, { depth: true }))
+  chNode.backgroundColor = backgroundColor
 
   // greyscale
   const greyscaleNode = new GreyScaleGradientNode()
@@ -243,6 +249,7 @@ export const app = async () => {
     objectCh.cube.scale.updateValue(effectLevel)
     objectCh.cube.scale.updateValue(effectLevel)
     objectCh.applyEffect(effectLevel)
+    tetraCh.setLength(effectLevel)
 
     kaleidoscopeFx.numOfTriangles = 4 + Math.floor(2 * effectLevel)
 
