@@ -1,11 +1,12 @@
-import { Drawable, getGL, Shader } from 'graph-gl'
+import { getGL, Shader } from 'graph-gl'
 import vert from './tetra.vert?raw'
 import frag from './tetra.frag?raw'
-import { GeometrySpec, parseObjData } from '../../../lib/model/parse'
+import { GeometrySpec, parseObjData } from '../../../../../lib/model/parse'
 import tetra from './tetrahedron.obj?raw'
-import { Generic3DModel } from '../../../lib/model/model'
+import { Generic3DModel } from '../../../../../lib/model/model'
 import { Tetrahedron } from './data'
 import { mat4 } from 'gl-matrix'
+import { I3DDrawable } from '../../../../../lib-node/channel/3D/scene'
 
 const stride = (3 + 3 + 3) * 4
 
@@ -84,7 +85,7 @@ export class TetraChain extends Generic3DModel {
   }
 }
 
-export class TetraGraph implements Drawable {
+export class TetraGraph implements I3DDrawable {
   private chains: TetraChain[] = []
   constructor(chains: number) {
     const shader = new Shader(vert, frag)
@@ -95,7 +96,7 @@ export class TetraGraph implements Drawable {
   }
 
   private updateActiveChains() {
-    this.numOfActiveChain = Math.floor(Math.random() * (this.chains.length)) + 1
+    this.numOfActiveChain = Math.floor(Math.random() * this.chains.length) + 1
   }
 
   private numOfActiveChain = 1

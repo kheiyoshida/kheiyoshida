@@ -10,12 +10,23 @@ export class OrbitCamera {
     return this._phi
   }
   public set phi(v: number) {
-    this._phi = clamp(v, -Math.PI /2 + 0.001, Math.PI / 2 - 0.001)
+    this._phi = clamp(v, -Math.PI / 2 + 0.001, Math.PI / 2 - 0.001)
   }
 
   public speed = 0.005
 
-  public getViewMatrix() {
+  private readonly fov: number
+  private readonly aspect: number
+  private readonly near: number
+  private readonly far: number
+  constructor(fov = Math.PI / 3, aspect = window.innerWidth / window.innerHeight, near = 0.1, far = 100) {
+    this.fov = fov
+    this.aspect = aspect
+    this.near = near
+    this.far = far
+  }
+
+  public getViewMatrix(): mat4 {
     const x = this.r * Math.cos(this.phi) * Math.cos(this.theta)
     const y = this.r * Math.sin(this.phi)
     const z = this.r * Math.cos(this.phi) * Math.sin(this.theta)
@@ -27,15 +38,10 @@ export class OrbitCamera {
     return mat
   }
 
-  public getProjectionMatrix(
-    fov = Math.PI / 3,
-    aspect = window.innerWidth / window.innerHeight,
-    near = 0.1,
-    far = 100
-  ) {
+  public getProjectionMatrix(): mat4 {
     const proj = mat4.create()
 
-    mat4.perspective(proj, fov, aspect, near, far)
+    mat4.perspective(proj, this.fov, this.aspect, this.near, this.far)
 
     return proj
   }
@@ -123,7 +129,7 @@ export class OrbitCameraControl {
 
         if (distance != null && this.lastPinchDistance != null) {
           const delta = distance - this.lastPinchDistance
-          this.zoom(-delta * 5.)
+          this.zoom(-delta * 5)
         }
 
         this.lastPinchDistance = distance

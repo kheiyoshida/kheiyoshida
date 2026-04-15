@@ -9,7 +9,7 @@ import { CameraInputSource } from '../../media/camera'
 import { bindMidiInputMessage } from '../../media/midi/input'
 import { LaunchControl } from '../../lib/params/launchControl'
 import { ParamsManager } from '../../lib/params/manager'
-import { CubeRenderingChannel } from './channels/object'
+import { CubeRenderingChannel } from './channels/cube/object'
 import { GlyphPresentation } from './presentation/glyph'
 import { ChannelParamsControl } from './control/fader'
 import {
@@ -43,6 +43,7 @@ import { PixelDataRTHandle } from '../../lib-node/channel/target'
 import { GreyScaleGradientNode } from './effect/greyscale/node'
 import { OutlinePresentation } from './presentation/outline/presentation'
 import { AfterImageNode } from './effect/afterimage/node'
+import { TetrahedraChannel } from './channels/tetrahedra/channel'
 
 // config
 const videoAspectRatio = 16 / 9
@@ -83,12 +84,13 @@ export const app = async () => {
   // channels
   const cameraCh = new CameraChannel(cameraSource)
   cameraCh.reverse(true)
+  const tetraCh = new TetrahedraChannel()
   const objectCh = new CubeRenderingChannel()
   const shinjukuVideoCh = new VideoChannel(shinjukuVideoSourceList)
   const youtubeCh = new VideoChannel(youtubeVideoList)
   const cityCh = new VideoChannel(cityVideoList)
 
-  const channelManager = new ChannelManager([cameraCh, objectCh, shinjukuVideoCh, youtubeCh, cityCh])
+  const channelManager = new ChannelManager([tetraCh, objectCh, shinjukuVideoCh, youtubeCh, cityCh])
   const chNode = new MultiChannelNode(channelManager)
   chNode.renderTarget = new PixelDataRTHandle(new FrameBuffer(videoWidth, videoHeight))
 

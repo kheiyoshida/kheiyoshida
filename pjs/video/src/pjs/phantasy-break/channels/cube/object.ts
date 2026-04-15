@@ -1,9 +1,9 @@
-import { ObjectRenderingChannel } from '../../../lib-node/channel/object'
-import { ImageResolution } from '../../../media/pixels/types'
+import { ObjectRenderingChannel } from '../../../../lib-node/channel/object'
+import { ImageResolution } from '../../../../media/pixels/types'
 import vert from './cube.vert?raw'
 import frag from './cube.frag?raw'
 import { mat4, vec3 } from 'gl-matrix'
-import { RangedValue } from '../utils/rangedValue'
+import { RangedValue } from '../../utils/rangedValue'
 import { randomIntInclusiveBetween } from 'utils'
 import { GenericModel, getGL, Shader } from 'graph-gl'
 
